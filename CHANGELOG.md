@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file. Format foll
 
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
 
+## [0.2.1] - 2026-07-06
+
+### Fixed
+- **Raw translation key shown as the hub header when entering via Chat**
+  (`#Gmale.#EPEPPY.#TTEEN.dialogue.chat`): MCA's `next` action builds the header prompt from the
+  raw next string, so the Chat→RealTalk redirect displays key `dialogue.chat` — which no lang file
+  provided (MCA never shows it; vanilla `chat` is an auto question). Added a `dialogue.chat`
+  entry-prompt pool (5 variants) plus a personality-flavored entry line in all 13 overlays, and
+  lint coverage so the key set can't regress.
+
 ## [0.2.0] - 2026-07-06
 
 ### Changed

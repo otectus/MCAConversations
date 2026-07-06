@@ -34,6 +34,7 @@ class OverlayLintTest {
 
     /** Every overlay must cover at least these high-traffic lines. */
     private static final Set<String> STANDARD_KEYS = Set.of(
+            "dialogue.chat",
             "dialogue.realtalk",
             "dialogue.realtalk.checkin.good", "dialogue.realtalk.checkin.rough",
             "dialogue.realtalk.day.good", "dialogue.realtalk.day.rough",
@@ -78,6 +79,8 @@ class OverlayLintTest {
         assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 
+    // Note: dialogue.chat has a base entry in our main lang file (added for the Chat->RealTalk
+    // entry header), so overlayKeysOverrideRealBaseKeys covers it like any other key.
     @Test
     void overlayKeysOverrideRealBaseKeys() {
         List<String> problems = new ArrayList<>();

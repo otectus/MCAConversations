@@ -314,9 +314,13 @@ class ContentLintTest {
         for (GossipEventType type : GossipEventType.values()) {
             referenced.add("dialogue.realtalk.gossip." + type.jsonName());
         }
-        // Intentional extensions of MCA's own dialogue pools (their bases live in MCA's lang).
+        // Intentional extensions of MCA's own dialogue pools (their bases live in MCA's lang),
+        // plus dialogue.chat: MCA's next-action builds the header prompt from the raw next string,
+        // so the Chat->RealTalk redirect displays "dialogue.chat" as the hub entry header even
+        // though no JSON of ours references it.
         Set<String> mcaPoolBases = Set.of("dialogue.main", "dialogue.greet.success",
-                "dialogue.greet.fail", "dialogue.story.success", "dialogue.shake_hand.success");
+                "dialogue.greet.fail", "dialogue.story.success", "dialogue.shake_hand.success",
+                "dialogue.chat");
 
         List<String> problems = new ArrayList<>();
         for (String key : lang.keySet()) {

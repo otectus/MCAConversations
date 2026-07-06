@@ -101,6 +101,11 @@ names pass through). Datapack answers merged into question `chat` are unreachabl
 is on. If the `realtalk` question is missing (e.g. a datapack removed it), Chat falls back to
 vanilla MCA behavior automatically.
 
+Header note: MCA builds the dialogue-screen header from the raw `next` string, so entering the hub
+via Chat displays lang key `dialogue.chat` (we provide its pool; personality overlays each carry a
+flavored entry line). Re-entering the hub from a topic (`next: "realtalk"`) uses `dialogue.realtalk`.
+Datapacks can override either pool to re-text the entry vs. return headers independently.
+
 To restore a separate menu button instead (v0.1.0 style), set the config to `false` and ship a
 datapack file `data/<yourpack>/dialogues/main.json`:
 
