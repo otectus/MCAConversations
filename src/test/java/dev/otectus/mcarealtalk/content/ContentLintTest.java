@@ -48,6 +48,22 @@ class ContentLintTest {
             "next", "say", "positive", "negative", "command", "quit", "remember",
             "realtalk_record", "realtalk_say", "realtalk_gossip_say");
 
+    // Condition VALUE vocabularies, pinned from the MCA 7.6.26 jar. Most of these are parsed with
+    // Enum.valueOf at DATAPACK LOAD TIME and MCA's Dialogues loader has no error containment — an
+    // invalid value crashes the game during world creation (the Chore.CHOPPING crash of 2026-07-06).
+    private static final Set<String> CHORES = Set.of("none", "prospect", "harvest", "chop", "hunt", "fish");
+    private static final Set<String> MOODS = Set.of("depressed", "sad", "unhappy", "passive", "fine", "happy", "overjoyed");
+    private static final Set<String> PERSONALITIES = Set.of(
+            "unassigned", "athletic", "confident", "friendly", "flirty", "witty", "shy",
+            "gloomy", "sensitive", "greedy", "odd", "lazy", "grumpy", "peppy");
+    private static final Set<String> AGE_GROUPS = Set.of("unassigned", "baby", "toddler", "child", "teen", "adult");
+    private static final Set<String> RANKS = Set.of("outlaw", "peasant", "merchant", "noble", "mayor", "monarch");
+    private static final Set<String> CONSTRAINTS = Set.of(
+            "family", "spouse", "kids", "parent", "adult", "teen", "toddler", "baby", "engaged",
+            "promised", "cleric", "adventurer", "mercenary", "outlawed", "trader", "orphan",
+            "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
+    private static final Set<String> FEATURES = Set.of("topics", "states", "templates", "gossip");
+
     private static Map<String, JsonObject> questions;
     private static Map<String, String> lang;
 
@@ -92,6 +108,55 @@ class ContentLintTest {
             }
         }));
         assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    @Test
+    void conditionValuesMatchMcaVocabularies() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            if (!result.has("conditions")) {
+                return;
+            }
+            for (JsonElement c : result.getAsJsonArray("conditions")) {
+                JsonObject condition = c.getAsJsonObject();
+                String where = name + "/" + answerName;
+                checkValue(condition, "current_chore", CHORES, where, problems);
+                checkValue(condition, "mood", MOODS, where, problems);
+                checkValue(condition, "personality", PERSONALITIES, where, problems);
+                checkValue(condition, "age_group", AGE_GROUPS, where, problems);
+                checkValue(condition, "rank", RANKS, where, problems);
+                checkValue(condition, "realtalk_enabled", FEATURES, where, problems);
+                checkValue(condition, "realtalk_disabled", FEATURES, where, problems);
+                if (condition.has("constraints")) {
+                    for (String token : condition.get("constraints").getAsString().split(",")) {
+                        String bare = token.strip().replaceFirst("^!", "");
+                        if (!CONSTRAINTS.contains(bare)) {
+                            problems.add(where + ": unknown constraint '" + token.strip() + "'");
+                        }
+                    }
+                }
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /** Regression guard for the 2026-07-06 world-creation crash: these exact values must never return. */
+    @Test
+    void choreVocabularyRejectsTheOldCrashValues() {
+        for (String bad : List.of("chopping", "harvesting", "fishing")) {
+            assertTrue(!CHORES.contains(bad), "'" + bad + "' is not a valid MCA Chore");
+        }
+    }
+
+    private static void checkValue(JsonObject condition, String key, Set<String> allowed,
+                                   String where, List<String> problems) {
+        if (condition.has(key) && condition.get(key).isJsonPrimitive()
+                && condition.get(key).getAsJsonPrimitive().isString()) {
+            String value = condition.get(key).getAsString();
+            if (!allowed.contains(value)) {
+                problems.add(where + ": invalid " + key + " value '" + value + "' (allowed: " + allowed + ")");
+            }
+        }
     }
 
     @Test

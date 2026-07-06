@@ -7,6 +7,19 @@ Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` +
 
 ## [0.1.0] - 2026-07-06
 
+### Fixed
+- **World-creation crash** (`No enum constant forge.net.mca.entity.ai.Chore.CHOPPING`): the day
+  topic used invalid `current_chore` values (`chopping`/`harvesting`/`fishing`); MCA's `Chore` enum
+  is `NONE, PROSPECT, HARVEST, CHOP, HUNT, FISH` and MCA parses these at datapack load with no
+  error containment, so the bad values aborted the resource reload while creating a new world.
+  Corrected to `chop`/`harvest`/`fish`.
+- Hardened all `realtalk_*` condition/action parsers: malformed JSON (in this mod or any datapack
+  using our keys) now logs an ERROR and degrades to a no-op instead of crashing the reload the
+  same way.
+- Content lint now validates condition *values* (chore/mood/personality/age_group/rank/constraints
+  vocabularies pinned from the MCA 7.6.26 jar), not just condition keys — the gap that let the
+  crash ship.
+
 ### Added
 - Real Talk conversation hub merged into MCA's villager Talk menu (`main` question), with 8 topics
   across three trust tiers plus gossip, spouse, and family branches (10 dialogue JSON files).

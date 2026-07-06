@@ -7,6 +7,7 @@ import dev.otectus.mcarealtalk.gossip.GossipQuery;
 import dev.otectus.mcarealtalk.gossip.GossipSayDirective;
 import dev.otectus.mcarealtalk.template.RealTalkSay;
 import dev.otectus.mcarealtalk.template.SayDirective;
+import dev.otectus.mcarealtalk.util.SafeParse;
 import forge.net.mca.entity.ai.LongTermMemory;
 import forge.net.mca.entity.interaction.gifts.GiftPredicate;
 import forge.net.mca.resources.data.dialogue.Actions;
@@ -17,7 +18,10 @@ import forge.net.mca.resources.data.dialogue.Actions;
  * classloading gate). Lambdas implementing MCA functional interfaces are confined to this package.
  *
  * <p>Every adapter body is wrapped in {@code try/catch (Throwable)} returning a safe default so a
- * runtime failure can never break MCA's dialogue selection loop.
+ * runtime failure can never break MCA's dialogue selection loop. Every <b>parser</b> is wrapped in
+ * {@link SafeParse#orNull} because MCA's {@code Dialogues} loader has no error containment — a
+ * throwing parser aborts the whole datapack reload and crashes world creation; malformed JSON
+ * instead parses to null and the adapter degrades to a no-op action / never-matching condition.
  *
  * <p>Registered vocabulary (see DATAPACK.md):
  * <ul>
@@ -54,10 +58,10 @@ public final class RealTalkMcaRegistrar {
         // --- Conditions (dialogue JSON shares the gift-predicate condition registry) ---
 
         GiftPredicate.register("realtalk_enabled",
-                (json, name) -> json.getAsString(),
+                (json, name) -> SafeParse.orNull("realtalk_enabled", json, json::getAsString),
                 feature -> (villager, stack, player) -> {
                     try {
-                        return McaRealTalkConfig.isFeatureEnabled(feature) ? 1.0f : 0.0f;
+                        return feature != null && McaRealTalkConfig.isFeatureEnabled(feature) ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaRealTalk.LOGGER.debug("realtalk_enabled({}) failed; defaulting 0", feature, t);
                         return 0.0f;
@@ -65,10 +69,10 @@ public final class RealTalkMcaRegistrar {
                 });
 
         GiftPredicate.register("realtalk_disabled",
-                (json, name) -> json.getAsString(),
+                (json, name) -> SafeParse.orNull("realtalk_disabled", json, json::getAsString),
                 feature -> (villager, stack, player) -> {
                     try {
-                        return McaRealTalkConfig.isFeatureEnabled(feature) ? 0.0f : 1.0f;
+                        return feature != null && !McaRealTalkConfig.isFeatureEnabled(feature) ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaRealTalk.LOGGER.debug("realtalk_disabled({}) failed; defaulting 0", feature, t);
                         return 0.0f;
@@ -76,10 +80,12 @@ public final class RealTalkMcaRegistrar {
                 });
 
         GiftPredicate.register("realtalk_gossip",
-                (json, name) -> GossipQuery.fromJson(json.getAsJsonObject()),
+                (json, name) -> SafeParse.orNull("realtalk_gossip", json,
+                        () -> GossipQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
                     try {
-                        return GossipConditionLogic.hasUntoldGossip(query, villager, player) ? 1.0f : 0.0f;
+                        return query != null && GossipConditionLogic.hasUntoldGossip(query, villager, player)
+                                ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaRealTalk.LOGGER.debug("realtalk_gossip condition failed; defaulting 0", t);
                         return 0.0f;
@@ -107,20 +113,26 @@ public final class RealTalkMcaRegistrar {
                 });
 
         Actions.register("realtalk_say",
-                (json, name) -> SayDirective.fromJson(json.getAsJsonObject()),
+                (json, name) -> SafeParse.orNull("realtalk_say", json,
+                        () -> SayDirective.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
                     try {
-                        RealTalkSay.trigger(directive, villager, player);
+                        if (directive != null) {
+                            RealTalkSay.trigger(directive, villager, player);
+                        }
                     } catch (Throwable t) {
                         McaRealTalk.LOGGER.debug("realtalk_say failed; ignoring", t);
                     }
                 });
 
         Actions.register("realtalk_gossip_say",
-                (json, name) -> GossipSayDirective.fromJson(json.getAsJsonObject()),
+                (json, name) -> SafeParse.orNull("realtalk_gossip_say", json,
+                        () -> GossipSayDirective.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
                     try {
-                        GossipConditionLogic.tellNextGossip(directive, villager, player);
+                        if (directive != null) {
+                            GossipConditionLogic.tellNextGossip(directive, villager, player);
+                        }
                     } catch (Throwable t) {
                         McaRealTalk.LOGGER.debug("realtalk_gossip_say failed; ignoring", t);
                     }

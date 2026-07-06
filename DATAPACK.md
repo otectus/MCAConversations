@@ -22,6 +22,17 @@ against MCA Reborn 7.6.23.
   Multiple condition keys inside one `{...}` entry are ANDed.
 - **Negative sinks are the reliable gate**: a condition like
   `{"chance": -1000, "hearts_max": 24}` kills a result outright when hearts ≤ 24.
+- **MCA parses condition values strictly at load, with NO error containment.** An invalid enum
+  value (e.g. a bad `current_chore`) throws out of `Dialogues.apply` and **crashes the game during
+  world creation / any datapack reload**. Valid values (MCA 7.6.26):
+  - `current_chore`: `none, prospect, harvest, chop, hunt, fish`
+  - `mood`: `depressed, sad, unhappy, passive, fine, happy, overjoyed` (string-compared — a bad
+    value silently never matches rather than crashing)
+  - `age_group`: `baby, toddler, child, teen, adult` · `rank`: `outlaw, peasant, merchant, noble,
+    mayor, monarch` · `personality`: `athletic, confident, friendly, flirty, witty, shy, gloomy,
+    sensitive, greedy, odd, lazy, grumpy, peppy`
+  This mod's own `realtalk_*` keys are **parse-safe**: malformed JSON logs an ERROR and the entry
+  degrades to a no-op action / never-matching condition instead of crashing the reload.
 
 ## MCA's LongTermMemory (what `memory`/`remember` really do)
 
