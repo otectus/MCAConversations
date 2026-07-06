@@ -1,0 +1,42 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+# Server-side mixin that records accepted gifts (BreedableRelationship.acceptGift) for the
+# gratitude/template features.
+[[mixins]]
+    config="mcarealtalk.mixins.json"
+
+# MCA: Real Talk is meaningless without MCA Reborn, so MCA is a mandatory dependency.
+# We load AFTER MCA so its entities, dialogue registries, and resource loaders are present.
+[[dependencies.${mod_id}]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="mca"
+    mandatory=true
+    versionRange="[7.6,8)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="architectury"
+    mandatory=true
+    versionRange="[9.2,10)"
+    ordering="AFTER"
+    side="BOTH"

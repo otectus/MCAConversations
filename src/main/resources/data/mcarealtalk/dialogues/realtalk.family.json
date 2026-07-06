@@ -1,0 +1,164 @@
+{
+  "answers": [
+    {
+      "name": "checkin_child",
+      "constraints": "kids",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": 80,
+              "age_group": "baby"
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "say": "realtalk.family.child.little",
+            "positive": 3
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "say": "realtalk.family.child.teen",
+            "positive": 3
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": 4,
+              "mood": "happy"
+            },
+            {
+              "chance": 3,
+              "personality": "peppy"
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "say": "realtalk.family.child.doing",
+            "positive": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_parent",
+      "constraints": "parent",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 30,
+              "mood": "sad"
+            },
+            {
+              "chance": 40,
+              "mood": "depressed"
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "say": "realtalk.family.parent.worried",
+            "positive": 4
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": 4,
+              "personality": "friendly"
+            },
+            {
+              "chance": 3,
+              "personality": "confident"
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "say": "realtalk.family.parent.proud",
+            "positive": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "memories",
+      "constraints": "family",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.memories",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "say": "realtalk.family.memories.again",
+            "positive": 1
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": 4,
+              "personality": "sensitive"
+            },
+            {
+              "chance": 3,
+              "personality": "witty"
+            }
+          ],
+          "actions": {
+            "next": "realtalk.family",
+            "positive": 4,
+            "realtalk_say": {
+              "phrase": "realtalk.family.memories.share",
+              "vars": [
+                "villager_name"
+              ]
+            },
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.memories",
+              "var": "player",
+              "time": 72000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "realtalk"
+          }
+        }
+      ]
+    }
+  ]
+}

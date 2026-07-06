@@ -1,0 +1,79 @@
+{
+  "answers": [
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": 4,
+              "personality": "peppy"
+            },
+            {
+              "chance": 4,
+              "mood": "happy"
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.dreams.encourage.glad",
+            "positive": 5
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": 5,
+              "personality": "gloomy"
+            },
+            {
+              "chance": 3,
+              "mood": "sad"
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.dreams.encourage.doubt",
+            "positive": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": 4,
+              "personality": "witty"
+            },
+            {
+              "chance": 4,
+              "personality": "confident"
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.dreams.more",
+            "positive": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "realtalk"
+          }
+        }
+      ]
+    }
+  ]
+}
