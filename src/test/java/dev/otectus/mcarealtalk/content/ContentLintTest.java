@@ -64,6 +64,34 @@ class ContentLintTest {
             "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
     private static final Set<String> FEATURES = Set.of("topics", "states", "templates", "gossip");
 
+    /** MCA trait vocabulary (lowercase, as MCA's own gift JSON uses), pinned from the 7.6.26 jar. */
+    private static final Set<String> TRAITS = Set.of(
+            "left_handed", "weak", "tough", "color_blind", "heterochromia", "lactose_intolerance",
+            "coeliac_disease", "diabetes", "dwarfism", "albinism", "vegetarian", "bisexual",
+            "homosexual", "asexual", "electrified", "sirben", "rainbow", "unknown");
+
+    /**
+     * Every profession id our content references — vanilla + the registered professions of the
+     * runecraft modpack (scanned 2026-07-06). A typo here means silent dead content, so JSON
+     * conditions must match this roster exactly. NOTE: mca:baker/jeweler/miner/warrior/pillager
+     * are lang-only ghosts in MCA 7.6.26 (never registered) and must not appear.
+     */
+    private static final Set<String> PROFESSIONS = Set.of(
+            "minecraft:farmer", "minecraft:fisherman", "minecraft:shepherd", "minecraft:fletcher",
+            "minecraft:librarian", "minecraft:cartographer", "minecraft:cleric", "minecraft:armorer",
+            "minecraft:weaponsmith", "minecraft:toolsmith", "minecraft:butcher",
+            "minecraft:leatherworker", "minecraft:mason", "minecraft:nitwit", "minecraft:none",
+            "mca:guard", "mca:archer", "mca:adventurer", "mca:mercenary", "mca:cultist", "mca:outlaw",
+            "morevillagers:enderian", "morevillagers:engineer", "morevillagers:florist",
+            "morevillagers:hunter", "morevillagers:miner", "morevillagers:netherian",
+            "morevillagers:oceanographer", "morevillagers:woodworker",
+            "ars_nouveau:shady_wizard", "chefsdelight:delightchef", "chefsdelight:delightcook",
+            "iceandfire:scribe", "vampirism:hunter_expert", "vampirism:priest",
+            "vampirism:vampire_expert", "werewolves:werewolf_expert");
+
+    private static final java.util.regex.Pattern RESOURCE_LOCATION =
+            java.util.regex.Pattern.compile("^[a-z0-9_.-]+:[a-z0-9_./-]+$");
+
     private static Map<String, JsonObject> questions;
     private static Map<String, String> lang;
 
@@ -127,6 +155,15 @@ class ContentLintTest {
                 checkValue(condition, "rank", RANKS, where, problems);
                 checkValue(condition, "realtalk_enabled", FEATURES, where, problems);
                 checkValue(condition, "realtalk_disabled", FEATURES, where, problems);
+                checkValue(condition, "trait", TRAITS, where, problems);
+                if (condition.has("profession")) {
+                    String value = condition.get("profession").getAsString();
+                    if (!RESOURCE_LOCATION.matcher(value).matches()) {
+                        problems.add(where + ": malformed profession id '" + value + "'");
+                    } else if (!PROFESSIONS.contains(value)) {
+                        problems.add(where + ": profession '" + value + "' not in the pinned roster (typo = dead content)");
+                    }
+                }
                 if (condition.has("constraints")) {
                     for (String token : condition.get("constraints").getAsString().split(",")) {
                         String bare = token.strip().replaceFirst("^!", "");
@@ -238,11 +275,117 @@ class ContentLintTest {
 
     @Test
     void newQuestionsHavePromptText() {
-        // Extension files (MCA questions) excluded — MCA provides their prompts.
-        Set<String> extensions = Set.of("main", "greet");
-        questions.keySet().stream().filter(q -> !extensions.contains(q)).forEach(q ->
-                assertTrue(lang.containsKey("dialogue." + q),
-                        "question '" + q + "' needs prompt text dialogue." + q));
+        // Extension files (MCA questions) excluded — MCA provides their prompts. Auto questions
+        // are processed server-side without ever showing a prompt.
+        Set<String> extensions = Set.of("greet");
+        questions.entrySet().stream()
+                .filter(e -> !extensions.contains(e.getKey()))
+                .filter(e -> !(e.getValue().has("auto") && e.getValue().get("auto").getAsBoolean()))
+                .forEach(e -> assertTrue(lang.containsKey("dialogue." + e.getKey()),
+                        "question '" + e.getKey() + "' needs prompt text dialogue." + e.getKey()));
+    }
+
+    /**
+     * Every lang key must trace back to something that can display it — a say/realtalk_say
+     * reference, a gossip type line, a question prompt, an answer button, a follow-up button, or a
+     * whitelisted extension of MCA's own line pools. Orphans are dead content rot.
+     */
+    @Test
+    void noDeadLangKeys() {
+        Set<String> referenced = new HashSet<>();
+        questions.forEach((name, json) -> {
+            referenced.add("dialogue." + name);
+            for (JsonElement a : json.getAsJsonArray("answers")) {
+                JsonObject answer = a.getAsJsonObject();
+                if (answer.has("name")) {
+                    referenced.add("dialogue." + name + "." + answer.get("name").getAsString());
+                }
+            }
+            forEachResult(json, (answerName, result) -> {
+                JsonObject actions = result.getAsJsonObject("actions");
+                if (actions.has("say")) {
+                    referenced.add("dialogue." + actions.get("say").getAsString());
+                }
+                if (actions.has("realtalk_say")) {
+                    referenced.add("dialogue." + actions.getAsJsonObject("realtalk_say").get("phrase").getAsString());
+                }
+            });
+        });
+        for (GossipEventType type : GossipEventType.values()) {
+            referenced.add("dialogue.realtalk.gossip." + type.jsonName());
+        }
+        // Intentional extensions of MCA's own dialogue pools (their bases live in MCA's lang).
+        Set<String> mcaPoolBases = Set.of("dialogue.main", "dialogue.greet.success",
+                "dialogue.greet.fail", "dialogue.story.success", "dialogue.shake_hand.success");
+
+        List<String> problems = new ArrayList<>();
+        for (String key : lang.keySet()) {
+            String base = key.contains("/") ? key.substring(0, key.indexOf('/')) : key;
+            if (!referenced.contains(base) && !mcaPoolBases.contains(base)) {
+                problems.add("orphaned lang key: " + key);
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * Anti-repetition floor: every referenced say key needs a pool of ≥3 lines, except the
+     * per-profession/per-trait/per-age flavor keys (≥2; they are already precision-targeted) and
+     * the sirben easter egg (1 is the joke).
+     */
+    @Test
+    void sayKeyPoolsMeetTheVariantFloor() {
+        Set<String> sayKeys = new HashSet<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (actions.has("say")) {
+                sayKeys.add(actions.get("say").getAsString());
+            }
+            if (actions.has("realtalk_say")) {
+                sayKeys.add(actions.getAsJsonObject("realtalk_say").get("phrase").getAsString());
+            }
+        }));
+        List<String> problems = new ArrayList<>();
+        for (String key : sayKeys) {
+            if (key.equals("realtalk.food.trait.sirben")) {
+                continue;
+            }
+            int floor = key.startsWith("realtalk.work.prof.") || key.startsWith("realtalk.food.trait.")
+                    || key.endsWith(".child") || key.endsWith(".teen") ? 2 : 3;
+            String base = "dialogue." + key;
+            int pool = (lang.containsKey(base) ? 1 : 0);
+            for (int i = 1; lang.containsKey(base + "/" + i); i++) {
+                pool++;
+            }
+            if (pool < floor) {
+                problems.add(base + ": pool " + pool + " < floor " + floor);
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /** All hand-written profession say keys must correspond to roster ids and vice versa. */
+    @Test
+    void professionLinesMatchRoster() {
+        Set<String> expectedPaths = new HashSet<>();
+        for (String id : PROFESSIONS) {
+            expectedPaths.add(id.substring(id.indexOf(':') + 1));
+        }
+        List<String> problems = new ArrayList<>();
+        for (String path : expectedPaths) {
+            if (!lang.containsKey("dialogue.realtalk.work.prof." + path)) {
+                problems.add("missing profession line: dialogue.realtalk.work.prof." + path);
+            }
+        }
+        for (String key : lang.keySet()) {
+            if (key.startsWith("dialogue.realtalk.work.prof.") && !key.contains("/")) {
+                String path = key.substring("dialogue.realtalk.work.prof.".length());
+                if (!expectedPaths.contains(path)) {
+                    problems.add("profession line without roster entry: " + key);
+                }
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 
     @Test

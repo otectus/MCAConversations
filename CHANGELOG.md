@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file. Format foll
 
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
 
+## [0.2.0] - 2026-07-06
+
+### Changed
+- **MCA's "Chat" button now opens the Real Talk hub** (the separate "Real talk..." button is
+  gone). Implemented as a soft-fail mixin on MCA's single dialogue routing point
+  (`Dialogues.getQuestion`): only the exact `chat` hop is redirected; `chat.topic`/`chat.fail`,
+  root/first-meeting, hire, rumors, and story flows are untouched (verified: MCA's `main.json` is
+  the only referrer of `next: "chat"`). Config `replaceChatWithRealTalk` (default true); when off,
+  Chat behaves vanilla and the hub is unreachable. MCA's old casual chat line pool is dropped.
+- Work topic moved to a dedicated auto question (`realtalk.work`) with per-profession responses.
+
+### Added
+- **Per-profession work talk for the whole runecraft modpack** (scanned 419 jars): hand-written
+  lines for all 13 vanilla trades + nitwit + jobless, MCA's 6 registered professions
+  (guard/archer/adventurer/mercenary/cultist/outlaw), all 8 More Villagers professions, Ars
+  Nouveau's shady wizard, Chef's Delight chef+cook, Ice and Fire scribe, Vampirism's three, and
+  Werewolves' expert — 37 professions × 2 variants. Unknown/future professions get a
+  self-personalizing generic line via the new `profession_name` template variable (localized
+  client-side).
+- **New topics**: food (with trait-flavored replies — vegetarian, lactose intolerance, coeliac,
+  diabetes, and a sirben easter egg), neighbors/people (personality-bucketed opinions), and
+  secret (tier 3, unlocked by having confided — the payoff for the `confided` flag).
+- **Age-appropriate answers**: child and teen villagers answer day/dreams/fears in their own
+  voice (and never trigger adult follow-ups or unlock flags).
+- **Personality overlays for all 13 personalities** (was 2): athletic, confident, friendly,
+  witty, shy, sensitive, greedy, odd, lazy, grumpy, peppy join gloomy and flirty — 14
+  high-traffic lines each.
+- **Anti-repetition depth**: every say line now has a pool of ≥3 variants (≥2 for
+  profession/trait/age precision lines); deflect and hub-prompt pools deepened.
+- Lint gates: pinned profession roster + ResourceLocation wellformedness, trait vocabulary,
+  dead-lang-key detection, variant-pool floor, overlay coverage floor, mixin-config guard.
+
+### Removed
+- `dialogue.main.realtalk` button and our `chat.success/20-25` pool extensions (dead after the
+  Chat replacement).
+
 ## [0.1.0] - 2026-07-06
 
 ### Fixed

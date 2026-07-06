@@ -25,6 +25,14 @@ class SayDirectiveTest {
     }
 
     @Test
+    void professionNameRoundTrips() {
+        SayDirective d = SayDirective.fromJson(json(
+                "{\"phrase\": \"realtalk.work.generic\", \"vars\": [\"profession_name\"]}"));
+        assertEquals(List.of(TemplateVariable.PROFESSION_NAME), d.vars());
+        assertEquals("mcarealtalk.fallback.profession", TemplateVariable.PROFESSION_NAME.fallbackKey());
+    }
+
+    @Test
     void varsOptional() {
         SayDirective d = SayDirective.fromJson(json("{\"phrase\": \"realtalk.day.good\"}"));
         assertTrue(d.vars().isEmpty());

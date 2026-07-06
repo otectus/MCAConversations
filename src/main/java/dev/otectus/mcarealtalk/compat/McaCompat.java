@@ -59,6 +59,21 @@ public final class McaCompat {
         return Optional.empty();
     }
 
+    /**
+     * The villager's localized profession text (e.g. "Farmer", "Guard"). Returned as a Component
+     * so translation resolves client-side in the player's locale. Safe default: empty.
+     */
+    public static Optional<net.minecraft.network.chat.Component> getProfessionText(Entity villager) {
+        if (villager instanceof VillagerLike<?> v) {
+            try {
+                return Optional.ofNullable(v.getProfessionText());
+            } catch (Throwable t) {
+                McaRealTalk.LOGGER.debug("MCA getProfessionText failed; defaulting empty", t);
+            }
+        }
+        return Optional.empty();
+    }
+
     /** The player's relationship hearts with this villager. Safe default: 0. */
     public static int getHearts(ServerPlayer player, Entity villager) {
         if (villager instanceof VillagerEntityMCA mca) {

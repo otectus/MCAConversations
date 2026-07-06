@@ -6,6 +6,7 @@ File: `config/mcarealtalk-common.toml` (generated on first run).
 
 | Option | Default | Effect when disabled |
 |---|---|---|
+| `replaceChatWithRealTalk` | `true` | MCA's Chat button behaves like vanilla MCA; the Real Talk hub becomes unreachable (no separate button exists since v0.2.0 — see DATAPACK.md to restore one via datapack) |
 | `enableTopics` | `true` | Real Talk topic branches deflect to fallback lines |
 | `enableStates` | `true` | gratitude after gifts is neither recorded nor referenced |
 | `enableTemplates` | `true` | templated lines render with neutral fallbacks ("someone", "the village") |

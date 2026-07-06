@@ -23,6 +23,58 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.day",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.day.child",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.day",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.day",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.day.teen",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.day",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 20,
               "mood": "sad"
             },
@@ -132,57 +184,9 @@
           }
         },
         {
-          "baseChance": 0,
-          "conditions": [
-            {
-              "chance": 30,
-              "personality": "lazy"
-            },
-            {
-              "chance": 20,
-              "mood": "unhappy"
-            },
-            {
-              "chance": 20,
-              "mood": "sad"
-            }
-          ],
+          "baseChance": 1,
           "actions": {
-            "next": "realtalk",
-            "say": "realtalk.work.hate",
-            "positive": 4,
-            "realtalk_record": {
-              "id": "mcarealtalk.cooldown.work",
-              "var": "player",
-              "time": 48000
-            }
-          }
-        },
-        {
-          "baseChance": 5,
-          "conditions": [
-            {
-              "chance": 6,
-              "personality": "athletic"
-            },
-            {
-              "chance": 6,
-              "personality": "confident"
-            },
-            {
-              "chance": 4,
-              "mood": "happy"
-            }
-          ],
-          "actions": {
-            "next": "realtalk",
-            "say": "realtalk.work.like",
-            "positive": 3,
-            "realtalk_record": {
-              "id": "mcarealtalk.cooldown.work",
-              "var": "player",
-              "time": 48000
-            }
+            "next": "realtalk.work"
           }
         }
       ]
@@ -243,6 +247,510 @@
             },
             "realtalk_record": {
               "id": "mcarealtalk.cooldown.village",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "food",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.food",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 150,
+              "trait": "sirben"
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.trait.sirben",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.food",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "vegetarian"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.trait.vegetarian",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.food",
+                "var": "player",
+                "time": 12000
+              },
+              {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "lactose_intolerance"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.trait.lactose",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.food",
+                "var": "player",
+                "time": 12000
+              },
+              {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "coeliac_disease"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.trait.coeliac",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.food",
+                "var": "player",
+                "time": 12000
+              },
+              {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "diabetes"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.trait.diabetes",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.food",
+                "var": "player",
+                "time": 12000
+              },
+              {
+                "id": "mcarealtalk.state.food.trait.told",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.topic.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "greedy"
+            },
+            {
+              "chance": 3,
+              "mood": "happy"
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.first",
+            "positive": 3,
+            "remember": {
+              "id": "mcarealtalk.topic.food",
+              "var": "player"
+            },
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.food",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.topic.food",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.food",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.food.revisit",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.food",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "people",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.people",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "friendly"
+            },
+            {
+              "chance": 100,
+              "personality": "peppy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.warm",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "grumpy"
+            },
+            {
+              "chance": 100,
+              "personality": "greedy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.judgy",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "shy"
+            },
+            {
+              "chance": 100,
+              "personality": "sensitive"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.shy",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "witty"
+            },
+            {
+              "chance": 100,
+              "personality": "odd"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.wry",
+            "positive": 3,
+            "realtalk_record": [
+              {
+                "id": "mcarealtalk.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcarealtalk.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 9
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.topic.people",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.first",
+            "positive": 3,
+            "remember": {
+              "id": "mcarealtalk.topic.people",
+              "var": "player"
+            },
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.people",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 9
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.topic.people",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.people",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.people.revisit",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.people",
               "var": "player",
               "time": 48000
             }
@@ -400,6 +908,66 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.dreams",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.dreams.child",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.dreams",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.dreams",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.dreams.teen",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.dreams",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
           "baseChance": 5,
           "conditions": [
             {
@@ -514,6 +1082,66 @@
           "actions": {
             "next": "realtalk",
             "say": "realtalk.fears.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.fears.child",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.fears.teen",
+            "positive": 2,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            }
           }
         },
         {
@@ -801,6 +1429,137 @@
                 "var": "player"
               }
             ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "secret",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcarealtalk.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.deflect.secret"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.secret",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcarealtalk.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.secret.again"
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.topic.secret",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "shy"
+            },
+            {
+              "chance": 4,
+              "personality": "odd"
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.secret.first",
+            "positive": 8,
+            "remember": {
+              "id": "mcarealtalk.topic.secret",
+              "var": "player"
+            },
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.secret",
+              "var": "player",
+              "time": 72000
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.topic.secret",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcarealtalk.cooldown.secret",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "realtalk",
+            "say": "realtalk.secret.revisit",
+            "positive": 4,
+            "realtalk_record": {
+              "id": "mcarealtalk.cooldown.secret",
+              "var": "player",
+              "time": 72000
+            }
           }
         }
       ]

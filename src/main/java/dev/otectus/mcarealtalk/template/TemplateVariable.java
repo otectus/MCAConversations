@@ -17,7 +17,8 @@ public enum TemplateVariable {
     SPOUSE_NAME("mcarealtalk.fallback.spouse"),
     VILLAGE_NAME("mcarealtalk.fallback.village"),
     LAST_GIFT_ITEM("mcarealtalk.fallback.something"),
-    TIME_OF_DAY("mcarealtalk.fallback.time");
+    TIME_OF_DAY("mcarealtalk.fallback.time"),
+    PROFESSION_NAME("mcarealtalk.fallback.profession");
 
     private final String fallbackKey;
 

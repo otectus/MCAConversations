@@ -46,6 +46,8 @@ public final class TemplateContextFactory {
                         });
                 case TIME_OF_DAY -> context.with(var,
                         Component.translatable(timeOfDayKey(player.serverLevel().getDayTime() % 24000L)));
+                case PROFESSION_NAME -> McaCompat.getProfessionText(villager)
+                        .ifPresent(text -> context.with(var, text));
             }
         }
         return context;

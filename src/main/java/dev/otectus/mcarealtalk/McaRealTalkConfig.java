@@ -42,6 +42,7 @@ public final class McaRealTalkConfig {
     }
 
     public static final class Common {
+        public final ForgeConfigSpec.BooleanValue replaceChatWithRealTalk;
         public final ForgeConfigSpec.BooleanValue enableTopics;
         public final ForgeConfigSpec.BooleanValue enableStates;
         public final ForgeConfigSpec.BooleanValue enableTemplates;
@@ -62,6 +63,11 @@ public final class McaRealTalkConfig {
 
         Common(ForgeConfigSpec.Builder b) {
             b.push("features");
+            replaceChatWithRealTalk = b.comment(
+                    "Route MCA's 'Chat' button to the Real Talk conversation hub.",
+                    "When false, Chat behaves like vanilla MCA and the Real Talk hub is unreachable",
+                    "(v0.2.0 removed the separate main-menu button; see DATAPACK.md to restore one).")
+                    .define("replaceChatWithRealTalk", true);
             enableTopics = b.comment("Enable the Real Talk conversation topics (heart-gated personal questions).")
                     .define("enableTopics", true);
             enableStates = b.comment("Enable conversation states (e.g. gratitude after a gift influences dialogue).")

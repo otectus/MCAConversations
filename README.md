@@ -8,14 +8,20 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.1.0)
+## Features (0.2.0)
 
-- **Real Talk menu** — a new "Real talk..." entry in MCA's villager Talk menu opens a hub of
-  personal conversation topics: how their day *actually* went, whether they like their work, their
-  life story, dreams, fears, feelings, and regrets.
+- **Chat, replaced** — MCA's own "Chat" button now opens the Real Talk hub: how their day
+  *actually* went, whether they like their work, food, the neighbors, their life story, dreams,
+  fears, feelings, regrets, and secrets. (Toggleable via `replaceChatWithRealTalk`.)
+- **Personalized per villager** — work talk is profession-aware (hand-written lines for all
+  vanilla trades plus every profession mod in the pack: MCA, More Villagers, Ars Nouveau, Chef's
+  Delight, Ice and Fire, Vampirism, Werewolves — and a self-personalizing generic line for any
+  other mod's professions); food talk respects MCA traits (vegetarian, lactose intolerance, ...);
+  children and teens answer in their own voice; all 13 personalities have flavored line overlays.
 - **Heart-gated depth** — casual topics are open to anyone; personal topics (life, dreams, fears)
   need 25+ hearts; intimate topics (feelings, regrets) need 60+ hearts *and* a prior heart-to-heart
-  — unless you're married to them. Below the gate, villagers deflect in character.
+  — unless you're married to them. Secrets require having confided something first. Below the
+  gate, villagers deflect in character.
 - **Conversation memory** — villagers remember (per player, persisted in entity NBT via MCA's own
   long-term memory) what you've asked. Ask again too soon and they'll call it out; come back much
   later and they'll *revisit* the topic ("I've been chewing on what you asked me...").

@@ -87,9 +87,37 @@ fill `%2$s`, `%3$s`, … in the order listed. Unresolvable vars fall back to neu
 | `village_name` | their home village's name |
 | `last_gift_item` | the display name of the last gift this player gave this villager |
 | `time_of_day` | "this morning" / "today" / "this evening" / "tonight" |
+| `profession_name` | the villager's localized profession display name (any mod's professions, client-side localized) |
 
 Gossip lines receive `%2$s` = subject A's name, `%3$s` = subject B's name (empty for
 single-subject events like deaths).
+
+## The Chat redirect (v0.2.0)
+
+While `replaceChatWithRealTalk` is on (default), **every** `next: "chat"` hop — MCA's Chat button,
+or any third-party datapack's — resolves to the `realtalk` hub instead (the redirect intercepts the
+exact question name `chat` at MCA's `Dialogues.getQuestion`; `chat.topic`/`chat.fail` and all other
+names pass through). Datapack answers merged into question `chat` are unreachable while the toggle
+is on. If the `realtalk` question is missing (e.g. a datapack removed it), Chat falls back to
+vanilla MCA behavior automatically.
+
+To restore a separate menu button instead (v0.1.0 style), set the config to `false` and ship a
+datapack file `data/<yourpack>/dialogues/main.json`:
+
+```json
+{ "silent": true, "answers": [ { "name": "realtalk",
+    "results": [ { "baseChance": 1, "actions": { "next": "realtalk" } } ] } ] }
+```
+
+(plus a lang entry `dialogue.main.realtalk` for the button label).
+
+## Extending profession work-talk
+
+`data/mcarealtalk/dialogues/realtalk.work.json` is an `auto` question whose results are scored per
+profession — third-party packs can merge additional profession results into it (same-basename
+merge) with `{"chance": 100, "profession": "yourmod:yourprofession"}` and their own say keys.
+Conditions naming professions from uninstalled mods never match and never crash. Professions with
+no hand-written result fall through to the generic templated line (`profession_name` var).
 
 ## Conventions for content that degrades gracefully
 
