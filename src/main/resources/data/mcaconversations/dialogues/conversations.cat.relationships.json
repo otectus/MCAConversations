@@ -1,0 +1,39 @@
+{
+  "answers": [
+    {
+      "name": "us",
+      "constraints": "spouse,adult",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.us"
+          }
+        }
+      ]
+    },
+    {
+      "name": "family",
+      "constraints": "family,!spouse",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.family"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

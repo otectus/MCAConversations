@@ -1,0 +1,45 @@
+{
+  "answers": [
+    {
+      "name": "news",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_gossip": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.events",
+            "positive": 1,
+            "conversations_gossip_say": {}
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.events",
+            "say": "conversations.gossip.none"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,345 @@
+{
+  "answers": [
+    {
+      "name": "village",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.village",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.village.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "constraints": "!has_village"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.village.none",
+            "positive": 2
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "constraints": "!has_village"
+            },
+            {
+              "chance": 4,
+              "rank": "mayor"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "positive": 3,
+            "conversations_say": {
+              "phrase": "conversations.village.home",
+              "vars": [
+                "village_name"
+              ]
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "people",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "friendly"
+            },
+            {
+              "chance": 100,
+              "personality": "peppy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.warm",
+            "positive": 3,
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "grumpy"
+            },
+            {
+              "chance": 100,
+              "personality": "greedy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.judgy",
+            "positive": 3,
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "shy"
+            },
+            {
+              "chance": 100,
+              "personality": "sensitive"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.shy",
+            "positive": 3,
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "personality": "witty"
+            },
+            {
+              "chance": 100,
+              "personality": "odd"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.wry",
+            "positive": 3,
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.state.people.flavored",
+                "var": "player",
+                "time": 168000
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 9
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.people",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.first",
+            "positive": 3,
+            "remember": {
+              "id": "mcaconversations.topic.people",
+              "var": "player"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.people",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 9
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.people",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.revisit",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.people",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

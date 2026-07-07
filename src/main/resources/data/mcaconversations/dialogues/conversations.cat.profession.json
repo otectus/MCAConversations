@@ -1,0 +1,72 @@
+{
+  "answers": [
+    {
+      "name": "work",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.again"
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.work"
+          }
+        }
+      ]
+    },
+    {
+      "name": "work_offer",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_quest_available": {
+                "scope": "this"
+              }
+            }
+          ],
+          "actions": {
+            "say": "conversations.quest.offer",
+            "conversations_quest_open": {
+              "mode": "menu"
+            },
+            "next": "conversations.cat.profession"
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "say": "conversations.quest.none",
+            "next": "conversations.cat.profession"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-# MCA: Real Talk
+# MCA: Conversations
 
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-green)
 ![Forge](https://img.shields.io/badge/Forge-47.x-orange)
@@ -8,11 +8,15 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.2.0)
+## Features (0.3.0)
 
-- **Chat, replaced** — MCA's own "Chat" button now opens the Real Talk hub: how their day
+- **Chat, replaced** — MCA's own "Chat" button now opens the Conversations hub: how their day
   *actually* went, whether they like their work, food, the neighbors, their life story, dreams,
-  fears, feelings, regrets, and secrets. (Toggleable via `replaceChatWithRealTalk`.)
+  fears, feelings, regrets, and secrets. (Toggleable via `replaceChatWithConversations`.)
+- **Category menu** — the hub opens on six clean categories (Chit-Chat, Profession, Village,
+  Events, Personal, Relationships) instead of one long list; pick one to see its starters, with
+  "Something else." to step back. Categories with nothing to offer are hidden — Relationships
+  only appears for spouses and family.
 - **Personalized per villager** — work talk is profession-aware (hand-written lines for all
   vanilla trades plus every profession mod in the pack: MCA, More Villagers, Ars Nouveau, Chef's
   Delight, Ice and Fire, Vampirism, Werewolves — and a self-personalizing generic line for any
@@ -31,7 +35,7 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   village, your last gift, and the time of day.
 - **Village gossip** — villagers notice marriages, divorces, births, and deaths in their village
   and share the news (with names) exactly once per listener. Ask "Anything happen around here
-  lately?" in the Real Talk menu.
+  lately?" in the Conversations menu.
 - **Spouse & family talk** — dedicated branches for married partners (Are you happy? Remember when
   we met? What about our future? Is anything weighing on you?) and family members.
 - **Anti-repetition polish** — dozens of new line variants merged into MCA's own most-heard
@@ -45,9 +49,9 @@ Minecraft 1.20.1 · Forge 47.x · requires **MCA Reborn `[7.6,8)`** + **Architec
 ## How it works
 
 MCA's dialogue system loads datapack JSON from any namespace and merges same-named questions, so
-most of Real Talk is data: `data/mcarealtalk/dialogues/*.json` adds new questions and extends MCA's
+most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
-(`realtalk_gossip`, `realtalk_say`, `realtalk_record`, ...) into MCA's public registries — no
+(`conversations_gossip`, `conversations_say`, `conversations_record`, ...) into MCA's public registries — no
 runtime patching of MCA except one small server-side mixin that observes accepted gifts. See
 [DATAPACK.md](DATAPACK.md) for the full JSON vocabulary (datapack authors can build on it) and
 [CONFIG.md](CONFIG.md) for configuration.

@@ -97,11 +97,25 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // MCA Reborn — obfuscated production (Universal) jar, remapped to our dev mappings
-    // by fg.deobf. All MCA access is isolated behind dev.otectus.mcarealtalk.compat.
+    // by fg.deobf. All MCA access is isolated behind dev.otectus.mcaconversations.compat.
     implementation fg.deobf("maven.modrinth:minecraft-comes-alive-reborn:${mca_version}")
 
     // Architectury API (Forge) — required at runtime by MCA. deobf for dev remapping.
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+
+    // MCA: Quests — OPTIONAL integration, compile-only. The sibling mod isn't published to a Maven, so
+    // we compile against its dev-mapped class output (both mods share `official` 1.20.1 mappings, so the
+    // Minecraft type names match and reobfJar remaps our own references for production). Quests' own
+    // class names are stable dev<->prod, and the real mod supplies them at runtime — hence compileOnly,
+    // never bundled. Build MCA: Quests first (`../MCAQuests: ./gradlew compileJava`) so these exist; when
+    // absent the compat.quests classes simply won't compile, which is why the integration is gated at
+    // runtime by QuestsBridge (ModList "mcaquests") and this optional mods.toml dependency.
+    def mcaQuestsClasses = file("${projectDir}/../MCAQuests/build/classes/java/main")
+    if (mcaQuestsClasses.exists()) {
+        compileOnly files(mcaQuestsClasses)
+    } else {
+        logger.warn("MCA: Quests classes not found at ${mcaQuestsClasses}; build it first to compile the optional Quests integration.")
+    }
 
     // Mixin annotation processor — generates the refmap for our server-side gift-detection mixin.
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -119,8 +133,8 @@ test {
 
 // MixinGradle: generate the refmap for our mixin and register the config for reobfuscation.
 mixin {
-    add sourceSets.main, 'mcarealtalk.refmap.json'
-    config 'mcarealtalk.mixins.json'
+    add sourceSets.main, 'mcaconversations.refmap.json'
+    config 'mcaconversations.mixins.json'
 }
 
 // Expand metadata placeholders into mods.toml / pack.mcmeta at build time.

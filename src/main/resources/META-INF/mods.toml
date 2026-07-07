@@ -12,9 +12,9 @@ description='''${mod_description}'''
 # Server-side mixin that records accepted gifts (BreedableRelationship.acceptGift) for the
 # gratitude/template features.
 [[mixins]]
-    config="mcarealtalk.mixins.json"
+    config="mcaconversations.mixins.json"
 
-# MCA: Real Talk is meaningless without MCA Reborn, so MCA is a mandatory dependency.
+# MCA: Conversations is meaningless without MCA Reborn, so MCA is a mandatory dependency.
 # We load AFTER MCA so its entities, dialogue registries, and resource loaders are present.
 [[dependencies.${mod_id}]]
     modId="forge"
@@ -38,5 +38,16 @@ description='''${mod_description}'''
     modId="architectury"
     mandatory=true
     versionRange="[9.2,10)"
+    ordering="AFTER"
+    side="BOTH"
+# MCA: Quests is an OPTIONAL integration. Conversations loads and works fully without it; when present we
+# load AFTER it so its objective/reward registries and dialogue-hook API exist before our setup runs.
+# The integration needs the Quests build that ships the api.QuestDialogueHooks / ExternalSignalObjective
+# seams; an older Quests without them degrades gracefully (QuestsBridge catches the missing API and
+# disables the integration), so the range stays permissive.
+[[dependencies.${mod_id}]]
+    modId="mcaquests"
+    mandatory=false
+    versionRange="[0.8,)"
     ordering="AFTER"
     side="BOTH"

@@ -1,18 +1,18 @@
-# MCA: Real Talk — Configuration
+# MCA: Conversations — Configuration
 
-File: `config/mcarealtalk-common.toml` (generated on first run).
+File: `config/mcaconversations-common.toml` (generated on first run).
 
 ## `[features]`
 
 | Option | Default | Effect when disabled |
 |---|---|---|
-| `replaceChatWithRealTalk` | `true` | MCA's Chat button behaves like vanilla MCA; the Real Talk hub becomes unreachable (no separate button exists since v0.2.0 — see DATAPACK.md to restore one via datapack) |
-| `enableTopics` | `true` | Real Talk topic branches deflect to fallback lines |
+| `replaceChatWithConversations` | `true` | MCA's Chat button behaves like vanilla MCA; the Conversations hub becomes unreachable (no separate button exists since v0.2.0 — see DATAPACK.md to restore one via datapack) |
+| `enableTopics` | `true` | Conversations topic branches deflect to fallback lines |
 | `enableStates` | `true` | gratitude after gifts is neither recorded nor referenced |
 | `enableTemplates` | `true` | templated lines render with neutral fallbacks ("someone", "the village") |
 | `enableGossip` | `true` | no events are detected or told; the "news" topic answers "quiet week" |
 
-Feature toggles act through the `realtalk_enabled`/`realtalk_disabled` dialogue conditions and
+Feature toggles act through the `conversations_enabled`/`conversations_disabled` dialogue conditions and
 server-side early-outs — content degrades to fallback lines rather than disappearing mid-tree.
 
 ## `[gift]`

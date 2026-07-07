@@ -1,0 +1,821 @@
+{
+  "answers": [
+    {
+      "name": "life",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.life",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.life.again"
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.life",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "age_group": "adult"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.life.first",
+            "positive": 5,
+            "remember": {
+              "id": "mcaconversations.topic.life",
+              "var": "player"
+            },
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.life",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.unlock.opened_up",
+                "var": "player"
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.life",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.life",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.life.revisit",
+            "positive": 3,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.life",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dreams",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.dreams",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.dreams",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.dreams",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.dreams",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.dreams",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.dreams",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "peppy"
+            },
+            {
+              "chance": 4,
+              "personality": "witty"
+            }
+          ],
+          "actions": {
+            "next": "conversations.dreams",
+            "say": "conversations.dreams.first",
+            "positive": 5,
+            "remember": {
+              "id": "mcaconversations.topic.dreams",
+              "var": "player"
+            },
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.dreams",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.unlock.opened_up",
+                "var": "player"
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.dreams",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.dreams",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.dreams",
+            "say": "conversations.dreams.revisit",
+            "positive": 3,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.dreams",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "fears",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "shy"
+            },
+            {
+              "chance": 4,
+              "personality": "sensitive"
+            }
+          ],
+          "actions": {
+            "next": "conversations.fears",
+            "say": "conversations.fears.first",
+            "positive": 6,
+            "remember": {
+              "id": "mcaconversations.topic.fears",
+              "var": "player"
+            },
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.unlock.opened_up",
+                "var": "player"
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.fears",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.fears",
+            "say": "conversations.fears.revisit",
+            "positive": 3,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "feelings",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 59
+            },
+            {
+              "chance": -2000,
+              "constraints": "spouse"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.intimate"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "constraints": "spouse"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.feelings",
+            "say": "conversations.feelings.spouse",
+            "positive": 6,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 59
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.unlock.opened_up",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "flirty"
+            },
+            {
+              "chance": 4,
+              "personality": "sensitive"
+            }
+          ],
+          "actions": {
+            "next": "conversations.feelings",
+            "say": "conversations.feelings.first",
+            "positive": 8,
+            "remember": {
+              "id": "mcaconversations.topic.feelings",
+              "var": "player"
+            },
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.unlock.confided",
+                "var": "player"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "regrets",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 59
+            },
+            {
+              "chance": -2000,
+              "constraints": "spouse"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.intimate"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.regrets",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.again"
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.regrets",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.unlock.opened_up",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": 6,
+              "personality": "gloomy"
+            },
+            {
+              "chance": 4,
+              "age_group": "adult"
+            },
+            {
+              "chance": 100,
+              "constraints": "spouse"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.first",
+            "positive": 6,
+            "remember": {
+              "id": "mcaconversations.topic.regrets",
+              "var": "player"
+            },
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.regrets",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.unlock.confided",
+                "var": "player"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "secret",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.secret"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.secret",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.secret.again"
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.secret",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "shy"
+            },
+            {
+              "chance": 4,
+              "personality": "odd"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.secret.first",
+            "positive": 8,
+            "remember": {
+              "id": "mcaconversations.topic.secret",
+              "var": "player"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.secret",
+              "var": "player",
+              "time": 72000
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.unlock.confided",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.secret",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.secret",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.secret.revisit",
+            "positive": 4,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.secret",
+              "var": "player",
+              "time": 72000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}
