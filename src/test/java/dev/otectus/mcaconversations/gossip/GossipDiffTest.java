@@ -107,4 +107,70 @@ class GossipDiffTest {
                 Set.of(), false, false, false);
         assertTrue(out.isEmpty());
     }
+
+    // --- Residency diffing (arrival/departure) ---
+
+    @Test
+    void arrivalWhenResidentAppears() {
+        List<GossipDiff.Derived> out = GossipDiff.diffResidency(
+                Set.of(SMALL, BIG), Set.of(SMALL), Map.of(BIG, "Newcomer"),
+                Set.of(), Set.of(), true, true);
+        assertEquals(1, out.size());
+        assertEquals(GossipEventType.ARRIVAL, out.get(0).type());
+        assertEquals(BIG, out.get(0).aUuid());
+        assertEquals("Newcomer", out.get(0).aName());
+    }
+
+    @Test
+    void departureWhenResidentVanishes() {
+        List<GossipDiff.Derived> out = GossipDiff.diffResidency(
+                Set.of(SMALL), Set.of(SMALL, BIG), Map.of(BIG, "Wanderer"),
+                Set.of(), Set.of(), true, true);
+        assertEquals(1, out.size());
+        assertEquals(GossipEventType.DEPARTURE, out.get(0).type());
+        assertEquals(BIG, out.get(0).aUuid());
+        assertEquals("Wanderer", out.get(0).aName());
+    }
+
+    @Test
+    void newbornIsNotAnArrival() {
+        // BIG just appeared, but it was reported as a BIRTH — must not double as an arrival.
+        List<GossipDiff.Derived> out = GossipDiff.diffResidency(
+                Set.of(SMALL, BIG), Set.of(SMALL), Map.of(BIG, "Junior"),
+                Set.of(), Set.of(BIG), true, true);
+        assertTrue(out.isEmpty());
+    }
+
+    @Test
+    void deadResidentIsNotADeparture() {
+        // BIG vanished because they died — the DEATH event covers it, not a departure.
+        List<GossipDiff.Derived> out = GossipDiff.diffResidency(
+                Set.of(SMALL), Set.of(SMALL, BIG), Map.of(BIG, "Departed"),
+                Set.of(BIG), Set.of(), true, true);
+        assertTrue(out.isEmpty());
+    }
+
+    @Test
+    void residencyTogglesRespected() {
+        List<GossipDiff.Derived> none = GossipDiff.diffResidency(
+                Set.of(SMALL, BIG), Set.of(SMALL), Map.of(BIG, "Newcomer"),
+                Set.of(), Set.of(), false, false);
+        assertTrue(none.isEmpty());
+
+        // Arrival-only: the appearing resident is reported, a vanished one is not.
+        List<GossipDiff.Derived> arrivalsOnly = GossipDiff.diffResidency(
+                Set.of(BIG), Set.of(SMALL), Map.of(BIG, "Newcomer", SMALL, "Gone"),
+                Set.of(), Set.of(), true, false);
+        assertEquals(1, arrivalsOnly.size());
+        assertEquals(GossipEventType.ARRIVAL, arrivalsOnly.get(0).type());
+    }
+
+    @Test
+    void unknownNameDefaultsToEmptyString() {
+        List<GossipDiff.Derived> out = GossipDiff.diffResidency(
+                Set.of(SMALL, BIG), Set.of(SMALL), Map.of(),
+                Set.of(), Set.of(), true, true);
+        assertEquals(1, out.size());
+        assertEquals("", out.get(0).aName());
+    }
 }

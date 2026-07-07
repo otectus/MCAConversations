@@ -8,7 +8,7 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.5.0)
+## Features (0.6.0)
 
 - **Chat, replaced** — MCA's own "Chat" button now opens the Conversations hub: how their day
   *actually* went, whether they like their work, food, the neighbors, their life story, dreams,
@@ -35,15 +35,18 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 - **Conversation moods** — an event leaves a villager in a passing mood that colors their dialogue:
   *grateful* or *smitten* after a gift, *proud* or *annoyed* after a quest, *annoyed* if you strike
   them, and village-wide *grieving* or *elated* after a death, birth, or marriage nearby.
-- **Weather-aware lines** — villagers can remark on the current sky (clear, rain, storm), and the
-  `weather` template variable drops it into any line.
+- **Weather, season & holiday lines** — villagers remark on the current sky (clear, rain, storm),
+  the time of year (spring/summer/autumn/winter), and calendar festivals (spring bloom, midsummer,
+  harvest festival, midwinter). Seasons read from **Serene Seasons** when installed, else from the
+  world calendar; the `weather`/`season`/`holiday` template variables drop any of it into a line.
 - **Gift gratitude** — an accepted gift leaves the villager grateful for a day; married partners
   will thank you for the specific item ("Still smiling about that poppy, if I'm honest").
 - **Personalized lines** — templated dialogue can reference the villager's name, spouse, home
-  village, your last gift, and the time of day.
-- **Village gossip** — villagers notice marriages, divorces, births, and deaths in their village
-  and share the news (with names) exactly once per listener. Ask "Anything happen around here
-  lately?" in the Conversations menu.
+  village, your last gift, the time of day, and the season.
+- **Village gossip** — villagers notice marriages, divorces, births, deaths, and now **arrivals and
+  departures** (neighbors moving in or leaving) in their village, and share the news (with names)
+  exactly once per listener — **each in their own personality's voice**. Ask "Anything happen around
+  here lately?" in Events or "Any rumors going around?" in Village.
 - **Spouse & family talk** — dedicated branches for married partners (Are you happy? Remember when
   we met? What about our future? Is anything weighing on you?) and family members.
 - **Anti-repetition polish** — dozens of new line variants merged into MCA's own most-heard
@@ -53,6 +56,8 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 ## Requirements
 
 Minecraft 1.20.1 · Forge 47.x · requires **MCA Reborn `[7.6,8)`** + **Architectury API `[9.2,10)`**.
+Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar fallback
+otherwise) — both are soft dependencies and the mod works fully without them.
 
 ## How it works
 

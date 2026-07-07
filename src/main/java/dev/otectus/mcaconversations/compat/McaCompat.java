@@ -19,10 +19,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -113,6 +117,18 @@ public final class McaCompat {
             }
         }
         return false;
+    }
+
+    /** The entity level's current day count ({@code dayTime / 24000}). Safe default: 0. */
+    public static long getWorldDay(Entity entity) {
+        if (entity != null) {
+            try {
+                return entity.level().getDayTime() / 24000L;
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("getWorldDay failed; defaulting 0", t);
+            }
+        }
+        return 0L;
     }
 
     // ------------------------------------------------------------------
@@ -315,6 +331,34 @@ public final class McaCompat {
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("MCA loadedVillageResidents failed; defaulting empty", t);
             return new ArrayList<>();
+        }
+    }
+
+    /**
+     * The full resident UUID set of a village — <b>independent of chunk loading</b>, so unloaded
+     * residents still count. This is what arrival/departure diffing reads, so an unloaded villager is
+     * never mistaken for one who left. Safe default: empty set.
+     */
+    public static Set<UUID> villageResidentUuids(ServerLevel level, int villageId) {
+        try {
+            return VillageManager.get(level).getOrEmpty(villageId)
+                    .map(v -> v.getResidentsUUIDs().collect(java.util.stream.Collectors.toCollection(HashSet::new)))
+                    .orElseGet(HashSet::new);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA villageResidentUuids failed; defaulting empty", t);
+            return new HashSet<>();
+        }
+    }
+
+    /** UUID→name for the full residency set (also names unloaded residents). Safe default: empty map. */
+    public static Map<UUID, String> villageResidentNames(ServerLevel level, int villageId) {
+        try {
+            return VillageManager.get(level).getOrEmpty(villageId)
+                    .map(v -> new HashMap<>(v.getResidentNames()))
+                    .orElseGet(HashMap::new);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA villageResidentNames failed; defaulting empty", t);
+            return new HashMap<>();
         }
     }
 }

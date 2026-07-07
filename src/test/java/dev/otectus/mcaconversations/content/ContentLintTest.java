@@ -42,6 +42,7 @@ class ContentLintTest {
             "is_pregnant", "trait", "village_has_building", "current_chore", "min_health",
             "min_infection_progress", "min_pregnancy_progress", "pregnancy_child_gender", "memory",
             "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
+            "conversations_season", "conversations_holiday",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed");
 
@@ -82,6 +83,13 @@ class ContentLintTest {
 
     /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
     private static final Set<String> WEATHERS = Set.of("clear", "rain", "storm");
+
+    /** Season buckets the {@code conversations_season} condition matches (see {@code WorldContext.seasonFromDay}). */
+    private static final Set<String> SEASONS = Set.of("spring", "summer", "autumn", "winter");
+
+    /** Holiday buckets the {@code conversations_holiday} condition matches (see {@code HolidayCalendar}). */
+    private static final Set<String> HOLIDAYS = Set.of(
+            "none", "spring_bloom", "midsummer", "harvest_festival", "midwinter");
 
     /** MCA trait vocabulary (lowercase, as MCA's own gift JSON uses), pinned from the 7.6.26 jar. */
     private static final Set<String> TRAITS = Set.of(
@@ -244,6 +252,26 @@ class ContentLintTest {
      */
     @Test
     void weatherConditionArgsAreValid() {
+        assertWorldConditionArgsValid("conversations_weather", WEATHERS);
+    }
+
+    /** {@code conversations_season: {"is": "autumn"}} — {@code is} must be a known season bucket. */
+    @Test
+    void seasonConditionArgsAreValid() {
+        assertWorldConditionArgsValid("conversations_season", SEASONS);
+    }
+
+    /** {@code conversations_holiday: {"is": "midsummer"}} — {@code is} must be a known holiday bucket. */
+    @Test
+    void holidayConditionArgsAreValid() {
+        assertWorldConditionArgsValid("conversations_holiday", HOLIDAYS);
+    }
+
+    /**
+     * Shared validator for the object-valued world conditions ({@code {"is": "<bucket>"}}): mirrors
+     * {@code WorldQuery}, so a bad datapack value fails CI rather than becoming a silent never-match.
+     */
+    private static void assertWorldConditionArgsValid(String key, Set<String> allowed) {
         List<String> problems = new ArrayList<>();
         questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
             if (!result.has("conditions")) {
@@ -251,18 +279,18 @@ class ContentLintTest {
             }
             for (JsonElement c : result.getAsJsonArray("conditions")) {
                 JsonObject condition = c.getAsJsonObject();
-                if (!condition.has("conversations_weather")) {
+                if (!condition.has(key)) {
                     continue;
                 }
-                String where = name + "/" + answerName + " conversations_weather";
-                JsonElement value = condition.get("conversations_weather");
+                String where = name + "/" + answerName + " " + key;
+                JsonElement value = condition.get(key);
                 if (!value.isJsonObject() || !value.getAsJsonObject().has("is")) {
                     problems.add(where + ": value must be an object {is}");
                     continue;
                 }
                 String is = value.getAsJsonObject().get("is").getAsString();
-                if (!WEATHERS.contains(is)) {
-                    problems.add(where + ": is '" + is + "' not a weather bucket " + WEATHERS);
+                if (!allowed.contains(is)) {
+                    problems.add(where + ": is '" + is + "' not in " + allowed);
                 }
             }
         }));

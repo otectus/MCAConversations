@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations;
 import com.mojang.logging.LogUtils;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
+import dev.otectus.mcaconversations.compat.SeasonsBridge;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -47,5 +48,7 @@ public final class McaConversations {
         // Then wire the optional MCA: Quests integration (no-op when that mod is absent). Ordered after
         // MCA so our quest-aware conditions exist first; we load after Quests so its registries are present.
         event.enqueueWork(QuestsBridge::tryRegister);
+        // And the optional Serene Seasons integration (reflection-only; calendar fallback when absent).
+        event.enqueueWork(SeasonsBridge::tryRegister);
     }
 }

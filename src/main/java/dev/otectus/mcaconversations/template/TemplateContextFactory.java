@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.template;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
+import dev.otectus.mcaconversations.season.SeasonContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,6 +51,10 @@ public final class TemplateContextFactory {
                         .ifPresent(text -> context.with(var, text));
                 case WEATHER -> context.with(var, Component.translatable("mcaconversations.weather."
                         + WorldContext.weatherBucket(McaCompat.isRaining(villager), McaCompat.isThundering(villager))));
+                case SEASON -> context.with(var,
+                        Component.translatable("mcaconversations.season." + SeasonContext.seasonBucket(villager)));
+                case HOLIDAY -> context.with(var,
+                        Component.translatable("mcaconversations.holiday." + SeasonContext.holidayBucket(villager)));
             }
         }
         return context;

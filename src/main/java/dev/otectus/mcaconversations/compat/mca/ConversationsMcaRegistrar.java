@@ -9,6 +9,7 @@ import dev.otectus.mcaconversations.compat.quests.QuestOpenDirective;
 import dev.otectus.mcaconversations.gossip.GossipConditionLogic;
 import dev.otectus.mcaconversations.gossip.GossipQuery;
 import dev.otectus.mcaconversations.gossip.GossipSayDirective;
+import dev.otectus.mcaconversations.season.SeasonContext;
 import dev.otectus.mcaconversations.state.MemoryIds;
 import dev.otectus.mcaconversations.template.ConversationsSay;
 import dev.otectus.mcaconversations.template.SayDirective;
@@ -145,6 +146,36 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        GiftPredicate.register("conversations_season",
+                (json, name) -> SafeParse.orNull("conversations_season", json,
+                        () -> WorldQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || !McaConversationsConfig.COMMON.enableSeasonLines.get()) {
+                            return 0.0f;
+                        }
+                        return query.matches(SeasonContext.seasonBucket(villager)) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_season failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        GiftPredicate.register("conversations_holiday",
+                (json, name) -> SafeParse.orNull("conversations_holiday", json,
+                        () -> WorldQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || !McaConversationsConfig.COMMON.enableHolidayLines.get()) {
+                            return 0.0f;
+                        }
+                        return query.matches(SeasonContext.holidayBucket(villager)) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_holiday failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
         // --- Quest-aware conditions (MCA: Quests integration; return 0 when that mod is absent) ---
         // These keys are always registered so dialogue JSON referencing them stays a known key and
         // scores 0 (never a crash) on an MCA-only install. The lambdas touch a Quests class only through
@@ -237,7 +268,8 @@ public final class ConversationsMcaRegistrar {
                 });
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
-                + "/conversations_quest_* and actions conversations_record/conversations_say/conversations_gossip_say/conversations_quest_open");
+                + "/conversations_weather/conversations_season/conversations_holiday/conversations_quest_* and actions "
+                + "conversations_record/conversations_say/conversations_gossip_say/conversations_quest_open");
     }
 
     /** Scores a {@code conversations_quest_*} condition through the {@link QuestsBridge} SPI; 0 when Quests absent. */

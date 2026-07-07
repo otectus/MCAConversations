@@ -71,8 +71,10 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 |---|---|---|
 | `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world"` | 1 when that config feature is on, else 0 |
 | `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch |
-| `conversations_gossip` | `{"types": ["marriage","divorce","death","birth"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
+| `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
 | `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
+| `conversations_season` | `{"is": "spring" \| "summer" \| "autumn" \| "winter"}` | 1 when the current season matches — read from Serene Seasons if installed, else the calendar season from the world day; 0 when `enableSeasonLines` is off |
+| `conversations_holiday` | `{"is": "spring_bloom" \| "midsummer" \| "harvest_festival" \| "midwinter" \| "none"}` | 1 when the current calendar festival matches (`none` = an ordinary day); 0 when `enableHolidayLines` is off |
 
 ## Custom actions
 
@@ -97,9 +99,11 @@ fill `%2$s`, `%3$s`, … in the order listed. Unresolvable vars fall back to neu
 | `time_of_day` | "this morning" / "today" / "this evening" / "tonight" |
 | `profession_name` | the villager's localized profession display name (any mod's professions, client-side localized) |
 | `weather` | "the clear sky" / "the rain" / "the storm" (current sky in the villager's level) |
+| `season` | "spring" / "the height of summer" / "autumn" / "the depths of winter" (Serene Seasons if installed, else calendar) |
+| `holiday` | "the spring bloom" / "midsummer" / "the harvest festival" / "midwinter" / "an ordinary day" |
 
 Gossip lines receive `%2$s` = subject A's name, `%3$s` = subject B's name (empty for
-single-subject events like deaths).
+single-subject events like deaths, births, arrivals, and departures).
 
 ## The category hub (v0.3.0)
 

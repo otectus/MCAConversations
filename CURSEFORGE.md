@@ -22,11 +22,11 @@ Chat? One config toggle restores it.)
 
 The hub is organized into six tidy categories instead of one endless list:
 
-- **Chit-Chat** — how their day went, how they feel about the food
+- **Chit-Chat** — how their day went, the food, the weather, and the season
 - **Profession** — how they feel about their work
-- **Village** — the place and the people in it
+- **Village** — the place, the people, and the rumors going around
 - **Events** — news and gossip going around
-- **Personal** — their life story, dreams, fears, feelings, regrets, and secrets
+- **Personal** — their life story, hopes, dreams, fears, feelings, regrets, and secrets
 - **Relationships** — dedicated talk for spouses and family (hidden from strangers)
 
 Empty categories simply don't show up.
@@ -67,18 +67,26 @@ Something just happened, and it shows. A villager turns **grateful** or **smitte
 **grieving** after a death or **elated** after a birth or wedding nearby. The mood colors their lines
 for a while, then fades.
 
-### 🌦️ They notice the weather
-Villagers can remark on the sky above them — a clear day, the rain, a rolling storm — so a chat in a
-thunderstorm doesn't sound like a chat in the sun.
+### 🌦️ They notice the weather, the season, and the day
+Villagers remark on the sky above them — a clear day, the rain, a rolling storm — so a chat in a
+thunderstorm doesn't sound like a chat in the sun. They also speak to the **time of year** and to
+**festival days** — the spring bloom, midsummer, the harvest festival, midwinter. Run **Serene Seasons**
+and the season tracks it exactly; without it, the season is read from the world calendar.
+
+### 🚪 They notice who comes and goes
+Beyond marriages and deaths, villagers now notice neighbours **moving into** the village and **leaving**
+it for good — fresh faces and empty doorways both become news worth passing on.
 
 ### 🎁 Gifts they're grateful for
 Give a villager a gift they like and they'll stay grateful for about a day. Married partners will
 even thank you for the *specific item* — *"Still smiling about that poppy, if I'm honest."*
 
 ### 🗣️ Village gossip
-Villagers notice **marriages, divorces, births, and deaths** happening around them and share the
-news — with names — exactly once per player. Ask *"Anything happen around here lately?"* and see
-what's going around.
+Villagers notice **marriages, divorces, births, deaths, arrivals, and departures** happening around
+them and share the news — with names — exactly once per player. Ask *"Anything happen around here
+lately?"* in Events, or *"Any rumors going around?"* in Village, and see what's going around. And now
+**every personality breaks the news in its own voice** — the gloomy one, the greedy one and the peppy
+one report the same wedding very differently.
 
 ### 💍 Spouse & family talk
 Married partners and family get their own branches — *Are you happy? Remember when we met? What
@@ -95,6 +103,7 @@ about our future? Is anything weighing on you?*
 | **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.6.x` |
 | **Required** | [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api) `9.2.x` (MCA's own dependency) |
 | **Optional** | MCA: Quests — unlocks quest-aware conversation lines when installed |
+| **Optional** | Serene Seasons — villagers track the real season when installed (calendar fallback otherwise) |
 
 > This is an **add-on** — MCA Reborn must be installed for it to do anything.
 
@@ -114,8 +123,8 @@ about a finished quest as fresh gossip. Everything degrades cleanly if Quests is
 Everything is toggleable in `config/mcaconversations-common.toml` (generated on first run):
 
 - Turn the whole Chat replacement off and get vanilla MCA Chat back.
-- Enable/disable topics, conversation moods, templated lines, weather lines, and village gossip independently.
-- Tune gossip scan frequency, event retention, how long gratitude lasts, and each mood's duration.
+- Enable/disable topics, conversation moods, templated lines, weather/season/holiday lines, and village gossip independently.
+- Tune gossip scan frequency, event retention, how long gratitude lasts, each mood's duration, the calendar year length, and which village events (marriage, birth, arrival, departure, …) get noticed.
 
 Disabled features degrade to graceful fallback lines rather than breaking mid-conversation.
 

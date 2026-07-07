@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file. Format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow SemVer.
 
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
+Optional: Serene Seasons (soft, reflection-only — used for real seasons when present).
+
+## [0.6.0] - 2026-07-07
+
+The **seasons & deeper-gossip** release: villagers now speak to the time of year and festival days, notice
+neighbours moving in and out of the village, and report every kind of news in their own personality's voice.
+Two new personal/village topics round it out. Everything is additive — existing saves and datapacks are
+unaffected, and every new system degrades cleanly when its feature is off or MCA state is unavailable.
+
+### Added
+- **Seasons & holidays.** New `conversations_season` (`{"is": "spring"|"summer"|"autumn"|"winter"}`) and
+  `conversations_holiday` (`{"is": "spring_bloom"|"midsummer"|"harvest_festival"|"midwinter"|"none"}`)
+  dialogue conditions, plus `season` and `holiday` template variables. Seasons come from **Serene Seasons**
+  when it's installed and fall back to a calendar season derived from the world day otherwise; holidays are
+  always calendar-based. Tunable under `[world]` (`enableSeasonLines`, `enableHolidayLines`,
+  `seasonYearLengthDays`, default 96 to match Serene Seasons).
+- **A "How's the season treating you?" topic** under Chit-Chat that remarks on the current festival if one
+  is running, otherwise the season.
+- **Arrival & departure gossip.** Villagers now notice neighbours **moving into** and **leaving** the
+  village — two new `GossipEventType`s (`arrival`, `departure`) detected by diffing the village's full,
+  load-independent residency set against a persisted snapshot. A death is never mistaken for a departure,
+  a newborn never for an arrival, and a village's first sighting only seeds the set (no false flood).
+  Toggles: `[gossip]` `detectArrival` / `detectDeparture`.
+- **Gossip in every personality's voice.** All 13 personality overlays now flavour the six village-gossip
+  lines (marriage, divorce, death, birth, arrival, departure) — the gloomy villager, the greedy one and the
+  peppy one break the same news very differently — each with a variant. Base gossip pools raised to three
+  variants apiece.
+- **Two new topics.** A personal **"What are you hoping for?"** (opens at 25+ hearts and feeds the existing
+  regrets/secrets confidence chain) and a village **"Any rumors going around?"** that surfaces the gossip
+  pool from the Village menu.
+
+### Notes
+- Serene Seasons is a **soft, reflection-only** dependency: it is not on the compile classpath and is reached
+  purely by reflection after a `ModList` check, so an MCA-only install loads and falls back to calendar
+  seasons with zero Serene Seasons classes touched.
+- Content/unit lints extended in lockstep: `ContentLintTest` pins the season/holiday conditions and their
+  value vocabularies; `OverlayLintTest` now requires all 13 overlays to cover the six gossip keys. New tests
+  cover the holiday calendar, the season-from-day math, the Serene Seasons bridge seam, the arrival/departure
+  residency diff, and the gossip-type round-trip.
+- As with prior releases, MCA + Quests don't load under the dev `runClient`, so the MCA-touching behaviour
+  (season/weather reads, residency diffing, the new topics in the live UI) is verified by the build/lint/unit
+  suite; in-world confirmation is done in a production instance.
 
 ## [0.5.0] - 2026-07-07
 

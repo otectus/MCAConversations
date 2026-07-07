@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -100,11 +101,15 @@ public final class GossipDetectors {
     }
 
     private static void scanVillage(GossipSavedData data, ServerLevel level, int villageId, long now) {
-        List<Entity> residents = McaCompat.loadedVillageResidents(level, villageId);
-        if (residents.isEmpty()) {
-            return;
+        Set<UUID> recentlyDead = new HashSet<>();
+        for (GossipEvent e : data.log().events()) {
+            if (e.type() == GossipEventType.DEATH) {
+                recentlyDead.add(e.aUuid());
+            }
         }
 
+        // --- Relationship diff (marriage/divorce/birth) over the LOADED residents ---
+        List<Entity> residents = McaCompat.loadedVillageResidents(level, villageId);
         List<GossipDiff.Observation> observations = new ArrayList<>(residents.size());
         for (Entity resident : residents) {
             if (!McaCompat.isMcaVillager(resident)) {
@@ -117,32 +122,82 @@ public final class GossipDetectors {
                     McaCompat.isBaby(resident)));
         }
 
-        Set<UUID> recentlyDead = new HashSet<>();
-        for (GossipEvent e : data.log().events()) {
-            if (e.type() == GossipEventType.DEATH) {
-                recentlyDead.add(e.aUuid());
-            }
-        }
+        Set<UUID> births = new HashSet<>();
+        if (!observations.isEmpty()) {
+            List<GossipDiff.Derived> derived = GossipDiff.diff(
+                    observations, data.snapshots(), recentlyDead,
+                    McaConversationsConfig.COMMON.detectMarriage.get(),
+                    McaConversationsConfig.COMMON.detectDivorce.get(),
+                    McaConversationsConfig.COMMON.detectBirth.get());
 
-        List<GossipDiff.Derived> derived = GossipDiff.diff(
-                observations, data.snapshots(), recentlyDead,
-                McaConversationsConfig.COMMON.detectMarriage.get(),
-                McaConversationsConfig.COMMON.detectDivorce.get(),
-                McaConversationsConfig.COMMON.detectBirth.get());
-
-        for (GossipDiff.Derived d : derived) {
-            GossipEvent event = new GossipEvent(UUID.randomUUID(), d.type(), villageId, now,
-                    d.aUuid(), d.aName(), d.bUuid(), d.bName());
-            if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())) {
-                StateRules.forGossip(d.type()).ifPresent(st -> StateTracker.applyAmbient(level, villageId, st));
-                if (McaConversationsConfig.COMMON.debugLogging.get()) {
-                    McaConversations.LOGGER.info("Gossip: {} in village {}: {} {}", d.type(), villageId, d.aName(), d.bName());
+            for (GossipDiff.Derived d : derived) {
+                if (d.type() == GossipEventType.BIRTH) {
+                    births.add(d.aUuid());
                 }
+                emit(data, level, villageId, now, d, true);
+            }
+
+            for (GossipDiff.Observation o : observations) {
+                data.putSnapshot(o.uuid(), new RelationshipSnapshot(o.partner(), o.name(), o.isBaby(), now));
             }
         }
 
-        for (GossipDiff.Observation o : observations) {
-            data.putSnapshot(o.uuid(), new RelationshipSnapshot(o.partner(), o.name(), o.isBaby(), now));
+        // --- Residency diff (arrival/departure) over the FULL, load-independent residency set ---
+        scanResidency(data, level, villageId, now, recentlyDead, births);
+    }
+
+    /**
+     * Diffs the village's full residency set (loaded or not) into arrival/departure gossip. The first
+     * sighting of a village only seeds the stored set — it emits nothing, so discovery never floods
+     * arrivals. Arrival/departure events carry no ambient mood.
+     */
+    private static void scanResidency(GossipSavedData data, ServerLevel level, int villageId, long now,
+                                      Set<UUID> recentlyDead, Set<UUID> births) {
+        boolean detectArrival = McaConversationsConfig.COMMON.detectArrival.get();
+        boolean detectDeparture = McaConversationsConfig.COMMON.detectDeparture.get();
+        if (!detectArrival && !detectDeparture) {
+            return;
+        }
+        Set<UUID> current = McaCompat.villageResidentUuids(level, villageId);
+        Set<UUID> prior = data.getResidency(villageId);
+        if (prior == null) {
+            data.putResidency(villageId, current); // seed; emit nothing on first sighting
+            return;
+        }
+        if (current.equals(prior)) {
+            return;
+        }
+
+        Map<UUID, String> names = new HashMap<>(McaCompat.villageResidentNames(level, villageId));
+        for (UUID u : prior) { // departed residents are no longer in the residency name map — resolve them
+            if (!current.contains(u) && !names.containsKey(u)) {
+                String n = Optional.ofNullable(data.snapshots().get(u)).map(RelationshipSnapshot::name)
+                        .filter(s -> !s.isEmpty())
+                        .or(() -> McaCompat.familyTreeName(level, u))
+                        .orElse("");
+                names.put(u, n);
+            }
+        }
+
+        for (GossipDiff.Derived d : GossipDiff.diffResidency(
+                current, prior, names, recentlyDead, births, detectArrival, detectDeparture)) {
+            emit(data, level, villageId, now, d, false);
+        }
+        data.putResidency(villageId, current);
+    }
+
+    /** Records one derived event; when {@code applyState} is set, applies its ambient village mood (if any). */
+    private static void emit(GossipSavedData data, ServerLevel level, int villageId, long now,
+                             GossipDiff.Derived d, boolean applyState) {
+        GossipEvent event = new GossipEvent(UUID.randomUUID(), d.type(), villageId, now,
+                d.aUuid(), d.aName(), d.bUuid(), d.bName());
+        if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())) {
+            if (applyState) {
+                StateRules.forGossip(d.type()).ifPresent(st -> StateTracker.applyAmbient(level, villageId, st));
+            }
+            if (McaConversationsConfig.COMMON.debugLogging.get()) {
+                McaConversations.LOGGER.info("Gossip: {} in village {}: {} {}", d.type(), villageId, d.aName(), d.bName());
+            }
         }
     }
 

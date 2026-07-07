@@ -331,6 +331,36 @@
       ]
     },
     {
+      "name": "rumors",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_gossip": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "positive": 1,
+            "conversations_gossip_say": {}
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.none"
+          }
+        }
+      ]
+    },
+    {
       "name": "back",
       "results": [
         {

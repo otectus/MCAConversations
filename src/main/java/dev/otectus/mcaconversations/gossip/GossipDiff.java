@@ -55,6 +55,7 @@ public final class GossipDiff {
             if (detectBirth && prev == null && o.isBaby()) {
                 out.add(new Derived(GossipEventType.BIRTH, o.uuid(), o.name(), Optional.empty(), ""));
             }
+            // note: births feed diffResidency's exclusion set so a newborn isn't also an "arrival".
 
             Optional<UUID> prevPartner = prev == null ? Optional.empty() : prev.partner();
 
@@ -77,6 +78,45 @@ public final class GossipDiff {
                             .or(() -> Optional.ofNullable(snapshots.get(exPartner)).map(RelationshipSnapshot::name))
                             .orElse("");
                     out.add(new Derived(GossipEventType.DIVORCE, o.uuid(), o.name(), Optional.of(exPartner), exName));
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Diffs a village's current resident UUID set against the previous scan's set into
+     * {@link GossipEventType#ARRIVAL}/{@link GossipEventType#DEPARTURE} events. Names are looked up in
+     * {@code names} (uuid→name), defaulting to {@code ""} when unknown.
+     *
+     * <ul>
+     *   <li><b>Arrival</b>: present now, absent before — excluding {@code births} (a newborn is a BIRTH,
+     *       reported by {@link #diff}, not an arrival).</li>
+     *   <li><b>Departure</b>: present before, absent now — excluding {@code recentlyDead} (a death is
+     *       reported as DEATH; a widow-maker is not a mover).</li>
+     * </ul>
+     *
+     * <p>Unlike {@link #diff}, this reads the load-independent residency set, so an unloaded resident is
+     * never mistaken for a departure. The caller must only invoke it once a {@code prior} set exists —
+     * the first sighting of a village seeds residency and emits nothing, so discovery never floods
+     * arrivals.
+     */
+    public static List<Derived> diffResidency(Set<UUID> current, Set<UUID> prior,
+                                              Map<UUID, String> names,
+                                              Set<UUID> recentlyDead, Set<UUID> births,
+                                              boolean detectArrival, boolean detectDeparture) {
+        List<Derived> out = new ArrayList<>();
+        if (detectArrival) {
+            for (UUID u : current) {
+                if (!prior.contains(u) && !births.contains(u)) {
+                    out.add(new Derived(GossipEventType.ARRIVAL, u, names.getOrDefault(u, ""), Optional.empty(), ""));
+                }
+            }
+        }
+        if (detectDeparture) {
+            for (UUID u : prior) {
+                if (!current.contains(u) && !recentlyDead.contains(u)) {
+                    out.add(new Derived(GossipEventType.DEPARTURE, u, names.getOrDefault(u, ""), Optional.empty(), ""));
                 }
             }
         }

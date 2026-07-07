@@ -44,6 +44,9 @@ gates on them with a plain `{"memory": {"id": "mcaconversations.state.<name>"}}`
 | Option | Default | Meaning |
 |---|---|---|
 | `enableWeatherLines` | `true` | enable weather-aware lines: the `weather` template variable and the `conversations_weather` dialogue condition (buckets: `clear`, `rain`, `storm`) |
+| `enableSeasonLines` | `true` | enable season-aware lines: the `season` template variable and the `conversations_season` condition (buckets: `spring`, `summer`, `autumn`, `winter`). Read from **Serene Seasons** when installed, else derived from the world day |
+| `enableHolidayLines` | `true` | enable festival-day lines: the `holiday` template variable and the `conversations_holiday` condition (buckets: `spring_bloom`, `midsummer`, `harvest_festival`, `midwinter`, `none`). Always calendar-based |
+| `seasonYearLengthDays` | 96 | length of a year in MC days for the calendar season/holiday dates (four equal quarters from spring at day 0); range 4–4096. Default 96 matches Serene Seasons' default 24-day seasons |
 
 ## `[gossip]`
 
@@ -53,9 +56,11 @@ gates on them with a plain `{"memory": {"id": "mcaconversations.state.<name>"}}`
 | `gossipRetentionDays` | 7 | 1–64 | MC days an event stays tellable |
 | `maxEventsPerVillage` | 32 | 4–256 | retained events per village (oldest dropped) |
 | `detectMarriage` / `detectDivorce` / `detectDeath` / `detectBirth` | `true` | | per-event-type detection toggles |
+| `detectArrival` / `detectDeparture` | `true` | | notice villagers moving into / away from a village (residency-set diffing) |
 
-Scan cost: one nearest village per online player per interval, deduplicated, primitive reads over
-loaded residents only — negligible on `/forge tps`.
+Scan cost: one nearest village per online player per interval, deduplicated. Relationship detection reads
+loaded residents only; arrival/departure reads the village's stored residency set (load-independent) and
+diffs it against a persisted snapshot — both negligible on `/forge tps`.
 
 ## `[debug]`
 

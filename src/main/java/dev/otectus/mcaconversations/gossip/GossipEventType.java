@@ -9,6 +9,10 @@ public enum GossipEventType {
     DIVORCE,
     DEATH,
     BIRTH,
+    /** A villager took up residence in the village (0.6.0 — from residency-set diffing). */
+    ARRIVAL,
+    /** A villager left the village for good — moved away, not died (0.6.0 — from residency-set diffing). */
+    DEPARTURE,
     /** A player completed an MCA: Quests quest for a villager (0.4.0 — only seeded when Quests is present). */
     QUEST;
 

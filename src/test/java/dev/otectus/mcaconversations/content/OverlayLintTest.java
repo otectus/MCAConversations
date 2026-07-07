@@ -48,7 +48,11 @@ class OverlayLintTest {
             "dialogue.conversations.life.first", "dialogue.conversations.dreams.first",
             "dialogue.conversations.fears.first", "dialogue.conversations.feelings.first",
             "dialogue.conversations.deflect.personal", "dialogue.conversations.deflect.intimate",
-            "dialogue.conversations.gossip.none", "dialogue.conversations.us.happy.yes");
+            "dialogue.conversations.gossip.none", "dialogue.conversations.us.happy.yes",
+            // Personality-flavored village gossip (0.6.0): every villager reports news in their own voice.
+            "dialogue.conversations.gossip.marriage", "dialogue.conversations.gossip.divorce",
+            "dialogue.conversations.gossip.death", "dialogue.conversations.gossip.birth",
+            "dialogue.conversations.gossip.arrival", "dialogue.conversations.gossip.departure");
 
     private static Map<String, Map<String, String>> overlays;
     private static Map<String, String> baseLang;

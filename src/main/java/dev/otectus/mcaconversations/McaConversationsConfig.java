@@ -62,6 +62,9 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.IntValue stateSmittenMinHearts;
 
         public final ForgeConfigSpec.BooleanValue enableWeatherLines;
+        public final ForgeConfigSpec.BooleanValue enableSeasonLines;
+        public final ForgeConfigSpec.BooleanValue enableHolidayLines;
+        public final ForgeConfigSpec.IntValue seasonYearLengthDays;
 
         public final ForgeConfigSpec.IntValue gossipScanIntervalTicks;
         public final ForgeConfigSpec.IntValue gossipRetentionDays;
@@ -70,6 +73,8 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue detectDivorce;
         public final ForgeConfigSpec.BooleanValue detectDeath;
         public final ForgeConfigSpec.BooleanValue detectBirth;
+        public final ForgeConfigSpec.BooleanValue detectArrival;
+        public final ForgeConfigSpec.BooleanValue detectDeparture;
 
         public final ForgeConfigSpec.BooleanValue debugLogging;
 
@@ -126,6 +131,23 @@ public final class McaConversationsConfig {
                     "and the 'weather' template variable resolves to the current sky. Gates the",
                     "conversations_weather dialogue condition and the 'world' feature flag.")
                     .define("enableWeatherLines", true);
+            enableSeasonLines = b.comment(
+                    "Enable season-aware conversation lines — villagers can remark on the time of year, and",
+                    "the 'season' template variable resolves to spring/summer/autumn/winter. When Serene",
+                    "Seasons is installed the season is read from it; otherwise it is derived from the world",
+                    "day via seasonYearLengthDays. Gates the conversations_season dialogue condition.")
+                    .define("enableSeasonLines", true);
+            enableHolidayLines = b.comment(
+                    "Enable festival-day conversation lines — villagers can remark on calendar holidays",
+                    "(spring bloom, midsummer, harvest festival, midwinter), and the 'holiday' template",
+                    "variable resolves to the current festival (or 'none'). Holidays are always calendar-based",
+                    "(seasonYearLengthDays), independent of Serene Seasons. Gates the conversations_holiday condition.")
+                    .define("enableHolidayLines", true);
+            seasonYearLengthDays = b.comment(
+                    "Length of a full year in MC days, used to derive the calendar season (without Serene",
+                    "Seasons) and all holiday dates. Split into four equal quarters starting at spring on day 0.",
+                    "The default 96 matches Serene Seasons' default 24-day seasons.")
+                    .defineInRange("seasonYearLengthDays", 96, 4, 4096);
             b.pop();
 
             b.push("gossip");
@@ -139,6 +161,10 @@ public final class McaConversationsConfig {
             detectDivorce = b.define("detectDivorce", true);
             detectDeath = b.define("detectDeath", true);
             detectBirth = b.define("detectBirth", true);
+            detectArrival = b.comment("Notice villagers moving INTO a village (residency-set diffing).")
+                    .define("detectArrival", true);
+            detectDeparture = b.comment("Notice villagers moving AWAY from a village for good (not deaths).")
+                    .define("detectDeparture", true);
             b.pop();
 
             b.push("debug");

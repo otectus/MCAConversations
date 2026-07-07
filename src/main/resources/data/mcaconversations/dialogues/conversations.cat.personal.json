@@ -468,6 +468,123 @@
       ]
     },
     {
+      "name": "hopes",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.hopes",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 24
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.again"
+          }
+        },
+        {
+          "baseChance": 5,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.hopes",
+                "var": "player"
+              }
+            },
+            {
+              "chance": 4,
+              "personality": "peppy"
+            },
+            {
+              "chance": 4,
+              "age_group": "adult"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.first",
+            "positive": 5,
+            "remember": {
+              "id": "mcaconversations.topic.hopes",
+              "var": "player"
+            },
+            "conversations_record": [
+              {
+                "id": "mcaconversations.cooldown.hopes",
+                "var": "player",
+                "time": 48000
+              },
+              {
+                "id": "mcaconversations.unlock.opened_up",
+                "var": "player"
+              }
+            ]
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -1000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.topic.hopes",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.hopes",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.revisit",
+            "positive": 3,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.hopes",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "feelings",
       "results": [
         {
