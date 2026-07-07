@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.compat.mca;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
 import dev.otectus.mcaconversations.compat.quests.QuestConditionQuery;
 import dev.otectus.mcaconversations.compat.quests.QuestOpenDirective;
@@ -11,7 +12,9 @@ import dev.otectus.mcaconversations.gossip.GossipSayDirective;
 import dev.otectus.mcaconversations.state.MemoryIds;
 import dev.otectus.mcaconversations.template.ConversationsSay;
 import dev.otectus.mcaconversations.template.SayDirective;
+import dev.otectus.mcaconversations.template.WorldContext;
 import dev.otectus.mcaconversations.util.SafeParse;
+import dev.otectus.mcaconversations.world.WorldQuery;
 import forge.net.mca.entity.ai.LongTermMemory;
 import forge.net.mca.entity.interaction.gifts.GiftPredicate;
 import forge.net.mca.resources.data.dialogue.Actions;
@@ -121,6 +124,23 @@ public final class ConversationsMcaRegistrar {
                                 ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_gossip condition failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        GiftPredicate.register("conversations_weather",
+                (json, name) -> SafeParse.orNull("conversations_weather", json,
+                        () -> WorldQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || !McaConversationsConfig.COMMON.enableWeatherLines.get()) {
+                            return 0.0f;
+                        }
+                        String bucket = WorldContext.weatherBucket(
+                                McaCompat.isRaining(villager), McaCompat.isThundering(villager));
+                        return query.matches(bucket) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_weather failed; defaulting 0", t);
                         return 0.0f;
                     }
                 });

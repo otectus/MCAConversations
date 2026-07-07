@@ -38,6 +38,7 @@ public final class McaConversationsConfig {
             case "templates" -> COMMON.enableTemplates.get();
             case "gossip" -> COMMON.enableGossip.get();
             case "quests" -> COMMON.enableQuests.get();
+            case "world" -> COMMON.enableWeatherLines.get();
             default -> true;
         };
     }
@@ -52,6 +53,15 @@ public final class McaConversationsConfig {
 
         public final ForgeConfigSpec.IntValue giftMemoryPerPlayerCap;
         public final ForgeConfigSpec.IntValue gratitudeWindowTicks;
+
+        public final ForgeConfigSpec.IntValue stateGriefWindowTicks;
+        public final ForgeConfigSpec.IntValue stateElatedWindowTicks;
+        public final ForgeConfigSpec.IntValue stateAnnoyedWindowTicks;
+        public final ForgeConfigSpec.IntValue stateSmittenWindowTicks;
+        public final ForgeConfigSpec.IntValue stateProudWindowTicks;
+        public final ForgeConfigSpec.IntValue stateSmittenMinHearts;
+
+        public final ForgeConfigSpec.BooleanValue enableWeatherLines;
 
         public final ForgeConfigSpec.IntValue gossipScanIntervalTicks;
         public final ForgeConfigSpec.IntValue gossipRetentionDays;
@@ -90,6 +100,32 @@ public final class McaConversationsConfig {
                     .defineInRange("giftMemoryPerPlayerCap", 16, 1, 256);
             gratitudeWindowTicks = b.comment("How long (game ticks) a villager stays 'grateful' after an accepted gift (24000 = 1 MC day).")
                     .defineInRange("gratitudeWindowTicks", 24000, 1200, 168000);
+            b.pop();
+
+            b.push("states");
+            b.comment("Conversation states (moods) are short-lived flags an event leaves on a villager that colour",
+                    "its dialogue for a while. All require enableStates; each value is a duration in game ticks",
+                    "(24000 = 1 MC day). Set a window to its minimum to make a state effectively momentary.");
+            stateGriefWindowTicks = b.comment("How long residents stay 'grieving' after a death in their village.")
+                    .defineInRange("stateGriefWindowTicks", 48000, 1200, 168000);
+            stateElatedWindowTicks = b.comment("How long residents stay 'elated' after a birth or marriage in their village.")
+                    .defineInRange("stateElatedWindowTicks", 24000, 1200, 168000);
+            stateAnnoyedWindowTicks = b.comment("How long a villager stays 'annoyed' at a player who struck it.")
+                    .defineInRange("stateAnnoyedWindowTicks", 12000, 1200, 168000);
+            stateSmittenWindowTicks = b.comment("How long a villager stays 'smitten' with a player after a gift given while very fond.")
+                    .defineInRange("stateSmittenWindowTicks", 24000, 1200, 168000);
+            stateProudWindowTicks = b.comment("How long a villager stays 'proud' of a player after they complete a quest for it (needs MCA: Quests).")
+                    .defineInRange("stateProudWindowTicks", 24000, 1200, 168000);
+            stateSmittenMinHearts = b.comment("Minimum hearts at gift time for the gift to also make the villager 'smitten' (as well as grateful).")
+                    .defineInRange("stateSmittenMinHearts", 100, 1, 1000);
+            b.pop();
+
+            b.push("world");
+            enableWeatherLines = b.comment(
+                    "Enable weather-aware conversation lines — villagers can remark on rain and storms,",
+                    "and the 'weather' template variable resolves to the current sky. Gates the",
+                    "conversations_weather dialogue condition and the 'world' feature flag.")
+                    .define("enableWeatherLines", true);
             b.pop();
 
             b.push("gossip");

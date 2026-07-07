@@ -57,8 +57,19 @@ Nobody sounds like a template:
 - **Food talk that respects MCA traits** — vegetarians, the lactose intolerant, and more answer
   differently.
 - **Kids and teens answer in their own voice** — never with adult follow-ups.
-- **All 13 MCA personalities** get flavored line overlays, so the gloomy villager and the flirty one
-  don't read from the same script.
+- **All 13 MCA personalities** now get flavored overlays across the **20 most-heard topics**, each
+  with two or three variants — the gloomy villager, the peppy one, and the greedy one answer the same
+  question in genuinely different voices, and asking twice rarely gives you the same words back.
+
+### 🎭 Passing moods
+Something just happened, and it shows. A villager turns **grateful** or **smitten** after a gift,
+**proud** or **annoyed** after a quest, **annoyed** if you hit them — and a whole village goes
+**grieving** after a death or **elated** after a birth or wedding nearby. The mood colors their lines
+for a while, then fades.
+
+### 🌦️ They notice the weather
+Villagers can remark on the sky above them — a clear day, the rain, a rolling storm — so a chat in a
+thunderstorm doesn't sound like a chat in the sun.
 
 ### 🎁 Gifts they're grateful for
 Give a villager a gift they like and they'll stay grateful for about a day. Married partners will
@@ -103,8 +114,8 @@ about a finished quest as fresh gossip. Everything degrades cleanly if Quests is
 Everything is toggleable in `config/mcaconversations-common.toml` (generated on first run):
 
 - Turn the whole Chat replacement off and get vanilla MCA Chat back.
-- Enable/disable topics, gift gratitude, templated lines, and village gossip independently.
-- Tune gossip scan frequency, event retention, and how long gratitude lasts.
+- Enable/disable topics, conversation moods, templated lines, weather lines, and village gossip independently.
+- Tune gossip scan frequency, event retention, how long gratitude lasts, and each mood's duration.
 
 Disabled features degrade to graceful fallback lines rather than breaking mid-conversation.
 

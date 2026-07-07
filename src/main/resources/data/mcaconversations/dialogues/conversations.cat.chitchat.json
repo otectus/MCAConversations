@@ -402,6 +402,51 @@
       ]
     },
     {
+      "name": "weather",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "storm"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.storm",
+            "positive": 1
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "rain"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.rain",
+            "positive": 1
+          }
+        },
+        {
+          "baseChance": 2,
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.clear",
+            "positive": 1
+          }
+        }
+      ]
+    },
+    {
       "name": "back",
       "results": [
         {

@@ -3,6 +3,9 @@ package dev.otectus.mcaconversations.gossip;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.state.ConversationState;
+import dev.otectus.mcaconversations.state.StateRules;
+import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -63,9 +66,11 @@ public final class GossipDetectors {
         long now = level.getGameTime();
         GossipEvent event = new GossipEvent(UUID.randomUUID(), GossipEventType.DEATH,
                 villageId.getAsInt(), now, villager.getUUID(), name, Optional.empty(), "");
-        if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())
-                && McaConversationsConfig.COMMON.debugLogging.get()) {
-            McaConversations.LOGGER.info("Gossip: death of {} ({}) in village {}", name, villager.getUUID(), villageId.getAsInt());
+        if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())) {
+            StateTracker.applyAmbient(level, villageId.getAsInt(), ConversationState.GRIEVING);
+            if (McaConversationsConfig.COMMON.debugLogging.get()) {
+                McaConversations.LOGGER.info("Gossip: death of {} ({}) in village {}", name, villager.getUUID(), villageId.getAsInt());
+            }
         }
     }
 
@@ -128,9 +133,11 @@ public final class GossipDetectors {
         for (GossipDiff.Derived d : derived) {
             GossipEvent event = new GossipEvent(UUID.randomUUID(), d.type(), villageId, now,
                     d.aUuid(), d.aName(), d.bUuid(), d.bName());
-            if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())
-                    && McaConversationsConfig.COMMON.debugLogging.get()) {
-                McaConversations.LOGGER.info("Gossip: {} in village {}: {} {}", d.type(), villageId, d.aName(), d.bName());
+            if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())) {
+                StateRules.forGossip(d.type()).ifPresent(st -> StateTracker.applyAmbient(level, villageId, st));
+                if (McaConversationsConfig.COMMON.debugLogging.get()) {
+                    McaConversations.LOGGER.info("Gossip: {} in village {}: {} {}", d.type(), villageId, d.aName(), d.bName());
+                }
             }
         }
 

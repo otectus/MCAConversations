@@ -18,7 +18,8 @@ public enum TemplateVariable {
     VILLAGE_NAME("mcaconversations.fallback.village"),
     LAST_GIFT_ITEM("mcaconversations.fallback.something"),
     TIME_OF_DAY("mcaconversations.fallback.time"),
-    PROFESSION_NAME("mcaconversations.fallback.profession");
+    PROFESSION_NAME("mcaconversations.fallback.profession"),
+    WEATHER("mcaconversations.fallback.weather");
 
     private final String fallbackKey;
 

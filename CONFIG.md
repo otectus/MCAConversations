@@ -8,9 +8,11 @@ File: `config/mcaconversations-common.toml` (generated on first run).
 |---|---|---|
 | `replaceChatWithConversations` | `true` | MCA's Chat button behaves like vanilla MCA; the Conversations hub becomes unreachable (no separate button exists since v0.2.0 — see DATAPACK.md to restore one via datapack) |
 | `enableTopics` | `true` | Conversations topic branches deflect to fallback lines |
-| `enableStates` | `true` | gratitude after gifts is neither recorded nor referenced |
+| `enableStates` | `true` | conversation states (grateful, grieving, elated, annoyed, smitten, proud) are neither recorded nor referenced |
 | `enableTemplates` | `true` | templated lines render with neutral fallbacks ("someone", "the village") |
 | `enableGossip` | `true` | no events are detected or told; the "news" topic answers "quiet week" |
+| `enableQuests` | `true` | MCA: Quests integration is inert (quest-aware conditions score 0, quest lines aren't voiced) — only ever active when the `mcaquests` mod is installed |
+| `enableWeatherLines` | `true` | weather-aware lines are off; the `conversations_weather` condition and the `world` feature flag score as disabled |
 
 Feature toggles act through the `conversations_enabled`/`conversations_disabled` dialogue conditions and
 server-side early-outs — content degrades to fallback lines rather than disappearing mid-tree.
@@ -21,6 +23,27 @@ server-side early-outs — content degrades to fallback lines rather than disapp
 |---|---|---|---|
 | `giftMemoryPerPlayerCap` | 16 | 1–256 | most recent gifts remembered per player (one per villager, oldest dropped) |
 | `gratitudeWindowTicks` | 24000 | 1200–168000 | how long a villager stays "grateful" after an accepted gift |
+
+## `[states]`
+
+Conversation states are short-lived moods an event leaves on a villager that colour its dialogue for a
+while. Each value is a duration in game ticks (24000 = 1 MC day); all require `enableStates`. Dialogue
+gates on them with a plain `{"memory": {"id": "mcaconversations.state.<name>"}}` condition.
+
+| Option | Default | Range | Meaning |
+|---|---|---|---|
+| `stateGriefWindowTicks` | 48000 | 1200–168000 | residents stay "grieving" after a death in their village |
+| `stateElatedWindowTicks` | 24000 | 1200–168000 | residents stay "elated" after a birth or marriage in their village |
+| `stateAnnoyedWindowTicks` | 12000 | 1200–168000 | a villager stays "annoyed" at a player who struck it |
+| `stateSmittenWindowTicks` | 24000 | 1200–168000 | a villager stays "smitten" after a gift given while very fond |
+| `stateProudWindowTicks` | 24000 | 1200–168000 | a villager stays "proud" of a player who completed a quest for it (needs MCA: Quests) |
+| `stateSmittenMinHearts` | 100 | 1–1000 | minimum hearts at gift time for the gift to also make the villager "smitten" |
+
+## `[world]`
+
+| Option | Default | Meaning |
+|---|---|---|
+| `enableWeatherLines` | `true` | enable weather-aware lines: the `weather` template variable and the `conversations_weather` dialogue condition (buckets: `clear`, `rain`, `storm`) |
 
 ## `[gossip]`
 

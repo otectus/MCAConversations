@@ -3,8 +3,9 @@ package dev.otectus.mcaconversations.gift;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.state.ConversationState;
 import dev.otectus.mcaconversations.state.LastGift;
-import dev.otectus.mcaconversations.state.MemoryIds;
+import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -39,8 +40,11 @@ public final class GiftTracker {
                     new LastGift(itemId, stack.getCount(), now),
                     McaConversationsConfig.COMMON.giftMemoryPerPlayerCap.get()));
 
-            McaCompat.remember(villager, MemoryIds.playerScoped(MemoryIds.state("grateful"), player.getUUID()),
-                    McaConversationsConfig.COMMON.gratitudeWindowTicks.get());
+            StateTracker.apply(villager, player, ConversationState.GRATEFUL);
+            // A gift given while already very fond deepens gratitude into being smitten.
+            if (McaCompat.getHearts(player, villager) >= McaConversationsConfig.COMMON.stateSmittenMinHearts.get()) {
+                StateTracker.apply(villager, player, ConversationState.SMITTEN);
+            }
 
             if (McaConversationsConfig.COMMON.debugLogging.get()) {
                 McaConversations.LOGGER.info("Recorded gift {} x{} from {} to {}", itemId, stack.getCount(),

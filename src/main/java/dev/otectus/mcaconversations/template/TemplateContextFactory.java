@@ -48,6 +48,8 @@ public final class TemplateContextFactory {
                         Component.translatable(timeOfDayKey(player.serverLevel().getDayTime() % 24000L)));
                 case PROFESSION_NAME -> McaCompat.getProfessionText(villager)
                         .ifPresent(text -> context.with(var, text));
+                case WEATHER -> context.with(var, Component.translatable("mcaconversations.weather."
+                        + WorldContext.weatherBucket(McaCompat.isRaining(villager), McaCompat.isThundering(villager))));
             }
         }
         return context;

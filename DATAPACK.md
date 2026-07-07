@@ -54,17 +54,25 @@ asked"), an expiring `mcaconversations.cooldown.<t>` flag ("asked recently"), an
 first-time / asked-again / revisit built from has/lacks gates plus negative sinks.
 
 **Memory id namespace** (all ids this mod writes): `mcaconversations.topic.*`, `mcaconversations.cooldown.*`,
-`mcaconversations.state.*` (`grateful`), `mcaconversations.unlock.*` (`opened_up`, `confided`),
-`mcaconversations.greet.today`, `mcaconversations.gossip.<eventUuid>`. Third-party packs building on these
-flags may read them freely; write your own ids under your own prefix.
+`mcaconversations.state.*` (`grateful`, `smitten`, `proud`, `annoyed` — player-scoped; `grieving`, `elated`
+— ambient/unscoped), `mcaconversations.unlock.*` (`opened_up`, `confided`), `mcaconversations.greet.today`,
+`mcaconversations.gossip.<eventUuid>`, `mcaconversations.quest.done.*` / `mcaconversations.quest.failed.*`.
+Third-party packs building on these flags may read them freely; write your own ids under your own prefix.
+
+**Conversation states** are short-lived moods left by an event, gated with a plain `memory` condition —
+`{"memory": {"id": "mcaconversations.state.grieving"}}` (ambient) or `{"memory": {"id":
+"mcaconversations.state.proud", "var": "player"}}` (player-scoped). They are set by: gifts (`grateful`,
+`smitten`), player strikes (`annoyed`), quest complete/fail (`proud`/`annoyed`, needs MCA: Quests), and
+village death/birth/marriage (`grieving`/`elated`). Durations are configurable; requires `enableStates`.
 
 ## Custom conditions (usable in any dialogue/gift JSON once this mod is installed)
 
 | Key | Value | Meaning |
 |---|---|---|
-| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip"` | 1 when that config feature is on, else 0 |
+| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world"` | 1 when that config feature is on, else 0 |
 | `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch |
 | `conversations_gossip` | `{"types": ["marriage","divorce","death","birth"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
+| `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
 
 ## Custom actions
 
@@ -88,6 +96,7 @@ fill `%2$s`, `%3$s`, … in the order listed. Unresolvable vars fall back to neu
 | `last_gift_item` | the display name of the last gift this player gave this villager |
 | `time_of_day` | "this morning" / "today" / "this evening" / "tonight" |
 | `profession_name` | the villager's localized profession display name (any mod's professions, client-side localized) |
+| `weather` | "the clear sky" / "the rain" / "the storm" (current sky in the villager's level) |
 
 Gossip lines receive `%2$s` = subject A's name, `%3$s` = subject B's name (empty for
 single-subject events like deaths).

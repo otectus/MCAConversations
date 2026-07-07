@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file. Format foll
 
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
 
+## [0.5.0] - 2026-07-07
+
+The **anti-repetition** release: every personality now sounds like itself across the topics you hit most,
+and two new event-driven systems give villagers something fresh to react to. Existing saves and datapacks
+are unaffected — all of it is additive and degrades cleanly when a feature is off or MCA state is unavailable.
+
+### Added
+- **Personality voices, everywhere that matters.** All 13 personality overlays now cover the **core-20
+  highest-traffic topics** (greeting, check-in, day, work, village, neighbours, food, the personal openers,
+  the deflects, gossip, and "are you happy with us"), each with **2–3 `/N` variants**. Previously overlays
+  flavoured only 15 topics with a single line apiece, so most villagers said the identical base line and
+  repeated it verbatim on a re-ask. Now a grumpy farmer and a peppy one answer the same question in
+  genuinely different voices, and asking twice rarely returns the same words.
+- **Conversation states (moods).** A gift, a completed quest, a punch, or a death/birth/marriage in the
+  village now leaves a villager in a short-lived mood — `grateful`, `smitten`, `proud`, `annoyed`,
+  `grieving`, or `elated` — written as an expiring `mcaconversations.state.<name>` memory. Dialogue gates
+  on it with a plain MCA `memory` condition (no new datapack vocabulary); durations are tunable under the
+  new `[states]` config group. Generalises the old single `grateful` state. Requires `enableStates`.
+- **Weather-aware lines.** A new `conversations_weather` dialogue condition (`{"is": "clear"|"rain"|"storm"}`)
+  and a `weather` template variable let villagers speak to the current sky. Gated by the new `[world]`
+  config group (`enableWeatherLines`) and the `world` feature flag; storm outranks rain outranks clear.
+- **Two built-in topics** surface the new systems in normal play: a **weather** starter under Chit-Chat
+  (villagers remark on the current sky) and a **"How have you been, in yourself?"** starter under Events
+  that reacts to a villager's current mood — condolences while `grieving`, shared joy while `elated`.
+
+### Fixed
+- **CONFIG.md** now documents the `features.enableQuests` toggle shipped in 0.4.0 (previously undocumented),
+  alongside the new `[states]` / `[world]` groups.
+
+### Notes
+- Content lints extended in lockstep: `OverlayLintTest` now requires all 13 overlays to cover the core-20
+  key set (with variant integrity), and `ContentLintTest` pins the `conversations_weather` condition, the
+  `world` feature, and the weather value vocabulary. New unit tests cover the state enum/rules and the
+  weather bucketing/query.
+- Long-tail per-personality topic coverage, seasonal/holiday lines, and deeper gossip are planned for
+  follow-up releases.
+
 ## [0.4.0] - 2026-07-07
 
 ### Added

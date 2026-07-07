@@ -41,7 +41,7 @@ class ContentLintTest {
             "gender", "has_home", "has_village", "hearts", "hearts_min", "hearts_max", "is_married",
             "is_pregnant", "trait", "village_has_building", "current_chore", "min_health",
             "min_infection_progress", "min_pregnancy_progress", "pregnancy_child_gender", "memory",
-            "conversations_enabled", "conversations_disabled", "conversations_gossip",
+            "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed");
 
@@ -78,7 +78,10 @@ class ContentLintTest {
             "family", "spouse", "kids", "parent", "adult", "teen", "toddler", "baby", "engaged",
             "promised", "cleric", "adventurer", "mercenary", "outlawed", "trader", "orphan",
             "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
-    private static final Set<String> FEATURES = Set.of("topics", "states", "templates", "gossip", "quests");
+    private static final Set<String> FEATURES = Set.of("topics", "states", "templates", "gossip", "quests", "world");
+
+    /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
+    private static final Set<String> WEATHERS = Set.of("clear", "rain", "storm");
 
     /** MCA trait vocabulary (lowercase, as MCA's own gift JSON uses), pinned from the 7.6.26 jar. */
     private static final Set<String> TRAITS = Set.of(
@@ -228,6 +231,38 @@ class ContentLintTest {
                     if (args.has("min") && args.get("min").getAsInt() < 0) {
                         problems.add(where + ": min must be >= 0");
                     }
+                }
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * The {@code conversations_weather} condition takes an object value {@code {"is": "rain"}}; validate
+     * that {@code is} is a known weather bucket — mirrors {@code WorldQuery}/{@code WorldContext}, so a
+     * bad datapack value fails CI, not a silent never-matching line.
+     */
+    @Test
+    void weatherConditionArgsAreValid() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            if (!result.has("conditions")) {
+                return;
+            }
+            for (JsonElement c : result.getAsJsonArray("conditions")) {
+                JsonObject condition = c.getAsJsonObject();
+                if (!condition.has("conversations_weather")) {
+                    continue;
+                }
+                String where = name + "/" + answerName + " conversations_weather";
+                JsonElement value = condition.get("conversations_weather");
+                if (!value.isJsonObject() || !value.getAsJsonObject().has("is")) {
+                    problems.add(where + ": value must be an object {is}");
+                    continue;
+                }
+                String is = value.getAsJsonObject().get("is").getAsString();
+                if (!WEATHERS.contains(is)) {
+                    problems.add(where + ": is '" + is + "' not a weather bucket " + WEATHERS);
                 }
             }
         }));

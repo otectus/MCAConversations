@@ -31,6 +31,51 @@
       ]
     },
     {
+      "name": "noticed",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.grieving",
+            "positive": 2
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.state.elated"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.elated",
+            "positive": 2
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine",
+            "positive": 1
+          }
+        }
+      ]
+    },
+    {
       "name": "back",
       "results": [
         {

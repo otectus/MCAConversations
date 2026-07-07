@@ -10,6 +10,8 @@ import dev.otectus.mcaconversations.gossip.GossipEvent;
 import dev.otectus.mcaconversations.gossip.GossipEventType;
 import dev.otectus.mcaconversations.gossip.GossipSavedData;
 import dev.otectus.mcaconversations.state.MemoryIds;
+import dev.otectus.mcaconversations.state.StateRules;
+import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -60,6 +62,7 @@ public final class ConversationsQuestsEvents {
                     ? MemoryIds.questCompleted(questId.toString())
                     : MemoryIds.questFailed(questId.toString());
             McaCompat.rememberForever(villager, MemoryIds.playerScoped(memId, player.getUUID()));
+            StateTracker.apply(villager, player, StateRules.forQuest(completed));
             if (completed && McaConversationsConfig.COMMON.enableGossip.get()) {
                 seedGossip(player, villager);
             }

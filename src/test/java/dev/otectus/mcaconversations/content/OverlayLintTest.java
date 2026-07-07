@@ -32,17 +32,23 @@ class OverlayLintTest {
             "athletic", "confident", "friendly", "flirty", "witty", "shy",
             "gloomy", "sensitive", "greedy", "odd", "lazy", "grumpy", "peppy");
 
-    /** Every overlay must cover at least these high-traffic lines. */
+    /**
+     * The core-20 high-traffic topics every personality overlay must cover (v0.5.0 anti-repetition
+     * pass). Long-tail topics gain per-personality overlays in later releases.
+     */
     private static final Set<String> STANDARD_KEYS = Set.of(
             "dialogue.chat",
             "dialogue.conversations",
             "dialogue.conversations.checkin.good", "dialogue.conversations.checkin.rough",
+            "dialogue.conversations.checkin.again",
             "dialogue.conversations.day.good", "dialogue.conversations.day.rough",
             "dialogue.conversations.work.like", "dialogue.conversations.work.hate",
+            "dialogue.conversations.village.home", "dialogue.conversations.people.first",
+            "dialogue.conversations.food.first",
             "dialogue.conversations.life.first", "dialogue.conversations.dreams.first",
             "dialogue.conversations.fears.first", "dialogue.conversations.feelings.first",
             "dialogue.conversations.deflect.personal", "dialogue.conversations.deflect.intimate",
-            "dialogue.conversations.gossip.none");
+            "dialogue.conversations.gossip.none", "dialogue.conversations.us.happy.yes");
 
     private static Map<String, Map<String, String>> overlays;
     private static Map<String, String> baseLang;

@@ -8,7 +8,7 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.3.0)
+## Features (0.5.0)
 
 - **Chat, replaced** — MCA's own "Chat" button now opens the Conversations hub: how their day
   *actually* went, whether they like their work, food, the neighbors, their life story, dreams,
@@ -21,7 +21,10 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   vanilla trades plus every profession mod in the pack: MCA, More Villagers, Ars Nouveau, Chef's
   Delight, Ice and Fire, Vampirism, Werewolves — and a self-personalizing generic line for any
   other mod's professions); food talk respects MCA traits (vegetarian, lactose intolerance, ...);
-  children and teens answer in their own voice; all 13 personalities have flavored line overlays.
+  children and teens answer in their own voice. **All 13 personalities now have flavored overlays
+  across the 20 most-heard topics** (greeting, check-in, day, work, village, neighbors, food, the
+  personal openers, deflects, and more), each with 2–3 variants — a grumpy villager and a peppy one
+  answer the same question in genuinely different voices, and asking twice rarely repeats verbatim.
 - **Heart-gated depth** — casual topics are open to anyone; personal topics (life, dreams, fears)
   need 25+ hearts; intimate topics (feelings, regrets) need 60+ hearts *and* a prior heart-to-heart
   — unless you're married to them. Secrets require having confided something first. Below the
@@ -29,6 +32,11 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 - **Conversation memory** — villagers remember (per player, persisted in entity NBT via MCA's own
   long-term memory) what you've asked. Ask again too soon and they'll call it out; come back much
   later and they'll *revisit* the topic ("I've been chewing on what you asked me...").
+- **Conversation moods** — an event leaves a villager in a passing mood that colors their dialogue:
+  *grateful* or *smitten* after a gift, *proud* or *annoyed* after a quest, *annoyed* if you strike
+  them, and village-wide *grieving* or *elated* after a death, birth, or marriage nearby.
+- **Weather-aware lines** — villagers can remark on the current sky (clear, rain, storm), and the
+  `weather` template variable drops it into any line.
 - **Gift gratitude** — an accepted gift leaves the villager grateful for a day; married partners
   will thank you for the specific item ("Still smiling about that poppy, if I'm honest").
 - **Personalized lines** — templated dialogue can reference the villager's name, spouse, home
@@ -39,8 +47,8 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 - **Spouse & family talk** — dedicated branches for married partners (Are you happy? Remember when
   we met? What about our future? Is anything weighing on you?) and family members.
 - **Anti-repetition polish** — dozens of new line variants merged into MCA's own most-heard
-  dialogue pools (main menu prompts, greetings, chat, stories, handshakes), plus flavored overrides
-  for gloomy and flirty personalities.
+  dialogue pools (main menu prompts, greetings, chat, stories, handshakes), on top of the full
+  per-personality overlay coverage above.
 
 ## Requirements
 

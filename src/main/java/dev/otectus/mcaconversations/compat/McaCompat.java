@@ -88,6 +88,34 @@ public final class McaCompat {
     }
 
     // ------------------------------------------------------------------
+    // World state (weather; season/holiday later)
+    // ------------------------------------------------------------------
+
+    /** True when it is raining in the entity's level. Safe default: false. */
+    public static boolean isRaining(Entity entity) {
+        if (entity != null) {
+            try {
+                return entity.level().isRaining();
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("isRaining failed; defaulting false", t);
+            }
+        }
+        return false;
+    }
+
+    /** True when it is thundering (a storm) in the entity's level. Safe default: false. */
+    public static boolean isThundering(Entity entity) {
+        if (entity != null) {
+            try {
+                return entity.level().isThundering();
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("isThundering failed; defaulting false", t);
+            }
+        }
+        return false;
+    }
+
+    // ------------------------------------------------------------------
     // LongTermMemory (dialogue memory) primitives
     // ------------------------------------------------------------------
 
