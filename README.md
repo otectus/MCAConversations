@@ -8,8 +8,18 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.6.0)
+## Features (0.7.0)
 
+- **A relationship deeper than hearts (new)** — every villager quietly tracks how much they *trust*
+  and *respect* you, how *warm* they feel around you, recent *tension*, and how long you've known
+  each other. Hearts stay MCA's one visible number — the vector never shows and never grants
+  hearts; it decides which replies open up and how they land. It drifts back toward the villager's
+  personality baseline over days, is capped against farming, and is per-player.
+- **Dialogue checks (new)** — the deepest stances resolve like a CRPG check with four outcomes:
+  a *crit* opens the villager further than asked, a *success* lands, a *partial* half-lands, a
+  *rebuff* misfires in character (and always exits gracefully). Outcomes come from the relationship,
+  hearts, mood, and a **seeded** roll — closing and re-opening the screen never re-rolls; coming
+  back tomorrow might. Piloted on the fears topic: try *"You could face it. I'd stand with you."*
 - **Chat, replaced** — MCA's own "Chat" button now opens the Conversations hub: how their day
   *actually* went, whether they like their work, food, the neighbors, their life story, dreams,
   fears, feelings, regrets, and secrets. (Toggleable via `replaceChatWithConversations`.)
@@ -64,10 +74,13 @@ otherwise) — both are soft dependencies and the mod works fully without them.
 MCA's dialogue system loads datapack JSON from any namespace and merges same-named questions, so
 most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
-(`conversations_gossip`, `conversations_say`, `conversations_record`, ...) into MCA's public registries — no
-runtime patching of MCA except one small server-side mixin that observes accepted gifts. See
-[DATAPACK.md](DATAPACK.md) for the full JSON vocabulary (datapack authors can build on it) and
-[CONFIG.md](CONFIG.md) for configuration.
+(`conversations_gossip`, `conversations_disposition`, `conversations_check`, `conversations_say`, ...) into
+MCA's public registries — no runtime patching of MCA except two small soft-fail mixins (the Chat→hub
+redirect and a gift observer). The relationship vector lives in its own versioned world save data and
+**never touches hearts**: MCA's hearts remain the only authoritative, visible relationship number,
+and every heart change still flows through MCA's own dialogue actions. See
+[DATAPACK.md](DATAPACK.md) for the full JSON vocabulary (datapack authors can build on it, including
+their own checked stances) and [CONFIG.md](CONFIG.md) for configuration.
 
 ## Status
 

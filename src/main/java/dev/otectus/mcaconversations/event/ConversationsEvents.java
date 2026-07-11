@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.disposition.DispositionSavedData;
 import dev.otectus.mcaconversations.gift.GiftMemoryProvider;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
 import dev.otectus.mcaconversations.gossip.GossipDetectors;
@@ -61,6 +62,21 @@ public final class ConversationsEvents {
         }
         if (McaCompat.isMcaVillager(event.getEntity())) {
             GossipDetectors.onVillagerDeath(event.getEntity());
+            dropDispositions(event.getEntity());
+        }
+    }
+
+    /** A dead villager's disposition records are meaningless — drop them (scars live in its LTM anyway). */
+    private static void dropDispositions(Entity villager) {
+        if (!McaConversationsConfig.COMMON.enableDispositions.get()) {
+            return;
+        }
+        try {
+            if (villager.getServer() != null) {
+                DispositionSavedData.get(villager.getServer()).removeVillager(villager.getUUID());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("disposition death-prune failed; ignoring", t);
         }
     }
 
@@ -86,6 +102,20 @@ public final class ConversationsEvents {
         int interval = McaConversationsConfig.COMMON.gossipScanIntervalTicks.get();
         if (event.getServer().getTickCount() % interval == 0) {
             GossipDetectors.scan(event.getServer());
+            pruneStaleDispositions(event.getServer());
+        }
+    }
+
+    /** Age-based disposition pruning, riding the gossip scan cadence (no extra tick work). */
+    private static void pruneStaleDispositions(net.minecraft.server.MinecraftServer server) {
+        int staleDays = McaConversationsConfig.COMMON.dispositionStaleDays.get();
+        if (staleDays <= 0 || !McaConversationsConfig.COMMON.enableDispositions.get()) {
+            return;
+        }
+        try {
+            DispositionSavedData.get(server).prune(server.overworld().getGameTime(), staleDays * 24_000L);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("disposition prune failed; ignoring", t);
         }
     }
 

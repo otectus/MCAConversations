@@ -62,6 +62,25 @@ Scan cost: one nearest village per online player per interval, deduplicated. Rel
 loaded residents only; arrival/departure reads the village's stored residency set (load-independent) and
 diffs it against a persisted snapshot — both negligible on `/forge tps`.
 
+## `[rpg]`
+
+The 0.7.0+ RPG layer: an internal per-(villager, player) **disposition vector** (trust, respect,
+warmth, attraction, tension, familiarity) that gates and voices dialogue, and **dialogue checks**
+with crit/success/partial/rebuff outcomes. Hearts remain MCA's only visible relationship number —
+the vector never grants hearts. Every toggle degrades to a documented simpler behavior; everything
+off is exactly the 0.6.0 experience. See DATAPACK.md → *The disposition vector & dialogue checks*.
+
+| Option | Default | Range | Meaning / off-state |
+|---|---|---|---|
+| `enableDispositions` | `true` | | master toggle for the vector. Off: no vector state is read or written, disposition-gated results never match (their authored fallbacks fire), checks run on a hearts-only formula |
+| `enableChecks` | `true` | | master toggle for dialogue checks. Off: checked stances resolve through their plain fallback result (0.6.0-style single outcome) |
+| `enableCheckTiers` | `true` | | four-tier outcomes. Off: binary — crit collapses into success, partial into rebuff |
+| `dispositionGainMultiplier` | 1.0 | 0.0–4.0 | scale on all disposition gains and losses (0 freezes the vector) |
+| `dispositionDecayMultiplier` | 1.0 | 0.0–4.0 | scale on drift back toward the personality baseline (0 = never drifts) |
+| `dispositionDailyAxisCap` | 8 | 1–50 | per-axis, per-MC-day cap on total disposition movement (anti-farming) |
+| `dispositionStaleDays` | 0 | 0–365 | prune records untouched this many MC days (0 = only prune on villager death) |
+| `debugRpg` | `false` | | INFO-level logs for disposition reads/writes, check inputs, tier selection |
+
 ## `[debug]`
 
 | Option | Default | Meaning |

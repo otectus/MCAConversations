@@ -2,8 +2,16 @@ package dev.otectus.mcaconversations.compat.mca;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.check.CheckContextFactory;
+import dev.otectus.mcaconversations.check.CheckDefinition;
+import dev.otectus.mcaconversations.check.CheckResolver;
+import dev.otectus.mcaconversations.check.CheckTier;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
+import dev.otectus.mcaconversations.disposition.DispositionApply;
+import dev.otectus.mcaconversations.disposition.DispositionAxis;
+import dev.otectus.mcaconversations.disposition.DispositionQuery;
+import dev.otectus.mcaconversations.disposition.Dispositions;
 import dev.otectus.mcaconversations.compat.quests.QuestConditionQuery;
 import dev.otectus.mcaconversations.compat.quests.QuestOpenDirective;
 import dev.otectus.mcaconversations.gossip.GossipConditionLogic;
@@ -43,6 +51,12 @@ import forge.net.mca.resources.data.dialogue.Actions;
  *   <li>action {@code conversations_say: {phrase, vars?}} → templated in-dialogue line</li>
  *   <li>action {@code conversations_gossip_say: {types?, max_age?, phrase_prefix?}} → tells the next
  *       untold gossip event and marks it told</li>
+ *   <li>condition {@code conversations_disposition: {axis, min?, max?}} → 1 while the decayed
+ *       disposition axis lies in range (never for Attraction on romance-ineligible targets)</li>
+ *   <li>condition {@code conversations_check: {id, tier, axis, difficulty}} → 1 when the seeded
+ *       check resolver lands on this result's declared tier</li>
+ *   <li>action {@code conversations_disposition_apply: {topic, deltas}} → moves disposition axes
+ *       through the farming guards</li>
  * </ul>
  */
 public final class ConversationsMcaRegistrar {
@@ -176,6 +190,59 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // --- RPG layer (1.0.0): disposition vector + dialogue checks ---
+
+        // Matches while the decayed axis value lies in [min, max]. Never matches when the vector
+        // subsystem is off (content authors an explicit fallback result; lint enforces it) and never
+        // matches on Attraction for romance-ineligible targets, whatever range is asked for.
+        GiftPredicate.register("conversations_disposition",
+                (json, name) -> SafeParse.orNull("conversations_disposition", json,
+                        () -> DispositionQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || !McaConversationsConfig.COMMON.enableDispositions.get()) {
+                            return 0.0f;
+                        }
+                        if (query.axis() == DispositionAxis.ATTRACTION
+                                && !McaCompat.isRomanceEligible(villager, player)) {
+                            return 0.0f;
+                        }
+                        return query.matches(Dispositions.axis(villager, player, query.axis())) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_disposition failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        // Matches when the deterministic check resolver's tier equals this result's declared tier.
+        // All four tier results of a stance carry the same id/axis/difficulty, so exactly one matches
+        // per click; the resolver is pure and seeded, so re-evaluating per candidate result (and
+        // re-opening the screen inside a time bucket) cannot change the outcome.
+        GiftPredicate.register("conversations_check",
+                (json, name) -> SafeParse.orNull("conversations_check", json,
+                        () -> CheckDefinition.fromJson(json.getAsJsonObject())),
+                check -> (villager, stack, player) -> {
+                    try {
+                        if (check == null) {
+                            return 0.0f;
+                        }
+                        return CheckContextFactory.assemble(villager, player, check)
+                                .map(inputs -> {
+                                    CheckTier tier = CheckResolver.resolve(inputs);
+                                    if (tier == check.tier()
+                                            && McaConversationsConfig.COMMON.debugRpg.get()) {
+                                        McaConversations.LOGGER.info("[rpg] check {} -> {} inputs={}",
+                                                check.id(), tier.key(), inputs);
+                                    }
+                                    return tier == check.tier() ? 1.0f : 0.0f;
+                                })
+                                .orElse(0.0f);
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_check failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
         // --- Quest-aware conditions (MCA: Quests integration; return 0 when that mod is absent) ---
         // These keys are always registered so dialogue JSON referencing them stays a known key and
         // scores 0 (never a crash) on an MCA-only install. The lambdas touch a Quests class only through
@@ -247,6 +314,22 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // Moves disposition axes through the farming guards (per-day cap, same-day repeat
+        // diminishing). No-op when the vector subsystem is off; Attraction deltas are dropped for
+        // romance-ineligible targets inside Dispositions.apply.
+        Actions.register("conversations_disposition_apply",
+                (json, name) -> SafeParse.orNull("conversations_disposition_apply", json,
+                        () -> DispositionApply.fromJson(json.getAsJsonObject())),
+                directive -> (villager, player) -> {
+                    try {
+                        if (directive != null) {
+                            Dispositions.apply(villager, player, directive);
+                        }
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_disposition_apply failed; ignoring", t);
+                    }
+                });
+
         // Opens (or directly accepts from) the MCA: Quests menu for this villager. No-op when Quests absent.
         Actions.register("conversations_quest_open",
                 (json, name) -> SafeParse.orNull("conversations_quest_open", json,
@@ -268,8 +351,9 @@ public final class ConversationsMcaRegistrar {
                 });
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
-                + "/conversations_weather/conversations_season/conversations_holiday/conversations_quest_* and actions "
-                + "conversations_record/conversations_say/conversations_gossip_say/conversations_quest_open");
+                + "/conversations_weather/conversations_season/conversations_holiday/conversations_disposition"
+                + "/conversations_check/conversations_quest_* and actions conversations_record/conversations_say"
+                + "/conversations_gossip_say/conversations_disposition_apply/conversations_quest_open");
     }
 
     /** Scores a {@code conversations_quest_*} condition through the {@link QuestsBridge} SPI; 0 when Quests absent. */

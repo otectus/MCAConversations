@@ -270,6 +270,82 @@ public final class McaCompat {
         }
     }
 
+    /**
+     * The villager's MCA personality as its lowercase enum name (e.g. {@code shy}, {@code grumpy}) —
+     * the same values the native {@code personality} dialogue condition matches. Safe default: empty.
+     */
+    public static Optional<String> getPersonality(Entity villager) {
+        if (villager instanceof VillagerEntityMCA mca) {
+            try {
+                return Optional.ofNullable(mca.getVillagerBrain().getPersonality())
+                        .map(p -> p.name().toLowerCase(java.util.Locale.ROOT));
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA getPersonality failed; defaulting empty", t);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * The villager's current MCA mood name (e.g. {@code sad}, {@code overjoyed}) — the same values
+     * the native {@code mood} dialogue condition matches. Safe default: empty.
+     */
+    public static Optional<String> getMoodName(Entity villager) {
+        if (villager instanceof VillagerEntityMCA mca) {
+            try {
+                return Optional.ofNullable(mca.getVillagerBrain().getMood()).map(m -> m.getName());
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA getMoodName failed; defaulting empty", t);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /** True when the villager's MCA age state is ADULT. Safe default: false (fail closed for gating). */
+    public static boolean isAdult(Entity villager) {
+        if (villager instanceof VillagerLike<?> v) {
+            try {
+                return v.getAgeState() == AgeState.ADULT;
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA isAdult failed; defaulting false", t);
+            }
+        }
+        return false;
+    }
+
+    /** True when the villager is married (to anyone — player or villager). Safe default: false. */
+    public static boolean isMarried(Entity villager) {
+        try {
+            return EntityRelationship.of(villager).map(EntityRelationship::isMarried).orElse(false);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA isMarried failed; defaulting false", t);
+            return false;
+        }
+    }
+
+    /** True when the villager is married to exactly this player. Safe default: false. */
+    public static boolean isMarriedToPlayer(Entity villager, UUID playerUuid) {
+        try {
+            return EntityRelationship.of(villager).map(r -> r.isMarriedTo(playerUuid)).orElse(false);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA isMarriedToPlayer failed; defaulting false", t);
+            return false;
+        }
+    }
+
+    /**
+     * The structural romance gate for the Attraction axis and all romantic content: the villager
+     * must be an adult, and either married to this player or not married at all. <b>Fails closed</b> —
+     * any MCA read failure means not eligible; a compat break must never open romance toward a
+     * child, teen, or someone else's spouse.
+     */
+    public static boolean isRomanceEligible(Entity villager, ServerPlayer player) {
+        if (villager == null || player == null || !isAdult(villager)) {
+            return false;
+        }
+        return isMarriedToPlayer(villager, player.getUUID()) || !isMarried(villager);
+    }
+
     /** True when the villager's MCA age state is BABY (used for birth detection). Safe default: false. */
     public static boolean isBaby(Entity villager) {
         if (villager instanceof VillagerLike<?> v) {

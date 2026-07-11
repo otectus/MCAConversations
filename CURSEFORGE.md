@@ -47,6 +47,24 @@ Not everyone spills their guts to a stranger.
 
 Below the bar, villagers deflect — in character, not with an error.
 
+### 🤝 A relationship deeper than hearts
+Every villager now quietly keeps track of more than a number: how much they **trust** you, whether
+they **respect** you, how **warm** they feel around you, any recent **tension** between you, and how
+long you've simply **known** each other. None of it shows as a score — hearts stay MCA's one visible
+measure — but all of it shows in what they're willing to say. Push too hard too early and doors stay
+politely shut; be someone's rock for a week and watch what opens. Left alone, feelings drift back
+toward what that villager's personality resting state is — grudges soften, and banked goodwill from
+one great day doesn't last forever either. It's per-player, farming-proof, and persists with the world.
+
+### 🎲 Conversations with real stakes
+The deepest stances resolve like a tabletop check with four ways to land. A **crit** opens the
+villager up further than you asked; a **success** lands as intended; a **partial** half-lands; a
+**rebuff** misfires — in character, with a graceful way out, and sometimes a little lingering tension.
+The outcome comes from your relationship, your hearts, their mood — and a dash of luck that is
+**seeded**: closing and reopening the dialogue never re-rolls a bad answer. Come back tomorrow and
+try again. First stances to use it, on the fears topic: *"You could face it. I'd stand with you."*
+and *"Tell me the rest of it."*
+
 ### 🧑‍🌾 Personalized to each villager
 Nobody sounds like a template:
 
@@ -124,7 +142,9 @@ Everything is toggleable in `config/mcaconversations-common.toml` (generated on 
 
 - Turn the whole Chat replacement off and get vanilla MCA Chat back.
 - Enable/disable topics, conversation moods, templated lines, weather/season/holiday lines, and village gossip independently.
-- Tune gossip scan frequency, event retention, how long gratitude lasts, each mood's duration, the calendar year length, and which village events (marriage, birth, arrival, departure, …) get noticed.
+- Toggle the relationship vector, dialogue checks, and four-tier outcomes separately — each falls
+  back to a simpler documented behavior, all the way down to the classic pre-RPG experience.
+- Tune gossip scan frequency, event retention, how long gratitude lasts, each mood's duration, the calendar year length, which village events (marriage, birth, arrival, departure, …) get noticed, and the relationship system's gain/decay rates and daily anti-farming caps.
 
 Disabled features degrade to graceful fallback lines rather than breaking mid-conversation.
 

@@ -39,6 +39,8 @@ public final class McaConversationsConfig {
             case "gossip" -> COMMON.enableGossip.get();
             case "quests" -> COMMON.enableQuests.get();
             case "world" -> COMMON.enableWeatherLines.get();
+            case "dispositions" -> COMMON.enableDispositions.get();
+            case "checks" -> COMMON.enableChecks.get();
             default -> true;
         };
     }
@@ -75,6 +77,15 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue detectBirth;
         public final ForgeConfigSpec.BooleanValue detectArrival;
         public final ForgeConfigSpec.BooleanValue detectDeparture;
+
+        public final ForgeConfigSpec.BooleanValue enableDispositions;
+        public final ForgeConfigSpec.BooleanValue enableChecks;
+        public final ForgeConfigSpec.BooleanValue enableCheckTiers;
+        public final ForgeConfigSpec.DoubleValue dispositionGainMultiplier;
+        public final ForgeConfigSpec.DoubleValue dispositionDecayMultiplier;
+        public final ForgeConfigSpec.IntValue dispositionDailyAxisCap;
+        public final ForgeConfigSpec.IntValue dispositionStaleDays;
+        public final ForgeConfigSpec.BooleanValue debugRpg;
 
         public final ForgeConfigSpec.BooleanValue debugLogging;
 
@@ -165,6 +176,41 @@ public final class McaConversationsConfig {
                     .define("detectArrival", true);
             detectDeparture = b.comment("Notice villagers moving AWAY from a village for good (not deaths).")
                     .define("detectDeparture", true);
+            b.pop();
+
+            b.push("rpg");
+            b.comment("The 1.0.0 RPG layer: an internal per-(villager, player) disposition vector (Trust, Respect,",
+                    "Warmth, Attraction, Tension, Familiarity) that gates and voices dialogue, plus dialogue checks",
+                    "with success tiers. Hearts remain MCA's sole visible relationship economy — the vector never",
+                    "shows as a number and never grants hearts. Each toggle degrades to a documented simpler",
+                    "behavior; everything off is exactly the 0.6.0 experience.");
+            enableDispositions = b.comment(
+                    "Master toggle for the disposition vector. When false, no vector state is read or written:",
+                    "disposition-gated results never match (their authored fallbacks fire) and checks run on a",
+                    "hearts-only formula.")
+                    .define("enableDispositions", true);
+            enableChecks = b.comment(
+                    "Master toggle for dialogue checks. When false, checked stances resolve through their",
+                    "authored plain fallback result (the 0.6.0-style single outcome).")
+                    .define("enableChecks", true);
+            enableCheckTiers = b.comment(
+                    "Four-tier check outcomes (crit/success/partial/rebuff). When false, checks collapse to",
+                    "binary success/rebuff at the same difficulty.")
+                    .define("enableCheckTiers", true);
+            dispositionGainMultiplier = b.comment("Scale on all disposition gains and losses (0 freezes the vector).")
+                    .defineInRange("dispositionGainMultiplier", 1.0, 0.0, 4.0);
+            dispositionDecayMultiplier = b.comment(
+                    "Scale on disposition decay toward the personality baseline (0 = values never drift back).")
+                    .defineInRange("dispositionDecayMultiplier", 1.0, 0.0, 4.0);
+            dispositionDailyAxisCap = b.comment(
+                    "Per-axis, per-MC-day cap on total disposition movement from conversations (anti-farming).")
+                    .defineInRange("dispositionDailyAxisCap", 8, 1, 50);
+            dispositionStaleDays = b.comment(
+                    "Prune disposition records untouched for this many MC days (0 = only prune on villager death).")
+                    .defineInRange("dispositionStaleDays", 0, 0, 365);
+            debugRpg = b.comment(
+                    "Verbose logging for disposition reads/writes, check inputs, tier selection, seed derivation.")
+                    .define("debugRpg", false);
             b.pop();
 
             b.push("debug");

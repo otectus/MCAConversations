@@ -6,6 +6,81 @@ All notable changes to this project will be documented in this file. Format foll
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
 Optional: Serene Seasons (soft, reflection-only — used for real seasons when present).
 
+## [0.7.0] - 2026-07-11
+
+The first **RPG-layer** release (1.0.0 track): villagers now carry an internal, per-player
+**disposition vector** — Trust, Respect, Warmth, Attraction, Tension, Familiarity — and the deepest
+stances resolve through **dialogue checks** with crit/success/partial/rebuff outcomes, piloted on the
+fears topic. Hearts remain MCA's only visible relationship economy: the vector never shows as a
+number and never grants hearts — it decides which replies open and how they land. Everything
+degrades cleanly: all RPG toggles off is exactly the 0.6.0 experience.
+
+### Added
+- **Disposition vector.** Six bounded axes per (villager, player), persisted in versioned world data
+  (`data/mcaconversations_dispositions.dat`), server-authoritative, pruned on villager death (and
+  optionally by age). Axes decay toward a personality baseline with per-axis half-lives — Tension
+  fades in ~2 days, Trust lingers ~7; Familiarity never decays. No per-tick processing: decay is
+  computed lazily on read. Pre-0.7.0 worlds migrate implicitly (first read = baseline).
+- **Farming guards on every vector write.** Per-axis per-day movement cap
+  (`dispositionDailyAxisCap`), and repeating the same stance the same day yields full → half →
+  quarter → nothing — for losses too, so Tension can't be rage-farmed. Authored deltas are capped at
+  ±10 at parse time.
+- **Dialogue checks with success tiers.** New `conversations_check` condition: four results per
+  stance (crit/success/partial/rebuff) selected deterministically from the disposition axis, hearts
+  (capped ±25 — checks refine MCA's economy, never fight it), MCA mood, conversation states, and a
+  **seeded roll** (villager + player + check id + half-day time bucket, SplitMix64) — re-opening the
+  screen can never re-roll a rebuff into a crit; coming back later legitimately can.
+- **New dialogue vocabulary.** Conditions `conversations_disposition` (gate on a decayed axis range)
+  and `conversations_check`; action `conversations_disposition_apply` (guarded vector deltas). All
+  SafeParse-contained: malformed JSON degrades to never-match/no-op, never a crash.
+- **Fears pilot content.** The fears follow-up now offers four stances: *comfort* (warmth check),
+  *"You could face it. I'd stand with you."* (trust-gated challenge check), *"Tell me the rest of
+  it."* (higher-trust press check), and the existing *share*. Below-gate stances get an in-character,
+  **cost-free** guard reply (no rebuff-farming below threshold); rebuffs misfire in character, raise
+  Tension, and always exit gracefully. 24 new base lines + 2 stance labels.
+- **`[rpg]` config section** — `enableDispositions`, `enableChecks`, `enableCheckTiers`,
+  gain/decay multipliers, daily axis cap, stale-days pruning, `debugRpg` logging. Each documented
+  with its off-state fallback in CONFIG.md.
+- **Age/romance structural gating.** The Attraction axis is layered shut for non-eligible targets
+  (children/teens/married-to-someone-else): the read path, the write path, the check assembler, and
+  the condition adapter each gate on a **fail-closed** eligibility read (any MCA API failure means
+  not eligible).
+
+### Validation
+- New unit suites: disposition math (clamp/half-life/convergence), NBT round-trip + versioning
+  (missing/future version → empty store, malformed entries skipped), farming guards, seed
+  determinism/spread, resolver tier bands and disabled-state formulas, parser rejection paths.
+- New content lints: parser-validated disposition/check args; every check id defines **all four
+  tiers** with consistent axis/difficulty plus a checks-disabled fallback; tier results never
+  dead-end; and `checkedAnswerStatesResolveToExactlyOneResult` — a full state-space simulation
+  proving **exactly one result of a checked answer has positive weight in every reachable state**
+  (MCA's result selection is weighted-random, verified from `Dialogues.selectAnswer` bytecode, so
+  this is the invariant that makes checks deterministic).
+
+### Notes
+- MCA's dialogue-response packets are handled on the server main thread (verified from the Forge
+  `NetworkHandlerImpl` bytecode: `enqueueWork`) — consequence application is single-threaded.
+- Verified from the 7.6.20 jar: `EntityRelationship.isMarriedTo(UUID)` = partner match + married
+  state, and MCA's mood names are exactly the seven the lint pins.
+
+### In-world verification checklist (production instance — MCA does not load in the dev runtime)
+1. Boot: log shows `conversations_disposition/conversations_check` and
+   `conversations_disposition_apply` registered; world creation succeeds.
+2. Fears page (25+ hearts, adult villager): all four stances + back render without clipping.
+3. Below-gate: with a fresh villager, *challenge*/*press* give the guard reply, cost nothing,
+   and stay on the fears page.
+4. Re-open scumming: force a rebuff (`debugRpg` shows the tier), close and re-open the dialogue
+   within the same half-day — identical tier every time; after a sleep/next half-day it may differ.
+5. Farming: repeat *comfort* through the cooldown window across a day — `debugRpg` shows applied
+   deltas diminishing full → half → quarter → 0 and the daily cap truncating.
+6. Two players build **independent** vectors with the same villager (`debugRpg` read logs).
+7. Relog + server restart: vector values persist (`data/mcaconversations_dispositions.dat`).
+8. Pre-0.7.0 world: first conversation works, reads baselines, no errors.
+9. Kill the villager: its disposition records are dropped from the saved data.
+10. Toggles: `enableChecks=false` → stances give the single fallback line; `enableCheckTiers=false`
+    → only success/rebuff appear in the debug log; `enableDispositions=false` → guard stances never
+    block and checks still resolve (hearts-only); all off → 0.6.0 behavior; `/forge tps` unchanged.
+
 ## [0.6.0] - 2026-07-07
 
 The **seasons & deeper-gossip** release: villagers now speak to the time of year and festival days, notice

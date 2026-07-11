@@ -75,6 +75,8 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
 | `conversations_season` | `{"is": "spring" \| "summer" \| "autumn" \| "winter"}` | 1 when the current season matches — read from Serene Seasons if installed, else the calendar season from the world day; 0 when `enableSeasonLines` is off |
 | `conversations_holiday` | `{"is": "spring_bloom" \| "midsummer" \| "harvest_festival" \| "midwinter" \| "none"}` | 1 when the current calendar festival matches (`none` = an ordinary day); 0 when `enableHolidayLines` is off |
+| `conversations_disposition` | `{"axis": "trust" \| "respect" \| "warmth" \| "attraction" \| "tension" \| "familiarity", "min"?, "max"?}` | 1 while the decayed disposition axis lies in the inclusive range (bounds default to the axis limits). **Never matches** when `enableDispositions` is off (author a fallback result) or on `attraction` for a romance-ineligible target |
+| `conversations_check` | `{"id": "<topic.stance>", "tier": "crit" \| "success" \| "partial" \| "rebuff", "axis", "difficulty": 0–100}` | 1 when the seeded check resolver lands on this result's declared tier — see *Dialogue checks* below. All four tier results of a stance share id/axis/difficulty |
 
 ## Custom actions
 
@@ -83,6 +85,7 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_record` | one `{"id", "var"?, "time"?}` or an array of them | extra `remember` writes (JSON keys can't repeat, so use this when a result needs several) |
 | `conversations_say` | `{"phrase": "<key>", "vars": ["villager_name", ...]?}` | says `dialogue.<phrase>` in the dialogue screen with template args |
 | `conversations_gossip_say` | `{"types"?, "max_age"?, "phrase_prefix"?}` | tells the next untold event (same query rules as the condition) using `dialogue.<prefix>.<type>` (default prefix `conversations.gossip`), then marks it told for this villager+player |
+| `conversations_disposition_apply` | `{"topic": "<topic.stance>", "deltas": {"<axis>": ±N}}` | moves disposition axes through the farming guards (per-axis \|delta\| ≤ 10 at parse; per-day cap and same-day repeat diminishing at apply). No-op when `enableDispositions` is off; `attraction` deltas are dropped for romance-ineligible targets |
 
 ### Template variables (`conversations_say` / gossip lines)
 
@@ -104,6 +107,98 @@ fill `%2$s`, `%3$s`, … in the order listed. Unresolvable vars fall back to neu
 
 Gossip lines receive `%2$s` = subject A's name, `%3$s` = subject B's name (empty for
 single-subject events like deaths, births, arrivals, and departures).
+
+## The disposition vector & dialogue checks (v0.7.0)
+
+### The vector
+
+Each (villager, player) pair carries six bounded, internal axes, persisted in
+`data/mcaconversations_dispositions.dat` (versioned; a pre-0.7.0 world simply reads baselines until
+the first write). **Hearts remain MCA's sole authoritative, visible relationship economy** — the
+vector never shows as a number, never grants hearts, and only decides which results open and how
+lines are voiced. Heart changes stay MCA-native `positive`/`negative` fields with the usual
+one-time/cooldown guards.
+
+| Axis | Range | Decay half-life | Built / spent by |
+|---|---|---|---|
+| `trust` | −100..100 | ~7 MC days | confiding, honored commitments; lost fast by betrayal |
+| `respect` | −100..100 | ~5 days | candor, competence, facing things |
+| `warmth` | −100..100 | ~4 days | kindness, company, comfort |
+| `attraction` | −100..100 | ~5 days | **romance-gated**: adults who are unmarried or married to this player; structurally unreachable otherwise |
+| `tension` | 0..100 | ~2 days | recent friction; fades so one bad talk isn't a scar |
+| `familiarity` | 0..100 | never | shared history; slow, time-earned, never decays |
+
+All axes except `familiarity` drift back toward the personality baseline (exponential, computed
+lazily — no tick cost). Writes are farming-guarded: per-axis daily movement cap
+(`dispositionDailyAxisCap`), and repeating the same `topic` the same day yields full → half →
+quarter → nothing (losses included — tension can't be rage-farmed).
+
+### Checks
+
+A **checked stance** is one answer whose results each declare a tier via `conversations_check`.
+The resolver computes, deterministically per click:
+
+```
+score = axis value (decayed)            // hearts/2 capped ±50 instead, when dispositions are off
+      + hearts/4 (capped ±25)           // hearts always matter — checks refine MCA's economy
+      + mood adjust (depressed −12 … overjoyed +6; grieving −12, annoyed −8, grateful +4, smitten +6)
+      + seeded roll (−10..+10)
+tier  = crit at difficulty+15 · success at difficulty · partial at difficulty−15 · rebuff below
+```
+
+The roll is **seeded** from villager UUID + player UUID + check id + arc stage + a half-day time
+bucket — re-opening the screen can never re-roll a rebuff into a crit; coming back later can.
+With `enableCheckTiers` off, crit collapses into success and partial into rebuff. With
+`enableChecks` off, no tier matches and the stance's authored fallback result fires.
+
+### The canonical checked-stance shape
+
+MCA's result selection is **weighted-random over positive totals, not highest-wins** — so a checked
+answer must guarantee that *exactly one result has positive weight in every state* (the
+`checkedAnswerStatesResolveToExactlyOneResult` lint proves this for every shipped answer, simulating
+all toggle/tier/gate combinations). The shape that achieves it:
+
+```jsonc
+{ "name": "challenge", "results": [
+  { // guard: fires alone below the gate, cost-free (no rebuff-farming below threshold)
+    "baseChance": 0,
+    "conditions": [ { "chance": 100, "conversations_disposition": { "axis": "trust", "max": 34 } } ],
+    "actions": { "next": "conversations.fears", "say": "conversations.fears.challenge.guard" } },
+  { // one result per tier: crit / success / partial / rebuff
+    "baseChance": 0,
+    "conditions": [
+      { "chance": 1000, "conversations_check": { "id": "fears.challenge", "tier": "crit", "axis": "trust", "difficulty": 45 } },
+      { "chance": -1000, "conversations_disposition": { "axis": "trust", "max": 34 } },  // dead below the gate
+      { "chance": -2000, "conversations_disabled": "checks" } ],                          // dead when checks off
+    "actions": { "next": "conversations.cat.personal", "say": "conversations.fears.challenge.crit",
+      "positive": 6,
+      "conversations_disposition_apply": { "topic": "fears.challenge", "deltas": { "respect": 6, "trust": 3 } } } },
+  { // plain fallback: fires only when the check subsystem is disabled (0.6.0-style single outcome)
+    "baseChance": 3,
+    "conditions": [
+      { "chance": -2000, "conversations_enabled": "checks" },
+      { "chance": -1000, "conversations_disposition": { "axis": "trust", "max": 34 } } ],
+    "actions": { "next": "conversations.cat.personal", "say": "conversations.fears.challenge.success", "positive": 4 } }
+] }
+```
+
+Rules the lint enforces: every check id defines **all four tiers** with identical axis/difficulty;
+every checked answer has the checks-disabled fallback; tier results always keep a live `next` and a
+say (rebuffs exit gracefully, never dead-end); guard replies are cost-free; disposition ranges are
+parser-valid and inside axis bounds; one disposition range per axis per answer.
+
+Button labels stay **in-character words** ("You could face it. I'd stand with you."), written honest
+at any relationship level — below the gate the villager's guard reply is the honest, lower-stakes
+outcome. Never label a stance mechanically ("Persuade"), never show a number.
+
+### What turns off when
+
+| Config | Off-state behavior |
+|---|---|
+| `enableDispositions` | vector reads return baselines; `conversations_disposition` never matches (fallbacks fire); applies are no-ops; checks run on hearts alone |
+| `enableChecks` | no tier ever matches; each checked stance's plain fallback result fires |
+| `enableCheckTiers` | binary: crit→success, partial→rebuff |
+| all three off | exactly the 0.6.0 experience |
 
 ## The category hub (v0.3.0)
 

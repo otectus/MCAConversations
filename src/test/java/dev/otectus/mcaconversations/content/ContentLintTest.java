@@ -5,6 +5,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.otectus.mcaconversations.check.CheckDefinition;
+import dev.otectus.mcaconversations.check.CheckTier;
+import dev.otectus.mcaconversations.disposition.DispositionApply;
+import dev.otectus.mcaconversations.disposition.DispositionAxis;
+import dev.otectus.mcaconversations.disposition.DispositionQuery;
 import dev.otectus.mcaconversations.gossip.GossipEventType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -43,13 +48,15 @@ class ContentLintTest {
             "min_infection_progress", "min_pregnancy_progress", "pregnancy_child_gender", "memory",
             "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
             "conversations_season", "conversations_holiday",
+            "conversations_disposition", "conversations_check",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed");
 
     /** MCA 7.6.23 action vocabulary (from Actions registrations) + ours. */
     private static final Set<String> ACTION_KEYS = Set.of(
             "next", "say", "positive", "negative", "command", "quit", "remember",
-            "conversations_record", "conversations_say", "conversations_gossip_say", "conversations_quest_open");
+            "conversations_record", "conversations_say", "conversations_gossip_say",
+            "conversations_disposition_apply", "conversations_quest_open");
 
     /** The four quest-aware condition keys, whose values are objects ({scope,min}), not MCA enum strings. */
     private static final Set<String> QUEST_CONDITION_KEYS = Set.of(
@@ -79,7 +86,8 @@ class ContentLintTest {
             "family", "spouse", "kids", "parent", "adult", "teen", "toddler", "baby", "engaged",
             "promised", "cleric", "adventurer", "mercenary", "outlawed", "trader", "orphan",
             "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
-    private static final Set<String> FEATURES = Set.of("topics", "states", "templates", "gossip", "quests", "world");
+    private static final Set<String> FEATURES = Set.of(
+            "topics", "states", "templates", "gossip", "quests", "world", "dispositions", "checks");
 
     /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
     private static final Set<String> WEATHERS = Set.of("clear", "rain", "storm");
@@ -477,7 +485,10 @@ class ContentLintTest {
                 continue;
             }
             int floor = key.startsWith("conversations.work.prof.") || key.startsWith("conversations.food.trait.")
-                    || key.endsWith(".child") || key.endsWith(".teen") ? 2 : 3;
+                    || key.endsWith(".child") || key.endsWith(".teen")
+                    // Check-tier and guard lines are precision-targeted (one tier of one stance).
+                    || key.endsWith(".crit") || key.endsWith(".success") || key.endsWith(".partial")
+                    || key.endsWith(".rebuff") || key.endsWith(".guard") ? 2 : 3;
             String base = "dialogue." + key;
             int pool = (lang.containsKey(base) ? 1 : 0);
             for (int i = 1; lang.containsKey(base + "/" + i); i++) {
@@ -629,6 +640,372 @@ class ContentLintTest {
             }
         });
         assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * Every {@code conversations_disposition}/{@code conversations_check} condition and
+     * {@code conversations_disposition_apply} action must be accepted by the exact parser the runtime
+     * uses (a rejected value there silently becomes a never-match/no-op — dead content), and
+     * disposition ranges must lie inside the axis bounds (an out-of-bounds bound also never matches).
+     */
+    @Test
+    void dispositionAndCheckArgsAreValid() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            String where = name + "/" + answerName;
+            if (result.has("conditions")) {
+                for (JsonElement c : result.getAsJsonArray("conditions")) {
+                    JsonObject condition = c.getAsJsonObject();
+                    if (condition.has("conversations_disposition")) {
+                        try {
+                            DispositionQuery query = DispositionQuery.fromJson(
+                                    condition.getAsJsonObject("conversations_disposition"));
+                            if (query.min() < query.axis().min() || query.max() > query.axis().max()) {
+                                problems.add(where + ": disposition range [" + query.min() + "," + query.max()
+                                        + "] exceeds " + query.axis().key() + " bounds");
+                            }
+                        } catch (RuntimeException e) {
+                            problems.add(where + ": conversations_disposition rejected: " + e.getMessage());
+                        }
+                    }
+                    if (condition.has("conversations_check")) {
+                        try {
+                            CheckDefinition.fromJson(condition.getAsJsonObject("conversations_check"));
+                        } catch (RuntimeException e) {
+                            problems.add(where + ": conversations_check rejected: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (actions.has("conversations_disposition_apply")) {
+                try {
+                    DispositionApply.fromJson(actions.getAsJsonObject("conversations_disposition_apply"));
+                } catch (RuntimeException e) {
+                    problems.add(where + ": conversations_disposition_apply rejected: " + e.getMessage());
+                }
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * Check completeness (§4b): within an answer, every check id must appear with exactly the four
+     * tiers, identical axis/difficulty across them (the resolver assembles inputs once per id), and
+     * the answer must author a plain fallback result that fires when the check subsystem is disabled
+     * (a negative {@code conversations_enabled: "checks"} sink marks it).
+     */
+    @Test
+    void checkedAnswersDefineAllFourTiersAndADisabledFallback() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> {
+            for (JsonElement a : json.getAsJsonArray("answers")) {
+                JsonObject answer = a.getAsJsonObject();
+                String where = name + "/" + (answer.has("name") ? answer.get("name").getAsString() : "(auto)");
+                Map<String, Set<String>> tiersById = new HashMap<>();
+                Map<String, Set<String>> shapesById = new HashMap<>();
+                boolean hasCheck = false;
+                boolean hasDisabledFallback = false;
+                for (JsonElement r : answer.getAsJsonArray("results")) {
+                    JsonObject result = r.getAsJsonObject();
+                    if (!result.has("conditions")) {
+                        continue;
+                    }
+                    for (JsonElement c : result.getAsJsonArray("conditions")) {
+                        JsonObject condition = c.getAsJsonObject();
+                        if (condition.has("conversations_check")) {
+                            hasCheck = true;
+                            JsonObject check = condition.getAsJsonObject("conversations_check");
+                            String id = check.get("id").getAsString();
+                            tiersById.computeIfAbsent(id, k -> new HashSet<>())
+                                    .add(check.get("tier").getAsString());
+                            shapesById.computeIfAbsent(id, k -> new HashSet<>())
+                                    .add(check.get("axis").getAsString() + "@" + check.get("difficulty").getAsInt());
+                        }
+                        if (condition.has("conversations_enabled")
+                                && condition.get("conversations_enabled").getAsString().equals("checks")
+                                && condition.get("chance").getAsInt() < 0) {
+                            hasDisabledFallback = true;
+                        }
+                    }
+                }
+                if (!hasCheck) {
+                    continue;
+                }
+                tiersById.forEach((id, tiers) -> {
+                    Set<String> allTiers = new HashSet<>();
+                    for (CheckTier tier : CheckTier.values()) {
+                        allTiers.add(tier.key());
+                    }
+                    if (!tiers.equals(allTiers)) {
+                        problems.add(where + ": check '" + id + "' defines tiers " + tiers
+                                + " but must define exactly " + allTiers);
+                    }
+                });
+                shapesById.forEach((id, shapes) -> {
+                    if (shapes.size() != 1) {
+                        problems.add(where + ": check '" + id + "' uses inconsistent axis/difficulty " + shapes);
+                    }
+                });
+                if (!hasDisabledFallback) {
+                    problems.add(where + ": checked answer has no checks-disabled fallback result"
+                            + " (a result sunk by a negative conversations_enabled: \"checks\" condition)");
+                }
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /** Every check-tier result must keep the conversation alive: a live next hop and a spoken line. */
+    @Test
+    void checkTierResultsNeverDeadEnd() {
+        List<String> problems = new ArrayList<>();
+        Set<String> mcaQuestions = Set.of("main", "greet", "root");
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            if (!result.has("conditions")) {
+                return;
+            }
+            boolean isCheckResult = false;
+            for (JsonElement c : result.getAsJsonArray("conditions")) {
+                if (c.getAsJsonObject().has("conversations_check")) {
+                    isCheckResult = true;
+                }
+            }
+            if (!isCheckResult) {
+                return;
+            }
+            String where = name + "/" + answerName;
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (!actions.has("say")) {
+                problems.add(where + ": check tier result has no say line");
+            }
+            if (!actions.has("next")
+                    || (!questions.containsKey(actions.get("next").getAsString())
+                        && !mcaQuestions.contains(actions.get("next").getAsString()))) {
+                problems.add(where + ": check tier result has no live next hop (graceful exit rule)");
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * The determinism invariant that makes checks work on MCA's <b>weighted-random</b> result
+     * selection (verified against Dialogues.selectAnswer bytecode: positive totals are lottery
+     * weights, not priorities): in every reachable state of a checked answer, EXACTLY one result may
+     * have positive weight. Enumerates the full state space — checks/dispositions feature toggles ×
+     * resolver tier per check id × in/out per disposition range × has/lacks per memory id — and
+     * evaluates every result's weight exactly as MCA sums it.
+     */
+    @Test
+    void checkedAnswerStatesResolveToExactlyOneResult() {
+        Set<String> modeledKeys = Set.of("chance", "conversations_check", "conversations_disposition",
+                "conversations_enabled", "conversations_disabled", "memory");
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> {
+            for (JsonElement a : json.getAsJsonArray("answers")) {
+                JsonObject answer = a.getAsJsonObject();
+                String where = name + "/" + (answer.has("name") ? answer.get("name").getAsString() : "(auto)");
+                JsonArray results = answer.getAsJsonArray("results");
+                boolean hasCheck = false;
+                for (JsonElement r : results) {
+                    if (r.getAsJsonObject().has("conditions")) {
+                        for (JsonElement c : r.getAsJsonObject().getAsJsonArray("conditions")) {
+                            if (c.getAsJsonObject().has("conversations_check")) {
+                                hasCheck = true;
+                            }
+                        }
+                    }
+                }
+                if (!hasCheck) {
+                    continue;
+                }
+
+                // Collect the state variables and reject unmodeled condition keys.
+                List<String> checkIds = new ArrayList<>();
+                List<String> dispRanges = new ArrayList<>();
+                List<String> memoryIds = new ArrayList<>();
+                Map<String, String> rangeAxis = new HashMap<>();
+                boolean modelable = true;
+                for (JsonElement r : results) {
+                    JsonObject result = r.getAsJsonObject();
+                    if (!result.has("conditions")) {
+                        continue;
+                    }
+                    for (JsonElement c : result.getAsJsonArray("conditions")) {
+                        JsonObject condition = c.getAsJsonObject();
+                        for (String key : condition.keySet()) {
+                            if (!modeledKeys.contains(key)) {
+                                problems.add(where + ": condition key '" + key
+                                        + "' is not modelable — checked answers may only use " + modeledKeys);
+                                modelable = false;
+                            }
+                        }
+                        if (condition.has("conversations_check")) {
+                            String id = condition.getAsJsonObject("conversations_check").get("id").getAsString();
+                            if (!checkIds.contains(id)) {
+                                checkIds.add(id);
+                            }
+                        }
+                        if (condition.has("conversations_disposition")) {
+                            JsonObject q = condition.getAsJsonObject("conversations_disposition");
+                            String range = q.toString();
+                            if (!dispRanges.contains(range)) {
+                                dispRanges.add(range);
+                                String axis = q.get("axis").getAsString();
+                                if (rangeAxis.containsValue(axis)) {
+                                    problems.add(where + ": multiple disposition ranges on axis '" + axis
+                                            + "' — ranges on one axis are correlated and cannot be simulated"
+                                            + " independently; use one range per axis per answer");
+                                    modelable = false;
+                                }
+                                rangeAxis.put(range, axis);
+                            }
+                        }
+                        if (condition.has("memory")) {
+                            String id = memoryVariable(condition.getAsJsonObject("memory"));
+                            if (!memoryIds.contains(id)) {
+                                memoryIds.add(id);
+                            }
+                        }
+                    }
+                }
+                if (!modelable) {
+                    continue;
+                }
+                int boolVars = 2 + dispRanges.size() + memoryIds.size();
+                if (boolVars + 2 * checkIds.size() > 14) {
+                    problems.add(where + ": state space too large to simulate — simplify the answer");
+                    continue;
+                }
+
+                // Enumerate: bit 0 = checks on, bit 1 = dispositions on, then ranges, then memories;
+                // tiers enumerated separately per check id (5 states: 4 tiers + 'none' for the
+                // attraction-ineligible case, which only arises for attraction-axis checks).
+                int combos = 1 << boolVars;
+                int tierStates = (int) Math.pow(5, checkIds.size());
+                for (int bits = 0; bits < combos; bits++) {
+                    boolean checksOn = (bits & 1) != 0;
+                    boolean dispOn = (bits & 2) != 0;
+                    for (int t = 0; t < tierStates; t++) {
+                        Map<String, String> tierById = new HashMap<>();
+                        boolean anyNone = false;
+                        int tt = t;
+                        for (String id : checkIds) {
+                            int pick = tt % 5;
+                            tt /= 5;
+                            String tier = pick == 4 ? "none" : CheckTier.values()[pick].key();
+                            if (tier.equals("none")) {
+                                anyNone = true;
+                            }
+                            tierById.put(id, tier);
+                        }
+                        // 'none' only occurs for attraction checks; skip it for other axes.
+                        if (anyNone && !answerHasAttractionCheck(results)) {
+                            continue;
+                        }
+                        int positives = 0;
+                        String positiveNames = "";
+                        for (JsonElement r : results) {
+                            JsonObject result = r.getAsJsonObject();
+                            int weight = result.has("baseChance") ? result.get("baseChance").getAsInt() : 0;
+                            if (result.has("conditions")) {
+                                for (JsonElement c : result.getAsJsonArray("conditions")) {
+                                    JsonObject condition = c.getAsJsonObject();
+                                    int chance = condition.get("chance").getAsInt();
+                                    weight += chance * conditionValue(condition, checksOn, dispOn,
+                                            tierById, dispRanges, bits, memoryIds);
+                                }
+                            }
+                            if (weight > 0) {
+                                positives++;
+                                positiveNames += " " + result.getAsJsonObject("actions");
+                            }
+                        }
+                        if (positives != 1) {
+                            problems.add(where + ": state[checks=" + checksOn + " disp=" + dispOn
+                                    + " tiers=" + tierById + " bits=" + Integer.toBinaryString(bits)
+                                    + "] has " + positives + " positive-weight results (must be exactly 1)"
+                                    + (positives > 1 ? ":" + positiveNames : ""));
+                        }
+                    }
+                }
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    private static boolean answerHasAttractionCheck(JsonArray results) {
+        for (JsonElement r : results) {
+            JsonObject result = r.getAsJsonObject();
+            if (!result.has("conditions")) {
+                continue;
+            }
+            for (JsonElement c : result.getAsJsonArray("conditions")) {
+                JsonObject condition = c.getAsJsonObject();
+                if (condition.has("conversations_check")
+                        && condition.getAsJsonObject("conversations_check").get("axis").getAsString()
+                                .equals(DispositionAxis.ATTRACTION.key())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Evaluates one modeled condition (0 or 1) in a simulated state — mirrors the runtime adapters. */
+    private static int conditionValue(JsonObject condition, boolean checksOn, boolean dispOn,
+                                      Map<String, String> tierById, List<String> dispRanges, int bits,
+                                      List<String> memoryIds) {
+        if (condition.has("conversations_check")) {
+            JsonObject check = condition.getAsJsonObject("conversations_check");
+            if (!checksOn) {
+                return 0;
+            }
+            return check.get("tier").getAsString()
+                    .equals(tierById.get(check.get("id").getAsString())) ? 1 : 0;
+        }
+        if (condition.has("conversations_disposition")) {
+            if (!dispOn) {
+                return 0;
+            }
+            int index = dispRanges.indexOf(condition.getAsJsonObject("conversations_disposition").toString());
+            return (bits & (1 << (2 + index))) != 0 ? 1 : 0;
+        }
+        if (condition.has("conversations_enabled")) {
+            String feature = condition.get("conversations_enabled").getAsString();
+            return featureOn(feature, checksOn, dispOn) ? 1 : 0;
+        }
+        if (condition.has("conversations_disabled")) {
+            String feature = condition.get("conversations_disabled").getAsString();
+            return featureOn(feature, checksOn, dispOn) ? 0 : 1;
+        }
+        if (condition.has("memory")) {
+            int index = memoryIds.indexOf(memoryVariable(condition.getAsJsonObject("memory")));
+            boolean has = (bits & (1 << (2 + dispRanges.size() + index))) != 0;
+            boolean lacks = condition.getAsJsonObject("memory").has("dividend")
+                    && condition.getAsJsonObject("memory").get("dividend").getAsDouble() < 0;
+            return (lacks ? !has : has) ? 1 : 0;
+        }
+        return 0;
+    }
+
+    /**
+     * The simulation variable behind a memory condition: the flag identity (id + player scoping),
+     * NOT the whole condition object — the has-form and lacks-form of one flag must share a variable
+     * or the simulation would enumerate impossible states.
+     */
+    private static String memoryVariable(JsonObject memory) {
+        return memory.get("id").getAsString()
+                + "|" + (memory.has("var") ? memory.get("var").getAsString() : "");
+    }
+
+    /** Only checks/dispositions vary in the simulation; other features are assumed on. */
+    private static boolean featureOn(String feature, boolean checksOn, boolean dispOn) {
+        return switch (feature) {
+            case "checks" -> checksOn;
+            case "dispositions" -> dispOn;
+            default -> true;
+        };
     }
 
     private static void requireLang(String key, String where, List<String> problems) {

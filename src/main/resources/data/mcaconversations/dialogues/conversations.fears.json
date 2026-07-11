@@ -4,19 +4,123 @@
       "name": "comfort",
       "results": [
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.comfort",
+                "tier": "crit",
+                "axis": "warmth",
+                "difficulty": 25
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.comfort.crit",
+            "positive": 6,
+            "conversations_disposition_apply": {
+              "topic": "fears.comfort",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2,
+                "familiarity": 1
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.comfort",
+                "tier": "success",
+                "axis": "warmth",
+                "difficulty": 25
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.comfort.thanks",
+            "positive": 5,
+            "conversations_disposition_apply": {
+              "topic": "fears.comfort",
+              "deltas": {
+                "warmth": 3,
+                "familiarity": 1
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.comfort",
+                "tier": "partial",
+                "axis": "warmth",
+                "difficulty": 25
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.comfort.brushoff",
+            "positive": 1
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.comfort",
+                "tier": "rebuff",
+                "axis": "warmth",
+                "difficulty": 25
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.comfort.rebuff",
+            "conversations_disposition_apply": {
+              "topic": "fears.comfort",
+              "deltas": {
+                "tension": 3
+              }
+            }
+          }
+        },
+        {
           "baseChance": 5,
           "conditions": [
             {
-              "chance": 4,
-              "personality": "sensitive"
-            },
-            {
-              "chance": 4,
-              "personality": "shy"
-            },
-            {
-              "chance": 3,
-              "mood": "sad"
+              "chance": -2000,
+              "conversations_enabled": "checks"
             }
           ],
           "actions": {
@@ -24,24 +128,367 @@
             "say": "conversations.fears.comfort.thanks",
             "positive": 5
           }
-        },
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
         {
-          "baseChance": 1,
-          "applyFatigue": true,
+          "baseChance": 0,
           "conditions": [
             {
-              "chance": 5,
-              "personality": "grumpy"
+              "chance": 100,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 34
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.fears",
+            "say": "conversations.fears.challenge.guard"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.challenge",
+                "tier": "crit",
+                "axis": "trust",
+                "difficulty": 45
+              }
             },
             {
-              "chance": 4,
-              "personality": "confident"
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 34
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
             }
           ],
           "actions": {
             "next": "conversations.cat.personal",
-            "say": "conversations.fears.comfort.brushoff",
+            "say": "conversations.fears.challenge.crit",
+            "positive": 6,
+            "conversations_disposition_apply": {
+              "topic": "fears.challenge",
+              "deltas": {
+                "respect": 6,
+                "trust": 3,
+                "familiarity": 1
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.challenge",
+                "tier": "success",
+                "axis": "trust",
+                "difficulty": 45
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 34
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.challenge.success",
+            "positive": 4,
+            "conversations_disposition_apply": {
+              "topic": "fears.challenge",
+              "deltas": {
+                "respect": 4,
+                "familiarity": 1
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.challenge",
+                "tier": "partial",
+                "axis": "trust",
+                "difficulty": 45
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 34
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.challenge.partial",
             "positive": 1
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.challenge",
+                "tier": "rebuff",
+                "axis": "trust",
+                "difficulty": 45
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 34
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.challenge.rebuff",
+            "conversations_disposition_apply": {
+              "topic": "fears.challenge",
+              "deltas": {
+                "tension": 4
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "checks"
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 34
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.challenge.success",
+            "positive": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "press",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 29
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.fears",
+            "say": "conversations.fears.press.guard"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.press",
+                "tier": "crit",
+                "axis": "trust",
+                "difficulty": 55
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 29
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.press.crit",
+            "positive": 5,
+            "conversations_disposition_apply": {
+              "topic": "fears.press",
+              "deltas": {
+                "trust": 4,
+                "familiarity": 2
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.press",
+                "tier": "success",
+                "axis": "trust",
+                "difficulty": 55
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 29
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.press.success",
+            "positive": 3,
+            "conversations_disposition_apply": {
+              "topic": "fears.press",
+              "deltas": {
+                "trust": 2,
+                "familiarity": 1
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.press",
+                "tier": "partial",
+                "axis": "trust",
+                "difficulty": 55
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 29
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.fears",
+            "say": "conversations.fears.press.partial"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.press",
+                "tier": "rebuff",
+                "axis": "trust",
+                "difficulty": 55
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 29
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.press.rebuff",
+            "conversations_disposition_apply": {
+              "topic": "fears.press",
+              "deltas": {
+                "tension": 5
+              }
+            }
+          }
+        },
+        {
+          "baseChance": 3,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "checks"
+            },
+            {
+              "chance": -1000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "max": 29
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.press.success",
+            "positive": 3
           }
         }
       ]
