@@ -53,6 +53,20 @@ public final class ConversationsEvents {
         event.getOriginal().invalidateCaps();
     }
 
+    // --- Player name sync ------------------------------------------------------
+
+    /**
+     * Keeps the player's MCA family-tree name in sync with the name they chose in the MCA editor, so
+     * every villager — ours and MCA's own — addresses them by that name instead of the vanilla username.
+     */
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!McaBridge.isAvailable() || !(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        McaCompat.syncPlayerFamilyName(player);
+    }
+
     // --- Gossip detection ------------------------------------------------------
 
     @SubscribeEvent

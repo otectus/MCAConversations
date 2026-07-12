@@ -8,7 +8,7 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.7.0)
+## Features (0.7.1)
 
 - **A relationship deeper than hearts (new)** — every villager quietly tracks how much they *trust*
   and *respect* you, how *warm* they feel around you, recent *tension*, and how long you've known
@@ -52,7 +52,8 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 - **Gift gratitude** — an accepted gift leaves the villager grateful for a day; married partners
   will thank you for the specific item ("Still smiling about that poppy, if I'm honest").
 - **Personalized lines** — templated dialogue can reference the villager's name, spouse, home
-  village, your last gift, the time of day, and the season.
+  village, your last gift, the time of day, and the season. Villagers address **you** by the name
+  you chose in the MCA character editor (not your Minecraft username).
 - **Village gossip** — villagers notice marriages, divorces, births, deaths, and now **arrivals and
   departures** (neighbors moving in or leaving) in their village, and share the news (with names)
   exactly once per listener — **each in their own personality's voice**. Ask "Anything happen around

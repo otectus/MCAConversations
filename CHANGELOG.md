@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file. Format foll
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
 Optional: Serene Seasons (soft, reflection-only — used for real seasons when present).
 
+## [0.7.1] - 2026-07-11
+
+A small correctness fix: villagers now address the player by the name they chose in the MCA
+character editor instead of their Minecraft username.
+
+### Fixed
+- **Villagers use the player's MCA name, not their username.** MCA resolves the spoken player name
+  (`%1$s`) from the player's family-tree node, falling back to the account username when that node
+  name is blank — which it was, because the chosen name is stored separately (the `villagerName`
+  entity-data tag the MCA editor writes). On login we now copy that chosen name into the family-tree
+  node (`McaCompat.syncPlayerFamilyName`, called from a new `PlayerLoggedInEvent` handler), so
+  `getTranslatable` resolves it correctly for **every** villager line — this mod's dialogue *and*
+  MCA's own. No-op for players who never set a name (their username still shows); the write persists
+  via MCA's own `FamilyTreeNode.setName` and is overworld-global, so it holds across dimensions and
+  relogs. Fixes player names in `conversations_say`, gossip lines, and quest-voice lines alike.
+
 ## [0.7.0] - 2026-07-11
 
 The first **RPG-layer** release (1.0.0 track): villagers now carry an internal, per-player

@@ -10,6 +10,7 @@ import forge.net.mca.entity.ai.relationship.EntityRelationship;
 import forge.net.mca.network.s2c.InteractionDialogueQuestionResponse;
 import forge.net.mca.server.world.data.FamilyTree;
 import forge.net.mca.server.world.data.FamilyTreeNode;
+import forge.net.mca.server.world.data.PlayerSaveData;
 import forge.net.mca.server.world.data.Village;
 import forge.net.mca.server.world.data.VillageManager;
 import net.minecraft.core.BlockPos;
@@ -267,6 +268,30 @@ public final class McaCompat {
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("MCA familyTreeName failed; defaulting empty", t);
             return Optional.empty();
+        }
+    }
+
+    /**
+     * Copies the player's MCA-editor name (stored server-side as the {@code "villagerName"} tag in their
+     * {@code PlayerSaveData} entity data) into their MCA family-tree node. MCA's {@code getTranslatable}
+     * resolves the player-name slot ({@code %1$s}) from that node, so this makes every villager — ours
+     * and MCA's own — address the player by their chosen MCA name rather than the vanilla username.
+     * <b>No-op</b> when the player hasn't chosen a name (leaves MCA's username fallback intact).
+     * <b>Server side only.</b>
+     */
+    public static void syncPlayerFamilyName(ServerPlayer player) {
+        try {
+            PlayerSaveData data = PlayerSaveData.get(player);
+            String chosen = data.getEntityData().getString("villagerName");
+            if (chosen == null || chosen.isBlank()) {
+                return; // never chosen a name -> keep MCA's username fallback
+            }
+            FamilyTreeNode node = data.getFamilyEntry(); // get-or-create (defaults to username)
+            if (!chosen.equals(node.getName())) {
+                node.setName(chosen); // setName() -> markDirty() -> persists
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA syncPlayerFamilyName failed; ignoring", t);
         }
     }
 
