@@ -2,6 +2,10 @@ package dev.otectus.mcaconversations.event;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
+import dev.otectus.mcaconversations.chat.ChatModePlayerStateProvider;
+import dev.otectus.mcaconversations.chat.ChatModeScheduler;
+import dev.otectus.mcaconversations.chat.ChatModeSession;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
@@ -16,10 +20,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -41,6 +47,10 @@ public final class ConversationsEvents {
             GiftMemoryProvider provider = new GiftMemoryProvider();
             event.addCapability(ConversationsCapabilities.ID, provider);
             event.addListener(provider::invalidate);
+
+            ChatModePlayerStateProvider chatProvider = new ChatModePlayerStateProvider();
+            event.addCapability(ConversationsCapabilities.CHAT_MODE_ID, chatProvider);
+            event.addListener(chatProvider::invalidate);
         }
     }
 
@@ -50,7 +60,31 @@ public final class ConversationsEvents {
         event.getOriginal().reviveCaps();
         ConversationsCapabilities.get(event.getOriginal()).ifPresent(old ->
                 ConversationsCapabilities.get(event.getEntity()).ifPresent(fresh -> fresh.copyFrom(old)));
+        ConversationsCapabilities.getChatMode(event.getOriginal()).ifPresent(old ->
+                ConversationsCapabilities.getChatMode(event.getEntity()).ifPresent(fresh -> fresh.copyFrom(old)));
         event.getOriginal().invalidateCaps();
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ChatModeSession.clear(player.getUUID());
+        }
+    }
+
+    // --- Chat mode -------------------------------------------------------------
+
+    /**
+     * Chat-mode entry point. Cheap early-out before the thread hop; the dispatcher captures only the
+     * raw text on this (background) thread and hops to the server thread. Never cancels or mutates the
+     * player's message — villagers respond around normal chat (1.19+ signed-chat safety).
+     */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onServerChat(ServerChatEvent event) {
+        if (!McaBridge.isAvailable() || !McaConversationsConfig.COMMON.enableChatMode.get()) {
+            return;
+        }
+        ChatModeDispatcher.onChat(event);
     }
 
     // --- Player name sync ------------------------------------------------------
@@ -113,6 +147,9 @@ public final class ConversationsEvents {
         if (event.phase != TickEvent.Phase.END || !McaBridge.isAvailable()) {
             return;
         }
+        // Deferred chat-mode replies are due-checked every tick (deadline queue, not the modulo cadence).
+        ChatModeScheduler.drain(event.getServer().overworld().getGameTime());
+
         int interval = McaConversationsConfig.COMMON.gossipScanIntervalTicks.get();
         if (event.getServer().getTickCount() % interval == 0) {
             GossipDetectors.scan(event.getServer());

@@ -7,7 +7,11 @@ import forge.net.mca.entity.VillagerLike;
 import forge.net.mca.entity.ai.Memories;
 import forge.net.mca.entity.ai.relationship.AgeState;
 import forge.net.mca.entity.ai.relationship.EntityRelationship;
+import forge.net.mca.entity.interaction.Constraint;
 import forge.net.mca.network.s2c.InteractionDialogueQuestionResponse;
+import forge.net.mca.resources.Dialogues;
+import forge.net.mca.resources.data.dialogue.Answer;
+import forge.net.mca.resources.data.dialogue.Question;
 import forge.net.mca.server.world.data.FamilyTree;
 import forge.net.mca.server.world.data.FamilyTreeNode;
 import forge.net.mca.server.world.data.PlayerSaveData;
@@ -461,5 +465,76 @@ public final class McaCompat {
             McaConversations.LOGGER.debug("MCA villageResidentNames failed; defaulting empty", t);
             return new HashMap<>();
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Chat mode: driving the dialogue engine as a GUI button click would
+    // ------------------------------------------------------------------
+
+    /**
+     * Drives MCA's dialogue engine exactly as a GUI button click would: runs the full weighted Result
+     * selection for {@code answerName} under {@code questionId} and triggers the chosen Result's actions
+     * (say/next, hearts, remember, and every {@code conversations_*} custom action). Delivery of the
+     * resulting {@code say}/{@code next} GUI packets is redirected to chat by {@code NetworkHandlerMixin}
+     * while a {@code ChatModeSession} redirect scope is open. Returns false on any failure. <b>Server side
+     * only.</b>
+     */
+    public static boolean selectAnswer(Entity villager, ServerPlayer player, String questionId, String answerName) {
+        if (villager instanceof VillagerEntityMCA mca) {
+            try {
+                Dialogues.getInstance().selectAnswer(mca, player, questionId, answerName);
+                return true;
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA selectAnswer({}, {}) failed; ignoring", questionId, answerName, t);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Enforces an answer's {@code constraints} the way the GUI does at render time (MCA's
+     * {@code selectAnswer} trusts the click and does <em>not</em> re-validate), so chat mode cannot
+     * trigger e.g. spouse-only content for a non-spouse. Resolves the {@link Question}/{@link Answer},
+     * computes the villager+player's satisfied {@link Constraint} set, and checks the answer accepts it.
+     * <b>Fails closed:</b> an unknown binding or any MCA read failure returns false (ineligible), so a
+     * compat break degrades to "answer unavailable", never "constraints bypassed".
+     */
+    public static boolean checkConstraints(Entity villager, ServerPlayer player, String questionId, String answerName) {
+        if (villager instanceof VillagerLike<?> v) {
+            try {
+                Question question = Dialogues.getInstance().getQuestion(questionId);
+                if (question == null) {
+                    return false;
+                }
+                Answer answer = question.getAnswer(answerName);
+                if (answer == null) {
+                    return false;
+                }
+                Set<Constraint> satisfied = Constraint.allMatching(v, player);
+                return answer.isValidForConstraint(satisfied);
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA checkConstraints({}, {}) failed; defaulting ineligible",
+                        questionId, answerName, t);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The UUID of the player currently in a GUI interaction (open screen) with this villager, so chat
+     * mode can defer with a busy line instead of driving the engine concurrently. MCA's
+     * {@code getInteractingPlayer()} is already filtered to players with an open screen. Fail-open:
+     * empty on any failure. <b>Server side only.</b>
+     */
+    public static Optional<UUID> isInteractingWith(Entity villager) {
+        if (villager instanceof VillagerEntityMCA mca) {
+            try {
+                return mca.getInteractions().getInteractingPlayer()
+                        .map(net.minecraft.world.entity.player.Player::getUUID);
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA isInteractingWith failed; defaulting empty", t);
+            }
+        }
+        return Optional.empty();
     }
 }

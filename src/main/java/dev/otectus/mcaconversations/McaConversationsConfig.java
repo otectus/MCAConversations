@@ -41,6 +41,7 @@ public final class McaConversationsConfig {
             case "world" -> COMMON.enableWeatherLines.get();
             case "dispositions" -> COMMON.enableDispositions.get();
             case "checks" -> COMMON.enableChecks.get();
+            case "chat" -> COMMON.enableChatMode.get();
             default -> true;
         };
     }
@@ -86,6 +87,25 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.IntValue dispositionDailyAxisCap;
         public final ForgeConfigSpec.IntValue dispositionStaleDays;
         public final ForgeConfigSpec.BooleanValue debugRpg;
+
+        public final ForgeConfigSpec.BooleanValue enableChatMode;
+        public final ForgeConfigSpec.BooleanValue chatModeDefaultOn;
+        public final ForgeConfigSpec.DoubleValue chatModeRadius;
+        public final ForgeConfigSpec.DoubleValue chatModeAddressedRadius;
+        public final ForgeConfigSpec.IntValue chatModeStickinessTicks;
+        public final ForgeConfigSpec.DoubleValue chatModeLookConeDegrees;
+        public final ForgeConfigSpec.IntValue chatModeMaxResponders;
+        public final ForgeConfigSpec.DoubleValue chatModeMinScore;
+        public final ForgeConfigSpec.DoubleValue chatModeAmbientMinScore;
+        public final ForgeConfigSpec.IntValue chatModeReplyDelayTicks;
+        public final ForgeConfigSpec.IntValue chatModeCooldownTicks;
+        public final ForgeConfigSpec.BooleanValue chatModePublicReplies;
+        public final ForgeConfigSpec.BooleanValue chatModeShowHeartChanges;
+        public final ForgeConfigSpec.ConfigValue<String> chatModeMessageFormat;
+        public final ForgeConfigSpec.IntValue chatModeMuteTicks;
+        public final ForgeConfigSpec.BooleanValue chatModeInsultDetection;
+        public final ForgeConfigSpec.BooleanValue chatModeLocalChat;
+        public final ForgeConfigSpec.BooleanValue chatModeGreetOnApproach;
 
         public final ForgeConfigSpec.BooleanValue debugLogging;
 
@@ -211,6 +231,76 @@ public final class McaConversationsConfig {
             debugRpg = b.comment(
                     "Verbose logging for disposition reads/writes, check inputs, tier selection, seed derivation.")
                     .define("debugRpg", false);
+            b.pop();
+
+            b.push("chat");
+            b.comment("Chat-only mode: an optional second frontend to the same dialogue engine. When enabled,",
+                    "players talk to villagers by typing in the vanilla chat box and villagers answer in chat,",
+                    "in their own voice, applying the identical heart gates, cooldowns, dispositions, moods,",
+                    "checks, and gossip as the interact GUI. No AI/LLM — all matching is deterministic and",
+                    "datapack-driven. Everything off (the default) is exactly the pre-chat-mode experience.");
+            enableChatMode = b.comment(
+                    "Master switch. When false, no chat listener work happens and behavior is unchanged.")
+                    .define("enableChatMode", false);
+            chatModeDefaultOn = b.comment(
+                    "Whether players are opted in to chat mode before running '/conversations chat on'.")
+                    .define("chatModeDefaultOn", false);
+            chatModeRadius = b.comment(
+                    "Ambient hearing radius (blocks) for unaddressed messages — villagers this close may",
+                    "answer a message that clearly matches a topic but names no one.")
+                    .defineInRange("chatModeRadius", 12.0, 1.0, 64.0);
+            chatModeAddressedRadius = b.comment(
+                    "Radius (blocks) when the villager is named or the sticky conversation partner",
+                    "('calling out' across the square). Larger than the ambient radius.")
+                    .defineInRange("chatModeAddressedRadius", 24.0, 1.0, 96.0);
+            chatModeStickinessTicks = b.comment(
+                    "How long (game ticks) the last conversation partner stays the default target (600 = 30s).")
+                    .defineInRange("chatModeStickinessTicks", 600, 0, 72000);
+            chatModeLookConeDegrees = b.comment(
+                    "Half-angle (degrees) of the look-at targeting cone. 0 disables look-at addressing.")
+                    .defineInRange("chatModeLookConeDegrees", 25.0, 0.0, 90.0);
+            chatModeMaxResponders = b.comment(
+                    "Maximum villagers that may answer one ambient (unaddressed) message.")
+                    .defineInRange("chatModeMaxResponders", 2, 1, 5);
+            chatModeMinScore = b.comment(
+                    "Confidence threshold (0-1) for addressed messages — lower favors recall (answer more often).")
+                    .defineInRange("chatModeMinScore", 0.55, 0.0, 1.0);
+            chatModeAmbientMinScore = b.comment(
+                    "Stricter threshold (0-1) for ambient messages so eavesdropping villagers do not misfire on",
+                    "player-to-player chatter. Raise on busy town-square servers.")
+                    .defineInRange("chatModeAmbientMinScore", 0.75, 0.0, 1.0);
+            chatModeReplyDelayTicks = b.comment(
+                    "Base humanized delay (game ticks) before a villager's reply appears (scaled up by line length).")
+                    .defineInRange("chatModeReplyDelayTicks", 15, 0, 100);
+            chatModeCooldownTicks = b.comment(
+                    "Per-player floor (game ticks) between processed chat messages (anti-spam).")
+                    .defineInRange("chatModeCooldownTicks", 40, 0, 1200);
+            chatModePublicReplies = b.comment(
+                    "When true, a villager's reply is also shown to other players near the villager (roleplay",
+                    "servers). When false (default), only the speaking player sees it (whisper model, GUI parity).")
+                    .define("chatModePublicReplies", false);
+            chatModeShowHeartChanges = b.comment(
+                    "Append a subtle '(+2 heart)'-style suffix to lines for players who want heart-change feedback.")
+                    .define("chatModeShowHeartChanges", false);
+            chatModeMessageFormat = b.comment(
+                    "Chat line template: %1$s = villager name (colored), %2$s = the line. Roleplay servers may",
+                    "prefer e.g. \"%1$s: %2$s\".")
+                    .define("chatModeMessageFormat", "<%1$s> %2$s");
+            chatModeMuteTicks = b.comment(
+                    "Duration (game ticks) of a 'stop talking' mute per villager->player pairing (6000 = 5 min).")
+                    .defineInRange("chatModeMuteTicks", 6000, 200, 72000);
+            chatModeInsultDetection = b.comment(
+                    "Map obvious in-game insults to an in-character rebuke and an ANNOYED state (never censors chat).")
+                    .define("chatModeInsultDetection", true);
+            chatModeLocalChat = b.comment(
+                    "EXPERIMENTAL: cancel and rebroadcast player chat only within chatModeRadius. This downgrades",
+                    "player messages to unsigned system messages (disables client-side chat reporting for them),",
+                    "so it is off by default and server-wide when on. See the spec's chat-signing notes.")
+                    .define("chatModeLocalChat", false);
+            chatModeGreetOnApproach = b.comment(
+                    "Villagers proactively greet an opted-in player entering the radius (rate-limited by the",
+                    "existing greet cooldown).")
+                    .define("chatModeGreetOnApproach", false);
             b.pop();
 
             b.push("debug");

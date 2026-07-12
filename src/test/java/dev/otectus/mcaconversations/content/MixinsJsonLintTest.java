@@ -27,6 +27,7 @@ class MixinsJsonLintTest {
         mixins.forEach(e -> names.add(e.getAsString()));
         assertTrue(names.contains("BreedableRelationshipMixin"), "gift-detection mixin missing");
         assertTrue(names.contains("DialoguesMixin"), "chat-redirect mixin missing");
+        assertTrue(names.contains("NetworkHandlerMixin"), "chat-mode delivery-redirect mixin missing");
 
         // require 0 so an MCA method rename degrades to vanilla behavior instead of crashing.
         assertEquals(0, config.getAsJsonObject("injectors").get("defaultRequire").getAsInt());
