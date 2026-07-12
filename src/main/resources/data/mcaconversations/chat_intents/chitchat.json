@@ -1,0 +1,42 @@
+{
+  "synonyms": {
+    "autumn": ["fall"]
+  },
+  "intents": {
+    "chitchat.day": {
+      "question": "conversations.cat.chitchat",
+      "answer": "day",
+      "keywords": { "day": 1.5, "today": 1.2, "going": 1.0, "doing": 1.0, "morning": 0.8, "afternoon": 0.8, "evening": 0.8 },
+      "requiresAny": ["day", "today", "doing", "going"],
+      "phrases": ["how * day", "how are you doing", "how is it going", "how is your day"],
+      "antiKeywords": ["birthday"],
+      "bigrams": ["your day"],
+      "category": "topics"
+    },
+    "chitchat.food": {
+      "question": "conversations.cat.chitchat",
+      "answer": "food",
+      "keywords": { "food": 1.5, "eat": 1.2, "hungry": 1.0, "meal": 1.0, "cook": 0.8, "dish": 0.8, "favorite": 0.6 },
+      "requiresAny": ["food", "eat", "hungry", "meal", "cook", "dish"],
+      "phrases": ["what do you like to eat", "what food do you like", "favorite food", "do you like to cook", "are you hungry"],
+      "bigrams": ["favorite food"],
+      "category": "topics"
+    },
+    "chitchat.weather": {
+      "question": "conversations.cat.chitchat",
+      "answer": "weather",
+      "keywords": { "weather": 1.5, "rain": 1.2, "storm": 1.2, "sunny": 1.0, "snow": 1.0, "sky": 0.8, "cold": 0.6, "hot": 0.6 },
+      "requiresAny": ["weather", "rain", "storm", "sunny", "snow", "sky"],
+      "phrases": ["what is the weather like", "how is the weather", "nice weather", "is it going to rain"],
+      "category": "topics"
+    },
+    "chitchat.season": {
+      "question": "conversations.cat.chitchat",
+      "answer": "season",
+      "keywords": { "season": 1.5, "spring": 1.2, "summer": 1.2, "autumn": 1.2, "winter": 1.2, "holiday": 1.0, "festival": 1.0 },
+      "requiresAny": ["season", "spring", "summer", "autumn", "winter", "holiday", "festival"],
+      "phrases": ["what season is it", "time of year"],
+      "category": "topics"
+    }
+  }
+}

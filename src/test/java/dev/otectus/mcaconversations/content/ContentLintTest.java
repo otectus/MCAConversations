@@ -455,6 +455,11 @@ class ContentLintTest {
         List<String> problems = new ArrayList<>();
         for (String key : lang.keySet()) {
             String base = key.contains("/") ? key.substring(0, key.indexOf('/')) : key;
+            // dialogue.chatmode.* are the chat-mode deflection lines, referenced from chat/ Java
+            // (ChatModeDispatcher), never from a dialogue say/prompt — count them as referenced.
+            if (base.startsWith("dialogue.chatmode.")) {
+                continue;
+            }
             if (!referenced.contains(base) && !mcaPoolBases.contains(base)) {
                 problems.add("orphaned lang key: " + key);
             }

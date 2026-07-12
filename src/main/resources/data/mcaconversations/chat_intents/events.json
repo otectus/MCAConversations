@@ -1,0 +1,20 @@
+{
+  "intents": {
+    "events.news": {
+      "question": "conversations.cat.events",
+      "answer": "news",
+      "keywords": { "news": 1.5, "happening": 1.0, "latest": 1.0, "update": 0.8, "anything": 0.6 },
+      "requiresAny": ["news", "happening", "latest", "update"],
+      "phrases": ["any news", "what is new", "anything happening", "what is going on"],
+      "category": "topics"
+    },
+    "events.noticed": {
+      "question": "conversations.cat.events",
+      "answer": "noticed",
+      "keywords": { "notice": 1.2, "noticed": 1.2, "unusual": 1.0, "strange": 1.0, "different": 0.8, "seen": 0.8 },
+      "requiresAny": ["notice", "noticed", "unusual", "strange", "seen"],
+      "phrases": ["noticed anything", "seen anything strange", "anything unusual", "anything different"],
+      "category": "topics"
+    }
+  }
+}

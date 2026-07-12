@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.event;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.chat.ChatIntentLoader;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.chat.ChatModePlayerStateProvider;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
@@ -18,6 +19,7 @@ import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
@@ -175,5 +177,18 @@ public final class ConversationsEvents {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         ConversationsCommand.register(event.getDispatcher());
+    }
+
+    // --- Datapack listeners ------------------------------------------------------
+
+    /**
+     * Registers the chat-intent datapack loader (the {@code chat_intents} directory under any
+     * namespace's {@code data}). MCA-independent — these are our own resources — so it attaches
+     * regardless of {@link McaBridge#isAvailable()}; the loaded index is inert until
+     * {@code enableChatMode} is on.
+     */
+    @SubscribeEvent
+    public static void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(new ChatIntentLoader());
     }
 }

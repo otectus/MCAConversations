@@ -54,6 +54,19 @@ class OverlayLintTest {
             "dialogue.conversations.gossip.death", "dialogue.conversations.gossip.birth",
             "dialogue.conversations.gossip.arrival", "dialogue.conversations.gossip.departure");
 
+    /**
+     * Personalities that carry chat-mode deflection/system voice (spec §11 "at least grumpy/peppy/
+     * friendly"). Other personalities intentionally fall through to the base {@code dialogue.chatmode.*}
+     * lines, so chatmode keys are deliberately <b>not</b> added to {@link #STANDARD_KEYS}.
+     */
+    private static final Set<String> CHATMODE_OVERLAYS = Set.of("grumpy", "peppy", "friendly");
+
+    /** Chat-mode line families each {@link #CHATMODE_OVERLAYS} personality must voice (base key form). */
+    private static final Set<String> CHATMODE_KEYS = Set.of(
+            "dialogue.chatmode.confused", "dialogue.chatmode.hint", "dialogue.chatmode.shrug",
+            "dialogue.chatmode.clarify", "dialogue.chatmode.dropped", "dialogue.chatmode.busy",
+            "dialogue.chatmode.muted", "dialogue.chatmode.farewell", "dialogue.chatmode.insult");
+
     private static Map<String, Map<String, String>> overlays;
     private static Map<String, String> baseLang;
 
@@ -115,6 +128,24 @@ class OverlayLintTest {
                 }
             }
         });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    @Test
+    void chatmodeOverlaysCoverTheChatmodeKeySet() {
+        List<String> problems = new ArrayList<>();
+        for (String personality : CHATMODE_OVERLAYS) {
+            Map<String, String> lang = overlays.get(personality);
+            if (lang == null) {
+                problems.add("missing overlay for chatmode-voiced personality '" + personality + "'");
+                continue;
+            }
+            for (String key : CHATMODE_KEYS) {
+                if (!lang.containsKey(key)) {
+                    problems.add(personality + ": missing chat-mode overlay key '" + key + "'");
+                }
+            }
+        }
         assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 }

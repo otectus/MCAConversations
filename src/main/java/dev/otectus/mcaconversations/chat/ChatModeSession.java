@@ -27,6 +27,7 @@ public final class ChatModeSession {
     public static final class Session {
         public UUID villagerId;              // sticky target
         public long lastExchangeGameTime;    // stickiness window anchor
+        public long lastProcessedGameTime;   // anti-spam floor anchor (any processed message, incl. misses)
         public String currentQuestion;       // open sub-question (set by the redirected dialogue packet)
         public List<String> currentAnswers;  // constraint-filtered answers captured from the same packet
         public int consecutiveMisses;        // graduated confused/hint/shrug ladder (§11)
@@ -68,6 +69,24 @@ public final class ChatModeSession {
         SESSIONS.remove(playerId);
     }
 
+    // --- Ambient per-villager rate limit (spec §12) ---------------------------
+
+    private static final Map<UUID, Long> LAST_AMBIENT = new ConcurrentHashMap<>();
+    private static final long AMBIENT_PRUNE_AGE = 12000L; // ~10 min: drop stale villager entries
+
+    /** Game-time of a villager's last ambient reply, or null. */
+    public static Long lastAmbient(UUID villagerId) {
+        return LAST_AMBIENT.get(villagerId);
+    }
+
+    /** Marks a villager as having just answered an ambient message; opportunistically prunes old rows. */
+    public static void markAmbient(UUID villagerId, long gameTime) {
+        LAST_AMBIENT.put(villagerId, gameTime);
+        if (LAST_AMBIENT.size() > 256) {
+            LAST_AMBIENT.entrySet().removeIf(e -> gameTime - e.getValue() > AMBIENT_PRUNE_AGE);
+        }
+    }
+
     // --- Redirect scope -------------------------------------------------------
 
     /**
@@ -76,8 +95,17 @@ public final class ChatModeSession {
      * <b>Must be used with try-with-resources</b> so it always closes, even if a dialogue action throws.
      */
     public static Scope open(ServerPlayer player, Entity villager) {
+        return open(player, villager, 0);
+    }
+
+    /**
+     * As {@link #open(ServerPlayer, Entity)} but the redirected line is delivered with an extra tick
+     * offset on top of the humanized reply delay — used to stagger ambient multi-responder replies
+     * (spec §12.3) so a crowd doesn't all answer in the same instant.
+     */
+    public static Scope open(ServerPlayer player, Entity villager, int extraDelayTicks) {
         assertServerThread(player);
-        Scope scope = new Scope(player, villager, activeScope);
+        Scope scope = new Scope(player, villager, extraDelayTicks, activeScope);
         activeScope = scope;
         return scope;
     }
@@ -111,7 +139,7 @@ public final class ChatModeSession {
             return false;
         }
         if (!silent && line != null) {
-            ChatDelivery.villagerSays(s.villager, player, line);
+            ChatDelivery.villagerSays(s.villager, player, line, s.extraDelayTicks);
         }
         return true;
     }
@@ -150,11 +178,13 @@ public final class ChatModeSession {
     public static final class Scope implements AutoCloseable {
         final ServerPlayer player;
         final Entity villager;
+        final int extraDelayTicks;
         private final Scope previous;
 
-        private Scope(ServerPlayer player, Entity villager, Scope previous) {
+        private Scope(ServerPlayer player, Entity villager, int extraDelayTicks, Scope previous) {
             this.player = player;
             this.villager = villager;
+            this.extraDelayTicks = extraDelayTicks;
             this.previous = previous;
         }
 

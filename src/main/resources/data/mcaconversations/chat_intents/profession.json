@@ -1,0 +1,23 @@
+{
+  "synonyms": {
+    "work": ["job", "trade", "profession", "occupation", "craft", "employment"]
+  },
+  "intents": {
+    "profession.work": {
+      "question": "conversations.cat.profession",
+      "answer": "work",
+      "keywords": { "work": 1.5, "busy": 0.6, "task": 0.6, "make": 0.6, "build": 0.6 },
+      "requiresAny": ["work"],
+      "phrases": ["do you like your work", "how is work going", "tell me about your work", "what is your job"],
+      "category": "topics"
+    },
+    "profession.work_offer": {
+      "question": "conversations.cat.profession",
+      "answer": "work_offer",
+      "keywords": { "hire": 1.5, "quest": 1.5, "task": 1.4, "help": 1.0, "need": 1.0, "work": 0.8 },
+      "requiresAny": ["hire", "quest", "task", "help", "need", "work"],
+      "phrases": ["can i help you", "do you need anything", "do you need any help", "got any work for me", "any tasks for me"],
+      "category": "topics"
+    }
+  }
+}

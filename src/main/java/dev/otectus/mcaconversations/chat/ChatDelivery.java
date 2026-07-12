@@ -24,6 +24,14 @@ public final class ChatDelivery {
 
     /** Schedules the villager's (already fully-resolved) line for delivery to {@code player}. */
     public static void villagerSays(Entity villager, ServerPlayer player, Component line) {
+        villagerSays(villager, player, line, 0);
+    }
+
+    /**
+     * As {@link #villagerSays(Entity, ServerPlayer, Component)} but adds {@code extraDelayTicks} on top
+     * of the humanized reply delay — the stagger offset for ambient multi-responder replies (spec §12.3).
+     */
+    public static void villagerSays(Entity villager, ServerPlayer player, Component line, int extraDelayTicks) {
         McaConversationsConfig.Common cfg = McaConversationsConfig.COMMON;
         String name = McaCompat.getVillagerName(villager).filter(n -> !n.isBlank()).orElse("Villager");
         MutableComponent coloredName = Component.literal(name).withStyle(ChatFormatting.YELLOW);
@@ -32,6 +40,7 @@ public final class ChatDelivery {
         MinecraftServer server = player.getServer();
         long now = server != null ? server.overworld().getGameTime() : 0L;
         int delay = ChatModeScheduler.computeDelayTicks(cfg.chatModeReplyDelayTicks.get(), line.getString().length());
+        delay += Math.max(0, extraDelayTicks);
         boolean publicReplies = cfg.chatModePublicReplies.get();
         double radius = cfg.chatModeRadius.get();
 

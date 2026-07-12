@@ -1,0 +1,64 @@
+{
+  "synonyms": {
+    "fear": ["fears", "afraid", "scared", "frightened", "terrified", "dread", "terror"]
+  },
+  "intents": {
+    "personal.life": {
+      "question": "conversations.cat.personal",
+      "answer": "life",
+      "keywords": { "life": 1.2, "yourself": 1.0, "story": 0.8, "background": 0.8, "living": 0.6 },
+      "requiresAny": ["life", "yourself", "story", "background"],
+      "phrases": ["tell me about yourself", "tell me about your life", "your life", "what is your story", "tell me your story"],
+      "category": "topics"
+    },
+    "personal.dreams": {
+      "question": "conversations.cat.personal",
+      "answer": "dreams",
+      "keywords": { "dream": 1.5, "ambition": 1.0, "aspire": 1.0, "goal": 1.0, "wish": 0.6 },
+      "requiresAny": ["dream", "ambition", "aspire", "goal"],
+      "phrases": ["what are your dreams", "your ambitions", "do you dream"],
+      "antiKeywords": ["nightmare"],
+      "category": "topics"
+    },
+    "personal.fears": {
+      "question": "conversations.cat.personal",
+      "answer": "fears",
+      "keywords": { "fear": 1.5, "scare": 1.2, "worry": 0.8, "nightmare": 0.8 },
+      "requiresAny": ["fear", "scare"],
+      "phrases": ["what are you afraid of", "what scares you", "your fears", "what do you fear"],
+      "category": "topics"
+    },
+    "personal.hopes": {
+      "question": "conversations.cat.personal",
+      "answer": "hopes",
+      "keywords": { "hope": 1.5, "wish": 1.0, "someday": 0.8, "better": 0.6 },
+      "requiresAny": ["hope", "wish", "someday"],
+      "phrases": ["what do you hope for", "what do you wish for", "your hopes", "hope for the future"],
+      "category": "topics"
+    },
+    "personal.feelings": {
+      "question": "conversations.cat.personal",
+      "answer": "feelings",
+      "keywords": { "feel": 1.5, "emotion": 1.0, "mood": 0.8, "okay": 0.6 },
+      "requiresAny": ["feel", "emotion", "mood"],
+      "phrases": ["how do you feel", "how are you feeling", "what are you feeling", "your feelings"],
+      "category": "topics"
+    },
+    "personal.regrets": {
+      "question": "conversations.cat.personal",
+      "answer": "regrets",
+      "keywords": { "regret": 1.5, "mistake": 1.0, "guilt": 1.0, "sorry": 0.8, "wrong": 0.6 },
+      "requiresAny": ["regret", "mistake", "guilt"],
+      "phrases": ["any regrets", "do you regret", "your biggest regret", "your biggest mistake"],
+      "category": "topics"
+    },
+    "personal.secret": {
+      "question": "conversations.cat.personal",
+      "answer": "secret",
+      "keywords": { "secret": 1.5, "hidden": 1.0, "confide": 1.0, "private": 0.8, "hide": 0.6 },
+      "requiresAny": ["secret", "hidden", "confide", "private"],
+      "phrases": ["any secrets", "tell me a secret", "something hidden"],
+      "category": "topics"
+    }
+  }
+}
