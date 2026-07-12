@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.compat.quests;
 
 import dev.otectus.mcaquests.api.QuestDialogueResolver;
 import dev.otectus.mcaquests.quest.QuestDefinition;
+import dev.otectus.mcaquests.quest.template.PlaceholderResolver;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import net.minecraft.network.chat.Component;
@@ -33,7 +34,8 @@ public final class QuestVoiceResolver implements QuestDialogueResolver {
         if (phrase == null) {
             return null;
         }
-        return McaCompat.getDialogueLine(villager, player, phrase, def.title()).orElse(null);
+        return McaCompat.getDialogueLine(villager, player, phrase, def.title(PlaceholderResolver.forPlayer(player)))
+                .orElse(null);
     }
 
     /** Maps a Quests lifecycle state to a Conversations say-key, or {@code null} for states we leave untouched. */
