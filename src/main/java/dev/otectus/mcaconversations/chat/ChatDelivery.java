@@ -52,7 +52,9 @@ public final class ChatDelivery {
         int delay = ChatModeScheduler.computeDelayTicks(cfg.chatModeReplyDelayTicks.get(), line.getString().length());
         delay += Math.max(0, extraDelayTicks);
         boolean publicReplies = cfg.chatModePublicReplies.get();
-        double radius = cfg.chatModeRadius.get();
+        // Public replies travel as far as an overheard player message (the addressed radius), so a
+        // bystander hears whole conversations — not the question without the answer.
+        double radius = cfg.chatModeAddressedRadius.get();
 
         ChatModeScheduler.schedule(now + delay,
                 () -> deliver(villager, player, rendered, publicReplies, radius, feedback));

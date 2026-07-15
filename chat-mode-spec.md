@@ -509,6 +509,11 @@ Semantics:
 
 All options in `McaConversationsConfig.Common`, new `b.push("chat") … b.pop()` section, following house conventions (camelCase, `enable*` feature flags, `*Ticks` durations, every value `.comment(...)`ed). Also add `case "chat" -> COMMON.enableChatMode.get();` to `isFeatureEnabled` so datapack content can gate on `conversations_enabled: "chat"`.
 
+> **Defaults changed in 0.8.0 (post-spec, user decision):** `enableChatMode`, `chatModeDefaultOn`,
+> `chatModePublicReplies`, `chatModeShowHeartChanges`, `chatModeLocalChat`, and
+> `chatModeGreetOnApproach` now default **`true`** — chat mode ships on. The table below preserves
+> the original design-time (dark-launch) defaults.
+
 | Option | Type / default | Meaning |
 |---|---|---|
 | `enableChatMode` | bool `false` | Master switch. Off = zero behavior change, no chat listener work. |

@@ -99,6 +99,9 @@ public final class ChatModeDispatcher {
         if (sender.hasDisconnected()) {
             return;
         }
+        // A canceled chat event never reaches vanilla's broadcast OR its log — keep the server's
+        // chat record (moderation history) intact.
+        McaConversations.LOGGER.info("[local-chat] <{}> {}", sender.getGameProfile().getName(), raw);
         double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
         double r2 = radius * radius;
         Component line = Component.literal("<").append(sender.getDisplayName())
@@ -204,12 +207,13 @@ public final class ChatModeDispatcher {
             return;
         }
 
-        // Respect an active mute for this player↔session.
-        if (existing != null && now < existing.mutedUntilGameTime) {
+        // Respect an active "stop talking" mute for this villager↔player pairing (spec §11).
+        if (existing != null && directed && existing.isMuted(target.entity().getUUID(), now)) {
             return;
         }
 
-        // Ambient (tier 4): any nearby villager the message applies to may answer (spec §12).
+        // Ambient (tier 4): any nearby villager the message applies to may answer (spec §12);
+        // muted pairings are filtered per candidate inside.
         if (!directed) {
             markProcessed(player, now);
             handleAmbient(player, address.message(), candidates, ambientRadius, now);
@@ -257,8 +261,24 @@ public final class ChatModeDispatcher {
         switch (decision.outcome()) {
             case MATCH -> fulfil(target, player, decision.chosen(), now);
             case AMBIGUOUS -> clarify(target, player, decision.chosen(), decision.alternative());
-            case NONE -> graduatedConfusion(target, player, now);
+            case NONE -> {
+                // Confusion is only in-character when the message was plausibly aimed at the villager:
+                // an explicit name, or an engagement cue (question form / second person — spec §5 tier 2).
+                // A sticky/look-at capture of ordinary player-to-player chat stays silent, costs no miss,
+                // and keeps the session so the player can re-engage.
+                if (address.named() || looksEngaged(normalized)) {
+                    graduatedConfusion(target, player, now);
+                }
+            }
         }
+    }
+
+    /**
+     * Pure engagement cue (spec §5 tier 2): the message reads as talking <em>to</em> someone — it is a
+     * question ({@code ?} or a leading question word) or uses second person ({@code you}/{@code your}).
+     */
+    static boolean looksEngaged(NormalizedMessage msg) {
+        return msg.interrogative || msg.contentStems.contains("you") || msg.contentStems.contains("your");
     }
 
     /**
@@ -282,12 +302,20 @@ public final class ChatModeDispatcher {
         int cooldown = McaConversationsConfig.COMMON.chatModeCooldownTicks.get();
         double r2 = ambientRadius * ambientRadius;
 
+        // The ranking depends only on (message, index, no-context) — identical for every candidate.
+        // Only GatePreview eligibility differs per villager, so rank once and filter per candidate.
+        List<Scored> ranked = IntentMatcher.rank(index, normalized, null);
+
+        Session session = ChatModeSession.peek(player.getUUID());
         List<AmbientSelection.Responder> pool = new ArrayList<>();
         Scored[] chosenByCandidate = new Scored[candidates.size()];
         for (int i = 0; i < candidates.size(); i++) {
             VillagerCandidate c = candidates.get(i);
             if (c.distSqr() > r2) {
                 continue; // out of ambient hearing range
+            }
+            if (session != null && session.isMuted(c.entity().getUUID(), now)) {
+                continue; // "stop talking" pairing — this villager stays quiet for this player
             }
             Long lastAmbient = ChatModeSession.lastAmbient(c.entity().getUUID());
             if (lastAmbient != null && cooldown > 0 && now - lastAmbient < cooldown) {
@@ -297,7 +325,6 @@ public final class ChatModeDispatcher {
             if (interacting.isPresent() && !interacting.get().equals(player.getUUID())) {
                 continue; // busy with another player's GUI — silently skip in ambient
             }
-            List<Scored> ranked = IntentMatcher.rank(index, normalized, null);
             List<Scored> eligible = new ArrayList<>();
             for (Scored s : ranked) {
                 if (GatePreview.eligible(c.entity(), player, s)) {
@@ -404,11 +431,11 @@ public final class ChatModeDispatcher {
         s.consecutiveMisses = 0;
     }
 
-    /** "Stop talking" (spec §11): mute this pairing for {@code chatModeMuteTicks}; one acknowledgment. */
+    /** "Stop talking" (spec §11): mute this villager↔player pairing for {@code chatModeMuteTicks}. */
     private static void mute(VillagerCandidate target, ServerPlayer player, long now) {
         Session s = ChatModeSession.get(player.getUUID());
         int muteTicks = McaConversationsConfig.COMMON.chatModeMuteTicks.get();
-        s.mutedUntilGameTime = now + Math.max(0, muteTicks);
+        s.mute(target.entity().getUUID(), now + Math.max(0, muteTicks));
         s.currentQuestion = null;
         deflect(target, player, "muted");
     }
@@ -461,8 +488,9 @@ public final class ChatModeDispatcher {
             deflectHint(target, player);
         } else {
             deflect(target, player, "shrug");
+            // The villager disengages from this player for a while — flailing at Agnes never mutes Ilsa.
             int cooldown = McaConversationsConfig.COMMON.chatModeCooldownTicks.get();
-            s.mutedUntilGameTime = now + Math.max(0, cooldown) * 4L;
+            s.mute(target.entity().getUUID(), now + Math.max(0, cooldown) * 4L);
         }
     }
 
@@ -478,9 +506,61 @@ public final class ChatModeDispatcher {
 
     private static void deflectHint(VillagerCandidate target, ServerPlayer player) {
         // %1$s = player name (auto), %2$s = the topic list.
-        Component topics = Component.translatable("dialogue.chatmode.topics");
         ChatDelivery.villagerSays(target.entity(), player,
-                voiced(target.entity(), player, "chatmode.hint", topics));
+                voiced(target.entity(), player, "chatmode.hint", eligibleTopics(target, player)));
+    }
+
+    /** Preferred hint order for the shipped topic hubs; datapack-added topics follow alphabetically. */
+    private static final List<String> TOPIC_ORDER =
+            List.of("chitchat", "profession", "village", "events", "personal", "us", "family");
+
+    /**
+     * The topics this villager can <em>actually</em> discuss with this player (spec §11 step 2): the
+     * distinct questions of the global topic intents, kept only when at least one bound answer passes
+     * its constraints (a spouse sees "us", a parent sees "the family", everyone else doesn't). Falls
+     * back to the static {@code dialogue.chatmode.topics} list if nothing survives.
+     */
+    private static Component eligibleTopics(VillagerCandidate target, ServerPlayer player) {
+        IntentIndex index = ChatIntentLoader.active();
+        Set<String> suffixes = new HashSet<>();
+        for (IntentIndex.CompiledIntent intent : index.activeIntents(null)) {
+            IntentBinding b = intent.source;
+            if (b.isSystem() || b.question() == null || suffixes.contains(topicSuffix(b.question()))) {
+                continue;
+            }
+            if (McaCompat.checkConstraints(target.entity(), player, b.question(), b.answer())) {
+                suffixes.add(topicSuffix(b.question()));
+            }
+        }
+        if (suffixes.isEmpty()) {
+            return Component.translatable("dialogue.chatmode.topics");
+        }
+        MutableComponent out = Component.empty();
+        List<String> ordered = orderedTopics(suffixes);
+        for (int i = 0; i < ordered.size(); i++) {
+            if (i > 0) {
+                out.append(Component.literal(", "));
+            }
+            out.append(Component.translatableWithFallback(
+                    "dialogue.chatmode.topic." + ordered.get(i), ordered.get(i)));
+        }
+        return out;
+    }
+
+    /** Pure: the hub's short name — the last dot segment ({@code conversations.cat.chitchat} → {@code chitchat}). */
+    static String topicSuffix(String questionId) {
+        int i = questionId.lastIndexOf('.');
+        return i < 0 ? questionId : questionId.substring(i + 1);
+    }
+
+    /** Pure: dedupes and orders topic suffixes — shipped hubs first in a fixed order, extras alphabetical. */
+    static List<String> orderedTopics(Set<String> suffixes) {
+        List<String> out = new ArrayList<>(new java.util.TreeSet<>(suffixes));
+        out.sort(java.util.Comparator.comparingInt(s -> {
+            int i = TOPIC_ORDER.indexOf(s);
+            return i < 0 ? TOPIC_ORDER.size() : i;
+        }));
+        return out;
     }
 
     /**

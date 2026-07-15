@@ -234,17 +234,17 @@ public final class McaConversationsConfig {
             b.pop();
 
             b.push("chat");
-            b.comment("Chat-only mode: an optional second frontend to the same dialogue engine. When enabled,",
-                    "players talk to villagers by typing in the vanilla chat box and villagers answer in chat,",
-                    "in their own voice, applying the identical heart gates, cooldowns, dispositions, moods,",
-                    "checks, and gossip as the interact GUI. No AI/LLM — all matching is deterministic and",
-                    "datapack-driven. Everything off (the default) is exactly the pre-chat-mode experience.");
+            b.comment("Chat-only mode: a second frontend to the same dialogue engine. Players talk to villagers",
+                    "by typing in the vanilla chat box and villagers answer in chat, in their own voice,",
+                    "applying the identical heart gates, cooldowns, dispositions, moods, checks, and gossip as",
+                    "the interact GUI. No AI/LLM — all matching is deterministic and datapack-driven.",
+                    "On by default since 0.8.0; set enableChatMode=false for the pre-chat-mode experience.");
             enableChatMode = b.comment(
                     "Master switch. When false, no chat listener work happens and behavior is unchanged.")
-                    .define("enableChatMode", false);
+                    .define("enableChatMode", true);
             chatModeDefaultOn = b.comment(
                     "Whether players are opted in to chat mode before running '/conversations chat on'.")
-                    .define("chatModeDefaultOn", false);
+                    .define("chatModeDefaultOn", true);
             chatModeRadius = b.comment(
                     "Ambient hearing radius (blocks) for unaddressed messages — villagers this close may",
                     "answer a message that clearly matches a topic but names no one.")
@@ -276,12 +276,12 @@ public final class McaConversationsConfig {
                     "Per-player floor (game ticks) between processed chat messages (anti-spam).")
                     .defineInRange("chatModeCooldownTicks", 40, 0, 1200);
             chatModePublicReplies = b.comment(
-                    "When true, a villager's reply is also shown to other players near the villager (roleplay",
-                    "servers). When false (default), only the speaking player sees it (whisper model, GUI parity).")
-                    .define("chatModePublicReplies", false);
+                    "When true (default), a villager's reply is also shown to other players near the villager",
+                    "(roleplay feel). When false, only the speaking player sees it (whisper model, GUI parity).")
+                    .define("chatModePublicReplies", true);
             chatModeShowHeartChanges = b.comment(
                     "Append a subtle '(+2 heart)'-style suffix to lines for players who want heart-change feedback.")
-                    .define("chatModeShowHeartChanges", false);
+                    .define("chatModeShowHeartChanges", true);
             chatModeMessageFormat = b.comment(
                     "Chat line template: %1$s = villager name (colored), %2$s = the line. Roleplay servers may",
                     "prefer e.g. \"%1$s: %2$s\".")
@@ -293,14 +293,15 @@ public final class McaConversationsConfig {
                     "Map obvious in-game insults to an in-character rebuke and an ANNOYED state (never censors chat).")
                     .define("chatModeInsultDetection", true);
             chatModeLocalChat = b.comment(
-                    "EXPERIMENTAL: cancel and rebroadcast player chat only within chatModeRadius. This downgrades",
-                    "player messages to unsigned system messages (disables client-side chat reporting for them),",
-                    "so it is off by default and server-wide when on. See the spec's chat-signing notes.")
-                    .define("chatModeLocalChat", false);
+                    "EXPERIMENTAL: cancel and rebroadcast opted-in players' chat only within the addressed",
+                    "radius. This downgrades their messages to unsigned system messages (disables client-side",
+                    "chat reporting for them; they are still logged to the server console) — set false to",
+                    "restore global, signed vanilla chat. See the spec's chat-signing notes.")
+                    .define("chatModeLocalChat", true);
             chatModeGreetOnApproach = b.comment(
                     "Villagers proactively greet an opted-in player entering the radius (rate-limited by the",
                     "existing greet cooldown).")
-                    .define("chatModeGreetOnApproach", false);
+                    .define("chatModeGreetOnApproach", true);
             b.pop();
 
             b.push("debug");

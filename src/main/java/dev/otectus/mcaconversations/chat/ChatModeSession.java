@@ -31,7 +31,26 @@ public final class ChatModeSession {
         public String currentQuestion;       // open sub-question (set by the redirected dialogue packet)
         public List<String> currentAnswers;  // constraint-filtered answers captured from the same packet
         public int consecutiveMisses;        // graduated confused/hint/shrug ladder (§11)
-        public long mutedUntilGameTime;      // "stop talking" / villager unavailable
+
+        /** "Stop talking" mutes, per villager→player pairing (spec §11) — never the whole session. */
+        private final Map<UUID, Long> mutedUntil = new ConcurrentHashMap<>();
+
+        /** True while this villager is muted for the player. Expired entries are dropped lazily. */
+        public boolean isMuted(UUID villagerId, long now) {
+            Long until = mutedUntil.get(villagerId);
+            if (until == null) {
+                return false;
+            }
+            if (now >= until) {
+                mutedUntil.remove(villagerId);
+                return false;
+            }
+            return true;
+        }
+
+        public void mute(UUID villagerId, long untilGameTime) {
+            mutedUntil.put(villagerId, untilGameTime);
+        }
     }
 
     private static final Map<UUID, Session> SESSIONS = new ConcurrentHashMap<>();

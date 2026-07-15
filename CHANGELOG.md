@@ -6,6 +6,41 @@ All notable changes to this project will be documented in this file. Format foll
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
 Optional: Serene Seasons (soft, reflection-only — used for real seasons when present).
 
+## [0.8.0] - 2026-07-15
+
+**Chat mode** — a second frontend to the whole dialogue engine, **on by default**: talk to villagers
+by typing in the vanilla chat box (`Agnes, how's your day?`) and they answer in chat, in their own
+voice, with the identical heart gates, cooldowns, dispositions, checks, and gossip as the GUI. No
+AI/LLM — deterministic, datapack-driven matching (`chat_intents/`, see DATAPACK.md).
+
+### Added
+- **Free-text matching engine**: keyword/IDF + phrase scoring with typo tolerance, synonyms,
+  negation awareness, and per-answer constraint gating; ~50 shipped intents over greeting,
+  chit-chat, profession, village, events, personal, relationship, and stance follow-up content.
+- **Natural targeting**: name address (`Agnes, …`) > conversation stickiness (multi-turn follow-ups
+  without re-addressing) > look-at > nearest; ambient questions may draw multiple staggered
+  responders (`chatModeMaxResponders`).
+- **Conversation depth**: open sub-questions (fears/dreams/feelings/us/family) keep context, so
+  "You could face it — I'd stand with you." lands as the stance it is.
+- **Social layer**: greeting/farewell/"stop talking"/"never mind" controls, graduated in-character
+  confusion with topic hints, insult rebukes (ANNOYED + tension, never censors), personality-voiced
+  deflections with grumpy/peppy/friendly overlays.
+- **Proximity greetings** (`chatModeGreetOnApproach`, default on): villagers greet you as you
+  arrive, sharing the GUI's daily greet cooldown.
+- **Heart feedback** (`chatModeShowHeartChanges`, default on): subtle `(+2 ♥)` suffix, speaker-only.
+- **Local chat** (`chatModeLocalChat`, default on, EXPERIMENTAL): opted-in players' chat is
+  radius-local unsigned text; set false to restore global signed chat.
+- `/conversations chat on|off|status` (everyone) and op tools `chat debug-ask` / `chat debug <msg>`
+  (live scoring introspection).
+- Config `[chat]` section (radii, thresholds, delays, mute, format, …); per-player opt-in
+  capability; `chat_intents` datapack format incl. third-party synonym packs.
+
+### Fixed
+- MCA's "Last interaction analysis" panel showed raw keys (e.g. `analysis.time_min`) for conditions
+  MCA ships no label for — added labels for `time_min`/`time_max` ("Time of Day"), `is_pregnant`,
+  `rank`, and all 12 `conversations_*` custom conditions.
+- Quests integration compiles against MCA: Quests 0.9.x (`QuestDefinition.title` API change).
+
 ## [0.7.1] - 2026-07-11
 
 A small correctness fix: villagers now address the player by the name they chose in the MCA

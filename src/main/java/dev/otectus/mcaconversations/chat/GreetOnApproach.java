@@ -66,14 +66,14 @@ public final class GreetOnApproach {
         }
 
         Session session = ChatModeSession.peek(player.getUUID());
-        if (session != null && now < session.mutedUntilGameTime) {
-            return;
-        }
 
         // Nearest newly-entered villager that may greet; at most one greeter per scan per player.
         for (VillagerCandidate c : candidates) { // already nearest-first
             if (!entered.contains(c.entity().getUUID())) {
                 continue;
+            }
+            if (session != null && session.isMuted(c.entity().getUUID(), now)) {
+                continue; // this pairing was told "stop talking" — no proactive greeting either
             }
             if (McaCompat.hasMemory(c.entity(),
                     MemoryIds.playerScoped(GREET_MEMORY, player.getUUID()))) {
