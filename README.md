@@ -8,14 +8,28 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (0.7.1)
+## Features (0.8.0)
 
-- **A relationship deeper than hearts (new)** — every villager quietly tracks how much they *trust*
+- **Chat mode (new)** — talk to villagers by just *typing*. `Hey Coralia! How's your day going?` in
+  the vanilla chat box gets an answer in chat, in her voice, through the **same dialogue engine** as
+  the GUI — identical heart gates, cooldowns, moods, dialogue checks, memories, and gossip. No
+  AI/LLM: matching is deterministic, datapack-driven (keywords + phrases with typo tolerance,
+  synonyms, negation awareness), and unit-tested. Address villagers by name, by looking at them, or
+  just keep talking — your conversation partner stays "sticky" for follow-ups. Multi-turn depth
+  works too: open up their fears, then answer *"You could face it — I'd stand with you."*
+- **A living village (new)** — villagers *may* greet you as you pass (a personality-weighted daily
+  coin flip — the peppy farmer usually says hi, the shy librarian rarely; villagers who dislike you
+  brush you off instead). Open the chat box and nearby villagers stop and turn to you expectantly;
+  your conversation partner stays put, facing you, until a while after the conversation lapses —
+  and still flees danger. Say *"bye"* or *"stop talking"* and they respect it, per villager.
+  Shout a question in the square and the villagers it applies to answer, staggered. Optional
+  radius-local chat (on by default, EXPERIMENTAL) keeps conversations neighborhood-scale.
+- **A relationship deeper than hearts** — every villager quietly tracks how much they *trust*
   and *respect* you, how *warm* they feel around you, recent *tension*, and how long you've known
   each other. Hearts stay MCA's one visible number — the vector never shows and never grants
   hearts; it decides which replies open up and how they land. It drifts back toward the villager's
   personality baseline over days, is capped against farming, and is per-player.
-- **Dialogue checks (new)** — the deepest stances resolve like a CRPG check with four outcomes:
+- **Dialogue checks** — the deepest stances resolve like a CRPG check with four outcomes:
   a *crit* opens the villager further than asked, a *success* lands, a *partial* half-lands, a
   *rebuff* misfires in character (and always exits gracefully). Outcomes come from the relationship,
   hearts, mood, and a **seeded** roll — closing and re-opening the screen never re-rolls; coming
@@ -76,8 +90,13 @@ MCA's dialogue system loads datapack JSON from any namespace and merges same-nam
 most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
 (`conversations_gossip`, `conversations_disposition`, `conversations_check`, `conversations_say`, ...) into
-MCA's public registries — no runtime patching of MCA except two small soft-fail mixins (the Chat→hub
-redirect and a gift observer). The relationship vector lives in its own versioned world save data and
+MCA's public registries — no runtime patching of MCA except three small soft-fail mixins (the Chat→hub
+redirect, a gift observer, and chat mode's dialogue-packet-to-chat redirect). Chat mode's matcher is a
+second *frontend* to the same engine: free text resolves to the exact `(question, answer)` a GUI click
+would send, so parity is structural, not re-implemented; its intents live in
+`data/<any-namespace>/chat_intents/*.json` and are fully datapack-extensible (including synonym packs).
+The only client-side code is a one-byte "chat box open" ping so villagers can turn toward a typing
+player. The relationship vector lives in its own versioned world save data and
 **never touches hearts**: MCA's hearts remain the only authoritative, visible relationship number,
 and every heart change still flows through MCA's own dialogue actions. See
 [DATAPACK.md](DATAPACK.md) for the full JSON vocabulary (datapack authors can build on it, including

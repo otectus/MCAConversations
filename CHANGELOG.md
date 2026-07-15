@@ -25,21 +25,38 @@ AI/LLM — deterministic, datapack-driven matching (`chat_intents/`, see DATAPAC
 - **Social layer**: greeting/farewell/"stop talking"/"never mind" controls, graduated in-character
   confusion with topic hints, insult rebukes (ANNOYED + tension, never censors), personality-voiced
   deflections with grumpy/peppy/friendly overlays.
-- **Proximity greetings** (`chatModeGreetOnApproach`, default on): villagers greet you as you
-  arrive, sharing the GUI's daily greet cooldown.
-- **Heart feedback** (`chatModeShowHeartChanges`, default on): subtle `(+2 ♥)` suffix, speaker-only.
+- **Proximity greetings** (`chatModeGreetOnApproach` + `chatModeGreetChance`, default on / 0.35):
+  villagers *may* greet you on radius entry with an actual hello (`chatmode.hail` pools; a cold
+  brush-off if they dislike you) — a personality-weighted, per-day deterministic coin flip, once per
+  villager per player per day, on a budget separate from the GUI's ask-how-you've-been cooldown.
+- **Villager attention** (`chatModeTypingAttention` + `chatModeAttentionTicks`, default on / 30 s):
+  open the chat box and nearby villagers stop and turn to you (a one-byte client→server ping — the
+  mod's first and only client code/packet); a conversation partner stays put facing you until the
+  timer lapses after the last exchange. Villagers in danger are never pinned; "bye"/"stop talking"
+  release them immediately.
+- **Bare-name calls**: `Nataliya?` (typo-tolerant) gets a "Yes?" acknowledgment — the villager turns
+  and waits. "Hey <Name>!" greeting-prefixed vocatives address that villager.
+- **Heart feedback** (`chatModeShowHeartChanges`, default on): subtle `(+2 ♥)` suffix, shown once
+  per exchange, speaker-only.
 - **Local chat** (`chatModeLocalChat`, default on, EXPERIMENTAL): opted-in players' chat is
-  radius-local unsigned text; set false to restore global signed chat.
+  radius-local unsigned text (still logged to the server console); set false to restore global
+  signed chat.
 - `/conversations chat on|off|status` (everyone) and op tools `chat debug-ask` / `chat debug <msg>`
   (live scoring introspection).
-- Config `[chat]` section (radii, thresholds, delays, mute, format, …); per-player opt-in
-  capability; `chat_intents` datapack format incl. third-party synonym packs.
+- Config `[chat]` section (radii, thresholds, delays, mute, format, …; see CONFIG.md); per-player
+  opt-in capability; `chat_intents` datapack format incl. third-party synonym packs.
 
 ### Fixed
 - MCA's "Last interaction analysis" panel showed raw keys (e.g. `analysis.time_min`) for conditions
   MCA ships no label for — added labels for `time_min`/`time_max` ("Time of Day"), `is_pregnant`,
   `rank`, and all 12 `conversations_*` custom conditions.
 - Quests integration compiles against MCA: Quests 0.9.x (`QuestDefinition.title` API change).
+- In-world test findings: "Hey <Name>!" vocatives and bare typo'd names now resolve; "what are you
+  doing / up to", "what's up", "what do you do (for a living)", and "how is everyone doing" now
+  match their topics; the topic-hint sentence no longer leaks a raw `greet` key; multi-line answers
+  no longer repeat the heart suffix per line; "stop talking" mutes only that villager (not the whole
+  village); unmatched chatter near a sticky villager stays silent instead of drawing confused lines
+  unless the message actually engages them (question form / second person).
 
 ## [0.7.1] - 2026-07-11
 

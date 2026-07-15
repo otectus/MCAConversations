@@ -2,8 +2,28 @@
 
 **Feature:** `chatMode` — an optional mode where players talk to villagers through the vanilla Minecraft chat box and villagers answer in chat, with no interaction GUI.
 **Target:** MCAConversations 0.8.x · Minecraft 1.20.1 · Forge 47.x · MCA Reborn `[7.6,8)`
-**Status:** Draft spec for implementation by a coding agent
+**Status:** Implemented and shipped in **0.8.0** (all four phases). This document is the design of
+record; see the addendum below for where the implementation deliberately evolved past it.
 **Hard constraint:** No AI/LLM/ML of any kind. All matching is deterministic, rule-based, data-driven, unit-testable, and runs server-side.
+
+> ### Post-spec addendum (as shipped in 0.8.0)
+> - **Defaults**: all chat/proximity flags default **on** (user decision; §10's table keeps the
+>   design-time dark-launch values).
+> - **Greetings**: the system `greet` no longer drives `greet/checkin` (those lines answer *"How
+>   have you been, really?"* and read out of context) — greetings use dedicated `chatmode.hail` /
+>   `hail_cold` lang pools, hearts-aware. Proactive greet-on-approach is a per-(villager, player,
+>   day) deterministic roll (`chatModeGreetChance` × personality weight) with its own daily memory.
+> - **Attention** (not in the original spec): villagers stop and face a player whose chat box is
+>   open, and a conversation partner stays put until `chatModeAttentionTicks` lapses. The typing
+>   signal required the mod's **one client→server packet** — a deliberate deviation from §1's "no
+>   new client code or packets" non-goal (the mod is required on both sides regardless).
+> - **Confusion gating**: unmatched messages captured via stickiness/look-at only draw the confused
+>   ladder when the message engages the villager (question form or second person) — §5 tier-2's
+>   pronoun cue, promoted to a filter, so player-to-player chat is never interrupted.
+> - **Mute**: per villager↔player pairing (§11 as written), enforced for ambient and proactive
+>   greetings too.
+> - **Vocatives**: greeting-prefixed forms (`Hey Agnes! …`) and bare typo'd names (`Anges?`) resolve
+>   as addresses; a bare name gets an attentive "Yes?" acknowledgment.
 
 ---
 

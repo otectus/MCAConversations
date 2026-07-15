@@ -81,6 +81,36 @@ off is exactly the 0.6.0 experience. See DATAPACK.md → *The disposition vector
 | `dispositionStaleDays` | 0 | 0–365 | prune records untouched this many MC days (0 = only prune on villager death) |
 | `debugRpg` | `false` | | INFO-level logs for disposition reads/writes, check inputs, tier selection |
 
+## `[chat]`
+
+Chat mode (0.8.0): talk to villagers by typing in the vanilla chat box; they answer in chat through
+the same dialogue engine as the GUI. **On by default.** Per-player opt-out: `/conversations chat off`.
+Ops can inspect matching live with `/conversations chat debug <message>`.
+
+| Option | Default | Range | Meaning |
+|---|---|---|---|
+| `enableChatMode` | `true` | | master switch — off restores the exact pre-chat-mode experience |
+| `chatModeDefaultOn` | `true` | | players are opted in before ever running `/conversations chat on` |
+| `chatModeRadius` | `12.0` | 1–64 | ambient hearing radius (blocks) for unaddressed messages |
+| `chatModeAddressedRadius` | `24.0` | 1–96 | radius when the villager is named or sticky ("calling out") |
+| `chatModeStickinessTicks` | `600` | 0–72000 | how long the last conversation partner stays the default target |
+| `chatModeLookConeDegrees` | `25.0` | 0–90 | half-angle of the look-at targeting cone (0 disables) |
+| `chatModeMaxResponders` | `2` | 1–5 | max villagers answering one ambient message |
+| `chatModeMinScore` | `0.55` | 0–1 | match-confidence threshold for addressed messages |
+| `chatModeAmbientMinScore` | `0.75` | 0–1 | stricter threshold for ambient messages (raise on chatty servers) |
+| `chatModeReplyDelayTicks` | `15` | 0–100 | base humanized reply delay (scaled by line length) |
+| `chatModeCooldownTicks` | `40` | 0–1200 | per-player floor between processed messages (anti-spam) |
+| `chatModePublicReplies` | `true` | | villager replies are shown to other players within the addressed radius |
+| `chatModeShowHeartChanges` | `true` | | subtle `(+2 ♥)` feedback, once per exchange, speaker-only |
+| `chatModeMessageFormat` | `<%1$s> %2$s` | | chat line template (`%1$s` villager name, `%2$s` line) |
+| `chatModeMuteTicks` | `6000` | 200–72000 | duration of a "stop talking" mute, per villager↔player pairing |
+| `chatModeInsultDetection` | `true` | | obvious insults get an in-character rebuke + ANNOYED (never censors) |
+| `chatModeLocalChat` | `true` | | **EXPERIMENTAL** — opted-in players' chat becomes radius-local unsigned text (still logged to console; set `false` for global signed vanilla chat) |
+| `chatModeGreetOnApproach` | `true` | | villagers may greet a player entering the radius (once per villager/player/day) |
+| `chatModeGreetChance` | `0.35` | 0–1 | daily greet chance, scaled by personality (outgoing ×1.5, reserved ×0.5); deterministic per day |
+| `chatModeTypingAttention` | `true` | | nearby villagers stop and face a player whose chat box is open |
+| `chatModeAttentionTicks` | `600` | 0–72000 | how long a conversation partner stays put facing you after the last exchange (0 disables) |
+
 ## `[debug]`
 
 | Option | Default | Meaning |

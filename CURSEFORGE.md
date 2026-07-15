@@ -15,6 +15,28 @@ what you've talked about before.
 
 ## What it does
 
+### 🗣️ Just talk to them (new in 0.8.0)
+Skip the menus entirely: type **`Hey Coralia! How's your day going?`** in normal chat and Coralia
+answers — in chat, in her own voice, through the exact same dialogue engine as the GUI (same heart
+gates, same memories, same moods, same gossip). No AI and no text generation: matching is
+old-fashioned, deterministic keyword-and-phrase scoring with typo tolerance, and every line is
+hand-written.
+
+- **Call them by name** (`Hey Hanna!`, even typo'd), **look at them**, or just keep talking — your
+  conversation partner sticks with you for follow-ups.
+- **The village feels alive**: some villagers greet you as you pass (the peppy ones more than the
+  shy ones — and villagers who dislike you brush you off). Open the chat box and nearby villagers
+  stop and turn to you; whoever you're talking with stays put, facing you, until a little while
+  after the conversation ends. Shout *"How's everyone doing?"* in the square and whoever it applies
+  to answers.
+- **They respect your boundaries**: say *"bye"* to end it, *"stop talking"* to mute that villager
+  for a while, *"never mind"* to change the subject. Insult one and they'll take it personally.
+- Multi-turn depth works in chat too: get a villager to open up about their fears, then answer
+  *"You could face it — I'd stand with you."*
+- Everything is a config toggle (whole feature, greetings, attention, local chat, thresholds), it's
+  per-player opt-out (`/conversations chat off`), and modpacks can add their own topics and synonyms
+  via datapack.
+
 ### 💬 The Chat button, reimagined
 MCA's existing **"Chat"** button now opens a clean **Conversations hub** instead of a random
 one-liner. Pick a category and dig in — or click *"Never mind."* to step back out. (Prefer vanilla
