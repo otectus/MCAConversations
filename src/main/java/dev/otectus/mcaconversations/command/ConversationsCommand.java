@@ -46,7 +46,12 @@ public final class ConversationsCommand {
                                         .then(Commands.argument("answer", StringArgumentType.string())
                                                 .executes(ctx -> debugAsk(ctx.getSource(),
                                                         StringArgumentType.getString(ctx, "question"),
-                                                        StringArgumentType.getString(ctx, "answer"))))))));
+                                                        StringArgumentType.getString(ctx, "answer"))))))
+                        .then(Commands.literal("debug")
+                                .requires(source -> source.hasPermission(2))
+                                .then(Commands.argument("message", StringArgumentType.greedyString())
+                                        .executes(ctx -> debugScore(ctx.getSource(),
+                                                StringArgumentType.getString(ctx, "message")))))));
     }
 
     // --- gossip (op) ----------------------------------------------------------
@@ -103,6 +108,14 @@ public final class ConversationsCommand {
         ServerPlayer player = source.getPlayerOrException();
         String result = ChatModeDispatcher.debugAsk(player, question, answer);
         source.sendSuccess(() -> Component.literal(result), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int debugScore(CommandSourceStack source, String message) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        for (String line : ChatModeDispatcher.debugScore(player, message)) {
+            source.sendSuccess(() -> Component.literal(line), false);
+        }
         return Command.SINGLE_SUCCESS;
     }
 }

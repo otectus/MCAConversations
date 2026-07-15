@@ -280,6 +280,55 @@ merge) with `{"chance": 100, "profession": "yourmod:yourprofession"}` and their 
 Conditions naming professions from uninstalled mods never match and never crash. Professions with
 no hand-written result fall through to the generic templated line (`profession_name` var).
 
+## Chat-mode intents (`chat_intents/`, chat-mode feature)
+
+When `enableChatMode` is on, free-typed chat is matched to dialogue answers by intents loaded from
+`data/<any-namespace>/chat_intents/*.json` — a real reload listener, so `/reload` picks up changes and
+third-party datapacks can add or override intents without touching this mod's files.
+
+**File shape** (both blocks optional — a synonyms-only file is a valid "synonym pack"):
+
+```json
+{
+  "synonyms": {
+    "work": ["job", "trade", "profession"]
+  },
+  "intents": {
+    "profession.work": {
+      "question": "conversations.cat.profession",
+      "answer": "work",
+      "keywords": { "work": 1.5, "craft": 0.8 },
+      "requiresAny": ["work"],
+      "phrases": ["what do you do", "your job"],
+      "antiKeywords": ["overwork"],
+      "context": null,
+      "category": "topics"
+    },
+    "chatmode.greeting": { "system": "greet", "keywords": { "hello": 1.5 } }
+  }
+}
+```
+
+Rules the loader enforces (one malformed intent is skipped with a log line; the reload never fails):
+
+- **Exactly one** of `question`+`answer` (drives the engine like a GUI click) or `system`
+  (`greet` / `farewell` / `mute` / `drop` / `insult` — dispatcher behaviors).
+- ≥ 1 keyword or phrase; keyword weights in `(0, 10]`.
+- `synonyms` blocks **merge across all files and namespaces** (pass 1, before any intent parses), so a
+  pack that only broadens vocabulary — e.g. `{"synonyms": {"rumor": ["tea", "goss"]}}` — needs no
+  intents of its own. First writer wins per alias; conflicts are logged and lint-checked.
+- Intent **ids** merge last-wins across datapacks (same as MCA's dialogue merge), so a pack can
+  re-keyword a shipped intent by redefining its id.
+- `context` scopes an intent to an open sub-question (`conversations.fears` etc.): it only scores
+  while the player's session has that question open, with a scoring bonus and threshold relief.
+- Keywords and phrases are authored as surface words; the loader stems and synonym-canonicalizes them
+  with the same normalizer the player's message goes through — write `"fears"`, match `"afraid"`.
+- Answer-level `constraints` in the dialogue file (e.g. `spouse`) are enforced automatically at match
+  time; do not duplicate them in the intent.
+
+Build-time lint (`ChatIntentLintTest`) verifies shipped intents bind to real dialogue answers, carry
+enough evidence, and don't collide.
+
 ## Conventions for content that degrades gracefully
 
 - Every result that uses a `conversations_*` action should carry a

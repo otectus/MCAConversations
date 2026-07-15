@@ -7,6 +7,7 @@ import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.chat.ChatModePlayerStateProvider;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
+import dev.otectus.mcaconversations.chat.GreetOnApproach;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
@@ -37,6 +38,9 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = McaConversations.MOD_ID)
 public final class ConversationsEvents {
+
+    /** Greet-on-approach proximity-scan cadence (2 s) — cheap AABB queries, not worth a config knob. */
+    private static final int GREET_SCAN_INTERVAL_TICKS = 40;
 
     private ConversationsEvents() {
     }
@@ -71,6 +75,7 @@ public final class ConversationsEvents {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             ChatModeSession.clear(player.getUUID());
+            GreetOnApproach.clear(player.getUUID());
         }
     }
 
@@ -78,13 +83,18 @@ public final class ConversationsEvents {
 
     /**
      * Chat-mode entry point. Cheap early-out before the thread hop; the dispatcher captures only the
-     * raw text on this (background) thread and hops to the server thread. Never cancels or mutates the
-     * player's message — villagers respond around normal chat (1.19+ signed-chat safety).
+     * raw text on this (background) thread and hops to the server thread. The default path never
+     * cancels or mutates the player's message — villagers respond around normal chat (1.19+ signed-chat
+     * safety). The one exception is the EXPERIMENTAL opt-in {@code chatModeLocalChat}, which cancels
+     * and rebroadcasts within a radius (trade-off documented on the dispatcher method + config).
      */
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onServerChat(ServerChatEvent event) {
         if (!McaBridge.isAvailable() || !McaConversationsConfig.COMMON.enableChatMode.get()) {
             return;
+        }
+        if (ChatModeDispatcher.interceptLocalChat(event)) {
+            return; // consumed: local rebroadcast + pipeline run on one main-thread hop
         }
         ChatModeDispatcher.onChat(event);
     }
@@ -151,6 +161,13 @@ public final class ConversationsEvents {
         }
         // Deferred chat-mode replies are due-checked every tick (deadline queue, not the modulo cadence).
         ChatModeScheduler.drain(event.getServer().overworld().getGameTime());
+
+        // Proactive greeting rides its own light cadence (Phase 4, double-gated, off by default).
+        if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0
+                && McaConversationsConfig.COMMON.enableChatMode.get()
+                && McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()) {
+            GreetOnApproach.scan(event.getServer());
+        }
 
         int interval = McaConversationsConfig.COMMON.gossipScanIntervalTicks.get();
         if (event.getServer().getTickCount() % interval == 0) {

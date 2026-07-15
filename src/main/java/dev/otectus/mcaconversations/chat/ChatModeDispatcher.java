@@ -24,9 +24,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.ServerChatEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -48,6 +50,65 @@ public final class ChatModeDispatcher {
     private static final int INSULT_TENSION = 6;
 
     private ChatModeDispatcher() {
+    }
+
+    /**
+     * EXPERIMENTAL radius-local chat (Phase 4, {@code chatModeLocalChat}, default off): cancels the
+     * sender's global chat message and re-sends it as an <b>unsigned system message</b> to players
+     * within {@code chatModeAddressedRadius} only, then runs the normal matching pipeline on the same
+     * main-thread hop. Returns true iff the event was consumed (the caller must not also route it
+     * through {@link #onChat}).
+     *
+     * <p><b>Signed-chat trade-off (why this is opt-in):</b> a canceled message never reaches vanilla
+     * broadcast, so recipients lose the 1.19+ signed-message chain (chat reporting) for these lines.
+     * The event is only canceled after the rebroadcast task is accepted — a failed submission falls
+     * back to untouched vanilla chat rather than eating the message.
+     */
+    public static boolean interceptLocalChat(ServerChatEvent event) {
+        if (!McaConversationsConfig.COMMON.chatModeLocalChat.get()) {
+            return false;
+        }
+        ServerPlayer player = event.getPlayer();
+        if (player == null || !isOptedIn(player)) {
+            return false;
+        }
+        String raw = event.getRawText();
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return false;
+        }
+        try {
+            server.execute(() -> {
+                try {
+                    rebroadcastLocal(player, raw);
+                    handle(player, raw);
+                } catch (Throwable t) {
+                    McaConversations.LOGGER.warn("chat-mode local-chat delivery failed", t);
+                }
+            });
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("local-chat thread hop failed; leaving vanilla chat untouched", t);
+            return false;
+        }
+        event.setCanceled(true);
+        return true;
+    }
+
+    /** Vanilla-style {@code <name> text} line to the sender + players within the addressed radius. */
+    private static void rebroadcastLocal(ServerPlayer sender, String raw) {
+        if (sender.hasDisconnected()) {
+            return;
+        }
+        double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double r2 = radius * radius;
+        Component line = Component.literal("<").append(sender.getDisplayName())
+                .append(Component.literal("> " + raw));
+        sender.sendSystemMessage(line);
+        for (ServerPlayer other : sender.serverLevel().players()) {
+            if (other != sender && !other.hasDisconnected() && other.distanceToSqr(sender) <= r2) {
+                other.sendSystemMessage(line);
+            }
+        }
     }
 
     /** Background-thread entry point: capture plain data and hop to the server thread. */
@@ -369,9 +430,15 @@ public final class ChatModeDispatcher {
      */
     private static void driveStaggered(VillagerCandidate target, ServerPlayer player, String question,
                                        String answer, long now, int stagger, boolean makeSticky) {
+        boolean showHearts = McaConversationsConfig.COMMON.chatModeShowHeartChanges.get();
+        int heartsBefore = showHearts ? McaCompat.getHearts(player, target.entity()) : 0;
         boolean ok;
         try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity(), stagger)) {
             ok = McaCompat.selectAnswer(target.entity(), player, question, answer);
+            if (showHearts && ok) {
+                // Delivery is deferred through the scheduler, so the delta lands before the line renders.
+                scope.heartsDelta = McaCompat.getHearts(player, target.entity()) - heartsBefore;
+            }
         }
         if (ok) {
             // The redirect mixin may have recorded a follow-up currentQuestion during selectAnswer;
@@ -514,7 +581,96 @@ public final class ChatModeDispatcher {
         return "Asked " + name + " (" + questionId + " / " + answerName + ")." + redirect;
     }
 
-    private static boolean isOptedIn(ServerPlayer player) {
+    /** Proactive greet-on-approach entry (Phase 4): the ordinary greet path, sticky as usual. */
+    static void proactiveGreet(VillagerCandidate target, ServerPlayer player, long now) {
+        drive(target, player, "greet", "checkin", now);
+    }
+
+    /**
+     * Scoring introspection for {@code /conversations chat debug <msg>} (Phase 4, op-gated): runs the
+     * real pipeline — targeting, normalization, ranking, gate preview, both decisions — completely
+     * <b>read-only</b>: no session writes, no cooldown, no delivery, no {@code selectAnswer}. Safe to
+     * run while the feature is live.
+     */
+    public static List<String> debugScore(ServerPlayer player, String message) {
+        if (!McaBridge.isAvailable()) {
+            return List.of("MCA is not available; chat mode is inert.");
+        }
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return List.of("No server.");
+        }
+        long now = server.overworld().getGameTime();
+        double addressedRadius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        List<VillagerCandidate> candidates = VillagerFinder.candidates(player, addressedRadius);
+        if (candidates.isEmpty()) {
+            return List.of("No MCA villager within " + (int) addressedRadius + " blocks.");
+        }
+
+        List<String> names = new ArrayList<>(candidates.size());
+        List<Double> lookDots = new ArrayList<>(candidates.size());
+        for (VillagerCandidate c : candidates) {
+            names.add(c.name());
+            lookDots.add(c.lookDot());
+        }
+        Session existing = ChatModeSession.peek(player.getUUID());
+        int stickyIndex = stickyIndex(existing, candidates, now);
+        double lookConeCos = lookConeCos(McaConversationsConfig.COMMON.chatModeLookConeDegrees.get());
+        Address address = Addressing.resolve(message.strip(), names, lookDots, stickyIndex, lookConeCos);
+        if (address.targetIndex() < 0) {
+            return List.of("No target resolved.");
+        }
+        VillagerCandidate target = candidates.get(address.targetIndex());
+        String tier = address.named() ? "1 (named)"
+                : address.targetIndex() == stickyIndex ? "2 (sticky)"
+                : address.directed() ? "3 (look-at)" : "4 (ambient/nearest)";
+
+        IntentIndex index = ChatIntentLoader.active();
+        String currentQuestion = contextFor(existing, target);
+        NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
+        List<Scored> ranked = IntentMatcher.rank(index, normalized, currentQuestion);
+        Set<String> eligibleIds = new HashSet<>();
+        List<Scored> eligible = new ArrayList<>();
+        for (Scored s : ranked) {
+            if (GatePreview.eligible(target.entity(), player, s)) {
+                eligibleIds.add(s.id());
+                eligible.add(s);
+            }
+        }
+        double minScore = McaConversationsConfig.COMMON.chatModeMinScore.get();
+        double ambientMinScore = McaConversationsConfig.COMMON.chatModeAmbientMinScore.get();
+        Decision directed = IntentMatcher.decide(eligible, true, minScore, ambientMinScore);
+        Decision ambient = IntentMatcher.decide(eligible, false, minScore, ambientMinScore);
+
+        List<String> out = new ArrayList<>();
+        out.add("target: " + (target.name().isBlank() ? "villager" : target.name())
+                + " — tier " + tier + (currentQuestion != null ? " — context " + currentQuestion : ""));
+        out.add("stems: " + String.join(" ", normalized.contentStems)
+                + (normalized.negatedStems.isEmpty() ? "" : " | negated: " + String.join(" ", normalized.negatedStems)));
+        out.addAll(formatRanked(ranked, eligibleIds, 5));
+        out.add(String.format("directed(≥%.2f): %s%s — ambient(≥%.2f): %s", minScore,
+                directed.outcome(), directed.chosen() != null ? " " + directed.chosen().id() : "",
+                ambientMinScore, ambient.outcome()));
+        return out;
+    }
+
+    /** Pure formatting: top-{@code limit} ranked intents, gate-ineligible ones marked. */
+    static List<String> formatRanked(List<Scored> ranked, Set<String> eligibleIds, int limit) {
+        if (ranked.isEmpty()) {
+            return List.of("no intent scored above zero");
+        }
+        List<String> out = new ArrayList<>();
+        for (int i = 0; i < Math.min(limit, ranked.size()); i++) {
+            Scored s = ranked.get(i);
+            String binding = s.isSystem() ? "system:" + s.system() : s.question() + "/" + s.answer();
+            out.add(String.format("%d. %s %.3f (%s)%s%s", i + 1, s.id(), s.score(), binding,
+                    s.contextScoped() ? " [ctx]" : "",
+                    eligibleIds.contains(s.id()) ? "" : " [gated]"));
+        }
+        return out;
+    }
+
+    static boolean isOptedIn(ServerPlayer player) {
         return ConversationsCapabilities.getChatMode(player)
                 .map(ChatModePlayerState::isEnabled)
                 .orElse(McaConversationsConfig.COMMON.chatModeDefaultOn.get());

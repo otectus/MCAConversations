@@ -139,7 +139,9 @@ public final class ChatModeSession {
             return false;
         }
         if (!silent && line != null) {
-            ChatDelivery.villagerSays(s.villager, player, line, s.extraDelayTicks);
+            // The scope rides along so heart feedback (set after selectAnswer returns, but before the
+            // deferred delivery fires) can be appended at delivery time.
+            ChatDelivery.villagerSays(s.villager, player, line, s.extraDelayTicks, s);
         }
         return true;
     }
@@ -179,6 +181,11 @@ public final class ChatModeSession {
         final ServerPlayer player;
         final Entity villager;
         final int extraDelayTicks;
+        /**
+         * Hearts gained/lost by the exchange ({@code chatModeShowHeartChanges}); written after
+         * {@code selectAnswer} returns, read by the deferred delivery closure. 0 = no feedback.
+         */
+        public int heartsDelta;
         private final Scope previous;
 
         private Scope(ServerPlayer player, Entity villager, int extraDelayTicks, Scope previous) {

@@ -32,6 +32,16 @@ public final class ChatDelivery {
      * of the humanized reply delay — the stagger offset for ambient multi-responder replies (spec §12.3).
      */
     public static void villagerSays(Entity villager, ServerPlayer player, Component line, int extraDelayTicks) {
+        villagerSays(villager, player, line, extraDelayTicks, null);
+    }
+
+    /**
+     * Full form: {@code feedback} (nullable) is the redirect scope whose {@link
+     * ChatModeSession.Scope#heartsDelta} — written after {@code selectAnswer} returns — is appended as
+     * a subtle {@code (+2 ♥)} suffix at <em>delivery</em> time, speaker-visible only.
+     */
+    static void villagerSays(Entity villager, ServerPlayer player, Component line, int extraDelayTicks,
+                             ChatModeSession.Scope feedback) {
         McaConversationsConfig.Common cfg = McaConversationsConfig.COMMON;
         String name = McaCompat.getVillagerName(villager).filter(n -> !n.isBlank()).orElse("Villager");
         MutableComponent coloredName = Component.literal(name).withStyle(ChatFormatting.YELLOW);
@@ -44,24 +54,39 @@ public final class ChatDelivery {
         boolean publicReplies = cfg.chatModePublicReplies.get();
         double radius = cfg.chatModeRadius.get();
 
-        ChatModeScheduler.schedule(now + delay, () -> deliver(villager, player, rendered, publicReplies, radius));
+        ChatModeScheduler.schedule(now + delay,
+                () -> deliver(villager, player, rendered, publicReplies, radius, feedback));
     }
 
     private static void deliver(Entity villager, ServerPlayer speaker, Component rendered,
-                                boolean publicReplies, double radius) {
+                                boolean publicReplies, double radius, ChatModeSession.Scope feedback) {
         if (speaker.hasDisconnected()) {
             return;
         }
-        speaker.sendSystemMessage(rendered);
+        String suffix = feedback == null ? "" : heartsSuffix(feedback.heartsDelta);
+        if (suffix.isEmpty()) {
+            speaker.sendSystemMessage(rendered);
+        } else {
+            speaker.sendSystemMessage(rendered.copy().append(
+                    Component.literal(suffix).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)));
+        }
         if (publicReplies && villager.level() instanceof ServerLevel level) {
             double r2 = radius * radius;
             for (ServerPlayer other : level.players()) {
                 if (other != speaker && !other.hasDisconnected()
                         && other.distanceToSqr(villager) <= r2) {
-                    other.sendSystemMessage(rendered);
+                    other.sendSystemMessage(rendered); // relationship feedback is personal — speaker only
                 }
             }
         }
+    }
+
+    /** Subtle relationship feedback: {@code " (+2 ♥)"} / {@code " (−2 ♥)"}; empty for no change. */
+    static String heartsSuffix(int delta) {
+        if (delta == 0) {
+            return "";
+        }
+        return delta > 0 ? " (+" + delta + " ♥)" : " (−" + (-delta) + " ♥)";
     }
 
     /**

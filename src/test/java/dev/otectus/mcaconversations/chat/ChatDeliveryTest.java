@@ -48,4 +48,22 @@ class ChatDeliveryTest {
         // The exact line component instance is appended as a sibling, not stringified.
         assertEquals(line, out.getSiblings().get(out.getSiblings().size() - 1));
     }
+
+    // --- Heart-change feedback suffix (Phase 4, chatModeShowHeartChanges) ---------
+
+    @Test
+    void zeroHeartsDeltaIsSilent() {
+        assertEquals("", ChatDelivery.heartsSuffix(0));
+    }
+
+    @Test
+    void positiveHeartsDeltaGetsPlusHeart() {
+        assertEquals(" (+2 ♥)", ChatDelivery.heartsSuffix(2));
+        assertEquals(" (+1 ♥)", ChatDelivery.heartsSuffix(1));
+    }
+
+    @Test
+    void negativeHeartsDeltaGetsMinusHeart() {
+        assertEquals(" (−3 ♥)", ChatDelivery.heartsSuffix(-3));
+    }
 }
