@@ -3,12 +3,20 @@
     "autumn": ["fall"]
   },
   "intents": {
+    "greeting.checkin": {
+      "question": "greet",
+      "answer": "checkin",
+      "keywords": { "how": 0.8, "lately": 1.0, "holding": 1.0 },
+      "requiresAny": ["how", "lately", "holding"],
+      "phrases": ["how have you been", "have you been well", "how are you holding up", "how have things been"],
+      "category": "topics"
+    },
     "chitchat.day": {
       "question": "conversations.cat.chitchat",
       "answer": "day",
-      "keywords": { "day": 1.5, "today": 1.2, "going": 1.0, "doing": 1.0, "morning": 0.8, "afternoon": 0.8, "evening": 0.8 },
-      "requiresAny": ["day", "today", "doing", "going"],
-      "phrases": ["how * day", "how are you doing", "how is it going", "how is your day"],
+      "keywords": { "day": 1.5, "today": 1.2, "going": 1.0, "doing": 1.0, "morning": 0.8, "afternoon": 0.8, "evening": 0.8, "up": 0.6 },
+      "requiresAny": ["day", "today", "doing", "going", "up"],
+      "phrases": ["how * day", "how are you doing", "how is it going", "how is your day", "what are you doing", "what are you up to", "what is up"],
       "antiKeywords": ["birthday"],
       "bigrams": ["your day"],
       "category": "topics"

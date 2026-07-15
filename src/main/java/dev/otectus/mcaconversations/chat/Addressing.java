@@ -21,6 +21,14 @@ public final class Addressing {
 
     private static final double NAME_FUZZY_THRESHOLD = 0.90;
 
+    /**
+     * Interjections that commonly precede a vocative ({@code "Hey Coralia! ..."}). Deliberately a
+     * small static set (pure class — independent of the synonym datapack); the greeting word itself
+     * already signals address, so the following name is matched with typo tolerance.
+     */
+    private static final java.util.Set<String> GREETING_PREFIXES = java.util.Set.of(
+            "hey", "hi", "hello", "hiya", "heya", "yo", "howdy", "greetings", "oi");
+
     private Addressing() {
     }
 
@@ -60,6 +68,10 @@ public final class Addressing {
         Address leading = tryLeading(s, candidateNames);
         if (leading != null) {
             return leading;
+        }
+        Address greeted = tryGreetingPrefix(s, candidateNames);
+        if (greeted != null) {
+            return greeted;
         }
         Address trailing = tryTrailing(s, candidateNames);
         if (trailing != null) {
@@ -110,16 +122,56 @@ public final class Addressing {
         String lead = s.substring(0, i);
         char sep = i < s.length() ? s.charAt(i) : '\0';
         boolean comma = sep == ',' || sep == ':' || sep == ';';
+        int j = i;
+        while (j < s.length() && !isWordChar(s.charAt(j))) {
+            j++;
+        }
+        // A single-word message ("Nayaliya?") is almost certainly a call by name — tolerate a typo,
+        // unless the word is itself a greeting ("hello?" must never fuzzy-grab a villager named Hella).
+        boolean bareWord = j >= s.length();
+        boolean allowFuzzy = comma
+                || (bareWord && !GREETING_PREFIXES.contains(lead.toLowerCase(java.util.Locale.ROOT)));
 
-        int target = firstMatch(lead, names, comma);
+        int target = firstMatch(lead, names, allowFuzzy);
         if (target < 0) {
+            return null;
+        }
+        return new Address(target, s.substring(j).strip(), true, true);
+    }
+
+    /**
+     * {@code "Hey Coralia! ..."}: a greeting interjection followed by a name is a vocative — the
+     * greeting word already signals address, so the name is matched with typo tolerance. Both tokens
+     * are stripped from the message.
+     */
+    private static Address tryGreetingPrefix(String s, List<String> names) {
+        int i = 0;
+        while (i < s.length() && isWordChar(s.charAt(i))) {
+            i++;
+        }
+        if (i == 0 || !GREETING_PREFIXES.contains(s.substring(0, i).toLowerCase(java.util.Locale.ROOT))) {
             return null;
         }
         int j = i;
         while (j < s.length() && !isWordChar(s.charAt(j))) {
             j++;
         }
-        return new Address(target, s.substring(j).strip(), true, true);
+        int k = j;
+        while (k < s.length() && isWordChar(s.charAt(k))) {
+            k++;
+        }
+        if (k == j) {
+            return null; // just a greeting, no second word — plain "hello" stays a greeting
+        }
+        int target = firstMatch(s.substring(j, k), names, true);
+        if (target < 0) {
+            return null;
+        }
+        int rest = k;
+        while (rest < s.length() && !isWordChar(s.charAt(rest))) {
+            rest++;
+        }
+        return new Address(target, s.substring(rest).strip(), true, true);
     }
 
     private static Address tryTrailing(String s, List<String> names) {

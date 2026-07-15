@@ -106,6 +106,9 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue chatModeInsultDetection;
         public final ForgeConfigSpec.BooleanValue chatModeLocalChat;
         public final ForgeConfigSpec.BooleanValue chatModeGreetOnApproach;
+        public final ForgeConfigSpec.DoubleValue chatModeGreetChance;
+        public final ForgeConfigSpec.BooleanValue chatModeTypingAttention;
+        public final ForgeConfigSpec.IntValue chatModeAttentionTicks;
 
         public final ForgeConfigSpec.BooleanValue debugLogging;
 
@@ -299,9 +302,22 @@ public final class McaConversationsConfig {
                     "restore global, signed vanilla chat. See the spec's chat-signing notes.")
                     .define("chatModeLocalChat", true);
             chatModeGreetOnApproach = b.comment(
-                    "Villagers proactively greet an opted-in player entering the radius (rate-limited by the",
-                    "existing greet cooldown).")
+                    "Villagers may proactively greet an opted-in player entering the radius (once per",
+                    "villager per player per day; see chatModeGreetChance).")
                     .define("chatModeGreetOnApproach", true);
+            chatModeGreetChance = b.comment(
+                    "Chance (0-1) that a given villager greets a given player on a given day. Scaled by",
+                    "personality (outgoing villagers greet more, reserved ones less); deterministic per day,",
+                    "so re-entering the radius never re-rolls. 1.0 = everyone always greets.")
+                    .defineInRange("chatModeGreetChance", 0.35, 0.0, 1.0);
+            chatModeTypingAttention = b.comment(
+                    "Nearby villagers stop and look at a player while their chat screen is open (requires the",
+                    "client half of this mod, which MCA already requires anyway).")
+                    .define("chatModeTypingAttention", true);
+            chatModeAttentionTicks = b.comment(
+                    "How long (game ticks) a villager keeps standing with its conversation partner after the",
+                    "last exchange before wandering off (600 = 30s; refreshed per exchange; 0 disables).")
+                    .defineInRange("chatModeAttentionTicks", 600, 0, 72000);
             b.pop();
 
             b.push("debug");

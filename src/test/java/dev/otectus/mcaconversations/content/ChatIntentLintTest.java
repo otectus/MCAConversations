@@ -40,7 +40,8 @@ class ChatIntentLintTest {
 
     /** Deflection/system phrase families referenced from chat/ Java (ChatModeDispatcher). */
     private static final Set<String> DEFLECTION_KEYS = Set.of(
-            "confused", "hint", "shrug", "clarify", "dropped", "busy", "muted", "topics", "farewell", "insult");
+            "confused", "hint", "shrug", "clarify", "dropped", "busy", "muted", "topics", "farewell", "insult",
+            "hail", "hail_cold", "attentive");
 
     private static Map<String, IntentBinding> intents;
     private static Map<String, Set<String>> dialogueAnswers; // questionId -> answer names
@@ -81,18 +82,12 @@ class ChatIntentLintTest {
     void topicBindingsExistInDialogues() {
         List<String> problems = new ArrayList<>();
         for (IntentBinding b : intents.values()) {
-            String question;
-            String answer;
             if (b.isSystem()) {
-                if (!"greet".equals(b.system())) {
-                    continue; // farewell/mute/drop route to dispatcher behaviors, not a dialogue answer
-                }
-                question = "greet";
-                answer = "checkin";
-            } else {
-                question = b.question();
-                answer = b.answer();
+                continue; // system intents (greet/farewell/mute/drop/insult) route to dispatcher
+                          // behaviors backed by lang pools, not dialogue answers
             }
+            String question = b.question();
+            String answer = b.answer();
             Set<String> answers = dialogueAnswers.get(question);
             if (answers == null) {
                 problems.add(b.id() + ": no dialogue question '" + question + "'");

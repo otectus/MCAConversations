@@ -69,6 +69,7 @@ public final class ChatDelivery {
         if (suffix.isEmpty()) {
             speaker.sendSystemMessage(rendered);
         } else {
+            feedback.heartsDelta = 0; // consume: a multi-line exchange shows its feedback exactly once
             speaker.sendSystemMessage(rendered.copy().append(
                     Component.literal(suffix).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)));
         }

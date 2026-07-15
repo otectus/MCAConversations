@@ -236,7 +236,14 @@ public final class ChatModeDispatcher {
         String currentQuestion = contextFor(existing, target);
         NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
-            return; // e.g. a bare name with no message — nothing to match
+            // A bare name ("Nataliya?") is a call, not a question: acknowledge, turn, and wait.
+            if (address.named()) {
+                ChatDelivery.villagerSays(target.entity(), player,
+                        voiced(target.entity(), player, "chatmode.attentive"));
+                ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+                attend(target, player, now);
+            }
+            return;
         }
 
         // Small-utterance greeting short-circuit (§6.6): a short "hi"/"hello" is a guaranteed greet,
@@ -260,7 +267,7 @@ public final class ChatModeDispatcher {
 
         switch (decision.outcome()) {
             case MATCH -> fulfil(target, player, decision.chosen(), now);
-            case AMBIGUOUS -> clarify(target, player, decision.chosen(), decision.alternative());
+            case AMBIGUOUS -> clarify(target, player, decision.chosen(), decision.alternative(), now);
             case NONE -> {
                 // Confusion is only in-character when the message was plausibly aimed at the villager:
                 // an explicit name, or an engagement cue (question form / second person — spec §5 tier 2).
@@ -363,7 +370,7 @@ public final class ChatModeDispatcher {
                                        long now, int stagger, boolean makeSticky) {
         if (chosen.isSystem()) {
             if ("greet".equals(chosen.system())) {
-                driveStaggered(target, player, "greet", "checkin", now, stagger, makeSticky);
+                hail(target, player, now, stagger, makeSticky);
             }
             return; // farewell/mute/decline are directed controls — not meaningful shouted to a crowd
         }
@@ -399,10 +406,10 @@ public final class ChatModeDispatcher {
 
     private static void routeSystem(VillagerCandidate target, ServerPlayer player, String system, long now) {
         switch (system) {
-            case "greet" -> drive(target, player, "greet", "checkin", now);
+            case "greet" -> hail(target, player, now, 0, true);
             case "farewell" -> farewell(target, player);
             case "mute" -> mute(target, player, now);
-            case "drop" -> decline(target, player);
+            case "drop" -> decline(target, player, now);
             case "insult" -> insult(target, player);
             default -> McaConversations.LOGGER.debug("chat-mode system intent '{}' not handled", system);
         }
@@ -429,6 +436,7 @@ public final class ChatModeDispatcher {
         s.villagerId = null;
         s.currentQuestion = null;
         s.consecutiveMisses = 0;
+        VillagerAttention.release(target.entity()); // conversation over — back to their day
     }
 
     /** "Stop talking" (spec §11): mute this villager↔player pairing for {@code chatModeMuteTicks}. */
@@ -438,12 +446,14 @@ public final class ChatModeDispatcher {
         s.mute(target.entity().getUUID(), now + Math.max(0, muteTicks));
         s.currentQuestion = null;
         deflect(target, player, "muted");
+        VillagerAttention.release(target.entity()); // asked to leave the player be — walks off too
     }
 
     /** "Never mind" (spec §11): drop the open sub-question; never counts as a miss. */
-    private static void decline(VillagerCandidate target, ServerPlayer player) {
+    private static void decline(VillagerCandidate target, ServerPlayer player, long now) {
         ChatModeSession.get(player.getUUID()).currentQuestion = null;
         deflect(target, player, "dropped");
+        attend(target, player, now); // still conversing, just changing the subject
     }
 
     private static void drive(VillagerCandidate target, ServerPlayer player, String question, String answer, long now) {
@@ -473,6 +483,7 @@ public final class ChatModeDispatcher {
             if (makeSticky) {
                 ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
             }
+            attend(target, player, now);
         } else {
             McaConversations.LOGGER.debug("chat-mode selectAnswer({}, {}) returned false", question, answer);
         }
@@ -484,20 +495,24 @@ public final class ChatModeDispatcher {
         s.consecutiveMisses++;
         if (s.consecutiveMisses == 1) {
             deflect(target, player, "confused");
+            attend(target, player, now);
         } else if (s.consecutiveMisses == 2) {
             deflectHint(target, player);
+            attend(target, player, now);
         } else {
             deflect(target, player, "shrug");
             // The villager disengages from this player for a while — flailing at Agnes never mutes Ilsa.
             int cooldown = McaConversationsConfig.COMMON.chatModeCooldownTicks.get();
             s.mute(target.entity().getUUID(), now + Math.max(0, cooldown) * 4L);
+            VillagerAttention.release(target.entity()); // demonstratively turns back to work
         }
     }
 
-    private static void clarify(VillagerCandidate target, ServerPlayer player, Scored top, Scored alt) {
+    private static void clarify(VillagerCandidate target, ServerPlayer player, Scored top, Scored alt, long now) {
         // %1$s = player name (auto), %2$s = first topic, %3$s = second topic.
         ChatDelivery.villagerSays(target.entity(), player,
                 voiced(target.entity(), player, "chatmode.clarify", topicName(top), topicName(alt)));
+        attend(target, player, now); // waiting on the player's answer
     }
 
     private static void deflect(VillagerCandidate target, ServerPlayer player, String key) {
@@ -512,7 +527,7 @@ public final class ChatModeDispatcher {
 
     /** Preferred hint order for the shipped topic hubs; datapack-added topics follow alphabetically. */
     private static final List<String> TOPIC_ORDER =
-            List.of("chitchat", "profession", "village", "events", "personal", "us", "family");
+            List.of("chitchat", "greet", "profession", "village", "events", "personal", "us", "family");
 
     /**
      * The topics this villager can <em>actually</em> discuss with this player (spec §11 step 2): the
@@ -661,9 +676,58 @@ public final class ChatModeDispatcher {
         return "Asked " + name + " (" + questionId + " / " + answerName + ")." + redirect;
     }
 
-    /** Proactive greet-on-approach entry (Phase 4): the ordinary greet path, sticky as usual. */
+    /** Proactive greet-on-approach entry: an actual hello, sticky so the player can just reply. */
     static void proactiveGreet(VillagerCandidate target, ServerPlayer player, long now) {
-        drive(target, player, "greet", "checkin", now);
+        hail(target, player, now, 0, true);
+    }
+
+    /**
+     * Server entry for the client's typing packet: full re-validation (flags, opt-in, liveness) so a
+     * stray or forged packet can at most make villagers glance over, then attention holds/release.
+     */
+    public static void onTypingStatus(ServerPlayer player, boolean typing) {
+        if (!McaBridge.isAvailable() || !McaConversationsConfig.COMMON.enableChatMode.get()
+                || !McaConversationsConfig.COMMON.chatModeTypingAttention.get()) {
+            return;
+        }
+        if (player.hasDisconnected() || !player.isAlive() || player.isSpectator() || !isOptedIn(player)) {
+            return;
+        }
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return;
+        }
+        long now = server.overworld().getGameTime();
+        if (typing) {
+            VillagerAttention.playerTyping(player, now);
+        } else {
+            VillagerAttention.playerStoppedTyping(player);
+        }
+    }
+
+    /** Conversation attention: the villager stays put facing the player until the timer lapses. */
+    private static void attend(VillagerCandidate target, ServerPlayer player, long now) {
+        int ticks = McaConversationsConfig.COMMON.chatModeAttentionTicks.get();
+        if (ticks > 0) {
+            VillagerAttention.hold(target.entity(), player, now + ticks, AttentionLedger.Source.CONVERSATION);
+        }
+    }
+
+    /**
+     * A real greeting (not the {@code greet/checkin} "how have you been" <em>answer</em>, which reads
+     * as a reply to a question nobody asked): a line from the {@code chatmode.hail} pool — or the
+     * {@code hail_cold} brush-off when the villager dislikes the player — rendered in personality
+     * voice. Sticky when directed at one player so a plain reply carries the conversation on.
+     */
+    private static void hail(VillagerCandidate target, ServerPlayer player, long now, int stagger,
+                             boolean makeSticky) {
+        String pool = McaCompat.getHearts(player, target.entity()) < 0
+                ? "chatmode.hail_cold" : "chatmode.hail";
+        ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger);
+        if (makeSticky) {
+            ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+        }
+        attend(target, player, now);
     }
 
     /**

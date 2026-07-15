@@ -51,6 +51,9 @@ class IntentMatcherTest {
     private static Map<String, String> cases() {
         Map<String, String> t = new LinkedHashMap<>();
         // chit-chat: day
+        t.put("what are you doing", "chitchat.day");
+        t.put("what are you up to", "chitchat.day");
+        t.put("what's up", "chitchat.day");
         t.put("how is your day", "chitchat.day");
         t.put("how are you doing today", "chitchat.day");
         t.put("how's it going", "chitchat.day");
@@ -72,6 +75,8 @@ class IntentMatcherTest {
         t.put("what season is it right now", "chitchat.season");
         t.put("is it winter or spring", "chitchat.season");
         // profession: work
+        t.put("what do you do", "profession.work");
+        t.put("what do you do for a living", "profession.work");
         t.put("what is your job", "profession.work");
         t.put("do you like your work", "profession.work");
         t.put("tell me about your work", "profession.work");
@@ -87,6 +92,7 @@ class IntentMatcherTest {
         t.put("about the village", "village.village");
         t.put("tell me about this town", "village.village");
         // village: people
+        t.put("how is everyone doing", "village.people");
         t.put("tell me about the people", "village.people");
         t.put("tell me about the neighbors", "village.people");
         t.put("what are the other villagers like", "village.people");
@@ -138,6 +144,10 @@ class IntentMatcherTest {
         t.put("good morning", "chatmode.greeting");
         t.put("good evening", "chatmode.greeting");
         t.put("good afternoon to you", "chatmode.greeting");
+        // check-in ("how have you been" is a real question — it gets the checkin content, not a hail)
+        t.put("how have you been", "greeting.checkin");
+        t.put("how are you holding up", "greeting.checkin");
+        t.put("how have things been lately", "greeting.checkin");
         return t;
     }
 
@@ -248,6 +258,17 @@ class IntentMatcherTest {
             }
         }
         assertTrue(missing.isEmpty(), "intents with no matcher utterance: " + missing);
+    }
+
+    @Test
+    void townSquareEveryoneQuestionClearsTheAmbientFloor() {
+        // "How's everyone doing?" shouted in a square must reach responders (spec §12).
+        NormalizedMessage n = Normalizer.normalize("how is everyone doing", index.synonyms());
+        List<Scored> ranked = IntentMatcher.rank(index, n, null);
+        Decision d = IntentMatcher.decide(ranked, false, MIN, AMBIENT);
+        assertEquals(Outcome.MATCH, d.outcome(), "expected an ambient match, top: "
+                + (ranked.isEmpty() ? "none" : ranked.get(0).id() + "=" + ranked.get(0).score()));
+        assertEquals("village.people", d.chosen().id());
     }
 
     @Test

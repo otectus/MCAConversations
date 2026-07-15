@@ -8,6 +8,7 @@ import dev.otectus.mcaconversations.chat.ChatModePlayerStateProvider;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
 import dev.otectus.mcaconversations.chat.GreetOnApproach;
+import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
@@ -76,6 +77,7 @@ public final class ConversationsEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             ChatModeSession.clear(player.getUUID());
             GreetOnApproach.clear(player.getUUID());
+            VillagerAttention.clearPlayer(player.getUUID());
         }
     }
 
@@ -160,7 +162,11 @@ public final class ConversationsEvents {
             return;
         }
         // Deferred chat-mode replies are due-checked every tick (deadline queue, not the modulo cadence).
-        ChatModeScheduler.drain(event.getServer().overworld().getGameTime());
+        long gameTime = event.getServer().overworld().getGameTime();
+        ChatModeScheduler.drain(gameTime);
+
+        // Villager attention (typing awareness + conversation presence) is applied every tick.
+        VillagerAttention.tick(event.getServer(), gameTime);
 
         // Proactive greeting rides its own light cadence (Phase 4, double-gated, off by default).
         if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0

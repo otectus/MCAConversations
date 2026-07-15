@@ -59,6 +59,13 @@ class ChatModeDispatcherHelperTest {
     }
 
     @Test
+    void greetHubSlotsAfterChitchat() {
+        List<String> ordered = ChatModeDispatcher.orderedTopics(
+                Set.of("village", "greet", "chitchat"));
+        assertEquals(List.of("chitchat", "greet", "village"), ordered);
+    }
+
+    @Test
     void datapackTopicsFollowAlphabetically() {
         List<String> ordered = ChatModeDispatcher.orderedTopics(
                 Set.of("zebra_care", "chitchat", "alchemy", "family"));

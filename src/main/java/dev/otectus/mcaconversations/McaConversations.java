@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
 import dev.otectus.mcaconversations.compat.SeasonsBridge;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
+import dev.otectus.mcaconversations.network.ConversationsNetwork;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -37,6 +38,9 @@ public final class McaConversations {
         final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::onCommonSetup);
         modBus.addListener(ConversationsCapabilities::onRegisterCapabilities);
+
+        // The chat-mode typing-attention channel (one C2S ping; server re-validates everything).
+        ConversationsNetwork.register();
 
         LOGGER.info("MCA: Conversations initialising (mod id '{}')", MOD_ID);
     }

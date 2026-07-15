@@ -90,6 +90,52 @@ class AddressingTest {
         assertFalse(a.named());
     }
 
+    // --- Log-review fixes: greeting-prefixed vocative + bare-name typo -------------
+
+    @Test
+    void greetingPrefixedNameIsAVocative() {
+        Address a = Addressing.resolve("Hey Agnes! What are you doing?", TOWN);
+        assertTrue(a.named());
+        assertEquals(0, a.targetIndex());
+        assertEquals("What are you doing?", a.message());
+    }
+
+    @Test
+    void greetingPrefixedNameToleratesTypo() {
+        Address a = Addressing.resolve("hey Anges, hello there", TOWN);
+        assertTrue(a.named());
+        assertEquals(0, a.targetIndex());
+        assertEquals("hello there", a.message());
+    }
+
+    @Test
+    void greetingWithoutANameIsNotAnAddress() {
+        Address a = Addressing.resolve("hey hello everyone", TOWN);
+        assertFalse(a.named());
+    }
+
+    @Test
+    void bareGreetingIsNotAnAddress() {
+        Address a = Addressing.resolve("hello", TOWN);
+        assertFalse(a.named());
+    }
+
+    @Test
+    void bareTypoedNameIsACall() {
+        Address a = Addressing.resolve("Anges?", TOWN); // single word → typo-tolerant
+        assertTrue(a.named());
+        assertEquals(0, a.targetIndex());
+        assertEquals("", a.message());
+    }
+
+    @Test
+    void singleWordFuzzyOnlyAppliesToBareMessages() {
+        // Two words: the old exact-only rule stands, so "Anges" mid-typo with trailing content
+        // still requires the comma form (covered by commaDelimitedVocativeToleratesTypo).
+        Address a = Addressing.resolve("Anges hello", TOWN);
+        assertFalse(a.named());
+    }
+
     // --- Phase 3: tier 2 (stickiness) + tier 3 (look-at) ---------------------------
 
     private static final double CONE_25 = Math.cos(Math.toRadians(25.0));
