@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.compat;
 
 import dev.otectus.mcaconversations.McaConversations;
+import dev.otectus.mcaconversations.personality.Personalities;
 import forge.net.mca.cobalt.network.NetworkHandler;
 import forge.net.mca.entity.VillagerEntityMCA;
 import forge.net.mca.entity.VillagerLike;
@@ -300,14 +301,22 @@ public final class McaCompat {
     }
 
     /**
-     * The villager's MCA personality as its lowercase enum name (e.g. {@code shy}, {@code grumpy}) —
-     * the same values the native {@code personality} dialogue condition matches. Safe default: empty.
+     * The villager's MCA personality as its bare lowercase id (e.g. {@code odd}, {@code upbeat}) —
+     * the same token MCA uses as the personality prefix on dialogue lang keys. Safe default: empty.
+     *
+     * <p><b>Version-agnostic on purpose.</b> MCA 7.6 declares {@code Personality} as an enum and 7.7
+     * as a registry-backed class, so neither {@code name()} (gone in 7.7) nor {@code getPersonalityId()}
+     * (absent in 7.6) can be called from a single binary without reflection. {@code toString()} exists
+     * in both — inherited from {@code Enum} on 7.6 ({@code "ODD"}) and overridden to the namespaced id
+     * on 7.7 ({@code "mca:odd"}) — and {@link Personalities#normalize} reduces both to {@code "odd"}.
      */
     public static Optional<String> getPersonality(Entity villager) {
         if (villager instanceof VillagerEntityMCA mca) {
             try {
                 return Optional.ofNullable(mca.getVillagerBrain().getPersonality())
-                        .map(p -> p.name().toLowerCase(java.util.Locale.ROOT));
+                        .map(Object::toString)
+                        .map(Personalities::normalize)
+                        .filter(s -> !s.isEmpty());
             } catch (Throwable t) {
                 McaConversations.LOGGER.debug("MCA getPersonality failed; defaulting empty", t);
             }

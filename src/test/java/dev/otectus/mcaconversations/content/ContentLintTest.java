@@ -11,6 +11,7 @@ import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.DispositionQuery;
 import dev.otectus.mcaconversations.gossip.GossipEventType;
+import dev.otectus.mcaconversations.personality.Personalities;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +37,9 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class ContentLintTest {
 
+    /** Join separator for problem lists. */
+    private static final String SEP = System.lineSeparator();
+
     private static final Path DIALOGUES = Path.of("src/main/resources/data/mcaconversations/dialogues");
     private static final Path LANG = Path.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
 
@@ -47,7 +51,7 @@ class ContentLintTest {
             "is_pregnant", "trait", "village_has_building", "current_chore", "min_health",
             "min_infection_progress", "min_pregnancy_progress", "pregnancy_child_gender", "memory",
             "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
-            "conversations_season", "conversations_holiday",
+            "conversations_season", "conversations_holiday", "conversations_personality",
             "conversations_disposition", "conversations_check",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed");
@@ -77,9 +81,13 @@ class ContentLintTest {
     // invalid value crashes the game during world creation (the Chore.CHOPPING crash of 2026-07-06).
     private static final Set<String> CHORES = Set.of("none", "prospect", "harvest", "chop", "hunt", "fish");
     private static final Set<String> MOODS = Set.of("depressed", "sad", "unhappy", "passive", "fine", "happy", "overjoyed");
-    private static final Set<String> PERSONALITIES = Set.of(
-            "unassigned", "athletic", "confident", "friendly", "flirty", "witty", "shy",
-            "gloomy", "sensitive", "greedy", "odd", "lazy", "grumpy", "peppy");
+    /**
+     * Values accepted by our own {@code conversations_personality} condition. Content names the MCA
+     * 7.7 canonical id: MCA's native {@code personality} condition is unusable across versions (it
+     * throws on an unknown id and takes the datapack reload down with it), so every use of it was
+     * replaced — see {@link #contentNeverUsesMcasCrashProneNativePersonalityCondition}.
+     */
+    private static final Set<String> PERSONALITIES = Personalities.CANONICAL;
     private static final Set<String> AGE_GROUPS = Set.of("unassigned", "baby", "toddler", "child", "teen", "adult");
     private static final Set<String> RANKS = Set.of("outlaw", "peasant", "merchant", "noble", "mayor", "monarch");
     private static final Set<String> CONSTRAINTS = Set.of(
@@ -174,6 +182,27 @@ class ContentLintTest {
     }
 
     @Test
+    void contentNeverUsesMcasCrashProneNativePersonalityCondition() {
+        // MCA parses `personality` with Personality.get(id).orElseThrow() inside Dialogues.apply,
+        // which has no error containment: an id the running MCA does not know aborts the datapack
+        // reload and the world fails to load. 7.7 removed witty/shy/lazy/grumpy/athletic, so any
+        // native use is a crash on one MCA version or the other. Ours is parse-safe and alias-aware.
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            if (!result.has("conditions")) {
+                return;
+            }
+            for (JsonElement c : result.getAsJsonArray("conditions")) {
+                if (c.getAsJsonObject().has("personality")) {
+                    problems.add(name + "/" + answerName
+                            + ": uses MCA's native `personality` condition; use `conversations_personality`");
+                }
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    @Test
     void conditionValuesMatchMcaVocabularies() {
         List<String> problems = new ArrayList<>();
         questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
@@ -185,7 +214,7 @@ class ContentLintTest {
                 String where = name + "/" + answerName;
                 checkValue(condition, "current_chore", CHORES, where, problems);
                 checkValue(condition, "mood", MOODS, where, problems);
-                checkValue(condition, "personality", PERSONALITIES, where, problems);
+                checkValue(condition, "conversations_personality", PERSONALITIES, where, problems);
                 checkValue(condition, "age_group", AGE_GROUPS, where, problems);
                 checkValue(condition, "rank", RANKS, where, problems);
                 checkValue(condition, "conversations_enabled", FEATURES, where, problems);
@@ -405,7 +434,9 @@ class ContentLintTest {
     void newQuestionsHavePromptText() {
         // Extension files (MCA questions) excluded — MCA provides their prompts. Auto questions
         // are processed server-side without ever showing a prompt.
-        Set<String> extensions = Set.of("greet");
+        // `main` joined this set in 1.0.0: additive hub entry injects the Conversations button as
+        // an extra answer merged into MCA's own main menu, so MCA owns the dialogue.main prompt.
+        Set<String> extensions = Set.of("greet", "main");
         questions.entrySet().stream()
                 .filter(e -> !extensions.contains(e.getKey()))
                 .filter(e -> !(e.getValue().has("auto") && e.getValue().get("auto").getAsBoolean()))

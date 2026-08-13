@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.content;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import dev.otectus.mcaconversations.personality.Personalities;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -28,9 +29,11 @@ class OverlayLintTest {
     private static final Path BASE_LANG = ASSETS.resolve("mca_dialogue/lang/en_us.json");
 
     /** MCA 7.6.26 personalities (lowercase). */
-    private static final Set<String> PERSONALITIES = Set.of(
-            "athletic", "confident", "friendly", "flirty", "witty", "shy",
-            "gloomy", "sensitive", "greedy", "odd", "lazy", "grumpy", "peppy");
+    /**
+     * Every namespace that needs an overlay: the MCA 7.7 roster plus the 7.6 spellings, because one
+     * binary serves both MCA versions and a 7.6 world still asks for {@code witty.dialogue.*}.
+     */
+    private static final Set<String> PERSONALITIES = Personalities.overlayPrefixes();
 
     /**
      * The core-20 high-traffic topics every personality overlay must cover (v0.5.0 anti-repetition

@@ -34,12 +34,10 @@ description='''${mod_description}'''
     versionRange="[7.6,8)"
     ordering="AFTER"
     side="BOTH"
-[[dependencies.${mod_id}]]
-    modId="architectury"
-    mandatory=true
-    versionRange="[9.2,10)"
-    ordering="AFTER"
-    side="BOTH"
+# NOTE: Architectury is deliberately NOT declared here. MCA 7.6 requires it and declares that
+# itself; MCA 7.7 dropped the dependency entirely. Conversations has zero Architectury references,
+# so declaring it mandatory only broke upgrades — a 7.7 user who removed Architectury (as 7.7
+# allows) was blocked by *this* mod with "requires architectury ... not installed".
 # MCA: Quests is an OPTIONAL integration. Conversations loads and works fully without it; when present we
 # load AFTER it so its objective/reward registries and dialogue-hook API exist before our setup runs.
 # The integration needs the Quests build that ships the api.QuestDialogueHooks / ExternalSignalObjective

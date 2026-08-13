@@ -17,6 +17,7 @@ import dev.otectus.mcaconversations.compat.quests.QuestOpenDirective;
 import dev.otectus.mcaconversations.gossip.GossipConditionLogic;
 import dev.otectus.mcaconversations.gossip.GossipQuery;
 import dev.otectus.mcaconversations.gossip.GossipSayDirective;
+import dev.otectus.mcaconversations.personality.PersonalityQuery;
 import dev.otectus.mcaconversations.season.SeasonContext;
 import dev.otectus.mcaconversations.state.MemoryIds;
 import dev.otectus.mcaconversations.template.ConversationsSay;
@@ -190,6 +191,27 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // Personality gate. Replaces MCA's native "personality" condition throughout our content:
+        // MCA parses that one with orElseThrow inside an uncontained datapack reload, so an id the
+        // running MCA does not know (7.7 dropped witty/shy/lazy/grumpy/athletic) aborts world load.
+        // This one is parse-safe and alias-aware, so a single authored id works on 7.6 and 7.7.
+        GiftPredicate.register("conversations_personality",
+                (json, name) -> SafeParse.orNull("conversations_personality", json,
+                        () -> PersonalityQuery.fromJson(json)),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null) {
+                            return 0.0f;
+                        }
+                        return McaCompat.getPersonality(villager)
+                                .filter(query::matches)
+                                .isPresent() ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_personality failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
         // --- RPG layer (1.0.0): disposition vector + dialogue checks ---
 
         // Matches while the decayed axis value lies in [min, max]. Never matches when the vector
@@ -351,7 +373,7 @@ public final class ConversationsMcaRegistrar {
                 });
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
-                + "/conversations_weather/conversations_season/conversations_holiday/conversations_disposition"
+                + "/conversations_weather/conversations_season/conversations_holiday/conversations_personality/conversations_disposition"
                 + "/conversations_check/conversations_quest_* and actions conversations_record/conversations_say"
                 + "/conversations_gossip_say/conversations_disposition_apply/conversations_quest_open");
     }

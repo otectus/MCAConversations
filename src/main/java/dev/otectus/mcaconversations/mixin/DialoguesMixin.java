@@ -39,7 +39,7 @@ public abstract class DialoguesMixin {
             if (!"chat".equals(name)) {
                 return;
             }
-            if (!McaConversationsConfig.COMMON.replaceChatWithConversations.get()) {
+            if (!McaConversationsConfig.hubEntryMode().replacesMcaChat()) {
                 return;
             }
             Question hub = questions.get("conversations");

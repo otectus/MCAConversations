@@ -46,8 +46,22 @@ public final class McaConversationsConfig {
         };
     }
 
+    /**
+     * How the hub is reached from MCA's interaction screen. Read through this accessor so callers
+     * agree across a config reload and a value the spec cannot parse degrades to the default
+     * instead of throwing inside a mixin.
+     */
+    public static HubEntryMode hubEntryMode() {
+        try {
+            HubEntryMode mode = COMMON.hubEntryMode.get();
+            return mode == null ? HubEntryMode.ADDITIVE : mode;
+        } catch (Throwable t) {
+            return HubEntryMode.ADDITIVE;
+        }
+    }
+
     public static final class Common {
-        public final ForgeConfigSpec.BooleanValue replaceChatWithConversations;
+        public final ForgeConfigSpec.EnumValue<HubEntryMode> hubEntryMode;
         public final ForgeConfigSpec.BooleanValue enableTopics;
         public final ForgeConfigSpec.BooleanValue enableStates;
         public final ForgeConfigSpec.BooleanValue enableTemplates;
@@ -114,11 +128,18 @@ public final class McaConversationsConfig {
 
         Common(ForgeConfigSpec.Builder b) {
             b.push("features");
-            replaceChatWithConversations = b.comment(
-                    "Route MCA's 'Chat' button to the Conversations conversation hub.",
-                    "When false, Chat behaves like vanilla MCA and the Conversations hub is unreachable",
-                    "(v0.2.0 removed the separate main-menu button; see DATAPACK.md to restore one).")
-                    .define("replaceChatWithConversations", true);
+            hubEntryMode = b.comment(
+                    "How the Conversations hub is reached from MCA's villager interaction screen.",
+                    "  ADDITIVE (default) - MCA's 'Chat' button keeps its own behaviour and Conversations",
+                    "                       appears as a SEPARATE button. Both are available.",
+                    "  REPLACE            - MCA's 'Chat' button opens the Conversations hub instead, and the",
+                    "                       separate button is hidden (this was the 0.2.0-0.9.x behaviour).",
+                    "  HIDDEN             - No Conversations button; MCA's Chat is untouched. Gossip, memory,",
+                    "                       chat mode and every other feature still run.",
+                    "Replaces the old boolean 'replaceChatWithConversations'. This is about the interaction",
+                    "SCREEN only - it is unrelated to enableChatMode (talking to villagers in normal chat),",
+                    "and no mode affects MCA's own AI chat, which never routes through the dialogue system.")
+                    .defineEnum("hubEntryMode", HubEntryMode.ADDITIVE);
             enableTopics = b.comment("Enable the Conversations conversation topics (heart-gated personal questions).")
                     .define("enableTopics", true);
             enableStates = b.comment("Enable conversation states (e.g. gratitude after a gift influences dialogue).")
