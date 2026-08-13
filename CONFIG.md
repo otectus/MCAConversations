@@ -6,13 +6,34 @@ File: `config/mcaconversations-common.toml` (generated on first run).
 
 | Option | Default | Effect when disabled |
 |---|---|---|
-| `replaceChatWithConversations` | `true` | MCA's Chat button behaves like vanilla MCA; the Conversations hub becomes unreachable (no separate button exists since v0.2.0 — see DATAPACK.md to restore one via datapack) |
 | `enableTopics` | `true` | Conversations topic branches deflect to fallback lines |
 | `enableStates` | `true` | conversation states (grateful, grieving, elated, annoyed, smitten, proud) are neither recorded nor referenced |
 | `enableTemplates` | `true` | templated lines render with neutral fallbacks ("someone", "the village") |
 | `enableGossip` | `true` | no events are detected or told; the "news" topic answers "quiet week" |
 | `enableQuests` | `true` | MCA: Quests integration is inert (quest-aware conditions score 0, quest lines aren't voiced) — only ever active when the `mcaquests` mod is installed |
 | `enableWeatherLines` | `true` | weather-aware lines are off; the `conversations_weather` condition and the `world` feature flag score as disabled |
+
+### `hubEntryMode` (default `ADDITIVE`)
+
+How the Conversations hub is reached from MCA's villager **interaction screen**. Replaces the old
+boolean `replaceChatWithConversations`, which had no setting for "both work".
+
+| Mode | MCA's Chat answer | Conversations button |
+|---|---|---|
+| `ADDITIVE` *(default)* | unchanged | visible, as its own entry |
+| `REPLACE` | opens the Conversations hub | hidden, so there is only one way in |
+| `HIDDEN` | unchanged | hidden |
+
+This is **not** chat mode. `enableChatMode` is about talking to villagers in normal chat with
+natural language; `hubEntryMode` only decides which button opens the hub inside MCA's GUI. They are
+independent — chat mode works in all three modes.
+
+**No mode affects MCA's own AI chat**, which is triggered by naming a villager in normal chat and
+never routes through the dialogue system this mod hooks.
+
+**Upgrading:** the old key is gone and existing configs land on `ADDITIVE`, a superset of both
+previous settings. Set `hubEntryMode = "REPLACE"` (old `true`) or `"HIDDEN"` (old `false`) to
+reproduce the old behaviour exactly.
 
 Feature toggles act through the `conversations_enabled`/`conversations_disabled` dialogue conditions and
 server-side early-outs — content degrades to fallback lines rather than disappearing mid-tree.

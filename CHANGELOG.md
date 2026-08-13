@@ -3,8 +3,132 @@
 All notable changes to this project will be documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow SemVer.
 
-Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)` + Architectury API `[9.2,10)`.
-Optional: Serene Seasons (soft, reflection-only — used for real seasons when present).
+Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
+Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
+asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
+
+## [1.0.0] - 2026-08-13
+
+**MCA Reborn 7.7 support**, on top of everything 0.9.0 shipped. 0.9.0 does not start on MCA 7.7 at
+all; this release fixes that and extends the personality system to 7.7's roster.
+
+### MCA versions
+
+Built and pinned against **MCA `7.7.0-beta.2+1.20.1`**, and verified to still start and run on
+**7.6.20**. Every MCA signature this mod consumes is byte-identical across those builds; the one
+real drift (`Personality` enum → registry-backed class) is handled without reflection.
+
+**MCA 7.7.0-beta.1 is broken on its own** and this release does not change that: beta.1 ships a
+truncated `forge-mca.refmap.json` (19 mixin classes vs beta.2's 31), so MCA's own `MixinLivingEntity`
+cannot resolve `isImmobile()Z` in a production runtime and startup dies. Reproduced with MCA as the
+only mod installed. Use beta.2 or newer.
+
+### Fixed
+
+- **0.9.0 could not start on MCA 7.7: `JsonSyntaxException: Unknown personality 'witty'`.** MCA 7.7
+  renamed four personalities and turned a fifth into a trait, and its native `personality` dialogue
+  condition parses values with `orElseThrow` inside `Dialogues.apply`, which has no error
+  containment — so 11 conditions in the shipped datapack aborted the whole reload and the world
+  would not load. All 49 uses of the native condition are replaced with a new parse-safe
+  **`conversations_personality`**, which never throws and matches through the canonical roster, so
+  one authored id works on both MCA versions.
+- **Forge refused to load on MCA 7.7 without Architectury.** `mods.toml` declared Architectury
+  **mandatory** while this mod has zero references to it. MCA 7.7 dropped the dependency, so anyone
+  who removed it was blocked by *us*. The declaration is gone; MCA asks for whatever MCA needs.
+- **`getPersonality` used `Personality.name()`**, which exists only on the 7.6 enum. It now reads
+  `Personality.toString()` — the one accessor the 7.6 enum (`"ODD"`) and the 7.7 registry class
+  (`"mca:odd"`) share — and normalises both to `odd`.
+
+### Added
+
+- **The four personalities new in MCA 7.7 — `playful`, `extroverted`, `anxious`, `peaceful` — now
+  have written voices**, at 0.9.0's full 80-key shape (conversation lines *and* the 25 chat-mode
+  lines). Upstream ships no overlay for any of them, so without this they would speak only the
+  generic pool. Each is written to stay distinct from its nearest neighbour (playful vs peppy,
+  extroverted vs upbeat, anxious vs introverted, peaceful vs relaxed).
+- **`conversations_personality`** dialogue condition (string or array), parse-safe and alias-aware.
+- **Client-only locale hook** (`MCAClientMixin`) for future locales: MCA gates per-personality
+  dialogue to `en_us`/`ru_ru`, and this widens **only** the language check, only for locales that
+  ship complete overlays, re-testing and preserving MCA's voice-pack and online-TTS restrictions.
+  Declared in the mixin config's `client` section so a dedicated server never loads a client class.
+
+### Changed — personality migration
+
+| MCA 7.6 | MCA 7.7 | Conversations |
+|---|---|---|
+| `witty` | `upbeat` | rewritten voice; `witty.dialogue.*` kept as a 7.6 alias |
+| `shy` | `introverted` | rewritten voice; `shy.dialogue.*` kept as a 7.6 alias |
+| `lazy` | `relaxed` | rewritten voice; `lazy.dialogue.*` kept as a 7.6 alias |
+| `grumpy` | `crabby` | rewritten voice; `grumpy.dialogue.*` kept as a 7.6 alias |
+| `athletic` | *(now the `mca:athletic` trait)* | kept as a **7.6-only** overlay, not offered as a 7.7 personality |
+
+The four renamed voices were **rewritten, not copied**: Upbeat is genuinely positive rather than
+Witty's dry deflection; Introverted is reserved and articulate rather than Shy's uniform stammer;
+Relaxed is unhurried-but-competent rather than Lazy's incapability; Crabby is irritable with range —
+weary, blunt, and noticeably softer with someone it likes — rather than Grumpy's flat hostility.
+Legacy alias namespaces carry the same text under the old prefix, so a world does not change voice
+when the server upgrades.
+
+### Changed — hub entry
+
+`replaceChatWithConversations` (boolean) is replaced by **`hubEntryMode`**:
+
+| Mode | MCA's Chat answer | Conversations button |
+|---|---|---|
+| `ADDITIVE` *(new default)* | unchanged | visible |
+| `REPLACE` *(the 0.2.0–0.9.x behaviour)* | opens the Conversations hub | hidden (no duplicate entry) |
+| `HIDDEN` | unchanged | hidden |
+
+Named `hubEntryMode` rather than `chatMode` to stay clearly distinct from 0.9.0's **chat mode**
+(`enableChatMode`, talking to villagers in normal chat) — the two are unrelated and independent.
+
+Additive mode needs **no mixin**: the button is a datapack answer merged into MCA's `main` question
+through the merge MCA already performs for same-named questions. A narrow `Question.getValidAnswers`
+injection hides that answer in the other two modes, since MCA filters answers by constraints only.
+
+**MCA's own AI chat is untouched in every mode**, as it always was: it is driven by
+`MixinServerPlayNetworkHandler.handleChat` and never routes through the dialogue system.
+
+*Migration:* existing configs land on `ADDITIVE`, a superset of both old settings. Set
+`hubEntryMode = "REPLACE"` to restore the old routing exactly, or `"HIDDEN"` for MCA-only menus.
+
+### Repository note
+
+0.9.0 shipped from a state that never reached git: `origin/feature/chat-mode` held the 0.8.0
+chat-mode source, while the released 0.9.0 jar contained a further delta (10 code files and 37
+resource files). That delta was recovered by decompiling the jar and diffing it against a build of
+the branch, and is now in source — verified by rebuilding and decompiling again, which reproduces
+0.9.0's classes exactly and packages byte-identical `assets/` and `data/`.
+
+### Tests
+
+314 tests, all passing (0.9.0's source baseline had 297). New: `PersonalitiesTest` (roster, alias
+resolution, parse-safety), `HubEntryModeTest` (behaviour matrix + injected `main.json` shape). The
+overlay lint now enforces the personality-prefix rule and cross-namespace collision-freedom, and
+draws its roster from the shared `Personalities` table so content and code cannot disagree.
+
+### Verified on a production Forge 1.20.1 dedicated server (not `runClient`)
+
+| Build | MCA | Architectury | Result |
+|---|---|---|---|
+| 0.9.0 | 7.7.0-beta.2 | yes | **crash** — `Unknown personality 'witty'`, never starts |
+| 1.0.0 | 7.7.0-beta.2 | no | **starts** |
+| 1.0.0 | 7.6.20 | yes | **starts** |
+
+Confirmed on 1.0.0: dialogue conditions/actions register, chat mode reports its configuration at
+startup, the datapack reload completes with no warnings, and `MCAClientMixin` is never loaded
+server-side.
+
+### Known limitations
+
+- **Brazilian Portuguese is not in this release.** `en_us` remains the only shipped locale. A
+  complete `pt_br` set for the current key inventory is ~2,450 strings (723 base + 41 UI + 21
+  personality overlays); shipping it partially would render raw translation keys mid-conversation,
+  so it is deferred rather than half-done. The client-side locale gate it needs is already in place.
+- Client-side behaviour (the rendered button, per-personality line selection) is verified by lint
+  and by MCA's own resolution rules, not by an automated in-game client run — MCA does not load
+  under a ForgeGradle dev runtime.
+- MCA 7.7 is itself in beta; the pin will move as upstream stabilises.
 
 ## [0.8.0] - 2026-07-15
 

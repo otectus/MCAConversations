@@ -80,9 +80,20 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 
 ## Requirements
 
-Minecraft 1.20.1 · Forge 47.x · requires **MCA Reborn `[7.6,8)`** + **Architectury API `[9.2,10)`**.
+Minecraft 1.20.1 · Forge 47.x · requires **MCA Reborn `[7.6,8)`**.
+
+Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run on **MCA 7.6.20**.
+
+> **Architectury is no longer declared as a dependency of this mod.** MCA 7.6 requires it and asks
+> for it itself; MCA 7.7 dropped it. Conversations has never referenced Architectury, and declaring
+> it mandatory only blocked people upgrading to 7.7 who had removed it.
+
+> **MCA 7.7.0-beta.1 does not work — with or without this mod.** That build ships a truncated
+> `forge-mca.refmap.json`, so MCA's own `MixinLivingEntity` fails to apply in a production runtime.
+> Reproduced with MCA alone. Use **7.7.0-beta.2** or newer.
+
 Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar fallback
-otherwise) — both are soft dependencies and the mod works fully without them.
+otherwise) — both soft dependencies; the mod works fully without them.
 
 ## How it works
 
