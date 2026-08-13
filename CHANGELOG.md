@@ -52,6 +52,28 @@ only mod installed. Use beta.2 or newer.
   ship complete overlays, re-testing and preserving MCA's voice-pack and online-TTS restrictions.
   Declared in the mixin config's `client` section so a dedicated server never loads a client class.
 
+### Added — Brazilian Portuguese (`pt_br`), complete
+
+**2,453 strings**, covering every shipped key: the 41 UI/fallback/analysis strings, all 724 base
+dialogue lines, and all 21 personality overlays — including the age voices (baby babble, toddler,
+child, teen) and the full chat-mode vocabulary, so a Portuguese player gets natural-language chat
+in Portuguese, not just menus.
+
+Enforced by `LocaleParityTest`: identical key sets to `en_us`, identical placeholder signatures per
+key, contiguous `/N` variant runs, no bare `%s`, and every locale declared complete in
+`OverlayLocales` must actually ship every overlay. A missing or mistyped key fails the build rather
+than rendering a raw translation key mid-conversation.
+
+The `dialogue.chatmode.topic.*` labels are written as noun phrases that read correctly after a
+preposition ("Pergunta sobre **o meu trabalho**"), because they are substituted into other lines
+rather than shown on their own.
+
+**MCA gates per-personality dialogue to `en_us`/`ru_ru`**, so the overlays would never have been
+read. `MCAClientMixin` widens **only** the language check, and only for locales that ship complete
+overlays, re-testing and preserving MCA's voice-pack and online-TTS restrictions verbatim. It is
+declared in the mixin config's `client` section, so a dedicated server never loads a client class —
+verified in the production run.
+
 ### Changed — personality migration
 
 | MCA 7.6 | MCA 7.7 | Conversations |
@@ -102,7 +124,7 @@ the branch, and is now in source — verified by rebuilding and decompiling agai
 
 ### Tests
 
-314 tests, all passing (0.9.0's source baseline had 297). New: `PersonalitiesTest` (roster, alias
+319 tests, all passing (0.9.0's source baseline had 297). New: `PersonalitiesTest` (roster, alias
 resolution, parse-safety), `HubEntryModeTest` (behaviour matrix + injected `main.json` shape). The
 overlay lint now enforces the personality-prefix rule and cross-namespace collision-freedom, and
 draws its roster from the shared `Personalities` table so content and code cannot disagree.
@@ -121,10 +143,6 @@ server-side.
 
 ### Known limitations
 
-- **Brazilian Portuguese is not in this release.** `en_us` remains the only shipped locale. A
-  complete `pt_br` set for the current key inventory is ~2,450 strings (723 base + 41 UI + 21
-  personality overlays); shipping it partially would render raw translation keys mid-conversation,
-  so it is deferred rather than half-done. The client-side locale gate it needs is already in place.
 - Client-side behaviour (the rendered button, per-personality line selection) is verified by lint
   and by MCA's own resolution rules, not by an automated in-game client run — MCA does not load
   under a ForgeGradle dev runtime.

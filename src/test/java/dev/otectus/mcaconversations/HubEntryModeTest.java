@@ -104,7 +104,7 @@ class HubEntryModeTest {
     /** The label the button renders with; MCA builds it as dialogue.<question>.<answer>. */
     @Test
     void injectedAnswerHasALabelInEveryAuthoredLocale() throws IOException {
-        for (String locale : new String[]{"en_us"}) {
+        for (String locale : new String[]{"en_us", "pt_br"}) {
             String lang = Files.readString(
                     Path.of("src/main/resources/assets/mca_dialogue/lang/" + locale + ".json"));
             assertTrue(JsonParser.parseString(lang).getAsJsonObject().has("dialogue.main.conversations"),

@@ -92,6 +92,14 @@ Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run o
 > `forge-mca.refmap.json`, so MCA's own `MixinLivingEntity` fails to apply in a production runtime.
 > Reproduced with MCA alone. Use **7.7.0-beta.2** or newer.
 
+### Languages
+
+**English (`en_us`)** and **Brazilian Portuguese (`pt_br`)** — both complete: UI strings, the full
+base dialogue pool, every personality overlay, the age voices and the whole chat-mode vocabulary
+(2,453 translated strings). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
+client-only hook widens that gate to the locales this mod ships complete overlays for, while
+preserving MCA's voice-pack and online-TTS restrictions untouched.
+
 Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar fallback
 otherwise) — both soft dependencies; the mod works fully without them.
 
