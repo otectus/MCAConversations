@@ -105,12 +105,56 @@ class OverlayLintTest {
 
     // Note: dialogue.chat has a base entry in our main lang file (added for the Chat->Conversations
     // entry header), so overlayKeysOverrideRealBaseKeys covers it like any other key.
+    /** Strips the {@code <personality>.} prefix and any {@code /N} variant suffix. */
+    private static String bareTopic(String personality, String key) {
+        String s = key.startsWith(personality + ".") ? key.substring(personality.length() + 1) : key;
+        int slash = s.indexOf('/');
+        return slash < 0 ? s : s.substring(0, slash);
+    }
+
+    /**
+     * Every key must start with its own namespace's personality prefix.
+     *
+     * <p>MCA resolves a personality line as {@code <personality>.[<dialogueType>.]<key>}
+     * ({@code DialogueType.applyFallback} → {@code getPrefixedPhrase}), so an unprefixed
+     * {@code dialogue.*} key here is never treated as a personality line at all. Worse, Minecraft
+     * translation keys are <b>global across asset namespaces</b>: unprefixed keys in several
+     * overlays collide, and whichever pack loads last silently becomes every villager's voice.
+     */
+    @Test
+    void everyKeyCarriesItsPersonalityPrefix() {
+        List<String> problems = new ArrayList<>();
+        overlays.forEach((personality, lang) -> {
+            for (String key : lang.keySet()) {
+                if (!key.startsWith(personality + ".dialogue.")) {
+                    problems.add(personality + ": key '" + key + "' is not prefixed '" + personality
+                            + ".dialogue.' (MCA would never resolve it as a personality line)");
+                }
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /** Translation keys are global, so two overlays sharing a key would silently overwrite. */
+    @Test
+    void noKeyCollidesAcrossOverlays() {
+        Map<String, String> owner = new HashMap<>();
+        List<String> problems = new ArrayList<>();
+        overlays.forEach((personality, lang) -> lang.keySet().forEach(key -> {
+            String previous = owner.putIfAbsent(key, personality);
+            if (previous != null) {
+                problems.add("key '" + key + "' defined by both " + previous + " and " + personality);
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
     @Test
     void overlayKeysOverrideRealBaseKeys() {
         List<String> problems = new ArrayList<>();
         overlays.forEach((personality, lang) -> {
             for (String key : lang.keySet()) {
-                String base = key.contains("/") ? key.substring(0, key.indexOf('/')) : key;
+                String base = bareTopic(personality, key);
                 if (!baseLang.containsKey(base)) {
                     problems.add(personality + ": overlay key '" + key + "' has no base line to override");
                 }
@@ -124,7 +168,7 @@ class OverlayLintTest {
         List<String> problems = new ArrayList<>();
         overlays.forEach((personality, lang) -> {
             for (String key : STANDARD_KEYS) {
-                if (!lang.containsKey(key)) {
+                if (!lang.containsKey(personality + "." + key)) {
                     problems.add(personality + ": missing standard overlay key '" + key + "'");
                 }
             }
@@ -142,7 +186,7 @@ class OverlayLintTest {
                 continue;
             }
             for (String key : CHATMODE_KEYS) {
-                if (!lang.containsKey(key)) {
+                if (!lang.containsKey(personality + "." + key)) {
                     problems.add(personality + ": missing chat-mode overlay key '" + key + "'");
                 }
             }

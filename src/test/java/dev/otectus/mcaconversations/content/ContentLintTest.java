@@ -615,6 +615,17 @@ class ContentLintTest {
                 continue;
             }
             JsonObject actions = results.get(0).getAsJsonObject().getAsJsonObject("actions");
+            if (name.equals("babble")) {
+                // The one hub answer that is not navigation: a baby has no categories to offer, so
+                // this leaf says its line and returns to the main menu. Shape-checked explicitly.
+                if (!actions.keySet().equals(Set.of("next", "say"))
+                        || !actions.get("next").getAsString().equals("main")
+                        || !actions.get("say").getAsString().startsWith("conversations.babble.")) {
+                    problems.add("conversations/babble: must say a conversations.babble.* line and "
+                            + "return to 'main', got " + actions);
+                }
+                continue;
+            }
             String expected = name.equals("back") ? "main" : "conversations.cat.";
             if (!actions.keySet().equals(Set.of("next"))
                     || !actions.get("next").getAsString().startsWith(expected)) {

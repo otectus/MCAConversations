@@ -168,7 +168,13 @@ class IntentMatcherTest {
         assertTrue(problems.isEmpty(), problems.size() + " mismatches:\n" + String.join("\n", problems));
     }
 
-    /** Context-scoped stance utterances: {message, open sub-question, expected intent id}. */
+    /**
+     * Stance utterances: {message, open sub-question, expected intent id}.
+     *
+     * <p>Every one of these must fire while its sub-question is open. Whether it may <em>also</em>
+     * fire cold is a per-intent authoring decision, expressed by the {@code context} field in the
+     * intent pack and asserted separately by {@link #globallyReachableStancesAreDeclaredSo()}.
+     */
     private static final String[][] CONTEXT_CASES = {
             {"you could face it", "conversations.fears", "fears.challenge"},
             {"that sounds hard to carry", "conversations.fears", "fears.comfort"},
@@ -200,14 +206,51 @@ class IntentMatcherTest {
                         expected, in.outcome(), in.chosen() != null
                                 ? " (" + in.chosen().id() + "=" + String.format("%.3f", in.chosen().score()) + ")" : ""));
             }
-            // Out of context, a scoped stance must not even enter the ranking.
+            // Out of context, a stance may only enter the ranking if its pack declares it global
+            // (no "context" field). A stance that IS context-scoped must stay completely inert.
             NormalizedMessage n = Normalizer.normalize(msg, index.synonyms());
             List<Scored> global = IntentMatcher.rank(index, n, null);
-            if (global.stream().anyMatch(s -> s.id().equals(expected))) {
+            boolean leaked = global.stream().anyMatch(x -> x.id().equals(expected));
+            if (leaked && isContextScoped(expected)) {
                 problems.add(String.format("out-of-context \"%s\" leaked scoped intent %s", msg, expected));
             }
         }
         assertTrue(problems.isEmpty(), problems.size() + " problems:\n" + String.join("\n", problems));
+    }
+
+    /** True when the loaded intent pack scopes this intent to a sub-question. */
+    private static boolean isContextScoped(String intentId) {
+        return index.all().stream()
+                .filter(ci -> ci.source.id().equals(intentId))
+                .noneMatch(ci -> index.activeIntents(null).contains(ci));
+    }
+
+    /**
+     * The relationship and family stances are reachable without first opening their topic page:
+     * asking a spouse "are you happy with us" in passing should work. They are global on purpose,
+     * so this pins the decision — if someone re-adds {@code "context"} to one of these, the
+     * conversational reach silently shrinks and this fails rather than the behaviour quietly
+     * regressing. Their questions still gate them: {@code GatePreview} checks the answer's
+     * constraints, so a non-spouse cannot reach spouse-only content this way.
+     */
+    @Test
+    void globallyReachableStancesAreDeclaredSo() {
+        List<String> problems = new ArrayList<>();
+        for (String id : new String[]{"us.happy", "us.firstmet", "us.future", "us.worries",
+                "family.checkin_child", "family.ask_parent", "family.memories"}) {
+            if (isContextScoped(id)) {
+                problems.add(id + " is context-scoped; it should be globally reachable");
+            }
+        }
+        // The fears/dreams/feelings stances are the opposite case: "tell me more about it" only
+        // means anything while that topic is open, so they must stay scoped.
+        for (String id : new String[]{"fears.challenge", "fears.comfort", "fears.press",
+                "dreams.encourage", "dreams.ask_more", "feelings.same", "feelings.unsure"}) {
+            if (!isContextScoped(id)) {
+                problems.add(id + " is global; a bare stance like this must stay context-scoped");
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 
     /** System control utterances (no context): {message, expected system-intent id}. */
