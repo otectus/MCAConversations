@@ -3,7 +3,8 @@
 Conversations's dialogue is ordinary MCA Reborn dialogue JSON, loaded by MCA itself from
 `data/<any-namespace>/dialogues/<question>.json`. Datapack authors can extend or override it, and
 can use this mod's custom conditions/actions in their own packs. Everything below is verified
-against MCA Reborn 7.6.23.
+against the packaged MCA Reborn jars — 7.7.0-beta.2 (the build this mod is compiled against)
+and 7.6.20 (still supported at runtime).
 
 ## How MCA loads dialogue (the parts that matter)
 
@@ -17,6 +18,18 @@ against MCA Reborn 7.6.23.
   `dialogue.<question>`; said lines from `dialogue.<say-key>`, all supporting random `/1`, `/2`, …
   variants (client-side pooling) and per-personality overlay namespaces
   (`assets/mca_dialogue_<personality>/lang/`).
+- **Personality overlay keys MUST be prefixed with the personality id**, e.g.
+  `odd.dialogue.conversations`, never `dialogue.conversations`. MCA's client resolver
+  (`DialogueType.applyFallback` → `getPrefixedPhrase`) only ever looks up
+  `<personality>.[<dialogueType>.]<key>`, so an unprefixed key is never treated as a personality
+  line. Worse, Minecraft translation keys are **global across asset namespaces**: unprefixed keys in
+  several overlays collide, and whichever resource pack loads last silently becomes every villager's
+  voice. The base fallback pool in `assets/mca_dialogue/lang/` stays unprefixed — that is what the
+  prefixed keys fall back to.
+- Per-personality dialogue is gated client-side by `MCAClient.useExpandedPersonalityTranslations()`:
+  off when an `MCAVoices` pack is active, when online TTS is enabled, or when the language is
+  outside MCA's list. This mod widens the **language** part only, for locales it ships complete
+  overlays for (`en_us`, `pt_br`).
 - Within a result, each entry of `"conditions"` contributes `chance × conditionValue` to the
   result's score on top of `baseChance`; unknown condition keys are skipped with a log warning.
   Multiple condition keys inside one `{...}` entry are ANDed.
@@ -29,8 +42,17 @@ against MCA Reborn 7.6.23.
   - `mood`: `depressed, sad, unhappy, passive, fine, happy, overjoyed` (string-compared — a bad
     value silently never matches rather than crashing)
   - `age_group`: `baby, toddler, child, teen, adult` · `rank`: `outlaw, peasant, merchant, noble,
-    mayor, monarch` · `personality`: `athletic, confident, friendly, flirty, witty, shy, gloomy,
-    sensitive, greedy, odd, lazy, grumpy, peppy`
+    mayor, monarch`
+  - **`personality`: do not use MCA's native condition.** MCA 7.7 renamed four personalities and
+    turned `athletic` into a trait, and the native parser throws on an id the running MCA does not
+    know — which aborts the datapack reload and the world load. Any single value is therefore a
+    crash on one MCA version or the other. Use this mod's parse-safe **`conversations_personality`**
+    instead: it never throws, and it resolves legacy ids to their successors so one authored value
+    works on both. Accepts a string or an array.
+    Canonical (MCA 7.7): `confident, peppy, friendly, flirty, playful, gloomy, sensitive, greedy,
+    odd, crabby, extroverted, introverted, relaxed, anxious, peaceful, upbeat`.
+    Legacy ids that still resolve: `witty`→`upbeat`, `shy`→`introverted`, `lazy`→`relaxed`,
+    `grumpy`→`crabby`; `athletic` matches only itself (MCA 7.6 worlds).
   This mod's own `conversations_*` keys are **parse-safe**: malformed JSON logs an ERROR and the entry
   degrades to a no-op action / never-matching condition instead of crashing the reload.
 
@@ -69,12 +91,13 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 
 | Key | Value | Meaning |
 |---|---|---|
-| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world"` | 1 when that config feature is on, else 0 |
+| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world" \| "dispositions" \| "checks" \| "chat"` | 1 when that config feature is on, else 0 |
 | `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch |
 | `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
 | `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
 | `conversations_season` | `{"is": "spring" \| "summer" \| "autumn" \| "winter"}` | 1 when the current season matches — read from Serene Seasons if installed, else the calendar season from the world day; 0 when `enableSeasonLines` is off |
 | `conversations_holiday` | `{"is": "spring_bloom" \| "midsummer" \| "harvest_festival" \| "midwinter" \| "none"}` | 1 when the current calendar festival matches (`none` = an ordinary day); 0 when `enableHolidayLines` is off |
+| `conversations_personality` | `"odd"` or `["odd","playful"]` | 1 when the villager's personality is one of these. **Use this instead of MCA's native `personality`** — that one throws on an id the running MCA does not know and takes the datapack reload (and world load) down with it. This one never throws, and resolves 7.6 ids to their 7.7 successors so one authored value works on both MCA versions |
 | `conversations_disposition` | `{"axis": "trust" \| "respect" \| "warmth" \| "attraction" \| "tension" \| "familiarity", "min"?, "max"?}` | 1 while the decayed disposition axis lies in the inclusive range (bounds default to the axis limits). **Never matches** when `enableDispositions` is off (author a fallback result) or on `attraction` for a romance-ineligible target |
 | `conversations_check` | `{"id": "<topic.stance>", "tier": "crit" \| "success" \| "partial" \| "rebuff", "axis", "difficulty": 0–100}` | 1 when the seeded check resolver lands on this result's declared tier — see *Dialogue checks* below. All four tier results of a stance share id/axis/difficulty |
 
@@ -247,9 +270,9 @@ appear on the hub *after* the category buttons (MCA appends merged answers). The
 packs written against the pre-0.3.0 flat hub; opt into a category by merging into
 `conversations.cat.<id>` instead.
 
-## The Chat redirect (v0.2.0)
+## Hub entry (`hubEntryMode`)
 
-While `replaceChatWithConversations` is on (default), **every** `next: "chat"` hop — MCA's Chat button,
+While `hubEntryMode = REPLACE`, **every** `next: "chat"` hop — MCA's Chat button,
 or any third-party datapack's — resolves to the `conversations` hub instead (the redirect intercepts the
 exact question name `chat` at MCA's `Dialogues.getQuestion`; `chat.topic`/`chat.fail` and all other
 names pass through). Datapack answers merged into question `chat` are unreachable while the toggle
@@ -262,15 +285,25 @@ flavored entry line). Returning to the hub from a category page (`next: "convers
 `dialogue.conversations`, and each category page's header is `dialogue.conversations.cat.<id>`. Datapacks can
 override any of these pools to re-text entry vs. return vs. per-category headers independently.
 
-To restore a separate menu button instead (v0.1.0 style), set the config to `false` and ship a
-datapack file `data/<yourpack>/dialogues/main.json`:
+Since 1.0.0 the **default is `ADDITIVE`**, not `REPLACE`: MCA's Chat answer is left alone and this
+mod ships its own `data/mcaconversations/dialogues/main.json`, which merges a `conversations` answer
+into MCA's `main` question. Both entries exist and neither hides the other. `REPLACE` restores the
+0.2.0–0.9.x routing described above (and hides the separate button, so there is only one way in);
+`HIDDEN` removes the button without touching MCA's Chat.
+
+None of the three modes affects MCA's own **AI chat**, which is driven by naming a villager in
+normal chat (`ServerGamePacketListenerImpl.handleChat`) and never routes through `Dialogues`.
+
+A third-party pack can add its own menu entry the same way:
 
 ```json
 { "silent": true, "answers": [ { "name": "conversations",
     "results": [ { "baseChance": 1, "actions": { "next": "conversations" } } ] } ] }
 ```
 
-(plus a lang entry `dialogue.main.conversations` for the button label).
+(plus a lang entry `dialogue.main.conversations` for the button label). Note the `"silent": true`:
+MCA keeps the top-level flags of whichever same-named file loads last, and that order is undefined,
+so an extension file must mirror the original question's flags.
 
 ## Extending profession work-talk
 

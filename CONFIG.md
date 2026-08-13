@@ -104,7 +104,7 @@ off is exactly the 0.6.0 experience. See DATAPACK.md → *The disposition vector
 
 ## `[chat]`
 
-Chat mode (0.8.0): talk to villagers by typing in the vanilla chat box; they answer in chat through
+Chat mode (since 0.8.0): talk to villagers by typing in the vanilla chat box; they answer in chat through
 the same dialogue engine as the GUI. **On by default.** Per-player opt-out: `/conversations chat off`.
 Ops can inspect matching live with `/conversations chat debug <message>`.
 
@@ -126,7 +126,7 @@ Ops can inspect matching live with `/conversations chat debug <message>`.
 | `chatModeMessageFormat` | `<%1$s> %2$s` | | chat line template (`%1$s` villager name, `%2$s` line) |
 | `chatModeMuteTicks` | `6000` | 200–72000 | duration of a "stop talking" mute, per villager↔player pairing |
 | `chatModeInsultDetection` | `true` | | obvious insults get an in-character rebuke + ANNOYED (never censors) |
-| `chatModeLocalChat` | `true` | | **EXPERIMENTAL** — opted-in players' chat becomes radius-local unsigned text (still logged to console; set `false` for global signed vanilla chat) |
+| `chatModeLocalChat` | `false` | | **EXPERIMENTAL** — proximity/RP chat: opted-in players' chat becomes radius-local unsigned text and global chat effectively goes away for them (still logged to console). Default flipped to `false` in 0.8.1 — safe for solo/RP packs; on public servers understand the chat-signing and moderation implications first |
 | `chatModeGreetOnApproach` | `true` | | villagers may greet a player entering the radius (once per villager/player/day) |
 | `chatModeGreetChance` | `0.35` | 0–1 | daily greet chance, scaled by personality (outgoing ×1.5, reserved ×0.5); deterministic per day |
 | `chatModeTypingAttention` | `true` | | nearby villagers stop and face a player whose chat box is open |

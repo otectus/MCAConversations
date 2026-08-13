@@ -15,7 +15,7 @@ what you've talked about before.
 
 ## What it does
 
-### 🗣️ Just talk to them (new in 0.8.0)
+### 🗣️ Just talk to them
 Skip the menus entirely: type **`Hey Coralia! How's your day going?`** in normal chat and Coralia
 answers — in chat, in her own voice, through the exact same dialogue engine as the GUI (same heart
 gates, same memories, same moods, same gossip). No AI and no text generation: matching is
@@ -25,7 +25,7 @@ hand-written.
 - **Call them by name** (`Hey Hanna!`, even typo'd), **look at them**, or just keep talking — your
   conversation partner sticks with you for follow-ups.
 - **The village feels alive**: some villagers greet you as you pass (the peppy ones more than the
-  shy ones — and villagers who dislike you brush you off). Open the chat box and nearby villagers
+  introverted ones — and villagers who dislike you brush you off). Open the chat box and nearby villagers
   stop and turn to you; whoever you're talking with stays put, facing you, until a little while
   after the conversation ends. Shout *"How's everyone doing?"* in the square and whoever it applies
   to answers.
@@ -136,12 +136,14 @@ about our future? Is anything weighing on you?*
 
 ## Requirements
 
+**Languages:** English and Brazilian Portuguese, both complete — menus, dialogue, every personality voice and the whole chat-mode vocabulary (2,453 translated strings).
+
 | | |
 |---|---|
 | **Minecraft** | 1.20.1 |
 | **Mod loader** | Forge 47.x |
-| **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.6.x` |
-| **Required** | [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api) `9.2.x` (MCA's own dependency) |
+| **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.6` – `7.7` (built against 7.7.0-beta.2; **not** 7.7.0-beta.1, which is broken upstream) |
+| **Only if MCA needs it** | [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api) — required by MCA 7.6, dropped by MCA 7.7. This mod never asks for it |
 | **Optional** | MCA: Quests — unlocks quest-aware conversation lines when installed |
 | **Optional** | Serene Seasons — villagers track the real season when installed (calendar fallback otherwise) |
 

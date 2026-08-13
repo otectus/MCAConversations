@@ -1,9 +1,20 @@
 # MCA: Conversations — Chat-Only Mode Specification
 
 **Feature:** `chatMode` — an optional mode where players talk to villagers through the vanilla Minecraft chat box and villagers answer in chat, with no interaction GUI.
-**Target:** MCAConversations 0.8.x · Minecraft 1.20.1 · Forge 47.x · MCA Reborn `[7.6,8)`
-**Status:** Implemented and shipped in **0.8.0** (all four phases). This document is the design of
-record; see the addendum below for where the implementation deliberately evolved past it.
+**Target:** MCAConversations 0.8.x–1.0.x · Minecraft 1.20.1 · Forge 47.x · MCA Reborn `[7.6,8)`
+**Status:** Implemented and shipped in **0.8.0** (all four phases), refined through 0.9.0, and
+carried into **1.0.0** unchanged in behaviour. This document is the design of record; see the
+addendum below for where the implementation deliberately evolved past it.
+
+**Naming note (1.0.0):** the config key `chatMode` in this document refers to *this* feature and is
+spelled `enableChatMode` plus the `chatMode*` family in the shipped config. It is unrelated to
+`hubEntryMode`, which only decides which button opens the Conversations hub inside MCA's own
+interaction screen. The two are independent — chat mode works in every hub-entry mode.
+
+**Since 0.9.0:** villager replies are age-aware (babies babble, toddlers get their own shorter
+variants — see `AgeVoice`); phrase matching is synonym- and typo-aware with backtracking; common
+words are barred from fuzzy-matching a villager's name; and `chatModeLocalChat` defaults to `false`.
+**Since 1.0.0:** the whole chat-mode vocabulary is translated (`en_us`, `pt_br`).
 **Hard constraint:** No AI/LLM/ML of any kind. All matching is deterministic, rule-based, data-driven, unit-testable, and runs server-side.
 
 > ### Post-spec addendum (as shipped in 0.8.0)
@@ -63,9 +74,9 @@ Today, all Conversations content is reached through MCA's interact screen: the p
 
 ### Non-goals
 
-- No natural-language *generation*. Villagers only ever say lines that exist in the lang packs (base + 13 personality overlays).
+- No natural-language *generation*. Villagers only ever say lines that exist in the lang packs (base + the personality overlays).
 - No client-side mod requirement beyond what already exists. Chat mode must work for vanilla-client players on a modded server? **No** — this is a Forge mod on both sides already (MCA requires the client mod). But chat mode itself must not add any *new* client code or packets (see §8).
-- No modification of MCA's chat button flow (`replaceChatWithConversations` GUI path is untouched; both frontends coexist).
+- No modification of MCA's chat button flow (the `hubEntryMode` GUI path is untouched; both frontends coexist).
 
 ---
 
@@ -86,7 +97,7 @@ What chat mode **adopts** from Denizen: per-feature radius + cooldown knobs; loo
 
 **Negative results, verified 3-0:** the popular "talking villager" mods are *not* prior art for matching. Villager Talk (Fabric, client-side, ~800 phrases) and Talking Villagers (Spigot) both make villagers **proactively** speak on proximity/game-state triggers (approach, weather, profession, raids, bells) and never parse typed chat; every villager mod that *does* respond to typed chat (VillagerGPT, Speaking Villagers, Villager AI) is LLM-based and excluded by this spec's hard constraint. They remain useful as secondary references for delivery feel: randomized per-villager reply delays to avoid overlap (→ §8.4 humanized delay, §12 staggering) and profession/context-conditioned phrase pools (which MCAConversations already has, far deeper).
 
-**MCA Reborn's own legacy "Chat" interaction** (the thing `replaceChatWithConversations` reroutes) is button-driven, not free-text — MCA has never parsed chat box text; this mode is genuinely new surface for the MCA family.
+**MCA Reborn's own legacy "Chat" interaction** (the thing `hubEntryMode = REPLACE` reroutes) is button-driven, not free-text — MCA has never parsed chat box text; this mode is genuinely new surface for the MCA family.
 
 ### 2.2 Classic pattern-matching engines: three convergent lessons
 
