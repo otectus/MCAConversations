@@ -49,6 +49,10 @@ public final class ChatModeDispatcher {
     /** Tension bump applied when a villager is insulted in chat (within {@link DispositionApply#MAX_DELTA}). */
     private static final int INSULT_TENSION = 6;
 
+    /** Stems of the two time-of-day greetings that count as a bare greeting on their own. */
+    private static final String MORNING_STEM = Normalizer.stemToken("morning");
+    private static final String EVENING_STEM = Normalizer.stemToken("evening");
+
     private ChatModeDispatcher() {
     }
 
@@ -175,6 +179,13 @@ public final class ChatModeDispatcher {
             return;
         }
 
+        // A message addressed to another player by name is theirs, not a villager's, no matter which
+        // villager happens to be sticky or in the look cone. Checked before targeting so it costs no
+        // miss and leaves the session intact.
+        if (isPlayerDirected(player, rawMessage)) {
+            return;
+        }
+
         // Targeting (tiers 1–4): gather within the larger addressed radius, let Addressing resolve.
         double addressedRadius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
         List<VillagerCandidate> candidates = VillagerFinder.candidates(player, addressedRadius);
@@ -192,7 +203,8 @@ public final class ChatModeDispatcher {
             existing.currentQuestion = null; // no in-range/in-window sticky partner → drop stale context
         }
         double lookConeCos = lookConeCos(McaConversationsConfig.COMMON.chatModeLookConeDegrees.get());
-        Address address = Addressing.resolve(rawMessage, names, lookDots, stickyIndex, lookConeCos);
+        Address address = Addressing.resolve(rawMessage, names, lookDots, stickyIndex, lookConeCos,
+                reservedNameWords());
         if (address.targetIndex() < 0) {
             return;
         }
@@ -232,10 +244,23 @@ public final class ChatModeDispatcher {
 
         markProcessed(player, now);
 
+        // A baby cannot hold a conversation; it babbles back and the exchange ends there. Placed
+        // after the busy gate so a baby another player is interacting with still reports "busy".
+        if (McaCompat.isBaby(target.entity())) {
+            deflect(target, player, "babble");
+            attend(target, player, now);
+            return;
+        }
+
         IntentIndex index = ChatIntentLoader.active();
         String currentQuestion = contextFor(existing, target);
         NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
+            // "Hey Anna" strips to nothing, but the greeting itself is the message — answer it.
+            if (address.named() && address.greeting()) {
+                routeSystem(target, player, "greet", now);
+                return;
+            }
             // A bare name ("Nataliya?") is a call, not a question: acknowledge, turn, and wait.
             if (address.named()) {
                 ChatDelivery.villagerSays(target.entity(), player,
@@ -248,7 +273,7 @@ public final class ChatModeDispatcher {
 
         // Small-utterance greeting short-circuit (§6.6): a short "hi"/"hello" is a guaranteed greet,
         // kept away from the topic-threshold math (hello canonicalizes hi/hiya/yo/howdy/greetings).
-        if (normalized.contentStems.contains("hello") && normalized.contentTokenCount() <= 3) {
+        if (isSmallGreeting(normalized)) {
             routeSystem(target, player, "greet", now);
             return;
         }
@@ -269,6 +294,14 @@ public final class ChatModeDispatcher {
             case MATCH -> fulfil(target, player, decision.chosen(), now);
             case AMBIGUOUS -> clarify(target, player, decision.chosen(), decision.alternative(), now);
             case NONE -> {
+                // A toddler that understood the topic but is gated out of it says so in its own
+                // words rather than falling through to the adult confusion ladder.
+                if (gatedTopicMiss(ranked, eligible, minScore)
+                        && "toddler".equals(McaCompat.getAgeGroup(target.entity()).orElse(""))) {
+                    deflect(target, player, "kidtopic");
+                    attend(target, player, now);
+                    return;
+                }
                 // Confusion is only in-character when the message was plausibly aimed at the villager:
                 // an explicit name, or an engagement cue (question form / second person — spec §5 tier 2).
                 // A sticky/look-at capture of ordinary player-to-player chat stays silent, costs no miss,
@@ -295,12 +328,15 @@ public final class ChatModeDispatcher {
      */
     private static void handleAmbient(ServerPlayer player, String message, List<VillagerCandidate> candidates,
                                       double ambientRadius, long now) {
-        if (isPlayerDirected(player, message)) {
-            return; // don't hijack a message aimed at another player
-        }
         IntentIndex index = ChatIntentLoader.active();
         NormalizedMessage normalized = Normalizer.normalize(message, index.synonyms());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
+            return;
+        }
+        // "hello" called into a crowd should get ONE villager waving back, not the whole square
+        // scoring it as a topic. Ambient greetings route to a single hail instead.
+        if (isSmallGreeting(normalized)) {
+            ambientHail(player, candidates, ambientRadius, now);
             return;
         }
 
@@ -378,6 +414,73 @@ public final class ChatModeDispatcher {
     }
 
     /** True if the message is aimed at another player (an {@code @}-reply or a player-name vocative). */
+    /**
+     * True for a message that is nothing but a greeting: "hi"/"hello" and friends in three content
+     * tokens or fewer, or a bare "good morning"/"good evening". These bypass topic scoring entirely
+     * so a wave never gets mistaken for a question.
+     */
+    static boolean isSmallGreeting(NormalizedMessage msg) {
+        if (msg.contentStems.contains("hello") && msg.contentTokenCount() <= 3) {
+            return true;
+        }
+        return (msg.contentStems.contains(MORNING_STEM) || msg.contentStems.contains(EVENING_STEM))
+                && msg.contentTokenCount() <= 2;
+    }
+
+    /**
+     * Words that must never be read as a villager's name: every keyword the loaded intent packs use,
+     * plus the normalizer's stopwords. Without this a content word like "work" could fuzzy-match a
+     * villager called "Wark" and silently redirect the message.
+     */
+    private static Set<String> reservedNameWords() {
+        Set<String> out = new HashSet<>(ChatIntentLoader.active().keywordVocabulary());
+        out.addAll(Normalizer.stopwords());
+        return out;
+    }
+
+    /**
+     * True when the best-scoring intent was confident enough but was filtered out by
+     * {@link GatePreview} — i.e. the villager understood the topic but is not allowed to discuss it.
+     * Used to give toddlers a specific "that's grown-up talk" reply instead of generic confusion.
+     */
+    static boolean gatedTopicMiss(List<Scored> ranked, List<Scored> eligible, double minScore) {
+        if (ranked.isEmpty()) {
+            return false;
+        }
+        Scored top = ranked.get(0);
+        return !top.isSystem() && top.score() >= minScore && !eligible.contains(top);
+    }
+
+    /**
+     * Ambient greeting: the nearest eligible villager waves back, and only that one. Skips villagers
+     * that are muted, still on their ambient cooldown, or busy in someone else's interaction screen.
+     */
+    private static void ambientHail(ServerPlayer player, List<VillagerCandidate> candidates,
+                                    double ambientRadius, long now) {
+        double r2 = ambientRadius * ambientRadius;
+        int cooldown = McaConversationsConfig.COMMON.chatModeCooldownTicks.get();
+        Session session = ChatModeSession.peek(player.getUUID());
+        for (VillagerCandidate c : candidates) {
+            if (c.distSqr() > r2) {
+                continue;
+            }
+            if (session != null && session.isMuted(c.entity().getUUID(), now)) {
+                continue;
+            }
+            Long lastAmbient = ChatModeSession.lastAmbient(c.entity().getUUID());
+            if (lastAmbient != null && cooldown > 0 && now - lastAmbient < cooldown) {
+                continue;
+            }
+            Optional<UUID> interacting = McaCompat.isInteractingWith(c.entity());
+            if (interacting.isPresent() && !interacting.get().equals(player.getUUID())) {
+                continue;
+            }
+            hail(c, player, now, 0, true);
+            ChatModeSession.markAmbient(c.entity().getUUID(), now);
+            return;
+        }
+    }
+
     private static boolean isPlayerDirected(ServerPlayer player, String message) {
         if (message.startsWith("@")) {
             return true;
@@ -586,19 +689,23 @@ public final class ChatModeDispatcher {
      * at {@code %1$s} — if MCA has no line (e.g. the entity isn't a loaded villager).
      */
     private static Component voiced(Entity villager, ServerPlayer player, String phrase, Object... extraArgs) {
-        Optional<MutableComponent> line = McaCompat.getDialogueLine(villager, player, phrase, extraArgs);
+        // Babies babble and toddlers get their own shorter variants of every chat-mode family.
+        String aged = AgeVoice.phrase(phrase, McaCompat.getAgeGroup(villager));
+        Optional<MutableComponent> line = McaCompat.getDialogueLine(villager, player, aged, extraArgs);
         if (line.isPresent()) {
             return line.get();
         }
         Object[] fallback = new Object[extraArgs.length + 1];
         fallback[0] = player.getDisplayName();
         System.arraycopy(extraArgs, 0, fallback, 1, extraArgs.length);
-        return Component.translatable("dialogue." + phrase, fallback);
+        return Component.translatable("dialogue." + aged, fallback);
     }
 
     private static Component topicName(Scored s) {
         String answer = s.answer() != null ? s.answer() : (s.system() != null ? s.system() : s.id());
-        return Component.literal(answer);
+        // Topic names are shown to the player (clarify prompts, debug output), so they get a
+        // translatable label; the raw answer id remains the fallback for un-localized topics.
+        return Component.translatableWithFallback("dialogue.chatmode.topic." + answer, answer);
     }
 
     /**
@@ -760,7 +867,8 @@ public final class ChatModeDispatcher {
         Session existing = ChatModeSession.peek(player.getUUID());
         int stickyIndex = stickyIndex(existing, candidates, now);
         double lookConeCos = lookConeCos(McaConversationsConfig.COMMON.chatModeLookConeDegrees.get());
-        Address address = Addressing.resolve(message.strip(), names, lookDots, stickyIndex, lookConeCos);
+        Address address = Addressing.resolve(message.strip(), names, lookDots, stickyIndex, lookConeCos,
+                reservedNameWords());
         if (address.targetIndex() < 0) {
             return List.of("No target resolved.");
         }

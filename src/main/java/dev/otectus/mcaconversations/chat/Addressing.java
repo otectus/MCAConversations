@@ -29,6 +29,17 @@ public final class Addressing {
     private static final java.util.Set<String> GREETING_PREFIXES = java.util.Set.of(
             "hey", "hi", "hello", "hiya", "heya", "yo", "howdy", "greetings", "oi");
 
+    /**
+     * Everyday words that must never fuzzy-match a villager's name. Without this, a reply like
+     * {@code "yes"} or {@code "thanks"} scores ≥ 0.90 Jaro-Winkler against a short name and silently
+     * re-addresses a villager the player was not talking to. Checked both raw and stemmed, and
+     * combined with a caller-supplied {@code reserved} set (the loaded intent vocabulary), so words
+     * the datapack treats as meaningful never double as names either.
+     */
+    private static final java.util.Set<String> COMMON_WORDS = java.util.Set.of(
+            "yes", "no", "ok", "okay", "same", "sure", "thanks", "thank", "yeah", "yep", "nope",
+            "nah", "guys", "guy", "everyone", "everybody", "folks", "all", "lads");
+
     private Addressing() {
     }
 
@@ -39,8 +50,15 @@ public final class Addressing {
      *                    breaks and re-sets stickiness
      * @param directed    true for tiers 1–3 (a single villager is meant to answer, uses the addressed
      *                    threshold and the graduated-confusion ladder); false for tier 4 (ambient)
+     * @param greeting    true iff the vocative was greeting-prefixed ({@code "Hey Coralia"}), so the
+     *                    dispatcher can answer the greeting itself rather than treat the remainder
+     *                    as the whole message
      */
-    public record Address(int targetIndex, String message, boolean named, boolean directed) {
+    public record Address(int targetIndex, String message, boolean named, boolean directed,
+                          boolean greeting) {
+        Address(int targetIndex, String message, boolean named, boolean directed) {
+            this(targetIndex, message, named, directed, false);
+        }
     }
 
     /** Two-arg convenience: name vocative (tier 1) then nearest (tier 4); no sticky/look context. */
@@ -59,21 +77,32 @@ public final class Addressing {
      */
     public static Address resolve(String rawMessage, List<String> candidateNames,
                                   List<Double> lookDots, int stickyIndex, double lookConeCos) {
+        return resolve(rawMessage, candidateNames, lookDots, stickyIndex, lookConeCos, java.util.Set.of());
+    }
+
+    /**
+     * As above, plus {@code reserved}: words the loaded intent vocabulary treats as meaningful.
+     * They are excluded from fuzzy name matching so a content word can never be mistaken for a
+     * vocative.
+     */
+    public static Address resolve(String rawMessage, List<String> candidateNames,
+                                  List<Double> lookDots, int stickyIndex, double lookConeCos,
+                                  java.util.Set<String> reserved) {
         String s = rawMessage == null ? "" : rawMessage.strip();
         if (candidateNames == null || candidateNames.isEmpty()) {
             return new Address(-1, s, false, false);
         }
 
         // Tier 1: explicit name vocative.
-        Address leading = tryLeading(s, candidateNames);
+        Address leading = tryLeading(s, candidateNames, reserved);
         if (leading != null) {
             return leading;
         }
-        Address greeted = tryGreetingPrefix(s, candidateNames);
+        Address greeted = tryGreetingPrefix(s, candidateNames, reserved);
         if (greeted != null) {
             return greeted;
         }
-        Address trailing = tryTrailing(s, candidateNames);
+        Address trailing = tryTrailing(s, candidateNames, reserved);
         if (trailing != null) {
             return trailing;
         }
@@ -111,7 +140,7 @@ public final class Addressing {
         return best;
     }
 
-    private static Address tryLeading(String s, List<String> names) {
+    private static Address tryLeading(String s, List<String> names, java.util.Set<String> reserved) {
         int i = 0;
         while (i < s.length() && isWordChar(s.charAt(i))) {
             i++;
@@ -132,7 +161,7 @@ public final class Addressing {
         boolean allowFuzzy = comma
                 || (bareWord && !GREETING_PREFIXES.contains(lead.toLowerCase(java.util.Locale.ROOT)));
 
-        int target = firstMatch(lead, names, allowFuzzy);
+        int target = firstMatch(lead, names, allowFuzzy, reserved);
         if (target < 0) {
             return null;
         }
@@ -144,7 +173,7 @@ public final class Addressing {
      * greeting word already signals address, so the name is matched with typo tolerance. Both tokens
      * are stripped from the message.
      */
-    private static Address tryGreetingPrefix(String s, List<String> names) {
+    private static Address tryGreetingPrefix(String s, List<String> names, java.util.Set<String> reserved) {
         int i = 0;
         while (i < s.length() && isWordChar(s.charAt(i))) {
             i++;
@@ -163,7 +192,7 @@ public final class Addressing {
         if (k == j) {
             return null; // just a greeting, no second word — plain "hello" stays a greeting
         }
-        int target = firstMatch(s.substring(j, k), names, true);
+        int target = firstMatch(s.substring(j, k), names, true, reserved);
         if (target < 0) {
             return null;
         }
@@ -171,10 +200,10 @@ public final class Addressing {
         while (rest < s.length() && !isWordChar(s.charAt(rest))) {
             rest++;
         }
-        return new Address(target, s.substring(rest).strip(), true, true);
+        return new Address(target, s.substring(rest).strip(), true, true, true);
     }
 
-    private static Address tryTrailing(String s, List<String> names) {
+    private static Address tryTrailing(String s, List<String> names, java.util.Set<String> reserved) {
         int end = s.length();
         while (end > 0 && !isWordChar(s.charAt(end - 1))) {
             end--; // trim trailing punctuation/space
@@ -194,7 +223,7 @@ public final class Addressing {
             return null; // a trailing vocative must be comma-delimited
         }
         String trail = s.substring(start, end);
-        int target = firstMatch(trail, names, true);
+        int target = firstMatch(trail, names, true, reserved);
         if (target < 0) {
             return null;
         }
@@ -202,16 +231,18 @@ public final class Addressing {
     }
 
     /** First candidate (nearest-first) whose name matches {@code word}; -1 if none. */
-    private static int firstMatch(String word, List<String> names, boolean allowFuzzy) {
+    private static int firstMatch(String word, List<String> names, boolean allowFuzzy,
+                                  java.util.Set<String> reserved) {
         for (int idx = 0; idx < names.size(); idx++) {
-            if (nameMatches(word, names.get(idx), allowFuzzy)) {
+            if (nameMatches(word, names.get(idx), allowFuzzy, reserved)) {
                 return idx;
             }
         }
         return -1;
     }
 
-    private static boolean nameMatches(String word, String name, boolean allowFuzzy) {
+    private static boolean nameMatches(String word, String name, boolean allowFuzzy,
+                                       java.util.Set<String> reserved) {
         if (name == null || name.isBlank()) {
             return false;
         }
@@ -221,7 +252,19 @@ public final class Addressing {
         if (w.equals(full) || w.equals(first)) {
             return true;
         }
-        return allowFuzzy && w.length() >= 3 && Fuzzy.jaroWinkler(w, first) >= NAME_FUZZY_THRESHOLD;
+        if (!allowFuzzy || isReserved(w, reserved)) {
+            return false;
+        }
+        return w.length() >= 3 && Fuzzy.jaroWinkler(w, first) >= NAME_FUZZY_THRESHOLD;
+    }
+
+    /** True when a word is too ordinary to be a vocative (checked raw and stemmed). */
+    private static boolean isReserved(String lowerWord, java.util.Set<String> reserved) {
+        if (COMMON_WORDS.contains(lowerWord) || reserved.contains(lowerWord)) {
+            return true;
+        }
+        String stem = Normalizer.stemToken(lowerWord);
+        return COMMON_WORDS.contains(stem) || reserved.contains(stem);
     }
 
     private static boolean isWordChar(char c) {

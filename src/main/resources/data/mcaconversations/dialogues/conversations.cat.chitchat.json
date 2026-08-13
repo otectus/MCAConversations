@@ -24,6 +24,32 @@
           "conditions": [
             {
               "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.toddler",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
               "age_group": "child"
             },
             {
@@ -89,6 +115,10 @@
             {
               "chance": 8,
               "personality": "gloomy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -116,6 +146,10 @@
             {
               "chance": 8,
               "current_chore": "fish"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -149,6 +183,10 @@
               "chance": 3,
               "time_min": 12000,
               "time_max": 14000
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -187,8 +225,90 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.toddler",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 150,
               "trait": "sirben"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -215,6 +335,10 @@
                 "id": "mcaconversations.state.food.trait.told",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -248,6 +372,10 @@
                 "id": "mcaconversations.state.food.trait.told",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -281,6 +409,10 @@
                 "id": "mcaconversations.state.food.trait.told",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -314,6 +446,10 @@
                 "id": "mcaconversations.state.food.trait.told",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -351,6 +487,10 @@
             {
               "chance": 3,
               "mood": "happy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -386,6 +526,10 @@
                 "id": "mcaconversations.cooldown.food",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -409,9 +553,27 @@
           "conditions": [
             {
               "chance": 100,
+              "age_group": "toddler"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.toddler",
+            "positive": 2
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
               "conversations_weather": {
                 "is": "storm"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -428,6 +590,10 @@
               "conversations_weather": {
                 "is": "rain"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -442,7 +608,13 @@
             "next": "conversations.cat.chitchat",
             "say": "conversations.weather.clear",
             "positive": 1
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            }
+          ]
         }
       ]
     },
@@ -454,9 +626,27 @@
           "conditions": [
             {
               "chance": 100,
+              "age_group": "toddler"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.toddler",
+            "positive": 2
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
               "conversations_holiday": {
                 "is": "spring_bloom"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -473,6 +663,10 @@
               "conversations_holiday": {
                 "is": "midsummer"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -489,6 +683,10 @@
               "conversations_holiday": {
                 "is": "harvest_festival"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -505,6 +703,10 @@
               "conversations_holiday": {
                 "is": "midwinter"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -521,6 +723,10 @@
               "conversations_season": {
                 "is": "spring"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -537,6 +743,10 @@
               "conversations_season": {
                 "is": "summer"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -553,6 +763,10 @@
               "conversations_season": {
                 "is": "autumn"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -569,6 +783,10 @@
               "conversations_season": {
                 "is": "winter"
               }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -583,7 +801,13 @@
             "next": "conversations.cat.chitchat",
             "say": "conversations.season.any",
             "positive": 1
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            }
+          ]
         }
       ]
     },

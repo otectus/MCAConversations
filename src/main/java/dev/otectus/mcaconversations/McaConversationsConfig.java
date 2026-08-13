@@ -297,10 +297,12 @@ public final class McaConversationsConfig {
                     .define("chatModeInsultDetection", true);
             chatModeLocalChat = b.comment(
                     "EXPERIMENTAL: cancel and rebroadcast opted-in players' chat only within the addressed",
-                    "radius. This downgrades their messages to unsigned system messages (disables client-side",
-                    "chat reporting for them; they are still logged to the server console) — set false to",
-                    "restore global, signed vanilla chat. See the spec's chat-signing notes.")
-                    .define("chatModeLocalChat", true);
+                    "radius (proximity/RP chat). This downgrades their messages to unsigned system messages",
+                    "(disables client-side chat reporting for them; they are still logged to the server",
+                    "console) and effectively removes global chat for opted-in players. Off by default since",
+                    "0.8.1 — solo players and RP packs can safely enable it; on public servers understand the",
+                    "chat-signing and moderation implications first. See the spec's chat-signing notes.")
+                    .define("chatModeLocalChat", false);
             chatModeGreetOnApproach = b.comment(
                     "Villagers may proactively greet an opted-in player entering the radius (once per",
                     "villager per player per day; see chatModeGreetChance).")

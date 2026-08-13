@@ -74,8 +74,15 @@ public final class Normalizer {
 
     private static final Set<String> STOPWORDS = Set.of(
             "the", "a", "an", "i", "me", "my", "we", "us", "it", "its", "is", "are", "was", "be",
+            // NOTE: "hey" is deliberately NOT a stopword — it is the leading token of a greeting
+            // ("hey Anna"), which Addressing needs in order to spot a greeting-prefixed address.
             "been", "of", "to", "in", "on", "at", "for", "with", "and", "or", "so", "well", "um",
-            "uh", "please", "hey", "ok", "okay", "just", "really", "very");
+            "uh", "please", "ok", "okay", "just", "really", "very");
+
+    /** The stopword set, exposed so {@link Addressing} can treat them as non-name tokens. */
+    static Set<String> stopwords() {
+        return STOPWORDS;
+    }
 
     /** Kept as features (they carry intent shape) — never flagged stop. */
     private static final Set<String> QUESTION_WORDS = Set.of(
@@ -353,6 +360,9 @@ public final class Normalizer {
                 {"let's", "let", "us"}, {"lets", "let", "us"},
                 {"gonna", "going", "to"}, {"wanna", "want", "to"}, {"gotta", "got", "to"},
                 {"ain't", "is", "not"}, {"aint", "is", "not"},
+                // Common typo, folded here so it reaches the index as "the" rather than an
+                // unknown stem that only fuzzy matching could rescue.
+                {"teh", "the"},
         };
         for (String[] p : pairs) {
             String[] parts = new String[p.length - 1];

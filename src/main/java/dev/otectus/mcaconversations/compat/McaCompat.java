@@ -387,6 +387,28 @@ public final class McaCompat {
         return false;
     }
 
+    /**
+     * The villager's MCA age state as a lowercase name ({@code baby}, {@code toddler},
+     * {@code child}, {@code teen}, {@code adult}) — the same vocabulary the native
+     * {@code age_group} dialogue condition matches. Safe default: empty.
+     *
+     * <p>Chat mode uses this to pick an age-appropriate voice: babies babble rather than answer,
+     * and toddlers get their own shorter variants of the chat-mode replies (see {@code AgeVoice}).
+     */
+    public static Optional<String> getAgeGroup(Entity villager) {
+        if (villager instanceof VillagerLike<?> v) {
+            try {
+                AgeState state = v.getAgeState();
+                return state == null
+                        ? Optional.empty()
+                        : Optional.of(state.name().toLowerCase(java.util.Locale.ROOT));
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("MCA getAgeGroup failed; defaulting empty", t);
+            }
+        }
+        return Optional.empty();
+    }
+
     // ------------------------------------------------------------------
     // Villages
     // ------------------------------------------------------------------

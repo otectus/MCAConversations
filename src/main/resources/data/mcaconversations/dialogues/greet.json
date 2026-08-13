@@ -24,6 +24,84 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "main",
+            "say": "conversations.checkin.toddler",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "main",
+            "say": "conversations.checkin.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "main",
+            "say": "conversations.checkin.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 20,
               "mood": "sad"
             },
@@ -34,6 +112,10 @@
             {
               "chance": 10,
               "personality": "gloomy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -62,6 +144,10 @@
               "chance": 3,
               "time_min": 0,
               "time_max": 3000
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {

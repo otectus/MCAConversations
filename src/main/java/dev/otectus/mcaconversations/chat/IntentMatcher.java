@@ -31,6 +31,8 @@ public final class IntentMatcher {
     private static final double MARGIN = 0.10;
     private static final double CONTEXT_THRESHOLD_RELIEF = 0.10;
     private static final int PHRASE_GAP_CAP = 4;
+    /** Two adjacent pattern literals may be separated by at most one filler token. */
+    private static final int ADJACENT_GAP_CAP = 1;
     private static final int PHRASE_WINDOW_CAP = 12;
     private static final int MIN_FUZZY_ANCHOR_LEN = 5;
 
@@ -104,22 +106,43 @@ public final class IntentMatcher {
                                 List<String> allStems, List<String> fuzzable, String currentQuestion) {
         Set<String> pos = msg.contentStems;
 
-        // --- Guards (cheap rejects) ---
-        for (String req : intent.requiresAllStems) {
-            if (!hasStem(req, pos, fuzzable)) {
-                return null;
-            }
-        }
-        if (!intent.requiresAnyStems.isEmpty()) {
-            boolean any = false;
-            for (String req : intent.requiresAnyStems) {
-                if (hasStem(req, pos, fuzzable)) {
-                    any = true;
-                    break;
+        // --- Phrase evidence (computed first: a matched phrase IS the anchor) ---
+        // requiresAll/requiresAny exist to stop a bag of weak keywords from claiming an intent.
+        // A whole authored phrase matching is stronger evidence than any single anchor stem, and
+        // insisting on the anchor as well rejected natural rewordings that the phrase already
+        // recognised. So the guards below apply only when no phrase matched.
+        double phrase = 0;
+        Set<String> phraseStems = new HashSet<>();
+        for (List<PhraseToken> pattern : intent.phrases) {
+            if (phraseMatches(allStems, pattern, index.synonyms())) {
+                phrase += PHRASE_BONUS;
+                for (PhraseToken pt : pattern) {
+                    if (!pt.wildcard()) {
+                        phraseStems.add(pt.stem());
+                    }
                 }
             }
-            if (!any) {
-                return null;
+        }
+        phrase = Math.min(phrase, PHRASE_CAP);
+
+        // --- Guards (cheap rejects) ---
+        if (phrase == 0) {
+            for (String req : intent.requiresAllStems) {
+                if (!hasStem(index, req, pos, fuzzable)) {
+                    return null;
+                }
+            }
+            if (!intent.requiresAnyStems.isEmpty()) {
+                boolean any = false;
+                for (String req : intent.requiresAnyStems) {
+                    if (hasStem(index, req, pos, fuzzable)) {
+                        any = true;
+                        break;
+                    }
+                }
+                if (!any) {
+                    return null;
+                }
             }
         }
 
@@ -134,7 +157,7 @@ public final class IntentMatcher {
                 quality = 1.0;
                 matchedStems.add(k);
             } else {
-                String fuzzy = fuzzyHit(k, fuzzable);
+                String fuzzy = fuzzyHit(index, k, fuzzable);
                 if (fuzzy != null) {
                     quality = FUZZY_QUALITY;
                     matchedStems.add(fuzzy);
@@ -145,18 +168,9 @@ public final class IntentMatcher {
             }
         }
         double base = intent.norm > 0 ? Math.min(1.0, kw / intent.norm) : 0;
+        matchedStems.addAll(phraseStems);
 
-        // --- Phrase & bigram boosts ---
-        double phrase = 0;
-        for (List<PhraseToken> pattern : intent.phrases) {
-            List<String> literals = literals(pattern);
-            if (phraseMatches(allStems, literals)) {
-                phrase += PHRASE_BONUS;
-                matchedStems.addAll(literals);
-            }
-        }
-        phrase = Math.min(phrase, PHRASE_CAP);
-
+        // --- Bigram boost ---
         double bigram = 0;
         for (String bg : intent.bigramStems) {
             if (msg.bigrams.contains(bg)) {
@@ -244,35 +258,48 @@ public final class IntentMatcher {
 
     // --- Helpers ---------------------------------------------------------------
 
-    private static boolean hasStem(String req, Set<String> pos, List<String> posTokenStems) {
+    private static boolean hasStem(IntentIndex index, String req, Set<String> pos,
+                                   List<String> posTokenStems) {
         if (pos.contains(req)) {
             return true;
         }
         // Fuzzy may satisfy an anchor only for sufficiently long stems (§6.5).
-        if (req.length() >= MIN_FUZZY_ANCHOR_LEN) {
-            return fuzzyHit(req, posTokenStems) != null;
+        if (req.length() >= MIN_FUZZY_ANCHOR_LEN && directFuzzyHit(req, posTokenStems) != null) {
+            return true;
+        }
+        // A typo'd *alias* should satisfy the anchor too: the index stores the canonical stem, but
+        // the player typed some member of the synonym class and misspelled it.
+        for (String alias : index.synonyms().aliasesOf(req)) {
+            if (alias.length() >= MIN_FUZZY_ANCHOR_LEN && directFuzzyHit(alias, posTokenStems) != null) {
+                return true;
+            }
         }
         return false;
     }
 
-    /** The message token stem that typo-matches {@code keyword}, or null. */
-    private static String fuzzyHit(String keyword, List<String> posTokenStems) {
-        for (String t : posTokenStems) {
-            if (Fuzzy.typoMatches(t, keyword)) {
-                return t;
+    /** As {@link #directFuzzyHit} but also tries every alias of {@code keyword}. */
+    private static String fuzzyHit(IntentIndex index, String keyword, List<String> posTokenStems) {
+        String direct = directFuzzyHit(keyword, posTokenStems);
+        if (direct != null) {
+            return direct;
+        }
+        for (String alias : index.synonyms().aliasesOf(keyword)) {
+            String hit = directFuzzyHit(alias, posTokenStems);
+            if (hit != null) {
+                return hit;
             }
         }
         return null;
     }
 
-    private static List<String> literals(List<PhraseToken> pattern) {
-        List<String> out = new ArrayList<>();
-        for (PhraseToken pt : pattern) {
-            if (!pt.wildcard()) {
-                out.add(pt.stem());
+    /** The message token stem that typo-matches {@code stem}, or null. */
+    private static String directFuzzyHit(String stem, List<String> posTokenStems) {
+        for (String t : posTokenStems) {
+            if (Fuzzy.typoMatches(t, stem)) {
+                return t;
             }
         }
-        return out;
+        return null;
     }
 
     /**
@@ -280,34 +307,78 @@ public final class IntentMatcher {
      * included), with each gap capped at {@link #PHRASE_GAP_CAP} tokens and the whole span capped at
      * {@link #PHRASE_WINDOW_CAP} (§6.4).
      */
-    static boolean phraseMatches(List<String> tokenStems, List<String> literals) {
+    /**
+     * True when {@code pattern} occurs in the message token stream.
+     *
+     * <p>A pattern is a list of literal stems with optional {@code *} wildcards between them. The
+     * search is a small backtracking walk rather than a greedy scan, because a greedy first-match
+     * can consume a literal at a position that makes a later one unreachable, failing a phrase that
+     * does occur. Each literal carries its own gap allowance: the first is free, one that follows a
+     * wildcard run may skip {@code 4 × wildcards} tokens, and two adjacent literals tolerate a
+     * single filler token ({@link #ADJACENT_GAP_CAP}) so "how is the work" still matches "how work".
+     * The whole match must span at most {@link #PHRASE_WINDOW_CAP} tokens.
+     *
+     * <p>Literals compare through {@link #literalMatches}, so a phrase also matches when the player
+     * used a synonym of the authored word or misspelled it.
+     */
+    static boolean phraseMatches(List<String> tokenStems, List<PhraseToken> pattern, SynonymTable syn) {
+        List<String> literals = new ArrayList<>();
+        List<Integer> maxGaps = new ArrayList<>();
+        int wildcards = 0;
+        for (PhraseToken pt : pattern) {
+            if (pt.wildcard()) {
+                wildcards++;
+                continue;
+            }
+            literals.add(pt.stem());
+            maxGaps.add(literals.size() == 1
+                    ? 0
+                    : (wildcards > 0 ? wildcards * PHRASE_GAP_CAP : ADJACENT_GAP_CAP));
+            wildcards = 0;
+        }
         if (literals.isEmpty()) {
             return false;
         }
-        int firstIdx = -1;
-        int prevIdx = -1;
-        int search = 0;
-        for (String lit : literals) {
-            int found = -1;
-            for (int j = search; j < tokenStems.size(); j++) {
-                if (prevIdx >= 0 && (j - prevIdx - 1) > PHRASE_GAP_CAP) {
-                    break; // gap to this literal exceeds the cap — no later index can be closer
-                }
-                if (tokenStems.get(j).equals(lit)) {
-                    found = j;
-                    break;
-                }
+        for (int start = 0; start < tokenStems.size(); start++) {
+            if (literalMatches(tokenStems.get(start), literals.get(0), syn)
+                    && matchFrom(tokenStems, literals, maxGaps, 1, start, start, syn)) {
+                return true;
             }
-            if (found < 0) {
-                return false;
-            }
-            if (firstIdx < 0) {
-                firstIdx = found;
-            }
-            prevIdx = found;
-            search = found + 1;
         }
-        return (prevIdx - firstIdx + 1) <= PHRASE_WINDOW_CAP;
+        return false;
+    }
+
+    /** Backtracking continuation of {@link #phraseMatches} from literal {@code li}. */
+    private static boolean matchFrom(List<String> tokenStems, List<String> literals,
+                                     List<Integer> maxGaps, int li, int prevIdx, int firstIdx,
+                                     SynonymTable syn) {
+        if (li == literals.size()) {
+            return prevIdx - firstIdx + 1 <= PHRASE_WINDOW_CAP;
+        }
+        int limit = Math.min(tokenStems.size() - 1, prevIdx + 1 + maxGaps.get(li));
+        for (int j = prevIdx + 1; j <= limit; j++) {
+            if (literalMatches(tokenStems.get(j), literals.get(li), syn)
+                    && matchFrom(tokenStems, literals, maxGaps, li + 1, j, firstIdx, syn)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** A pattern literal matches a token exactly, as a typo, or through its synonym class. */
+    private static boolean literalMatches(String token, String literal, SynonymTable syn) {
+        if (token.equals(literal)) {
+            return true;
+        }
+        if (literal.length() >= MIN_FUZZY_ANCHOR_LEN && Fuzzy.typoMatches(token, literal)) {
+            return true;
+        }
+        for (String alias : syn.aliasesOf(literal)) {
+            if (alias.length() >= MIN_FUZZY_ANCHOR_LEN && Fuzzy.typoMatches(token, alias)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static double clamp01(double v) {

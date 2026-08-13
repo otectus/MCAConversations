@@ -2,6 +2,7 @@
   "answers": [
     {
       "name": "work",
+      "constraints": "!toddler,!baby",
       "results": [
         {
           "baseChance": 0,
@@ -20,6 +21,58 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 12000
+            }
+          }
+        },
+        {
           "baseChance": 1,
           "actions": {
             "next": "conversations.work"
@@ -29,6 +82,7 @@
     },
     {
       "name": "work_offer",
+      "constraints": "!toddler,!baby",
       "results": [
         {
           "baseChance": 0,

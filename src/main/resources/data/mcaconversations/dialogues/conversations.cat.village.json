@@ -24,7 +24,89 @@
           "conditions": [
             {
               "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.village",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.village.toddler",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.village",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.village.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.village",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.village.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
               "constraints": "!has_village"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -43,6 +125,10 @@
             {
               "chance": 4,
               "rank": "mayor"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
@@ -65,7 +151,68 @@
     },
     {
       "name": "people",
+      "constraints": "!toddler,!baby",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.child",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.people",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.people",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "hearts_max": 9
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.people.teen",
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.people",
+              "var": "player",
+              "time": 48000
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -332,6 +479,7 @@
     },
     {
       "name": "rumors",
+      "constraints": "!toddler,!baby",
       "results": [
         {
           "baseChance": 0,

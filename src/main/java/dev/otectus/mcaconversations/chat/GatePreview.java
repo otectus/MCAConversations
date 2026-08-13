@@ -23,6 +23,11 @@ public final class GatePreview {
 
     /** True if this scored intent may be driven for {@code player} against {@code villager}. */
     public static boolean eligible(Entity villager, ServerPlayer player, Scored scored) {
+        // Babies never hold a conversation — AgeVoice babbles at them instead. A greeting is the
+        // one exception, so waving at a baby still gets an (adorable) reaction rather than silence.
+        if (McaCompat.isBaby(villager) && !(scored.isSystem() && "greet".equals(scored.system()))) {
+            return false;
+        }
         String category = scored.category();
         if (category != null && !McaConversationsConfig.isFeatureEnabled(category)) {
             return false;

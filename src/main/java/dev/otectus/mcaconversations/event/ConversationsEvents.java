@@ -29,6 +29,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -99,6 +100,35 @@ public final class ConversationsEvents {
             return; // consumed: local rebroadcast + pipeline run on one main-thread hop
         }
         ChatModeDispatcher.onChat(event);
+    }
+
+    // --- Startup summary -------------------------------------------------------
+
+    /**
+     * Logs, once, what chat mode will actually do on this server.
+     *
+     * <p>Chat mode changes how player chat behaves — who is opted in, whether villager replies are
+     * visible to bystanders, and (when {@code chatModeLocalChat} is on) whether messages stay
+     * radius-local and unsigned. Those are consequential enough that an operator should not have to
+     * read four config keys to discover them, so the effective combination is stated plainly in the
+     * log at startup.
+     */
+    @SubscribeEvent
+    public static void onServerStarted(ServerStartedEvent event) {
+        McaConversationsConfig.Common c = McaConversationsConfig.COMMON;
+        if (!c.enableChatMode.get()) {
+            return;
+        }
+        McaConversations.LOGGER.info(
+                "Chat mode is ON: players are opted {} by default; villager replies are {}; "
+                        + "radius-local player chat is {}. "
+                        + "Knobs: enableChatMode, chatModeDefaultOn, chatModePublicReplies, chatModeLocalChat.",
+                c.chatModeDefaultOn.get() ? "IN" : "OUT",
+                c.chatModePublicReplies.get()
+                        ? "public (nearby players see them)" : "private (whisper model)",
+                c.chatModeLocalChat.get()
+                        ? "ENABLED (opted-in players' chat becomes unsigned and radius-limited)"
+                        : "disabled (vanilla chat untouched)");
     }
 
     // --- Player name sync ------------------------------------------------------

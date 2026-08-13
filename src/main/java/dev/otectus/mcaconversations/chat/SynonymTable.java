@@ -1,7 +1,9 @@
 package dev.otectus.mcaconversations.chat;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,13 +22,35 @@ public final class SynonymTable {
 
     private final Map<String, String> stemToCanonical;
 
+    /** Reverse view of {@link #stemToCanonical}, canonical → the aliases that resolve to it. */
+    private final Map<String, List<String>> canonicalToAliases;
+
     private SynonymTable(Map<String, String> stemToCanonical) {
         this.stemToCanonical = stemToCanonical;
+        Map<String, List<String>> reverse = new HashMap<>();
+        stemToCanonical.forEach((stem, canonical) -> {
+            if (!stem.equals(canonical)) {
+                reverse.computeIfAbsent(canonical, k -> new ArrayList<>()).add(stem);
+            }
+        });
+        this.canonicalToAliases = reverse;
     }
 
     /** The canonical stem for {@code stem}, or {@code stem} itself when it is not an alias. */
     public String canonical(String stem) {
         return stemToCanonical.getOrDefault(stem, stem);
+    }
+
+    /**
+     * Every alias that canonicalizes to {@code canonical}, empty when it has none.
+     *
+     * <p>Phrase patterns are stored canonicalized, but a player's message is matched token by
+     * token, so a pattern token has to be able to recognise any spelling of itself. Expanding the
+     * canonical back to its aliases here lets phrase matching compare against the whole class
+     * without re-stemming the query.
+     */
+    public List<String> aliasesOf(String canonical) {
+        return canonicalToAliases.getOrDefault(canonical, Collections.emptyList());
     }
 
     public boolean isEmpty() {

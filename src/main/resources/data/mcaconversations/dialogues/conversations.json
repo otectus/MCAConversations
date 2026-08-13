@@ -2,6 +2,7 @@
   "answers": [
     {
       "name": "chitchat",
+      "constraints": "!baby",
       "results": [
         {
           "baseChance": 1,
@@ -13,6 +14,7 @@
     },
     {
       "name": "profession",
+      "constraints": "!toddler,!baby",
       "results": [
         {
           "baseChance": 1,
@@ -24,6 +26,7 @@
     },
     {
       "name": "village",
+      "constraints": "!baby",
       "results": [
         {
           "baseChance": 1,
@@ -35,6 +38,7 @@
     },
     {
       "name": "events",
+      "constraints": "!toddler,!baby",
       "results": [
         {
           "baseChance": 1,
@@ -46,6 +50,7 @@
     },
     {
       "name": "personal",
+      "constraints": "!baby",
       "results": [
         {
           "baseChance": 1,
@@ -57,12 +62,25 @@
     },
     {
       "name": "relationships",
-      "constraints": "family",
+      "constraints": "family,!baby",
       "results": [
         {
           "baseChance": 1,
           "actions": {
             "next": "conversations.cat.relationships"
+          }
+        }
+      ]
+    },
+    {
+      "name": "babble",
+      "constraints": "baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "main",
+            "say": "conversations.babble.baby"
           }
         }
       ]

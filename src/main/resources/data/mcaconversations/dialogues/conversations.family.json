@@ -46,6 +46,14 @@
             {
               "chance": 3,
               "personality": "peppy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
             }
           ],
           "actions": {
@@ -120,6 +128,32 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.memories",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "next": "conversations.family",
+            "say": "conversations.family.memories.toddler",
+            "positive": 3,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.memories",
+              "var": "player",
+              "time": 72000
+            }
+          }
+        },
+        {
           "baseChance": 5,
           "conditions": [
             {
@@ -129,6 +163,10 @@
             {
               "chance": 3,
               "personality": "witty"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
             }
           ],
           "actions": {
