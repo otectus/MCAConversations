@@ -1,0 +1,168 @@
+{
+  "answers": [
+    {
+      "name": "praise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.ordinary.praise",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.praise",
+              "deltas": {
+                "respect": 4,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.praise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.ordinary.advise",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.advise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.advise.welcome"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.ordinary.advise",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.advise",
+              "deltas": {
+                "respect": -2,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.advise.unwanted"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.advise",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.advise.neutral"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_them_work",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.ordinary.let_them_work",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.let_them_work",
+              "deltas": {
+                "respect": 2,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.let_them_work"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

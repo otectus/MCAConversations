@@ -97,6 +97,34 @@ public final class McaCompat {
         return 0;
     }
 
+    /**
+     * Moves hearts through MCA's own reward path — the same call its native {@code positive}/
+     * {@code negative} dialogue actions make — so the heart particle, the interaction-fatigue bump,
+     * the {@code HEARTS_CRITERION} advancement trigger and the mood change all still happen.
+     *
+     * <p>Returns the <b>measured</b> change ({@code after − before}), not the requested one. MCA
+     * doubles a negative delta inside {@code rewardHearts} for a {@code SENSITIVE} villager, so the
+     * requested number is not always what the player receives, and the honest figure is the one to
+     * log and to show as chat heart feedback.
+     *
+     * <p>Note that MCA's native actions call {@code modifyMoodValue} once themselves <em>and</em>
+     * again inside {@code rewardHearts}; this path moves mood once, which is the intended behaviour
+     * for guarded conversation outcomes. Safe default: 0 (nothing moved). <b>Server side only.</b>
+     */
+    public static int rewardHearts(Entity villager, ServerPlayer player, int delta) {
+        if (delta == 0 || player == null || !(villager instanceof VillagerEntityMCA mca)) {
+            return 0;
+        }
+        try {
+            int before = getHearts(player, villager);
+            mca.getVillagerBrain().rewardHearts(player, delta);
+            return getHearts(player, villager) - before;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA rewardHearts({}) failed; no hearts moved", delta, t);
+            return 0;
+        }
+    }
+
     // ------------------------------------------------------------------
     // World state (weather; season/holiday later)
     // ------------------------------------------------------------------

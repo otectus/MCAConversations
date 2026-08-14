@@ -66,13 +66,23 @@ public final class ChatDelivery {
             return;
         }
         String suffix = feedback == null ? "" : heartsSuffix(feedback.heartsDelta);
-        if (suffix.isEmpty()) {
-            speaker.sendSystemMessage(rendered);
-        } else {
-            feedback.heartsDelta = 0; // consume: a multi-line exchange shows its feedback exactly once
-            speaker.sendSystemMessage(rendered.copy().append(
-                    Component.literal(suffix).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)));
+        boolean hasOptions = feedback != null && feedback.options != null;
+        Component forSpeaker = rendered;
+        if (!suffix.isEmpty() || hasOptions) {
+            MutableComponent personal = rendered.copy();
+            if (!suffix.isEmpty()) {
+                feedback.heartsDelta = 0; // consume: an exchange shows its feedback exactly once
+                personal.append(Component.literal(suffix)
+                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            }
+            if (hasOptions) {
+                // The choices belong to the player being asked, never to bystanders overhearing.
+                personal.append(Component.literal("\n")).append(feedback.options);
+                feedback.options = null; // consume: shown once, under the line that prompted them
+            }
+            forSpeaker = personal;
         }
+        speaker.sendSystemMessage(forSpeaker);
         if (publicReplies && villager.level() instanceof ServerLevel level) {
             double r2 = radius * radius;
             for (ServerPlayer other : level.players()) {

@@ -7,6 +7,95 @@ Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
 Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
 
+## [1.1.0] - unreleased
+
+**Branching conversations, phase one.** Asking a villager a question no longer pays you for the
+click. They answer; you choose what to say back; your reply is what moves hearts. Two topics are
+converted in this release — **the day** and **fears** — chosen deliberately as the shallowest and
+the deepest, to prove the grammar before the remaining twenty-six follow.
+
+> ### Live verification has NOT been done for this release
+>
+> This release ships on unit tests, lint and a successful reobfuscated build. The production
+> checklist — a real Forge instance with MCA, fresh and upgraded worlds, a dedicated server, two
+> concurrent players, all three hub entry modes, relog and restart persistence, MCA: Quests and
+> Serene Seasons present and absent, every config off-state, and deliberate farming and
+> duplicate-packet attempts — **has not been run**. ForgeGradle's `runClient` is not a substitute,
+> because MCA's own mixins misbehave in that runtime. Treat 1.1.0 as untested in play.
+
+### The economy moved
+
+- **Opener rewards are gone from the converted topics.** Asking "how's your day?" was worth +2 or
+  +3 on the click; it is now worth nothing. What the day is worth is decided by what you say next,
+  and the ceiling for a whole mundane conversation is +2.
+- **Losses are real and cannot be refunded.** Brushing off someone's bad day costs a heart; doubling
+  down when they object costs two more. Apologising afterwards settles the *tension* — the invisible
+  relationship vector — and grants no hearts at all. You cannot pay your way out of having been
+  dismissive.
+- **Every conversation heart change is guarded.** In order: duplicate-transaction refusal → replay
+  policy (full, then half, then nothing for the same decision the same day; milestone outcomes fire
+  once ever) → per-conversation budget by depth class → per-villager per-player daily budget → MCA's
+  own `rewardHearts`. Positive and negative budgets are separate, so antagonising a villager never
+  creates room to earn more back.
+- **No universally correct button.** A joke on a bad day lands for a playful or upbeat villager,
+  falls flat on a gloomy, sensitive or anxious one, and is politely received by everyone else — no
+  dice involved, just who they are. Same for unsolicited advice while they're working.
+
+### Conversations that remember
+
+- **A three-stage arc for fears**, advancing at most one stage per conversation and continuing on
+  later days: they name it, you work out what would help, and later you ask how it went.
+- **A one-shot revelation.** Getting someone to open all the way about what frightens them fires
+  once, ever, and a later conversation says something different because of it.
+- **A boundary that can be crossed.** Pressing after a refusal — not the first attempt, the one
+  *after* being told no — sets a permanent scar. The topic opens warily from then on, the warm route
+  closes, and an honest apology reopens a guarded one without erasing what happened.
+- **A mutually exclusive promise.** Pledging to stand with them, or honestly saying you can't, are
+  both remembered, are read back differently later, and the first one taken decides it for good.
+
+### Chat mode reaches all of it
+
+- 57 new context-scoped intents with 171 tested utterances, covering every substantive answer in
+  both trees.
+- **Numbered quick-replies:** a villager who has put a decision to you lists the choices, and `2`
+  picks the second one. It is the same `selectAnswer` call the GUI button makes.
+- **Live-decision filtering:** while a decision is open, matching scores the choices on the table
+  plus the ways out. A weak global topic match can no longer masquerade as your answer; interrupting
+  requires an explicit subject change that clears an absolute floor and beats the best contextual
+  reading by a margin.
+
+### New for datapacks
+
+`conversations_session`, `conversations_affection_apply`, `conversations_progress_apply` and the
+`conversations_progress` condition; a conversation catalog under `conversation_catalog/`; a
+per-personality interiority registry under `interiority/`; and `stance` / `arc` fields on
+`conversations_check`. Full reference in `DATAPACK.md`, including three MCA engine rules that were
+never written down before and that decide how a result must be authored.
+
+### Fixed / completed
+
+- **`Dispositions.baseline` returned zero for every personality.** It now reads real resting values
+  from the interiority registry, so a crabby villager genuinely starts colder than a friendly one.
+- **Dialogue checks used a personality fit of zero and an arc stage of zero.** Both are real now: a
+  check can name a stance family, and the villager's personality moves the outcome by less than one
+  tier margin; a check can name an arc, so the seeded roll changes when the relationship does.
+- **MCA's GUI submission path validates nothing** — no distance, open-screen, constraint or replay
+  check, byte-identical in 7.6.20 and 7.7.0-beta.2. A narrow soft-failing mixin now rejects, *for
+  this mod's questions only*, an answer that was never offered, a duplicate submission in the same
+  tick, and any attempt to drive a villager that MCA says is mid-conversation with someone else.
+- **The progress ledger is migrated field-by-field, never discarded.** Unlike the disposition store,
+  a world opened once with a newer build and rolled back keeps its arcs, milestones and promises.
+
+### Known gaps
+
+- Twenty-six topics still pay out on the click. The count is tracked as a migration ledger inside
+  `ConversationGraphLintTest`, which fails if a topic is converted without removing its row.
+- Interiority profiles carry resting baselines and stance bias only. Wants, boundaries and secret
+  pools arrive with the topics that read them — storing state nothing reads is how save files rot.
+- Converted results no longer populate MCA's analysis tooltip. That tooltip explains *lottery
+  chances*, and a deterministic authored branch has none; fabricating one would be both misleading
+  and a mechanics leak. The villager's words are the feedback.
+
 ## [1.0.0] - 2026-08-13
 
 **MCA Reborn 7.7 support**, on top of everything 0.9.0 shipped. 0.9.0 does not start on MCA 7.7 at

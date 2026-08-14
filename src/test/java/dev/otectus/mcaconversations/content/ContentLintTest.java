@@ -52,7 +52,7 @@ class ContentLintTest {
             "min_infection_progress", "min_pregnancy_progress", "pregnancy_child_gender", "memory",
             "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
             "conversations_season", "conversations_holiday", "conversations_personality",
-            "conversations_disposition", "conversations_check",
+            "conversations_disposition", "conversations_check", "conversations_progress",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed");
 
@@ -60,7 +60,8 @@ class ContentLintTest {
     private static final Set<String> ACTION_KEYS = Set.of(
             "next", "say", "positive", "negative", "command", "quit", "remember",
             "conversations_record", "conversations_say", "conversations_gossip_say",
-            "conversations_disposition_apply", "conversations_quest_open");
+            "conversations_disposition_apply", "conversations_quest_open",
+            "conversations_session", "conversations_affection_apply", "conversations_progress_apply");
 
     /** The four quest-aware condition keys, whose values are objects ({scope,min}), not MCA enum strings. */
     private static final Set<String> QUEST_CONDITION_KEYS = Set.of(
@@ -95,7 +96,8 @@ class ContentLintTest {
             "promised", "cleric", "adventurer", "mercenary", "outlawed", "trader", "orphan",
             "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
     private static final Set<String> FEATURES = Set.of(
-            "topics", "states", "templates", "gossip", "quests", "world", "dispositions", "checks");
+            "topics", "states", "templates", "gossip", "quests", "world", "dispositions", "checks",
+            "branching", "chat");
 
     /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
     private static final Set<String> WEATHERS = Set.of("clear", "rain", "storm");

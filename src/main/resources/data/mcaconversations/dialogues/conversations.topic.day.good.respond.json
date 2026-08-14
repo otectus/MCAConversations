@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "celebrate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.good.celebrate",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.good.celebrate",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.day.good.followup",
+            "say": "conversations.day.good.celebrate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "day.good.ask_more",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.day.good.followup",
+            "say": "conversations.day.good.ask_more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deflate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.good.deflate",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.good.deflate",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.day.good.followup",
+            "say": "conversations.day.good.deflate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.good.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

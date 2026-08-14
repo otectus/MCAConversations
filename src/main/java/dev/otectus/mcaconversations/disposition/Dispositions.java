@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.disposition;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.interiority.Interiority;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -16,8 +17,8 @@ import java.util.Map;
  * addition to the JSON/adapter gates — romance gating is layered, never single-point). Everything
  * fails safe to the baseline / a no-op.
  *
- * <p>Baselines are neutral (0) until the interiority data lands in 0.9.0; this is the single seam
- * where per-personality resting baselines plug in.
+ * <p>Baselines come from the reloadable per-personality interiority registry; this is the single seam
+ * where they plug in.
  */
 public final class Dispositions {
 
@@ -28,9 +29,21 @@ public final class Dispositions {
         return McaConversationsConfig.COMMON.enableDispositions.get();
     }
 
-    /** The personality resting baseline for an axis. Neutral until interiority data lands (0.9.0). */
+    /**
+     * The personality resting baseline for an axis: where a villager of this personality sits before
+     * the player has done anything at all. Read from the reloadable interiority registry, so a
+     * personality with no profile is simply neutral and a pack can retune one without touching Java.
+     */
     public static int baseline(Entity villager, DispositionAxis axis) {
-        return 0;
+        if (villager == null || axis == null) {
+            return 0;
+        }
+        try {
+            return Interiority.baseline(villager, axis);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("interiority baseline read failed; defaulting neutral", t);
+            return 0;
+        }
     }
 
     /**

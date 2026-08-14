@@ -8,6 +8,16 @@ import dev.otectus.mcaconversations.check.CheckResolver;
 import dev.otectus.mcaconversations.check.CheckTier;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
+import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.DepthClass;
+import dev.otectus.mcaconversations.conversation.SessionDirective;
+import dev.otectus.mcaconversations.conversation.TopicEntry;
+import dev.otectus.mcaconversations.progress.Affection;
+import dev.otectus.mcaconversations.progress.AffectionApply;
+import dev.otectus.mcaconversations.progress.Progress;
+import dev.otectus.mcaconversations.progress.ProgressApply;
+import dev.otectus.mcaconversations.progress.ProgressQuery;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.DispositionQuery;
@@ -58,6 +68,14 @@ import forge.net.mca.resources.data.dialogue.Actions;
  *       check resolver lands on this result's declared tier</li>
  *   <li>action {@code conversations_disposition_apply: {topic, deltas}} → moves disposition axes
  *       through the farming guards</li>
+ *   <li>condition {@code conversations_progress: {arc|milestone|exclusive, …}} → 1 when the durable
+ *       narrative ledger says so (arc stage in range, milestone set, exclusive side taken)</li>
+ *   <li>action {@code conversations_session: {op, topic?, budget?, branch?}} → frames the exchange on
+ *       the shared conversation session; never rewards anything itself</li>
+ *   <li>action {@code conversations_affection_apply: {decision, delta, budget?, policy?}} → the only
+ *       guarded route to a heart change inside branching content</li>
+ *   <li>action {@code conversations_progress_apply: {arc|milestone|exclusive, …}} (or an array) →
+ *       moves arc stages, fires one-shot milestones, decides exclusive choices</li>
  * </ul>
  */
 public final class ConversationsMcaRegistrar {
@@ -265,6 +283,21 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // Where a relationship stands in an authored arc, or whether a one-shot milestone or an
+        // exclusive promise has been recorded. Reads the progress ledger, which is deliberately
+        // independent of the disposition vector so narrative state survives with that feature off.
+        GiftPredicate.register("conversations_progress",
+                (json, name) -> SafeParse.orNull("conversations_progress", json,
+                        () -> ProgressQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        return query != null && Progress.matches(villager, player, query) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_progress failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
         // --- Quest-aware conditions (MCA: Quests integration; return 0 when that mod is absent) ---
         // These keys are always registered so dialogue JSON referencing them stays a known key and
         // scores 0 (never a crash) on an MCA-only install. The lambdas touch a Quests class only through
@@ -352,6 +385,58 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // --- Branching layer (1.1.0): session, guarded affection, narrative progress ---
+
+        // Starts, branches, or ends a topic on the shared conversation session. Carries no reward of
+        // its own — an opener is not kindness (plan §3.2) — it only frames what follows.
+        Actions.register("conversations_session",
+                (json, name) -> SafeParse.orNull("conversations_session", json,
+                        () -> SessionDirective.fromJson(json.getAsJsonObject())),
+                directive -> (villager, player) -> {
+                    try {
+                        if (directive != null) {
+                            applySession(directive, villager, player);
+                        }
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_session failed; ignoring", t);
+                    }
+                });
+
+        // The one guarded route from authored content to a visible heart change. Runs the full chain:
+        // duplicate-transaction refusal, replay policy, per-conversation budget, per-day budget, then
+        // MCA's own rewardHearts. Content must never use native positive/negative inside a branch.
+        Actions.register("conversations_affection_apply",
+                (json, name) -> SafeParse.orNull("conversations_affection_apply", json,
+                        () -> AffectionApply.fromJson(json.getAsJsonObject())),
+                directive -> (villager, player) -> {
+                    try {
+                        if (directive != null) {
+                            Affection.apply(villager, player, directive);
+                        }
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_affection_apply failed; ignoring", t);
+                    }
+                });
+
+        // Moves durable narrative state: an arc stage (one step at a time, clamped to the catalog
+        // bound), a one-shot milestone, or one side of a mutually exclusive choice. Accepts one object
+        // or an array of them, because a result may need several and JSON keys cannot repeat.
+        Actions.register("conversations_progress_apply",
+                (json, name) -> json,
+                json -> (villager, player) -> {
+                    try {
+                        if (json.isJsonArray()) {
+                            for (var element : json.getAsJsonArray()) {
+                                applyProgress(element.getAsJsonObject(), villager, player);
+                            }
+                        } else {
+                            applyProgress(json.getAsJsonObject(), villager, player);
+                        }
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_progress_apply failed; ignoring", t);
+                    }
+                });
+
         // Opens (or directly accepts from) the MCA: Quests menu for this villager. No-op when Quests absent.
         Actions.register("conversations_quest_open",
                 (json, name) -> SafeParse.orNull("conversations_quest_open", json,
@@ -374,8 +459,46 @@ public final class ConversationsMcaRegistrar {
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
                 + "/conversations_weather/conversations_season/conversations_holiday/conversations_personality/conversations_disposition"
-                + "/conversations_check/conversations_quest_* and actions conversations_record/conversations_say"
-                + "/conversations_gossip_say/conversations_disposition_apply/conversations_quest_open");
+                + "/conversations_check/conversations_progress/conversations_quest_* and actions conversations_record/conversations_say"
+                + "/conversations_gossip_say/conversations_disposition_apply/conversations_session"
+                + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open");
+    }
+
+    /**
+     * Applies one {@code conversations_session} op. The depth class comes from the catalog unless the
+     * result overrides it, so a topic's depth is declared in exactly one place.
+     */
+    private static void applySession(SessionDirective directive,
+                                     forge.net.mca.entity.VillagerEntityMCA villager,
+                                     net.minecraft.server.level.ServerPlayer player) {
+        long now = villager.level().getGameTime();
+        switch (directive.op()) {
+            case BEGIN -> {
+                String topic = directive.topic().orElseThrow();
+                DepthClass budget = directive.budget()
+                        .or(() -> ConversationCatalogLoader.topic(topic).map(TopicEntry::depth))
+                        .orElse(DepthClass.QUICK);
+                ConversationSessions.beginTopic(player.getUUID(), villager.getUUID(), topic, budget, now);
+                if (McaConversationsConfig.COMMON.debugBranching.get()) {
+                    McaConversations.LOGGER.info("[branch] session begin topic={} budget={} villager={} player={}",
+                            topic, budget.key(), villager.getUUID(), player.getName().getString());
+                }
+            }
+            case BRANCH -> ConversationSessions.get(player.getUUID(), now)
+                    .setBranch(directive.branch().orElse(null));
+            case END -> ConversationSessions.endTopic(player.getUUID(), now);
+        }
+    }
+
+    /** Parses and applies one {@code conversations_progress_apply} entry, containing parse failures. */
+    private static void applyProgress(com.google.gson.JsonObject json,
+                                      forge.net.mca.entity.VillagerEntityMCA villager,
+                                      net.minecraft.server.level.ServerPlayer player) {
+        ProgressApply directive = SafeParse.orNull("conversations_progress_apply", json,
+                () -> ProgressApply.fromJson(json));
+        if (directive != null) {
+            Progress.apply(villager, player, directive);
+        }
     }
 
     /** Scores a {@code conversations_quest_*} condition through the {@link QuestsBridge} SPI; 0 when Quests absent. */

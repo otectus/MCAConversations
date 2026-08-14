@@ -4,6 +4,8 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.Dispositions;
+import dev.otectus.mcaconversations.interiority.Interiority;
+import dev.otectus.mcaconversations.progress.Progress;
 import dev.otectus.mcaconversations.state.ConversationState;
 import dev.otectus.mcaconversations.state.MemoryIds;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,16 +41,18 @@ public final class CheckContextFactory {
         boolean vectorEnabled = Dispositions.enabled();
         int axisValue = vectorEnabled ? Dispositions.axis(villager, player, check.axis()) : 0;
         int hearts = McaCompat.getHearts(player, villager);
-        // Interiority check_bias plugs in here in 0.9.0; neutral until then.
-        int personalityFit = 0;
+        // How well this kind of thing lands on this personality. Bounded by the interiority profile's
+        // own clamp to less than one tier margin, so it colours the outcome without deciding it.
+        int personalityFit = check.stance().map(stance -> Interiority.stanceBias(villager, stance)).orElse(0);
         int moodAdjust = MoodModifiers.moodAdjust(McaCompat.getMoodName(villager).orElse(null))
                 + MoodModifiers.stateAdjust(
                         hasState(villager, player, ConversationState.GRIEVING),
                         hasState(villager, player, ConversationState.ANNOYED),
                         hasState(villager, player, ConversationState.GRATEFUL),
                         hasState(villager, player, ConversationState.SMITTEN));
-        // Arc stages land in 0.9.0; stage 0 until then.
-        int arcStage = 0;
+        // The real arc stage, so re-rolling is impossible within a stage but the dice genuinely change
+        // once the relationship moves on.
+        int arcStage = check.arc().map(arcId -> Progress.arcStage(villager, player, arcId)).orElse(0);
         int roll = CheckSeed.roll(villager.getUUID(), player.getUUID(), check.id(), arcStage,
                 villager.level().getDayTime());
         return Optional.of(new CheckInputs(axisValue, hearts, personalityFit, moodAdjust, roll,

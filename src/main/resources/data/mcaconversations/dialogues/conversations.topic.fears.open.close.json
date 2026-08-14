@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "thank",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.open.thank",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.thank",
+              "deltas": {
+                "warmth": 2,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.open.thank"
+          }
+        }
+      ]
+    },
+    {
+      "name": "means",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.open.means",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.means",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.open.means"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.open.close_leave"
+          }
+        }
+      ]
+    }
+  ]
+}

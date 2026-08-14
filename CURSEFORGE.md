@@ -15,6 +15,34 @@ what you've talked about before.
 
 ## What it does
 
+### 💬 It's a conversation, not a vending machine *(new in 1.1.0)*
+Asking a villager how their day went used to hand you hearts for the click. Not any more. Now they
+**answer** — and you choose what to say back, and *that* is what counts.
+
+Find someone having a rotten day and you can sit with it, ask what happened, offer to take
+something off their hands — or tell them everyone has bad days and watch their face close. Apologise
+afterwards and the air clears, but the hearts don't come back: being dismissive isn't undone by
+saying sorry.
+
+There's no correct button. Crack a joke on a bad day and the playful blacksmith laughs; the gloomy
+one asks you not to. Offer the busy farmer a faster way to do her job and she'll either thank you
+for being blunt or add it to the list of things she's apparently doing wrong — depending entirely on
+who she is.
+
+Two topics are converted so far — **their day** and **their fears** — chosen as the shallowest and
+the deepest. Everything else works exactly as it did while the rest catch up, and one config toggle
+puts it all back the old way.
+
+### 🕯️ They hold you to what you said *(new in 1.1.0)*
+Get a villager to tell you what really frightens them and it isn't a one-off scene. Days later
+they'll bring it up themselves, ask you what you think would help, and later still tell you how it's
+going. Promise you'll stand with them and they remember the promise — by name, out loud, a week
+on. Say honestly that you can't promise that, and they remember *that* instead, and respect it.
+
+Push them after they've told you no, though, and it's permanent. The topic opens warily from then
+on, the warm route closes, and the only way back is an apology that doesn't pretend it never
+happened.
+
 ### 🗣️ Just talk to them
 Skip the menus entirely: type **`Hey Coralia! How's your day going?`** in normal chat and Coralia
 answers — in chat, in her own voice, through the exact same dialogue engine as the GUI (same heart
@@ -33,6 +61,9 @@ hand-written.
   for a while, *"never mind"* to change the subject. Insult one and they'll take it personally.
 - Multi-turn depth works in chat too: get a villager to open up about their fears, then answer
   *"You could face it — I'd stand with you."*
+- When a villager puts a real choice to you, the options come with their reply, numbered — answer in
+  your own words, or just type `2`. While you're mid-decision an idle *"nice weather"* won't be
+  mistaken for your answer.
 - Everything is a config toggle (whole feature, greetings, attention, local chat, thresholds), it's
   per-player opt-out (`/conversations chat off`), and modpacks can add their own topics and synonyms
   via datapack.
@@ -168,6 +199,9 @@ Everything is toggleable in `config/mcaconversations-common.toml` (generated on 
 - Enable/disable topics, conversation moods, templated lines, weather/season/holiday lines, and village gossip independently.
 - Toggle the relationship vector, dialogue checks, and four-tier outcomes separately — each falls
   back to a simpler documented behavior, all the way down to the classic pre-RPG experience.
+- Turn branching conversations off entirely and converted topics go back to their old one-line
+  answers, payout and all. If you'd rather the new economy were gentler or harsher, there's a global
+  multiplier, separate daily caps for hearts gained and lost, and a stronger-negatives switch.
 - Tune gossip scan frequency, event retention, how long gratitude lasts, each mood's duration, the calendar year length, which village events (marriage, birth, arrival, departure, …) get noticed, and the relationship system's gain/decay rates and daily anti-farming caps.
 
 Disabled features degrade to graceful fallback lines rather than breaking mid-conversation.

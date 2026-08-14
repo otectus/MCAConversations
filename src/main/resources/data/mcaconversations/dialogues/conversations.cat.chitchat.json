@@ -12,10 +12,20 @@
                 "id": "mcaconversations.cooldown.day",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.chitchat",
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "again"
+            },
+            "next": "conversations.topic.day.again.respond",
             "say": "conversations.day.again"
           }
         },
@@ -32,17 +42,26 @@
                 "id": "mcaconversations.cooldown.day",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.chitchat",
-            "say": "conversations.day.toddler",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "toddler"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
               "var": "player",
               "time": 12000
-            }
+            },
+            "next": "conversations.topic.day.toddler.respond",
+            "say": "conversations.day.toddler"
           }
         },
         {
@@ -58,17 +77,26 @@
                 "id": "mcaconversations.cooldown.day",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.chitchat",
-            "say": "conversations.day.child",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "child"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
               "var": "player",
               "time": 12000
-            }
+            },
+            "next": "conversations.topic.day.young.respond",
+            "say": "conversations.day.child"
           }
         },
         {
@@ -84,120 +112,355 @@
                 "id": "mcaconversations.cooldown.day",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.chitchat",
-            "say": "conversations.day.teen",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "teen"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
               "var": "player",
               "time": 12000
-            }
+            },
+            "next": "conversations.topic.day.young.respond",
+            "say": "conversations.day.teen"
           }
         },
         {
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 20,
-              "mood": "sad"
-            },
-            {
-              "chance": 30,
+              "chance": 100,
               "mood": "depressed"
             },
             {
-              "chance": 30,
-              "mood": "unhappy"
+              "chance": 100,
+              "mood": "sad"
             },
             {
-              "chance": 8,
-              "conversations_personality": "gloomy"
+              "chance": 100,
+              "mood": "unhappy"
             },
             {
               "chance": -2000,
               "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.chitchat",
-            "say": "conversations.day.rough",
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "rough"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.rough.respond",
+            "say": "conversations.day.rough"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "happy"
+            },
+            {
+              "chance": 100,
+              "mood": "overjoyed"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "good"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.good.respond",
+            "say": "conversations.day.good"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "current_chore": "chop"
+            },
+            {
+              "chance": 100,
+              "current_chore": "harvest"
+            },
+            {
+              "chance": 100,
+              "current_chore": "fish"
+            },
+            {
+              "chance": 100,
+              "current_chore": "hunt"
+            },
+            {
+              "chance": 100,
+              "current_chore": "prospect"
+            },
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "mood": "happy"
+            },
+            {
+              "chance": -2000,
+              "mood": "overjoyed"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "working"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.ordinary.respond",
+            "say": "conversations.day.working"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "mood": "happy"
+            },
+            {
+              "chance": -2000,
+              "mood": "overjoyed"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "chop"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "harvest"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "fish"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "hunt"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "prospect"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "plain"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.ordinary.respond",
+            "say": "conversations.day.plain"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "depressed"
+            },
+            {
+              "chance": 100,
+              "mood": "sad"
+            },
+            {
+              "chance": 100,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
             "positive": 3,
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
               "var": "player",
               "time": 12000
-            }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough"
           }
         },
         {
-          "baseChance": 2,
+          "baseChance": 1,
           "conditions": [
             {
-              "chance": 8,
-              "current_chore": "chop"
-            },
-            {
-              "chance": 8,
-              "current_chore": "harvest"
-            },
-            {
-              "chance": 8,
-              "current_chore": "fish"
-            },
-            {
               "chance": -2000,
-              "age_group": "toddler"
+              "conversations_enabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.chitchat",
-            "say": "conversations.day.working",
             "positive": 2,
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
               "var": "player",
               "time": 12000
-            }
-          }
-        },
-        {
-          "baseChance": 5,
-          "conditions": [
-            {
-              "chance": 4,
-              "mood": "happy"
             },
-            {
-              "chance": 3,
-              "conversations_personality": "peppy"
-            },
-            {
-              "chance": 3,
-              "time_min": 0,
-              "time_max": 3000
-            },
-            {
-              "chance": 3,
-              "time_min": 12000,
-              "time_max": 14000
-            },
-            {
-              "chance": -2000,
-              "age_group": "toddler"
-            }
-          ],
-          "actions": {
             "next": "conversations.cat.chitchat",
-            "say": "conversations.day.good",
-            "positive": 2,
-            "conversations_record": {
-              "id": "mcaconversations.cooldown.day",
-              "var": "player",
-              "time": 12000
-            }
+            "say": "conversations.day.plain"
           }
         }
       ]

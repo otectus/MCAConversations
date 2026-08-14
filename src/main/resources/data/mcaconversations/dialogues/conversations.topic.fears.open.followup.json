@@ -1,0 +1,268 @@
+{
+  "answers": [
+    {
+      "name": "pledge",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "exclusive": "fears.support",
+              "member": "pledged"
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.pledge",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.pledge",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.pledge"
+          }
+        }
+      ]
+    },
+    {
+      "name": "step_back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "exclusive": "fears.support",
+              "member": "stepped_back"
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.step_back",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.step_back",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.step_back"
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.open.challenge",
+                "tier": "crit",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "challenge",
+                "arc": "fears"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.challenge.crit",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.challenge",
+              "deltas": {
+                "respect": 6,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.challenge.crit"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.open.challenge",
+                "tier": "success",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "challenge",
+                "arc": "fears"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.challenge",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.challenge",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.challenge.success"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.open.challenge",
+                "tier": "partial",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "challenge",
+                "arc": "fears"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.challenge",
+              "deltas": {
+                "respect": 1,
+                "tension": 1
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.challenge.partial"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "fears.open.challenge",
+                "tier": "rebuff",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "challenge",
+                "arc": "fears"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.challenge.rebuff",
+              "delta": -2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.challenge",
+              "deltas": {
+                "tension": 5,
+                "respect": -2
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.challenge.rebuff"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.challenge",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.challenge",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.challenge.plain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.open.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

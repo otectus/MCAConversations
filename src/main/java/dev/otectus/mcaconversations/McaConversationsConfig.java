@@ -41,6 +41,7 @@ public final class McaConversationsConfig {
             case "world" -> COMMON.enableWeatherLines.get();
             case "dispositions" -> COMMON.enableDispositions.get();
             case "checks" -> COMMON.enableChecks.get();
+            case "branching" -> COMMON.enableBranching.get();
             case "chat" -> COMMON.enableChatMode.get();
             default -> true;
         };
@@ -67,6 +68,14 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue enableTemplates;
         public final ForgeConfigSpec.BooleanValue enableGossip;
         public final ForgeConfigSpec.BooleanValue enableQuests;
+        public final ForgeConfigSpec.BooleanValue enableBranching;
+
+        public final ForgeConfigSpec.DoubleValue conversationHeartMultiplier;
+        public final ForgeConfigSpec.IntValue conversationDailyPositiveCap;
+        public final ForgeConfigSpec.IntValue conversationDailyNegativeCap;
+        public final ForgeConfigSpec.BooleanValue strongerNegativeOutcomes;
+        public final ForgeConfigSpec.IntValue conversationSessionTimeoutTicks;
+        public final ForgeConfigSpec.BooleanValue debugBranching;
 
         public final ForgeConfigSpec.IntValue giftMemoryPerPlayerCap;
         public final ForgeConfigSpec.IntValue gratitudeWindowTicks;
@@ -153,6 +162,13 @@ public final class McaConversationsConfig {
                     "villagers acknowledge available/active/completed quests in conversation, finished quests",
                     "seed gossip + memory, and quest lines can speak in the villager's personality.")
                     .define("enableQuests", true);
+            enableBranching = b.comment(
+                    "Enable branching conversations (1.1.0): a topic opens a short authored exchange in which",
+                    "the villager answers and YOU choose what to say back, and your reply — not the act of",
+                    "asking — is what moves hearts. When false, every converted topic falls back to its",
+                    "legacy one-line result and returns to its category, exactly as in 1.0.0. Turning this",
+                    "off never leaves an empty page: each starter carries an explicit legacy fallback result.")
+                    .define("enableBranching", true);
             b.pop();
 
             b.push("gift");
@@ -255,6 +271,42 @@ public final class McaConversationsConfig {
             debugRpg = b.comment(
                     "Verbose logging for disposition reads/writes, check inputs, tier selection, seed derivation.")
                     .define("debugRpg", false);
+            b.pop();
+
+            b.push("conversation");
+            b.comment("The branching-conversation economy (1.1.0). Hearts move on what you SAY BACK, never on",
+                    "asking a question, navigating, or leaving. Every heart change from a conversation passes",
+                    "through a guarded ledger: an authored delta is scaled by the multiplier, clamped by the",
+                    "depth class's per-conversation budget, clamped again by the per-day budget, diminished on",
+                    "repeat (full -> half -> nothing for the same decision on the same day), and applied at most",
+                    "once per transaction. Milestone outcomes fire once ever. These caps stay active even when",
+                    "the disposition vector is switched off.");
+            conversationHeartMultiplier = b.comment(
+                    "Scale on every conversation-sourced heart change, positive and negative. 0 makes",
+                    "conversation heart-neutral (the trees still play, the vector and arcs still move).")
+                    .defineInRange("conversationHeartMultiplier", 1.0, 0.0, 4.0);
+            conversationDailyPositiveCap = b.comment(
+                    "Per-villager, per-player, per-MC-day ceiling on hearts GAINED from conversation.",
+                    "Counted separately from the negative budget, so antagonising a villager can never",
+                    "manufacture extra room to earn hearts back.")
+                    .defineInRange("conversationDailyPositiveCap", 8, 0, 100);
+            conversationDailyNegativeCap = b.comment(
+                    "Per-villager, per-player, per-MC-day floor on hearts LOST to conversation (as a positive",
+                    "number). Stops rage-baiting a villager to farm reconciliation content.")
+                    .defineInRange("conversationDailyNegativeCap", 10, 0, 100);
+            strongerNegativeOutcomes = b.comment(
+                    "Double the authored negative deltas (before the caps) for players who want dismissiveness",
+                    "and boundary-pushing to bite harder. Positive outcomes are unaffected.")
+                    .define("strongerNegativeOutcomes", false);
+            conversationSessionTimeoutTicks = b.comment(
+                    "How long (game ticks) a conversation session survives without activity before it expires",
+                    "and its per-conversation budget resets (1200 = 60 s). Sessions are transient and never",
+                    "persist across a restart; arcs, milestones and the daily budgets do.")
+                    .defineInRange("conversationSessionTimeoutTicks", 1200, 200, 24000);
+            debugBranching = b.comment(
+                    "Verbose logging for the branching layer: topic and node transitions, decision ids, check",
+                    "inputs and tier, requested vs applied hearts, disposition deltas, and arc/milestone moves.")
+                    .define("debugBranching", false);
             b.pop();
 
             b.push("chat");

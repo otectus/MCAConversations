@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import forge.net.mca.cobalt.network.Message;
 import forge.net.mca.cobalt.network.NetworkHandler;
 import forge.net.mca.network.s2c.AnalysisResults;
@@ -38,7 +39,12 @@ public abstract class NetworkHandlerMixin {
                     ci.cancel();
                 }
             } else if (message instanceof InteractionDialogueResponse response) {
-                if (ChatModeSession.recordDialogue(player, response.question, response.answers)) {
+                // Record what the player was actually offered for BOTH frontends. This packet is the
+                // only place the constraint-filtered answer list exists, and knowing it is what lets
+                // the submission validator reject an answer that was never on screen.
+                ConversationSessions.recordOffer(player.getUUID(), response.question, response.answers,
+                        player.level().getGameTime());
+                if (ChatModeSession.swallowDialogue(player)) {
                     ci.cancel();
                 }
             } else if (message instanceof AnalysisResults) {

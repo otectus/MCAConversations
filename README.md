@@ -8,16 +8,38 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
+> **Since 1.1.0, asking a question is not what earns affection — answering one is.**
+
+## Features (1.1.0)
+
+- **Your reply is what shapes the relationship (new)** — asking a villager how their day went used
+  to hand you hearts for the click. It doesn't any more. Now they *answer*, and **you** choose what
+  to say back, and that is what lands. Sit with someone's bad day and offer to take something off
+  their hands, and you've earned something. Tell them everyone has bad days and then double down
+  when they bristle, and you've lost it — and apologising settles the air without buying the hearts
+  back, because a slight isn't undone by saying sorry. Two topics are converted in 1.1.0 (**the
+  day**, and **fears**); the rest follow, and every one still works exactly as it did in the
+  meantime.
+- **Conversations that remember (new)** — tell a villager you'll stand with them and they hold you
+  to it a week later, by name. Get them to crack all the way open about what frightens them and
+  they answer differently ever after, because they know you remember. Press them after they've said
+  no and that is permanent: the topic opens warily from then on, and the only way back is an honest
+  apology that doesn't erase it.
+- **The same conversation by typing (new)** — every one of those choices is reachable in chat, in
+  your own words. When a villager puts a decision to you, the options come with it, numbered, so you
+  can answer `2` if you'd rather pick than phrase. While you're mid-decision, an idle "how's the
+  weather" can't be mistaken for your answer.
+
 ## Features (1.0.0)
 
-- **Chat mode (new)** — talk to villagers by just *typing*. `Hey Coralia! How's your day going?` in
+- **Chat mode** — talk to villagers by just *typing*. `Hey Coralia! How's your day going?` in
   the vanilla chat box gets an answer in chat, in her voice, through the **same dialogue engine** as
   the GUI — identical heart gates, cooldowns, moods, dialogue checks, memories, and gossip. No
   AI/LLM: matching is deterministic, datapack-driven (keywords + phrases with typo tolerance,
   synonyms, negation awareness), and unit-tested. Address villagers by name, by looking at them, or
   just keep talking — your conversation partner stays "sticky" for follow-ups. Multi-turn depth
   works too: open up their fears, then answer *"You could face it — I'd stand with you."*
-- **A living village (new)** — villagers *may* greet you as you pass (a personality-weighted daily
+- **A living village** — villagers *may* greet you as you pass (a personality-weighted daily
   coin flip — the peppy farmer usually says hi, the introverted librarian rarely; villagers who dislike you
   brush you off instead). Open the chat box and nearby villagers stop and turn to you expectantly;
   your conversation partner stays put, facing you, until a while after the conversation lapses —

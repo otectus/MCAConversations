@@ -1,0 +1,176 @@
+{
+  "answers": [
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.rough.offer_help",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.rough.offer_help",
+              "deltas": {
+                "warmth": 2,
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.offer_help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "lighten",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "playful",
+                "peppy",
+                "upbeat",
+                "odd",
+                "relaxed",
+                "extroverted",
+                "flirty"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.rough.lighten",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.rough.lighten",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.lighten.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.rough.lighten",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.rough.lighten",
+              "deltas": {
+                "warmth": -2,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.lighten.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "playful",
+                "peppy",
+                "upbeat",
+                "odd",
+                "relaxed",
+                "extroverted",
+                "flirty"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "day.rough.lighten",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.lighten.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_be",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.rough.let_be",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.rough.let_be",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.let_be"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

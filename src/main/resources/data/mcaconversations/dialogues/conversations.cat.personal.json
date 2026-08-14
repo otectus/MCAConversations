@@ -433,6 +433,32 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "again"
+            },
+            "next": "conversations.topic.fears.again.respond",
+            "say": "conversations.fears.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "age_group": "toddler"
             },
@@ -442,54 +468,26 @@
                 "id": "mcaconversations.cooldown.fears",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.fears.toddler",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "toddler"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
               "var": "player",
               "time": 48000
-            }
-          }
-        },
-        {
-          "baseChance": 0,
-          "conditions": [
-            {
-              "chance": 100,
-              "hearts_max": 24
             },
-            {
-              "chance": -2000,
-              "age_group": "toddler"
-            }
-          ],
-          "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.deflect.personal"
-          }
-        },
-        {
-          "baseChance": 0,
-          "conditions": [
-            {
-              "chance": 1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.fears",
-                "var": "player"
-              }
-            },
-            {
-              "chance": -2000,
-              "hearts_max": 24
-            }
-          ],
-          "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.fears.again"
+            "next": "conversations.topic.fears.toddler.respond",
+            "say": "conversations.fears.toddler"
           }
         },
         {
@@ -507,19 +505,24 @@
               }
             },
             {
-              "chance": -1000,
-              "hearts_max": 24
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.fears.child",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "child"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
               "var": "player",
               "time": 48000
-            }
+            },
+            "next": "conversations.topic.fears.young.respond",
+            "say": "conversations.fears.child"
           }
         },
         {
@@ -537,78 +540,255 @@
               }
             },
             {
-              "chance": -1000,
-              "hearts_max": 24
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.fears.teen",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "teen"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
               "var": "player",
               "time": 48000
-            }
+            },
+            "next": "conversations.topic.fears.young.respond",
+            "say": "conversations.fears.teen"
           }
         },
         {
-          "baseChance": 5,
+          "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "conversations_progress": {
+                "milestone": "fears.scar"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
               "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "scarred"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.fears.scarred.respond",
+            "say": "conversations.fears.scarred"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "hearts_max": 24
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "fears.scar"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "guarded"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.fears.guarded.respond",
+            "say": "conversations.deflect.personal"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "arc": "fears",
+                "min": 2,
+                "max": 3
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "fears.scar"
+              }
+            },
+            {
+              "chance": -2000,
               "hearts_max": 24
             },
             {
               "chance": -1000,
               "memory": {
-                "id": "mcaconversations.topic.fears",
+                "id": "mcaconversations.cooldown.fears",
                 "var": "player"
               }
             },
             {
-              "chance": 4,
-              "conversations_personality": "introverted"
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "followthrough"
             },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.arc.fears.followthrough.respond",
+            "say": "conversations.fears.resume.followthrough"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
             {
-              "chance": 4,
-              "conversations_personality": "sensitive"
+              "chance": 100,
+              "conversations_progress": {
+                "arc": "fears",
+                "min": 1,
+                "max": 1
+              }
             },
             {
               "chance": -2000,
               "age_group": "toddler"
-            }
-          ],
-          "actions": {
-            "next": "conversations.fears",
-            "say": "conversations.fears.first",
-            "positive": 6,
-            "remember": {
-              "id": "mcaconversations.topic.fears",
-              "var": "player"
             },
-            "conversations_record": [
-              {
-                "id": "mcaconversations.cooldown.fears",
-                "var": "player",
-                "time": 48000
-              },
-              {
-                "id": "mcaconversations.unlock.opened_up",
-                "var": "player"
-              }
-            ]
-          }
-        },
-        {
-          "baseChance": 3,
-          "conditions": [
             {
-              "chance": -1000,
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "fears.scar"
+              }
+            },
+            {
+              "chance": -2000,
               "hearts_max": 24
             },
             {
               "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "plan"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.arc.fears.plan.respond",
+            "say": "conversations.fears.resume.plan"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
               "memory": {
                 "id": "mcaconversations.topic.fears",
                 "var": "player",
@@ -617,6 +797,36 @@
               }
             },
             {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "fears.scar"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "fears",
+                "min": 1,
+                "max": 3
+              }
+            },
+            {
               "chance": -1000,
               "memory": {
                 "id": "mcaconversations.cooldown.fears",
@@ -625,18 +835,118 @@
             },
             {
               "chance": -2000,
-              "age_group": "toddler"
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.fears",
-            "say": "conversations.fears.revisit",
-            "positive": 3,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "open"
+            },
+            "remember": {
+              "id": "mcaconversations.topic.fears",
+              "var": "player"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
               "var": "player",
               "time": 48000
+            },
+            "next": "conversations.topic.fears.open.respond",
+            "say": "conversations.fears.first"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.topic.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "fears.scar"
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 24
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "fears",
+                "min": 1,
+                "max": 3
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.fears",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "deep",
+              "branch": "revisit"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.fears.open.respond",
+            "say": "conversations.fears.revisit"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 5,
+            "remember": {
+              "id": "mcaconversations.topic.fears",
+              "var": "player"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.fears",
+            "say": "conversations.fears.first"
           }
         }
       ]

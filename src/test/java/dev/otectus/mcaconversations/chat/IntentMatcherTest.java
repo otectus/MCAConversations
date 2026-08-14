@@ -191,6 +191,183 @@ class IntentMatcherTest {
             {"how are the kids holding up", "conversations.family", "family.checkin_child"},
             {"tell me about your parents", "conversations.family", "family.ask_parent"},
             {"tell me a family story", "conversations.family", "family.memories"},
+
+            // --- the branching Day tree (1.1.0). Three utterances per stance: the plain phrasing,
+            // a natural paraphrase, and a shorter form a player would actually type mid-chat.
+            {"that sounds hard", "conversations.topic.day.rough.respond", "day.rough.empathize"},
+            {"im sorry, that sounds rough", "conversations.topic.day.rough.respond", "day.rough.empathize"},
+            {"that is a lot to carry", "conversations.topic.day.rough.respond", "day.rough.empathize"},
+            {"what happened", "conversations.topic.day.rough.respond", "day.rough.ask"},
+            {"what went wrong", "conversations.topic.day.rough.respond", "day.rough.ask"},
+            {"tell me what happened", "conversations.topic.day.rough.respond", "day.rough.ask"},
+            {"everyone has bad days", "conversations.topic.day.rough.respond", "day.rough.brush_off"},
+            {"could be worse", "conversations.topic.day.rough.respond", "day.rough.brush_off"},
+            {"that is just life", "conversations.topic.day.rough.respond", "day.rough.brush_off"},
+            {"let me help", "conversations.topic.day.rough.followup", "day.rough.offer_help"},
+            {"can i give you a hand", "conversations.topic.day.rough.followup", "day.rough.offer_help"},
+            {"let me take that", "conversations.topic.day.rough.followup", "day.rough.offer_help"},
+            {"the cat won", "conversations.topic.day.rough.followup", "day.rough.lighten"},
+            {"you have to laugh", "conversations.topic.day.rough.followup", "day.rough.lighten"},
+            {"at least it is funny", "conversations.topic.day.rough.followup", "day.rough.lighten"},
+            {"it is okay to have a bad day", "conversations.topic.day.rough.followup", "day.rough.let_be"},
+            {"you do not have to explain", "conversations.topic.day.rough.followup", "day.rough.let_be"},
+            {"it can just be a bad day", "conversations.topic.day.rough.followup", "day.rough.let_be"},
+            {"that came out wrong", "conversations.topic.day.rough.repair", "day.rough.apologize"},
+            {"im sorry, that was harsh", "conversations.topic.day.rough.repair", "day.rough.apologize"},
+            {"i did not mean that", "conversations.topic.day.rough.repair", "day.rough.apologize"},
+            {"it is not a tragedy", "conversations.topic.day.rough.repair", "day.rough.double_down"},
+            {"you are overreacting", "conversations.topic.day.rough.repair", "day.rough.double_down"},
+            {"stop being dramatic", "conversations.topic.day.rough.repair", "day.rough.double_down"},
+            {"you have earned it", "conversations.topic.day.good.respond", "day.good.celebrate"},
+            {"you deserve that", "conversations.topic.day.good.respond", "day.good.celebrate"},
+            {"good for you", "conversations.topic.day.good.respond", "day.good.celebrate"},
+            {"what made it good", "conversations.topic.day.good.respond", "day.good.ask_more"},
+            {"why is that", "conversations.topic.day.good.respond", "day.good.ask_more"},
+            {"tell me more about it", "conversations.topic.day.good.respond", "day.good.ask_more"},
+            {"must be nice", "conversations.topic.day.good.respond", "day.good.deflate"},
+            {"alright for some", "conversations.topic.day.good.respond", "day.good.deflate"},
+            {"some of us work", "conversations.topic.day.good.respond", "day.good.deflate"},
+            {"mine has been good too", "conversations.topic.day.good.followup", "day.good.share_own"},
+            {"same here", "conversations.topic.day.good.followup", "day.good.share_own"},
+            {"mine as well", "conversations.topic.day.good.followup", "day.good.share_own"},
+            {"careful, people will think you are happy", "conversations.topic.day.good.followup", "day.good.tease"},
+            {"mind your reputation", "conversations.topic.day.good.followup", "day.good.tease"},
+            {"you are smiling", "conversations.topic.day.good.followup", "day.good.tease"},
+            {"hope it holds", "conversations.topic.day.good.followup", "day.good.wish_well"},
+            {"hope it lasts", "conversations.topic.day.good.followup", "day.good.wish_well"},
+            {"long may it continue", "conversations.topic.day.good.followup", "day.good.wish_well"},
+            {"what are you working on", "conversations.topic.day.ordinary.respond", "day.ordinary.ask_work"},
+            {"what is that you are making", "conversations.topic.day.ordinary.respond", "day.ordinary.ask_work"},
+            {"what are you making", "conversations.topic.day.ordinary.respond", "day.ordinary.ask_work"},
+            {"mine has been the same", "conversations.topic.day.ordinary.respond", "day.ordinary.share_own_day"},
+            {"much the same", "conversations.topic.day.ordinary.respond", "day.ordinary.share_own_day"},
+            {"mine too", "conversations.topic.day.ordinary.respond", "day.ordinary.share_own_day"},
+            {"do not let me slow you down", "conversations.topic.day.ordinary.respond", "day.ordinary.hurry"},
+            {"hurry up", "conversations.topic.day.ordinary.respond", "day.ordinary.hurry"},
+            {"you are busy, clearly", "conversations.topic.day.ordinary.respond", "day.ordinary.hurry"},
+            {"you are good at that", "conversations.topic.day.ordinary.followup", "day.ordinary.praise"},
+            {"that is impressive", "conversations.topic.day.ordinary.followup", "day.ordinary.praise"},
+            {"you do that well", "conversations.topic.day.ordinary.followup", "day.ordinary.praise"},
+            {"you could do that faster", "conversations.topic.day.ordinary.followup", "day.ordinary.advise"},
+            {"there is a quicker way", "conversations.topic.day.ordinary.followup", "day.ordinary.advise"},
+            {"you should try it this way", "conversations.topic.day.ordinary.followup", "day.ordinary.advise"},
+            {"i will stop talking", "conversations.topic.day.ordinary.followup", "day.ordinary.let_them_work"},
+            {"let you finish", "conversations.topic.day.ordinary.followup", "day.ordinary.let_them_work"},
+            {"i will be quiet", "conversations.topic.day.ordinary.followup", "day.ordinary.let_them_work"},
+            {"tell me properly", "conversations.topic.day.young.respond", "day.young.interested"},
+            {"i want to hear it", "conversations.topic.day.young.respond", "day.young.interested"},
+            {"tell me more", "conversations.topic.day.young.respond", "day.young.interested"},
+            {"that is a good day of work", "conversations.topic.day.young.respond", "day.young.encourage"},
+            {"well done", "conversations.topic.day.young.respond", "day.young.encourage"},
+            {"i would be proud of that", "conversations.topic.day.young.respond", "day.young.encourage"},
+            {"that is not really news", "conversations.topic.day.young.respond", "day.young.dismiss"},
+            {"that is boring", "conversations.topic.day.young.respond", "day.young.dismiss"},
+            {"who cares", "conversations.topic.day.young.respond", "day.young.dismiss"},
+            {"and then what", "conversations.topic.day.young.followup", "day.young.play_along"},
+            {"what happened next", "conversations.topic.day.young.followup", "day.young.play_along"},
+            {"go on, what next", "conversations.topic.day.young.followup", "day.young.play_along"},
+            {"is it always like this", "conversations.topic.day.young.followup", "day.young.ask_more"},
+            {"is that normal", "conversations.topic.day.young.followup", "day.young.ask_more"},
+            {"is that normally how it goes", "conversations.topic.day.young.followup", "day.young.ask_more"},
+            {"that is the best news", "conversations.topic.day.toddler.respond", "day.toddler.delighted"},
+            {"wow", "conversations.topic.day.toddler.respond", "day.toddler.delighted"},
+            {"that is amazing", "conversations.topic.day.toddler.respond", "day.toddler.delighted"},
+            {"how much", "conversations.topic.day.toddler.respond", "day.toddler.ask"},
+            {"how many", "conversations.topic.day.toddler.respond", "day.toddler.ask"},
+            {"tell me more", "conversations.topic.day.toddler.respond", "day.toddler.ask"},
+            {"sorry, i forgot i asked", "conversations.topic.day.again.respond", "day.again.apologize"},
+            {"my mistake", "conversations.topic.day.again.respond", "day.again.apologize"},
+            {"sorry, asked already", "conversations.topic.day.again.respond", "day.again.apologize"},
+            {"humour me", "conversations.topic.day.again.respond", "day.again.press"},
+            {"tell me anyway", "conversations.topic.day.again.respond", "day.again.press"},
+            {"go on, again", "conversations.topic.day.again.respond", "day.again.press"},
+
+            // --- the branching Fears tree (1.1.0): the deep pilot, including the boundary node,
+            // the guarded refusal, the scarred repair route and both cross-session arc stages.
+            {"that sounds hard to carry", "conversations.topic.fears.open.respond", "fears.open.comfort"},
+            {"that is heavy", "conversations.topic.fears.open.respond", "fears.open.comfort"},
+            {"i am sorry", "conversations.topic.fears.open.respond", "fears.open.comfort"},
+            {"tell me the rest", "conversations.topic.fears.open.respond", "fears.open.press"},
+            {"tell me everything", "conversations.topic.fears.open.respond", "fears.open.press"},
+            {"there is more, is there not", "conversations.topic.fears.open.respond", "fears.open.press"},
+            {"me too", "conversations.topic.fears.open.respond", "fears.open.share"},
+            {"i am scared of that too", "conversations.topic.fears.open.respond", "fears.open.share"},
+            {"i fear that myself", "conversations.topic.fears.open.respond", "fears.open.share"},
+            {"you will not face it alone", "conversations.topic.fears.open.followup", "fears.open.pledge"},
+            {"we face it together", "conversations.topic.fears.open.followup", "fears.open.pledge"},
+            {"i promise", "conversations.topic.fears.open.followup", "fears.open.pledge"},
+            {"i cannot promise that", "conversations.topic.fears.open.followup", "fears.open.step_back"},
+            {"but i am listening", "conversations.topic.fears.open.followup", "fears.open.step_back"},
+            {"i would rather be honest", "conversations.topic.fears.open.followup", "fears.open.step_back"},
+            {"you could face it", "conversations.topic.fears.open.followup", "fears.open.challenge"},
+            {"stand up to it", "conversations.topic.fears.open.followup", "fears.open.challenge"},
+            {"you can overcome it", "conversations.topic.fears.open.followup", "fears.open.challenge"},
+            {"thank you for telling me", "conversations.topic.fears.open.close", "fears.open.thank"},
+            {"thank you for trusting me", "conversations.topic.fears.open.close", "fears.open.thank"},
+            {"i am grateful", "conversations.topic.fears.open.close", "fears.open.thank"},
+            {"that took something to say", "conversations.topic.fears.open.close", "fears.open.means"},
+            {"that was brave", "conversations.topic.fears.open.close", "fears.open.means"},
+            {"that took courage", "conversations.topic.fears.open.close", "fears.open.means"},
+            {"forget i asked", "conversations.topic.fears.pressed", "fears.pressed.back_off"},
+            {"you are right", "conversations.topic.fears.pressed", "fears.pressed.back_off"},
+            {"sorry i asked", "conversations.topic.fears.pressed", "fears.pressed.back_off"},
+            {"i want the rest now", "conversations.topic.fears.pressed", "fears.pressed.push"},
+            {"i insist", "conversations.topic.fears.pressed", "fears.pressed.push"},
+            {"tell me now", "conversations.topic.fears.pressed", "fears.pressed.push"},
+            {"that is yours to keep", "conversations.topic.fears.guarded.respond", "fears.guarded.respect"},
+            {"fair enough", "conversations.topic.fears.guarded.respond", "fears.guarded.respect"},
+            {"keep it private", "conversations.topic.fears.guarded.respond", "fears.guarded.respect"},
+            {"tell me something easier", "conversations.topic.fears.guarded.respond", "fears.guarded.ask_safer"},
+            {"something lighter then", "conversations.topic.fears.guarded.respond", "fears.guarded.ask_safer"},
+            {"ask something else", "conversations.topic.fears.guarded.respond", "fears.guarded.ask_safer"},
+            {"come on", "conversations.topic.fears.guarded.respond", "fears.guarded.press"},
+            {"out with it", "conversations.topic.fears.guarded.respond", "fears.guarded.press"},
+            {"just tell me", "conversations.topic.fears.guarded.respond", "fears.guarded.press"},
+            {"i pushed you and i was wrong", "conversations.topic.fears.scarred.respond", "fears.scarred.apologize"},
+            {"i should not have pushed", "conversations.topic.fears.scarred.respond", "fears.scarred.apologize"},
+            {"that was wrong of me", "conversations.topic.fears.scarred.respond", "fears.scarred.apologize"},
+            {"i will not ask again", "conversations.topic.fears.scarred.respond", "fears.scarred.give_space"},
+            {"i will give you space", "conversations.topic.fears.scarred.respond", "fears.scarred.give_space"},
+            {"never again", "conversations.topic.fears.scarred.respond", "fears.scarred.give_space"},
+            {"sorry, i asked twice", "conversations.topic.fears.again.respond", "fears.again.apologize"},
+            {"i should not have asked again", "conversations.topic.fears.again.respond", "fears.again.apologize"},
+            {"my mistake", "conversations.topic.fears.again.respond", "fears.again.apologize"},
+            {"humour me", "conversations.topic.fears.again.respond", "fears.again.press"},
+            {"tell me anyway", "conversations.topic.fears.again.respond", "fears.again.press"},
+            {"go on, again", "conversations.topic.fears.again.respond", "fears.again.press"},
+            {"you are safe here", "conversations.topic.fears.toddler.respond", "fears.toddler.reassure"},
+            {"that does sound scary", "conversations.topic.fears.toddler.respond", "fears.toddler.reassure"},
+            {"nothing will get you", "conversations.topic.fears.toddler.respond", "fears.toddler.reassure"},
+            {"what does it look like", "conversations.topic.fears.toddler.respond", "fears.toddler.ask"},
+            {"describe it to me", "conversations.topic.fears.toddler.respond", "fears.toddler.ask"},
+            {"what is it like", "conversations.topic.fears.toddler.respond", "fears.toddler.ask"},
+            {"that is a real fear", "conversations.topic.fears.young.respond", "fears.young.reassure"},
+            {"that is valid", "conversations.topic.fears.young.respond", "fears.young.reassure"},
+            {"that is fair", "conversations.topic.fears.young.respond", "fears.young.reassure"},
+            {"everyone is scared of something", "conversations.topic.fears.young.respond", "fears.young.normalize"},
+            {"everybody has fears", "conversations.topic.fears.young.respond", "fears.young.normalize"},
+            {"that is normal", "conversations.topic.fears.young.respond", "fears.young.normalize"},
+            {"you will grow out of it", "conversations.topic.fears.young.respond", "fears.young.dismiss"},
+            {"do not be silly", "conversations.topic.fears.young.respond", "fears.young.dismiss"},
+            {"that is childish", "conversations.topic.fears.young.respond", "fears.young.dismiss"},
+            {"what would help", "conversations.arc.fears.plan.respond", "fears.plan.ask_what_helps"},
+            {"what do you need", "conversations.arc.fears.plan.respond", "fears.plan.ask_what_helps"},
+            {"what actually helps", "conversations.arc.fears.plan.respond", "fears.plan.ask_what_helps"},
+            {"let us do something about it", "conversations.arc.fears.plan.respond", "fears.plan.offer_plan"},
+            {"we need a plan", "conversations.arc.fears.plan.respond", "fears.plan.offer_plan"},
+            {"let us try something", "conversations.arc.fears.plan.respond", "fears.plan.offer_plan"},
+            {"you do not need a plan", "conversations.arc.fears.plan.respond", "fears.plan.just_listen"},
+            {"i am just listening", "conversations.arc.fears.plan.respond", "fears.plan.just_listen"},
+            {"i am here", "conversations.arc.fears.plan.respond", "fears.plan.just_listen"},
+            {"how is it going", "conversations.arc.fears.followthrough.respond", "fears.followthrough.ask_how"},
+            {"how have you been getting on", "conversations.arc.fears.followthrough.respond", "fears.followthrough.ask_how"},
+            {"how are you doing with it", "conversations.arc.fears.followthrough.respond", "fears.followthrough.ask_how"},
+            {"look at you", "conversations.arc.fears.followthrough.respond", "fears.followthrough.celebrate"},
+            {"that is not nothing", "conversations.arc.fears.followthrough.respond", "fears.followthrough.celebrate"},
+            {"i am proud of you", "conversations.arc.fears.followthrough.respond", "fears.followthrough.celebrate"},
+            {"i meant what i said", "conversations.arc.fears.followthrough.respond", "fears.followthrough.recall_promise"},
+            {"i meant it back then", "conversations.arc.fears.followthrough.respond", "fears.followthrough.recall_promise"},
+            {"i stand by what i said", "conversations.arc.fears.followthrough.respond", "fears.followthrough.recall_promise"},
     };
 
     @Test
@@ -384,5 +561,63 @@ class IntentMatcherTest {
         NormalizedMessage m = Normalizer.normalize("shared", SynonymTable.EMPTY);
         assertEquals(Outcome.AMBIGUOUS, IntentMatcher.decide(IntentMatcher.rank(idx, m, null), true, MIN, AMBIENT).outcome());
         assertEquals(Outcome.NONE, IntentMatcher.decide(IntentMatcher.rank(idx, m, null), false, MIN, AMBIENT).outcome());
+    }
+
+    // --- Live-decision filtering (plan §7.3) ----------------------------------
+
+    private static final String DAY_ROUGH = "conversations.topic.day.rough.respond";
+    private static final List<String> DAY_ROUGH_OFFER = List.of("empathize", "ask", "brush_off", "leave");
+
+    private static List<Scored> liveRank(String message, String question, List<String> offered) {
+        NormalizedMessage n = Normalizer.normalize(message, index.synonyms());
+        return IntentMatcher.rank(index, n, question, offered);
+    }
+
+    @Test
+    void liveDecisionKeepsTheChoicesOnTheTable() {
+        List<Scored> ranked = liveRank("that sounds hard", DAY_ROUGH, DAY_ROUGH_OFFER);
+        assertTrue(ranked.stream().anyMatch(s -> s.id().equals("day.rough.empathize")),
+                "a genuine reply to the open question must survive: " + ids(ranked));
+    }
+
+    @Test
+    void liveDecisionDropsAnswersThatWereNotOffered() {
+        // The same question, but MCA only offered two of its answers for this villager.
+        List<Scored> ranked = liveRank("what happened", DAY_ROUGH, List.of("empathize", "leave"));
+        assertTrue(ranked.stream().noneMatch(s -> s.id().equals("day.rough.ask")),
+                "an answer the player was never shown must not be reachable by typing: " + ids(ranked));
+    }
+
+    @Test
+    void liveDecisionSilencesWeakGlobalTopicMatches() {
+        // "how is your day" is a perfectly good global topic starter, and exactly the kind of thing a
+        // player might type mid-decision without meaning to abandon the question they were asked.
+        List<Scored> ranked = liveRank("how is your day", DAY_ROUGH, DAY_ROUGH_OFFER);
+        for (Scored s : ranked) {
+            if (s.isSystem()) {
+                continue;
+            }
+            assertTrue(s.contextScoped() || s.score() >= IntentMatcher.SUBJECT_CHANGE_FLOOR,
+                    "a global topic below the subject-change floor leaked through: " + s.id() + "=" + s.score());
+        }
+    }
+
+    @Test
+    void liveDecisionAlwaysLeavesAWayOut() {
+        List<Scored> ranked = liveRank("goodbye", DAY_ROUGH, DAY_ROUGH_OFFER);
+        assertTrue(ranked.stream().anyMatch(Scored::isSystem),
+                "system controls must survive a live decision so the player can always leave: " + ids(ranked));
+    }
+
+    @Test
+    void withoutALiveDecisionRankingIsUnchanged() {
+        List<Scored> open = liveRank("how is your day", null, List.of());
+        List<Scored> plain = IntentMatcher.rank(index,
+                Normalizer.normalize("how is your day", index.synonyms()), null);
+        assertEquals(ids(plain), ids(open));
+    }
+
+    private static String ids(List<Scored> scored) {
+        return scored.stream().map(Scored::id).toList().toString();
     }
 }

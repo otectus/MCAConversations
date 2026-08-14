@@ -1,6 +1,8 @@
 package dev.otectus.mcaconversations.chat;
 
 import dev.otectus.mcaconversations.McaConversations;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,14 +25,39 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class ChatModeSession {
 
-    /** Per-player conversation state. All time fields are overworld game-time ticks. */
+    /**
+     * Per-player <b>chat-specific</b> state. All time fields are overworld game-time ticks.
+     *
+     * <p>The open question and its offered answers deliberately do <em>not</em> live here: since
+     * 1.1.0 they belong to the shared {@link dev.otectus.mcaconversations.conversation.ConversationSession},
+     * so the GUI and chat mode cannot disagree about what the player was just asked. What remains here
+     * is what only chat has: the sticky target, the anti-spam anchors, the miss ladder and the mutes.
+     */
     public static final class Session {
+        public final UUID playerId;
         public UUID villagerId;              // sticky target
         public long lastExchangeGameTime;    // stickiness window anchor
         public long lastProcessedGameTime;   // anti-spam floor anchor (any processed message, incl. misses)
-        public String currentQuestion;       // open sub-question (set by the redirected dialogue packet)
-        public List<String> currentAnswers;  // constraint-filtered answers captured from the same packet
         public int consecutiveMisses;        // graduated confused/hint/shrug ladder (§11)
+
+        Session(UUID playerId) {
+            this.playerId = playerId;
+        }
+
+        /** The question this player was last offered, or null. Shared with the GUI frontend. */
+        public String currentQuestion() {
+            return ChatModeSession.currentQuestion(playerId);
+        }
+
+        /** The constraint-filtered answers that came with it; empty when there is no open question. */
+        public List<String> currentAnswers() {
+            return ChatModeSession.currentAnswers(playerId);
+        }
+
+        /** Drops the open question without ending the conversation. */
+        public void clearQuestion() {
+            ChatModeSession.clearQuestion(playerId);
+        }
 
         /** "Stop talking" mutes, per villager→player pairing (spec §11) — never the whole session. */
         private final Map<UUID, Long> mutedUntil = new ConcurrentHashMap<>();
@@ -67,7 +94,22 @@ public final class ChatModeSession {
     // --- Sessions -------------------------------------------------------------
 
     public static Session get(UUID playerId) {
-        return SESSIONS.computeIfAbsent(playerId, id -> new Session());
+        return SESSIONS.computeIfAbsent(playerId, Session::new);
+    }
+
+    /** The question this player was last offered by either frontend, or null. */
+    public static String currentQuestion(UUID playerId) {
+        return ConversationSessions.raw(playerId).map(ConversationSession::currentQuestion).orElse(null);
+    }
+
+    /** The answers offered with it; empty when there is no open question. */
+    public static List<String> currentAnswers(UUID playerId) {
+        return ConversationSessions.raw(playerId).map(ConversationSession::currentAnswers).orElse(List.of());
+    }
+
+    /** Drops the open question — a subject change, "never mind", a farewell, or a stale sticky target. */
+    public static void clearQuestion(UUID playerId) {
+        ConversationSessions.raw(playerId).ifPresent(ConversationSession::clearOffer);
     }
 
     /** Peek without creating — for read-only checks. */
@@ -83,9 +125,10 @@ public final class ChatModeSession {
         s.consecutiveMisses = 0;
     }
 
-    /** Drops a player's session (logout/death). */
+    /** Drops a player's session (logout/death), including the shared conversation session. */
     public static void clear(UUID playerId) {
         SESSIONS.remove(playerId);
+        ConversationSessions.clear(playerId);
     }
 
     // --- Ambient per-villager rate limit (spec §12) ---------------------------
@@ -166,19 +209,15 @@ public final class ChatModeSession {
     }
 
     /**
-     * Mixin hook for MCA's question-prompt packet ({@code InteractionDialogueResponse}): records the
-     * open question id and its constraint-filtered answers on the session for follow-up matching, then
-     * the caller cancels (chat mode never renders menus). Returns true iff consumed.
+     * Mixin hook for MCA's question-prompt packet ({@code InteractionDialogueResponse}): true when a
+     * redirect scope is open for this player, so the caller cancels the GUI packet — chat mode never
+     * renders menus. The question and its answers are recorded by the caller into
+     * {@link dev.otectus.mcaconversations.conversation.ConversationSessions}, which both frontends
+     * share, so this only decides delivery.
      */
-    public static boolean recordDialogue(ServerPlayer player, String question, List<String> answers) {
+    public static boolean swallowDialogue(ServerPlayer player) {
         Scope s = activeScope;
-        if (s == null || s.player != player) {
-            return false;
-        }
-        Session sess = get(player.getUUID());
-        sess.currentQuestion = question;
-        sess.currentAnswers = answers;
-        return true;
+        return s != null && s.player == player;
     }
 
     /** Mixin hook for the heart-impact analysis strip ({@code AnalysisResults}): swallowed silently. */
@@ -205,6 +244,12 @@ public final class ChatModeSession {
          * {@code selectAnswer} returns, read by the deferred delivery closure. 0 = no feedback.
          */
         public int heartsDelta;
+        /**
+         * The numbered choices to show under the villager's line, when the exchange left a decision
+         * open. Written after {@code selectAnswer} returns (the redirect mixin records the new offer
+         * during it) and read by the deferred delivery closure.
+         */
+        public net.minecraft.network.chat.Component options;
         private final Scope previous;
 
         private Scope(ServerPlayer player, Entity villager, int extraDelayTicks, Scope previous) {

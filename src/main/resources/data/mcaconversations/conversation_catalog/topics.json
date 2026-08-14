@@ -1,0 +1,33 @@
+{
+  "_comment": [
+    "The conversation catalog (see DATAPACK.md). This is not a second dialogue engine - MCA's JSON stays",
+    "authoritative for what happens. The catalog is the machine-readable claim that a topic exists, where",
+    "it is entered, how deep it may be, and which durable state it may write, so that 'every shipped topic",
+    "is a real conversation' is something lint can check and so arc, milestone and exclusive ids are",
+    "declared in exactly one place. Adding a topic to a category without adding it here fails lint.",
+    "1.1.0 converts two pilot topics; the rest follow in later releases."
+  ],
+  "topics": {
+    "day": {
+      "entry": {"question": "conversations.cat.chitchat", "answer": "day"},
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
+      "ages": ["toddler", "child", "teen", "adult"],
+      "required_stance_families": ["empathy", "curiosity", "practical_help", "dismissal", "exit"],
+      "chat_required": true
+    },
+    "fears": {
+      "entry": {"question": "conversations.cat.personal", "answer": "fears"},
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": ["toddler", "child", "teen", "adult"],
+      "required_stance_families": ["empathy", "challenge", "restraint", "boundary_push", "exit"],
+      "chat_required": true,
+      "arc": {"id": "fears", "max_stage": 3},
+      "milestones": ["fears.revelation", "fears.scar"],
+      "exclusive_groups": {
+        "fears.support": ["pledged", "stepped_back"]
+      }
+    }
+  }
+}

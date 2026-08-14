@@ -200,7 +200,7 @@ public final class ChatModeDispatcher {
         }
         int stickyIndex = stickyIndex(existing, candidates, now);
         if (existing != null && stickyIndex < 0) {
-            existing.currentQuestion = null; // no in-range/in-window sticky partner → drop stale context
+            existing.clearQuestion(); // no in-range/in-window sticky partner → drop stale context
         }
         double lookConeCos = lookConeCos(McaConversationsConfig.COMMON.chatModeLookConeDegrees.get());
         Address address = Addressing.resolve(rawMessage, names, lookDots, stickyIndex, lookConeCos,
@@ -254,6 +254,24 @@ public final class ChatModeDispatcher {
 
         IntentIndex index = ChatIntentLoader.active();
         String currentQuestion = contextFor(existing, target);
+        List<String> offered = currentQuestion == null
+                ? List.of() : ChatModeSession.currentAnswers(player.getUUID());
+
+        // A live decision may be answered by its number. The villager listed the choices with its
+        // last line, so "2" is as much a way of naming a stance as typing the words would be, and it
+        // drives the identical selectAnswer call the GUI button drives.
+        if (!offered.isEmpty()) {
+            java.util.OptionalInt choice = QuickReplies.parse(address.message(), offered.size());
+            if (choice.isPresent()) {
+                java.util.Optional<String> picked = QuickReplies.answerFor(offered, choice.getAsInt());
+                if (picked.isPresent()
+                        && McaCompat.checkConstraints(target.entity(), player, currentQuestion, picked.get())) {
+                    drive(target, player, currentQuestion, picked.get(), now);
+                    return;
+                }
+            }
+        }
+
         NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
             // "Hey Anna" strips to nothing, but the greeting itself is the message — answer it.
@@ -278,7 +296,9 @@ public final class ChatModeDispatcher {
             return;
         }
 
-        List<Scored> ranked = IntentMatcher.rank(index, normalized, currentQuestion);
+        // While a decision is open, score the choices on the table (plus the ways out) rather than
+        // every topic in the pack: a weak global match must never masquerade as an answer (§7.3).
+        List<Scored> ranked = IntentMatcher.rank(index, normalized, currentQuestion, offered);
         List<Scored> eligible = new ArrayList<>();
         for (Scored s : ranked) {
             if (GatePreview.eligible(target.entity(), player, s)) {
@@ -537,7 +557,7 @@ public final class ChatModeDispatcher {
         deflect(target, player, "farewell");
         Session s = ChatModeSession.get(player.getUUID());
         s.villagerId = null;
-        s.currentQuestion = null;
+        s.clearQuestion();
         s.consecutiveMisses = 0;
         VillagerAttention.release(target.entity()); // conversation over — back to their day
     }
@@ -547,14 +567,14 @@ public final class ChatModeDispatcher {
         Session s = ChatModeSession.get(player.getUUID());
         int muteTicks = McaConversationsConfig.COMMON.chatModeMuteTicks.get();
         s.mute(target.entity().getUUID(), now + Math.max(0, muteTicks));
-        s.currentQuestion = null;
+        s.clearQuestion();
         deflect(target, player, "muted");
         VillagerAttention.release(target.entity()); // asked to leave the player be — walks off too
     }
 
     /** "Never mind" (spec §11): drop the open sub-question; never counts as a miss. */
     private static void decline(VillagerCandidate target, ServerPlayer player, long now) {
-        ChatModeSession.get(player.getUUID()).currentQuestion = null;
+        ChatModeSession.get(player.getUUID()).clearQuestion();
         deflect(target, player, "dropped");
         attend(target, player, now); // still conversing, just changing the subject
     }
@@ -578,6 +598,15 @@ public final class ChatModeDispatcher {
             if (showHearts && ok) {
                 // Delivery is deferred through the scheduler, so the delta lands before the line renders.
                 scope.heartsDelta = McaCompat.getHearts(player, target.entity()) - heartsBefore;
+            }
+            if (ok) {
+                // selectAnswer may have left a new decision open; the redirect mixin recorded what was
+                // offered, so the reply can carry the choices the GUI would have drawn as buttons.
+                String nextQuestion = ChatModeSession.currentQuestion(player.getUUID());
+                if (nextQuestion != null && !isHubQuestion(nextQuestion)) {
+                    QuickReplies.optionsLine(nextQuestion, ChatModeSession.currentAnswers(player.getUUID()))
+                            .ifPresent(line -> scope.options = line);
+                }
             }
         }
         if (ok) {
@@ -735,18 +764,21 @@ public final class ChatModeDispatcher {
     }
 
     private static String contextFor(Session session, VillagerCandidate target) {
-        if (session == null || session.currentQuestion == null || session.villagerId == null) {
+        if (session == null || session.currentQuestion() == null || session.villagerId == null) {
             return null;
         }
         if (!session.villagerId.equals(target.entity().getUUID())) {
             return null;
         }
         // Category hubs (menus in the GUI) are meaningless as chat context — treat them as no context.
-        String q = session.currentQuestion;
-        if (q.equals("conversations") || q.startsWith("conversations.cat.")) {
-            return null;
-        }
-        return q;
+        String q = session.currentQuestion();
+        return isHubQuestion(q) ? null : q;
+    }
+
+    /** True for the navigation pages: menus in the GUI, and nothing to answer in chat. */
+    private static boolean isHubQuestion(String question) {
+        return question == null || question.equals("conversations")
+                || question.startsWith("conversations.cat.");
     }
 
     private static void markProcessed(ServerPlayer player, long now) {
@@ -879,8 +911,11 @@ public final class ChatModeDispatcher {
 
         IntentIndex index = ChatIntentLoader.active();
         String currentQuestion = contextFor(existing, target);
+        List<String> offered = currentQuestion == null
+                ? List.of() : ChatModeSession.currentAnswers(player.getUUID());
+
         NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
-        List<Scored> ranked = IntentMatcher.rank(index, normalized, currentQuestion);
+        List<Scored> ranked = IntentMatcher.rank(index, normalized, currentQuestion, offered);
         Set<String> eligibleIds = new HashSet<>();
         List<Scored> eligible = new ArrayList<>();
         for (Scored s : ranked) {

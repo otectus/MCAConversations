@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "ask_work",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.ask_work",
+              "deltas": {
+                "respect": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.day.ordinary.followup",
+            "say": "conversations.day.ordinary.ask_work"
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_own_day",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.ordinary.share_own_day",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.share_own_day",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.day.ordinary.followup",
+            "say": "conversations.day.ordinary.share_own_day"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hurry",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.ordinary.hurry",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.ordinary.hurry",
+              "deltas": {
+                "respect": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.day.ordinary.followup",
+            "say": "conversations.day.ordinary.hurry"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.ordinary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,7 @@ File: `config/mcaconversations-common.toml` (generated on first run).
 | `enableGossip` | `true` | no events are detected or told; the "news" topic answers "quiet week" |
 | `enableQuests` | `true` | MCA: Quests integration is inert (quest-aware conditions score 0, quest lines aren't voiced) — only ever active when the `mcaquests` mod is installed |
 | `enableWeatherLines` | `true` | weather-aware lines are off; the `conversations_weather` condition and the `world` feature flag score as disabled |
+| `enableBranching` | `true` | converted topics fall back to their 1.0.0 one-line result and return to the category, payout and all. Nothing is ever left as an empty page: each starter carries an explicit legacy fallback |
 
 ### `hubEntryMode` (default `ADDITIVE`)
 
@@ -101,6 +102,37 @@ off is exactly the 0.6.0 experience. See DATAPACK.md → *The disposition vector
 | `dispositionDailyAxisCap` | 8 | 1–50 | per-axis, per-MC-day cap on total disposition movement (anti-farming) |
 | `dispositionStaleDays` | 0 | 0–365 | prune records untouched this many MC days (0 = only prune on villager death) |
 | `debugRpg` | `false` | | INFO-level logs for disposition reads/writes, check inputs, tier selection |
+
+## `[conversation]`
+
+The branching-conversation economy. Hearts move on what you **say back** — never on asking,
+navigating, or leaving. Every conversation-sourced heart change passes through a guarded ledger:
+the authored delta is scaled by the multiplier, clamped by the depth class's per-conversation
+budget, clamped again by the per-day budget, diminished on repeat, and applied at most once per
+transaction. These caps stay active even with the disposition vector switched off.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `conversationHeartMultiplier` | `1.0` | Scale on every conversation heart change, both directions. `0.0` makes conversation heart-neutral while the trees, vector and arcs still run |
+| `conversationDailyPositiveCap` | `8` | Per-villager, per-player, per-MC-day ceiling on hearts **gained** from conversation |
+| `conversationDailyNegativeCap` | `10` | Per-day floor on hearts **lost**, as a positive number. Counted separately, so antagonising a villager never manufactures room to earn more back |
+| `strongerNegativeOutcomes` | `false` | Double authored negatives before the caps, for players who want dismissiveness to bite harder |
+| `conversationSessionTimeoutTicks` | `1200` | How long a conversation survives without activity before its per-conversation budget resets (1200 = 60 s). Sessions never persist across a restart; arcs, milestones and daily budgets do |
+| `debugBranching` | `false` | Verbose logging: topic and node transitions, decision ids, check inputs and tier, requested vs applied hearts, vector deltas, arc and milestone moves |
+
+Per-conversation budgets come from the topic's depth class rather than a config knob, so an
+operator has four numbers to reason about instead of forty:
+
+| Depth class | Gain per conversation | Loss per conversation |
+|---|---:|---:|
+| Quick (weather, food, the day) | +2 | −3 |
+| Standard (work, village, news) | +4 | −5 |
+| Deep / Relationship (fears, secrets, family) | +8 | −10 |
+| Service (a work offer) | +2 | −2 |
+
+One honest wrinkle: MCA itself doubles a **negative** heart change for a `SENSITIVE` villager,
+inside its own reward path and therefore after these caps. The budget bounds what this mod grants;
+MCA's personality rule can still amplify a granted loss.
 
 ## `[chat]`
 

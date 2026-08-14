@@ -336,6 +336,24 @@ Selection over the ranked eligible list:
 - Greeting/farewell short-circuit: messages of ≤ 3 content tokens are first checked against the small-utterance table (`hello`, `bye`, `thanks`, `yes`, `no` classes) before full scoring; this keeps one-word messages away from the coverage math and gives `hi Agnes` a guaranteed greet.
 - **System-intent precedence**: `_system.json` intents (§7) score like any other but win ties and near-ties (margin < 0.10) against topic intents — a decline or mute request must never be misread as topic interest.
 
+### 6.7a Live decisions (AMENDS 6.7 and 9, added 1.1.0)
+
+Everything in 6.7 still describes how context scoping works for the pre-1.1.0 sub-questions. One rule changes once a topic becomes a branching tree.
+
+When the open question is a **live decision** — a `conversations.topic.*` or `conversations.arc.*` node, with a known offered-answer list — global topic intents no longer compete freely. `IntentMatcher.rank(index, msg, question, offeredAnswers)` keeps: **(a)** system controls, always, so the player can always leave; **(b)** context intents bound to that exact question whose answer is in the list MCA *actually offered* (the constraint-filtered set from `InteractionDialogueResponse`, not merely something present in the datapack); **(c)** a global topic intent only as a deliberate **subject change**, which must clear `SUBJECT_CHANGE_FLOOR` (0.80) *and* beat the best contextual reading by `SUBJECT_CHANGE_MARGIN` (0.15).
+
+The reason is concrete: a villager has just asked what you make of their bad day, and you type "how's the weather?". Under 6.7's rules that scores as a topic starter and silently abandons the decision. Under 6.7a it does not clear the floor, so it is treated as a miss rather than an answer.
+
+`Session.currentQuestion` and `currentAnswers` moved out of `ChatModeSession` in 1.1.0 and now live on the shared `ConversationSession`, which the GUI writes to as well — so both frontends agree on what the player was last asked. `ChatModeSession.Session` keeps what is genuinely chat-only: the sticky target, the anti-spam anchors, the miss ladder and the per-villager mutes.
+
+### 6.7b Numbered quick-replies (NEW, 1.1.0)
+
+Free text stays the primary path — every substantive answer has authored intents with real paraphrases, and lint requires them. But a branching tree asks the player to choose between specific things their character could say, and expecting them to guess the wording of a stance they cannot see is a worse experience than the GUI, not a better one.
+
+So when an exchange leaves a decision open, the villager's chat line is followed by the choices, numbered, rendered from the same `dialogue.<question>.<answer>` keys the buttons use (so a player reads the exact words the GUI would have shown, in their own locale). `QuickReplies.parse` accepts a bare number with the punctuation people actually type — `2`, `2.`, `(2)`, `#2` — and nothing else: "give me 2 minutes" is speech and goes to the matcher. The chosen answer drives the identical `selectAnswer` call the button drives.
+
+The list is sent to the asking player only, never to bystanders overhearing a public reply.
+
 ### 6.7 Context scoping (multi-turn)
 
 Intents may declare `"context": "conversations.fears"` — they only enter scoring when `session.currentQuestion` equals that id (and score the `ctx` bonus). This is how CRPG-style stances work in chat: after `fears` opens (`next: "conversations.fears"` recorded by the redirect mixin), the scoped intents for `comfort` / `challenge` / `press` / `share` become live, e.g. *"You could face it. I'd stand with you."* → `press`. Context intents are checked with threshold `chatModeMinScore − 0.10` (the conversation frame justifies looser reading, mirroring AIML's `<that>`-scoped categories and IF's current-topic disambiguation). Global intents remain live simultaneously — a subject change wins if it outscores the scoped set, and clears `currentQuestion` (§9). Category-hub questions (`conversations`, `conversations.cat.*`) are **never** recorded as context: they are menus, and chat mode's entire premise is that menus dissolve into free address.

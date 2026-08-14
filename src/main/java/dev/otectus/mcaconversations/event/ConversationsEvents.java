@@ -12,7 +12,11 @@ import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
+import dev.otectus.mcaconversations.interiority.Interiority;
+import dev.otectus.mcaconversations.progress.ProgressSavedData;
 import dev.otectus.mcaconversations.gift.GiftMemoryProvider;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
 import dev.otectus.mcaconversations.gossip.GossipDetectors;
@@ -155,6 +159,8 @@ public final class ConversationsEvents {
         if (McaCompat.isMcaVillager(event.getEntity())) {
             GossipDetectors.onVillagerDeath(event.getEntity());
             dropDispositions(event.getEntity());
+            dropProgress(event.getEntity());
+            ConversationSessions.clearVillager(event.getEntity().getUUID());
         }
     }
 
@@ -169,6 +175,21 @@ public final class ConversationsEvents {
             }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("disposition death-prune failed; ignoring", t);
+        }
+    }
+
+    /**
+     * A dead villager can never have the conversation its ledger exists to remember, so its progress
+     * rows are dropped with its disposition. Milestones are per (villager, player): with the villager
+     * gone there is nothing left that could ever read them back.
+     */
+    private static void dropProgress(Entity villager) {
+        try {
+            if (villager.getServer() != null) {
+                ProgressSavedData.get(villager.getServer()).removeVillager(villager.getUUID());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("progress death-prune failed; ignoring", t);
         }
     }
 
@@ -209,6 +230,8 @@ public final class ConversationsEvents {
         if (event.getServer().getTickCount() % interval == 0) {
             GossipDetectors.scan(event.getServer());
             pruneStaleDispositions(event.getServer());
+            pruneStaleProgress(event.getServer());
+            ConversationSessions.sweep(gameTime);
         }
     }
 
@@ -225,6 +248,23 @@ public final class ConversationsEvents {
         }
     }
 
+    /**
+     * Age-based progress pruning, riding the same low-frequency cadence as the gossip scan. Uses the
+     * disposition stale-days knob rather than adding a second one: both are "this pair has not spoken
+     * in a very long time" and an operator should not have to reason about two numbers.
+     */
+    private static void pruneStaleProgress(net.minecraft.server.MinecraftServer server) {
+        int staleDays = McaConversationsConfig.COMMON.dispositionStaleDays.get();
+        if (staleDays <= 0) {
+            return;
+        }
+        try {
+            ProgressSavedData.get(server).prune(server.overworld().getGameTime(), staleDays * 24_000L);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("progress prune failed; ignoring", t);
+        }
+    }
+
     // --- Commands ----------------------------------------------------------------
 
     @SubscribeEvent
@@ -235,13 +275,15 @@ public final class ConversationsEvents {
     // --- Datapack listeners ------------------------------------------------------
 
     /**
-     * Registers the chat-intent datapack loader (the {@code chat_intents} directory under any
-     * namespace's {@code data}). MCA-independent — these are our own resources — so it attaches
-     * regardless of {@link McaBridge#isAvailable()}; the loaded index is inert until
-     * {@code enableChatMode} is on.
+     * Registers this mod's datapack loaders — chat intents, the conversation catalog and the
+     * per-personality interiority profiles, each merged across namespaces so packs can extend them.
+     * MCA-independent — these are our own resources — so they attach regardless of
+     * {@link McaBridge#isAvailable()}; each loaded index is inert until its feature is on.
      */
     @SubscribeEvent
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(new ChatIntentLoader());
+        event.addListener(new ConversationCatalogLoader());
+        event.addListener(new Interiority());
     }
 }

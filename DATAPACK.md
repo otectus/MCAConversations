@@ -56,6 +56,29 @@ and 7.6.20 (still supported at runtime).
   This mod's own `conversations_*` keys are **parse-safe**: malformed JSON logs an ERROR and the entry
   degrades to a no-op action / never-matching condition instead of crashing the reload.
 
+### Three engine rules that decide how you author a result (verified in 7.6.20 and 7.7.0-beta.2)
+
+These are not obvious from the JSON, and getting any of them wrong produces content that looks fine
+and behaves strangely. All three are enforced by `ConversationGraphLintTest`.
+
+1. **Actions run in JSON key order, and `say` must come after `next`.** The interact screen holds one
+   speech slot and `setLastPhrase` *replaces* it. The `next` action writes the destination question's
+   prompt into that slot; a `say` authored **before** `next` is therefore overwritten and the player
+   never reads it. The order to write is: state actions (`conversations_session`,
+   `conversations_progress_apply`, `conversations_affection_apply`, `conversations_disposition_apply`,
+   `conversations_record`, `remember`) → `next` → `say`. A corollary: a question's own
+   `dialogue.<question>` prompt is a **fallback**, shown only when a result arrives with no line of
+   its own.
+
+2. **When every result of an answer scores ≤ 0, MCA picks the LAST one.** `Dialogues.selectAnswer`
+   walks the results subtracting each clamped weight and breaks when the running total goes negative;
+   if nothing has positive weight the loop simply runs off the end. So the final element of a
+   `results` array is the implicit safety net — put the fallback there, never first.
+
+3. **An `auto` question must have exactly one answer.** `Actions.next` calls `getRandomAnswer()` on an
+   auto question, and answers *merge across datapacks*, so a second answer turns the node into a coin
+   flip that a third-party pack can introduce without touching your file.
+
 ## MCA's LongTermMemory (what `memory`/`remember` really do)
 
 MCA stores an **expiry game-time** per memory id, per villager:
@@ -99,7 +122,8 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_holiday` | `{"is": "spring_bloom" \| "midsummer" \| "harvest_festival" \| "midwinter" \| "none"}` | 1 when the current calendar festival matches (`none` = an ordinary day); 0 when `enableHolidayLines` is off |
 | `conversations_personality` | `"odd"` or `["odd","playful"]` | 1 when the villager's personality is one of these. **Use this instead of MCA's native `personality`** — that one throws on an id the running MCA does not know and takes the datapack reload (and world load) down with it. This one never throws, and resolves 7.6 ids to their 7.7 successors so one authored value works on both MCA versions |
 | `conversations_disposition` | `{"axis": "trust" \| "respect" \| "warmth" \| "attraction" \| "tension" \| "familiarity", "min"?, "max"?}` | 1 while the decayed disposition axis lies in the inclusive range (bounds default to the axis limits). **Never matches** when `enableDispositions` is off (author a fallback result) or on `attraction` for a romance-ineligible target |
-| `conversations_check` | `{"id": "<topic.stance>", "tier": "crit" \| "success" \| "partial" \| "rebuff", "axis", "difficulty": 0–100}` | 1 when the seeded check resolver lands on this result's declared tier — see *Dialogue checks* below. All four tier results of a stance share id/axis/difficulty |
+| `conversations_check` | `{"id": "<topic.stance>", "tier": "crit" \| "success" \| "partial" \| "rebuff", "axis", "difficulty": 0–100, "stance"?, "arc"?}` | 1 when the seeded check resolver lands on this result's declared tier — see *Dialogue checks* below. All tier results of a stance share id/axis/difficulty/stance/arc. Optional `stance` names a stance family so the villager's interiority profile can make that kind of remark land better or worse on them; optional `arc` names the ordered progression the check belongs to, so the seeded roll changes when the relationship genuinely moves on |
+| `conversations_progress` | `{"arc","min"?,"max"?}` / `{"milestone","has"?}` / `{"exclusive","is"}` | 1 when the durable ledger agrees: arc stage in range, milestone set (or deliberately absent with `"has": false`), or this side of an exclusive choice taken (`"is": "none"` for undecided). Exactly one of the three keys |
 
 ## Custom actions
 
@@ -109,6 +133,94 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_say` | `{"phrase": "<key>", "vars": ["villager_name", ...]?}` | says `dialogue.<phrase>` in the dialogue screen with template args |
 | `conversations_gossip_say` | `{"types"?, "max_age"?, "phrase_prefix"?}` | tells the next untold event (same query rules as the condition) using `dialogue.<prefix>.<type>` (default prefix `conversations.gossip`), then marks it told for this villager+player |
 | `conversations_disposition_apply` | `{"topic": "<topic.stance>", "deltas": {"<axis>": ±N}}` | moves disposition axes through the farming guards (per-axis \|delta\| ≤ 10 at parse; per-day cap and same-day repeat diminishing at apply). No-op when `enableDispositions` is off; `attraction` deltas are dropped for romance-ineligible targets |
+| `conversations_session` | `{"op": "begin"\|"branch"\|"end", "topic"?, "budget"?, "branch"?}` | frames a topic on the shared conversation session. `begin` resets the per-conversation heart budget (depth class from the catalog unless `budget` overrides it); `branch` records which way an opener went; `end` closes the topic. Carries no reward of its own |
+| `conversations_affection_apply` | `{"decision": "<topic.stage.stance>", "delta": ±1..8, "budget"?, "policy"?}` | **the only way branching content may move hearts.** See below |
+| `conversations_progress_apply` | one object or an array of `{"arc",…}` / `{"milestone"}` / `{"exclusive","member"}` | moves durable narrative state. See below |
+
+### Branching conversations (v1.1.0)
+
+A converted topic stops being one click that pays out and becomes a short authored exchange: the
+villager answers, **you** choose what to say back, and your reply is what moves hearts. Three pieces
+of vocabulary do the work, and the runtime guards them so authored content cannot create an exploit
+by accident.
+
+**`conversations_affection_apply` — the only guarded route to a heart change.**
+
+```json
+"conversations_affection_apply": {
+  "decision": "day.rough.empathize",
+  "delta": 1,
+  "budget": "quick",
+  "policy": "daily_repeat"
+}
+```
+
+- `decision` is a **stable id** that keys anti-farming, debug output and tests. Never reuse one for a
+  semantically different choice; lint rejects the same id on two unrelated answers.
+- `delta` is clamped to ±8 at parse.
+- `budget` is the depth class whose per-conversation cap applies — `quick` (+2/−3), `standard`
+  (+4/−5), `deep`/`relationship` (+8/−10), `service` (+2/−2). Omit it and the live session's class
+  (from the catalog) is used.
+- `policy` is `daily_repeat` (full → half → nothing for a repeat of the same decision the same day),
+  `once_per_day`, or `once` (a milestone outcome, once ever). It defaults to `daily_repeat` so a pack
+  that omits it still behaves safely; this mod's own lint requires it explicitly.
+
+Every application runs: duplicate-transaction refusal → replay policy → per-conversation budget →
+per-day budget → MCA's own `rewardHearts`. Note that MCA itself doubles a **negative** delta for a
+`SENSITIVE` villager inside `rewardHearts`, after our caps — the budget bounds what the mod grants,
+and MCA's personality rule may still amplify a granted loss.
+
+**`conversations_progress_apply` — durable narrative state.** One object, or an array when a result
+needs several (JSON keys cannot repeat):
+
+```json
+"conversations_progress_apply": [
+  {"arc": "fears", "op": "advance", "to": 1},
+  {"milestone": "fears.revelation"}
+]
+```
+
+- `arc` with `op` `advance` / `regress` / `hold`. **An advance moves at most one stage per call**, and
+  never past the `max_stage` the catalog declares — the runtime enforces both, not just lint.
+- `milestone` fires exactly once, ever, for this villager and player.
+- `exclusive` + `member` records one side of a mutually exclusive choice; the first side taken decides
+  the group for good.
+
+Expiring boundary and cooldown state needs no new action — `conversations_record` with a `time`
+already does it.
+
+**The conversation catalog** (`data/<namespace>/conversation_catalog/*.json`) is the machine-readable
+claim that a topic exists. It is not a second dialogue engine; MCA's JSON stays authoritative. It
+exists so lint can check that every shipped topic really became a conversation, and so arc, milestone
+and exclusive ids are declared in exactly one place a typo cannot slip past:
+
+```json
+{"topics": {"day": {
+  "entry": {"question": "conversations.cat.chitchat", "answer": "day"},
+  "depth": "quick",
+  "return_question": "conversations.cat.chitchat",
+  "ages": ["toddler", "child", "teen", "adult"],
+  "required_stance_families": ["empathy", "curiosity", "practical_help", "dismissal", "exit"],
+  "chat_required": true
+}}}
+```
+
+Stance families are the shared vocabulary for *what kind of thing the player just said*: `empathy`,
+`curiosity`, `candor`, `encouragement`, `practical_help`, `humor`, `respectful_disagreement`,
+`self_disclosure`, `restraint`, `challenge`, `flirtation`, `dismissal`, `boundary_push`, `exit`.
+Every topic must require `exit` — a node with no graceful way out fails lint.
+
+**Interiority** (`data/<namespace>/interiority/*.json`) gives each personality resting disposition
+baselines and a bias for or against each stance family. Baselines clamp to ±15 and stance bias to
+±12, which is less than one check-tier margin: personality colours an outcome, it never decides one.
+Profiles are per personality, so nothing is rolled or stored per villager.
+
+```json
+{"profiles": {"friendly": {
+  "baselines":   {"warmth": 8, "trust": 4},
+  "stance_bias": {"empathy": 8, "practical_help": 5, "dismissal": -10}
+}}}
+```
 
 ### Template variables (`conversations_say` / gossip lines)
 
@@ -361,6 +473,60 @@ Rules the loader enforces (one malformed intent is skipped with a log line; the 
 
 Build-time lint (`ChatIntentLintTest`) verifies shipped intents bind to real dialogue answers, carry
 enough evidence, and don't collide.
+
+## Content-authoring checklist (a topic is not converted until all of this is true)
+
+Work through this before opening a PR that converts a topic. Most of it is lint-enforced; the items
+that are not are the ones worth being honest with yourself about.
+
+**Shape**
+
+- [ ] The topic has a row in `conversation_catalog/topics.json`, with a depth class, the ages it is
+      reachable by, and `exit` among its required stance families.
+- [ ] The opener routes into a `conversations.topic.<topic>.*` node and grants **nothing** — no
+      hearts, no vector, no progress. First-seen and cooldown memories are fine; those are bookkeeping.
+- [ ] Every normal adult path offers at least the decisions its depth class requires (Quick 2,
+      Standard 2, Deep and Relationship 3), and no path exceeds five.
+- [ ] Every node offers 2–5 answers and at least one consequence-free way out.
+- [ ] Every *non-ideal* opener result — cooldown, low hearts, missing context, no quest — also leads
+      to a choice. A shorter, warier exchange is fine; silently returning to the menu is not.
+- [ ] Toddlers babble or get the reduced grammar; children and teens get age-appropriate lines, not
+      adult lines behind a different opener.
+
+**Consequence**
+
+- [ ] Hearts move only through `conversations_affection_apply`, never native `positive`/`negative`.
+- [ ] Every affection action declares a stable `decision` id and an explicit `policy`.
+- [ ] No single path can exceed its depth class's budget in either direction.
+- [ ] At least one plausible path can gain affection and at least one can lose it.
+- [ ] There is no universally correct button: at least one stance's outcome depends on personality,
+      mood or relationship rather than being right for everyone.
+- [ ] Anything durable (arc, milestone, exclusive choice) is declared in the catalog **and** read
+      back somewhere. State nothing reads is state that should not be stored.
+- [ ] An arc advances at most one stage per conversation.
+- [ ] A crossed boundary changes the relationship; it never removes all access to the villager.
+
+**Both frontends**
+
+- [ ] Every non-exit answer has a context-scoped chat intent bound to its exact question, with
+      several natural paraphrases.
+- [ ] At least three test utterances per stance in `IntentMatcherTest`, and they pass in context.
+- [ ] The intent's keyword set is distinct from every other intent's.
+
+**Words**
+
+- [ ] `en_us` and `pt_br` land in the same change, with matching keys and placeholders.
+- [ ] Every `say` key has its variant pool (3 lines; 2 for check tiers).
+- [ ] Button labels are what the **player says** — never "Persuade", never "+2 Warmth", never a
+      success chance — and are never personality-flavoured.
+- [ ] Each result authors its actions in the order: state → `next` → `say`.
+- [ ] The node's own prompt reads acceptably on its own, even though it is only a fallback.
+
+**Then**
+
+- [ ] `./gradlew test` is green, including the migration ledger — delete the topic's row from
+      `LEGACY_REWARDED_STARTERS`, because the debt is paid.
+- [ ] Add the topic's interesting paths to `PilotPathSimulationTest`, or the equivalent for its phase.
 
 ## Conventions for content that degrades gracefully
 

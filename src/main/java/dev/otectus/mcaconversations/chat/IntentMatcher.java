@@ -6,6 +6,7 @@ import dev.otectus.mcaconversations.chat.Normalizer.NormalizedMessage;
 import dev.otectus.mcaconversations.chat.Normalizer.Token;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,10 @@ public final class IntentMatcher {
     private static final double COVER_FREE_RATIO = 0.6;
     private static final double MARGIN = 0.10;
     private static final double CONTEXT_THRESHOLD_RELIEF = 0.10;
+    /** Absolute confidence a global topic must reach to interrupt a live decision (§7.3). */
+    public static final double SUBJECT_CHANGE_FLOOR = 0.80;
+    /** …and how far it must beat the best contextual reading of the same message. */
+    public static final double SUBJECT_CHANGE_MARGIN = 0.15;
     private static final int PHRASE_GAP_CAP = 4;
     /** Two adjacent pattern literals may be separated by at most one filler token. */
     private static final int ADJACENT_GAP_CAP = 1;
@@ -100,6 +105,49 @@ public final class IntentMatcher {
         }
         out.sort(Comparator.comparingDouble(Scored::score).reversed().thenComparing(Scored::id));
         return out;
+    }
+
+    /**
+     * As {@link #rank(IntentIndex, NormalizedMessage, String)}, but for a <b>live decision</b>: the
+     * player has been asked to choose between specific things to say, and those answers are known.
+     *
+     * <p>Ordinary ranking keeps every global topic intent live alongside the contextual ones, which is
+     * right for small talk and wrong here — "how's the weather" scoring 0.6 must not out-shout a
+     * genuine reply to the question actually on the table. So while a decision is open:
+     *
+     * <ul>
+     *   <li>system controls (farewell, decline, mute) always survive — the player can always leave;</li>
+     *   <li>context intents survive only if their answer is one of the choices <em>actually offered</em>,
+     *       which is MCA's own constraint-filtered list, not merely something present in the datapack;</li>
+     *   <li>a global topic intent survives only as a deliberate <b>subject change</b>: it must clear a
+     *       high absolute bar and beat the best contextual reading by a clear margin.</li>
+     * </ul>
+     */
+    public static List<Scored> rank(IntentIndex index, NormalizedMessage msg, String currentQuestion,
+                                    Collection<String> offeredAnswers) {
+        List<Scored> ranked = rank(index, msg, currentQuestion);
+        if (currentQuestion == null || offeredAnswers == null || offeredAnswers.isEmpty()) {
+            return ranked;
+        }
+        double bestContext = 0;
+        for (Scored s : ranked) {
+            if (s.contextScoped() && offeredAnswers.contains(s.answer())) {
+                bestContext = Math.max(bestContext, s.score());
+            }
+        }
+        List<Scored> kept = new ArrayList<>(ranked.size());
+        for (Scored s : ranked) {
+            if (s.isSystem()) {
+                kept.add(s);
+            } else if (s.contextScoped()) {
+                if (offeredAnswers.contains(s.answer())) {
+                    kept.add(s);
+                }
+            } else if (s.score() >= SUBJECT_CHANGE_FLOOR && s.score() >= bestContext + SUBJECT_CHANGE_MARGIN) {
+                kept.add(s);
+            }
+        }
+        return kept;
     }
 
     private static Scored score(IntentIndex index, CompiledIntent intent, NormalizedMessage msg,
