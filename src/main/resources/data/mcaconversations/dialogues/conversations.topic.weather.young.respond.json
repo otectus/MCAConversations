@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "play_along",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.young.play_along",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.young.play_along",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.young.play_along"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "weather.young.ask",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.young.ask"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.young.dismiss",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.young.dismiss",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.young.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.young.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

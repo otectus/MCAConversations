@@ -1,0 +1,168 @@
+{
+  "answers": [
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "checkin.rough.offer_help",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.offer_help",
+              "deltas": {
+                "warmth": 2,
+                "respect": 3
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.offer_help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "give_space",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "checkin.rough.give_space",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.give_space",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.give_space"
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_own",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "checkin.rough.share_own",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.share_own",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 2
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.share_own.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "checkin.rough.share_own",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.share_own",
+              "deltas": {
+                "respect": -2
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.share_own.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.share_own",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.share_own.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

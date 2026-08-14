@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "delight",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "food.young.delight",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.young.delight",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.young.delight"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "food.young.ask",
+              "deltas": {
+                "warmth": 1,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.young.ask"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "food.young.dismiss",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.young.dismiss",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.young.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.young.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

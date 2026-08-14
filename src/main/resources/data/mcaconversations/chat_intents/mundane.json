@@ -1,0 +1,1400 @@
+{
+  "_comment": [
+    "Context-scoped stances for the Phase 3 mundane topics: check-in, food, weather and season.",
+    "Live only while their exact question is open and their answer is among the offered choices."
+  ],
+  "intents": {
+    "checkin.rough.listen": {
+      "question": "conversations.topic.checkin.rough.respond",
+      "answer": "listen",
+      "context": "conversations.topic.checkin.rough.respond",
+      "keywords": {
+        "listening": 1.5,
+        "listen": 1.5,
+        "more": 0.6,
+        "say": 0.5
+      },
+      "requiresAny": [
+        "listening",
+        "listen",
+        "more"
+      ],
+      "phrases": [
+        "i am listening",
+        "say more if you want",
+        "i will listen",
+        "tell me more if you want"
+      ],
+      "category": "topics"
+    },
+    "checkin.rough.ask": {
+      "question": "conversations.topic.checkin.rough.respond",
+      "answer": "ask",
+      "context": "conversations.topic.checkin.rough.respond",
+      "keywords": {
+        "weighing": 1.5,
+        "bothering": 1.5,
+        "wrong": 1.0,
+        "troubling": 1.5
+      },
+      "requiresAny": [
+        "weighing",
+        "bothering",
+        "wrong",
+        "troubling"
+      ],
+      "phrases": [
+        "what is weighing on you",
+        "what is bothering you",
+        "what is wrong",
+        "what is troubling you"
+      ],
+      "category": "topics"
+    },
+    "checkin.rough.dismiss": {
+      "question": "conversations.topic.checkin.rough.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.checkin.rough.respond",
+      "keywords": {
+        "fine": 1.2,
+        "always": 1.2,
+        "survive": 1.5,
+        "live": 1.2
+      },
+      "requiresAny": [
+        "fine",
+        "always",
+        "survive",
+        "live"
+      ],
+      "phrases": [
+        "you will be fine",
+        "you always are",
+        "you will live",
+        "you will survive"
+      ],
+      "category": "topics"
+    },
+    "checkin.rough.offer_help": {
+      "question": "conversations.topic.checkin.rough.followup",
+      "answer": "offer_help",
+      "context": "conversations.topic.checkin.rough.followup",
+      "keywords": {
+        "take": 1.2,
+        "off": 0.5,
+        "help": 1.2,
+        "one": 0.6,
+        "thing": 0.8
+      },
+      "requiresAny": [
+        "take",
+        "help",
+        "thing"
+      ],
+      "phrases": [
+        "tell me one thing i can take off you",
+        "let me take something",
+        "what can i help with",
+        "name one thing"
+      ],
+      "category": "topics"
+    },
+    "checkin.rough.give_space": {
+      "question": "conversations.topic.checkin.rough.followup",
+      "answer": "give_space",
+      "context": "conversations.topic.checkin.rough.followup",
+      "keywords": {
+        "stop": 1.2,
+        "asking": 1.2,
+        "around": 1.2,
+        "space": 1.5
+      },
+      "requiresAny": [
+        "stop",
+        "around",
+        "space",
+        "asking"
+      ],
+      "phrases": [
+        "i will stop asking",
+        "i am around though",
+        "i will give you space",
+        "i will not push"
+      ],
+      "category": "topics"
+    },
+    "checkin.rough.share_own": {
+      "question": "conversations.topic.checkin.rough.followup",
+      "answer": "share_own",
+      "context": "conversations.topic.checkin.rough.followup",
+      "keywords": {
+        "stretch": 1.5,
+        "myself": 1.2,
+        "been": 0.4,
+        "through": 1.0
+      },
+      "requiresAny": [
+        "stretch",
+        "myself",
+        "through"
+      ],
+      "phrases": [
+        "i have had a stretch like that",
+        "i went through that myself",
+        "been through that myself"
+      ],
+      "category": "topics"
+    },
+    "checkin.good.glad": {
+      "question": "conversations.topic.checkin.good.respond",
+      "answer": "glad",
+      "context": "conversations.topic.checkin.good.respond",
+      "keywords": {
+        "glad": 1.5,
+        "genuinely": 1.5,
+        "pleased": 1.5
+      },
+      "requiresAny": [
+        "glad",
+        "genuinely",
+        "pleased"
+      ],
+      "phrases": [
+        "i am glad",
+        "genuinely glad",
+        "that pleases me",
+        "glad to hear it"
+      ],
+      "category": "topics"
+    },
+    "checkin.good.ask_more": {
+      "question": "conversations.topic.checkin.good.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.checkin.good.respond",
+      "keywords": {
+        "going": 1.2,
+        "right": 1.2,
+        "what": 0.5,
+        "well": 0.8
+      },
+      "requiresAny": [
+        "going",
+        "right",
+        "well"
+      ],
+      "phrases": [
+        "what has been going right",
+        "what is going well",
+        "what has gone right"
+      ],
+      "category": "topics"
+    },
+    "checkin.good.deflate": {
+      "question": "conversations.topic.checkin.good.respond",
+      "answer": "deflate",
+      "context": "conversations.topic.checkin.good.respond",
+      "keywords": {
+        "week": 1.5,
+        "wait": 1.2,
+        "last": 1.2
+      },
+      "requiresAny": [
+        "week",
+        "wait",
+        "last"
+      ],
+      "phrases": [
+        "give it a week",
+        "wait a week",
+        "it will not last"
+      ],
+      "category": "topics"
+    },
+    "checkin.good.keep_it_up": {
+      "question": "conversations.topic.checkin.good.followup",
+      "answer": "keep_it_up",
+      "context": "conversations.topic.checkin.good.followup",
+      "keywords": {
+        "keep": 1.5,
+        "carry": 1.0,
+        "doing": 0.8,
+        "continue": 1.2
+      },
+      "requiresAny": [
+        "keep",
+        "carry",
+        "continue"
+      ],
+      "phrases": [
+        "keep at it",
+        "keep it up",
+        "carry on with that",
+        "continue doing that"
+      ],
+      "category": "topics"
+    },
+    "checkin.good.tease": {
+      "question": "conversations.topic.checkin.good.followup",
+      "answer": "tease",
+      "context": "conversations.topic.checkin.good.followup",
+      "keywords": {
+        "reputation": 1.5,
+        "careful": 1.2,
+        "ruin": 1.5
+      },
+      "requiresAny": [
+        "reputation",
+        "careful",
+        "ruin"
+      ],
+      "phrases": [
+        "careful, you will ruin your reputation",
+        "mind your reputation",
+        "you will ruin it"
+      ],
+      "category": "topics"
+    },
+    "checkin.good.share_own": {
+      "question": "conversations.topic.checkin.good.followup",
+      "answer": "share_own",
+      "context": "conversations.topic.checkin.good.followup",
+      "keywords": {
+        "me": 0.4,
+        "too": 1.2,
+        "alright": 1.2,
+        "mine": 1.2
+      },
+      "requiresAny": [
+        "too",
+        "alright",
+        "mine"
+      ],
+      "phrases": [
+        "things have been alright with me too",
+        "same with me",
+        "mine has been alright too"
+      ],
+      "category": "topics"
+    },
+    "checkin.young.interested": {
+      "question": "conversations.topic.checkin.young.respond",
+      "answer": "interested",
+      "context": "conversations.topic.checkin.young.respond",
+      "keywords": {
+        "whole": 1.5,
+        "everything": 1.2,
+        "tell": 0.8
+      },
+      "requiresAny": [
+        "whole",
+        "everything",
+        "tell"
+      ],
+      "phrases": [
+        "tell me the whole thing",
+        "tell me everything",
+        "go on then tell me"
+      ],
+      "category": "topics"
+    },
+    "checkin.young.encourage": {
+      "question": "conversations.topic.checkin.young.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.checkin.young.respond",
+      "keywords": {
+        "doing": 1.0,
+        "alright": 1.2,
+        "proud": 1.5,
+        "well": 0.8
+      },
+      "requiresAny": [
+        "alright",
+        "proud",
+        "well",
+        "doing"
+      ],
+      "phrases": [
+        "you are doing alright",
+        "i am proud of you",
+        "you are doing well"
+      ],
+      "category": "topics"
+    },
+    "checkin.young.dismiss": {
+      "question": "conversations.topic.checkin.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.checkin.young.respond",
+      "keywords": {
+        "answer": 1.5,
+        "much": 1.0,
+        "hardly": 1.2
+      },
+      "requiresAny": [
+        "answer",
+        "hardly",
+        "much"
+      ],
+      "phrases": [
+        "that is not much of an answer",
+        "hardly an answer",
+        "that is not much"
+      ],
+      "category": "topics"
+    },
+    "checkin.again.apologize": {
+      "question": "conversations.topic.checkin.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.checkin.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "asked": 0.8
+      },
+      "requiresAny": [
+        "already",
+        "sorry",
+        "asked"
+      ],
+      "phrases": [
+        "sorry, i have asked already",
+        "i already asked",
+        "sorry, my mistake"
+      ],
+      "category": "topics"
+    },
+    "checkin.again.press": {
+      "question": "conversations.topic.checkin.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.checkin.again.respond",
+      "keywords": {
+        "humour": 1.5,
+        "really": 1.2,
+        "anyway": 1.2
+      },
+      "requiresAny": [
+        "humour",
+        "really",
+        "anyway"
+      ],
+      "phrases": [
+        "humour me",
+        "really, how are you",
+        "tell me anyway"
+      ],
+      "category": "topics"
+    },
+    "food.trait.respect": {
+      "question": "conversations.topic.food.trait.respond",
+      "answer": "respect",
+      "context": "conversations.topic.food.trait.respond",
+      "keywords": {
+        "fuss": 1.5,
+        "fine": 0.8,
+        "understood": 1.2,
+        "way": 0.5
+      },
+      "requiresAny": [
+        "fuss",
+        "understood",
+        "fine"
+      ],
+      "phrases": [
+        "no fuss from me",
+        "that is how it is",
+        "understood",
+        "fine by me"
+      ],
+      "category": "topics"
+    },
+    "food.trait.ask_about": {
+      "question": "conversations.topic.food.trait.respond",
+      "answer": "ask_about",
+      "context": "conversations.topic.food.trait.respond",
+      "keywords": {
+        "manage": 1.5,
+        "cope": 1.5,
+        "how": 0.5,
+        "day": 0.5
+      },
+      "requiresAny": [
+        "manage",
+        "cope",
+        "how"
+      ],
+      "phrases": [
+        "how do you manage",
+        "how do you cope with it",
+        "how do you manage day to day"
+      ],
+      "category": "topics"
+    },
+    "food.trait.mock": {
+      "question": "conversations.topic.food.trait.respond",
+      "answer": "mock",
+      "context": "conversations.topic.food.trait.respond",
+      "keywords": {
+        "excuse": 1.5,
+        "difficult": 1.5,
+        "fussy": 1.5,
+        "picky": 1.5
+      },
+      "requiresAny": [
+        "excuse",
+        "difficult",
+        "fussy",
+        "picky"
+      ],
+      "phrases": [
+        "sounds like an excuse",
+        "you are being difficult",
+        "that is just fussy",
+        "you are picky"
+      ],
+      "category": "topics"
+    },
+    "food.trait.offer_alternative": {
+      "question": "conversations.topic.food.trait.followup",
+      "answer": "offer_alternative",
+      "context": "conversations.topic.food.trait.followup",
+      "keywords": {
+        "find": 1.5,
+        "bring": 1.2,
+        "something": 0.8,
+        "eat": 0.8
+      },
+      "requiresAny": [
+        "find",
+        "bring",
+        "something"
+      ],
+      "phrases": [
+        "i will find you something you can eat",
+        "i will bring you something else",
+        "i will find something"
+      ],
+      "category": "topics"
+    },
+    "food.trait.share_own": {
+      "question": "conversations.topic.food.trait.followup",
+      "answer": "share_own",
+      "context": "conversations.topic.food.trait.followup",
+      "keywords": {
+        "touch": 1.2,
+        "either": 1.5,
+        "too": 1.0,
+        "cannot": 0.8
+      },
+      "requiresAny": [
+        "either",
+        "touch",
+        "too"
+      ],
+      "phrases": [
+        "there is food i cannot touch either",
+        "same for me",
+        "me too actually"
+      ],
+      "category": "topics"
+    },
+    "food.trait.let_be": {
+      "question": "conversations.topic.food.trait.followup",
+      "answer": "let_be",
+      "context": "conversations.topic.food.trait.followup",
+      "keywords": {
+        "explain": 1.5,
+        "need": 0.8,
+        "justify": 1.5
+      },
+      "requiresAny": [
+        "explain",
+        "justify",
+        "need"
+      ],
+      "phrases": [
+        "you do not have to explain",
+        "no need to justify it",
+        "you owe me no explanation"
+      ],
+      "category": "topics"
+    },
+    "food.normal.share_pref": {
+      "question": "conversations.topic.food.normal.respond",
+      "answer": "share_pref",
+      "context": "conversations.topic.food.normal.respond",
+      "keywords": {
+        "plainer": 1.5,
+        "mine": 1.2,
+        "simple": 1.2
+      },
+      "requiresAny": [
+        "plainer",
+        "mine",
+        "simple"
+      ],
+      "phrases": [
+        "mine is plainer than that",
+        "my taste is simple",
+        "mine is simpler"
+      ],
+      "category": "topics"
+    },
+    "food.normal.ask_recipe": {
+      "question": "conversations.topic.food.normal.respond",
+      "answer": "ask_recipe",
+      "context": "conversations.topic.food.normal.respond",
+      "keywords": {
+        "make": 1.5,
+        "cook": 1.5,
+        "recipe": 1.5
+      },
+      "requiresAny": [
+        "make",
+        "cook",
+        "recipe"
+      ],
+      "phrases": [
+        "how do you make it",
+        "how do you cook it",
+        "what is the recipe"
+      ],
+      "category": "topics"
+    },
+    "food.normal.disagree": {
+      "question": "conversations.topic.food.normal.respond",
+      "answer": "disagree",
+      "context": "conversations.topic.food.normal.respond",
+      "keywords": {
+        "argue": 1.5,
+        "disagree": 1.5,
+        "wrong": 1.0
+      },
+      "requiresAny": [
+        "argue",
+        "disagree",
+        "wrong"
+      ],
+      "phrases": [
+        "i would argue with that",
+        "i disagree",
+        "you are wrong about that"
+      ],
+      "category": "topics"
+    },
+    "food.normal.praise": {
+      "question": "conversations.topic.food.normal.followup",
+      "answer": "praise",
+      "context": "conversations.topic.food.normal.followup",
+      "keywords": {
+        "taste": 1.5,
+        "good": 0.6,
+        "excellent": 1.2
+      },
+      "requiresAny": [
+        "taste",
+        "excellent",
+        "good"
+      ],
+      "phrases": [
+        "you have good taste",
+        "excellent taste",
+        "that is good taste"
+      ],
+      "category": "topics"
+    },
+    "food.normal.promise_bring": {
+      "question": "conversations.topic.food.normal.followup",
+      "answer": "promise_bring",
+      "context": "conversations.topic.food.normal.followup",
+      "keywords": {
+        "bring": 1.5,
+        "some": 0.8,
+        "get": 0.6
+      },
+      "requiresAny": [
+        "bring",
+        "some"
+      ],
+      "phrases": [
+        "i will bring you some",
+        "i will bring some over",
+        "i will get you some"
+      ],
+      "category": "topics"
+    },
+    "food.normal.ask_where": {
+      "question": "conversations.topic.food.normal.followup",
+      "answer": "ask_where",
+      "context": "conversations.topic.food.normal.followup",
+      "keywords": {
+        "where": 1.5,
+        "get": 1.0,
+        "buy": 1.2
+      },
+      "requiresAny": [
+        "where",
+        "buy",
+        "get"
+      ],
+      "phrases": [
+        "where do you get it",
+        "where do you buy it",
+        "where does it come from"
+      ],
+      "category": "topics"
+    },
+    "food.young.delight": {
+      "question": "conversations.topic.food.young.respond",
+      "answer": "delight",
+      "context": "conversations.topic.food.young.respond",
+      "keywords": {
+        "excellent": 1.5,
+        "choice": 1.2,
+        "agree": 1.0
+      },
+      "requiresAny": [
+        "excellent",
+        "choice",
+        "agree"
+      ],
+      "phrases": [
+        "that is an excellent choice",
+        "excellent choice",
+        "i agree completely"
+      ],
+      "category": "topics"
+    },
+    "food.young.ask": {
+      "question": "conversations.topic.food.young.respond",
+      "answer": "ask",
+      "context": "conversations.topic.food.young.respond",
+      "keywords": {
+        "else": 1.5,
+        "other": 1.2,
+        "what": 0.4
+      },
+      "requiresAny": [
+        "else",
+        "other"
+      ],
+      "phrases": [
+        "what else do you like",
+        "what other food",
+        "anything else you like"
+      ],
+      "category": "topics"
+    },
+    "food.young.dismiss": {
+      "question": "conversations.topic.food.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.food.young.respond",
+      "keywords": {
+        "proper": 1.5,
+        "real": 1.2,
+        "food": 0.4
+      },
+      "requiresAny": [
+        "proper",
+        "real"
+      ],
+      "phrases": [
+        "that is not proper food",
+        "that is not real food",
+        "hardly proper food"
+      ],
+      "category": "topics"
+    },
+    "food.again.apologize": {
+      "question": "conversations.topic.food.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.food.again.respond",
+      "keywords": {
+        "covered": 1.5,
+        "sorry": 1.2,
+        "already": 1.0
+      },
+      "requiresAny": [
+        "covered",
+        "sorry",
+        "already"
+      ],
+      "phrases": [
+        "sorry, we covered this",
+        "sorry, asked already",
+        "my mistake, we did this"
+      ],
+      "category": "topics"
+    },
+    "food.again.press": {
+      "question": "conversations.topic.food.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.food.again.respond",
+      "keywords": {
+        "craving": 1.5,
+        "humour": 1.5,
+        "anyway": 1.0
+      },
+      "requiresAny": [
+        "craving",
+        "humour",
+        "anyway"
+      ],
+      "phrases": [
+        "what are you craving",
+        "humour me",
+        "tell me anyway"
+      ],
+      "category": "topics"
+    },
+    "weather.storm.concern": {
+      "question": "conversations.topic.weather.storm.respond",
+      "answer": "concern",
+      "context": "conversations.topic.weather.storm.respond",
+      "keywords": {
+        "alright": 1.5,
+        "okay": 1.2,
+        "out": 0.5,
+        "safe": 1.2
+      },
+      "requiresAny": [
+        "alright",
+        "okay",
+        "safe"
+      ],
+      "phrases": [
+        "are you alright out in this",
+        "are you okay in this",
+        "are you safe out here"
+      ],
+      "category": "topics"
+    },
+    "weather.storm.practical": {
+      "question": "conversations.topic.weather.storm.respond",
+      "answer": "practical",
+      "context": "conversations.topic.weather.storm.respond",
+      "keywords": {
+        "bringing": 1.5,
+        "inside": 1.2,
+        "need": 0.6,
+        "secure": 1.2
+      },
+      "requiresAny": [
+        "bringing",
+        "inside",
+        "secure",
+        "need"
+      ],
+      "phrases": [
+        "anything need bringing in",
+        "anything to bring inside",
+        "need anything secured"
+      ],
+      "category": "topics"
+    },
+    "weather.storm.dismiss": {
+      "question": "conversations.topic.weather.storm.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.weather.storm.respond",
+      "keywords": {
+        "only": 1.2,
+        "thunder": 1.2,
+        "bit": 1.0,
+        "just": 0.8
+      },
+      "requiresAny": [
+        "only",
+        "thunder",
+        "bit",
+        "just"
+      ],
+      "phrases": [
+        "it is only thunder",
+        "just a bit of thunder",
+        "only a bit of weather"
+      ],
+      "category": "topics"
+    },
+    "weather.storm.offer_shelter": {
+      "question": "conversations.topic.weather.storm.followup",
+      "answer": "offer_shelter",
+      "context": "conversations.topic.weather.storm.followup",
+      "keywords": {
+        "come": 1.2,
+        "sit": 1.5,
+        "inside": 1.2,
+        "shelter": 1.5
+      },
+      "requiresAny": [
+        "sit",
+        "shelter",
+        "inside",
+        "come"
+      ],
+      "phrases": [
+        "come sit it out with me",
+        "come inside with me",
+        "take shelter with me"
+      ],
+      "category": "topics"
+    },
+    "weather.storm.stay_awhile": {
+      "question": "conversations.topic.weather.storm.followup",
+      "answer": "stay_awhile",
+      "context": "conversations.topic.weather.storm.followup",
+      "keywords": {
+        "wait": 1.5,
+        "here": 1.0,
+        "stay": 1.2,
+        "with": 0.4
+      },
+      "requiresAny": [
+        "wait",
+        "stay",
+        "here"
+      ],
+      "phrases": [
+        "i will wait it out here with you",
+        "i will stay with you",
+        "i will wait here"
+      ],
+      "category": "topics"
+    },
+    "weather.storm.joke": {
+      "question": "conversations.topic.weather.storm.followup",
+      "answer": "joke",
+      "context": "conversations.topic.weather.storm.followup",
+      "keywords": {
+        "bed": 1.5,
+        "staying": 1.2,
+        "sleeping": 1.5
+      },
+      "requiresAny": [
+        "bed",
+        "staying",
+        "sleeping"
+      ],
+      "phrases": [
+        "good weather for staying in bed",
+        "perfect sleeping weather",
+        "weather for bed"
+      ],
+      "category": "topics"
+    },
+    "weather.mild.enjoy": {
+      "question": "conversations.topic.weather.mild.respond",
+      "answer": "enjoy",
+      "context": "conversations.topic.weather.mild.respond",
+      "keywords": {
+        "good": 0.8,
+        "lovely": 1.5,
+        "nice": 1.2,
+        "one": 0.5
+      },
+      "requiresAny": [
+        "lovely",
+        "nice",
+        "good"
+      ],
+      "phrases": [
+        "it is a good one",
+        "lovely day",
+        "it is nice out"
+      ],
+      "category": "topics"
+    },
+    "weather.mild.talk_crops": {
+      "question": "conversations.topic.weather.mild.respond",
+      "answer": "talk_crops",
+      "context": "conversations.topic.weather.mild.respond",
+      "keywords": {
+        "fields": 1.5,
+        "crops": 1.5,
+        "harvest": 1.2,
+        "use": 0.6
+      },
+      "requiresAny": [
+        "fields",
+        "crops",
+        "harvest"
+      ],
+      "phrases": [
+        "is it any use to the fields",
+        "good for the crops",
+        "will it help the harvest"
+      ],
+      "category": "topics"
+    },
+    "weather.mild.grumble": {
+      "question": "conversations.topic.weather.mild.respond",
+      "answer": "grumble",
+      "context": "conversations.topic.weather.mild.respond",
+      "keywords": {
+        "less": 1.5,
+        "could": 0.5,
+        "enough": 1.2,
+        "tired": 1.2
+      },
+      "requiresAny": [
+        "less",
+        "enough",
+        "tired"
+      ],
+      "phrases": [
+        "i could do with less of it",
+        "i have had enough of it",
+        "i am tired of it"
+      ],
+      "category": "topics"
+    },
+    "weather.mild.agree": {
+      "question": "conversations.topic.weather.mild.followup",
+      "answer": "agree",
+      "context": "conversations.topic.weather.mild.followup",
+      "keywords": {
+        "right": 1.5,
+        "true": 1.2,
+        "correct": 1.2
+      },
+      "requiresAny": [
+        "right",
+        "true",
+        "correct"
+      ],
+      "phrases": [
+        "you are right about that",
+        "that is true",
+        "quite right"
+      ],
+      "category": "topics"
+    },
+    "weather.mild.ask_plans": {
+      "question": "conversations.topic.weather.mild.followup",
+      "answer": "ask_plans",
+      "context": "conversations.topic.weather.mild.followup",
+      "keywords": {
+        "plans": 1.5,
+        "doing": 1.0,
+        "day": 0.6
+      },
+      "requiresAny": [
+        "plans",
+        "doing"
+      ],
+      "phrases": [
+        "doing anything with the day",
+        "any plans today",
+        "what are your plans"
+      ],
+      "category": "topics"
+    },
+    "weather.mild.cut_short": {
+      "question": "conversations.topic.weather.mild.followup",
+      "answer": "cut_short",
+      "context": "conversations.topic.weather.mild.followup",
+      "keywords": {
+        "only": 1.2,
+        "weather": 1.2,
+        "anyway": 1.2,
+        "boring": 1.2
+      },
+      "requiresAny": [
+        "only",
+        "anyway",
+        "boring"
+      ],
+      "phrases": [
+        "it is only weather",
+        "anyway, moving on",
+        "this is boring"
+      ],
+      "category": "topics"
+    },
+    "weather.young.play_along": {
+      "question": "conversations.topic.weather.young.respond",
+      "answer": "play_along",
+      "context": "conversations.topic.weather.young.respond",
+      "keywords": {
+        "sheep": 1.5,
+        "definitely": 1.2,
+        "see": 0.6
+      },
+      "requiresAny": [
+        "sheep",
+        "definitely",
+        "see"
+      ],
+      "phrases": [
+        "big sky sheep definitely",
+        "i see them too",
+        "definitely sheep"
+      ],
+      "category": "topics"
+    },
+    "weather.young.ask": {
+      "question": "conversations.topic.weather.young.respond",
+      "answer": "ask",
+      "context": "conversations.topic.weather.young.respond",
+      "keywords": {
+        "favourite": 1.5,
+        "favorite": 1.5,
+        "best": 1.2,
+        "kind": 0.6
+      },
+      "requiresAny": [
+        "favourite",
+        "favorite",
+        "best"
+      ],
+      "phrases": [
+        "what is your favourite kind of sky",
+        "which sky is best",
+        "favourite weather"
+      ],
+      "category": "topics"
+    },
+    "weather.young.dismiss": {
+      "question": "conversations.topic.weather.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.weather.young.respond",
+      "keywords": {
+        "just": 1.0,
+        "clouds": 1.5,
+        "only": 0.8
+      },
+      "requiresAny": [
+        "clouds",
+        "just",
+        "only"
+      ],
+      "phrases": [
+        "they are just clouds",
+        "it is only clouds",
+        "just clouds"
+      ],
+      "category": "topics"
+    },
+    "season.holiday.ask_tradition": {
+      "question": "conversations.topic.season.holiday.respond",
+      "answer": "ask_tradition",
+      "context": "conversations.topic.season.holiday.respond",
+      "keywords": {
+        "do": 0.5,
+        "celebrate": 1.5,
+        "tradition": 1.5,
+        "usually": 0.8
+      },
+      "requiresAny": [
+        "celebrate",
+        "tradition",
+        "usually",
+        "do"
+      ],
+      "phrases": [
+        "what do you do for it",
+        "how do you celebrate",
+        "what is the tradition"
+      ],
+      "category": "topics"
+    },
+    "season.holiday.accept": {
+      "question": "conversations.topic.season.holiday.respond",
+      "answer": "accept",
+      "context": "conversations.topic.season.holiday.respond",
+      "keywords": {
+        "save": 1.5,
+        "place": 1.2,
+        "come": 1.0,
+        "join": 1.5
+      },
+      "requiresAny": [
+        "save",
+        "place",
+        "join",
+        "come"
+      ],
+      "phrases": [
+        "save me a place",
+        "i will come",
+        "count me in",
+        "i will join you"
+      ],
+      "category": "topics"
+    },
+    "season.holiday.decline": {
+      "question": "conversations.topic.season.holiday.respond",
+      "answer": "decline",
+      "context": "conversations.topic.season.holiday.respond",
+      "keywords": {
+        "cannot": 1.5,
+        "enjoy": 1.0,
+        "make": 0.6,
+        "busy": 1.2
+      },
+      "requiresAny": [
+        "cannot",
+        "busy",
+        "enjoy"
+      ],
+      "phrases": [
+        "i cannot make it",
+        "i am busy that day",
+        "i cannot come but enjoy it"
+      ],
+      "category": "topics"
+    },
+    "season.holiday.share_tradition": {
+      "question": "conversations.topic.season.holiday.followup",
+      "answer": "share_tradition",
+      "context": "conversations.topic.season.holiday.followup",
+      "keywords": {
+        "similar": 1.5,
+        "where": 0.8,
+        "from": 0.6,
+        "home": 1.2
+      },
+      "requiresAny": [
+        "similar",
+        "home",
+        "from"
+      ],
+      "phrases": [
+        "we did something similar where i am from",
+        "we had something similar back home",
+        "similar where i grew up"
+      ],
+      "category": "topics"
+    },
+    "season.holiday.compliment": {
+      "question": "conversations.topic.season.holiday.followup",
+      "answer": "compliment",
+      "context": "conversations.topic.season.holiday.followup",
+      "keywords": {
+        "village": 1.2,
+        "well": 1.2,
+        "lovely": 1.2,
+        "beautifully": 1.5
+      },
+      "requiresAny": [
+        "village",
+        "well",
+        "lovely",
+        "beautifully"
+      ],
+      "phrases": [
+        "the village does this well",
+        "you do this beautifully",
+        "it is lovely here today"
+      ],
+      "category": "topics"
+    },
+    "season.holiday.grumble": {
+      "question": "conversations.topic.season.holiday.followup",
+      "answer": "grumble",
+      "context": "conversations.topic.season.holiday.followup",
+      "keywords": {
+        "fuss": 1.5,
+        "bother": 1.2,
+        "much": 0.6
+      },
+      "requiresAny": [
+        "fuss",
+        "bother"
+      ],
+      "phrases": [
+        "it is a lot of fuss",
+        "too much fuss",
+        "a lot of bother for one day"
+      ],
+      "category": "topics"
+    },
+    "season.turn.agree": {
+      "question": "conversations.topic.season.turn.respond",
+      "answer": "agree",
+      "context": "conversations.topic.season.turn.respond",
+      "keywords": {
+        "suits": 1.5,
+        "fits": 1.5,
+        "you": 0.3
+      },
+      "requiresAny": [
+        "suits",
+        "fits"
+      ],
+      "phrases": [
+        "it suits you",
+        "this season fits you",
+        "it suits you, this time of year"
+      ],
+      "category": "topics"
+    },
+    "season.turn.ask_favourite": {
+      "question": "conversations.topic.season.turn.respond",
+      "answer": "ask_favourite",
+      "context": "conversations.topic.season.turn.respond",
+      "keywords": {
+        "favourite": 1.5,
+        "favorite": 1.5,
+        "which": 1.0,
+        "prefer": 1.5
+      },
+      "requiresAny": [
+        "favourite",
+        "favorite",
+        "which",
+        "prefer"
+      ],
+      "phrases": [
+        "which season is yours",
+        "what is your favourite season",
+        "which do you prefer"
+      ],
+      "category": "topics"
+    },
+    "season.turn.complain": {
+      "question": "conversations.topic.season.turn.respond",
+      "answer": "complain",
+      "context": "conversations.topic.season.turn.respond",
+      "keywords": {
+        "over": 1.5,
+        "glad": 1.0,
+        "sick": 1.5,
+        "done": 1.0
+      },
+      "requiresAny": [
+        "over",
+        "sick",
+        "glad",
+        "done"
+      ],
+      "phrases": [
+        "i will be glad when it is over",
+        "i am sick of this season",
+        "i am done with it"
+      ],
+      "category": "topics"
+    },
+    "season.turn.share_plan": {
+      "question": "conversations.topic.season.turn.followup",
+      "answer": "share_plan",
+      "context": "conversations.topic.season.turn.followup",
+      "keywords": {
+        "doing": 1.2,
+        "plan": 1.5,
+        "mine": 0.8
+      },
+      "requiresAny": [
+        "plan",
+        "doing",
+        "mine"
+      ],
+      "phrases": [
+        "here is what i am doing with it",
+        "my plan for it",
+        "this is what i am doing"
+      ],
+      "category": "topics"
+    },
+    "season.turn.look_forward": {
+      "question": "conversations.topic.season.turn.followup",
+      "answer": "look_forward",
+      "context": "conversations.topic.season.turn.followup",
+      "keywords": {
+        "forward": 1.5,
+        "ahead": 1.2,
+        "coming": 1.2
+      },
+      "requiresAny": [
+        "forward",
+        "ahead",
+        "coming"
+      ],
+      "phrases": [
+        "a lot to look forward to",
+        "good things ahead",
+        "much to look forward to"
+      ],
+      "category": "topics"
+    },
+    "season.turn.dismiss": {
+      "question": "conversations.topic.season.turn.followup",
+      "answer": "dismiss",
+      "context": "conversations.topic.season.turn.followup",
+      "keywords": {
+        "same": 1.5,
+        "all": 0.5,
+        "matter": 1.2
+      },
+      "requiresAny": [
+        "same",
+        "matter"
+      ],
+      "phrases": [
+        "it is all the same to me",
+        "they are all the same",
+        "does not matter to me"
+      ],
+      "category": "topics"
+    },
+    "season.young.play_along": {
+      "question": "conversations.topic.season.young.respond",
+      "answer": "play_along",
+      "context": "conversations.topic.season.young.respond",
+      "keywords": {
+        "best": 1.5,
+        "right": 1.0,
+        "agree": 1.0
+      },
+      "requiresAny": [
+        "best",
+        "right",
+        "agree"
+      ],
+      "phrases": [
+        "it is the best one",
+        "you are right, it is the best",
+        "i agree it is the best"
+      ],
+      "category": "topics"
+    },
+    "season.young.ask": {
+      "question": "conversations.topic.season.young.respond",
+      "answer": "ask",
+      "context": "conversations.topic.season.young.respond",
+      "keywords": {
+        "like": 1.2,
+        "about": 0.5,
+        "why": 1.0
+      },
+      "requiresAny": [
+        "like",
+        "why",
+        "about"
+      ],
+      "phrases": [
+        "what do you like about it",
+        "why do you like it",
+        "what is good about it"
+      ],
+      "category": "topics"
+    },
+    "season.young.dismiss": {
+      "question": "conversations.topic.season.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.season.young.respond",
+      "keywords": {
+        "same": 1.5,
+        "much": 0.8,
+        "alike": 1.5
+      },
+      "requiresAny": [
+        "same",
+        "alike"
+      ],
+      "phrases": [
+        "they are all much the same",
+        "they are all alike",
+        "all the same really"
+      ],
+      "category": "topics"
+    }
+  }
+}

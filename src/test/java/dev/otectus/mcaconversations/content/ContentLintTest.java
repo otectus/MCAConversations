@@ -611,7 +611,9 @@ class ContentLintTest {
     @Test
     void everyConversationsQuestionIsReachableFromHub() {
         Set<String> reached = new HashSet<>();
-        List<String> frontier = new ArrayList<>(List.of("conversations"));
+        // Every root this mod hangs an answer on: the hub, MCA's main menu (which carries the
+        // Conversations button) and MCA's greeting menu (which carries the check-in topic).
+        List<String> frontier = new ArrayList<>(List.of("conversations", "main", "greet"));
         while (!frontier.isEmpty()) {
             String current = frontier.remove(frontier.size() - 1);
             if (!reached.add(current) || !questions.containsKey(current)) {

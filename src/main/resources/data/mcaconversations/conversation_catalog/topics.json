@@ -9,25 +9,150 @@
   ],
   "topics": {
     "day": {
-      "entry": {"question": "conversations.cat.chitchat", "answer": "day"},
+      "entry": {
+        "question": "conversations.cat.chitchat",
+        "answer": "day"
+      },
       "depth": "quick",
       "return_question": "conversations.cat.chitchat",
-      "ages": ["toddler", "child", "teen", "adult"],
-      "required_stance_families": ["empathy", "curiosity", "practical_help", "dismissal", "exit"],
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "curiosity",
+        "practical_help",
+        "dismissal",
+        "exit"
+      ],
       "chat_required": true
     },
     "fears": {
-      "entry": {"question": "conversations.cat.personal", "answer": "fears"},
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "fears"
+      },
       "depth": "deep",
       "return_question": "conversations.cat.personal",
-      "ages": ["toddler", "child", "teen", "adult"],
-      "required_stance_families": ["empathy", "challenge", "restraint", "boundary_push", "exit"],
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "challenge",
+        "restraint",
+        "boundary_push",
+        "exit"
+      ],
       "chat_required": true,
-      "arc": {"id": "fears", "max_stage": 3},
-      "milestones": ["fears.revelation", "fears.scar"],
+      "arc": {
+        "id": "fears",
+        "max_stage": 3
+      },
+      "milestones": [
+        "fears.revelation",
+        "fears.scar"
+      ],
       "exclusive_groups": {
-        "fears.support": ["pledged", "stepped_back"]
+        "fears.support": [
+          "pledged",
+          "stepped_back"
+        ]
       }
+    },
+    "checkin": {
+      "entry": {
+        "question": "greet",
+        "answer": "checkin"
+      },
+      "depth": "quick",
+      "return_question": "main",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "food": {
+      "entry": {
+        "question": "conversations.cat.chitchat",
+        "answer": "food"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "restraint",
+        "curiosity",
+        "self_disclosure",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "weather": {
+      "entry": {
+        "question": "conversations.cat.chitchat",
+        "answer": "weather"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "practical_help",
+        "humor",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "season": {
+      "entry": {
+        "question": "conversations.cat.chitchat",
+        "answer": "season"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "self_disclosure",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
     }
   }
 }

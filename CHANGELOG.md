@@ -23,6 +23,19 @@ the deepest, to prove the grammar before the remaining twenty-six follow.
 > duplicate-packet attempts — **has not been run**. ForgeGradle's `runClient` is not a substitute,
 > because MCA's own mixins misbehave in that runtime. Treat 1.1.0 as untested in play.
 
+### Topics converted so far
+
+| Topic | Depth | Branches |
+|---|---|---|
+| **The day** | quick | rough / good / ordinary, plus age-appropriate trees and a repair route |
+| **Fears** | deep | checked stances, a three-stage arc, a revelation, a boundary scar and its repair |
+| **Check-in** | quick | rough / good, from MCA's own greeting menu |
+| **Food** | quick | a dietary-trait branch that is never the butt of a rewarded joke, plus ordinary taste talk |
+| **Weather** | quick | a storm is concern; a fine morning is small talk. They are not the same conversation |
+| **Season** | quick | the turning year, and the four festival days with a once-a-day invitation |
+
+Twenty-six starters still pay out on the click and are tracked in the lint's migration ledger.
+
 ### The economy moved
 
 - **Opener rewards are gone from the converted topics.** Asking "how's your day?" was worth +2 or
@@ -88,8 +101,11 @@ never written down before and that decide how a result must be authored.
 
 ### Known gaps
 
-- Twenty-six topics still pay out on the click. The count is tracked as a migration ledger inside
-  `ConversationGraphLintTest`, which fails if a topic is converted without removing its row.
+- Twenty of the twenty-six original topics still pay out on the click: work and the work offer, the
+  village, its people and its rumours, news and the noticed-state check-in, life story, dreams,
+  hopes, regrets and secrets, feelings, and every spouse and family starter. The count is tracked as
+  a migration ledger inside `ConversationGraphLintTest`, which fails if a topic is converted without
+  removing its row, or if a new rewarded starter appears without being listed.
 - Interiority profiles carry resting baselines and stance bias only. Wants, boundaries and secret
   pools arrive with the topics that read them — storing state nothing reads is how save files rot.
 - Converted results no longer populate MCA's analysis tooltip. That tooltip explains *lottery

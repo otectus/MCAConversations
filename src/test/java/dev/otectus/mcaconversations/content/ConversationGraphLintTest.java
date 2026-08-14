@@ -354,9 +354,6 @@ class ConversationGraphLintTest {
      * a test rather than a paragraph in a design document.
      */
     private static final Set<String> LEGACY_REWARDED_STARTERS = Set.of(
-            "conversations.cat.chitchat/food",
-            "conversations.cat.chitchat/season",
-            "conversations.cat.chitchat/weather",
             "conversations.cat.events/news",
             "conversations.cat.events/noticed",
             "conversations.cat.personal/dreams",
@@ -384,8 +381,7 @@ class ConversationGraphLintTest {
             "conversations.us/future",
             "conversations.us/happy",
             "conversations.us/worries",
-            "conversations.work/(auto)",
-            "greet/checkin");
+            "conversations.work/(auto)");
 
     @Test
     @DisplayName("the list of not-yet-converted rewarded starters matches reality exactly")
