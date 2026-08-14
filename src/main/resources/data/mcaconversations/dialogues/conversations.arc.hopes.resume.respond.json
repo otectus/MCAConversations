@@ -1,0 +1,144 @@
+{
+  "answers": [
+    {
+      "name": "still_hoping",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "milestone": "hopes.named"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "hopes",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "hopes.resume.still_hoping",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.resume.still_hoping",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.resume.still_hoping.named"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "hopes.named"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "hopes",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "hopes.resume.still_hoping",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.resume.still_hoping",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.resume.still_hoping.plain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "hopes",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "hopes.resume.offer_help",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.resume.offer_help",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.resume.offer_help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.resume.dismiss",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.resume.dismiss",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.resume.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -40,8 +40,13 @@ the deepest, to prove the grammar before the remaining twenty-six follow.
 | **Rumours** | standard | who told you, is it reliable, and who you will tell |
 | **News** | standard | the event *type* picks the branch: a death and a wedding are not one conversation |
 | **Noticed** | standard | grieving, annoyed at you, elated, or steady — four different answers |
+| **Life story** | deep | a chapter they chose to reveal, and a later day that asks how it ended |
+| **Dreams** | deep | promise to help, or say honestly that you can't — the two are exclusive |
+| **Hopes** | deep | smaller than a dream; naming the first step is what makes it real |
+| **Regrets** | deep | absolution and honest company are both valid, and mutually exclusive |
+| **Secrets** | deep | a one-shot confidence, a promise you make or refuse, and a callback that proves it held |
 
-Thirteen starters still pay out on the click and are tracked in the lint's migration ledger.
+Ten starters still pay out on the click and are tracked in the lint's migration ledger.
 
 ### The economy moved
 
@@ -108,10 +113,10 @@ never written down before and that decide how a result must be authored.
 
 ### Known gaps
 
-- Thirteen of the twenty-six original topics still pay out on the click: life story, dreams, hopes,
-  regrets and secrets, feelings, and every spouse and family starter. The count is tracked as a
-  migration ledger inside `ConversationGraphLintTest`, which fails if a topic is converted without
-  removing its row, or if a new rewarded starter appears without being listed.
+- Six of the twenty-six original topics still pay out on the click: feelings, and every spouse and
+  family starter. The count is tracked as a migration ledger inside `ConversationGraphLintTest`,
+  which fails if a topic is converted without removing its row, or if a new rewarded starter appears
+  without being listed.
 - Interiority profiles carry resting baselines and stance bias only. Wants, boundaries and secret
   pools arrive with the topics that read them — storing state nothing reads is how save files rot.
 - Converted results no longer populate MCA's analysis tooltip. That tooltip explains *lottery

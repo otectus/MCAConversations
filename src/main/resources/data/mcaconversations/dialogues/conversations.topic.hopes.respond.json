@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.respond.listen",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.respond.listen",
+              "deltas": {
+                "trust": 4,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.hopes.followup",
+            "say": "conversations.hopes.respond.listen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.respond.encourage",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.respond.encourage",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.hopes.followup",
+            "say": "conversations.hopes.respond.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "mock",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.respond.mock",
+              "delta": -2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.respond.mock",
+              "deltas": {
+                "warmth": -5,
+                "tension": 6
+              }
+            },
+            "next": "conversations.topic.hopes.followup",
+            "say": "conversations.hopes.respond.mock"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

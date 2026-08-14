@@ -1,0 +1,1837 @@
+{
+  "_comment": [
+    "Context-scoped stances for the Phase 5 personal topics: life story, dreams, hopes, regrets and",
+    "secrets, including their cross-session arc nodes."
+  ],
+  "intents": {
+    "life.guarded.respect": {
+      "question": "conversations.topic.life.guarded.respond",
+      "answer": "respect",
+      "context": "conversations.topic.life.guarded.respond",
+      "keywords": {
+        "yours": 1.5,
+        "keep": 1.2,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "yours",
+        "keep"
+      ],
+      "phrases": [
+        "that is yours to keep",
+        "keep it to yourself",
+        "that story is yours"
+      ],
+      "category": "topics"
+    },
+    "life.guarded.ask_safer": {
+      "question": "conversations.topic.life.guarded.respond",
+      "answer": "ask_safer",
+      "context": "conversations.topic.life.guarded.respond",
+      "keywords": {
+        "lighter": 1.5,
+        "easier": 1.2,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "lighter",
+        "easier"
+      ],
+      "phrases": [
+        "tell me something lighter",
+        "something easier then",
+        "let us keep it light"
+      ],
+      "category": "topics"
+    },
+    "life.guarded.press": {
+      "question": "conversations.topic.life.guarded.respond",
+      "answer": "press",
+      "context": "conversations.topic.life.guarded.respond",
+      "keywords": {
+        "come": 1.2,
+        "tell": 1.0,
+        "story": 1.0
+      },
+      "requiresAny": [
+        "come",
+        "tell"
+      ],
+      "phrases": [
+        "come on, you can tell me",
+        "tell me the story",
+        "go on, tell me"
+      ],
+      "category": "topics"
+    },
+    "life.again.apologize": {
+      "question": "conversations.topic.life.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.life.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "already",
+        "sorry"
+      ],
+      "phrases": [
+        "sorry, i have asked already",
+        "sorry about the story",
+        "my mistake, asked already"
+      ],
+      "category": "topics"
+    },
+    "life.again.press": {
+      "question": "conversations.topic.life.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.life.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "again",
+        "anyway"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "the story again, please",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "life.close.thank": {
+      "question": "conversations.topic.life.close",
+      "answer": "thank",
+      "context": "conversations.topic.life.close",
+      "keywords": {
+        "thank": 1.5,
+        "telling": 1.2,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "thank",
+        "telling"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thank you for the story",
+        "i am grateful you told me"
+      ],
+      "category": "topics"
+    },
+    "life.close.say_means": {
+      "question": "conversations.topic.life.close",
+      "answer": "say_means",
+      "context": "conversations.topic.life.close",
+      "keywords": {
+        "took": 1.5,
+        "brave": 1.2,
+        "courage": 1.5,
+        "story": 0.6
+      },
+      "requiresAny": [
+        "took",
+        "brave",
+        "courage"
+      ],
+      "phrases": [
+        "that took something to say",
+        "that was brave of you",
+        "that took courage"
+      ],
+      "category": "topics"
+    },
+    "dreams.guarded.respect": {
+      "question": "conversations.topic.dreams.guarded.respond",
+      "answer": "respect",
+      "context": "conversations.topic.dreams.guarded.respond",
+      "keywords": {
+        "yours": 1.5,
+        "keep": 1.2,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "yours",
+        "keep"
+      ],
+      "phrases": [
+        "that is yours to keep",
+        "keep it to yourself",
+        "that dream is yours"
+      ],
+      "category": "topics"
+    },
+    "dreams.guarded.ask_safer": {
+      "question": "conversations.topic.dreams.guarded.respond",
+      "answer": "ask_safer",
+      "context": "conversations.topic.dreams.guarded.respond",
+      "keywords": {
+        "lighter": 1.5,
+        "easier": 1.2,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "lighter",
+        "easier"
+      ],
+      "phrases": [
+        "tell me something lighter",
+        "something easier then",
+        "let us keep it light"
+      ],
+      "category": "topics"
+    },
+    "dreams.guarded.press": {
+      "question": "conversations.topic.dreams.guarded.respond",
+      "answer": "press",
+      "context": "conversations.topic.dreams.guarded.respond",
+      "keywords": {
+        "come": 1.2,
+        "tell": 1.0,
+        "dream": 1.0
+      },
+      "requiresAny": [
+        "come",
+        "tell"
+      ],
+      "phrases": [
+        "come on, you can tell me",
+        "tell me the dream",
+        "go on, tell me"
+      ],
+      "category": "topics"
+    },
+    "dreams.again.apologize": {
+      "question": "conversations.topic.dreams.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.dreams.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "already",
+        "sorry"
+      ],
+      "phrases": [
+        "sorry, i have asked already",
+        "sorry about the dream",
+        "my mistake, asked already"
+      ],
+      "category": "topics"
+    },
+    "dreams.again.press": {
+      "question": "conversations.topic.dreams.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.dreams.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "again",
+        "anyway"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "the dream again, please",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "dreams.close.thank": {
+      "question": "conversations.topic.dreams.close",
+      "answer": "thank",
+      "context": "conversations.topic.dreams.close",
+      "keywords": {
+        "thank": 1.5,
+        "telling": 1.2,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "thank",
+        "telling"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thank you for the dream",
+        "i am grateful you told me"
+      ],
+      "category": "topics"
+    },
+    "dreams.close.say_means": {
+      "question": "conversations.topic.dreams.close",
+      "answer": "say_means",
+      "context": "conversations.topic.dreams.close",
+      "keywords": {
+        "took": 1.5,
+        "brave": 1.2,
+        "courage": 1.5,
+        "dream": 0.6
+      },
+      "requiresAny": [
+        "took",
+        "brave",
+        "courage"
+      ],
+      "phrases": [
+        "that took something to say",
+        "that was brave of you",
+        "that took courage"
+      ],
+      "category": "topics"
+    },
+    "hopes.guarded.respect": {
+      "question": "conversations.topic.hopes.guarded.respond",
+      "answer": "respect",
+      "context": "conversations.topic.hopes.guarded.respond",
+      "keywords": {
+        "yours": 1.5,
+        "keep": 1.2,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "yours",
+        "keep"
+      ],
+      "phrases": [
+        "that is yours to keep",
+        "keep it to yourself",
+        "that hope is yours"
+      ],
+      "category": "topics"
+    },
+    "hopes.guarded.ask_safer": {
+      "question": "conversations.topic.hopes.guarded.respond",
+      "answer": "ask_safer",
+      "context": "conversations.topic.hopes.guarded.respond",
+      "keywords": {
+        "lighter": 1.5,
+        "easier": 1.2,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "lighter",
+        "easier"
+      ],
+      "phrases": [
+        "tell me something lighter",
+        "something easier then",
+        "let us keep it light"
+      ],
+      "category": "topics"
+    },
+    "hopes.guarded.press": {
+      "question": "conversations.topic.hopes.guarded.respond",
+      "answer": "press",
+      "context": "conversations.topic.hopes.guarded.respond",
+      "keywords": {
+        "come": 1.2,
+        "tell": 1.0,
+        "hope": 1.0
+      },
+      "requiresAny": [
+        "come",
+        "tell"
+      ],
+      "phrases": [
+        "come on, you can tell me",
+        "tell me the hope",
+        "go on, tell me"
+      ],
+      "category": "topics"
+    },
+    "hopes.again.apologize": {
+      "question": "conversations.topic.hopes.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.hopes.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "already",
+        "sorry"
+      ],
+      "phrases": [
+        "sorry, i have asked already",
+        "sorry about the hope",
+        "my mistake, asked already"
+      ],
+      "category": "topics"
+    },
+    "hopes.again.press": {
+      "question": "conversations.topic.hopes.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.hopes.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "again",
+        "anyway"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "the hope again, please",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "hopes.close.thank": {
+      "question": "conversations.topic.hopes.close",
+      "answer": "thank",
+      "context": "conversations.topic.hopes.close",
+      "keywords": {
+        "thank": 1.5,
+        "telling": 1.2,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "thank",
+        "telling"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thank you for the hope",
+        "i am grateful you told me"
+      ],
+      "category": "topics"
+    },
+    "hopes.close.say_means": {
+      "question": "conversations.topic.hopes.close",
+      "answer": "say_means",
+      "context": "conversations.topic.hopes.close",
+      "keywords": {
+        "took": 1.5,
+        "brave": 1.2,
+        "courage": 1.5,
+        "hope": 0.6
+      },
+      "requiresAny": [
+        "took",
+        "brave",
+        "courage"
+      ],
+      "phrases": [
+        "that took something to say",
+        "that was brave of you",
+        "that took courage"
+      ],
+      "category": "topics"
+    },
+    "regrets.guarded.respect": {
+      "question": "conversations.topic.regrets.guarded.respond",
+      "answer": "respect",
+      "context": "conversations.topic.regrets.guarded.respond",
+      "keywords": {
+        "yours": 1.5,
+        "keep": 1.2,
+        "regret": 0.8
+      },
+      "requiresAny": [
+        "yours",
+        "keep"
+      ],
+      "phrases": [
+        "that is yours to keep",
+        "keep it to yourself",
+        "that regret is yours"
+      ],
+      "category": "topics"
+    },
+    "regrets.guarded.ask_safer": {
+      "question": "conversations.topic.regrets.guarded.respond",
+      "answer": "ask_safer",
+      "context": "conversations.topic.regrets.guarded.respond",
+      "keywords": {
+        "lighter": 1.5,
+        "easier": 1.2,
+        "regret": 0.8
+      },
+      "requiresAny": [
+        "lighter",
+        "easier"
+      ],
+      "phrases": [
+        "tell me something lighter",
+        "something easier then",
+        "let us keep it light"
+      ],
+      "category": "topics"
+    },
+    "regrets.guarded.press": {
+      "question": "conversations.topic.regrets.guarded.respond",
+      "answer": "press",
+      "context": "conversations.topic.regrets.guarded.respond",
+      "keywords": {
+        "come": 1.2,
+        "tell": 1.0,
+        "regret": 1.0
+      },
+      "requiresAny": [
+        "come",
+        "tell"
+      ],
+      "phrases": [
+        "come on, you can tell me",
+        "tell me the regret",
+        "go on, tell me"
+      ],
+      "category": "topics"
+    },
+    "regrets.again.apologize": {
+      "question": "conversations.topic.regrets.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.regrets.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "regret": 0.8
+      },
+      "requiresAny": [
+        "already",
+        "sorry"
+      ],
+      "phrases": [
+        "sorry, i have asked already",
+        "sorry about the regret",
+        "my mistake, asked already"
+      ],
+      "category": "topics"
+    },
+    "regrets.again.press": {
+      "question": "conversations.topic.regrets.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.regrets.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "regret": 0.8
+      },
+      "requiresAny": [
+        "again",
+        "anyway"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "the regret again, please",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "regrets.close.thank": {
+      "question": "conversations.topic.regrets.close",
+      "answer": "thank",
+      "context": "conversations.topic.regrets.close",
+      "keywords": {
+        "thank": 1.5,
+        "telling": 1.2,
+        "regret": 0.8
+      },
+      "requiresAny": [
+        "thank",
+        "telling"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thank you for the regret",
+        "i am grateful you told me"
+      ],
+      "category": "topics"
+    },
+    "regrets.close.say_means": {
+      "question": "conversations.topic.regrets.close",
+      "answer": "say_means",
+      "context": "conversations.topic.regrets.close",
+      "keywords": {
+        "took": 1.5,
+        "brave": 1.2,
+        "courage": 1.5,
+        "regret": 0.6
+      },
+      "requiresAny": [
+        "took",
+        "brave",
+        "courage"
+      ],
+      "phrases": [
+        "that took something to say",
+        "that was brave of you",
+        "that took courage"
+      ],
+      "category": "topics"
+    },
+    "secret.guarded.respect": {
+      "question": "conversations.topic.secret.guarded.respond",
+      "answer": "respect",
+      "context": "conversations.topic.secret.guarded.respond",
+      "keywords": {
+        "yours": 1.5,
+        "keep": 1.2,
+        "secret": 0.8
+      },
+      "requiresAny": [
+        "yours",
+        "keep"
+      ],
+      "phrases": [
+        "that is yours to keep",
+        "keep it to yourself",
+        "that secret is yours"
+      ],
+      "category": "topics"
+    },
+    "secret.guarded.ask_safer": {
+      "question": "conversations.topic.secret.guarded.respond",
+      "answer": "ask_safer",
+      "context": "conversations.topic.secret.guarded.respond",
+      "keywords": {
+        "lighter": 1.5,
+        "easier": 1.2,
+        "secret": 0.8
+      },
+      "requiresAny": [
+        "lighter",
+        "easier"
+      ],
+      "phrases": [
+        "tell me something lighter",
+        "something easier then",
+        "let us keep it light"
+      ],
+      "category": "topics"
+    },
+    "secret.guarded.press": {
+      "question": "conversations.topic.secret.guarded.respond",
+      "answer": "press",
+      "context": "conversations.topic.secret.guarded.respond",
+      "keywords": {
+        "come": 1.2,
+        "tell": 1.0,
+        "secret": 1.0
+      },
+      "requiresAny": [
+        "come",
+        "tell"
+      ],
+      "phrases": [
+        "come on, you can tell me",
+        "tell me the secret",
+        "go on, tell me"
+      ],
+      "category": "topics"
+    },
+    "secret.again.apologize": {
+      "question": "conversations.topic.secret.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.secret.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "secret": 0.8
+      },
+      "requiresAny": [
+        "already",
+        "sorry"
+      ],
+      "phrases": [
+        "sorry, i have asked already",
+        "sorry about the secret",
+        "my mistake, asked already"
+      ],
+      "category": "topics"
+    },
+    "secret.again.press": {
+      "question": "conversations.topic.secret.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.secret.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "secret": 0.8
+      },
+      "requiresAny": [
+        "again",
+        "anyway"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "the secret again, please",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "secret.close.thank": {
+      "question": "conversations.topic.secret.close",
+      "answer": "thank",
+      "context": "conversations.topic.secret.close",
+      "keywords": {
+        "thank": 1.5,
+        "telling": 1.2,
+        "secret": 0.8
+      },
+      "requiresAny": [
+        "thank",
+        "telling"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thank you for the secret",
+        "i am grateful you told me"
+      ],
+      "category": "topics"
+    },
+    "secret.close.say_means": {
+      "question": "conversations.topic.secret.close",
+      "answer": "say_means",
+      "context": "conversations.topic.secret.close",
+      "keywords": {
+        "took": 1.5,
+        "brave": 1.2,
+        "courage": 1.5,
+        "secret": 0.6
+      },
+      "requiresAny": [
+        "took",
+        "brave",
+        "courage"
+      ],
+      "phrases": [
+        "that took something to say",
+        "that was brave of you",
+        "that took courage"
+      ],
+      "category": "topics"
+    },
+    "life.young.interested": {
+      "question": "conversations.topic.life.young.respond",
+      "answer": "interested",
+      "context": "conversations.topic.life.young.respond",
+      "keywords": {
+        "properly": 1.5,
+        "whole": 1.2,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "properly",
+        "whole"
+      ],
+      "phrases": [
+        "tell me properly",
+        "tell me the whole story",
+        "go on, properly"
+      ],
+      "category": "topics"
+    },
+    "life.young.encourage": {
+      "question": "conversations.topic.life.young.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.life.young.respond",
+      "keywords": {
+        "worth": 1.5,
+        "having": 1.0,
+        "story": 0.8
+      },
+      "requiresAny": [
+        "worth",
+        "having"
+      ],
+      "phrases": [
+        "that is worth having",
+        "that story is worth having",
+        "worth holding onto"
+      ],
+      "category": "topics"
+    },
+    "life.young.dismiss": {
+      "question": "conversations.topic.life.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.life.young.respond",
+      "keywords": {
+        "change": 1.5,
+        "mind": 1.2,
+        "grow": 1.2,
+        "story": 0.6
+      },
+      "requiresAny": [
+        "change",
+        "mind",
+        "grow"
+      ],
+      "phrases": [
+        "you will change your mind",
+        "you will grow out of it",
+        "you will think differently"
+      ],
+      "category": "topics"
+    },
+    "dreams.young.interested": {
+      "question": "conversations.topic.dreams.young.respond",
+      "answer": "interested",
+      "context": "conversations.topic.dreams.young.respond",
+      "keywords": {
+        "properly": 1.5,
+        "whole": 1.2,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "properly",
+        "whole"
+      ],
+      "phrases": [
+        "tell me properly",
+        "tell me the whole dream",
+        "go on, properly"
+      ],
+      "category": "topics"
+    },
+    "dreams.young.encourage": {
+      "question": "conversations.topic.dreams.young.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.dreams.young.respond",
+      "keywords": {
+        "worth": 1.5,
+        "having": 1.0,
+        "dream": 0.8
+      },
+      "requiresAny": [
+        "worth",
+        "having"
+      ],
+      "phrases": [
+        "that is worth having",
+        "that dream is worth having",
+        "worth holding onto"
+      ],
+      "category": "topics"
+    },
+    "dreams.young.dismiss": {
+      "question": "conversations.topic.dreams.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.dreams.young.respond",
+      "keywords": {
+        "change": 1.5,
+        "mind": 1.2,
+        "grow": 1.2,
+        "dream": 0.6
+      },
+      "requiresAny": [
+        "change",
+        "mind",
+        "grow"
+      ],
+      "phrases": [
+        "you will change your mind",
+        "you will grow out of it",
+        "you will think differently"
+      ],
+      "category": "topics"
+    },
+    "hopes.young.interested": {
+      "question": "conversations.topic.hopes.young.respond",
+      "answer": "interested",
+      "context": "conversations.topic.hopes.young.respond",
+      "keywords": {
+        "properly": 1.5,
+        "whole": 1.2,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "properly",
+        "whole"
+      ],
+      "phrases": [
+        "tell me properly",
+        "tell me the whole hope",
+        "go on, properly"
+      ],
+      "category": "topics"
+    },
+    "hopes.young.encourage": {
+      "question": "conversations.topic.hopes.young.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.hopes.young.respond",
+      "keywords": {
+        "worth": 1.5,
+        "having": 1.0,
+        "hope": 0.8
+      },
+      "requiresAny": [
+        "worth",
+        "having"
+      ],
+      "phrases": [
+        "that is worth having",
+        "that hope is worth having",
+        "worth holding onto"
+      ],
+      "category": "topics"
+    },
+    "hopes.young.dismiss": {
+      "question": "conversations.topic.hopes.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.hopes.young.respond",
+      "keywords": {
+        "change": 1.5,
+        "mind": 1.2,
+        "grow": 1.2,
+        "hope": 0.6
+      },
+      "requiresAny": [
+        "change",
+        "mind",
+        "grow"
+      ],
+      "phrases": [
+        "you will change your mind",
+        "you will grow out of it",
+        "you will think differently"
+      ],
+      "category": "topics"
+    },
+    "life.respond.ask_which": {
+      "question": "conversations.topic.life.respond",
+      "answer": "ask_which",
+      "context": "conversations.topic.life.respond",
+      "keywords": {
+        "part": 1.5,
+        "which": 1.2,
+        "matters": 1.2
+      },
+      "requiresAny": [
+        "part",
+        "which",
+        "matters"
+      ],
+      "phrases": [
+        "which part matters most",
+        "which part matters to you",
+        "what part matters"
+      ],
+      "category": "topics"
+    },
+    "life.respond.empathise": {
+      "question": "conversations.topic.life.respond",
+      "answer": "empathise",
+      "context": "conversations.topic.life.respond",
+      "keywords": {
+        "easy": 1.5,
+        "hard": 1.0,
+        "rough": 1.0
+      },
+      "requiresAny": [
+        "easy",
+        "hard",
+        "rough"
+      ],
+      "phrases": [
+        "that cannot have been easy",
+        "that sounds hard",
+        "that must have been rough"
+      ],
+      "category": "topics"
+    },
+    "life.respond.judge": {
+      "question": "conversations.topic.life.respond",
+      "answer": "judge",
+      "context": "conversations.topic.life.respond",
+      "keywords": {
+        "better": 1.5,
+        "should": 1.0,
+        "wrong": 1.0
+      },
+      "requiresAny": [
+        "better",
+        "should",
+        "wrong"
+      ],
+      "phrases": [
+        "you could have done better",
+        "you should have known better",
+        "that was wrong of you"
+      ],
+      "category": "topics"
+    },
+    "life.followup.follow_thread": {
+      "question": "conversations.topic.life.followup",
+      "answer": "follow_thread",
+      "context": "conversations.topic.life.followup",
+      "keywords": {
+        "more": 1.2,
+        "part": 1.2,
+        "continue": 1.5
+      },
+      "requiresAny": [
+        "more",
+        "part",
+        "continue"
+      ],
+      "phrases": [
+        "tell me more about that part",
+        "continue that part",
+        "more about that bit"
+      ],
+      "category": "topics"
+    },
+    "life.followup.compare_own": {
+      "question": "conversations.topic.life.followup",
+      "answer": "compare_own",
+      "context": "conversations.topic.life.followup",
+      "keywords": {
+        "happened": 1.2,
+        "me": 0.5,
+        "similar": 1.5
+      },
+      "requiresAny": [
+        "happened",
+        "similar",
+        "me"
+      ],
+      "phrases": [
+        "something like that happened to me",
+        "something similar happened to me",
+        "same happened to me"
+      ],
+      "category": "topics"
+    },
+    "life.followup.change_subject": {
+      "question": "conversations.topic.life.followup",
+      "answer": "change_subject",
+      "context": "conversations.topic.life.followup",
+      "keywords": {
+        "leave": 1.5,
+        "there": 0.8,
+        "enough": 1.2
+      },
+      "requiresAny": [
+        "leave",
+        "enough"
+      ],
+      "phrases": [
+        "let us leave it there",
+        "that is enough of that",
+        "leave it there"
+      ],
+      "category": "topics"
+    },
+    "life.resume.ask_chapter": {
+      "question": "conversations.arc.life.resume.respond",
+      "answer": "ask_chapter",
+      "context": "conversations.arc.life.resume.respond",
+      "keywords": {
+        "finished": 1.5,
+        "ended": 1.5,
+        "rest": 1.2
+      },
+      "requiresAny": [
+        "finished",
+        "ended",
+        "rest"
+      ],
+      "phrases": [
+        "you never finished that story",
+        "how did it end",
+        "tell me the rest of it"
+      ],
+      "category": "topics"
+    },
+    "life.resume.ask_now": {
+      "question": "conversations.arc.life.resume.respond",
+      "answer": "ask_now",
+      "context": "conversations.arc.life.resume.respond",
+      "keywords": {
+        "now": 1.5,
+        "leave": 1.0,
+        "today": 1.2
+      },
+      "requiresAny": [
+        "now",
+        "today",
+        "leave"
+      ],
+      "phrases": [
+        "where does that leave you now",
+        "and now",
+        "how are you with it today"
+      ],
+      "category": "topics"
+    },
+    "life.resume.brush_off": {
+      "question": "conversations.arc.life.resume.respond",
+      "answer": "brush_off",
+      "context": "conversations.arc.life.resume.respond",
+      "keywords": {
+        "ago": 1.5,
+        "past": 1.2,
+        "history": 1.2
+      },
+      "requiresAny": [
+        "ago",
+        "past",
+        "history"
+      ],
+      "phrases": [
+        "it was a long time ago",
+        "that is in the past",
+        "ancient history"
+      ],
+      "category": "topics"
+    },
+    "dreams.respond.encourage": {
+      "question": "conversations.topic.dreams.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.dreams.respond",
+      "keywords": {
+        "chase": 1.5,
+        "pursue": 1.5,
+        "should": 0.6
+      },
+      "requiresAny": [
+        "chase",
+        "pursue",
+        "should"
+      ],
+      "phrases": [
+        "you should chase that",
+        "go and pursue it",
+        "chase it"
+      ],
+      "category": "topics"
+    },
+    "dreams.respond.ask_more": {
+      "question": "conversations.topic.dreams.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.dreams.respond",
+      "keywords": {
+        "more": 1.2,
+        "about": 0.5,
+        "detail": 1.5
+      },
+      "requiresAny": [
+        "more",
+        "detail"
+      ],
+      "phrases": [
+        "tell me more about it",
+        "give me the detail",
+        "say more about it"
+      ],
+      "category": "topics"
+    },
+    "dreams.respond.realism": {
+      "question": "conversations.topic.dreams.respond",
+      "answer": "realism",
+      "context": "conversations.topic.dreams.respond",
+      "keywords": {
+        "far": 1.5,
+        "long": 1.2,
+        "way": 0.8
+      },
+      "requiresAny": [
+        "far",
+        "long",
+        "way"
+      ],
+      "phrases": [
+        "that is a long way from here",
+        "that is far off",
+        "a long way to go"
+      ],
+      "category": "topics"
+    },
+    "dreams.followup.pledge_help": {
+      "question": "conversations.topic.dreams.followup",
+      "answer": "pledge_help",
+      "context": "conversations.topic.dreams.followup",
+      "keywords": {
+        "help": 1.5,
+        "there": 0.6,
+        "together": 1.2
+      },
+      "requiresAny": [
+        "help",
+        "together"
+      ],
+      "phrases": [
+        "i will help you get there",
+        "we will get there together",
+        "let me help you with it"
+      ],
+      "category": "topics"
+    },
+    "dreams.followup.be_honest": {
+      "question": "conversations.topic.dreams.followup",
+      "answer": "be_honest",
+      "context": "conversations.topic.dreams.followup",
+      "keywords": {
+        "cannot": 1.5,
+        "promise": 1.2,
+        "glad": 1.0
+      },
+      "requiresAny": [
+        "cannot",
+        "promise",
+        "glad"
+      ],
+      "phrases": [
+        "i cannot promise help",
+        "i will not promise anything",
+        "glad you told me, but i cannot promise"
+      ],
+      "category": "topics"
+    },
+    "dreams.followup.mock": {
+      "question": "conversations.topic.dreams.followup",
+      "answer": "mock",
+      "context": "conversations.topic.dreams.followup",
+      "keywords": {
+        "you": 0.4,
+        "ridiculous": 1.5,
+        "laugh": 1.5
+      },
+      "requiresAny": [
+        "ridiculous",
+        "laugh"
+      ],
+      "phrases": [
+        "that is ridiculous",
+        "do not make me laugh",
+        "you, doing that? ridiculous"
+      ],
+      "category": "topics"
+    },
+    "dreams.resume.ask_progress": {
+      "question": "conversations.arc.dreams.resume.respond",
+      "answer": "ask_progress",
+      "context": "conversations.arc.dreams.resume.respond",
+      "keywords": {
+        "closer": 1.5,
+        "progress": 1.5,
+        "any": 0.5
+      },
+      "requiresAny": [
+        "closer",
+        "progress"
+      ],
+      "phrases": [
+        "any closer to it",
+        "any progress",
+        "are you any closer"
+      ],
+      "category": "topics"
+    },
+    "dreams.resume.offer_step": {
+      "question": "conversations.arc.dreams.resume.respond",
+      "answer": "offer_step",
+      "context": "conversations.arc.dreams.resume.respond",
+      "keywords": {
+        "step": 1.5,
+        "first": 1.2,
+        "help": 0.8
+      },
+      "requiresAny": [
+        "step",
+        "first"
+      ],
+      "phrases": [
+        "what is the first step",
+        "let us start with one step",
+        "the first step, i will help"
+      ],
+      "category": "topics"
+    },
+    "dreams.resume.doubt": {
+      "question": "conversations.arc.dreams.resume.respond",
+      "answer": "doubt",
+      "context": "conversations.arc.dreams.resume.respond",
+      "keywords": {
+        "still": 1.5,
+        "on": 0.3,
+        "again": 1.0
+      },
+      "requiresAny": [
+        "still",
+        "again"
+      ],
+      "phrases": [
+        "still on about that",
+        "are you still on that",
+        "that again"
+      ],
+      "category": "topics"
+    },
+    "hopes.respond.listen": {
+      "question": "conversations.topic.hopes.respond",
+      "answer": "listen",
+      "context": "conversations.topic.hopes.respond",
+      "keywords": {
+        "listening": 1.5,
+        "listen": 1.2
+      },
+      "requiresAny": [
+        "listening",
+        "listen"
+      ],
+      "phrases": [
+        "i am listening",
+        "i will listen",
+        "go on, i am listening"
+      ],
+      "category": "topics"
+    },
+    "hopes.respond.encourage": {
+      "question": "conversations.topic.hopes.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.hopes.respond",
+      "keywords": {
+        "hope": 1.2,
+        "get": 0.6,
+        "deserve": 1.5
+      },
+      "requiresAny": [
+        "hope",
+        "deserve",
+        "get"
+      ],
+      "phrases": [
+        "i hope you get it",
+        "you deserve it",
+        "i hope it comes"
+      ],
+      "category": "topics"
+    },
+    "hopes.respond.mock": {
+      "question": "conversations.topic.hopes.respond",
+      "answer": "mock",
+      "context": "conversations.topic.hopes.respond",
+      "keywords": {
+        "much": 1.5,
+        "ambitious": 1.5,
+        "dreaming": 1.2
+      },
+      "requiresAny": [
+        "much",
+        "ambitious",
+        "dreaming"
+      ],
+      "phrases": [
+        "that is a bit much to hope for",
+        "rather ambitious",
+        "keep dreaming"
+      ],
+      "category": "topics"
+    },
+    "hopes.followup.ask_first_step": {
+      "question": "conversations.topic.hopes.followup",
+      "answer": "ask_first_step",
+      "context": "conversations.topic.hopes.followup",
+      "keywords": {
+        "first": 1.5,
+        "step": 1.5,
+        "start": 1.2
+      },
+      "requiresAny": [
+        "first",
+        "step",
+        "start"
+      ],
+      "phrases": [
+        "what would the first step be",
+        "where would you start",
+        "what is step one"
+      ],
+      "category": "topics"
+    },
+    "hopes.followup.share_own": {
+      "question": "conversations.topic.hopes.followup",
+      "answer": "share_own",
+      "context": "conversations.topic.hopes.followup",
+      "keywords": {
+        "too": 1.2,
+        "myself": 1.2,
+        "same": 1.0
+      },
+      "requiresAny": [
+        "too",
+        "myself",
+        "same"
+      ],
+      "phrases": [
+        "i hope for something like that too",
+        "i want the same myself",
+        "me too"
+      ],
+      "category": "topics"
+    },
+    "hopes.followup.question_it": {
+      "question": "conversations.topic.hopes.followup",
+      "answer": "question_it",
+      "context": "conversations.topic.hopes.followup",
+      "keywords": {
+        "really": 1.5,
+        "want": 1.0,
+        "sure": 1.2
+      },
+      "requiresAny": [
+        "really",
+        "want",
+        "sure"
+      ],
+      "phrases": [
+        "is that really what you want",
+        "are you sure that is what you want",
+        "do you really want that"
+      ],
+      "category": "topics"
+    },
+    "hopes.resume.still_hoping": {
+      "question": "conversations.arc.hopes.resume.respond",
+      "answer": "still_hoping",
+      "context": "conversations.arc.hopes.resume.respond",
+      "keywords": {
+        "still": 1.5,
+        "hoping": 1.5
+      },
+      "requiresAny": [
+        "still",
+        "hoping"
+      ],
+      "phrases": [
+        "still hoping for it",
+        "are you still hoping",
+        "still hoping"
+      ],
+      "category": "topics"
+    },
+    "hopes.resume.offer_help": {
+      "question": "conversations.arc.hopes.resume.respond",
+      "answer": "offer_help",
+      "context": "conversations.arc.hopes.resume.respond",
+      "keywords": {
+        "help": 1.5,
+        "let": 0.6,
+        "hand": 1.0
+      },
+      "requiresAny": [
+        "help",
+        "hand"
+      ],
+      "phrases": [
+        "let me help with it",
+        "i can help with that",
+        "give me a hand in it"
+      ],
+      "category": "topics"
+    },
+    "hopes.resume.dismiss": {
+      "question": "conversations.arc.hopes.resume.respond",
+      "answer": "dismiss",
+      "context": "conversations.arc.hopes.resume.respond",
+      "keywords": {
+        "still": 1.2,
+        "that": 0.3,
+        "again": 1.2,
+        "give": 1.0
+      },
+      "requiresAny": [
+        "still",
+        "again",
+        "give"
+      ],
+      "phrases": [
+        "you are still on that",
+        "that again",
+        "give it up"
+      ],
+      "category": "topics"
+    },
+    "regrets.respond.listen": {
+      "question": "conversations.topic.regrets.respond",
+      "answer": "listen",
+      "context": "conversations.topic.regrets.respond",
+      "keywords": {
+        "going": 1.2,
+        "nowhere": 1.5,
+        "listening": 1.2
+      },
+      "requiresAny": [
+        "nowhere",
+        "going",
+        "listening"
+      ],
+      "phrases": [
+        "i am not going anywhere",
+        "go on, i am listening",
+        "i am staying right here"
+      ],
+      "category": "topics"
+    },
+    "regrets.respond.ask_repair": {
+      "question": "conversations.topic.regrets.respond",
+      "answer": "ask_repair",
+      "context": "conversations.topic.regrets.respond",
+      "keywords": {
+        "right": 1.2,
+        "put": 1.0,
+        "fix": 1.5,
+        "left": 1.0
+      },
+      "requiresAny": [
+        "right",
+        "fix",
+        "left",
+        "put"
+      ],
+      "phrases": [
+        "is there anything left to put right",
+        "can it be fixed",
+        "anything left to make right"
+      ],
+      "category": "topics"
+    },
+    "regrets.respond.pry": {
+      "question": "conversations.topic.regrets.respond",
+      "answer": "pry",
+      "context": "conversations.topic.regrets.respond",
+      "keywords": {
+        "exactly": 1.5,
+        "did": 0.5,
+        "details": 1.5
+      },
+      "requiresAny": [
+        "exactly",
+        "details"
+      ],
+      "phrases": [
+        "what exactly did you do",
+        "give me the details",
+        "what did you do exactly"
+      ],
+      "category": "topics"
+    },
+    "regrets.followup.forgive": {
+      "question": "conversations.topic.regrets.followup",
+      "answer": "forgive",
+      "context": "conversations.topic.regrets.followup",
+      "keywords": {
+        "bad": 1.2,
+        "person": 1.2,
+        "forgive": 1.5
+      },
+      "requiresAny": [
+        "bad",
+        "person",
+        "forgive"
+      ],
+      "phrases": [
+        "i do not think you are a bad person",
+        "i forgive you",
+        "you are not a bad person"
+      ],
+      "category": "topics"
+    },
+    "regrets.followup.sit_with_it": {
+      "question": "conversations.topic.regrets.followup",
+      "answer": "sit_with_it",
+      "context": "conversations.topic.regrets.followup",
+      "keywords": {
+        "fine": 1.2,
+        "here": 1.0,
+        "wont": 1.0,
+        "tell": 0.6
+      },
+      "requiresAny": [
+        "fine",
+        "here",
+        "wont"
+      ],
+      "phrases": [
+        "i will not tell you it was fine",
+        "i am here anyway",
+        "i will not pretend it was fine"
+      ],
+      "category": "topics"
+    },
+    "regrets.followup.challenge": {
+      "question": "conversations.topic.regrets.followup",
+      "answer": "challenge",
+      "context": "conversations.topic.regrets.followup",
+      "keywords": {
+        "still": 1.2,
+        "make": 1.0,
+        "right": 1.2
+      },
+      "requiresAny": [
+        "still",
+        "make",
+        "right"
+      ],
+      "phrases": [
+        "you could still make it right",
+        "it is not too late to make it right",
+        "you can still put it right"
+      ],
+      "category": "topics"
+    },
+    "regrets.resume.ask_since": {
+      "question": "conversations.arc.regrets.resume.respond",
+      "answer": "ask_since",
+      "context": "conversations.arc.regrets.resume.respond",
+      "keywords": {
+        "easier": 1.5,
+        "sat": 1.2,
+        "since": 1.0
+      },
+      "requiresAny": [
+        "easier",
+        "sat",
+        "since"
+      ],
+      "phrases": [
+        "has it sat any easier since",
+        "is it easier now",
+        "any easier since we spoke"
+      ],
+      "category": "topics"
+    },
+    "regrets.resume.encourage_repair": {
+      "question": "conversations.arc.regrets.resume.respond",
+      "answer": "encourage_repair",
+      "context": "conversations.arc.regrets.resume.respond",
+      "keywords": {
+        "thought": 1.5,
+        "putting": 1.2,
+        "more": 0.6
+      },
+      "requiresAny": [
+        "thought",
+        "putting"
+      ],
+      "phrases": [
+        "have you thought any more about putting it right",
+        "thought more about it",
+        "any more thought about fixing it"
+      ],
+      "category": "topics"
+    },
+    "regrets.resume.bring_it_up": {
+      "question": "conversations.arc.regrets.resume.respond",
+      "answer": "bring_it_up",
+      "context": "conversations.arc.regrets.resume.respond",
+      "keywords": {
+        "about": 0.4,
+        "thing": 1.0,
+        "did": 1.2,
+        "remember": 1.2
+      },
+      "requiresAny": [
+        "thing",
+        "did",
+        "remember"
+      ],
+      "phrases": [
+        "about that thing you did",
+        "remember that thing you did",
+        "that thing you did"
+      ],
+      "category": "topics"
+    },
+    "secret.respond.accept": {
+      "question": "conversations.topic.secret.respond",
+      "answer": "accept",
+      "context": "conversations.topic.secret.respond",
+      "keywords": {
+        "hear": 1.5,
+        "listening": 1.2,
+        "tell": 0.6
+      },
+      "requiresAny": [
+        "hear",
+        "listening"
+      ],
+      "phrases": [
+        "i will hear it",
+        "i am listening",
+        "go on, i will hear it"
+      ],
+      "category": "topics"
+    },
+    "secret.respond.ask_why_me": {
+      "question": "conversations.topic.secret.respond",
+      "answer": "ask_why_me",
+      "context": "conversations.topic.secret.respond",
+      "keywords": {
+        "why": 1.5,
+        "me": 1.0,
+        "choose": 1.5
+      },
+      "requiresAny": [
+        "why",
+        "me",
+        "choose"
+      ],
+      "phrases": [
+        "why me",
+        "why choose me",
+        "why tell me"
+      ],
+      "category": "topics"
+    },
+    "secret.respond.decline": {
+      "question": "conversations.topic.secret.respond",
+      "answer": "decline",
+      "context": "conversations.topic.secret.respond",
+      "keywords": {
+        "regret": 1.5,
+        "dont": 0.6,
+        "sure": 1.0
+      },
+      "requiresAny": [
+        "regret",
+        "sure"
+      ],
+      "phrases": [
+        "do not tell me something you will regret",
+        "are you sure you want to tell me",
+        "you might regret telling me"
+      ],
+      "category": "topics"
+    },
+    "secret.followup.promise": {
+      "question": "conversations.topic.secret.followup",
+      "answer": "promise",
+      "context": "conversations.topic.secret.followup",
+      "keywords": {
+        "word": 1.5,
+        "stays": 1.5,
+        "promise": 1.2
+      },
+      "requiresAny": [
+        "word",
+        "stays",
+        "promise"
+      ],
+      "phrases": [
+        "it stays with me, you have my word",
+        "i promise",
+        "you have my word"
+      ],
+      "category": "topics"
+    },
+    "secret.followup.no_promise": {
+      "question": "conversations.topic.secret.followup",
+      "answer": "no_promise",
+      "context": "conversations.topic.secret.followup",
+      "keywords": {
+        "wont": 1.2,
+        "try": 1.5,
+        "promise": 1.0
+      },
+      "requiresAny": [
+        "wont",
+        "try"
+      ],
+      "phrases": [
+        "i will not promise, but i will try",
+        "i can only try",
+        "no promises, but i will try"
+      ],
+      "category": "topics"
+    },
+    "secret.followup.trivialise": {
+      "question": "conversations.topic.secret.followup",
+      "answer": "trivialise",
+      "context": "conversations.topic.secret.followup",
+      "keywords": {
+        "all": 1.2,
+        "that": 0.3,
+        "hardly": 1.5,
+        "nothing": 1.2
+      },
+      "requiresAny": [
+        "all",
+        "hardly",
+        "nothing"
+      ],
+      "phrases": [
+        "is that all it was",
+        "hardly worth the secrecy",
+        "that is nothing"
+      ],
+      "category": "topics"
+    },
+    "secret.resume.reference": {
+      "question": "conversations.arc.secret.resume.respond",
+      "answer": "reference",
+      "context": "conversations.arc.secret.resume.respond",
+      "keywords": {
+        "nobody": 1.5,
+        "told": 1.0,
+        "kept": 1.5
+      },
+      "requiresAny": [
+        "nobody",
+        "kept",
+        "told"
+      ],
+      "phrases": [
+        "i have told nobody",
+        "i kept it",
+        "nobody has heard it from me"
+      ],
+      "category": "topics"
+    },
+    "secret.resume.check_in": {
+      "question": "conversations.arc.secret.resume.respond",
+      "answer": "check_in",
+      "context": "conversations.arc.secret.resume.respond",
+      "keywords": {
+        "carrying": 1.5,
+        "how": 0.5,
+        "bearing": 1.5
+      },
+      "requiresAny": [
+        "carrying",
+        "bearing",
+        "how"
+      ],
+      "phrases": [
+        "how are you carrying it",
+        "how are you bearing it",
+        "how is it sitting with you"
+      ],
+      "category": "topics"
+    },
+    "secret.resume.hint_publicly": {
+      "question": "conversations.arc.secret.resume.respond",
+      "answer": "hint_publicly",
+      "context": "conversations.arc.secret.resume.respond",
+      "keywords": {
+        "mention": 1.5,
+        "others": 1.5,
+        "tell": 0.6
+      },
+      "requiresAny": [
+        "mention",
+        "others"
+      ],
+      "phrases": [
+        "shall i mention it to the others",
+        "should i tell the others",
+        "shall i mention it"
+      ],
+      "category": "topics"
+    }
+  }
+}

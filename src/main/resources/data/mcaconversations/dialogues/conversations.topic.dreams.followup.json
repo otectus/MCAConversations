@@ -1,0 +1,121 @@
+{
+  "answers": [
+    {
+      "name": "pledge_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "dreams",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "exclusive": "dreams.support",
+                "member": "pledged"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "dreams.followup.pledge_help",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.followup.pledge_help",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.dreams.close",
+            "say": "conversations.dreams.followup.pledge_help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "be_honest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "dreams",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "exclusive": "dreams.support",
+                "member": "honest"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "dreams.followup.be_honest",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.followup.be_honest",
+              "deltas": {
+                "respect": 5,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.dreams.close",
+            "say": "conversations.dreams.followup.be_honest"
+          }
+        }
+      ]
+    },
+    {
+      "name": "mock",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "dreams",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "dreams.followup.mock",
+              "delta": -2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.followup.mock",
+              "deltas": {
+                "warmth": -5,
+                "tension": 6
+              }
+            },
+            "next": "conversations.topic.dreams.close",
+            "say": "conversations.dreams.followup.mock"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

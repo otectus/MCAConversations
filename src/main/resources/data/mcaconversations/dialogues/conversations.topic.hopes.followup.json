@@ -1,0 +1,183 @@
+{
+  "answers": [
+    {
+      "name": "ask_first_step",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "hopes",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "milestone": "hopes.named"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "hopes.followup.ask_first_step",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.followup.ask_first_step",
+              "deltas": {
+                "respect": 4,
+                "trust": 3
+              }
+            },
+            "next": "conversations.topic.hopes.close",
+            "say": "conversations.hopes.followup.ask_first_step"
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "hopes",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "hopes.followup.share_own",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.followup.share_own",
+              "deltas": {
+                "familiarity": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.hopes.close",
+            "say": "conversations.hopes.followup.share_own"
+          }
+        }
+      ]
+    },
+    {
+      "name": "question_it",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.followup.question_it",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.followup.question_it",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.followup.question_it.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.followup.question_it",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.followup.question_it",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.followup.question_it.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "hopes.followup.question_it",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.followup.question_it.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

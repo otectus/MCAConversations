@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_which",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "life.respond.ask_which",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.respond.ask_which",
+              "deltas": {
+                "familiarity": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.life.followup",
+            "say": "conversations.life.respond.ask_which"
+          }
+        }
+      ]
+    },
+    {
+      "name": "empathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "life.respond.empathise",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.respond.empathise",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.life.followup",
+            "say": "conversations.life.respond.empathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "judge",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "life.respond.judge",
+              "delta": -2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.respond.judge",
+              "deltas": {
+                "warmth": -4,
+                "tension": 6,
+                "trust": -2
+              }
+            },
+            "next": "conversations.topic.life.followup",
+            "say": "conversations.life.respond.judge"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.life.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

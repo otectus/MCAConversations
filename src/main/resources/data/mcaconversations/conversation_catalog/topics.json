@@ -296,6 +296,157 @@
         "exit"
       ],
       "chat_required": true
+    },
+    "life": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "life"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "curiosity",
+        "self_disclosure",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "life",
+        "max_stage": 2
+      },
+      "milestones": [
+        "life.chapter"
+      ]
+    },
+    "dreams": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "dreams"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "encouragement",
+        "curiosity",
+        "respectful_disagreement",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "dreams",
+        "max_stage": 2
+      },
+      "exclusive_groups": {
+        "dreams.support": [
+          "pledged",
+          "honest"
+        ]
+      }
+    },
+    "hopes": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "hopes"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "encouragement",
+        "challenge",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "hopes",
+        "max_stage": 2
+      },
+      "milestones": [
+        "hopes.named"
+      ]
+    },
+    "regrets": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "regrets"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "restraint",
+        "challenge",
+        "boundary_push",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "regrets",
+        "max_stage": 2
+      },
+      "exclusive_groups": {
+        "regrets.stance": [
+          "forgave",
+          "listened"
+        ]
+      }
+    },
+    "secret": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "secret"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "restraint",
+        "curiosity",
+        "self_disclosure",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "secret",
+        "max_stage": 2
+      },
+      "milestones": [
+        "secret.entrusted"
+      ],
+      "exclusive_groups": {
+        "secret.promise": [
+          "kept",
+          "declined"
+        ]
+      }
     }
   }
 }

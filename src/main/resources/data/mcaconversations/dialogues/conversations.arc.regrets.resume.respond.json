@@ -1,0 +1,147 @@
+{
+  "answers": [
+    {
+      "name": "ask_since",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "exclusive": "regrets.stance",
+                "is": "forgave"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "regrets",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "regrets.resume.ask_since",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.resume.ask_since",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.resume.ask_since.forgave"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "exclusive": "regrets.stance",
+                "is": "forgave"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "regrets",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "regrets.resume.ask_since",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.resume.ask_since",
+              "deltas": {
+                "trust": 4,
+                "respect": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.resume.ask_since.listened"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage_repair",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "regrets",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "regrets.resume.encourage_repair",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.resume.encourage_repair",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.resume.encourage_repair"
+          }
+        }
+      ]
+    },
+    {
+      "name": "bring_it_up",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.resume.bring_it_up",
+              "delta": -2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.resume.bring_it_up",
+              "deltas": {
+                "tension": 6,
+                "trust": -4
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.resume.bring_it_up"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

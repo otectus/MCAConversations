@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "respect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.guarded.respect",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.guarded.respect",
+              "deltas": {
+                "respect": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.guarded.respect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_safer",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "regrets.guarded.ask_safer",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.guarded.ask_safer"
+          }
+        }
+      ]
+    },
+    {
+      "name": "press",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.guarded.press",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.guarded.press",
+              "deltas": {
+                "tension": 5
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.guarded.press"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.guarded.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

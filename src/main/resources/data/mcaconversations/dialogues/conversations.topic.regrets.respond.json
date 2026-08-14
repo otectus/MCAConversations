@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.respond.listen",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.respond.listen",
+              "deltas": {
+                "trust": 5,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.regrets.followup",
+            "say": "conversations.regrets.respond.listen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_repair",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.respond.ask_repair",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.respond.ask_repair",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.regrets.followup",
+            "say": "conversations.regrets.respond.ask_repair"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pry",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.respond.pry",
+              "delta": -2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.respond.pry",
+              "deltas": {
+                "tension": 6,
+                "trust": -3
+              }
+            },
+            "next": "conversations.topic.regrets.followup",
+            "say": "conversations.regrets.respond.pry"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

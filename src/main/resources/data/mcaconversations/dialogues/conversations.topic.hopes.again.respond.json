@@ -1,0 +1,61 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "hopes.again.apologize",
+              "deltas": {
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.again.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "press",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.again.press",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.again.press",
+              "deltas": {
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.again.press"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.again.leave"
+          }
+        }
+      ]
+    }
+  ]
+}
