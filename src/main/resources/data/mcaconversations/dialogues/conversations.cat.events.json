@@ -9,22 +9,203 @@
           "conditions": [
             {
               "chance": 100,
-              "conversations_gossip": {}
+              "conversations_gossip": {
+                "types": [
+                  "death",
+                  "divorce"
+                ]
+              }
             },
             {
               "chance": -2000,
               "conversations_disabled": "gossip"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.events",
-            "positive": 1,
-            "conversations_gossip_say": {}
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "sad"
+            },
+            "next": "conversations.topic.news.sad.respond",
+            "conversations_gossip_say": {
+              "types": [
+                "death",
+                "divorce"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_gossip": {
+                "types": [
+                  "marriage",
+                  "birth"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_gossip": {
+                "types": [
+                  "death",
+                  "divorce"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "glad"
+            },
+            "next": "conversations.topic.news.glad.respond",
+            "conversations_gossip_say": {
+              "types": [
+                "marriage",
+                "birth"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_gossip": {
+                "types": [
+                  "arrival",
+                  "departure"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_gossip": {
+                "types": [
+                  "death",
+                  "divorce"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_gossip": {
+                "types": [
+                  "marriage",
+                  "birth"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "mixed"
+            },
+            "next": "conversations.topic.news.mixed.respond",
+            "conversations_gossip_say": {
+              "types": [
+                "arrival",
+                "departure"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "conversations_gossip": {
+                "types": [
+                  "death",
+                  "divorce"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_gossip": {
+                "types": [
+                  "marriage",
+                  "birth"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_gossip": {
+                "types": [
+                  "arrival",
+                  "departure"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "none"
+            },
+            "next": "conversations.topic.news.none.respond",
+            "say": "conversations.gossip.none"
           }
         },
         {
           "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
           "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 0
+            },
             "next": "conversations.cat.events",
             "say": "conversations.gossip.none"
           }
@@ -43,12 +224,53 @@
               "memory": {
                 "id": "mcaconversations.state.grieving"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.events",
-            "say": "conversations.noticed.grieving",
-            "positive": 2
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "grieving"
+            },
+            "next": "conversations.topic.noticed.grieving.respond",
+            "say": "conversations.noticed.grieving"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.state.annoyed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "annoyed"
+            },
+            "next": "conversations.topic.noticed.annoyed.respond",
+            "say": "conversations.noticed.annoyed"
           }
         },
         {
@@ -59,20 +281,95 @@
               "memory": {
                 "id": "mcaconversations.state.elated"
               }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.annoyed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.cat.events",
-            "say": "conversations.noticed.elated",
-            "positive": 2
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "elated"
+            },
+            "next": "conversations.topic.noticed.elated.respond",
+            "say": "conversations.noticed.elated"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.annoyed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.elated"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "fine"
+            },
+            "next": "conversations.topic.noticed.fine.respond",
+            "say": "conversations.noticed.fine"
           }
         },
         {
           "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
           "actions": {
+            "positive": 1,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.noticed",
+              "var": "player",
+              "time": 0
+            },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.fine",
-            "positive": 1
+            "say": "conversations.noticed.fine"
           }
         }
       ]

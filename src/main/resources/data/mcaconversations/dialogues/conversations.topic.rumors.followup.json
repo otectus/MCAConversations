@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "promise_discretion",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "rumors.followup.promise_discretion",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.followup.promise_discretion",
+              "deltas": {
+                "trust": 6
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.followup.promise_discretion"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_it_go",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "rumors.followup.let_it_go",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.followup.let_it_go",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.followup.let_it_go"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage_spread",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "rumors.followup.encourage_spread",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.followup.encourage_spread",
+              "deltas": {
+                "trust": -4,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.followup.encourage_spread"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

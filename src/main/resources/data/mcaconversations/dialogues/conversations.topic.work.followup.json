@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "offer_idea",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "work.followup.offer_idea",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.followup.offer_idea",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.followup.offer_idea"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hear_burnout",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "work.followup.hear_burnout",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.followup.hear_burnout",
+              "deltas": {
+                "trust": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.followup.hear_burnout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "belittle",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "work.followup.belittle",
+              "delta": -2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.followup.belittle",
+              "deltas": {
+                "respect": -5,
+                "tension": 6,
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.followup.belittle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

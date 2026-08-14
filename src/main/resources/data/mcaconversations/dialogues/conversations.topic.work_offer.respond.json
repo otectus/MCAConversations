@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_needed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.respond.ask_needed",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work_offer.followup",
+            "say": "conversations.work_offer.ask_needed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_terms",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.respond.ask_terms",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.topic.work_offer.followup",
+            "say": "conversations.work_offer.ask_terms"
+          }
+        }
+      ]
+    },
+    {
+      "name": "accept",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.accept",
+              "deltas": {
+                "respect": 3,
+                "trust": 2
+              }
+            },
+            "conversations_quest_open": {
+              "mode": "menu"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.accept"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

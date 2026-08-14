@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "share_joy",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.elated.share_joy",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.elated.share_joy",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.elated.share_joy"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "noticed.elated.ask_more",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.elated.ask_more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deflate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.elated.deflate",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.elated.deflate",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.elated.deflate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.elated.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

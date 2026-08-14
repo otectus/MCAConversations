@@ -1,0 +1,162 @@
+{
+  "answers": [
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.respond.agree",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.respond.agree",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.people.followup",
+            "say": "conversations.people.respond.agree"
+          }
+        }
+      ]
+    },
+    {
+      "name": "defend",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "peaceful",
+                "friendly",
+                "confident",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.respond.defend",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.respond.defend",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.people.followup",
+            "say": "conversations.people.respond.defend.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.respond.defend",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.respond.defend",
+              "deltas": {
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.people.followup",
+            "say": "conversations.people.respond.defend.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "peaceful",
+                "friendly",
+                "confident",
+                "upbeat"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "people.respond.defend",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.people.followup",
+            "say": "conversations.people.respond.defend.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_example",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "people.respond.ask_example",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.topic.people.followup",
+            "say": "conversations.people.respond.ask_example"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

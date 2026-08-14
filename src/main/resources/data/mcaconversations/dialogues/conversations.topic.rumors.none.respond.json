@@ -1,0 +1,62 @@
+{
+  "answers": [
+    {
+      "name": "relieved",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "rumors.none.relieved",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.none.relieved",
+              "deltas": {
+                "respect": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.none.relieved"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_anyway",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "rumors.none.ask_anyway",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.none.ask_anyway"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.none.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

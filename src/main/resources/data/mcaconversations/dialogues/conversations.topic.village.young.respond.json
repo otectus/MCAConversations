@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "play_along",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.young.play_along",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.young.play_along",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.young.play_along"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "village.young.ask",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.young.ask"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.young.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.young.dismiss",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.young.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.young.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "ask_source",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "rumors.respond.ask_source",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.respond.ask_source",
+              "deltas": {
+                "respect": 3,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.rumors.followup",
+            "say": "conversations.rumors.respond.ask_source"
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "rumors.respond.challenge",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.respond.challenge",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.rumors.followup",
+            "say": "conversations.rumors.respond.challenge"
+          }
+        }
+      ]
+    },
+    {
+      "name": "listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "rumors.respond.listen",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.rumors.followup",
+            "say": "conversations.rumors.respond.listen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

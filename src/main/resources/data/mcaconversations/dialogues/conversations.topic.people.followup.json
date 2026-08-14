@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "empathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.followup.empathise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.empathise",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.empathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage_repair",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.followup.encourage_repair",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.encourage_repair",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.encourage_repair"
+          }
+        }
+      ]
+    },
+    {
+      "name": "push_gossip",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.followup.push_gossip",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.push_gossip",
+              "deltas": {
+                "tension": 5,
+                "trust": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.push_gossip"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

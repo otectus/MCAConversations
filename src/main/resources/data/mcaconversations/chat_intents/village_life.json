@@ -1,0 +1,1713 @@
+{
+  "_comment": [
+    "Context-scoped stances for the Phase 4 topics: work, the work offer, the village, its people,",
+    "rumours, news, and the noticed-state check-in."
+  ],
+  "intents": {
+    "work.respond.praise": {
+      "question": "conversations.topic.work.respond",
+      "answer": "praise",
+      "context": "conversations.topic.work.respond",
+      "keywords": {
+        "good": 0.8,
+        "skilled": 1.5,
+        "craft": 1.5,
+        "master": 1.2
+      },
+      "requiresAny": [
+        "good",
+        "skilled",
+        "craft",
+        "master"
+      ],
+      "phrases": [
+        "you are good at what you do",
+        "you know your craft",
+        "you are skilled at it"
+      ],
+      "category": "topics"
+    },
+    "work.respond.ask_why": {
+      "question": "conversations.topic.work.respond",
+      "answer": "ask_why",
+      "context": "conversations.topic.work.respond",
+      "keywords": {
+        "matter": 1.5,
+        "why": 0.8,
+        "means": 1.2
+      },
+      "requiresAny": [
+        "matter",
+        "why",
+        "means"
+      ],
+      "phrases": [
+        "why does it matter to you",
+        "what does it mean to you",
+        "why do you do it"
+      ],
+      "category": "topics"
+    },
+    "work.respond.challenge": {
+      "question": "conversations.topic.work.respond",
+      "answer": "challenge",
+      "context": "conversations.topic.work.respond",
+      "keywords": {
+        "enjoy": 1.5,
+        "hate": 1.2,
+        "sound": 0.6,
+        "like": 0.5
+      },
+      "requiresAny": [
+        "enjoy",
+        "hate",
+        "sound"
+      ],
+      "phrases": [
+        "you do not sound like you enjoy it",
+        "do you even like it",
+        "sounds like you hate it"
+      ],
+      "category": "topics"
+    },
+    "work.followup.offer_idea": {
+      "question": "conversations.topic.work.followup",
+      "answer": "offer_idea",
+      "context": "conversations.topic.work.followup",
+      "keywords": {
+        "tried": 1.5,
+        "other": 1.0,
+        "way": 0.8,
+        "different": 1.2
+      },
+      "requiresAny": [
+        "tried",
+        "other",
+        "different"
+      ],
+      "phrases": [
+        "have you tried it the other way",
+        "have you tried something different",
+        "try it another way"
+      ],
+      "category": "topics"
+    },
+    "work.followup.hear_burnout": {
+      "question": "conversations.topic.work.followup",
+      "answer": "hear_burnout",
+      "context": "conversations.topic.work.followup",
+      "keywords": {
+        "wearing": 1.5,
+        "tiring": 1.5,
+        "worn": 1.5,
+        "down": 0.6
+      },
+      "requiresAny": [
+        "wearing",
+        "tiring",
+        "worn"
+      ],
+      "phrases": [
+        "it sounds like it is wearing you down",
+        "that sounds tiring",
+        "you sound worn out"
+      ],
+      "category": "topics"
+    },
+    "work.followup.belittle": {
+      "question": "conversations.topic.work.followup",
+      "answer": "belittle",
+      "context": "conversations.topic.work.followup",
+      "keywords": {
+        "anyone": 1.5,
+        "easy": 1.2,
+        "simple": 1.0
+      },
+      "requiresAny": [
+        "anyone",
+        "easy",
+        "simple"
+      ],
+      "phrases": [
+        "anyone could do that job",
+        "that looks easy",
+        "that is simple work"
+      ],
+      "category": "topics"
+    },
+    "work.young.encourage": {
+      "question": "conversations.topic.work.young.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.work.young.respond",
+      "keywords": {
+        "real": 1.5,
+        "proper": 1.2,
+        "counts": 1.5
+      },
+      "requiresAny": [
+        "real",
+        "proper",
+        "counts"
+      ],
+      "phrases": [
+        "that is real work",
+        "that is proper work",
+        "that counts as work"
+      ],
+      "category": "topics"
+    },
+    "work.young.ask": {
+      "question": "conversations.topic.work.young.respond",
+      "answer": "ask",
+      "context": "conversations.topic.work.young.respond",
+      "keywords": {
+        "taught": 1.5,
+        "learn": 1.2,
+        "who": 0.6
+      },
+      "requiresAny": [
+        "taught",
+        "learn",
+        "who"
+      ],
+      "phrases": [
+        "who taught you",
+        "how did you learn",
+        "who showed you"
+      ],
+      "category": "topics"
+    },
+    "work.young.dismiss": {
+      "question": "conversations.topic.work.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.work.young.respond",
+      "keywords": {
+        "playing": 1.5,
+        "pretend": 1.5,
+        "chores": 1.2
+      },
+      "requiresAny": [
+        "playing",
+        "pretend",
+        "chores"
+      ],
+      "phrases": [
+        "you are just playing",
+        "that is pretend work",
+        "those are only chores"
+      ],
+      "category": "topics"
+    },
+    "work.again.apologize": {
+      "question": "conversations.topic.work.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.work.again.respond",
+      "keywords": {
+        "told": 1.5,
+        "sorry": 1.2,
+        "already": 1.0,
+        "work": 0.6
+      },
+      "requiresAny": [
+        "told",
+        "sorry",
+        "already"
+      ],
+      "phrases": [
+        "sorry, you have told me",
+        "sorry, i already asked",
+        "my mistake, you told me"
+      ],
+      "category": "topics"
+    },
+    "work.again.press": {
+      "question": "conversations.topic.work.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.work.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "once": 1.0
+      },
+      "requiresAny": [
+        "again",
+        "anyway",
+        "once"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "once more",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "work_offer.ask_needed": {
+      "question": "conversations.topic.work_offer.respond",
+      "answer": "ask_needed",
+      "context": "conversations.topic.work_offer.respond",
+      "keywords": {
+        "needs": 1.5,
+        "doing": 1.0,
+        "task": 1.5
+      },
+      "requiresAny": [
+        "needs",
+        "doing",
+        "task"
+      ],
+      "phrases": [
+        "what needs doing",
+        "what is the task",
+        "what needs done"
+      ],
+      "category": "topics"
+    },
+    "work_offer.ask_terms": {
+      "question": "conversations.topic.work_offer.respond",
+      "answer": "ask_terms",
+      "context": "conversations.topic.work_offer.respond",
+      "keywords": {
+        "pay": 1.5,
+        "worth": 1.2,
+        "reward": 1.5,
+        "terms": 1.5
+      },
+      "requiresAny": [
+        "pay",
+        "worth",
+        "reward",
+        "terms"
+      ],
+      "phrases": [
+        "what is in it for me",
+        "what does it pay",
+        "what are the terms"
+      ],
+      "category": "topics"
+    },
+    "work_offer.accept": {
+      "question": "conversations.topic.work_offer.respond",
+      "answer": "accept",
+      "context": "conversations.topic.work_offer.respond",
+      "keywords": {
+        "do": 0.5,
+        "take": 1.2,
+        "yes": 1.2,
+        "in": 0.4
+      },
+      "requiresAny": [
+        "do",
+        "take",
+        "yes"
+      ],
+      "phrases": [
+        "i will do it",
+        "i will take it",
+        "yes, i am in"
+      ],
+      "category": "topics"
+    },
+    "work_offer.accept_after": {
+      "question": "conversations.topic.work_offer.followup",
+      "answer": "accept",
+      "context": "conversations.topic.work_offer.followup",
+      "keywords": {
+        "take": 1.5,
+        "on": 0.4,
+        "alright": 1.0,
+        "agreed": 1.5
+      },
+      "requiresAny": [
+        "take",
+        "alright",
+        "agreed"
+      ],
+      "phrases": [
+        "alright, i will take it on",
+        "agreed",
+        "i will take it on"
+      ],
+      "category": "topics"
+    },
+    "work_offer.decline": {
+      "question": "conversations.topic.work_offer.followup",
+      "answer": "decline",
+      "context": "conversations.topic.work_offer.followup",
+      "keywords": {
+        "not": 0.4,
+        "time": 1.0,
+        "afraid": 1.5,
+        "pass": 1.5
+      },
+      "requiresAny": [
+        "afraid",
+        "pass",
+        "time"
+      ],
+      "phrases": [
+        "not this time i am afraid",
+        "i will pass",
+        "not this time"
+      ],
+      "category": "topics"
+    },
+    "work_offer.refuse_rudely": {
+      "question": "conversations.topic.work_offer.followup",
+      "answer": "refuse_rudely",
+      "context": "conversations.topic.work_offer.followup",
+      "keywords": {
+        "else": 1.5,
+        "someone": 1.2,
+        "yourself": 1.5
+      },
+      "requiresAny": [
+        "else",
+        "someone",
+        "yourself"
+      ],
+      "phrases": [
+        "find someone else",
+        "do it yourself",
+        "ask someone else"
+      ],
+      "category": "topics"
+    },
+    "work_offer.none.offer_anyway": {
+      "question": "conversations.topic.work_offer.none.respond",
+      "answer": "offer_anyway",
+      "context": "conversations.topic.work_offer.none.respond",
+      "keywords": {
+        "help": 1.5,
+        "regardless": 1.5,
+        "anything": 1.0
+      },
+      "requiresAny": [
+        "help",
+        "regardless",
+        "anything"
+      ],
+      "phrases": [
+        "anything i can help with regardless",
+        "can i help anyway",
+        "anything at all i can help with"
+      ],
+      "category": "topics"
+    },
+    "work_offer.none.ask_later": {
+      "question": "conversations.topic.work_offer.none.respond",
+      "answer": "ask_later",
+      "context": "conversations.topic.work_offer.none.respond",
+      "keywords": {
+        "back": 1.2,
+        "later": 1.5,
+        "check": 1.5
+      },
+      "requiresAny": [
+        "back",
+        "later",
+        "check"
+      ],
+      "phrases": [
+        "i will check back",
+        "i will ask later",
+        "i will come back later"
+      ],
+      "category": "topics"
+    },
+    "village.respond.affirm": {
+      "question": "conversations.topic.village.respond",
+      "answer": "affirm",
+      "context": "conversations.topic.village.respond",
+      "keywords": {
+        "good": 1.0,
+        "place": 1.2,
+        "live": 1.0,
+        "lovely": 1.2
+      },
+      "requiresAny": [
+        "good",
+        "place",
+        "lovely",
+        "live"
+      ],
+      "phrases": [
+        "it is a good place to live",
+        "lovely place",
+        "good place this"
+      ],
+      "category": "topics"
+    },
+    "village.respond.ask_improve": {
+      "question": "conversations.topic.village.respond",
+      "answer": "ask_improve",
+      "context": "conversations.topic.village.respond",
+      "keywords": {
+        "change": 1.5,
+        "improve": 1.5,
+        "better": 1.0
+      },
+      "requiresAny": [
+        "change",
+        "improve",
+        "better"
+      ],
+      "phrases": [
+        "what would you change about it",
+        "how could it be better",
+        "what would you improve"
+      ],
+      "category": "topics"
+    },
+    "village.respond.insult": {
+      "question": "conversations.topic.village.respond",
+      "answer": "insult",
+      "context": "conversations.topic.village.respond",
+      "keywords": {
+        "miserable": 1.5,
+        "dump": 1.5,
+        "awful": 1.2
+      },
+      "requiresAny": [
+        "miserable",
+        "dump",
+        "awful"
+      ],
+      "phrases": [
+        "it is a miserable little place",
+        "this place is a dump",
+        "awful place"
+      ],
+      "category": "topics"
+    },
+    "village.followup.offer_help": {
+      "question": "conversations.topic.village.followup",
+      "answer": "offer_help",
+      "context": "conversations.topic.village.followup",
+      "keywords": {
+        "fix": 1.5,
+        "help": 1.2,
+        "hand": 1.0
+      },
+      "requiresAny": [
+        "fix",
+        "help",
+        "hand"
+      ],
+      "phrases": [
+        "tell me and i will help fix it",
+        "i will help fix it",
+        "i can lend a hand with that"
+      ],
+      "category": "topics"
+    },
+    "village.followup.criticise_fairly": {
+      "question": "conversations.topic.village.followup",
+      "answer": "criticise_fairly",
+      "context": "conversations.topic.village.followup",
+      "keywords": {
+        "run": 1.5,
+        "managed": 1.5,
+        "better": 0.8
+      },
+      "requiresAny": [
+        "run",
+        "managed",
+        "better"
+      ],
+      "phrases": [
+        "it could be run better",
+        "it is badly managed",
+        "it could be better run"
+      ],
+      "category": "topics"
+    },
+    "village.followup.agree": {
+      "question": "conversations.topic.village.followup",
+      "answer": "agree",
+      "context": "conversations.topic.village.followup",
+      "keywords": {
+        "right": 1.5,
+        "true": 1.2,
+        "agree": 1.2
+      },
+      "requiresAny": [
+        "right",
+        "true",
+        "agree"
+      ],
+      "phrases": [
+        "you are right about that",
+        "that is true",
+        "i agree with that"
+      ],
+      "category": "topics"
+    },
+    "village.none.sympathise": {
+      "question": "conversations.topic.village.none.respond",
+      "answer": "sympathise",
+      "context": "conversations.topic.village.none.respond",
+      "keywords": {
+        "hard": 1.5,
+        "rough": 1.2,
+        "difficult": 1.2
+      },
+      "requiresAny": [
+        "hard",
+        "rough",
+        "difficult"
+      ],
+      "phrases": [
+        "that is a hard way to live",
+        "that sounds rough",
+        "that must be difficult"
+      ],
+      "category": "topics"
+    },
+    "village.none.ask_where": {
+      "question": "conversations.topic.village.none.respond",
+      "answer": "ask_where",
+      "context": "conversations.topic.village.none.respond",
+      "keywords": {
+        "where": 1.5,
+        "stay": 1.2,
+        "sleep": 1.2
+      },
+      "requiresAny": [
+        "where",
+        "stay",
+        "sleep"
+      ],
+      "phrases": [
+        "where do you stay",
+        "where do you sleep",
+        "where are you living"
+      ],
+      "category": "topics"
+    },
+    "village.none.dismiss": {
+      "question": "conversations.topic.village.none.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.village.none.respond",
+      "keywords": {
+        "fault": 1.5,
+        "own": 1.0,
+        "blame": 1.5
+      },
+      "requiresAny": [
+        "fault",
+        "own",
+        "blame"
+      ],
+      "phrases": [
+        "your own fault surely",
+        "that is your own doing",
+        "you are to blame"
+      ],
+      "category": "topics"
+    },
+    "village.young.play_along": {
+      "question": "conversations.topic.village.young.respond",
+      "answer": "play_along",
+      "context": "conversations.topic.village.young.respond",
+      "keywords": {
+        "good": 1.0,
+        "village": 1.2,
+        "nice": 1.0
+      },
+      "requiresAny": [
+        "good",
+        "village",
+        "nice"
+      ],
+      "phrases": [
+        "it is a good village",
+        "nice village",
+        "good village this"
+      ],
+      "category": "topics"
+    },
+    "village.young.ask": {
+      "question": "conversations.topic.village.young.respond",
+      "answer": "ask",
+      "context": "conversations.topic.village.young.respond",
+      "keywords": {
+        "best": 1.5,
+        "bit": 1.0,
+        "favourite": 1.2
+      },
+      "requiresAny": [
+        "best",
+        "bit",
+        "favourite"
+      ],
+      "phrases": [
+        "what is the best bit",
+        "what is your favourite bit",
+        "best part of it"
+      ],
+      "category": "topics"
+    },
+    "village.young.dismiss": {
+      "question": "conversations.topic.village.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.village.young.respond",
+      "keywords": {
+        "dull": 1.5,
+        "boring": 1.5,
+        "quiet": 0.8
+      },
+      "requiresAny": [
+        "dull",
+        "boring"
+      ],
+      "phrases": [
+        "it is a bit dull",
+        "it is boring here",
+        "bit dull, this place"
+      ],
+      "category": "topics"
+    },
+    "village.again.apologize": {
+      "question": "conversations.topic.village.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.village.again.respond",
+      "keywords": {
+        "told": 1.5,
+        "sorry": 1.2,
+        "already": 1.0,
+        "village": 0.6
+      },
+      "requiresAny": [
+        "told",
+        "sorry",
+        "already"
+      ],
+      "phrases": [
+        "sorry, you have told me",
+        "sorry, i already asked",
+        "my mistake"
+      ],
+      "category": "topics"
+    },
+    "village.again.press": {
+      "question": "conversations.topic.village.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.village.again.respond",
+      "keywords": {
+        "again": 1.5,
+        "anyway": 1.2,
+        "village": 0.6
+      },
+      "requiresAny": [
+        "again",
+        "anyway"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "go on, again",
+        "again, please"
+      ],
+      "category": "topics"
+    },
+    "people.respond.agree": {
+      "question": "conversations.topic.people.respond",
+      "answer": "agree",
+      "context": "conversations.topic.people.respond",
+      "keywords": {
+        "noticed": 1.5,
+        "same": 1.2,
+        "seen": 1.0
+      },
+      "requiresAny": [
+        "noticed",
+        "same",
+        "seen"
+      ],
+      "phrases": [
+        "i have noticed the same",
+        "i have seen that too",
+        "same here"
+      ],
+      "category": "topics"
+    },
+    "people.respond.defend": {
+      "question": "conversations.topic.people.respond",
+      "answer": "defend",
+      "context": "conversations.topic.people.respond",
+      "keywords": {
+        "bad": 1.2,
+        "harsh": 1.5,
+        "unfair": 1.5
+      },
+      "requiresAny": [
+        "bad",
+        "harsh",
+        "unfair"
+      ],
+      "phrases": [
+        "they are not so bad",
+        "that is a bit harsh",
+        "that seems unfair to them"
+      ],
+      "category": "topics"
+    },
+    "people.respond.ask_example": {
+      "question": "conversations.topic.people.respond",
+      "answer": "ask_example",
+      "context": "conversations.topic.people.respond",
+      "keywords": {
+        "example": 1.5,
+        "instance": 1.5,
+        "specific": 1.2
+      },
+      "requiresAny": [
+        "example",
+        "instance",
+        "specific"
+      ],
+      "phrases": [
+        "give me an example",
+        "for instance",
+        "be specific"
+      ],
+      "category": "topics"
+    },
+    "people.followup.empathise": {
+      "question": "conversations.topic.people.followup",
+      "answer": "empathise",
+      "context": "conversations.topic.people.followup",
+      "keywords": {
+        "exhausting": 1.5,
+        "tiring": 1.2,
+        "draining": 1.5
+      },
+      "requiresAny": [
+        "exhausting",
+        "tiring",
+        "draining"
+      ],
+      "phrases": [
+        "that sounds exhausting",
+        "that sounds draining",
+        "that must be tiring"
+      ],
+      "category": "topics"
+    },
+    "people.followup.encourage_repair": {
+      "question": "conversations.topic.people.followup",
+      "answer": "encourage_repair",
+      "context": "conversations.topic.people.followup",
+      "keywords": {
+        "talking": 1.5,
+        "talk": 1.2,
+        "mend": 1.5
+      },
+      "requiresAny": [
+        "talking",
+        "talk",
+        "mend"
+      ],
+      "phrases": [
+        "have you tried talking to them",
+        "could you mend it",
+        "have you talked to them"
+      ],
+      "category": "topics"
+    },
+    "people.followup.push_gossip": {
+      "question": "conversations.topic.people.followup",
+      "answer": "push_gossip",
+      "context": "conversations.topic.people.followup",
+      "keywords": {
+        "worst": 1.5,
+        "who": 0.8,
+        "name": 1.2
+      },
+      "requiresAny": [
+        "worst",
+        "who",
+        "name"
+      ],
+      "phrases": [
+        "who is the worst",
+        "go on, name them",
+        "who is the worst of them"
+      ],
+      "category": "topics"
+    },
+    "people.young.listen": {
+      "question": "conversations.topic.people.young.respond",
+      "answer": "listen",
+      "context": "conversations.topic.people.young.respond",
+      "keywords": {
+        "friends": 1.5,
+        "get": 0.5,
+        "on": 0.3,
+        "with": 0.3
+      },
+      "requiresAny": [
+        "friends",
+        "get"
+      ],
+      "phrases": [
+        "who do you get on with",
+        "who are your friends",
+        "who do you like here"
+      ],
+      "category": "topics"
+    },
+    "people.young.ask": {
+      "question": "conversations.topic.people.young.respond",
+      "answer": "ask",
+      "context": "conversations.topic.people.young.respond",
+      "keywords": {
+        "unkind": 1.5,
+        "mean": 1.2,
+        "bully": 1.5
+      },
+      "requiresAny": [
+        "unkind",
+        "mean",
+        "bully"
+      ],
+      "phrases": [
+        "is anyone unkind to you",
+        "is anyone mean to you",
+        "does anyone bully you"
+      ],
+      "category": "topics"
+    },
+    "people.young.dismiss": {
+      "question": "conversations.topic.people.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.people.young.respond",
+      "keywords": {
+        "grow": 1.5,
+        "caring": 1.5,
+        "matter": 0.8
+      },
+      "requiresAny": [
+        "grow",
+        "caring",
+        "matter"
+      ],
+      "phrases": [
+        "you will grow out of caring",
+        "it will not matter when you are older",
+        "you will stop caring"
+      ],
+      "category": "topics"
+    },
+    "people.again.apologize": {
+      "question": "conversations.topic.people.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.people.again.respond",
+      "keywords": {
+        "already": 1.5,
+        "sorry": 1.2,
+        "asked": 0.8,
+        "neighbours": 0.6
+      },
+      "requiresAny": [
+        "already",
+        "sorry",
+        "asked"
+      ],
+      "phrases": [
+        "sorry, asked already",
+        "sorry, i already asked",
+        "my mistake"
+      ],
+      "category": "topics"
+    },
+    "people.again.press": {
+      "question": "conversations.topic.people.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.people.again.respond",
+      "keywords": {
+        "anyway": 1.5,
+        "again": 1.2
+      },
+      "requiresAny": [
+        "anyway",
+        "again"
+      ],
+      "phrases": [
+        "tell me anyway",
+        "go on, again",
+        "again, please"
+      ],
+      "category": "topics"
+    },
+    "rumors.respond.ask_source": {
+      "question": "conversations.topic.rumors.respond",
+      "answer": "ask_source",
+      "context": "conversations.topic.rumors.respond",
+      "keywords": {
+        "told": 1.5,
+        "who": 1.0,
+        "heard": 1.0,
+        "from": 0.5
+      },
+      "requiresAny": [
+        "told",
+        "who",
+        "heard"
+      ],
+      "phrases": [
+        "who told you that",
+        "where did you hear it",
+        "who did you hear that from"
+      ],
+      "category": "topics"
+    },
+    "rumors.respond.challenge": {
+      "question": "conversations.topic.rumors.respond",
+      "answer": "challenge",
+      "context": "conversations.topic.rumors.respond",
+      "keywords": {
+        "reliable": 1.5,
+        "doubt": 1.5,
+        "true": 1.0
+      },
+      "requiresAny": [
+        "reliable",
+        "doubt",
+        "true"
+      ],
+      "phrases": [
+        "that does not sound reliable",
+        "i doubt that",
+        "is that even true"
+      ],
+      "category": "topics"
+    },
+    "rumors.respond.listen": {
+      "question": "conversations.topic.rumors.respond",
+      "answer": "listen",
+      "context": "conversations.topic.rumors.respond",
+      "keywords": {
+        "go": 0.6,
+        "on": 0.4,
+        "more": 1.0,
+        "continue": 1.5
+      },
+      "requiresAny": [
+        "go",
+        "more",
+        "continue"
+      ],
+      "phrases": [
+        "go on",
+        "tell me more",
+        "continue"
+      ],
+      "category": "topics"
+    },
+    "rumors.followup.promise_discretion": {
+      "question": "conversations.topic.rumors.followup",
+      "answer": "promise_discretion",
+      "context": "conversations.topic.rumors.followup",
+      "keywords": {
+        "stops": 1.5,
+        "repeat": 1.2,
+        "secret": 1.2
+      },
+      "requiresAny": [
+        "stops",
+        "repeat",
+        "secret"
+      ],
+      "phrases": [
+        "it stops with me",
+        "i will not repeat it",
+        "your secret is safe"
+      ],
+      "category": "topics"
+    },
+    "rumors.followup.let_it_go": {
+      "question": "conversations.topic.rumors.followup",
+      "answer": "let_it_go",
+      "context": "conversations.topic.rumors.followup",
+      "keywords": {
+        "forgotten": 1.5,
+        "forget": 1.2,
+        "drop": 1.2
+      },
+      "requiresAny": [
+        "forgotten",
+        "forget",
+        "drop"
+      ],
+      "phrases": [
+        "best forgotten",
+        "let us forget it",
+        "we should drop it"
+      ],
+      "category": "topics"
+    },
+    "rumors.followup.encourage_spread": {
+      "question": "conversations.topic.rumors.followup",
+      "answer": "encourage_spread",
+      "context": "conversations.topic.rumors.followup",
+      "keywords": {
+        "knows": 1.5,
+        "else": 1.2,
+        "told": 0.8
+      },
+      "requiresAny": [
+        "knows",
+        "else",
+        "told"
+      ],
+      "phrases": [
+        "who else knows",
+        "who else have you told",
+        "does anyone else know"
+      ],
+      "category": "topics"
+    },
+    "rumors.none.relieved": {
+      "question": "conversations.topic.rumors.none.respond",
+      "answer": "relieved",
+      "context": "conversations.topic.rumors.none.respond",
+      "keywords": {
+        "quiet": 1.5,
+        "suits": 1.2,
+        "good": 0.6
+      },
+      "requiresAny": [
+        "quiet",
+        "suits"
+      ],
+      "phrases": [
+        "a quiet week suits me",
+        "good, quiet is fine",
+        "quiet suits me"
+      ],
+      "category": "topics"
+    },
+    "rumors.none.ask_anyway": {
+      "question": "conversations.topic.rumors.none.respond",
+      "answer": "ask_anyway",
+      "context": "conversations.topic.rumors.none.respond",
+      "keywords": {
+        "nothing": 1.5,
+        "all": 0.6,
+        "really": 1.0
+      },
+      "requiresAny": [
+        "nothing",
+        "really"
+      ],
+      "phrases": [
+        "nothing at all",
+        "really, nothing",
+        "nothing whatsoever"
+      ],
+      "category": "topics"
+    },
+    "news.sad.compassion": {
+      "question": "conversations.topic.news.sad.respond",
+      "answer": "compassion",
+      "context": "conversations.topic.news.sad.respond",
+      "keywords": {
+        "awful": 1.5,
+        "terrible": 1.5,
+        "everyone": 0.8
+      },
+      "requiresAny": [
+        "awful",
+        "terrible",
+        "everyone"
+      ],
+      "phrases": [
+        "that is awful, how is everyone",
+        "that is terrible",
+        "how is everyone holding up"
+      ],
+      "category": "topics"
+    },
+    "news.sad.ask_more": {
+      "question": "conversations.topic.news.sad.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.news.sad.respond",
+      "keywords": {
+        "happened": 1.5,
+        "exactly": 1.2
+      },
+      "requiresAny": [
+        "happened",
+        "exactly"
+      ],
+      "phrases": [
+        "what happened exactly",
+        "what happened",
+        "how did it happen"
+      ],
+      "category": "topics"
+    },
+    "news.sad.amused": {
+      "question": "conversations.topic.news.sad.respond",
+      "answer": "amused",
+      "context": "conversations.topic.news.sad.respond",
+      "keywords": {
+        "serves": 1.5,
+        "deserved": 1.5,
+        "funny": 1.2
+      },
+      "requiresAny": [
+        "serves",
+        "deserved",
+        "funny"
+      ],
+      "phrases": [
+        "serves them right",
+        "they deserved it",
+        "that is funny"
+      ],
+      "category": "topics"
+    },
+    "news.glad.celebrate": {
+      "question": "conversations.topic.news.glad.respond",
+      "answer": "celebrate",
+      "context": "conversations.topic.news.glad.respond",
+      "keywords": {
+        "wonderful": 1.5,
+        "brilliant": 1.5,
+        "great": 1.2
+      },
+      "requiresAny": [
+        "wonderful",
+        "brilliant",
+        "great"
+      ],
+      "phrases": [
+        "that is wonderful news",
+        "brilliant",
+        "that is great news"
+      ],
+      "category": "topics"
+    },
+    "news.glad.ask_more": {
+      "question": "conversations.topic.news.glad.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.news.glad.respond",
+      "keywords": {
+        "story": 1.5,
+        "whole": 1.2,
+        "all": 0.5
+      },
+      "requiresAny": [
+        "story",
+        "whole"
+      ],
+      "phrases": [
+        "tell me the whole story",
+        "tell me all of it",
+        "i want the whole story"
+      ],
+      "category": "topics"
+    },
+    "news.glad.sour": {
+      "question": "conversations.topic.news.glad.respond",
+      "answer": "sour",
+      "context": "conversations.topic.news.glad.respond",
+      "keywords": {
+        "last": 1.5,
+        "wont": 1.0,
+        "never": 1.0
+      },
+      "requiresAny": [
+        "last",
+        "wont",
+        "never"
+      ],
+      "phrases": [
+        "it will not last",
+        "these things never last",
+        "that will not last"
+      ],
+      "category": "topics"
+    },
+    "news.mixed.curious": {
+      "question": "conversations.topic.news.mixed.respond",
+      "answer": "curious",
+      "context": "conversations.topic.news.mixed.respond",
+      "keywords": {
+        "brought": 1.5,
+        "caused": 1.5,
+        "why": 0.6
+      },
+      "requiresAny": [
+        "brought",
+        "caused",
+        "why"
+      ],
+      "phrases": [
+        "what brought that on",
+        "what caused it",
+        "why did that happen"
+      ],
+      "category": "topics"
+    },
+    "news.mixed.wish_well": {
+      "question": "conversations.topic.news.mixed.respond",
+      "answer": "wish_well",
+      "context": "conversations.topic.news.mixed.respond",
+      "keywords": {
+        "hope": 1.5,
+        "works": 1.2,
+        "them": 0.4
+      },
+      "requiresAny": [
+        "hope",
+        "works"
+      ],
+      "phrases": [
+        "i hope it works out for them",
+        "i hope they do well",
+        "hope it works out"
+      ],
+      "category": "topics"
+    },
+    "news.mixed.skeptical": {
+      "question": "conversations.topic.news.mixed.respond",
+      "answer": "skeptical",
+      "context": "conversations.topic.news.mixed.respond",
+      "keywords": {
+        "more": 1.2,
+        "story": 1.2,
+        "behind": 1.5
+      },
+      "requiresAny": [
+        "more",
+        "story",
+        "behind"
+      ],
+      "phrases": [
+        "there is more to that story",
+        "something behind that",
+        "there is more to it"
+      ],
+      "category": "topics"
+    },
+    "news.followup.keep_quiet": {
+      "question": "conversations.topic.news.followup",
+      "answer": "keep_quiet",
+      "context": "conversations.topic.news.followup",
+      "keywords": {
+        "repeat": 1.5,
+        "quiet": 1.2,
+        "nobody": 1.0
+      },
+      "requiresAny": [
+        "repeat",
+        "quiet",
+        "nobody"
+      ],
+      "phrases": [
+        "i will not repeat any of it",
+        "i will keep quiet",
+        "nobody will hear it from me"
+      ],
+      "category": "topics"
+    },
+    "news.followup.ask_how_they_are": {
+      "question": "conversations.topic.news.followup",
+      "answer": "ask_how_they_are",
+      "context": "conversations.topic.news.followup",
+      "keywords": {
+        "you": 0.4,
+        "yourself": 1.5,
+        "coping": 1.5
+      },
+      "requiresAny": [
+        "yourself",
+        "coping",
+        "you"
+      ],
+      "phrases": [
+        "and how are you with all that",
+        "how are you coping",
+        "and yourself"
+      ],
+      "category": "topics"
+    },
+    "news.followup.spread": {
+      "question": "conversations.topic.news.followup",
+      "answer": "spread",
+      "context": "conversations.topic.news.followup",
+      "keywords": {
+        "everyone": 1.5,
+        "hear": 1.2,
+        "should": 0.8
+      },
+      "requiresAny": [
+        "everyone",
+        "hear",
+        "should"
+      ],
+      "phrases": [
+        "everyone should hear about this",
+        "everyone should know",
+        "people should hear this"
+      ],
+      "category": "topics"
+    },
+    "news.none.chat_anyway": {
+      "question": "conversations.topic.news.none.respond",
+      "answer": "chat_anyway",
+      "context": "conversations.topic.news.none.respond",
+      "keywords": {
+        "quiet": 1.5,
+        "suits": 1.2,
+        "village": 0.6
+      },
+      "requiresAny": [
+        "quiet",
+        "suits"
+      ],
+      "phrases": [
+        "quiet suits a village",
+        "quiet is good",
+        "quiet suits this place"
+      ],
+      "category": "topics"
+    },
+    "news.none.share_own": {
+      "question": "conversations.topic.news.none.respond",
+      "answer": "share_own",
+      "context": "conversations.topic.news.none.respond",
+      "keywords": {
+        "week": 1.5,
+        "myself": 1.2,
+        "mine": 1.0
+      },
+      "requiresAny": [
+        "week",
+        "myself",
+        "mine"
+      ],
+      "phrases": [
+        "i have had a week of it myself",
+        "same week for me",
+        "mine has been quiet too"
+      ],
+      "category": "topics"
+    },
+    "noticed.grieving.validate": {
+      "question": "conversations.topic.noticed.grieving.respond",
+      "answer": "validate",
+      "context": "conversations.topic.noticed.grieving.respond",
+      "keywords": {
+        "allowed": 1.5,
+        "feel": 1.0,
+        "grieve": 1.5
+      },
+      "requiresAny": [
+        "allowed",
+        "feel",
+        "grieve"
+      ],
+      "phrases": [
+        "you are allowed to feel that",
+        "you are allowed to grieve",
+        "it is alright to feel that"
+      ],
+      "category": "topics"
+    },
+    "noticed.grieving.give_space": {
+      "question": "conversations.topic.noticed.grieving.respond",
+      "answer": "give_space",
+      "context": "conversations.topic.noticed.grieving.respond",
+      "keywords": {
+        "talk": 1.0,
+        "make": 0.8,
+        "push": 1.5,
+        "force": 1.5
+      },
+      "requiresAny": [
+        "talk",
+        "push",
+        "force",
+        "make"
+      ],
+      "phrases": [
+        "i will not make you talk about it",
+        "i will not push",
+        "i will not force it"
+      ],
+      "category": "topics"
+    },
+    "noticed.grieving.dismiss": {
+      "question": "conversations.topic.noticed.grieving.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.noticed.grieving.respond",
+      "keywords": {
+        "die": 1.5,
+        "life": 1.2,
+        "happens": 1.0
+      },
+      "requiresAny": [
+        "die",
+        "life",
+        "happens"
+      ],
+      "phrases": [
+        "people die, that is life",
+        "it happens",
+        "that is life"
+      ],
+      "category": "topics"
+    },
+    "noticed.annoyed.apologize": {
+      "question": "conversations.topic.noticed.annoyed.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.noticed.annoyed.respond",
+      "keywords": {
+        "sorry": 1.5,
+        "did": 0.5,
+        "wrong": 1.0
+      },
+      "requiresAny": [
+        "sorry",
+        "wrong"
+      ],
+      "phrases": [
+        "i am sorry for what i did",
+        "sorry, that was wrong of me",
+        "i am sorry"
+      ],
+      "category": "topics"
+    },
+    "noticed.annoyed.explain": {
+      "question": "conversations.topic.noticed.annoyed.respond",
+      "answer": "explain",
+      "context": "conversations.topic.noticed.annoyed.respond",
+      "keywords": {
+        "explain": 1.5,
+        "myself": 1.2,
+        "reason": 1.2
+      },
+      "requiresAny": [
+        "explain",
+        "myself",
+        "reason"
+      ],
+      "phrases": [
+        "let me explain myself",
+        "let me explain",
+        "there was a reason"
+      ],
+      "category": "topics"
+    },
+    "noticed.annoyed.brush_off": {
+      "question": "conversations.topic.noticed.annoyed.respond",
+      "answer": "brush_off",
+      "context": "conversations.topic.noticed.annoyed.respond",
+      "keywords": {
+        "still": 1.5,
+        "about": 0.4,
+        "over": 1.2,
+        "grudge": 1.5
+      },
+      "requiresAny": [
+        "still",
+        "over",
+        "grudge"
+      ],
+      "phrases": [
+        "you are still on about that",
+        "get over it",
+        "still holding a grudge"
+      ],
+      "category": "topics"
+    },
+    "noticed.elated.share_joy": {
+      "question": "conversations.topic.noticed.elated.respond",
+      "answer": "share_joy",
+      "context": "conversations.topic.noticed.elated.respond",
+      "keywords": {
+        "see": 1.0,
+        "like": 0.6,
+        "happy": 1.2,
+        "good": 0.8
+      },
+      "requiresAny": [
+        "see",
+        "happy",
+        "good"
+      ],
+      "phrases": [
+        "it is good to see you like this",
+        "good to see you happy",
+        "nice to see you like this"
+      ],
+      "category": "topics"
+    },
+    "noticed.elated.ask_more": {
+      "question": "conversations.topic.noticed.elated.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.noticed.elated.respond",
+      "keywords": {
+        "brought": 1.5,
+        "caused": 1.2,
+        "what": 0.4
+      },
+      "requiresAny": [
+        "brought",
+        "caused"
+      ],
+      "phrases": [
+        "what has brought this on",
+        "what caused this",
+        "what brought that on"
+      ],
+      "category": "topics"
+    },
+    "noticed.elated.deflate": {
+      "question": "conversations.topic.noticed.elated.respond",
+      "answer": "deflate",
+      "context": "conversations.topic.noticed.elated.respond",
+      "keywords": {
+        "carried": 1.5,
+        "away": 1.0,
+        "ahead": 1.2
+      },
+      "requiresAny": [
+        "carried",
+        "away",
+        "ahead"
+      ],
+      "phrases": [
+        "do not get carried away",
+        "do not get ahead of yourself",
+        "steady on"
+      ],
+      "category": "topics"
+    },
+    "noticed.fine.glad": {
+      "question": "conversations.topic.noticed.fine.respond",
+      "answer": "glad",
+      "context": "conversations.topic.noticed.fine.respond",
+      "keywords": {
+        "steady": 1.5,
+        "something": 1.0,
+        "nothing": 0.6
+      },
+      "requiresAny": [
+        "steady",
+        "something"
+      ],
+      "phrases": [
+        "steady is not nothing",
+        "steady is something",
+        "steady will do"
+      ],
+      "category": "topics"
+    },
+    "noticed.fine.dig": {
+      "question": "conversations.topic.noticed.fine.respond",
+      "answer": "dig",
+      "context": "conversations.topic.noticed.fine.respond",
+      "keywords": {
+        "really": 1.5,
+        "though": 1.2,
+        "sure": 1.2
+      },
+      "requiresAny": [
+        "really",
+        "though",
+        "sure"
+      ],
+      "phrases": [
+        "really though",
+        "are you sure",
+        "really, though?"
+      ],
+      "category": "topics"
+    },
+    "noticed.fine.dismiss": {
+      "question": "conversations.topic.noticed.fine.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.noticed.fine.respond",
+      "keywords": {
+        "answer": 1.5,
+        "much": 1.0
+      },
+      "requiresAny": [
+        "answer",
+        "much"
+      ],
+      "phrases": [
+        "not much of an answer",
+        "that is hardly an answer",
+        "not much to go on"
+      ],
+      "category": "topics"
+    },
+    "noticed.followup.offer_help": {
+      "question": "conversations.topic.noticed.followup",
+      "answer": "offer_help",
+      "context": "conversations.topic.noticed.followup",
+      "keywords": {
+        "help": 1.5,
+        "would": 0.5,
+        "need": 1.0
+      },
+      "requiresAny": [
+        "help",
+        "need"
+      ],
+      "phrases": [
+        "tell me what would help",
+        "what do you need",
+        "what would help"
+      ],
+      "category": "topics"
+    },
+    "noticed.followup.just_be_there": {
+      "question": "conversations.topic.noticed.followup",
+      "answer": "just_be_there",
+      "context": "conversations.topic.noticed.followup",
+      "keywords": {
+        "around": 1.5,
+        "here": 1.0,
+        "nearby": 1.5
+      },
+      "requiresAny": [
+        "around",
+        "here",
+        "nearby"
+      ],
+      "phrases": [
+        "i will be around",
+        "i am here",
+        "i will be nearby"
+      ],
+      "category": "topics"
+    },
+    "noticed.followup.change_subject": {
+      "question": "conversations.topic.noticed.followup",
+      "answer": "change_subject",
+      "context": "conversations.topic.noticed.followup",
+      "keywords": {
+        "else": 1.5,
+        "something": 1.0,
+        "subject": 1.5
+      },
+      "requiresAny": [
+        "else",
+        "subject",
+        "something"
+      ],
+      "phrases": [
+        "let us talk about something else",
+        "change the subject",
+        "something else then"
+      ],
+      "category": "topics"
+    }
+  }
+}

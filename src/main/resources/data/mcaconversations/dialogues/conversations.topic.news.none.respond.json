@@ -1,0 +1,68 @@
+{
+  "answers": [
+    {
+      "name": "chat_anyway",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.none.chat_anyway",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.none.chat_anyway",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.none.chat_anyway"
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.none.share_own",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.none.share_own",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.none.share_own"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.none.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

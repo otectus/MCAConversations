@@ -1,0 +1,170 @@
+{
+  "answers": [
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.followup.offer_help",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.followup.offer_help",
+              "deltas": {
+                "respect": 5,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.followup.offer_help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "criticise_fairly",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "confident"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.followup.criticise_fairly",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.followup.criticise_fairly",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.followup.criticise_fairly.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.followup.criticise_fairly",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.followup.criticise_fairly",
+              "deltas": {
+                "tension": 3,
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.followup.criticise_fairly.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "confident"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "anxious",
+                "sensitive",
+                "gloomy",
+                "introverted"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "village.followup.criticise_fairly",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.followup.criticise_fairly.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.followup.agree",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.followup.agree",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.followup.agree"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

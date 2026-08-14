@@ -354,40 +354,40 @@ class ConversationGraphLintTest {
      * a test rather than a paragraph in a design document.
      */
     private static final Set<String> LEGACY_REWARDED_STARTERS = Set.of(
-            "conversations.cat.events/news",
-            "conversations.cat.events/noticed",
             "conversations.cat.personal/dreams",
             "conversations.cat.personal/feelings",
             "conversations.cat.personal/hopes",
             "conversations.cat.personal/life",
             "conversations.cat.personal/regrets",
             "conversations.cat.personal/secret",
-            "conversations.cat.profession/work",
-            "conversations.cat.village/people",
-            "conversations.cat.village/rumors",
-            "conversations.cat.village/village",
             "conversations.dreams/ask_more",
             "conversations.dreams/encourage",
             "conversations.family/ask_parent",
             "conversations.family/checkin_child",
             "conversations.family/memories",
-            "conversations.fears/challenge",
-            "conversations.fears/comfort",
-            "conversations.fears/press",
-            "conversations.fears/share",
             "conversations.feelings/same",
             "conversations.feelings/unsure",
             "conversations.us/firstmet",
             "conversations.us/future",
             "conversations.us/happy",
-            "conversations.us/worries",
-            "conversations.work/(auto)");
+            "conversations.us/worries");
+
+    /**
+     * Whole questions that exist only as the branching-disabled path of a topic that HAS been
+     * converted. Their answers keep their 1.0.0 payouts on purpose — that is what makes the off-state
+     * the old experience rather than a stripped one — so they are not unconverted debt.
+     */
+    private static final Set<String> LEGACY_OFFSTATE_QUESTIONS = Set.of(
+            "conversations.fears", "conversations.work.legacy");
 
     @Test
     @DisplayName("the list of not-yet-converted rewarded starters matches reality exactly")
     void legacyRewardLedgerIsAccurate() {
         Set<String> actual = new LinkedHashSet<>();
         forEachResult((question, answerName, result) -> {
+            if (LEGACY_OFFSTATE_QUESTIONS.contains(question)) {
+                return;
+            }
             // A converted topic keeps its 1.0.0 payout on the branching-disabled fallback on purpose,
             // so that off-state really is the old experience. That is not unconverted debt.
             if (isLegacyFallback(result)) {
@@ -664,8 +664,27 @@ class ConversationGraphLintTest {
         answer(question, topic.entryAnswer()).ifPresent(answer -> {
             for (JsonElement r : answer.getAsJsonArray("results")) {
                 JsonObject actions = r.getAsJsonObject().getAsJsonObject("actions");
-                if (actions.has("next") && isBranchingNode(actions.get("next").getAsString())) {
-                    targets.add(actions.get("next").getAsString());
+                if (!actions.has("next")) {
+                    continue;
+                }
+                String next = actions.get("next").getAsString();
+                if (isBranchingNode(next)) {
+                    targets.add(next);
+                } else {
+                    // An auto question is a continuation of the opener, not a decision: it picks a
+                    // contextual line (a profession, say) and hands straight on. Follow it through.
+                    JsonObject intermediate = questions.get(next);
+                    if (intermediate != null && intermediate.has("auto")
+                            && intermediate.get("auto").getAsBoolean()) {
+                        for (JsonElement a : intermediate.getAsJsonArray("answers")) {
+                            for (JsonElement ir : a.getAsJsonObject().getAsJsonArray("results")) {
+                                JsonObject ia = ir.getAsJsonObject().getAsJsonObject("actions");
+                                if (ia.has("next") && isBranchingNode(ia.get("next").getAsString())) {
+                                    targets.add(ia.get("next").getAsString());
+                                }
+                            }
+                        }
+                    }
                 }
             }
         });

@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "glad",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.glad",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.glad",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.fine.glad"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dig",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.dig",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.fine.dig"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.dismiss",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.fine.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

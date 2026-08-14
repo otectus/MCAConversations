@@ -33,8 +33,15 @@ the deepest, to prove the grammar before the remaining twenty-six follow.
 | **Food** | quick | a dietary-trait branch that is never the butt of a rewarded joke, plus ordinary taste talk |
 | **Weather** | quick | a storm is concern; a fine morning is small talk. They are not the same conversation |
 | **Season** | quick | the turning year, and the four festival days with a once-a-day invitation |
+| **Work** | standard | the forty profession lines now *open* a conversation instead of ending one |
+| **Work offer** | service | terms and motivation first; the quest screen opens only once you have said yes |
+| **Village** | standard | resident pride, honest criticism, and having nowhere to call home |
+| **The people** | standard | four personality-flavoured openings; pushing for gossip after discomfort costs |
+| **Rumours** | standard | who told you, is it reliable, and who you will tell |
+| **News** | standard | the event *type* picks the branch: a death and a wedding are not one conversation |
+| **Noticed** | standard | grieving, annoyed at you, elated, or steady — four different answers |
 
-Twenty-six starters still pay out on the click and are tracked in the lint's migration ledger.
+Thirteen starters still pay out on the click and are tracked in the lint's migration ledger.
 
 ### The economy moved
 
@@ -101,10 +108,9 @@ never written down before and that decide how a result must be authored.
 
 ### Known gaps
 
-- Twenty of the twenty-six original topics still pay out on the click: work and the work offer, the
-  village, its people and its rumours, news and the noticed-state check-in, life story, dreams,
-  hopes, regrets and secrets, feelings, and every spouse and family starter. The count is tracked as
-  a migration ledger inside `ConversationGraphLintTest`, which fails if a topic is converted without
+- Thirteen of the twenty-six original topics still pay out on the click: life story, dreams, hopes,
+  regrets and secrets, feelings, and every spouse and family starter. The count is tracked as a
+  migration ledger inside `ConversationGraphLintTest`, which fails if a topic is converted without
   removing its row, or if a new rewarded starter appears without being listed.
 - Interiority profiles carry resting baselines and stance bias only. Wants, boundaries and secret
   pools arrive with the topics that read them — storing state nothing reads is how save files rot.
