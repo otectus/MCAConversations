@@ -29,9 +29,9 @@ one asks you not to. Offer the busy farmer a faster way to do her job and she'll
 for being blunt or add it to the list of things she's apparently doing wrong — depending entirely on
 who she is.
 
-Two topics are converted so far — **their day** and **their fears** — chosen as the shallowest and
-the deepest. Everything else works exactly as it did while the rest catch up, and one config toggle
-puts it all back the old way.
+All 27 topics are converted — from the weather and what's for supper up through fears, regrets,
+secrets, and the topics you only get with a spouse or your own children. Nothing pays you hearts
+just for asking any more, and one config toggle puts it all back the old way.
 
 ### 🕯️ They hold you to what you said *(new in 1.1.0)*
 Get a villager to tell you what really frightens them and it isn't a one-off scene. Days later

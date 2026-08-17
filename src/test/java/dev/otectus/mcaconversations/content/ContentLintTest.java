@@ -615,6 +615,93 @@ class ContentLintTest {
         assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 
+    /**
+     * Two buttons in the same topic may read identically only if pressing them does the same thing.
+     *
+     * <p>Three adjacent {@code life} nodes all offered "Thank you for telling me.": on two of them it
+     * was a free exit, on the third it paid a heart and moved trust. The player cannot tell those
+     * apart, which makes the choice a coin flip dressed as a decision. Reusing a bare exit line
+     * <em>across</em> topics is fine and deliberate — that is the mod's voice — so this only looks
+     * inside one topic's family of nodes.
+     */
+    @Test
+    void answerLabelsAreUniqueWithinATopic() {
+        // topic -> label -> consequence signature -> where it was seen
+        Map<String, Map<String, Map<String, List<String>>>> byTopic = new HashMap<>();
+        questions.forEach((name, json) -> {
+            String topic = topicOf(name);
+            if (topic == null) {
+                return;
+            }
+            for (JsonElement a : json.getAsJsonArray("answers")) {
+                JsonObject answer = a.getAsJsonObject();
+                if (!answer.has("name")) {
+                    continue;
+                }
+                String label = lang.get("dialogue." + name + "." + answer.get("name").getAsString());
+                if (label == null) {
+                    continue; // branchingContentIsLocalized reports the missing label
+                }
+                byTopic.computeIfAbsent(topic, t -> new HashMap<>())
+                        .computeIfAbsent(label, l -> new HashMap<>())
+                        .computeIfAbsent(consequenceSignature(answer), s -> new ArrayList<>())
+                        .add(name + "/" + answer.get("name").getAsString());
+            }
+        });
+
+        List<String> problems = new ArrayList<>();
+        byTopic.forEach((topic, labels) -> labels.forEach((label, signatures) -> {
+            if (signatures.size() > 1) {
+                List<String> where = new ArrayList<>();
+                signatures.values().forEach(where::addAll);
+                where.sort(null);
+                problems.add(topic + ": " + signatures.size() + " different consequences share the label \""
+                        + label + "\" — " + String.join(", ", where));
+            }
+        }));
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /** The topic a branching node belongs to: conversations.{topic,arc}.&lt;topic&gt;.… */
+    private static String topicOf(String question) {
+        String[] parts = question.split("\\.");
+        if (parts.length < 4 || !parts[0].equals("conversations")) {
+            return null;
+        }
+        return parts[1].equals("topic") || parts[1].equals("arc") ? parts[2] : null;
+    }
+
+    /**
+     * What pressing this button actually does, reduced to a comparable string. Only the durable,
+     * player-visible effects count: hearts, the disposition vector, and progress state. Which line the
+     * villager says back is deliberately excluded — two exits that differ only in flavour text are the
+     * same choice.
+     */
+    private static String consequenceSignature(JsonObject answer) {
+        Set<String> effects = new java.util.TreeSet<>();
+        for (JsonElement r : answer.getAsJsonArray("results")) {
+            JsonObject actions = r.getAsJsonObject().getAsJsonObject("actions");
+            if (actions.has("conversations_affection_apply")) {
+                effects.add("hearts=" + actions.getAsJsonObject("conversations_affection_apply").get("delta"));
+            }
+            if (actions.has("positive")) {
+                effects.add("hearts=" + actions.get("positive"));
+            }
+            if (actions.has("negative")) {
+                effects.add("hearts=-" + actions.get("negative"));
+            }
+            if (actions.has("conversations_disposition_apply")) {
+                effects.add("vector=" + actions.getAsJsonObject("conversations_disposition_apply")
+                        .getAsJsonObject("deltas"));
+            }
+            if (actions.has("conversations_progress_apply")) {
+                effects.add("progress=" + actions.get("conversations_progress_apply"));
+            }
+        }
+        return effects.toString();
+    }
+
     /** Every conversations.* question must be reachable from the hub via next edges — no orphan pages. */
     @Test
     void everyConversationsQuestionIsReachableFromHub() {

@@ -1063,6 +1063,12 @@ class IntentMatcherTest {
             {"do not tell me something you will regret", "conversations.topic.secret.respond", "secret.respond.decline"},
             {"are you sure you want to tell me", "conversations.topic.secret.respond", "secret.respond.decline"},
             {"you might regret telling me", "conversations.topic.secret.respond", "secret.respond.decline"},
+            {"tell me when you are ready", "conversations.topic.secret.declined", "secret.declined.offer_later"},
+            {"whenever you are ready", "conversations.topic.secret.declined", "secret.declined.offer_later"},
+            {"another day then, when you want to", "conversations.topic.secret.declined", "secret.declined.offer_later"},
+            {"talk to me about something easier", "conversations.topic.secret.declined", "secret.declined.change_subject"},
+            {"let us talk about something else", "conversations.topic.secret.declined", "secret.declined.change_subject"},
+            {"something lighter instead", "conversations.topic.secret.declined", "secret.declined.change_subject"},
             {"it stays with me, you have my word", "conversations.topic.secret.followup", "secret.followup.promise"},
             {"i promise", "conversations.topic.secret.followup", "secret.followup.promise"},
             {"you have my word", "conversations.topic.secret.followup", "secret.followup.promise"},
@@ -1078,9 +1084,12 @@ class IntentMatcherTest {
             {"how are you carrying it", "conversations.arc.secret.resume.respond", "secret.resume.check_in"},
             {"how are you bearing it", "conversations.arc.secret.resume.respond", "secret.resume.check_in"},
             {"how is it sitting with you", "conversations.arc.secret.resume.respond", "secret.resume.check_in"},
-            {"shall i mention it to the others", "conversations.arc.secret.resume.respond", "secret.resume.hint_publicly"},
-            {"should i tell the others", "conversations.arc.secret.resume.respond", "secret.resume.hint_publicly"},
-            {"shall i mention it", "conversations.arc.secret.resume.respond", "secret.resume.hint_publicly"},
+            {"does anyone else know", "conversations.arc.secret.resume.respond", "secret.resume.ask_who_knows"},
+            {"who else knows", "conversations.arc.secret.resume.respond", "secret.resume.ask_who_knows"},
+            {"has anyone else been told", "conversations.arc.secret.resume.respond", "secret.resume.ask_who_knows"},
+            {"i have been thinking of letting it slip", "conversations.arc.secret.resume.respond", "secret.resume.hint_publicly"},
+            {"i might mention it to the others", "conversations.arc.secret.resume.respond", "secret.resume.hint_publicly"},
+            {"maybe the others should know", "conversations.arc.secret.resume.respond", "secret.resume.hint_publicly"},
     };
 
     @Test

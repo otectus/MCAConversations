@@ -680,4 +680,42 @@ class PilotPathSimulationTest {
                 "a whole day of the same two kindnesses must not exceed the daily cap; got "
                         + run.heartsMoved + " — " + run.trace);
     }
+
+    @Test
+    @DisplayName("refusing to hear a secret ends its own way, and is never treated as having heard it")
+    void decliningASecretNeverReachesTheNodeThatAssumesYouHeardIt() {
+        Run run = new Run(new World());
+        String node = click("conversations.topic.secret.respond", "decline", run);
+
+        assertEquals("conversations.topic.secret.declined", node,
+                "declining used to land on the follow-up, which then offered to promise to keep a"
+                        + " secret the player had never been told");
+        assertFalse(run.milestone("secret.entrusted"), "you cannot be entrusted with what you refused");
+        assertEquals(0, run.arcStage("secret"), "refusing does not advance the arc");
+        assertEquals(0, run.heartsMoved, "refusing to hear it is neither rewarded nor punished");
+
+        // Nothing on the declined node can reach the follow-up either: its whole premise is
+        // "so now you're carrying it too".
+        for (String answer : List.of("offer_later", "change_subject", "leave")) {
+            Run branch = new Run(new World());
+            click("conversations.topic.secret.respond", "decline", branch);
+            assertEquals("conversations.cat.personal",
+                    click("conversations.topic.secret.declined", answer, branch),
+                    answer + " must return to the category, not continue into the disclosure");
+            assertFalse(branch.milestone("secret.entrusted"), answer + " must not entrust anything");
+        }
+    }
+
+    @Test
+    @DisplayName("agreeing to hear a secret is what delivers it — the opener only offers")
+    void acceptingASecretIsWhatDeliversIt() {
+        Run run = new Run(new World());
+        JsonObject chosen = select("conversations.topic.secret.respond", "accept", run);
+        assertEquals("conversations.secret.respond.accept",
+                chosen.getAsJsonObject("actions").get("say").getAsString(),
+                "the payload belongs to the answer that agreed to hear it, not to the opener");
+        apply(chosen, run);
+        assertTrue(run.milestone("secret.entrusted"), "hearing it is what entrusts you");
+        assertEquals(1, run.arcStage("secret"));
+    }
 }

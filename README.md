@@ -17,9 +17,9 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   to say back, and that is what lands. Sit with someone's bad day and offer to take something off
   their hands, and you've earned something. Tell them everyone has bad days and then double down
   when they bristle, and you've lost it — and apologising settles the air without buying the hearts
-  back, because a slight isn't undone by saying sorry. Two topics are converted in 1.1.0 (**the
-  day**, and **fears**); the rest follow, and every one still works exactly as it did in the
-  meantime.
+  back, because a slight isn't undone by saying sorry. **All 27 catalogued topics are converted** —
+  from the weather and what's for supper up through fears, regrets, secrets, and the spouse and
+  family topics — and no topic pays hearts for being clicked any more.
 - **Conversations that remember (new)** — tell a villager you'll stand with them and they hold you
   to it a week later, by name. Get them to crack all the way open about what frightens them and
   they answer differently ever after, because they know you remember. Press them after they've said
@@ -70,9 +70,10 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   children and teens answer in their own voice. **Every personality has a flavored overlay** — all 16 of MCA 7.7's, plus MCA 7.6's
   `athletic` and the four 7.6 spellings (`witty`/`shy`/`lazy`/`grumpy`) kept as aliases of their
   7.7 successors, so a villager keeps its voice across an MCA upgrade. 21 overlay namespaces in all. Each covers the
-  high-traffic lines (greetings, check-ins, day/work/village, personal openers, deflects, gossip and
-  the whole chat-mode vocabulary), each with 2–3 variants — a crabby villager and a peppy one
-  answer the same question in visibly different words
+  high-traffic lines (greetings, check-ins, day/work/village, the topic openers, deflects, gossip and
+  the personality-voiced chat-mode deflections), each with 2–3 variants — a crabby villager and a
+  peppy one answer the same question in visibly different words. The overlays sit on the openers and
+  the deflections; the bodies of the branching trees are spoken in one shared voice
 
 ## Requirements
 
@@ -92,7 +93,7 @@ Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run o
 
 **English (`en_us`)** and **Brazilian Portuguese (`pt_br`)** — both complete: UI strings, the full
 base dialogue pool, every personality overlay, the age voices and the whole chat-mode vocabulary
-(2,453 translated strings). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
+(4,724 translated strings per locale, across 23 namespaces). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
 client-only hook widens that gate to the locales this mod ships complete overlays for, while
 preserving MCA's voice-pack and online-TTS restrictions untouched.
 

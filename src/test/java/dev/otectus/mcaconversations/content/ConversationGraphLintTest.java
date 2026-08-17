@@ -63,6 +63,9 @@ class ConversationGraphLintTest {
     /** MCA questions we may hand control back to. */
     private static final Set<String> MCA_QUESTIONS = Set.of("main", "greet", "root");
 
+    /** MCA's age groups, ordered youngest first so lint messages read in a sensible order. */
+    private static final List<String> AGE_GROUPS = List.of("toddler", "child", "teen", "adult");
+
     private static Map<String, JsonObject> questions;
     private static ConversationCatalog catalog;
     private static Map<String, String> lang;
@@ -122,6 +125,130 @@ class ConversationGraphLintTest {
             }
         }
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * The catalog's {@code ages} and the opener's {@code constraints} are two statements of the same
+     * fact, and nothing used to make them agree — four topics declared {@code ["adult"]} while their
+     * openers were gated only {@code !toddler,!baby}, so a child could be asked to keep an adult's
+     * secret. Age is decided by the button being offered at all, so the constraint string on the
+     * starter answer is the thing that has to match.
+     */
+    @Test
+    @DisplayName("a topic's declared ages match the ages its opener is actually offered to")
+    void catalogAgesMatchOpenerGating() {
+        List<String> problems = new ArrayList<>();
+        for (TopicEntry topic : catalog.topics()) {
+            JsonObject question = questions.get(topic.entryQuestion());
+            if (question == null) {
+                continue; // catalogStartersExist already reports this
+            }
+            Optional<JsonObject> starter = answer(question, topic.entryAnswer());
+            if (starter.isEmpty()) {
+                continue;
+            }
+            String constraints = starter.get().has("constraints")
+                    ? starter.get().get("constraints").getAsString() : "";
+            Set<String> offered = new LinkedHashSet<>(agesPermittedBy(constraints));
+            offered.retainAll(agesReaching(topic.entryQuestion()));
+            for (String age : AGE_GROUPS) {
+                boolean declared = topic.allowsAge(age);
+                boolean reachable = offered.contains(age);
+                if (declared && !reachable) {
+                    problems.add(topic.id() + ": catalog lists age '" + age + "' but nothing offers the"
+                            + " opener to them — the answer's constraints are '" + constraints
+                            + "' and the page itself is only reachable by " + agesReaching(topic.entryQuestion()));
+                } else if (!declared && reachable) {
+                    problems.add(topic.id() + ": a '" + age + "' villager can be asked this but the"
+                            + " catalog does not list that age — add \"" + age + "\" to ages, or tighten"
+                            + " the constraints on " + topic.entryQuestion() + "/" + topic.entryAnswer());
+                }
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * The age groups that can get as far as a given page at all.
+     *
+     * <p>Age gating is inherited: the four spouse topics carry no constraint of their own because the
+     * only route to {@code conversations.us} is an answer gated {@code spouse,adult}. Demanding a
+     * redundant gate on every starter would be noise, so this walks the graph instead — a page is
+     * reachable by an age if any inbound answer both permits that age and sits on a page that age can
+     * already reach. Computed as a fixpoint because the graph has cycles (every "back" button).
+     */
+    private static Set<String> agesReaching(String question) {
+        if (REACHABLE_AGES.isEmpty()) {
+            Set<String> roots = new HashSet<>(questions.keySet());
+            forEachResult((from, answerName, result) -> {
+                JsonObject actions = result.getAsJsonObject("actions");
+                if (actions.has("next")) {
+                    roots.remove(actions.get("next").getAsString());
+                }
+            });
+            questions.keySet().forEach(q -> REACHABLE_AGES.put(q,
+                    roots.contains(q) ? new LinkedHashSet<>(AGE_GROUPS) : new LinkedHashSet<>()));
+
+            boolean changed = true;
+            while (changed) {
+                changed = false;
+                for (Map.Entry<String, JsonObject> page : questions.entrySet()) {
+                    Set<String> here = REACHABLE_AGES.get(page.getKey());
+                    for (JsonElement a : page.getValue().getAsJsonArray("answers")) {
+                        JsonObject answer = a.getAsJsonObject();
+                        Set<String> carried = new LinkedHashSet<>(here);
+                        carried.retainAll(agesPermittedBy(answer.has("constraints")
+                                ? answer.get("constraints").getAsString() : ""));
+                        if (carried.isEmpty()) {
+                            continue;
+                        }
+                        for (JsonElement r : answer.getAsJsonArray("results")) {
+                            JsonObject actions = r.getAsJsonObject().getAsJsonObject("actions");
+                            if (!actions.has("next")) {
+                                continue;
+                            }
+                            Set<String> target = REACHABLE_AGES.get(actions.get("next").getAsString());
+                            if (target != null && target.addAll(carried)) {
+                                changed = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return REACHABLE_AGES.getOrDefault(question, Set.of());
+    }
+
+    private static final Map<String, Set<String>> REACHABLE_AGES = new HashMap<>();
+
+    /**
+     * The age groups an MCA {@code constraints} string leaves able to see an answer. MCA treats a
+     * bare token as "must be", a {@code !}-prefixed token as "must not be", and anything that is not
+     * an age group (spouse, family, kids, has_village, …) as irrelevant to age.
+     */
+    private static Set<String> agesPermittedBy(String constraints) {
+        Set<String> permitted = new LinkedHashSet<>(AGE_GROUPS);
+        Set<String> required = new LinkedHashSet<>();
+        for (String raw : constraints.split(",")) {
+            String token = raw.trim();
+            if (token.isEmpty()) {
+                continue;
+            }
+            boolean negated = token.startsWith("!");
+            String name = negated ? token.substring(1) : token;
+            if (!AGE_GROUPS.contains(name)) {
+                continue;
+            }
+            if (negated) {
+                permitted.remove(name);
+            } else {
+                required.add(name);
+            }
+        }
+        if (!required.isEmpty()) {
+            permitted.retainAll(required);
+        }
+        return permitted;
     }
 
     @Test

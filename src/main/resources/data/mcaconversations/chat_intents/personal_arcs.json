@@ -1708,6 +1708,48 @@
       ],
       "category": "topics"
     },
+    "secret.declined.offer_later": {
+      "question": "conversations.topic.secret.declined",
+      "answer": "offer_later",
+      "context": "conversations.topic.secret.declined",
+      "keywords": {
+        "ready": 1.5,
+        "later": 1.2,
+        "whenever": 1.0
+      },
+      "requiresAny": [
+        "ready",
+        "later",
+        "whenever"
+      ],
+      "phrases": [
+        "tell me when you are ready",
+        "whenever you are ready",
+        "another day then, when you want to"
+      ],
+      "category": "topics"
+    },
+    "secret.declined.change_subject": {
+      "question": "conversations.topic.secret.declined",
+      "answer": "change_subject",
+      "context": "conversations.topic.secret.declined",
+      "keywords": {
+        "easier": 1.5,
+        "lighter": 1.2,
+        "else": 0.8
+      },
+      "requiresAny": [
+        "easier",
+        "lighter",
+        "else"
+      ],
+      "phrases": [
+        "talk to me about something easier",
+        "let us talk about something else",
+        "something lighter instead"
+      ],
+      "category": "topics"
+    },
     "secret.followup.promise": {
       "question": "conversations.topic.secret.followup",
       "answer": "promise",
@@ -1813,25 +1855,53 @@
       ],
       "category": "topics"
     },
+    "secret.resume.ask_who_knows": {
+      "question": "conversations.arc.secret.resume.respond",
+      "answer": "ask_who_knows",
+      "context": "conversations.arc.secret.resume.respond",
+      "keywords": {
+        "else": 1.4,
+        "knows": 1.5,
+        "anyone": 1.2
+      },
+      "requiresAny": [
+        "knows",
+        "anyone"
+      ],
+      "antiKeywords": [
+        "slip",
+        "mention",
+        "others"
+      ],
+      "phrases": [
+        "does anyone else know",
+        "who else knows",
+        "has anyone else been told"
+      ],
+      "category": "topics"
+    },
     "secret.resume.hint_publicly": {
       "question": "conversations.arc.secret.resume.respond",
       "answer": "hint_publicly",
       "context": "conversations.arc.secret.resume.respond",
       "keywords": {
-        "mention": 1.5,
-        "others": 1.5,
-        "tell": 0.6
+        "slip": 1.5,
+        "mention": 1.2,
+        "others": 1.0
       },
       "requiresAny": [
-        "mention",
-        "others"
+        "slip",
+        "mention"
       ],
       "phrases": [
-        "shall i mention it to the others",
-        "should i tell the others",
-        "shall i mention it"
+        "i have been thinking of letting it slip",
+        "i might mention it to the others",
+        "maybe the others should know"
       ],
-      "category": "topics"
+      "category": "topics",
+      "antiKeywords": [
+        "anyone"
+      ]
     }
   }
 }

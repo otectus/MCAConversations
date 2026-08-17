@@ -116,7 +116,7 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 |---|---|---|
 | `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world" \| "dispositions" \| "checks" \| "chat"` | 1 when that config feature is on, else 0 |
 | `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch |
-| `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
+| `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure","quest"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
 | `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
 | `conversations_season` | `{"is": "spring" \| "summer" \| "autumn" \| "winter"}` | 1 when the current season matches — read from Serene Seasons if installed, else the calendar season from the world day; 0 when `enableSeasonLines` is off |
 | `conversations_holiday` | `{"is": "spring_bloom" \| "midsummer" \| "harvest_festival" \| "midwinter" \| "none"}` | 1 when the current calendar festival matches (`none` = an ordinary day); 0 when `enableHolidayLines` is off |
@@ -516,9 +516,17 @@ that are not are the ones worth being honest with yourself about.
 **Words**
 
 - [ ] `en_us` and `pt_br` land in the same change, with matching keys and placeholders.
-- [ ] Every `say` key has its variant pool (3 lines; 2 for check tiers).
+- [ ] Every `say` key has its variant pool. The floor `ContentLintTest.sayKeyPoolsMeetTheVariantFloor`
+      actually enforces is **3 lines**, relaxed to **2** for the precision-targeted pools:
+      `conversations.work.prof.*`, `conversations.food.trait.*`, and any key ending `.child`,
+      `.teen`, `.crit`, `.success`, `.partial`, `.rebuff` or `.guard`. The single exception is
+      `conversations.food.trait.sirben`, where one line is the joke.
 - [ ] Button labels are what the **player says** — never "Persuade", never "+2 Warmth", never a
       success chance — and are never personality-flavoured.
+- [ ] A player label and its reply pool reference only detail that appears in **every** variant
+      of the line they answer. "Well, the cat clearly won." answered a rough-day opener whose
+      other two variants were a sticking door and a dropped egg, so it was a non-sequitur two
+      times in three. If the pools disagree, write to what they share.
 - [ ] Each result authors its actions in the order: state → `next` → `say`.
 - [ ] The node's own prompt reads acceptably on its own, even though it is only a fallback.
 

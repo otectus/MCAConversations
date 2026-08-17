@@ -34,6 +34,57 @@ below exists and Conversations is unchanged.
   children and teens deflect; without Reputation the villager honestly shrugs. Catalogued, linted,
   chat-intent-covered, and localized in both languages.
 
+### Added — every topic is a real conversation now
+
+- **The last ten legacy starters are converted.** `us`, `family` and `feelings` were flat menus that
+  paid up to +8 hearts for a single click and had no follow-up at all — a spouse could say *"I've
+  been rehearsing how to say it for a week"* and the conversation simply ended. They are now
+  branching trees, split into `happy`, `firstmet`, `future`, `worries`, `memories`, `checkin_child`,
+  `ask_parent` and `feelings`, with an arc on `feelings`. The migration ledger in
+  `ConversationGraphLintTest` is **empty**: no topic anywhere pays hearts for being asked.
+
+### Fixed — things the trees promised and did not deliver
+
+- **A secret is no longer told before you agree to hear it, and is actually told once you do.** The
+  opener used to *be* the secret; agreeing to hear it replied *"here it is"* and then delivered
+  nothing. The opener is now a pre-disclosure beat with no content in it, both answers that accept
+  carry the payload, and **declining has its own ending** — you can offer to hear it another time or
+  change the subject, and you are never asked to promise to keep a secret you were never told.
+  Declining does not advance the arc or set the `secret.entrusted` milestone.
+- **Asking a villager whether anyone else knows their secret is no longer treated as betrayal.**
+  *"Shall I mention it to the others?"* read as asking permission and cost 3 hearts and 8 trust. The
+  hostile button now says what it means — *"I've been thinking of letting it slip."* — and the
+  question it was impersonating is a real, safe answer of its own.
+- **Jokes and payoffs no longer name things that only happened in one version of the story.** *"Well,
+  the cat clearly won."* answered a bad-day opener that mentioned a cat one time in three; the other
+  two were a sticking door and a dropped egg. Same for the toddler weather branch, where playing
+  along meant agreeing about sky sheep the child had not necessarily mentioned. Both are now written
+  to what every variant shares, and `DATAPACK.md` carries the rule.
+- **Children can no longer be asked to keep an adult's secret.** `regrets`, `secret`, `rumors` and
+  `work_offer` declared themselves adult-only in the catalog and were gated only against toddlers
+  and babies. New lint `catalogAgesMatchOpenerGating` walks inbound routes — so a topic gated by its
+  category page is not asked for a redundant gate — and fails if a catalog age and the button that
+  offers it ever disagree again.
+- **Three buttons in `life` that read *"Thank you for telling me."* did three different things**, one
+  of which paid a heart. New lint `answerLabelsAreUniqueWithinATopic` allows identical labels only
+  where the consequence is identical, so reusing a bare exit line across topics stays legal — that is
+  voice — while a disguised choice is not.
+- **The villager no longer narrates your conversational stances back at you.** When chat mode had to
+  ask which of two things you meant, it rendered them from the design vocabulary: *"Do you mean
+  offering comfort, or hearing the rest?"* Those now read as fragments of what you would have said.
+
+### Fixed — documentation that had drifted from the code
+
+- `README.md`, `CURSEFORGE.md` and the catalog's own comment all still said two pilot topics were
+  converted; it is twenty-seven. The translated-string count is re-measured (4,724 per locale across
+  23 namespaces), and the overlay claim no longer implies the personality voices reach the branching
+  bodies — they cover the openers and deflections only.
+- `DATAPACK.md`'s variant-floor bullet described a rule the lint does not enforce; it now matches
+  `sayKeyPoolsMeetTheVariantFloor` exactly. Its `conversations_gossip` type list was missing `quest`.
+- `CONFIG.md` claimed `enableTopics` deflects topic branches (it has no effect at all) and that
+  `enableQuests` makes quest conditions score 0 (`questScore` never consults it). Both rows now say
+  what the code does; both flags are wired up later in this release.
+
 ## [1.1.0] - unreleased
 
 ### Added — MCA: Reputation integration (optional)
@@ -193,10 +244,10 @@ never written down before and that decide how a result must be authored.
 
 ### Known gaps
 
-- Six of the twenty-six original topics still pay out on the click: feelings, and every spouse and
-  family starter. The count is tracked as a migration ledger inside `ConversationGraphLintTest`,
-  which fails if a topic is converted without removing its row, or if a new rewarded starter appears
-  without being listed.
+- Ten answers across three areas still pay out on the click: `feelings`, and every spouse (`us`) and
+  `family` starter — that is ten of the twenty-one topics the 0.6.0 hub actually shipped. The debt is
+  tracked as a migration ledger inside `ConversationGraphLintTest`, which fails if a topic is
+  converted without removing its row, or if a new rewarded starter appears without being listed.
 - Interiority profiles carry resting baselines and stance bias only. Wants, boundaries and secret
   pools arrive with the topics that read them — storing state nothing reads is how save files rot.
 - Converted results no longer populate MCA's analysis tooltip. That tooltip explains *lottery
