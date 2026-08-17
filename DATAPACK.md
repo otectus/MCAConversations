@@ -528,6 +528,14 @@ that are not are the ones worth being honest with yourself about.
       other two variants were a sticking door and a dropped egg, so it was a non-sequitur two
       times in three. If the pools disagree, write to what they share.
 - [ ] Each result authors its actions in the order: state → `next` → `say`.
+- [ ] A rebuff tier never routes into a close node whose answers assume the stance landed.
+      `fears.open.comfort.rebuff` used to arrive at a page offering "Thank you for trusting me
+      with that." Author a rebuff-aware close instead; `rebuffTiersDoNotRouteToLandedCloseNodes`
+      enforces it.
+- [ ] Every member of an `exclusive_groups` entry is read back by some `conversations_progress`
+      condition, and so is having taken neither side. The idiom is one result per member plus a
+      last result that sinks `-2000` on *all* of them - not an explicit `{"is": "none"}` scoring
+      1 beside a member scoring 100, which leaves MCA a 1-in-101 chance of the wrong line.
 - [ ] The node's own prompt reads acceptably on its own, even though it is only a fallback.
 
 **Then**

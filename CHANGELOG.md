@@ -73,6 +73,43 @@ below exists and Conversations is unchanged.
   ask which of two things you meant, it rendered them from the design vocabulary: *"Do you mean
   offering comfort, or hearing the rest?"* Those now read as fragments of what you would have said.
 
+### Added — a promise you can actually break
+
+- **Pledging to stand with someone and then not coming back is now a thing that happened.** Both
+  durable commitments the system tracks — `fears.support` and `dreams.support` — could previously only
+  ever be honoured; the arc lines rewarded turning up and there was no branch for the other case. Making
+  the pledge now also stamps a dated memory, and when the villager next raises it and that stamp has
+  lapsed, they say so. **No hearts are lost on a first lapse** — the cost is trust and tension — and
+  `fears` gets a repair node where you can own it, offer to be there now, or decline to make excuses.
+- **A crit now tells you something a success does not.** Pressing or comforting well enough to crit
+  promised *"the rest of it, the true shape"* and then routed to a page reading *"So now you know"*,
+  which contained nothing new. Both crits now reach an authored second layer of the fear — how long
+  it has been carried, and what it costs — before the conversation continues. The tier system is
+  visible in the text rather than only in the ledger.
+
+### Fixed — tiers that contradicted themselves
+
+- **Being told off no longer leads to a page thanking you for the trust.** *"I didn't hand you that
+  so you could pat it on the head"* routed to a close node whose two substantive answers were
+  *"Thank you for trusting me with that"* and *"That took something to say"*. Rebuffs now reach a
+  rebuff-aware close — apologise, accept the boundary, or leave. New lint
+  `rebuffTiersDoNotRouteToLandedCloseNodes` fails any rebuff that lands on a node granting trust or
+  warmth.
+- **Apologising for having pushed no longer hands back the button that caused the scar.** It routed
+  to the guarded node, which offers *"Come on, you can tell me."* It now reaches a repair node with
+  no boundary push on it at all, asserted by the path simulation.
+- **Turning checks off is no longer invisible.** In the off-state `fears` question the checks-disabled
+  fallback shared its lang key with the success tier, so both said the same sentence — and the key,
+  by being spelled `.success`, also collected the relaxed two-line variant floor meant for check
+  tiers. The fallbacks now have their own three-line pools, and
+  `sayKeyPoolsMeetTheVariantFloor` derives the relaxed floor from the result's `conversations_check`
+  condition rather than from how the key is spelled.
+- **"I can't promise that, but I'm listening" is now remembered as itself.** Three of the four
+  exclusive groups recorded a second member that no condition ever read, so the honest refusal read
+  back exactly like never having had the conversation. Each group now branches on both members and on
+  having taken neither, and the fourth — the one that was already right — had a latent 1-in-101
+  chance of speaking the wrong line, which is fixed too. New lint `everyExclusiveMemberIsReadBack`.
+
 ### Fixed — documentation that had drifted from the code
 
 - `README.md`, `CURSEFORGE.md` and the catalog's own comment all still said two pilot topics were

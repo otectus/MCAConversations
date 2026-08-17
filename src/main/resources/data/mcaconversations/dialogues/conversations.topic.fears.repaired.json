@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_safer",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.repaired.ask_safer",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.repaired.ask_safer",
+              "deltas": {
+                "trust": 3,
+                "tension": -3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.repaired.ask_safer"
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.repaired.respect",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.repaired.respect",
+              "deltas": {
+                "respect": 5,
+                "tension": -4
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.repaired.respect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.repaired.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

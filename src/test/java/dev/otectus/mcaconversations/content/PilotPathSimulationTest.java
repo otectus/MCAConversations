@@ -508,9 +508,18 @@ class PilotPathSimulationTest {
         Run repair = new Run(scarred);
         String opener = click("conversations.cat.personal", "fears", repair);
         assertEquals("conversations.topic.fears.scarred.respond", opener);
-        assertEquals("conversations.topic.fears.guarded.respond",
-                click(opener, "apologize", repair),
+        String repaired = click(opener, "apologize", repair);
+        assertEquals("conversations.topic.fears.repaired", repaired,
                 "the scar is permanent; the conversation is not");
+
+        // Apologising used to route to the guarded node, which offers "Come on, you can tell me."
+        // — handing back the exact button that caused the scar. The repair route must not.
+        Set<String> offered = new HashSet<>();
+        for (JsonElement a : questions.get(repaired).getAsJsonArray("answers")) {
+            offered.add(a.getAsJsonObject().get("name").getAsString());
+        }
+        assertFalse(offered.contains("press"),
+                "a repair node must not re-offer the boundary push; got " + offered);
     }
 
     @Test
@@ -533,15 +542,52 @@ class PilotPathSimulationTest {
         click("conversations.topic.fears.open.followup", "step_back", steppedBack);
         assertEquals(Optional.of("stepped_back"), steppedBack.exclusive("fears.support"));
 
-        // Both sides are read back later, differently.
+        // Both sides are read back later, differently — and so is having taken neither.
         for (String side : List.of("pledged", "stepped_back")) {
             World world = new World();
             world.memories.add("arc:fears=2");
             world.memories.add("exclusive:fears.support=" + side);
+            // A pledge that is still standing: the stamp it wrote has not yet lapsed.
+            world.memories.add("mcaconversations.pledge.fears");
             JsonObject chosen = select("conversations.arc.fears.followthrough.respond",
                     "recall_promise", new Run(world));
             assertTrue(chosen.getAsJsonObject("actions").get("say").getAsString().endsWith(side),
                     side + " must have its own callback line");
+        }
+
+        World stranger = new World();
+        stranger.memories.add("arc:fears=2");
+        JsonObject shrug = select("conversations.arc.fears.followthrough.respond",
+                "recall_promise", new Run(stranger));
+        assertEquals("conversations.fears.followthrough.recall.plain",
+                shrug.getAsJsonObject("actions").get("say").getAsString(),
+                "never having been asked must not read back as having stepped back");
+    }
+
+    @Test
+    @DisplayName("a pledge you did not come back for is noticed, and can be repaired")
+    void aPledgeCanBeBrokenAndMended() {
+        World lapsed = new World();
+        lapsed.memories.add("arc:fears=2");
+        lapsed.memories.add("exclusive:fears.support=pledged");
+        // No mcaconversations.pledge.fears stamp: the window it was written with has run out.
+        Run run = new Run(lapsed);
+
+        JsonObject chosen = select("conversations.arc.fears.followthrough.respond", "recall_promise", run);
+        assertEquals("conversations.fears.followthrough.recall.lapsed",
+                chosen.getAsJsonObject("actions").get("say").getAsString(),
+                "a promise that can only ever be kept is not a promise");
+        apply(chosen, run);
+        assertEquals(0, run.heartsMoved, "a first lapse costs trust and tension, never hearts");
+        assertEquals("conversations.topic.fears.lapsed",
+                chosen.getAsJsonObject("actions").get("next").getAsString(),
+                "there has to be a way back from it");
+
+        for (String answer : List.of("apologize", "make_good", "leave")) {
+            Run repair = new Run(lapsed);
+            assertEquals("conversations.cat.personal",
+                    click("conversations.topic.fears.lapsed", answer, repair));
+            assertTrue(repair.heartsMoved >= 0, answer + " must not punish the player twice");
         }
     }
 

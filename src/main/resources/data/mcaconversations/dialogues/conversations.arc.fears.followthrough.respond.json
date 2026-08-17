@@ -72,6 +72,15 @@
                 "exclusive": "fears.support",
                 "is": "pledged"
               }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.pledge.fears",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
             }
           ],
           "actions": {
@@ -97,13 +106,47 @@
           }
         },
         {
-          "baseChance": 1,
+          "baseChance": 0,
           "conditions": [
             {
-              "chance": -2000,
+              "chance": 100,
               "conversations_progress": {
                 "exclusive": "fears.support",
                 "is": "pledged"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.pledge.fears",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.followthrough.recall_promise",
+              "deltas": {
+                "trust": -3,
+                "tension": 4
+              }
+            },
+            "next": "conversations.topic.fears.lapsed",
+            "say": "conversations.fears.followthrough.recall.lapsed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "exclusive": "fears.support",
+                "is": "stepped_back"
               }
             }
           ],
@@ -120,6 +163,39 @@
             },
             "next": "conversations.cat.personal",
             "say": "conversations.fears.followthrough.recall.stepped_back"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "exclusive": "fears.support",
+                "is": "pledged"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "exclusive": "fears.support",
+                "is": "stepped_back"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.followthrough.recall_promise",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.followthrough.recall.plain"
           }
         }
       ]

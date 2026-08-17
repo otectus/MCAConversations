@@ -600,6 +600,77 @@ class ConversationGraphLintTest {
     // Shape of a real conversation
     // ------------------------------------------------------------------
 
+    /**
+     * An exclusive choice the content never reads back is a choice that did not happen.
+     *
+     * <p>Three of the four declared groups recorded a member that no condition named: taking
+     * {@code stepped_back} — "I can't promise that. But I'm listening." — read back exactly like
+     * never having had the conversation, because the only branch tested for {@code pledged} and its
+     * sink caught the honest refusal and the stranger alike.
+     */
+    @Test
+    @DisplayName("every member of an exclusive group is read back by some condition")
+    void everyExclusiveMemberIsReadBack() {
+        Map<String, Set<String>> read = new HashMap<>();
+        // A result that sinks on every member of a group IS the "none" branch, even though it never
+        // spells the word — and it is the better idiom, because an explicit {"is": "none"} scoring 1
+        // alongside a member scoring 100 leaves MCA a 1-in-101 chance of speaking the wrong line.
+        Map<String, Set<String>> sunk = new HashMap<>();
+        forEachResult((question, answerName, result) -> {
+            if (!result.has("conditions")) {
+                return;
+            }
+            Map<String, Set<String>> sunkHere = new HashMap<>();
+            for (JsonElement c : result.getAsJsonArray("conditions")) {
+                JsonObject condition = c.getAsJsonObject();
+                if (!condition.has("conversations_progress")) {
+                    continue;
+                }
+                JsonObject progress = condition.getAsJsonObject("conversations_progress");
+                if (!progress.has("exclusive") || !progress.has("is")) {
+                    continue;
+                }
+                String group = progress.get("exclusive").getAsString();
+                String member = progress.get("is").getAsString();
+                read.computeIfAbsent(group, g -> new HashSet<>()).add(member);
+                if (condition.has("chance") && condition.get("chance").getAsInt() < 0) {
+                    sunkHere.computeIfAbsent(group, g -> new HashSet<>()).add(member);
+                }
+            }
+            sunkHere.forEach((group, members) -> {
+                Set<String> best = sunk.computeIfAbsent(group, g -> new HashSet<>());
+                if (members.size() > best.size()) {
+                    best.clear();
+                    best.addAll(members);
+                }
+            });
+        });
+
+        List<String> problems = new ArrayList<>();
+        for (TopicEntry topic : catalog.topics()) {
+            topic.exclusiveGroups().forEach((group, members) -> {
+                Set<String> seen = read.getOrDefault(group, Set.of());
+                for (String member : members) {
+                    if (!seen.contains(member)) {
+                        problems.add(topic.id() + ": exclusive group '" + group + "' can record '"
+                                + member + "' but no condition ever names it — the choice is invisible"
+                                + " to every later conversation");
+                    }
+                }
+                boolean noneHandled = seen.contains("none")
+                        || sunk.getOrDefault(group, Set.of()).containsAll(members);
+                if (!noneHandled) {
+                    problems.add(topic.id() + ": exclusive group '" + group + "' never distinguishes"
+                            + " \"none\" — author a branch reading {\"is\": \"none\"}, or one that sinks"
+                            + " on every member, so a player who never made the choice does not read"
+                            + " back as one who did");
+                }
+            });
+        }
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
     @Test
     @DisplayName("every decision node offers 2-5 answers and always a way out")
     void decisionNodesAreWellShaped() {
@@ -638,6 +709,68 @@ class ConversationGraphLintTest {
             }
         });
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * A rebuff is the villager telling the player off. Landing them on a node whose answers assume
+     * the stance worked is the sharpest tonal collision available: {@code fears.open.comfort.rebuff}
+     * ("I didn't hand you that so you could pat it on the head") used to route to a close node whose
+     * two substantive answers were "Thank you for trusting me with that" and "That took something to
+     * say" — gratitude for opening up, offered immediately after being rebuked for it.
+     */
+    @Test
+    @DisplayName("a rebuffed stance never lands on a node that assumes it landed")
+    void rebuffTiersDoNotRouteToLandedCloseNodes() {
+        List<String> problems = new ArrayList<>();
+        forEachResult((question, answerName, result) -> {
+            if (!"rebuff".equals(checkTier(result))) {
+                return;
+            }
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (!actions.has("next")) {
+                return;
+            }
+            String target = actions.get("next").getAsString();
+            JsonObject destination = questions.get(target);
+            if (destination == null || !isBranchingNode(target)) {
+                return; // returning to a category page is always a legitimate way out
+            }
+            for (JsonElement a : destination.getAsJsonArray("answers")) {
+                JsonObject answer = a.getAsJsonObject();
+                for (JsonElement r : answer.getAsJsonArray("results")) {
+                    JsonObject acts = r.getAsJsonObject().getAsJsonObject("actions");
+                    if (!acts.has("conversations_disposition_apply")) {
+                        continue;
+                    }
+                    JsonObject deltas = acts.getAsJsonObject("conversations_disposition_apply")
+                            .getAsJsonObject("deltas");
+                    for (String axis : List.of("trust", "warmth")) {
+                        if (deltas.has(axis) && deltas.get(axis).getAsInt() > 0) {
+                            problems.add(question + "/" + answerName + ": a rebuff routes to '" + target
+                                    + "', whose answer '" + answer.get("name").getAsString() + "' gains "
+                                    + axis + " — that node assumes the stance landed. Author a"
+                                    + " rebuff-aware close instead");
+                        }
+                    }
+                }
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /** The check tier a result is gated on, or null when it is not a checked result. */
+    private static String checkTier(JsonObject result) {
+        if (!result.has("conditions")) {
+            return null;
+        }
+        for (JsonElement c : result.getAsJsonArray("conditions")) {
+            JsonObject condition = c.getAsJsonObject();
+            if (condition.has("conversations_check")) {
+                JsonObject check = condition.getAsJsonObject("conversations_check");
+                return check.has("tier") ? check.get("tier").getAsString() : null;
+            }
+        }
+        return null;
     }
 
     @Test

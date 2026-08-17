@@ -1,38 +1,39 @@
 {
   "answers": [
     {
-      "name": "apologize",
+      "name": "hold_it",
       "results": [
         {
           "baseChance": 1,
           "actions": {
             "conversations_disposition_apply": {
-              "topic": "fears.scarred.apologize",
+              "topic": "fears.open.disclosed.hold_it",
               "deltas": {
-                "tension": -6,
-                "respect": 2
+                "trust": 5,
+                "warmth": 3
               }
             },
-            "next": "conversations.topic.fears.repaired",
-            "say": "conversations.fears.scarred.apologize"
+            "next": "conversations.topic.fears.open.followup",
+            "say": "conversations.fears.open.disclosed.hold_it"
           }
         }
       ]
     },
     {
-      "name": "give_space",
+      "name": "ask_when",
       "results": [
         {
           "baseChance": 1,
           "actions": {
             "conversations_disposition_apply": {
-              "topic": "fears.scarred.give_space",
+              "topic": "fears.open.disclosed.ask_when",
               "deltas": {
-                "tension": -3
+                "familiarity": 4,
+                "trust": 2
               }
             },
-            "next": "conversations.cat.personal",
-            "say": "conversations.fears.scarred.give_space"
+            "next": "conversations.topic.fears.open.followup",
+            "say": "conversations.fears.open.disclosed.ask_when"
           }
         }
       ]
@@ -47,7 +48,7 @@
               "op": "end"
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.fears.scarred.leave"
+            "say": "conversations.fears.open.disclosed.leave"
           }
         }
       ]

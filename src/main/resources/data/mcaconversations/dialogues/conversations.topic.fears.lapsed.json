@@ -1,0 +1,73 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.pledge.fears",
+              "var": "player",
+              "time": 72000
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.lapsed.apologize",
+              "deltas": {
+                "tension": -4,
+                "respect": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.lapsed.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "make_good",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.pledge.fears",
+              "var": "player",
+              "time": 72000
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.lapsed.make_good",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.lapsed.make_good",
+              "deltas": {
+                "trust": 3,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.lapsed.make_good"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.lapsed.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

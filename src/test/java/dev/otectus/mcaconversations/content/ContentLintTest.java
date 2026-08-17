@@ -515,16 +515,36 @@ class ContentLintTest {
      */
     @Test
     void sayKeyPoolsMeetTheVariantFloor() {
+        // A say key earns the relaxed floor by being a check tier, which is a property of the RESULT
+        // that speaks it, not of how the key is spelled. Keying off the name let
+        // conversations.fears.{challenge,press}.success take the relaxed floor while also serving as
+        // the checks-disabled fallback — the line every player with checks off hears — on two
+        // variants. A key spoken from anywhere without a conversations_check pays the full floor.
         Set<String> sayKeys = new HashSet<>();
+        Set<String> alwaysChecked = new HashSet<>();
+        Set<String> spokenUnchecked = new HashSet<>();
         questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            List<String> spoken = new ArrayList<>();
             JsonObject actions = result.getAsJsonObject("actions");
             if (actions.has("say")) {
-                sayKeys.add(actions.get("say").getAsString());
+                spoken.add(actions.get("say").getAsString());
             }
             if (actions.has("conversations_say")) {
-                sayKeys.add(actions.getAsJsonObject("conversations_say").get("phrase").getAsString());
+                spoken.add(actions.getAsJsonObject("conversations_say").get("phrase").getAsString());
             }
+            boolean checked = false;
+            if (result.has("conditions")) {
+                for (JsonElement c : result.getAsJsonArray("conditions")) {
+                    if (c.getAsJsonObject().has("conversations_check")) {
+                        checked = true;
+                    }
+                }
+            }
+            sayKeys.addAll(spoken);
+            (checked ? alwaysChecked : spokenUnchecked).addAll(spoken);
         }));
+        alwaysChecked.removeAll(spokenUnchecked);
+
         List<String> problems = new ArrayList<>();
         for (String key : sayKeys) {
             if (key.equals("conversations.food.trait.sirben")) {
@@ -533,8 +553,7 @@ class ContentLintTest {
             int floor = key.startsWith("conversations.work.prof.") || key.startsWith("conversations.food.trait.")
                     || key.endsWith(".child") || key.endsWith(".teen")
                     // Check-tier and guard lines are precision-targeted (one tier of one stance).
-                    || key.endsWith(".crit") || key.endsWith(".success") || key.endsWith(".partial")
-                    || key.endsWith(".rebuff") || key.endsWith(".guard") ? 2 : 3;
+                    || alwaysChecked.contains(key) || key.endsWith(".guard") ? 2 : 3;
             String base = "dialogue." + key;
             int pool = (lang.containsKey(base) ? 1 : 0);
             for (int i = 1; lang.containsKey(base + "/" + i); i++) {
