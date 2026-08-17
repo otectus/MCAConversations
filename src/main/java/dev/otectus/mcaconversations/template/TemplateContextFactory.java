@@ -55,6 +55,45 @@ public final class TemplateContextFactory {
                         Component.translatable("mcaconversations.season." + SeasonContext.seasonBucket(villager)));
                 case HOLIDAY -> context.with(var,
                         Component.translatable("mcaconversations.holiday." + SeasonContext.holidayBucket(villager)));
+                // MCA: Reputation variables (spec 30.7). Each is left unset when the mod is absent or
+                // nothing resolves, so TemplateEngine substitutes the variable's neutral fallback and
+                // the line still reads as a sentence.
+                case REPUTATION_TIER -> {
+                    String tier = dev.otectus.mcaconversations.compat.ReputationBridge
+                            .tierId(player, villager);
+                    if (!tier.isEmpty()) {
+                        context.with(var, Component.translatable("mcareputation.tier." + tier));
+                    }
+                }
+                case REPUTATION_SCORE -> {
+                    if (dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()) {
+                        context.with(var, Component.literal(Integer.toString(
+                                dev.otectus.mcaconversations.compat.ReputationBridge.score(player, villager))));
+                    }
+                }
+                case REPUTATION_VILLAGE -> McaCompat.getHomeVillageName(villager)
+                        .ifPresent(name -> context.with(var, Component.literal(name)));
+                case REPUTATION_RECENT_DEED -> {
+                    var queries = dev.otectus.mcaconversations.compat.ReputationBridge.queries();
+                    if (queries != null && dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()) {
+                        try {
+                            queries.recentKnownDeed(player, villager)
+                                    .ifPresent(deed -> context.with(var, deed));
+                        } catch (Throwable t) {
+                            dev.otectus.mcaconversations.McaConversations.LOGGER.debug(
+                                    "reputation_recent_deed failed; using the fallback", t);
+                        }
+                    }
+                }
+                case REPUTATION_TITLE -> {
+                    // Titles are shown by the standing screen and the Journal; a dialogue line wanting
+                    // one asks for the tier's name, which is the badge a villager would actually use.
+                    String tier = dev.otectus.mcaconversations.compat.ReputationBridge
+                            .tierId(player, villager);
+                    if (!tier.isEmpty()) {
+                        context.with(var, Component.translatable("mcareputation.tier." + tier));
+                    }
+                }
             }
         }
         return context;

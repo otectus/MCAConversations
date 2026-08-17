@@ -52,6 +52,10 @@ public final class McaConversations {
         // Then wire the optional MCA: Quests integration (no-op when that mod is absent). Ordered after
         // MCA so our quest-aware conditions exist first; we load after Quests so its registries are present.
         event.enqueueWork(QuestsBridge::tryRegister);
+        // And the optional MCA: Reputation integration (no-op when that mod is absent). Ordered after
+        // MCA for the same reason as Quests: our reputation-aware conditions are registered by the MCA
+        // registrar and must exist before any dialogue JSON referencing them is parsed.
+        event.enqueueWork(dev.otectus.mcaconversations.compat.ReputationBridge::tryRegister);
         // And the optional Serene Seasons integration (reflection-only; calendar fallback when absent).
         event.enqueueWork(SeasonsBridge::tryRegister);
     }

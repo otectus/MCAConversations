@@ -21,7 +21,21 @@ public enum TemplateVariable {
     PROFESSION_NAME("mcaconversations.fallback.profession"),
     WEATHER("mcaconversations.fallback.weather"),
     SEASON("mcaconversations.fallback.season"),
-    HOLIDAY("mcaconversations.fallback.holiday");
+    HOLIDAY("mcaconversations.fallback.holiday"),
+
+    // --- MCA: Reputation (spec 30.7) ---
+    // Every one of these resolves to a neutral localized fallback when that mod is absent or the
+    // village has no opinion yet, so a line using them never breaks and never reads as an error.
+    /** The player's current standing tier with this villager's village, e.g. "Friend". */
+    REPUTATION_TIER("mcaconversations.fallback.reputation_tier"),
+    /** The numeric standing. Only for lines that genuinely intend to show a number. */
+    REPUTATION_SCORE("mcaconversations.fallback.reputation_score"),
+    /** The village the standing is with — distinct from VILLAGE_NAME, which is the villager's home. */
+    REPUTATION_VILLAGE("mcaconversations.fallback.reputation_village"),
+    /** A recent deed this villager actually knows about. */
+    REPUTATION_RECENT_DEED("mcaconversations.fallback.reputation_recent_deed"),
+    /** A title the player holds with this village. */
+    REPUTATION_TITLE("mcaconversations.fallback.reputation_title");
 
     private final String fallbackKey;
 

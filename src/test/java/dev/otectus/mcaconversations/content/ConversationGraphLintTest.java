@@ -353,17 +353,7 @@ class ConversationGraphLintTest {
      * <p>It shrinks to empty as the phases land. That is the point — the debt is a visible number in
      * a test rather than a paragraph in a design document.
      */
-    private static final Set<String> LEGACY_REWARDED_STARTERS = Set.of(
-            "conversations.cat.personal/feelings",
-            "conversations.family/ask_parent",
-            "conversations.family/checkin_child",
-            "conversations.family/memories",
-            "conversations.feelings/same",
-            "conversations.feelings/unsure",
-            "conversations.us/firstmet",
-            "conversations.us/future",
-            "conversations.us/happy",
-            "conversations.us/worries");
+    private static final Set<String> LEGACY_REWARDED_STARTERS = Set.of();
 
     /**
      * Whole questions that exist only as the branching-disabled path of a topic that HAS been
@@ -371,7 +361,8 @@ class ConversationGraphLintTest {
      * the old experience rather than a stripped one — so they are not unconverted debt.
      */
     private static final Set<String> LEGACY_OFFSTATE_QUESTIONS = Set.of(
-            "conversations.fears", "conversations.dreams", "conversations.work.legacy");
+            "conversations.fears", "conversations.dreams", "conversations.feelings",
+            "conversations.work.legacy");
 
     @Test
     @DisplayName("the list of not-yet-converted rewarded starters matches reality exactly")

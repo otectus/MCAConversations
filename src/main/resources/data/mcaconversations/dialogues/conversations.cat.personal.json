@@ -1705,6 +1705,95 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "again"
+            },
+            "next": "conversations.topic.feelings.again.respond",
+            "say": "conversations.feelings.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "chance": -2000,
+              "hearts_max": 59
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "resume"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.arc.feelings.resume.respond",
+            "say": "conversations.feelings.revisit"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "age_group": "toddler"
             },
@@ -1714,17 +1803,34 @@
                 "id": "mcaconversations.cooldown.feelings",
                 "var": "player"
               }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.feelings.toddler",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "toddler"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
               "var": "player",
               "time": 48000
-            }
+            },
+            "next": "conversations.topic.feelings.young.respond",
+            "say": "conversations.feelings.toddler"
           }
         },
         {
@@ -1742,19 +1848,32 @@
               }
             },
             {
-              "chance": -1000,
-              "hearts_max": 59
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.feelings.child",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "child"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
               "var": "player",
               "time": 48000
-            }
+            },
+            "next": "conversations.topic.feelings.young.respond",
+            "say": "conversations.feelings.child"
           }
         },
         {
@@ -1772,19 +1891,87 @@
               }
             },
             {
-              "chance": -1000,
-              "hearts_max": 59
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.feelings.teen",
-            "positive": 2,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "teen"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
               "var": "player",
               "time": 48000
+            },
+            "next": "conversations.topic.feelings.young.respond",
+            "say": "conversations.feelings.teen"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "constraints": "spouse,adult"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
             }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "romantic"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.feelings.romantic.respond",
+            "say": "conversations.feelings.spouse"
           }
         },
         {
@@ -1801,10 +1988,48 @@
             {
               "chance": -2000,
               "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.feelings",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
             }
           ],
           "actions": {
-            "next": "conversations.cat.personal",
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "guarded"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.feelings.guarded.respond",
             "say": "conversations.deflect.intimate"
           }
         },
@@ -1812,24 +2037,28 @@
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.feelings",
-                "var": "player"
-              }
-            }
-          ],
-          "actions": {
-            "next": "conversations.cat.personal",
-            "say": "conversations.feelings.again"
-          }
-        },
-        {
-          "baseChance": 0,
-          "conditions": [
+              "chance": 1,
+              "hearts_min": 0
+            },
             {
-              "chance": 100,
+              "chance": -2000,
+              "hearts_max": 59
+            },
+            {
+              "chance": -2000,
               "constraints": "spouse"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
             },
             {
               "chance": -1000,
@@ -1840,75 +2069,50 @@
             },
             {
               "chance": -2000,
-              "age_group": "toddler"
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "feelings",
+                "min": 1,
+                "max": 2
+              }
             }
           ],
           "actions": {
-            "next": "conversations.feelings",
-            "say": "conversations.feelings.spouse",
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "relationship",
+              "branch": "platonic"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.feelings.platonic.respond",
+            "say": "conversations.feelings.first"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
             "positive": 6,
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
               "var": "player",
               "time": 48000
-            }
-          }
-        },
-        {
-          "baseChance": 5,
-          "conditions": [
-            {
-              "chance": -1000,
-              "hearts_max": 59
             },
-            {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.unlock.opened_up",
-                "var": "player",
-                "dividend": -1.0,
-                "add": 1.0
-              }
-            },
-            {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.feelings",
-                "var": "player"
-              }
-            },
-            {
-              "chance": 4,
-              "conversations_personality": "flirty"
-            },
-            {
-              "chance": 4,
-              "conversations_personality": "sensitive"
-            },
-            {
-              "chance": -2000,
-              "age_group": "toddler"
-            }
-          ],
-          "actions": {
             "next": "conversations.feelings",
-            "say": "conversations.feelings.first",
-            "positive": 8,
-            "remember": {
-              "id": "mcaconversations.topic.feelings",
-              "var": "player"
-            },
-            "conversations_record": [
-              {
-                "id": "mcaconversations.cooldown.feelings",
-                "var": "player",
-                "time": 48000
-              },
-              {
-                "id": "mcaconversations.unlock.confided",
-                "var": "player"
-              }
-            ]
+            "say": "conversations.feelings.first"
           }
         }
       ]

@@ -117,6 +117,19 @@ dependencies {
         logger.warn("MCA: Quests classes not found at ${mcaQuestsClasses}; build it first to compile the optional Quests integration.")
     }
 
+    // MCA: Reputation — OPTIONAL integration, compile-only, same sibling-class-output pattern as the
+    // Quests block above. Build it first (`../MCAReputation: ./gradlew classes`); when absent the
+    // compat.reputation package cannot compile, which is a loud failure rather than a silently
+    // integration-less jar (spec 9.2). Never bundled: the real mod supplies these classes at runtime
+    // and everything that touches them is gated behind ReputationBridge's ModList check.
+    def mcaReputationClasses = file("${projectDir}/../MCAReputation/build/classes/java/main")
+    if (mcaReputationClasses.exists()) {
+        compileOnly files(mcaReputationClasses)
+    } else {
+        logger.warn("MCA: Reputation classes not found at ${mcaReputationClasses}; build it first " +
+                "(../MCAReputation: ./gradlew classes) or the optional Reputation integration will not compile.")
+    }
+
     // Mixin annotation processor — generates the refmap for our server-side gift-detection mixin.
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 

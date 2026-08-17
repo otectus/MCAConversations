@@ -8,66 +8,161 @@
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 200,
+              "chance": 1000,
               "memory": {
                 "id": "mcaconversations.state.grateful",
                 "var": "player"
               }
             },
             {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.happy",
+                "var": "player"
+              }
+            },
+            {
               "chance": -2000,
-              "conversations_disabled": "states"
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "positive": 4,
-            "conversations_say": {
-              "phrase": "conversations.us.happy.grateful",
-              "vars": [
-                "last_gift_item"
-              ]
-            }
+            "conversations_session": {
+              "op": "begin",
+              "topic": "happy",
+              "budget": "relationship",
+              "branch": "grateful"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.happy",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.happy.respond",
+            "say": "conversations.us.happy.grateful"
           }
         },
         {
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 30,
-              "mood": "sad"
-            },
-            {
-              "chance": 40,
+              "chance": 100,
               "mood": "depressed"
             },
             {
-              "chance": 30,
+              "chance": 100,
+              "mood": "sad"
+            },
+            {
+              "chance": 100,
               "mood": "unhappy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.state.grateful",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.happy",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.happy.low",
-            "positive": 3
+            "conversations_session": {
+              "op": "begin",
+              "topic": "happy",
+              "budget": "relationship",
+              "branch": "low"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.happy",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.happy.respond",
+            "say": "conversations.us.happy.low"
           }
         },
         {
-          "baseChance": 5,
+          "baseChance": 0,
           "conditions": [
             {
-              "chance": 4,
-              "mood": "happy"
+              "chance": 1,
+              "hearts_min": 0
             },
             {
-              "chance": 3,
-              "conversations_personality": "flirty"
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.state.grateful",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.happy",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "happy",
+              "budget": "relationship",
+              "branch": "yes"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.happy",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.happy.respond",
+            "say": "conversations.us.happy.yes"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 4,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.happy",
+              "var": "player",
+              "time": 36000
+            },
             "next": "conversations.us",
-            "say": "conversations.us.happy.yes",
-            "positive": 4
+            "say": "conversations.us.happy.yes"
           }
         }
       ]
@@ -85,40 +180,150 @@
                 "id": "mcaconversations.cooldown.firstmet",
                 "var": "player"
               }
-            }
-          ],
-          "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.firstmet.again",
-            "positive": 1
-          }
-        },
-        {
-          "baseChance": 5,
-          "conditions": [
-            {
-              "chance": 4,
-              "conversations_personality": "sensitive"
             },
             {
-              "chance": 4,
-              "conversations_personality": "flirty"
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.firstmet",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "positive": 5,
-            "conversations_say": {
-              "phrase": "conversations.us.firstmet.memory",
-              "vars": [
-                "village_name"
-              ]
+            "conversations_session": {
+              "op": "begin",
+              "topic": "firstmet",
+              "budget": "relationship",
+              "branch": "again"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.firstmet",
               "var": "player",
-              "time": 72000
+              "time": 36000
+            },
+            "next": "conversations.topic.firstmet.respond",
+            "say": "conversations.us.firstmet.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "sensitive",
+                "flirty",
+                "gloomy",
+                "peaceful"
+              ]
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.firstmet",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.firstmet",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "firstmet",
+              "budget": "relationship",
+              "branch": "memory"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.firstmet",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.firstmet.respond",
+            "say": "conversations.us.firstmet.memory"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "sensitive",
+                "flirty",
+                "gloomy",
+                "peaceful"
+              ]
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.firstmet",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.firstmet",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "firstmet",
+              "budget": "relationship",
+              "branch": "tell"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.firstmet",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.firstmet.respond",
+            "say": "conversations.us.firstmet.tell"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 4,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.firstmet",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.firstmet.tell"
           }
         }
       ]
@@ -131,14 +336,35 @@
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 200,
+              "chance": 100,
               "is_pregnant": true
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.future",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.future.baby",
-            "positive": 5
+            "conversations_session": {
+              "op": "begin",
+              "topic": "future",
+              "budget": "relationship",
+              "branch": "baby"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.future",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.future.respond",
+            "say": "conversations.us.future.baby"
           }
         },
         {
@@ -147,30 +373,99 @@
             {
               "chance": 100,
               "constraints": "kids"
+            },
+            {
+              "chance": -2000,
+              "is_pregnant": true
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.future",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.future.kids",
-            "positive": 4
+            "conversations_session": {
+              "op": "begin",
+              "topic": "future",
+              "budget": "relationship",
+              "branch": "kids"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.future",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.future.respond",
+            "say": "conversations.us.future.kids"
           }
         },
         {
-          "baseChance": 5,
+          "baseChance": 0,
           "conditions": [
             {
-              "chance": 4,
-              "conversations_personality": "confident"
+              "chance": 1,
+              "hearts_min": 0
             },
             {
-              "chance": 3,
-              "conversations_personality": "peppy"
+              "chance": -2000,
+              "is_pregnant": true
+            },
+            {
+              "chance": -2000,
+              "constraints": "kids"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.future",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "future",
+              "budget": "relationship",
+              "branch": "together"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.future",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.future.respond",
+            "say": "conversations.us.future.together"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 4,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.future",
+              "var": "player",
+              "time": 36000
+            },
             "next": "conversations.us",
-            "say": "conversations.us.future.together",
-            "positive": 4
+            "say": "conversations.us.future.together"
           }
         }
       ]
@@ -188,62 +483,156 @@
                 "id": "mcaconversations.cooldown.worries",
                 "var": "player"
               }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.worries",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.worries.again",
-            "positive": 1
+            "conversations_session": {
+              "op": "begin",
+              "topic": "worries",
+              "budget": "relationship",
+              "branch": "again"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.worries",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.worries.respond",
+            "say": "conversations.us.worries.again"
           }
         },
         {
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 40,
-              "mood": "sad"
-            },
-            {
-              "chance": 50,
+              "chance": 100,
               "mood": "depressed"
             },
             {
-              "chance": 20,
-              "conversations_personality": "gloomy"
+              "chance": 100,
+              "mood": "sad"
             },
             {
-              "chance": 15,
-              "conversations_personality": "sensitive"
+              "chance": 100,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.worries",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.worries",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
           ],
           "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.worries.open",
-            "positive": 6,
-            "conversations_record": [
-              {
-                "id": "mcaconversations.cooldown.worries",
-                "var": "player",
-                "time": 48000
-              },
-              {
-                "id": "mcaconversations.unlock.confided",
-                "var": "player"
-              }
-            ]
-          }
-        },
-        {
-          "baseChance": 5,
-          "actions": {
-            "next": "conversations.us",
-            "say": "conversations.us.worries.fine",
-            "positive": 3,
+            "conversations_session": {
+              "op": "begin",
+              "topic": "worries",
+              "budget": "relationship",
+              "branch": "open"
+            },
             "conversations_record": {
               "id": "mcaconversations.cooldown.worries",
               "var": "player",
-              "time": 48000
+              "time": 36000
+            },
+            "next": "conversations.topic.worries.respond",
+            "say": "conversations.us.worries.open"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.worries",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.worries",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
             }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "worries",
+              "budget": "relationship",
+              "branch": "fine"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.worries",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.worries.respond",
+            "say": "conversations.us.worries.fine"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 4,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.worries",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.worries.fine"
           }
         }
       ]

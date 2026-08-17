@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "answer_honestly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.parent.answer_honestly",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.parent.answer_honestly",
+              "deltas": {
+                "trust": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.ask_parent.followup",
+            "say": "conversations.family.parent.answer_honestly"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reassure",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.parent.reassure",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.parent.reassure",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.ask_parent.followup",
+            "say": "conversations.family.parent.reassure"
+          }
+        }
+      ]
+    },
+    {
+      "name": "snap",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.parent.snap",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.parent.snap",
+              "deltas": {
+                "warmth": -4,
+                "tension": 6
+              }
+            },
+            "next": "conversations.topic.ask_parent.followup",
+            "say": "conversations.family.parent.snap"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.parent.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

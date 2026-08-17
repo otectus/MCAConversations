@@ -49,3 +49,15 @@ description='''${mod_description}'''
     versionRange="[0.8,)"
     ordering="AFTER"
     side="BOTH"
+
+# MCA: Reputation is an OPTIONAL integration. Conversations loads and plays fully without it: the
+# reputation dialogue conditions score 0, the public-standing check term is exactly 0 (so every
+# existing seeded outcome is unchanged), the reputation signal action is a no-op, and no external
+# gossip candidate is offered. When present we load AFTER it so its API and registries exist before
+# ReputationBridge tries to install the integration (spec 9.3).
+[[dependencies.${mod_id}]]
+    modId="mcareputation"
+    mandatory=false
+    versionRange="[0.2,)"
+    ordering="AFTER"
+    side="BOTH"

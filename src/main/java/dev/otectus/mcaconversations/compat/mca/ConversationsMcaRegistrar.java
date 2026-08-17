@@ -323,6 +323,24 @@ public final class ConversationsMcaRegistrar {
                         () -> QuestConditionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> questScore(query, player, villager, QuestKind.COMPLETED));
 
+        // --- Reputation-aware conditions (MCA: Reputation integration; 0 when that mod is absent) ---
+        // Registered unconditionally for the same reason the quest conditions are: dialogue JSON that
+        // names an unregistered key is an error, so a pack written for the full suite must still load
+        // on an install without Reputation. Scoring 0 there lets the pack's own fallback branch fire
+        // (spec 30.2). Both lambdas reach Reputation only through the pure ReputationBridge SPI.
+
+        GiftPredicate.register("conversations_reputation",
+                (json, name) -> SafeParse.orNull("conversations_reputation", json,
+                        () -> dev.otectus.mcaconversations.compat.ReputationQueryJson
+                                .standing(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> standingScore(query, player, villager));
+
+        GiftPredicate.register("conversations_reputation_incident",
+                (json, name) -> SafeParse.orNull("conversations_reputation_incident", json,
+                        () -> dev.otectus.mcaconversations.compat.ReputationQueryJson
+                                .incident(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> incidentScore(query, player, villager));
+
         // --- Actions ---
 
         Actions.register("conversations_record",
@@ -457,11 +475,55 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        /*
+         * conversations_reputation_signal — records an authored conversation outcome as a public deed
+         * (spec 30.6).
+         *
+         * <pre>{@code
+         * { "incident": "mcareputation:public_apology", "decision": "standing.apology.public",
+         *   "visibility": "witnessed", "policy": "once_per_incident" }
+         * }</pre>
+         *
+         * The action names an INCIDENT DEFINITION; it never accepts a raw score delta. That is what
+         * stops a datapack — or a player clicking the same apology repeatedly — from farming standing:
+         * how much an apology is worth is decided by the incident's own definition, and Reputation's
+         * dedupe key (built from the villager, the player, and the decision id) makes the second click
+         * a no-op. Generic small talk, navigation, and asking the opener cannot reach this action at
+         * all, because nothing authors it on them.
+         */
+        Actions.register("conversations_reputation_signal",
+                (json, name) -> SafeParse.orNull("conversations_reputation_signal", json,
+                        () -> json.getAsJsonObject()),
+                obj -> (villager, player) -> {
+                    try {
+                        var queries = dev.otectus.mcaconversations.compat.ReputationBridge.queries();
+                        if (obj == null || queries == null
+                                || !dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()) {
+                            return; // no Reputation: an authored signal is simply not recordable
+                        }
+                        var object = obj.getAsJsonObject();
+                        String incident = object.has("incident")
+                                ? object.get("incident").getAsString() : null;
+                        if (incident == null || incident.isBlank()) {
+                            return;
+                        }
+                        String visibility = object.has("visibility")
+                                ? object.get("visibility").getAsString() : null;
+                        String decision = object.has("decision")
+                                ? object.get("decision").getAsString() : incident;
+                        queries.recordSignal(player, villager, incident, visibility, decision);
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_reputation_signal failed; ignoring", t);
+                    }
+                });
+
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
                 + "/conversations_weather/conversations_season/conversations_holiday/conversations_personality/conversations_disposition"
                 + "/conversations_check/conversations_progress/conversations_quest_* and actions conversations_record/conversations_say"
                 + "/conversations_gossip_say/conversations_disposition_apply/conversations_session"
-                + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open");
+                + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open"
+                + "; reputation conditions conversations_reputation/conversations_reputation_incident"
+                + " and action conversations_reputation_signal");
     }
 
     /**
@@ -528,4 +590,46 @@ public final class ConversationsMcaRegistrar {
     }
 
     private enum QuestKind { AVAILABLE, ACTIVE, READY, COMPLETED }
+
+    /**
+     * Scores {@code conversations_reputation} through the {@link dev.otectus.mcaconversations.compat.ReputationBridge}
+     * SPI; {@code 0} when MCA: Reputation is absent, which is what lets an authored disabled-context
+     * fallback fire (spec 30.2).
+     */
+    private static float standingScore(dev.otectus.mcaconversations.compat.ReputationBridge.StandingQuery query,
+                                       net.minecraft.server.level.ServerPlayer player,
+                                       net.minecraft.world.entity.Entity villager) {
+        if (query == null) {
+            return 0.0f;
+        }
+        try {
+            var queries = dev.otectus.mcaconversations.compat.ReputationBridge.queries();
+            if (queries == null || !dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()) {
+                return 0.0f;
+            }
+            return queries.matchesStanding(player, villager, query) ? 1.0f : 0.0f;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("conversations_reputation failed; defaulting 0", t);
+            return 0.0f;
+        }
+    }
+
+    /** Scores {@code conversations_reputation_incident}; {@code 0} when MCA: Reputation is absent. */
+    private static float incidentScore(dev.otectus.mcaconversations.compat.ReputationBridge.IncidentQuery query,
+                                       net.minecraft.server.level.ServerPlayer player,
+                                       net.minecraft.world.entity.Entity villager) {
+        if (query == null) {
+            return 0.0f;
+        }
+        try {
+            var queries = dev.otectus.mcaconversations.compat.ReputationBridge.queries();
+            if (queries == null || !dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()) {
+                return 0.0f;
+            }
+            return queries.matchesIncident(player, villager, query) ? 1.0f : 0.0f;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("conversations_reputation_incident failed; defaulting 0", t);
+            return 0.0f;
+        }
+    }
 }

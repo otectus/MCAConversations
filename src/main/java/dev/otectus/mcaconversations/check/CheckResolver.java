@@ -2,7 +2,7 @@ package dev.otectus.mcaconversations.check;
 
 /**
  * Deterministic tier selection (spec §4b). Score model:
- * {@code axisTerm + heartsTerm + personalityFit + moodAdjust + roll} against the authored
+ * {@code axisTerm + heartsTerm + personalityFit + publicStandingFit + moodAdjust + roll} against the authored
  * difficulty, with crit at +{@link #CRIT_MARGIN} and partial down to −{@link #PARTIAL_MARGIN}.
  * Hearts always contribute (capped) so the check system never fights MCA's economy — it refines it;
  * with the vector subsystem disabled, hearts alone carry the axis term (the documented fallback).
@@ -26,7 +26,10 @@ public final class CheckResolver {
                 ? in.axisValue()
                 : clamp(in.hearts() / FALLBACK_DIVISOR, FALLBACK_CAP);
         int heartsTerm = clamp(in.hearts() / HEARTS_DIVISOR, HEARTS_CAP);
-        int score = axisTerm + heartsTerm + in.personalityFit() + in.moodAdjust() + in.roll();
+        // Public standing is a small additive context term, never a second relationship vector
+        // (spec 30.3). It is 0 without MCA: Reputation, so this line changes no existing outcome.
+        int score = axisTerm + heartsTerm + in.personalityFit() + in.publicStandingFit()
+                + in.moodAdjust() + in.roll();
 
         if (!in.tiersEnabled()) {
             return score >= in.difficulty() ? CheckTier.SUCCESS : CheckTier.REBUFF;

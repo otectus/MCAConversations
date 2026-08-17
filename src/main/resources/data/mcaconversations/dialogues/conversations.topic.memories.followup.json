@@ -1,0 +1,98 @@
+{
+  "answers": [
+    {
+      "name": "add_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "family.memories.add_own",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.memories.add_own",
+              "deltas": {
+                "familiarity": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.memories.add_own"
+          }
+        }
+      ]
+    },
+    {
+      "name": "question_detail",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.memories.question_detail",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.memories.question_detail",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.memories.question_detail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.memories.dismiss",
+              "delta": -1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.memories.dismiss",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.memories.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.memories.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

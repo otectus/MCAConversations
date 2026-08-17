@@ -1,0 +1,79 @@
+{
+  "answers": [
+    {
+      "name": "check_in",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "feelings",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "feelings.resume.check_in",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.resume.check_in",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.resume.check_in"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reaffirm",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "feelings",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "feelings.resume.reaffirm",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.resume.reaffirm",
+              "deltas": {
+                "warmth": 4,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.resume.reaffirm"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

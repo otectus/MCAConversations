@@ -101,6 +101,11 @@ class IntentMatcherTest {
         t.put("any gossip", "village.rumors");
         t.put("what are people saying", "village.rumors");
         t.put("heard any good rumors lately", "village.rumors");
+        // village: standing (§30.5)
+        t.put("what do people think of me", "village.standing");
+        t.put("what do people think of me around here", "village.standing");
+        t.put("what is my reputation", "village.standing");
+        t.put("how am i regarded", "village.standing");
         // events: news
         t.put("any news", "events.news");
         t.put("anything happening", "events.news");

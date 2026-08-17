@@ -7,7 +7,87 @@ Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
 Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
 
+## [1.2.0] - unreleased
+
+### Added — the ledger speaks (MCA: Reputation, optional)
+
+The 1.1.0 bridge supplied normalized gossip candidates but nothing rendered them, and the standing
+topic was designed but not authored. Both are real now; without MCA: Reputation installed, nothing
+below exists and Conversations is unchanged.
+
+- **External gossip is actually told.** The gossip logic merges two sources — the native village log
+  and the incidents this villager knows about the listener's deeds — into one normalized shape, and
+  the newest story wins deterministically, so the `conversations_gossip` condition and the say
+  action can never disagree. External stories render through Conversations' own dialogue voices
+  (`dialogue.mcareputation.gossip.*`, en_us and pt_br) with up to four arguments, and use the same
+  once-per-teller `LongTermMemory` flag native gossip always has.
+- **Duplicate quest gossip is suppressed.** With Reputation active, completing a quest no longer
+  seeds the generic `QUEST` gossip event — Reputation's named quest incident is the canonical story,
+  and one deed should not be told twice in two voices. Memories and state still apply either way.
+- **The standing topic.** A Village-category question — *"What do people think of me around
+  here?"* — reachable from the GUI and from chat. The answer branches on your actual standing
+  (well-regarded, neutral, poorly regarded, or an unresolved matter this villager knows about) and
+  speaks your tier; you can press for the deed people mention, and when something genuinely hangs
+  over you, an amends path lets you apologise in public — recorded through
+  `conversations_reputation_signal` as `mcareputation:public_apology`, once per decision, never
+  resolving the original deed by itself. Taking the answer with grace or snapping at it matters;
+  children and teens deflect; without Reputation the villager honestly shrugs. Catalogued, linted,
+  chat-intent-covered, and localized in both languages.
+
 ## [1.1.0] - unreleased
+
+### Added — MCA: Reputation integration (optional)
+
+**Villagers now take your public standing into account, and can tell each other what you have done —
+when [MCA: Reputation](https://github.com/otectus/MCAReputation) is installed. Without it, nothing
+about Conversations changes at all.**
+
+That last clause is the important one and it is asserted by tests, not merely intended: with the mod
+absent the standing term is exactly `0`, so every seeded check resolves to the tier it always did.
+
+- **Public standing colours trust and respect checks.** `CheckInputs` gains a `publicStandingFit` term,
+  read from the player's current tier and hard-clamped to ±8 on both sides of the bridge. The resolver's
+  tier margin is 15, so standing can tip a borderline outcome and can never carry a check on its own.
+  Warmth, attraction, tension, and familiarity receive nothing — those are private interpersonal state
+  between one villager and one player, and what the village at large thinks has no business there.
+  Reputation never writes a disposition axis and never grants hearts.
+- **Two dialogue conditions**, `conversations_reputation` (score, tier range, title) and
+  `conversations_reputation_incident` (type, status, tags, age, and whether *this speaker* actually
+  knows about it). Both are registered **unconditionally**, because dialogue JSON naming an
+  unregistered key is an error — a pack written for the full suite has to load on an MCA-only install,
+  where they score `0` and your authored fallback branch fires.
+- **One dialogue action**, `conversations_reputation_signal`. It names an *incident definition*, never a
+  raw score delta: how much a public apology is worth is decided by the datapack, and the dedupe key —
+  villager, player, decision id — makes a second click a no-op. Small talk, navigation, and asking the
+  opener cannot reach it. Repeated clicking cannot farm standing.
+- **The external gossip seam.** Reputation supplies incidents this villager knows as normalized
+  candidates carrying a phrase key and up to four arguments; the "already told" flag stays exactly
+  where it has always lived, in MCA's `LongTermMemory` under
+  `mcaconversations.gossip.<eventUuid>.<playerUuid>`. Built-in gossip is untouched. (Rendering the
+  candidates and merging the two sources landed in 1.2.0.)
+- **Five template variables** for `conversations_say`: `reputation_tier`, `reputation_score`,
+  `reputation_village`, `reputation_recent_deed`, `reputation_title`. Each has a neutral localized
+  fallback in both `en_us` and `pt_br`, so a line using one never breaks and never reads as an error.
+
+### Changed
+
+- `gradle.properties` no longer hardcodes an absolute Linux JDK path, which made the build fail on any
+  other machine. Set `JAVA_HOME` to a JDK 17 instead.
+
+### Compatibility
+
+- **MCA: Reputation is entirely optional**, gated by the same `ReputationBridge` discipline as
+  `QuestsBridge`: no `mcareputation` import outside `compat/reputation`, the implementation reached by
+  name after a `ModList` check, and every failure contained to one ERROR. A test walks the source tree
+  and fails the build if either rule is broken.
+- Existing dispositions, gossip data, progress, `LongTermMemory` flags, and quest memories are
+  untouched. `mcaconversations_gossip.dat` loads unchanged.
+- 450 automated tests pass, including all 432 that existed before this work, and both locales keep
+  full parity.
+
+### Earlier in 1.1.0
+
+
 
 **Branching conversations, phase one.** Asking a villager a question no longer pays you for the
 click. They answer; you choose what to say back; your reply is what moves hearts. Two topics are
@@ -46,7 +126,7 @@ the deepest, to prove the grammar before the remaining twenty-six follow.
 | **Regrets** | deep | absolution and honest company are both valid, and mutually exclusive |
 | **Secrets** | deep | a one-shot confidence, a promise you make or refuse, and a callback that proves it held |
 
-Ten starters still pay out on the click and are tracked in the lint's migration ledger.
+The lint's migration ledger is now empty: no starter pays out on the click any more.
 
 ### The economy moved
 

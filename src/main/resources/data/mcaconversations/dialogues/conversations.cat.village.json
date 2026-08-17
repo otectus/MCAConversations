@@ -843,6 +843,354 @@
       ]
     },
     {
+      "name": "standing",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "again"
+            },
+            "next": "conversations.topic.standing.respond",
+            "say": "conversations.standing.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.child"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.teen"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 150,
+              "conversations_reputation_incident": {
+                "statuses": ["active"],
+                "tags": ["crime"],
+                "known_to_speaker": true
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "trouble"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.standing.respond",
+            "say": "conversations.standing.trouble"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_reputation": {
+                "max_tier": "wary"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_reputation_incident": {
+                "statuses": ["active"],
+                "tags": ["crime"],
+                "known_to_speaker": true
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "bad"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.standing.respond",
+            "conversations_say": {
+              "phrase": "conversations.standing.bad",
+              "vars": [
+                "reputation_tier"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_reputation": {
+                "min_tier": "acquaintance"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "good"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.standing.respond",
+            "conversations_say": {
+              "phrase": "conversations.standing.good",
+              "vars": [
+                "reputation_tier"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_reputation": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_reputation": {
+                "min_tier": "acquaintance"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_reputation": {
+                "max_tier": "wary"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_reputation_incident": {
+                "statuses": ["active"],
+                "tags": ["crime"],
+                "known_to_speaker": true
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.standing",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "neutral"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.standing.respond",
+            "say": "conversations.standing.neutral"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_reputation": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.unknown"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.unknown"
+          }
+        }
+      ]
+    },
+    {
       "name": "back",
       "results": [
         {

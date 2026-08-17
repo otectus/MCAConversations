@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "help_solve",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "us.worries.help_solve",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.worries.help_solve",
+              "deltas": {
+                "respect": 5,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.worries.help_solve"
+          }
+        }
+      ]
+    },
+    {
+      "name": "give_space",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "us.worries.give_space",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.worries.give_space",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.worries.give_space"
+          }
+        }
+      ]
+    },
+    {
+      "name": "change_subject",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.worries.change_subject"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.worries.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "guide",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "family.child.guide",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.child.guide",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.child.guide"
+          }
+        }
+      ]
+    },
+    {
+      "name": "play_along",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "family.child.play_along",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.child.play_along",
+              "deltas": {
+                "warmth": 5
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.child.play_along"
+          }
+        }
+      ]
+    },
+    {
+      "name": "scold",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.child.scold",
+              "delta": -1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.child.scold",
+              "deltas": {
+                "warmth": -3,
+                "tension": 4
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.child.scold"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.child.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

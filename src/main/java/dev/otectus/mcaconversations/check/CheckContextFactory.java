@@ -44,6 +44,10 @@ public final class CheckContextFactory {
         // How well this kind of thing lands on this personality. Bounded by the interiority profile's
         // own clamp to less than one tier margin, so it colours the outcome without deciding it.
         int personalityFit = check.stance().map(stance -> Interiority.stanceBias(villager, stance)).orElse(0);
+        // What the village as a whole thinks of this player, as a small additive term. Exactly 0
+        // without MCA: Reputation, and only ever non-zero for TRUST and RESPECT (spec 30.3).
+        int publicStandingFit = dev.otectus.mcaconversations.compat.ReputationBridge
+                .publicStandingFit(player, villager, check.axis().name());
         int moodAdjust = MoodModifiers.moodAdjust(McaCompat.getMoodName(villager).orElse(null))
                 + MoodModifiers.stateAdjust(
                         hasState(villager, player, ConversationState.GRIEVING),
@@ -55,8 +59,9 @@ public final class CheckContextFactory {
         int arcStage = check.arc().map(arcId -> Progress.arcStage(villager, player, arcId)).orElse(0);
         int roll = CheckSeed.roll(villager.getUUID(), player.getUUID(), check.id(), arcStage,
                 villager.level().getDayTime());
-        return Optional.of(new CheckInputs(axisValue, hearts, personalityFit, moodAdjust, roll,
-                check.difficulty(), McaConversationsConfig.COMMON.enableCheckTiers.get(), vectorEnabled));
+        return Optional.of(new CheckInputs(axisValue, hearts, personalityFit, publicStandingFit,
+                moodAdjust, roll, check.difficulty(),
+                McaConversationsConfig.COMMON.enableCheckTiers.get(), vectorEnabled));
     }
 
     private static boolean hasState(Entity villager, ServerPlayer player, ConversationState state) {

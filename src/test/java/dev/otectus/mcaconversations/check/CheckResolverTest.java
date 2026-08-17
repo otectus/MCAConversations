@@ -8,7 +8,10 @@ class CheckResolverTest {
 
     private static CheckInputs inputs(int axisValue, int hearts, int fit, int mood, int roll,
                                       int difficulty, boolean tiersEnabled, boolean vectorEnabled) {
-        return new CheckInputs(axisValue, hearts, fit, mood, roll, difficulty, tiersEnabled, vectorEnabled);
+        // The public-standing term is 0 here on purpose: these cases assert the pre-existing
+        // formula is unchanged by the MCA: Reputation integration (spec 30.3).
+        return new CheckInputs(axisValue, hearts, fit, 0, mood, roll, difficulty, tiersEnabled,
+                vectorEnabled);
     }
 
     @Test

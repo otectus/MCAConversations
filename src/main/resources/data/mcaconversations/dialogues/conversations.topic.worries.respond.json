@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "validate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.worries.validate",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.worries.validate",
+              "deltas": {
+                "warmth": 4,
+                "trust": 3
+              }
+            },
+            "next": "conversations.topic.worries.followup",
+            "say": "conversations.us.worries.validate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_detail",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.worries.ask_detail",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.worries.ask_detail",
+              "deltas": {
+                "trust": 4,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.worries.followup",
+            "say": "conversations.us.worries.ask_detail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.worries.dismiss",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.worries.dismiss",
+              "deltas": {
+                "warmth": -5,
+                "tension": 6
+              }
+            },
+            "next": "conversations.topic.worries.followup",
+            "say": "conversations.us.worries.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.worries.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

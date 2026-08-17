@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "thank",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.close.thank",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.close.thank",
+              "deltas": {
+                "warmth": 2,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.close.thank"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_means",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.close.say_means",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.close.say_means",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.close.say_means"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.close.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

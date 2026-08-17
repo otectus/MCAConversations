@@ -63,12 +63,25 @@ public final class ConversationsQuestsEvents {
                     : MemoryIds.questFailed(questId.toString());
             McaCompat.rememberForever(villager, MemoryIds.playerScoped(memId, player.getUUID()));
             StateTracker.apply(villager, player, StateRules.forQuest(completed));
-            if (completed && McaConversationsConfig.COMMON.enableGossip.get()) {
+            // §30.4: with MCA: Reputation active, its named quest incident is the canonical story —
+            // seeding the generic QUEST event as well would have villagers telling the same deed
+            // twice in two voices. Memories and state above still apply either way.
+            if (completed && McaConversationsConfig.COMMON.enableGossip.get()
+                    && !shouldSuppressGenericQuestGossip()) {
                 seedGossip(player, villager);
             }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("Quest event -> gossip/memory failed for {}; ignoring", questId, t);
         }
+    }
+
+    /**
+     * §30.4's duplicate suppression, as its own decision so the regression test can pin it without a
+     * live quest event. {@code ReputationBridge} is always-loaded and names no Reputation type, so
+     * consulting it here keeps the classloading discipline.
+     */
+    static boolean shouldSuppressGenericQuestGossip() {
+        return dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable();
     }
 
     /** Seeds a village-scoped QUEST gossip event about the giver, so other residents can tell of it. */

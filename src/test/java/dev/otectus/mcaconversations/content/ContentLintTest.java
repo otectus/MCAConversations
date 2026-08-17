@@ -54,14 +54,16 @@ class ContentLintTest {
             "conversations_season", "conversations_holiday", "conversations_personality",
             "conversations_disposition", "conversations_check", "conversations_progress",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
-            "conversations_quest_completed");
+            "conversations_quest_completed",
+            "conversations_reputation", "conversations_reputation_incident");
 
     /** MCA 7.6.23 action vocabulary (from Actions registrations) + ours. */
     private static final Set<String> ACTION_KEYS = Set.of(
             "next", "say", "positive", "negative", "command", "quit", "remember",
             "conversations_record", "conversations_say", "conversations_gossip_say",
             "conversations_disposition_apply", "conversations_quest_open",
-            "conversations_session", "conversations_affection_apply", "conversations_progress_apply");
+            "conversations_session", "conversations_affection_apply", "conversations_progress_apply",
+            "conversations_reputation_signal");
 
     /** The four quest-aware condition keys, whose values are objects ({scope,min}), not MCA enum strings. */
     private static final Set<String> QUEST_CONDITION_KEYS = Set.of(
@@ -491,6 +493,12 @@ class ContentLintTest {
             // dialogue.chatmode.* are the chat-mode deflection lines, referenced from chat/ Java
             // (ChatModeDispatcher), never from a dialogue say/prompt — count them as referenced.
             if (base.startsWith("dialogue.chatmode.")) {
+                continue;
+            }
+            // dialogue.mcareputation.gossip.* are the external gossip voices (§30.4): the phrase key
+            // arrives from MCA: Reputation's incident definitions at runtime and is rendered by
+            // GossipConditionLogic, never referenced from any dialogue JSON.
+            if (base.startsWith("dialogue.mcareputation.gossip.")) {
                 continue;
             }
             if (!referenced.contains(base) && !mcaPoolBases.contains(base)) {

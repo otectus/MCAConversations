@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.child.listen",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.child.listen",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.checkin_child.followup",
+            "say": "conversations.family.child.listen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "praise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.child.praise",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.child.praise",
+              "deltas": {
+                "warmth": 5
+              }
+            },
+            "next": "conversations.topic.checkin_child.followup",
+            "say": "conversations.family.child.praise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.child.dismiss",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.child.dismiss",
+              "deltas": {
+                "warmth": -5,
+                "tension": 5
+              }
+            },
+            "next": "conversations.topic.checkin_child.followup",
+            "say": "conversations.family.child.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.child.leave"
+          }
+        }
+      ]
+    }
+  ]
+}
