@@ -10,10 +10,13 @@ import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.SessionQuery;
+import dev.otectus.mcaconversations.progress.BudgetQuery;
 import dev.otectus.mcaconversations.conversation.DepthClass;
 import dev.otectus.mcaconversations.conversation.SessionDirective;
 import dev.otectus.mcaconversations.conversation.TopicEntry;
 import dev.otectus.mcaconversations.progress.Affection;
+import dev.otectus.mcaconversations.progress.BudgetQuery;
 import dev.otectus.mcaconversations.progress.AffectionApply;
 import dev.otectus.mcaconversations.progress.Progress;
 import dev.otectus.mcaconversations.progress.ProgressApply;
@@ -72,6 +75,10 @@ import forge.net.mca.resources.data.dialogue.Actions;
  *       narrative ledger says so (arc stage in range, milestone set, exclusive side taken)</li>
  *   <li>action {@code conversations_session: {op, topic?, budget?, branch?}} → frames the exchange on
  *       the shared conversation session; never rewards anything itself</li>
+ *   <li>condition {@code conversations_session: {topic?, branch?}} → 1 while the live session is
+ *       inside that topic and/or branch, so sibling branches can share a node</li>
+ *   <li>condition {@code conversations_budget: {axis, min?, max?, decision?}} → 1 while today's
+ *       affection ledger for this villager and player lies in range, so a villager can voice the cap</li>
  *   <li>action {@code conversations_affection_apply: {decision, delta, budget?, policy?}} → the only
  *       guarded route to a heart change inside branching content</li>
  *   <li>action {@code conversations_progress_apply: {arc|milestone|exclusive, …}} (or an array) →
@@ -250,6 +257,41 @@ public final class ConversationsMcaRegistrar {
                         return query.matches(Dispositions.axis(villager, player, query.axis())) ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_disposition failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        // Reads the live session the conversations_session ACTION writes. 114 shipped results set a
+        // branch and nothing ever read one back, so content duplicated the branch into the node name
+        // instead. Registered unconditionally: dialogue naming an unregistered key is a load error,
+        // so a pack written for this must still load on a build that has it.
+        GiftPredicate.register("conversations_session",
+                (json, name) -> SafeParse.orNull("conversations_session", json,
+                        () -> SessionQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || player == null) {
+                            return 0.0f;
+                        }
+                        long now = player.level().getGameTime();
+                        return ConversationSessions.peek(player.getUUID(), now)
+                                .filter(query::matches).isPresent() ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_session condition failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        // Reads today's affection ledger so the villager can voice the cap instead of the player
+        // quietly receiving nothing once it is reached.
+        GiftPredicate.register("conversations_budget",
+                (json, name) -> SafeParse.orNull("conversations_budget", json,
+                        () -> BudgetQuery.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        return Progress.matchesBudget(villager, player, query) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_budget failed; defaulting 0", t);
                         return 0.0f;
                     }
                 });
@@ -570,6 +612,12 @@ public final class ConversationsMcaRegistrar {
         if (query == null) {
             return 0.0f;
         }
+        // CONFIG.md has always said the quest-aware conditions score 0 with the integration
+        // switched off. They did not: the flag gated the voice lines and the gossip seeding but
+        // never this, so quest branches kept matching for a player who had turned Quests off.
+        if (!McaConversationsConfig.COMMON.enableQuests.get()) {
+            return 0.0f;
+        }
         try {
             QuestsBridge.QuestQueries q = QuestsBridge.queries();
             if (q == null) {
@@ -577,6 +625,10 @@ public final class ConversationsMcaRegistrar {
             }
             boolean thisOnly = query.thisVillagerOnly();
             boolean match = switch (kind) {
+                // AVAILABLE is inherently about the villager in front of you — the SPI has no
+                // "anywhere" form to call, because MCA: Quests offers are held by a giver. So
+                // scope is not silently ignored here, it is not applicable; ContentLintTest
+                // rejects scope:"any" on this condition rather than letting a pack believe it works.
                 case AVAILABLE -> q.hasEligibleOffer(player, villager);
                 case ACTIVE -> q.hasActive(player, villager, thisOnly, query.min());
                 case READY -> q.hasReadyTurnIn(player, villager, thisOnly);

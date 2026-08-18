@@ -4,6 +4,32 @@
       "name": "share_pref",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "food.normal.share_pref",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.normal.share_pref",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.food.normal.followup",
+            "say": "conversations.food.agree.fine"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "fine"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -21,13 +47,50 @@
             },
             "next": "conversations.topic.food.normal.followup",
             "say": "conversations.food.normal.share_pref"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "fine"
+            }
+          ]
         }
       ]
     },
     {
       "name": "ask_recipe",
       "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "food.normal.ask_recipe",
+              "deltas": {
+                "respect": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.food.normal.followup",
+            "conversations_say": {
+              "phrase": "conversations.food.ask_recipe.season",
+              "vars": [
+                "season"
+              ]
+            }
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_season": {
+                "is": "summer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "seasons"
+            }
+          ]
+        },
         {
           "baseChance": 1,
           "actions": {
@@ -40,7 +103,15 @@
             },
             "next": "conversations.topic.food.normal.followup",
             "say": "conversations.food.normal.ask_recipe"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_season": {
+                "is": "summer"
+              }
+            }
+          ]
         }
       ]
     },

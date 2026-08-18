@@ -4,6 +4,29 @@
       "name": "offer_help",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "day.rough.offer_help",
+              "deltas": {
+                "warmth": 2,
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.offer_help.spent"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_budget": {
+                "axis": "positive",
+                "min": 8
+              }
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -21,7 +44,16 @@
             },
             "next": "conversations.cat.chitchat",
             "say": "conversations.day.rough.offer_help"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_budget": {
+                "axis": "positive",
+                "min": 8
+              }
+            }
+          ]
         }
       ]
     },
@@ -32,29 +64,68 @@
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 100,
-              "conversations_personality": [
-                "playful",
-                "peppy",
-                "upbeat",
-                "odd",
-                "relaxed",
-                "extroverted",
-                "flirty"
-              ]
+              "chance": 1000,
+              "conversations_check": {
+                "id": "day.lighten",
+                "tier": "crit",
+                "axis": "warmth",
+                "difficulty": 25,
+                "stance": "humor"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
             }
           ],
           "actions": {
             "conversations_affection_apply": {
-              "decision": "day.rough.lighten",
+              "decision": "day.lighten.crit",
               "delta": 1,
               "budget": "quick",
               "policy": "daily_repeat"
             },
             "conversations_disposition_apply": {
-              "topic": "day.rough.lighten",
+              "topic": "day.lighten",
               "deltas": {
-                "warmth": 3
+                "warmth": 6,
+                "tension": -4
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.lighten.crit"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "day.lighten",
+                "tier": "success",
+                "axis": "warmth",
+                "difficulty": 25,
+                "stance": "humor"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.lighten.success",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.lighten",
+              "deltas": {
+                "warmth": 4,
+                "tension": -2
               }
             },
             "next": "conversations.cat.chitchat",
@@ -65,25 +136,64 @@
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 100,
-              "conversations_personality": [
-                "gloomy",
-                "sensitive",
-                "anxious",
-                "crabby",
-                "introverted"
-              ]
+              "chance": 1000,
+              "conversations_check": {
+                "id": "day.lighten",
+                "tier": "partial",
+                "axis": "warmth",
+                "difficulty": 25,
+                "stance": "humor"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
             }
           ],
           "actions": {
             "conversations_affection_apply": {
-              "decision": "day.rough.lighten",
+              "decision": "day.lighten.partial",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.lighten",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough.lighten.polite"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "day.lighten",
+                "tier": "rebuff",
+                "axis": "warmth",
+                "difficulty": 25,
+                "stance": "humor"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.lighten.rebuff",
               "delta": -1,
               "budget": "quick",
               "policy": "daily_repeat"
             },
             "conversations_disposition_apply": {
-              "topic": "day.rough.lighten",
+              "topic": "day.lighten",
               "deltas": {
                 "warmth": -2,
                 "tension": 3
@@ -98,36 +208,24 @@
           "conditions": [
             {
               "chance": -2000,
-              "conversations_personality": [
-                "playful",
-                "peppy",
-                "upbeat",
-                "odd",
-                "relaxed",
-                "extroverted",
-                "flirty"
-              ]
-            },
-            {
-              "chance": -2000,
-              "conversations_personality": [
-                "gloomy",
-                "sensitive",
-                "anxious",
-                "crabby",
-                "introverted"
-              ]
+              "conversations_enabled": "checks"
             }
           ],
           "actions": {
+            "conversations_affection_apply": {
+              "decision": "day.lighten",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
             "conversations_disposition_apply": {
-              "topic": "day.rough.lighten",
+              "topic": "day.lighten",
               "deltas": {
-                "warmth": 1
+                "warmth": 2
               }
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.day.rough.lighten.polite"
+            "say": "conversations.day.lighten.plain"
           }
         }
       ]

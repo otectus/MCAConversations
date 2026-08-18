@@ -4,6 +4,31 @@
       "name": "enjoy",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.mild.enjoy",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.enjoy",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.enjoy.high"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "happy"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -20,13 +45,49 @@
             },
             "next": "conversations.topic.weather.mild.followup",
             "say": "conversations.weather.mild.enjoy"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "happy"
+            }
+          ]
         }
       ]
     },
     {
       "name": "talk_crops",
       "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.talk_crops",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "conversations_say": {
+              "phrase": "conversations.weather.talk_crops.clear",
+              "vars": [
+                "weather"
+              ]
+            }
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "clear"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "world"
+            }
+          ]
+        },
         {
           "baseChance": 1,
           "actions": {
@@ -38,7 +99,15 @@
             },
             "next": "conversations.topic.weather.mild.followup",
             "say": "conversations.weather.mild.talk_crops"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_weather": {
+                "is": "clear"
+              }
+            }
+          ]
         }
       ]
     },

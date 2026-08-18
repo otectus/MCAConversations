@@ -7,6 +7,50 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "time_min": 13000
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "late"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.late.respond",
+            "say": "conversations.checkin.late"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.greet.today",
@@ -16,6 +60,10 @@
             {
               "chance": -2000,
               "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
             }
           ],
           "actions": {
@@ -46,6 +94,10 @@
             {
               "chance": -2000,
               "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
             }
           ],
           "actions": {
@@ -81,6 +133,10 @@
             {
               "chance": -2000,
               "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
             }
           ],
           "actions": {
@@ -116,6 +172,10 @@
             {
               "chance": -2000,
               "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
             }
           ],
           "actions": {
@@ -171,6 +231,10 @@
             {
               "chance": -2000,
               "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
             }
           ],
           "actions": {
@@ -230,6 +294,10 @@
             {
               "chance": -2000,
               "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
             }
           ],
           "actions": {

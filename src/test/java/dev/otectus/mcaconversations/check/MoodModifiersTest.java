@@ -33,5 +33,11 @@ class MoodModifiersTest {
         // They stack: grieving but grateful is still a bad moment to push.
         assertEquals(-8, MoodModifiers.stateAdjust(true, false, true, false));
         assertEquals(0, MoodModifiers.stateAdjust(false, false, false, false));
+        // PROUD was written, given a config window, and read by nothing at all until 1.2.0.
+        assertEquals(4, MoodModifiers.stateAdjust(false, false, false, false, true));
+        assertEquals(10, MoodModifiers.stateAdjust(false, false, false, true, true),
+                "states stack: impressed and infatuated at once is a very good day");
+        assertEquals(-8, MoodModifiers.stateAdjust(true, false, false, false, true),
+                "and grief still outweighs it");
     }
 }

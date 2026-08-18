@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_up",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "checkin.late.ask_why_up",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.checkin.rough.followup",
+            "say": "conversations.checkin.late.ask_why_up"
+          }
+        }
+      ]
+    },
+    {
+      "name": "send_to_bed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "checkin.late.send_to_bed",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.late.send_to_bed",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.checkin.late.send_to_bed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_watch",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "checkin.late.keep_watch",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.late.keep_watch",
+              "deltas": {
+                "trust": 4,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.checkin.late.keep_watch"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.checkin.late.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

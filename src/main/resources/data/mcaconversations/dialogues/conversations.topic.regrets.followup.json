@@ -4,6 +4,193 @@
       "name": "forgive",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "regrets",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "exclusive": "regrets.stance",
+                "member": "forgave"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "regrets.forgive.crit",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.forgive",
+              "deltas": {
+                "trust": 7,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.regrets.close",
+            "say": "conversations.regrets.forgive.crit"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "regrets.forgive",
+                "tier": "crit",
+                "axis": "trust",
+                "difficulty": 40,
+                "stance": "empathy"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "regrets",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "exclusive": "regrets.stance",
+                "member": "forgave"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "regrets.forgive.success",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.forgive",
+              "deltas": {
+                "trust": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.regrets.close",
+            "say": "conversations.regrets.forgive.success"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "regrets.forgive",
+                "tier": "success",
+                "axis": "trust",
+                "difficulty": 40,
+                "stance": "empathy"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "regrets",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "exclusive": "regrets.stance",
+                "member": "forgave"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "regrets.forgive.partial",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.forgive",
+              "deltas": {
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.regrets.close",
+            "say": "conversations.regrets.forgive.partial"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "regrets.forgive",
+                "tier": "partial",
+                "axis": "trust",
+                "difficulty": 40,
+                "stance": "empathy"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "regrets",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "exclusive": "regrets.stance",
+                "member": "forgave"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "regrets.forgive.rebuff",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.forgive",
+              "deltas": {
+                "tension": 5,
+                "trust": -2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.forgive.rebuff"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "regrets.forgive",
+                "tier": "rebuff",
+                "axis": "trust",
+                "difficulty": 40,
+                "stance": "empathy"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_progress_apply": [
@@ -32,7 +219,13 @@
             },
             "next": "conversations.topic.regrets.close",
             "say": "conversations.regrets.followup.forgive"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "checks"
+            }
+          ]
         }
       ]
     },

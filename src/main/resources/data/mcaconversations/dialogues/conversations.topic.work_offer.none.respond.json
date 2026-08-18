@@ -29,6 +29,32 @@
       "name": "ask_later",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.none.ask_later",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.ask_later.proud"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.state.proud",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "states"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_disposition_apply": {
@@ -39,7 +65,16 @@
             },
             "next": "conversations.cat.profession",
             "say": "conversations.work_offer.none.ask_later"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.proud",
+                "var": "player"
+              }
+            }
+          ]
         }
       ]
     },

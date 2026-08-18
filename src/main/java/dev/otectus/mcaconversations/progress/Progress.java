@@ -39,6 +39,29 @@ public final class Progress {
         }
     }
 
+    /**
+     * Scores a {@code conversations_budget} condition against today's ledger.
+     *
+     * <p>Reads only; asking how much of the daily budget is spent must never spend any of it.
+     * Defaults to a non-match on any failure, so a broken read degrades to the authored fallback.
+     */
+    public static boolean matchesBudget(Entity villager, ServerPlayer player, BudgetQuery query) {
+        MinecraftServer server = serverOf(player);
+        if (server == null || villager == null || query == null) {
+            return false;
+        }
+        try {
+            long day = player.serverLevel().getDayTime() / 24000L;
+            return query.matches(ProgressSavedData.get(server)
+                    .peek(villager.getUUID(), player.getUUID())
+                    .map(record -> query.valueOf(record, day))
+                    .orElse(0));
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("conversations_budget read failed; defaulting 0", t);
+            return false;
+        }
+    }
+
     public static boolean hasMilestone(Entity villager, ServerPlayer player, String milestoneId) {
         MinecraftServer server = serverOf(player);
         if (server == null || villager == null) {

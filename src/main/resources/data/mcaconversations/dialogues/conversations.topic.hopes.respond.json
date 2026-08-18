@@ -4,6 +4,32 @@
       "name": "listen",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.respond.listen",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.respond.listen",
+              "deltas": {
+                "trust": 4,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.hopes.followup",
+            "say": "conversations.hopes.listen.low"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "depressed"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -21,7 +47,13 @@
             },
             "next": "conversations.topic.hopes.followup",
             "say": "conversations.hopes.respond.listen"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            }
+          ]
         }
       ]
     },

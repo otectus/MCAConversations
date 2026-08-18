@@ -4,6 +4,48 @@
       "name": "pledge",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_progress_apply": {
+              "exclusive": "fears.support",
+              "member": "pledged"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.pledge.fears",
+              "var": "player",
+              "time": 72000
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.open.pledge",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.open.pledge",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.open.pledge.trusted"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_disposition": {
+                "axis": "trust",
+                "min": 55
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dispositions"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_progress_apply": {
@@ -30,7 +72,16 @@
             },
             "next": "conversations.topic.fears.open.close",
             "say": "conversations.fears.open.pledge"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disposition": {
+                "axis": "trust",
+                "min": 55
+              }
+            }
+          ]
         }
       ]
     },

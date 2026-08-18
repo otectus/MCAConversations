@@ -4,6 +4,29 @@
       "name": "offer_help",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.offer_help",
+              "deltas": {
+                "warmth": 2,
+                "respect": 3
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.offer_help.spent"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_budget": {
+                "axis": "positive",
+                "min": 8
+              }
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -21,7 +44,16 @@
             },
             "next": "main",
             "say": "conversations.checkin.rough.offer_help"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_budget": {
+                "axis": "positive",
+                "min": 8
+              }
+            }
+          ]
         }
       ]
     },

@@ -4,6 +4,31 @@
       "name": "agree",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.agree",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.agree",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.agree.passive"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "passive"
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -20,13 +45,45 @@
             },
             "next": "conversations.topic.season.turn.followup",
             "say": "conversations.season.turn.agree"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "passive"
+            }
+          ]
         }
       ]
     },
     {
       "name": "ask_favourite",
       "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "season.turn.ask_favourite",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.ask_favourite.plain"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_holiday": {
+                "is": "none"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "holidays"
+            }
+          ]
+        },
         {
           "baseChance": 1,
           "actions": {
@@ -39,7 +96,15 @@
             },
             "next": "conversations.topic.season.turn.followup",
             "say": "conversations.season.turn.ask_favourite"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "none"
+              }
+            }
+          ]
         }
       ]
     },

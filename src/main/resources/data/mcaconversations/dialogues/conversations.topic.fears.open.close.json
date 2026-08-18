@@ -4,6 +4,29 @@
       "name": "thank",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "fears.open.thank",
+              "deltas": {
+                "warmth": 2,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.open.thank.spent"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_budget": {
+                "axis": "positive",
+                "min": 8
+              }
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_affection_apply": {
@@ -21,7 +44,16 @@
             },
             "next": "conversations.cat.personal",
             "say": "conversations.fears.open.thank"
-          }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_budget": {
+                "axis": "positive",
+                "min": 8
+              }
+            }
+          ]
         }
       ]
     },

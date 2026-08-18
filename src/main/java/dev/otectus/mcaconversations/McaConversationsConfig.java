@@ -39,6 +39,11 @@ public final class McaConversationsConfig {
             case "gossip" -> COMMON.enableGossip.get();
             case "quests" -> COMMON.enableQuests.get();
             case "world" -> COMMON.enableWeatherLines.get();
+            // Without these, "seasons" and "holidays" fell through to the default and scored as
+            // enabled forever, so a conversations_disabled sink on either could never fire and
+            // season- or festival-aware content had no way to degrade when its flag was off.
+            case "seasons" -> COMMON.enableSeasonLines.get();
+            case "holidays" -> COMMON.enableHolidayLines.get();
             case "dispositions" -> COMMON.enableDispositions.get();
             case "checks" -> COMMON.enableChecks.get();
             case "branching" -> COMMON.enableBranching.get();

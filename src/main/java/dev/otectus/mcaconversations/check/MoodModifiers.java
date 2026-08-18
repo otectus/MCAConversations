@@ -28,6 +28,19 @@ public final class MoodModifiers {
     /** Conversation-state adjustments; states stack (grieving + grateful is still a raw moment). */
     public static int stateAdjust(boolean grieving, boolean annoyedAtPlayer, boolean gratefulToPlayer,
                                   boolean smittenWithPlayer) {
+        return stateAdjust(grieving, annoyedAtPlayer, gratefulToPlayer, smittenWithPlayer, false);
+    }
+
+    /**
+     * Conversation-state adjustments; states stack (grieving + grateful is still a raw moment).
+     *
+     * <p>{@code proud} is the state a villager is left in by the player finishing a quest for it. It
+     * was written, given its own config window, and then read by nothing at all — not even the check
+     * resolver, which knew about the other four. It sits below {@code smitten}: being impressed with
+     * someone is warmer than gratitude and cooler than infatuation.
+     */
+    public static int stateAdjust(boolean grieving, boolean annoyedAtPlayer, boolean gratefulToPlayer,
+                                  boolean smittenWithPlayer, boolean proudOfPlayer) {
         int adjust = 0;
         if (grieving) {
             adjust -= 12;
@@ -40,6 +53,9 @@ public final class MoodModifiers {
         }
         if (smittenWithPlayer) {
             adjust += 6;
+        }
+        if (proudOfPlayer) {
+            adjust += 4;
         }
         return adjust;
     }

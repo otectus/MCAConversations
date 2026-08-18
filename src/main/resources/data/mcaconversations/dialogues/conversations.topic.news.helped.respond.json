@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "ask_who",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "news.helped.ask_who",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.helped.ask_who"
+          }
+        }
+      ]
+    },
+    {
+      "name": "glad",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.helped.glad",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.helped.glad",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.helped.glad"
+          }
+        }
+      ]
+    },
+    {
+      "name": "take_credit",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.helped.take_credit",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.helped.take_credit",
+              "deltas": {
+                "respect": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.helped.take_credit"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.helped.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

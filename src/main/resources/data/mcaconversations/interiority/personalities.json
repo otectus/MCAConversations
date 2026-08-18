@@ -9,72 +9,249 @@
   ],
   "profiles": {
     "confident": {
-      "baselines": {"respect": 4, "trust": 2},
-      "stance_bias": {"candor": 8, "challenge": 6, "respectful_disagreement": 6, "restraint": -4, "dismissal": -8}
+      "baselines": {
+        "respect": 4,
+        "trust": 2
+      },
+      "stance_bias": {
+        "candor": 8,
+        "challenge": 6,
+        "respectful_disagreement": 6,
+        "restraint": -4,
+        "dismissal": -8,
+        "curiosity": 3
+      }
     },
     "peppy": {
-      "baselines": {"warmth": 8, "trust": 2},
-      "stance_bias": {"encouragement": 8, "humor": 6, "empathy": 4, "restraint": -3, "dismissal": -10}
+      "baselines": {
+        "warmth": 8,
+        "trust": 2,
+        "respect": 2
+      },
+      "stance_bias": {
+        "encouragement": 8,
+        "humor": 6,
+        "empathy": 4,
+        "restraint": -3,
+        "dismissal": -10,
+        "curiosity": 6,
+        "candor": -3
+      }
     },
     "friendly": {
-      "baselines": {"warmth": 8, "trust": 4},
-      "stance_bias": {"empathy": 8, "practical_help": 5, "encouragement": 4, "dismissal": -10}
+      "baselines": {
+        "warmth": 8,
+        "trust": 4,
+        "respect": 3
+      },
+      "stance_bias": {
+        "empathy": 8,
+        "practical_help": 5,
+        "encouragement": 4,
+        "dismissal": -10,
+        "curiosity": 5,
+        "candor": -2
+      }
     },
     "flirty": {
-      "baselines": {"warmth": 6, "attraction": 4},
-      "stance_bias": {"flirtation": 10, "humor": 6, "self_disclosure": 4, "restraint": -4, "dismissal": -8}
+      "baselines": {
+        "warmth": 6,
+        "attraction": 4,
+        "respect": 1
+      },
+      "stance_bias": {
+        "flirtation": 10,
+        "humor": 6,
+        "self_disclosure": 4,
+        "restraint": -4,
+        "dismissal": -8,
+        "curiosity": 4
+      }
     },
     "playful": {
-      "baselines": {"warmth": 6},
-      "stance_bias": {"humor": 10, "encouragement": 4, "challenge": 3, "restraint": -5, "dismissal": -6}
+      "baselines": {
+        "warmth": 6,
+        "respect": 1
+      },
+      "stance_bias": {
+        "humor": 10,
+        "encouragement": 4,
+        "challenge": 3,
+        "restraint": -5,
+        "dismissal": -6,
+        "curiosity": 6,
+        "candor": 2
+      }
     },
     "gloomy": {
-      "baselines": {"warmth": -4, "tension": 5},
-      "stance_bias": {"empathy": 8, "restraint": 6, "self_disclosure": 4, "encouragement": -6, "humor": -6, "dismissal": -8}
+      "baselines": {
+        "warmth": -4,
+        "tension": 5,
+        "respect": -2
+      },
+      "stance_bias": {
+        "empathy": 8,
+        "restraint": 6,
+        "self_disclosure": 4,
+        "encouragement": -6,
+        "humor": -6,
+        "dismissal": -8,
+        "curiosity": -3,
+        "candor": 5
+      }
     },
     "sensitive": {
-      "baselines": {"warmth": 4, "trust": 2},
-      "stance_bias": {"empathy": 10, "restraint": 6, "humor": -4, "challenge": -6, "dismissal": -12, "boundary_push": -12}
+      "baselines": {
+        "warmth": 4,
+        "trust": 2,
+        "respect": 2
+      },
+      "stance_bias": {
+        "empathy": 10,
+        "restraint": 6,
+        "humor": -4,
+        "challenge": -6,
+        "dismissal": -12,
+        "boundary_push": -12,
+        "curiosity": 2,
+        "candor": -5
+      }
     },
     "greedy": {
-      "baselines": {"respect": -2},
-      "stance_bias": {"practical_help": 8, "candor": 4, "challenge": 2, "empathy": -2, "self_disclosure": -4}
+      "baselines": {
+        "respect": -2
+      },
+      "stance_bias": {
+        "practical_help": 8,
+        "candor": 4,
+        "challenge": 2,
+        "empathy": -2,
+        "self_disclosure": -4,
+        "curiosity": -2
+      }
     },
     "odd": {
-      "baselines": {"warmth": 2},
-      "stance_bias": {"curiosity": 10, "humor": 6, "self_disclosure": 5, "restraint": -2, "dismissal": -6}
+      "baselines": {
+        "warmth": 2,
+        "respect": -1
+      },
+      "stance_bias": {
+        "curiosity": 10,
+        "humor": 6,
+        "self_disclosure": 5,
+        "restraint": -2,
+        "dismissal": -6,
+        "candor": 3
+      }
     },
     "crabby": {
-      "baselines": {"warmth": -6, "tension": 8},
-      "stance_bias": {"candor": 8, "respectful_disagreement": 6, "practical_help": 4, "encouragement": -6, "flirtation": -8, "dismissal": -6}
+      "baselines": {
+        "warmth": -6,
+        "tension": 8
+      },
+      "stance_bias": {
+        "candor": 8,
+        "respectful_disagreement": 6,
+        "practical_help": 4,
+        "encouragement": -6,
+        "flirtation": -8,
+        "dismissal": -6,
+        "curiosity": -5
+      }
     },
     "extroverted": {
-      "baselines": {"warmth": 6},
-      "stance_bias": {"self_disclosure": 8, "humor": 5, "curiosity": 5, "restraint": -6}
+      "baselines": {
+        "warmth": 6,
+        "respect": 2
+      },
+      "stance_bias": {
+        "self_disclosure": 8,
+        "humor": 5,
+        "curiosity": 5,
+        "restraint": -6
+      }
     },
     "introverted": {
-      "baselines": {"warmth": 2, "tension": 3},
-      "stance_bias": {"restraint": 10, "empathy": 5, "curiosity": -2, "self_disclosure": -4, "boundary_push": -10}
+      "baselines": {
+        "warmth": 2,
+        "tension": 3,
+        "respect": -1
+      },
+      "stance_bias": {
+        "restraint": 10,
+        "empathy": 5,
+        "curiosity": -2,
+        "self_disclosure": -4,
+        "boundary_push": -10,
+        "candor": 2
+      }
     },
     "relaxed": {
-      "baselines": {"warmth": 4},
-      "stance_bias": {"humor": 6, "restraint": 5, "practical_help": 2, "challenge": -4, "dismissal": -4}
+      "baselines": {
+        "warmth": 4,
+        "respect": 2
+      },
+      "stance_bias": {
+        "humor": 6,
+        "restraint": 5,
+        "practical_help": 2,
+        "challenge": -4,
+        "dismissal": -4,
+        "curiosity": 2,
+        "candor": 3
+      }
     },
     "anxious": {
-      "baselines": {"trust": -2, "tension": 10},
-      "stance_bias": {"empathy": 8, "encouragement": 6, "practical_help": 6, "challenge": -8, "dismissal": -8, "boundary_push": -12}
+      "baselines": {
+        "trust": -2,
+        "tension": 10
+      },
+      "stance_bias": {
+        "empathy": 8,
+        "encouragement": 6,
+        "practical_help": 6,
+        "challenge": -8,
+        "dismissal": -8,
+        "boundary_push": -12
+      }
     },
     "peaceful": {
-      "baselines": {"warmth": 5, "trust": 3},
-      "stance_bias": {"empathy": 6, "restraint": 6, "respectful_disagreement": 4, "challenge": -5, "dismissal": -8}
+      "baselines": {
+        "warmth": 5,
+        "trust": 3
+      },
+      "stance_bias": {
+        "empathy": 6,
+        "restraint": 6,
+        "respectful_disagreement": 4,
+        "challenge": -5,
+        "dismissal": -8
+      }
     },
     "upbeat": {
-      "baselines": {"warmth": 6},
-      "stance_bias": {"encouragement": 8, "humor": 7, "curiosity": 4, "restraint": -3, "dismissal": -8}
+      "baselines": {
+        "warmth": 6
+      },
+      "stance_bias": {
+        "encouragement": 8,
+        "humor": 7,
+        "curiosity": 4,
+        "restraint": -3,
+        "dismissal": -8
+      }
     },
     "athletic": {
-      "baselines": {"respect": 3},
-      "stance_bias": {"challenge": 8, "practical_help": 6, "encouragement": 4, "restraint": -4, "dismissal": -6}
+      "baselines": {
+        "respect": 3
+      },
+      "stance_bias": {
+        "challenge": 8,
+        "practical_help": 6,
+        "encouragement": 4,
+        "restraint": -4,
+        "dismissal": -6,
+        "curiosity": 3
+      }
     }
   }
 }

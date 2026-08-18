@@ -192,6 +192,67 @@ below exists and Conversations is unchanged.
   which props belong to which variant, so the next pool with differing detail is caught rather than
   discovered in play.
 
+### Added — the systems that were built and never used
+
+Six small engine changes, each of which existed to make content possible that had never been written.
+
+- **`enableTopics` does something.** It had no effect whatsoever: the flag was read only through a
+  feature key no shipped dialogue named. All 150 branching results across the 27 openers now sink on
+  it, so turning it off falls every topic back to its legacy one-line result — what `CONFIG.md` has
+  claimed since 0.6.0. Asserted by a simulation over every catalogued topic.
+- **`enableQuests` switches the quest conditions off.** `questScore` never consulted it, so quest
+  branches kept matching for players who had turned the integration off.
+- **`conversations_disabled: "seasons"` and `"holidays"` can fire.** Both fell through
+  `isFeatureEnabled`'s default and scored as permanently enabled, so season- and festival-aware
+  content had no way to degrade.
+- **`PROUD` is read by something.** The state a villager is left in by the player finishing a quest
+  for it was written, given its own config window, and consulted by nothing — not even the check
+  resolver, which knew the other four. It is worth +4, between gratitude and infatuation.
+- **`conversations_session` is readable.** 114 results had been writing a `branch` into the session
+  since 1.1.0 and its only reader was its own setter, so content duplicated the branch into node
+  names instead. The five deep topics' "we were just here" nodes — identical but for one lang key
+  each — are now **one** node that asks the session which topic is open.
+- **`conversations_budget` exposes the daily ledger.** `positiveToday`, `negativeToday` and
+  `repeatsToday` were tracked per villager and player and readable by nothing, so the cap clamped
+  kindness to zero in silence. At the cap the villager now turns the offer down warmly.
+
+### Added — content for the seams that had none
+
+- **Villagers say something different at midnight.** `time_min`/`time_max` had zero uses and the
+  `time_of_day` template variable zero references, so nobody in the mod spoke differently at dawn
+  than at noon. Being about at a strange hour is now its own check-in branch, and asking what is
+  keeping them up continues into the rough-day follow-up.
+- **The disposition vector is finally audible.** `tension` had 105 writes and no reads, `familiarity`
+  95 and none, and no gate anywhere used a `min` bound — so there was not one "you have earned this"
+  threshold in the mod. Three now exist: a cooler reply while the air is still unsettled (the missing
+  half of the apology mechanic), a warmer one from someone who has known you a long time, and an
+  extra beat at high trust. All carry the `dispositions`-disabled sink the documentation described
+  and no content had ever used.
+- **Checks reach five more topics.** `conversations_check` lived entirely in `fears`, so eleven of
+  fourteen stance families' tuned personality bias was computed by nothing at runtime. `regrets`,
+  `work`, `village`, `people` and `day` each gain a checked stance. The `day` one converts a
+  hand-rolled two-list personality gate into a real humour check — which is what finally makes the
+  headline claim about a joke landing for a playful villager and falling flat on a gloomy one true
+  rather than decorative.
+- **Personality profiles cover what the content uses.** `curiosity` is required by 13 topics and was
+  biased by 4 of 17 profiles; it is now on 15. `candor` goes from 3 to 11, and a resting `respect`
+  baseline from 3 to 13 against content that writes the axis 91 times.
+- **Replies read mood.** All 54 mood conditions were on openers; not one reply node read mood, which
+  is the moment it matters most. Eight now do — including `passive` and `fine`, which nothing in the
+  mod had ever branched on, so "they are just having an ordinary day" was unwritten.
+- **Four MCA-native conditions that had zero uses.** A mayor now answers differently about the
+  village than a peasant, an outlaw differently about the neighbours, a villager notices you are
+  bleeding, and a village with a smith says so.
+- **The world reaches beyond two answers.** All 36 world-condition uses sat in one file, so a farmer
+  at harvest and a fisherman in a storm said identical things. `work`, `village`, `food`, `checkin`,
+  `weather` and `season` are now world-aware, and the `clear` and `none` values — implemented,
+  localized and never once authored — finally have lines.
+- **The gift and quest layers reach ordinary conversation.** Gratitude names the gift, a smitten
+  villager will talk about anything you like, and a villager you finished a quest for is almost too
+  embarrassed to ask for another.
+- **Quest gossip is tellable.** `GossipEventType.QUEST` was seeded, localized in both languages, and
+  reachable only through `rumors`, so a village whose one untold event was a quest said "quiet week".
+
 ### Fixed — documentation that had drifted from the code
 
 - `README.md`, `CURSEFORGE.md` and the catalog's own comment all still said two pilot topics were

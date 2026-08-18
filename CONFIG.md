@@ -6,11 +6,11 @@ File: `config/mcaconversations-common.toml` (generated on first run).
 
 | Option | Default | Effect when disabled |
 |---|---|---|
-| `enableTopics` | `true` | **No effect as of 1.1.0.** The flag is read only through the `topics` feature key, and no shipped dialogue names that key, so nothing degrades. Being wired up in 1.2.0 |
+| `enableTopics` | `true` | Every converted topic falls back to its legacy one-line result and returns to its category — the branching trees are not entered at all. Distinct from `enableBranching`, which keeps the topics but disables the trees behind them |
 | `enableStates` | `true` | conversation states (grateful, grieving, elated, annoyed, smitten, proud) are neither recorded nor referenced |
 | `enableTemplates` | `true` | templated lines render with neutral fallbacks ("someone", "the village") |
 | `enableGossip` | `true` | no events are detected or told; the "news" topic answers "quiet week" |
-| `enableQuests` | `true` | Quest lines aren't voiced and finished quests seed no gossip. **As of 1.1.0 the four `conversations_quest_*` conditions still match with the flag off** — `questScore` never consults it. Being fixed in 1.2.0. Only ever active when the `mcaquests` mod is installed |
+| `enableQuests` | `true` | MCA: Quests integration is inert: the four `conversations_quest_*` conditions score 0, quest lines aren't voiced, and finished quests seed no gossip. Only ever active when the `mcaquests` mod is installed. Note that `conversations_quest_available` is always about the villager in front of you, so `scope` does not apply to it |
 | `enableWeatherLines` | `true` | weather-aware lines are off; the `conversations_weather` condition and the `world` feature flag score as disabled |
 | `enableBranching` | `true` | converted topics fall back to their 1.0.0 one-line result and return to the category, payout and all. Nothing is ever left as an empty page: each starter carries an explicit legacy fallback |
 

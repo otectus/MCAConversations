@@ -9,6 +9,7 @@ import dev.otectus.mcaconversations.chat.IntentBinding;
 import dev.otectus.mcaconversations.chat.Normalizer;
 import dev.otectus.mcaconversations.chat.SynonymTable;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -119,6 +120,69 @@ class ChatIntentLintTest {
             }
         }
         assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * Intents that can be live at the same moment and key on the same words must carry
+     * {@code antiKeywords} to tell themselves apart.
+     *
+     * <p>{@code antiKeywords} shipped on 3 of 340-odd intents. The globally-live
+     * {@code personal.regrets} keys on <em>regret</em>, <em>sorry</em> and <em>wrong</em>, which
+     * shadows every context-scoped apology stance in the mod, and {@code chatmode.greeting} collides
+     * with {@code chitchat.day} on <em>morning</em>, <em>afternoon</em> and <em>evening</em>. When
+     * two intents overlap this much and neither says what it is <em>not</em>, the matcher is
+     * guessing, and a player apologising for pushing gets a conversation about regrets instead.
+     */
+    @Test
+    @DisplayName("intents that can fire together and share words say what they are not")
+    void antiKeywordsDisambiguateCoLiveIntents() {
+        final double JACCARD = 0.30;
+        List<String> problems = new ArrayList<>();
+        List<Map.Entry<String, IntentBinding>> all = new ArrayList<>(intents.entrySet());
+        for (int i = 0; i < all.size(); i++) {
+            for (int j = i + 1; j < all.size(); j++) {
+                IntentBinding a = all.get(i).getValue();
+                IntentBinding b = all.get(j).getValue();
+                if (!canBeLiveTogether(a, b)) {
+                    continue;
+                }
+                Set<String> left = a.keywords().keySet();
+                Set<String> right = b.keywords().keySet();
+                Set<String> shared = new HashSet<>(left);
+                shared.retainAll(right);
+                if (shared.isEmpty()) {
+                    continue;
+                }
+                Set<String> union = new HashSet<>(left);
+                union.addAll(right);
+                double jaccard = (double) shared.size() / union.size();
+                if (jaccard < JACCARD) {
+                    continue;
+                }
+                boolean separated = notEmpty(a.antiKeywords()) || notEmpty(b.antiKeywords());
+                if (!separated) {
+                    problems.add(String.format(
+                            "%s and %s can be live together and share %s (Jaccard %.2f) with no"
+                                    + " antiKeywords on either — the matcher is guessing between them",
+                            all.get(i).getKey(), all.get(j).getKey(), shared, jaccard));
+                }
+            }
+        }
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
+    }
+
+    /**
+     * Two intents can be live at the same moment when neither is context-scoped, or when one is
+     * scoped to a node and the other is global — a global intent stays live inside every node, which
+     * is exactly how the shadowing happens.
+     */
+    private static boolean canBeLiveTogether(IntentBinding a, IntentBinding b) {
+        return a.context() == null || b.context() == null || a.context().equals(b.context());
+    }
+
+    private static boolean notEmpty(List<String> values) {
+        return values != null && !values.isEmpty();
     }
 
     @Test

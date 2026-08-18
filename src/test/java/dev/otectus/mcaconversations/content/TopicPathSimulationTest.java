@@ -10,6 +10,7 @@ import dev.otectus.mcaconversations.conversation.DepthClass;
 import dev.otectus.mcaconversations.conversation.TopicEntry;
 import dev.otectus.mcaconversations.personality.Personalities;
 import dev.otectus.mcaconversations.progress.AffectionApply;
+import dev.otectus.mcaconversations.progress.BudgetQuery;
 import dev.otectus.mcaconversations.progress.AffectionContext;
 import dev.otectus.mcaconversations.progress.AffectionOutcome;
 import dev.otectus.mcaconversations.progress.ProgressApply;
@@ -107,8 +108,16 @@ class TopicPathSimulationTest {
         int hearts = 60;
         /** Whether "is it raining / is there a festival / is a quest waiting" answers yes. */
         boolean worldFacts;
+        boolean topics = true;
+        boolean dispositionsEnabled = true;
+        /** Midday: the ordinary hour, so dawn and late-night branches are colourings, not defaults. */
+        long timeOfDay = 6000L;
+        String rank = "peasant";
+        int health = 20;
         /** Constraint tokens this villager satisfies (spouse, family, kids, has_village, …). */
         final Set<String> traits = new HashSet<>();
+        /** Where the disposition vector sits; absent axes rest at zero, as a stranger's would. */
+        final Map<String, Integer> dispositions = new HashMap<>();
         final Set<String> memories = new HashSet<>();
         CheckTier tier = CheckTier.SUCCESS;
 
@@ -157,6 +166,9 @@ class TopicPathSimulationTest {
         int sessionNegative;
         int heartsMoved;
         DepthClass budget = DepthClass.QUICK;
+        /** What conversations_session has framed this exchange as, which content can now read. */
+        String sessionTopic;
+        String sessionBranch;
         final List<String> trace = new ArrayList<>();
 
         Run(World world) {
@@ -228,7 +240,7 @@ class TopicPathSimulationTest {
 
         List<JsonObject> positive = new ArrayList<>();
         for (JsonElement r : results) {
-            if (weight(r.getAsJsonObject(), question + "/" + answerName, run.world) > 0) {
+            if (weight(r.getAsJsonObject(), question + "/" + answerName, run) > 0) {
                 positive.add(r.getAsJsonObject());
             }
         }
@@ -239,7 +251,7 @@ class TopicPathSimulationTest {
         return positive.isEmpty() ? results.get(results.size() - 1).getAsJsonObject() : positive.get(0);
     }
 
-    private static int weight(JsonObject result, String where, World world) {
+    private static int weight(JsonObject result, String where, Run run) {
         int total = result.has("baseChance") ? result.get("baseChance").getAsInt() : 0;
         if (!result.has("conditions")) {
             return total;
@@ -247,12 +259,13 @@ class TopicPathSimulationTest {
         for (JsonElement c : result.getAsJsonArray("conditions")) {
             JsonObject condition = c.getAsJsonObject();
             int chance = condition.get("chance").getAsInt();
-            total += chance * conditionValue(condition, where, world);
+            total += chance * conditionValue(condition, where, run);
         }
         return total;
     }
 
-    private static int conditionValue(JsonObject condition, String where, World world) {
+    private static int conditionValue(JsonObject condition, String where, Run run) {
+        World world = run.world;
         for (String key : condition.keySet()) {
             switch (key) {
                 case "chance":
@@ -281,6 +294,46 @@ class TopicPathSimulationTest {
                             .equals(world.tier.key()) ? 1 : 0;
                 case "conversations_progress":
                     return progressValue(condition.getAsJsonObject(key), world);
+                // The vector rests at its personality baseline in this world, so a "you have earned
+                // this" threshold is not met by a stranger — which is the point of the threshold.
+                case "conversations_disposition": {
+                    JsonObject query = condition.getAsJsonObject(key);
+                    int value = world.dispositions.getOrDefault(query.get("axis").getAsString(), 0);
+                    boolean inRange = (!query.has("min") || value >= query.get("min").getAsInt())
+                            && (!query.has("max") || value <= query.get("max").getAsInt());
+                    return inRange ? 1 : 0;
+                }
+                // Read against the run's real ledger, so a budget-aware branch is simulated rather
+                // than assumed. This is the only condition whose answer changes as the walk proceeds.
+                case "conversations_budget": {
+                    BudgetQuery query = BudgetQuery.fromJson(condition.getAsJsonObject(key));
+                    ProgressRecord record = run.store.get(VILLAGER, PLAYER).orElse(null);
+                    return query.matches(query.valueOf(record, run.now / 24000L)) ? 1 : 0;
+                }
+                // An unhurt villager of no particular standing: the ordinary case, so rank- and
+                // health-gated colourings are colourings rather than the default walk.
+                // The read half of conversations_session, which lets sibling branches share a node
+                // instead of duplicating the branch into the node's name.
+                case "conversations_session": {
+                    JsonObject query = condition.getAsJsonObject(key);
+                    if (query.has("topic")
+                            && !query.get("topic").getAsString().equalsIgnoreCase(String.valueOf(run.sessionTopic))) {
+                        return 0;
+                    }
+                    if (query.has("branch")
+                            && !query.get("branch").getAsString().equalsIgnoreCase(String.valueOf(run.sessionBranch))) {
+                        return 0;
+                    }
+                    return run.sessionTopic == null ? 0 : 1;
+                }
+                case "rank":
+                    return condition.get(key).getAsString().equals(world.rank) ? 1 : 0;
+                case "min_health":
+                    return world.health >= condition.get(key).getAsInt() ? 1 : 0;
+                case "time_min":
+                    return world.timeOfDay >= condition.get(key).getAsLong() ? 1 : 0;
+                case "time_max":
+                    return world.timeOfDay <= condition.get(key).getAsLong() ? 1 : 0;
                 // The world facts below are all "is the world currently like this?" questions with
                 // no bearing on the guard chain. The simulated world answers no to every one, which
                 // makes the walk deterministic and lands it on each topic's ordinary branch — the
@@ -315,6 +368,8 @@ class TopicPathSimulationTest {
         return switch (feature) {
             case "branching" -> world.branching;
             case "checks" -> world.checks;
+            case "topics" -> world.topics;
+            case "dispositions" -> world.dispositionsEnabled;
             default -> true;
         };
     }
@@ -387,6 +442,19 @@ class TopicPathSimulationTest {
     /** Applies a chosen result's actions through the real guards, and returns where it routes next. */
     private static String apply(JsonObject result, Run run) {
         JsonObject actions = result.getAsJsonObject("actions");
+        if (actions.has("conversations_session")) {
+            JsonObject session = actions.getAsJsonObject("conversations_session");
+            String op = session.has("op") ? session.get("op").getAsString() : "";
+            if ("begin".equals(op)) {
+                run.sessionTopic = session.has("topic") ? session.get("topic").getAsString() : null;
+                run.sessionBranch = session.has("branch") ? session.get("branch").getAsString() : null;
+            } else if ("branch".equals(op) && session.has("branch")) {
+                run.sessionBranch = session.get("branch").getAsString();
+            } else if ("end".equals(op)) {
+                run.sessionTopic = null;
+                run.sessionBranch = null;
+            }
+        }
         if (actions.has("conversations_progress_apply")) {
             JsonElement element = actions.get("conversations_progress_apply");
             List<JsonObject> entries = new ArrayList<>();
@@ -492,23 +560,40 @@ class TopicPathSimulationTest {
     @Test
     @DisplayName("5. the same joke lands for one personality and misfires for another")
     void personalityDecidesTheJoke() {
-        Run playful = new Run(new World().mood("sad").personality("playful"));
-        click("conversations.cat.chitchat", "day", playful);
-        click("conversations.topic.day.rough.respond", "ask", playful);
-        click("conversations.topic.day.rough.followup", "lighten", playful);
-        assertEquals(1, playful.heartsMoved, "playful: " + playful.trace);
+        // The joke used to be decided by two hardcoded personality lists. It is now a real check on
+        // the humour family, so the tier decides the outcome and personality reaches it the way
+        // every other stance does — through the interiority bias the resolver adds to the roll.
+        for (Map.Entry<CheckTier, Integer> expected : Map.of(
+                CheckTier.CRIT, 1, CheckTier.SUCCESS, 1, CheckTier.PARTIAL, 1, CheckTier.REBUFF, -1).entrySet()) {
+            Run run = new Run(new World().mood("sad").tier(expected.getKey()));
+            click("conversations.cat.chitchat", "day", run);
+            click("conversations.topic.day.rough.respond", "ask", run);
+            click("conversations.topic.day.rough.followup", "lighten", run);
+            assertEquals(expected.getValue(), run.heartsMoved,
+                    expected.getKey() + ": " + run.trace);
+        }
 
-        Run gloomy = new Run(new World().mood("sad").personality("gloomy"));
-        click("conversations.cat.chitchat", "day", gloomy);
-        click("conversations.topic.day.rough.respond", "ask", gloomy);
-        click("conversations.topic.day.rough.followup", "lighten", gloomy);
-        assertEquals(-1, gloomy.heartsMoved, "gloomy: " + gloomy.trace);
+        // And the thing that tips the roll is the shipped profile, which is what makes the
+        // CHANGELOG's long-standing claim true rather than decorative: a joke lands for a playful
+        // villager and falls flat on a gloomy one. Read from the datapack, because the runtime
+        // loader only populates on a resource reload.
+        assertTrue(shippedHumourBias("playful") > 0,
+                "a playful villager has to be more receptive to a joke than average");
+        assertTrue(shippedHumourBias("gloomy") < 0,
+                "and a gloomy one less so — otherwise the headline claim is decoration");
+    }
 
-        Run peaceful = new Run(new World().mood("sad").personality("peaceful"));
-        click("conversations.cat.chitchat", "day", peaceful);
-        click("conversations.topic.day.rough.respond", "ask", peaceful);
-        click("conversations.topic.day.rough.followup", "lighten", peaceful);
-        assertEquals(0, peaceful.heartsMoved, "everyone else: politely received, no movement");
+    /** The humour stance bias the shipped interiority datapack gives a personality. */
+    private static int shippedHumourBias(String personality) {
+        try {
+            JsonObject profiles = JsonParser.parseString(Files.readString(
+                            Path.of("src/main/resources/data/mcaconversations/interiority/personalities.json")))
+                    .getAsJsonObject().getAsJsonObject("profiles");
+            JsonObject bias = profiles.getAsJsonObject(personality).getAsJsonObject("stance_bias");
+            return bias.has("humor") ? bias.get("humor").getAsInt() : 0;
+        } catch (IOException e) {
+            throw new AssertionError("could not read the shipped interiority profiles", e);
+        }
     }
 
     @Test
@@ -817,6 +902,140 @@ class TopicPathSimulationTest {
      * <p>It deliberately does not assert that a bad path exists: {@code everyTopicHasABetterAndAWorseRoute}
      * already proves that over the whole graph, which is a stronger statement than one greedy walk.
      */
+    /**
+     * {@code enableTopics} does what CONFIG.md has always said it does.
+     *
+     * <p>Until 1.2.0 the flag had no effect at all: it was read only through the {@code "topics"}
+     * feature key and no shipped dialogue used that key, so turning it off changed nothing. Every
+     * converted opener now sinks its branching results on it, which leaves the legacy fallback
+     * standing — the documented behaviour, finally true.
+     */
+    @Test
+    @DisplayName("with topics disabled every opener falls back to its legacy line")
+    void disablingTopicsFallsBackEverywhere() {
+        List<String> problems = new ArrayList<>();
+        for (TopicEntry topic : CATALOG.topics()) {
+            World world = worldFor(topic);
+            world.topics = false;
+            Run run = new Run(world);
+            JsonObject chosen = select(topic.entryQuestion(), topic.entryAnswer(), run);
+            JsonObject actions = chosen.getAsJsonObject("actions");
+            String next = actions.has("next") ? actions.get("next").getAsString() : null;
+            if (next != null && (next.startsWith("conversations.topic.") || next.startsWith("conversations.arc."))) {
+                problems.add(topic.id() + ": topics disabled still routed into " + next);
+            }
+            JsonObject destination = next == null ? null : questions.get(next);
+            boolean spokenByAuto = destination != null && destination.has("auto")
+                    && destination.get("auto").getAsBoolean();
+            if (!actions.has("say") && !actions.has("conversations_gossip_say")
+                    && !actions.has("conversations_say") && !spokenByAuto) {
+                problems.add(topic.id() + ": topics disabled left the villager with nothing to say");
+            }
+            apply(chosen, run);
+            if (run.heartsMoved < 0) {
+                problems.add(topic.id() + ": the off-state punished the player for asking");
+            }
+        }
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
+    }
+
+    /**
+     * The disposition vector is finally readable, and reads differently at the thresholds.
+     *
+     * <p>Before 1.2.0 {@code tension} had 105 writes and 0 reads, {@code familiarity} 95 and 0, and
+     * no gate anywhere used a {@code min} bound — so there was not one "you have earned this"
+     * threshold in the whole mod, and every axis was a number the player could never detect.
+     */
+    /**
+     * One node, five topics, five different answers — read from the live session.
+     *
+     * <p>The five deep topics each had their own "we were just here" node, identical in every way
+     * except which lang key it said, because nothing could ask the session what topic was open.
+     * 114 results had been writing a branch into that session since 1.1.0 with no reader at all.
+     */
+    @Test
+    @DisplayName("the shared repeat node says the right topic's line, chosen from the session")
+    void oneNodeSpeaksForFiveTopics() {
+        for (String topic : List.of("life", "dreams", "hopes", "regrets", "secret")) {
+            Run run = new Run(new World());
+            run.sessionTopic = topic;
+            assertEquals("conversations." + topic + ".again.press",
+                    select("conversations.topic.deep.again.respond", "press", run)
+                            .getAsJsonObject("actions").get("say").getAsString(),
+                    topic + " must speak for itself even though the node is shared");
+        }
+
+        // And a session that has lapsed still gets a sensible line rather than a raw key.
+        Run lapsed = new Run(new World());
+        assertNotNull(select("conversations.topic.deep.again.respond", "press", lapsed)
+                .getAsJsonObject("actions").get("say"));
+    }
+
+    @Test
+    @DisplayName("the disposition thresholds change what the villager says")
+    void earnedThresholdsAreAudible() {
+        // A stranger gets the ordinary line...
+        Run stranger = new Run(new World().mood("sad"));
+        assertEquals("conversations.day.rough.empathize",
+                select("conversations.topic.day.rough.respond", "empathize", stranger)
+                        .getAsJsonObject("actions").get("say").getAsString());
+
+        // ...and somebody the villager is still cross with gets a cooler one. This is the missing
+        // half of the apology mechanic: something finally reads whether the air is unsettled.
+        World unsettled = new World().mood("sad");
+        unsettled.dispositions.put("tension", 40);
+        assertEquals("conversations.day.rough.tense",
+                select("conversations.topic.day.rough.respond", "empathize", new Run(unsettled))
+                        .getAsJsonObject("actions").get("say").getAsString());
+
+        // With the vector switched off entirely, the gate cannot fire and the plain line returns.
+        World vectorOff = new World().mood("sad");
+        vectorOff.dispositions.put("tension", 40);
+        vectorOff.dispositionsEnabled = false;
+        assertEquals("conversations.day.rough.empathize",
+                select("conversations.topic.day.rough.respond", "empathize", new Run(vectorOff))
+                        .getAsJsonObject("actions").get("say").getAsString(),
+                "a disposition-gated result must degrade to its authored fallback, not vanish");
+    }
+
+    /**
+     * At the daily cap the villager says so, instead of the player quietly receiving nothing.
+     *
+     * <p>{@code positiveToday} was tracked per villager and player since 1.1.0 and exposed by no
+     * condition, so the guard chain would clamp a kindness to zero in silence.
+     */
+    @Test
+    @DisplayName("at the daily cap the villager winds the conversation down instead of going quiet")
+    void theBudgetIsAudibleOnceItIsSpent() {
+        Run run = new Run(new World().mood("sad"));
+        assertEquals("conversations.day.rough.offer_help",
+                select("conversations.topic.day.rough.followup", "offer_help", run)
+                        .getAsJsonObject("actions").get("say").getAsString());
+
+        // Spend the day's positive budget the way a player actually would — across different
+        // topics. Repeating one kindness cannot do it: daily_repeat diminishes the same decision to
+        // nothing, which is the anti-farming guard working exactly as intended.
+        for (String node : List.of("conversations.topic.life.respond", "conversations.topic.hopes.respond",
+                "conversations.topic.fears.open.respond", "conversations.topic.village.respond",
+                "conversations.topic.people.respond", "conversations.topic.work.respond",
+                "conversations.topic.life.followup", "conversations.topic.hopes.followup")) {
+            if (run.heartsMoved >= 8 || !questions.containsKey(node)) {
+                continue;
+            }
+            run.newConversation(DepthClass.DEEP);
+            click(node, mostGenerousAnswer(node), run);
+        }
+        assertEquals(8, run.heartsMoved,
+                "the daily cap is 8 and distinct kindnesses reach it; trace: " + run.trace);
+
+        run.newConversation(DepthClass.QUICK);
+        assertEquals("conversations.day.rough.offer_help.spent",
+                select("conversations.topic.day.rough.followup", "offer_help", run)
+                        .getAsJsonObject("actions").get("say").getAsString(),
+                "at the cap the offer is turned down warmly rather than accepted for nothing");
+    }
+
     @Test
     @DisplayName("every catalog topic walks end to end, deterministically and inside its budget")
     void everyTopicWalksEndToEndInsideItsBudget() {
@@ -928,7 +1147,7 @@ class TopicPathSimulationTest {
         JsonObject heaviest = null;
         int best = 0;
         for (JsonElement r : results) {
-            int w = weight(r.getAsJsonObject(), question + "/(auto)", run.world);
+            int w = weight(r.getAsJsonObject(), question + "/(auto)", run);
             if (w > best) {
                 best = w;
                 heaviest = r.getAsJsonObject();

@@ -53,7 +53,8 @@ public final class CheckContextFactory {
                         hasState(villager, player, ConversationState.GRIEVING),
                         hasState(villager, player, ConversationState.ANNOYED),
                         hasState(villager, player, ConversationState.GRATEFUL),
-                        hasState(villager, player, ConversationState.SMITTEN));
+                        hasState(villager, player, ConversationState.SMITTEN),
+                        hasState(villager, player, ConversationState.PROUD));
         // The real arc stage, so re-rolling is impossible within a stage but the dice genuinely change
         // once the relationship moves on.
         int arcStage = check.arc().map(arcId -> Progress.arcStage(villager, player, arcId)).orElse(0);

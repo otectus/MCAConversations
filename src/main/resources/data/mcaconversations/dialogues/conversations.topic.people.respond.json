@@ -33,6 +33,35 @@
           "conditions": [
             {
               "chance": 100,
+              "mood": "unhappy"
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.respond.defend",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.respond.defend",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.people.followup",
+            "say": "conversations.people.defend.low"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": 100,
               "conversations_personality": [
                 "peaceful",
                 "friendly",

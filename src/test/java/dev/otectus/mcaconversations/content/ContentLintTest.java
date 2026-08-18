@@ -55,7 +55,8 @@ class ContentLintTest {
             "conversations_disposition", "conversations_check", "conversations_progress",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed",
-            "conversations_reputation", "conversations_reputation_incident");
+            "conversations_reputation", "conversations_reputation_incident",
+            "conversations_session", "conversations_budget");
 
     /** MCA 7.6.23 action vocabulary (from Actions registrations) + ours. */
     private static final Set<String> ACTION_KEYS = Set.of(
@@ -99,6 +100,10 @@ class ContentLintTest {
             "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
     private static final Set<String> FEATURES = Set.of(
             "topics", "states", "templates", "gossip", "quests", "world", "dispositions", "checks",
+            // "world" gates weather only; seasons and holidays have their own flags, and until
+            // McaConversationsConfig.isFeatureEnabled learned them they fell through its default
+            // and scored as permanently enabled, so a sink on either could never fire.
+            "seasons", "holidays",
             "branching", "chat");
 
     /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
