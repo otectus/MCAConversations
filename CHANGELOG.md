@@ -157,6 +157,41 @@ below exists and Conversations is unchanged.
   terminates, and that the total stays inside the topic's budget. It also refuses to pass vacuously:
   a topic whose opener does not reach a branching node is reported rather than skipped.
 
+### Changed — the deep topics stop sounding like each other
+
+- **`life`, `dreams`, `hopes`, `regrets` and `secret` no longer share their words.** Three entire
+  sub-trees were byte-identical across all five, so the refusal to tell you a secret and the
+  reluctance to discuss your hopes for the harvest were the same sentence — *"I could. I'm choosing
+  not to. There's a difference."* Every guarded, again and close pool is now written to its own
+  subject: `secret` refuses to be pried at, `hopes` is superstitious about jinxing it, `dreams` will
+  not be shown a house with no roof on it, `regrets` will not lift a stone it put down on purpose.
+  New lint `deepTopicsDoNotShareLines` — exits stay shared on purpose, because a reused parting line
+  is voice, and the exemption keys off the answer being an exit rather than a word count.
+- **The "nobody has ever done that for me" beat is rationed to six sites.** It fired at 25, one for
+  essentially every kind act in the game, which collectively established that every villager had been
+  ignored by everyone forever until the player arrived. The other nineteen now acknowledge kindness
+  four other ways — practical (*"Tuesday, and bring the good axe"*), deflecting (*"Don't say it in
+  front of the others"*), surprised-then-brisk (*"Huh. Right — where were we"*), and reciprocal
+  (*"And you? You get to answer that too"*). `rewardBeatIsNotOverused` matches the beat rather than
+  the word, so a line like *"Nobody's said 'settled' yet"* — a fact about the village — is not caught.
+- **Two node shapes that did not exist before.** Every one of 140-odd nodes was
+  `[warm, curious, hostile, leave]`, so after two topics the buttons were predictable by position.
+  `life`, `work`, `village` and `people` now offer a fifth answer — a joke — and the five deep closes
+  offer to trade rather than only to thank, which is also the reciprocal disclosure the trees never
+  allowed even though `deflect.secret` explicitly invites it. `regrets` gains a two-answer beat in the
+  middle of its tree, where the only moves are to stay with it or to give the room; at the heaviest
+  moment in the topic a menu was the wrong shape.
+- **`dreams` forks.** Encouraging someone and being honest with them now lead to two different
+  closes rather than the same one.
+- **Variant pools that were one line and its editor's pass** are rewritten to take different angles
+  rather than different wordings — `regrets.again` had the same "stones" metaphor twice,
+  `work.respond.challenge.polite` said "it's fine, not love" three ways, and the `greedy` and `odd`
+  overlays each had a near-duplicate pair. `variantPoolsAreNotParaphrases` logs anything above 0.65
+  similarity for a human to judge and fails above 0.80, where it is not a judgement call any more.
+- **`labelsDoNotReferenceSingleVariantDetail`** locks in the earlier fix and carries a curated map of
+  which props belong to which variant, so the next pool with differing detail is caught rather than
+  discovered in play.
+
 ### Fixed — documentation that had drifted from the code
 
 - `README.md`, `CURSEFORGE.md` and the catalog's own comment all still said two pilot topics were

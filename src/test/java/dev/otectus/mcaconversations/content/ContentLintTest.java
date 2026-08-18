@@ -753,6 +753,234 @@ class ContentLintTest {
         return effects.toString();
     }
 
+    /**
+     * The deep topics may not speak each other's lines.
+     *
+     * <p>{@code life}, {@code dreams}, {@code hopes}, {@code regrets} and {@code secret} shared three
+     * entire sub-trees byte-identically, so the refusal to tell you a secret and the reluctance to
+     * discuss your hopes for the harvest were the same sentence: <em>"I could. I'm choosing not to.
+     * There's a difference."</em> After two topics a player could predict the words as well as the
+     * buttons.
+     *
+     * <p>Exits are exempt on purpose. A short parting line reused across topics — "Right you are." —
+     * is the mod's voice, and the exemption is decided by the answer being an exit rather than by an
+     * arbitrary word count, so a well-written seven-word goodbye is not punished for being long.
+     */
+    @Test
+    void deepTopicsDoNotShareLines() {
+        Set<String> deep = Set.of("life", "dreams", "hopes", "regrets", "secret", "fears");
+        Map<String, Map<String, String>> byText = new HashMap<>();
+        for (Map.Entry<String, String> e : lang.entrySet()) {
+            String key = e.getKey();
+            if (!key.startsWith("dialogue.conversations.")) {
+                continue;
+            }
+            String rest = key.substring("dialogue.conversations.".length());
+            String topic = rest.split("\\.")[0];
+            if (!deep.contains(topic) || isExitLine(rest)) {
+                continue;
+            }
+            byText.computeIfAbsent(e.getValue(), t -> new java.util.TreeMap<>()).putIfAbsent(topic, key);
+        }
+
+        List<String> problems = new ArrayList<>();
+        byText.forEach((text, topics) -> {
+            if (topics.size() > 1) {
+                problems.add(String.join(" / ", topics.values()) + " all say \"" + text
+                        + "\" — a deep topic has to sound like its own subject");
+            }
+        });
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /** True for the parting lines, which are deliberately shared across the whole mod. */
+    private static boolean isExitLine(String keyWithoutPrefix) {
+        String base = keyWithoutPrefix.split("/")[0];
+        return base.endsWith(".leave") || base.endsWith(".back") || base.equals("back")
+                || base.endsWith("close_leave") || base.endsWith(".give_space");
+    }
+
+    /**
+     * The "nobody has ever done that for me" beat is rationed.
+     *
+     * <p>It fired at 25 distinct sites — one for essentially every kind act in the game. Each line is
+     * good; collectively they establish that every villager in the valley has been ignored by
+     * everyone forever until the player arrived, which is implausible, self-flattering, and cheapens
+     * each individual moment by repeating it. Six sites keep it, all deepest-disclosure beats.
+     *
+     * <p>The pattern deliberately matches the <em>beat</em> and not the word: "Nobody's said
+     * 'settled' yet" is a fact about the village and "Nobody's looked at me strangely since" is
+     * evidence a secret held, and neither is a villager telling the player they are unique.
+     */
+    @Test
+    void rewardBeatIsNotOverused() {
+        java.util.regex.Pattern beat = java.util.regex.Pattern.compile(
+                "Nobody(?:'s| has) (?:ever\\b|(?:said|asked|offered|given|wanted)\\s+(?:that|me|it)\\b)");
+        List<String> uses = new ArrayList<>();
+        List<String> mostPeople = new ArrayList<>();
+        lang.forEach((key, value) -> {
+            if (!key.startsWith("dialogue.conversations.")) {
+                return;
+            }
+            if (beat.matcher(value).find()) {
+                uses.add(key);
+            }
+            if (value.contains("Most people")) {
+                mostPeople.add(key);
+            }
+        });
+        uses.sort(null);
+        mostPeople.sort(null);
+        assertTrue(uses.size() <= 6, "the 'nobody has ever' reward beat is at " + uses.size()
+                + " sites, and 6 is the ration — reserve it for the deepest disclosures and give the"
+                + " rest another kind of acknowledgement (practical, deflecting, surprised-then-brisk,"
+                + " reciprocal): " + String.join(SEP, uses));
+        assertTrue(mostPeople.size() <= 10, "'Most people' is at " + mostPeople.size()
+                + " sites and 10 is the ration: " + String.join(SEP, mostPeople));
+    }
+
+    /**
+     * A variant pool exists so the villager does not say the same thing twice. Two members that
+     * differ only in wording are one line and its editor's pass, and the pool is effectively shorter
+     * than it looks.
+     *
+     * <p>Mostly advisory: everything above {@code ADVISORY} is logged for a human to read, because
+     * "is this a different angle or the same one reworded?" is a judgement call. Above
+     * {@code NEAR_DUPLICATE} it fails, because at that similarity it is not a judgement call any
+     * more — the two lines are the same sentence with a synonym swapped, and the player will notice.
+     * Overlay namespaces are included: their variants were measurably the worst in the mod.
+     */
+    @Test
+    void variantPoolsAreNotParaphrases() throws IOException {
+        final double ADVISORY = 0.65;
+        final double NEAR_DUPLICATE = 0.80;
+
+        Map<String, Map<String, String>> pools = new java.util.TreeMap<>();
+        for (Path file : langFiles()) {
+            String namespace = file.getParent().getParent().getFileName().toString();
+            JsonObject json = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+            for (Map.Entry<String, JsonElement> e : json.entrySet()) {
+                String key = e.getKey();
+                String base = key.contains("/") ? key.substring(0, key.indexOf('/')) : key;
+                pools.computeIfAbsent(namespace + ":" + base, p -> new java.util.TreeMap<>())
+                        .put(key, e.getValue().getAsString());
+            }
+        }
+
+        List<String> advisory = new ArrayList<>();
+        List<String> failures = new ArrayList<>();
+        pools.forEach((pool, members) -> {
+            List<Map.Entry<String, String>> list = new ArrayList<>(members.entrySet());
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = i + 1; j < list.size(); j++) {
+                    double similarity = similarity(list.get(i).getValue(), list.get(j).getValue());
+                    if (similarity <= ADVISORY) {
+                        continue;
+                    }
+                    String note = String.format("%.2f  %s <-> %s", similarity,
+                            list.get(i).getKey(), list.get(j).getKey());
+                    (similarity > NEAR_DUPLICATE ? failures : advisory).add(note);
+                }
+            }
+        });
+
+        if (!advisory.isEmpty()) {
+            System.out.println("[variantPoolsAreNotParaphrases] " + advisory.size()
+                    + " pool(s) worth a second look (similarity > " + ADVISORY + "):");
+            advisory.forEach(a -> System.out.println("    " + a));
+        }
+        assertTrue(failures.isEmpty(), failures.size() + " variant pair(s) are the same line reworded"
+                + " (similarity > " + NEAR_DUPLICATE + "). Give each variant a different angle, not a"
+                + " different wording:" + SEP + String.join(SEP, failures));
+    }
+
+    /** Normalized similarity in 0..1, from Levenshtein distance over case-folded text. */
+    private static double similarity(String a, String b) {
+        String x = a.toLowerCase(java.util.Locale.ROOT);
+        String y = b.toLowerCase(java.util.Locale.ROOT);
+        int longest = Math.max(x.length(), y.length());
+        if (longest == 0) {
+            return 1.0;
+        }
+        int[] previous = new int[y.length() + 1];
+        int[] current = new int[y.length() + 1];
+        for (int j = 0; j <= y.length(); j++) {
+            previous[j] = j;
+        }
+        for (int i = 1; i <= x.length(); i++) {
+            current[0] = i;
+            for (int j = 1; j <= y.length(); j++) {
+                int cost = x.charAt(i - 1) == y.charAt(j - 1) ? 0 : 1;
+                current[j] = Math.min(Math.min(current[j - 1] + 1, previous[j] + 1), previous[j - 1] + cost);
+            }
+            int[] swap = previous;
+            previous = current;
+            current = swap;
+        }
+        return 1.0 - (double) previous[y.length()] / longest;
+    }
+
+    /** Every en_us lang file this mod ships, base pool and personality overlays alike. */
+    private static List<Path> langFiles() throws IOException {
+        try (var dirs = Files.list(Path.of("src/main/resources/assets"))) {
+            List<Path> files = new ArrayList<>();
+            for (Path dir : dirs.toList()) {
+                Path file = dir.resolve("lang").resolve("en_us.json");
+                if (Files.exists(file)) {
+                    files.add(file);
+                }
+            }
+            return files;
+        }
+    }
+
+    /**
+     * A player label and its reply pool may only name detail that appears in <em>every</em> variant
+     * of the line they answer.
+     *
+     * <p>"Well, the cat clearly won." answered a bad-day opener whose three variants were a cat
+     * knocking the stew over, a sticking door and a dropped egg, so it was a non-sequitur two times
+     * in three — and the payoff tripled down on it. Whether a word is "specific detail" is a
+     * judgement, so the map below is curated rather than inferred: each entry names a pool and the
+     * nouns that only some of its variants contain. Add a row when you write a pool whose variants
+     * differ in their props.
+     */
+    @Test
+    void labelsDoNotReferenceSingleVariantDetail() {
+        // key prefix that answers a variable pool -> words only some of that pool's variants contain
+        Map<String, List<String>> singleVariantDetail = Map.of(
+                "dialogue.conversations.day.rough", List.of("cat", "stew", "egg", "bucket", "door"),
+                // "puddle" is deliberately absent: weather.toddler.ask invites the child to name a
+                // favourite sky, which is new information rather than an echo of the opener.
+                "dialogue.conversations.weather.toddler", List.of("sheep", "thunder"),
+                "dialogue.conversations.checkin.toddler", List.of("bug", "wiggled"),
+                "dialogue.conversations.life.toddler", List.of("frog", "puddles"),
+                "dialogue.conversations.day.toddler", List.of("mud", "butterfly"),
+                "dialogue.conversations.fears.toddler", List.of("thunder", "mama", "bed"));
+
+        List<String> problems = new ArrayList<>();
+        singleVariantDetail.forEach((pool, nouns) -> {
+            // Every key that answers this pool: same prefix, deeper path (a stance or its reply).
+            for (Map.Entry<String, String> e : lang.entrySet()) {
+                String key = e.getKey();
+                if (!key.startsWith(pool + ".") && !key.startsWith(pool.replace(
+                        "dialogue.conversations.", "dialogue.conversations.topic.") + ".")) {
+                    continue;
+                }
+                String text = e.getValue().toLowerCase(java.util.Locale.ROOT);
+                for (String noun : nouns) {
+                    if (text.matches(".*\\b" + noun + "\\b.*")) {
+                        problems.add(key + " says \"" + noun + "\", which only some variants of "
+                                + pool + " mention — write to what every variant shares");
+                    }
+                }
+            }
+        });
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
     /** Every conversations.* question must be reachable from the hub via next edges — no orphan pages. */
     @Test
     void everyConversationsQuestionIsReachableFromHub() {

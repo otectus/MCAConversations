@@ -51,6 +51,31 @@
       ]
     },
     {
+      "name": "confide",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.close.confide",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.close.confide",
+              "deltas": {
+                "trust": 4,
+                "familiarity": 4
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.close.confide"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {

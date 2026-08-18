@@ -78,6 +78,31 @@
       ]
     },
     {
+      "name": "joke",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "life.followup.joke",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.followup.joke",
+              "deltas": {
+                "warmth": 4,
+                "tension": -2
+              }
+            },
+            "next": "conversations.topic.life.close",
+            "say": "conversations.life.followup.joke"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {

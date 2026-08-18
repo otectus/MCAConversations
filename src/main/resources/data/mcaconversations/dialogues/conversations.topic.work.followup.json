@@ -77,6 +77,31 @@
       ]
     },
     {
+      "name": "joke",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "work.followup.joke",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.followup.joke",
+              "deltas": {
+                "warmth": 3,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.followup.joke"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {
