@@ -60,7 +60,7 @@
               "var": "player",
               "time": 48000
             },
-            "next": "conversations.topic.village.young.respond",
+            "next": "conversations.topic.village.toddler.respond",
             "say": "conversations.village.toddler"
           }
         },
@@ -823,6 +823,32 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_gossip": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            },
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.rumors",
+              "var": "player",
+              "time": 0
+            },
+            "next": "conversations.cat.village",
+            "conversations_gossip_say": {}
+          }
+        },
+        {
           "baseChance": 1,
           "conditions": [
             {
@@ -936,8 +962,12 @@
             {
               "chance": 150,
               "conversations_reputation_incident": {
-                "statuses": ["active"],
-                "tags": ["crime"],
+                "statuses": [
+                  "active"
+                ],
+                "tags": [
+                  "crime"
+                ],
                 "known_to_speaker": true
               }
             },
@@ -989,8 +1019,12 @@
             {
               "chance": -2000,
               "conversations_reputation_incident": {
-                "statuses": ["active"],
-                "tags": ["crime"],
+                "statuses": [
+                  "active"
+                ],
+                "tags": [
+                  "crime"
+                ],
                 "known_to_speaker": true
               }
             },
@@ -1107,8 +1141,12 @@
             {
               "chance": -2000,
               "conversations_reputation_incident": {
-                "statuses": ["active"],
-                "tags": ["crime"],
+                "statuses": [
+                  "active"
+                ],
+                "tags": [
+                  "crime"
+                ],
                 "known_to_speaker": true
               }
             },

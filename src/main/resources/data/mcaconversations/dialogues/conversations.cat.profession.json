@@ -216,6 +216,33 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_quest_available": {
+                "scope": "this"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work_offer",
+              "var": "player",
+              "time": 0
+            },
+            "conversations_quest_open": {
+              "mode": "menu"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.quest.offer"
+          }
+        },
+        {
           "baseChance": 1,
           "conditions": [
             {

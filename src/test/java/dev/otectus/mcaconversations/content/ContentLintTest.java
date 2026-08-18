@@ -474,8 +474,11 @@ class ContentLintTest {
                 }
             });
         });
-        for (GossipEventType type : GossipEventType.values()) {
-            referenced.add("dialogue.conversations.gossip." + type.jsonName());
+        for (String prefix : gossipPrefixesInUse()) {
+            for (GossipEventType type : GossipEventType.values()) {
+                referenced.add("dialogue." + prefix + "." + type.jsonName());
+            }
+            referenced.add("dialogue." + prefix + ".none");
         }
         // Quest lifecycle lines are referenced by the MCA: Quests voice resolver (Java), not by JSON.
         referenced.addAll(QUEST_VOICE_KEYS);
@@ -591,11 +594,40 @@ class ContentLintTest {
     }
 
     @Test
-    void gossipTypeLinesExistForDefaultPrefix() {
-        for (GossipEventType type : GossipEventType.values()) {
-            assertTrue(lang.containsKey("dialogue.conversations.gossip." + type.jsonName()),
-                    "missing gossip line for " + type);
+    void gossipTypeLinesExistForEveryPrefixInUse() {
+        List<String> problems = new ArrayList<>();
+        for (String prefix : gossipPrefixesInUse()) {
+            for (GossipEventType type : GossipEventType.values()) {
+                if (!lang.containsKey("dialogue." + prefix + "." + type.jsonName())) {
+                    problems.add("gossip prefix '" + prefix + "' has no line for " + type
+                            + " — a phrase_prefix must cover every type it can be asked to tell");
+                }
+            }
         }
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * Every prefix {@code conversations_gossip_say} can render through, including the default.
+     *
+     * <p>The action takes an optional {@code phrase_prefix} so a branch can tell the same events in
+     * a different voice — a child hearing that someone died should not get the adult line. Whichever
+     * prefixes the content actually uses have to be complete, or a villager renders a raw lang key
+     * at the one moment the line matters.
+     */
+    private static Set<String> gossipPrefixesInUse() {
+        Set<String> prefixes = new HashSet<>();
+        prefixes.add("conversations.gossip");
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (actions.has("conversations_gossip_say")) {
+                JsonObject say = actions.getAsJsonObject("conversations_gossip_say");
+                if (say.has("phrase_prefix")) {
+                    prefixes.add(say.get("phrase_prefix").getAsString());
+                }
+            }
+        }));
+        return prefixes;
     }
 
     @Test

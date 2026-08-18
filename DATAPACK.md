@@ -542,7 +542,8 @@ that are not are the ones worth being honest with yourself about.
 
 - [ ] `./gradlew test` is green, including the migration ledger — delete the topic's row from
       `LEGACY_REWARDED_STARTERS`, because the debt is paid.
-- [ ] Add the topic's interesting paths to `PilotPathSimulationTest`, or the equivalent for its phase.
+- [ ] Add the topic's interesting paths to `TopicPathSimulationTest`. Its coverage half walks every
+      catalogued topic automatically; the hand-written scenarios are for beats worth naming.
 
 ## Conventions for content that degrades gracefully
 

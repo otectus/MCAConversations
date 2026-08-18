@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "commit",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.plan.followup.commit",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.followup.commit",
+              "deltas": {
+                "trust": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.plan.followup.commit"
+          }
+        }
+      ]
+    },
+    {
+      "name": "refine",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.followup.refine",
+              "deltas": {
+                "respect": 4,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.plan.followup.refine"
+          }
+        }
+      ]
+    },
+    {
+      "name": "honest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.plan.followup.honest",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.followup.honest",
+              "deltas": {
+                "respect": 5,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.fears.open.close",
+            "say": "conversations.fears.plan.followup.honest"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.plan.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,49 +1,201 @@
 {
   "synonyms": {
-    "autumn": ["fall"]
+    "autumn": [
+      "fall"
+    ]
   },
   "intents": {
     "greeting.checkin": {
       "question": "greet",
       "answer": "checkin",
-      "keywords": { "how": 0.8, "lately": 1.0, "holding": 1.0 },
-      "requiresAny": ["how", "lately", "holding"],
-      "phrases": ["how have you been", "have you been well", "how are you holding up", "how have things been", "how are you"],
+      "keywords": {
+        "how": 0.8,
+        "lately": 1.0,
+        "holding": 1.0
+      },
+      "requiresAny": [
+        "how",
+        "lately",
+        "holding"
+      ],
+      "phrases": [
+        "how have you been",
+        "have you been well",
+        "how are you holding up",
+        "how have things been",
+        "how are you"
+      ],
       "category": "topics"
     },
     "chitchat.day": {
       "question": "conversations.cat.chitchat",
       "answer": "day",
-      "keywords": { "day": 1.5, "today": 1.2, "going": 1.0, "doing": 1.0, "morning": 0.8, "afternoon": 0.8, "evening": 0.8, "up": 0.6 },
-      "requiresAny": ["day", "today", "doing", "going", "up"],
-      "phrases": ["how * day", "how are you doing", "how is it going", "how is your day", "what are you doing", "what are you up to", "what is up"],
-      "antiKeywords": ["birthday"],
-      "bigrams": ["your day"],
+      "keywords": {
+        "day": 1.5,
+        "today": 1.2,
+        "going": 1.0,
+        "doing": 1.0,
+        "morning": 0.8,
+        "afternoon": 0.8,
+        "evening": 0.8,
+        "up": 0.6
+      },
+      "requiresAny": [
+        "day",
+        "today",
+        "doing",
+        "going",
+        "up"
+      ],
+      "phrases": [
+        "how * day",
+        "how are you doing",
+        "how is it going",
+        "how is your day",
+        "what are you doing",
+        "what are you up to",
+        "what is up"
+      ],
+      "antiKeywords": [
+        "birthday"
+      ],
+      "bigrams": [
+        "your day"
+      ],
       "category": "topics"
     },
     "chitchat.food": {
       "question": "conversations.cat.chitchat",
       "answer": "food",
-      "keywords": { "food": 1.5, "eat": 1.2, "hungry": 1.0, "meal": 1.0, "cook": 0.8, "dish": 0.8, "favorite": 0.6 },
-      "requiresAny": ["food", "eat", "hungry", "meal", "cook", "dish"],
-      "phrases": ["what do you like to eat", "what food do you like", "favorite food", "do you like to cook", "are you hungry"],
-      "bigrams": ["favorite food"],
+      "keywords": {
+        "food": 1.5,
+        "eat": 1.2,
+        "hungry": 1.0,
+        "meal": 1.0,
+        "cook": 0.8,
+        "dish": 0.8,
+        "favorite": 0.6
+      },
+      "requiresAny": [
+        "food",
+        "eat",
+        "hungry",
+        "meal",
+        "cook",
+        "dish"
+      ],
+      "phrases": [
+        "what do you like to eat",
+        "what food do you like",
+        "favorite food",
+        "do you like to cook",
+        "are you hungry"
+      ],
+      "bigrams": [
+        "favorite food"
+      ],
       "category": "topics"
     },
     "chitchat.weather": {
       "question": "conversations.cat.chitchat",
       "answer": "weather",
-      "keywords": { "weather": 1.5, "rain": 1.2, "storm": 1.2, "sunny": 1.0, "snow": 1.0, "sky": 0.8, "cold": 0.6, "hot": 0.6 },
-      "requiresAny": ["weather", "rain", "storm", "sunny", "snow", "sky"],
-      "phrases": ["what is the weather like", "how is the weather", "nice weather", "is it going to rain"],
+      "keywords": {
+        "weather": 1.5,
+        "rain": 1.2,
+        "storm": 1.2,
+        "sunny": 1.0,
+        "snow": 1.0,
+        "sky": 0.8,
+        "cold": 0.6,
+        "hot": 0.6
+      },
+      "requiresAny": [
+        "weather",
+        "rain",
+        "storm",
+        "sunny",
+        "snow",
+        "sky"
+      ],
+      "phrases": [
+        "what is the weather like",
+        "how is the weather",
+        "nice weather",
+        "is it going to rain"
+      ],
       "category": "topics"
     },
     "chitchat.season": {
       "question": "conversations.cat.chitchat",
       "answer": "season",
-      "keywords": { "season": 1.5, "spring": 1.2, "summer": 1.2, "autumn": 1.2, "winter": 1.2, "holiday": 1.0, "festival": 1.0 },
-      "requiresAny": ["season", "spring", "summer", "autumn", "winter", "holiday", "festival"],
-      "phrases": ["what season is it", "time of year"],
+      "keywords": {
+        "season": 1.5,
+        "spring": 1.2,
+        "summer": 1.2,
+        "autumn": 1.2,
+        "winter": 1.2,
+        "holiday": 1.0,
+        "festival": 1.0
+      },
+      "requiresAny": [
+        "season",
+        "spring",
+        "summer",
+        "autumn",
+        "winter",
+        "holiday",
+        "festival"
+      ],
+      "phrases": [
+        "what season is it",
+        "time of year"
+      ],
+      "category": "topics"
+    },
+    "checkin.toddler.delight": {
+      "question": "conversations.topic.checkin.toddler.respond",
+      "answer": "delight",
+      "context": "conversations.topic.checkin.toddler.respond",
+      "keywords": {
+        "report": 1.5,
+        "good": 1.0
+      },
+      "requiresAny": [
+        "report",
+        "good"
+      ],
+      "antiKeywords": [
+        "best",
+        "bit"
+      ],
+      "phrases": [
+        "that is a very good report",
+        "a very good report",
+        "good report"
+      ],
+      "category": "topics"
+    },
+    "checkin.toddler.ask": {
+      "question": "conversations.topic.checkin.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.checkin.toddler.respond",
+      "keywords": {
+        "best": 1.5,
+        "bit": 1.0
+      },
+      "requiresAny": [
+        "best",
+        "bit"
+      ],
+      "antiKeywords": [
+        "report",
+        "good"
+      ],
+      "phrases": [
+        "tell me the best bit",
+        "what was the best bit",
+        "the best bit please"
+      ],
       "category": "topics"
     }
   }

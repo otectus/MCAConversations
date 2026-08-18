@@ -110,6 +110,53 @@ below exists and Conversations is unchanged.
   having taken neither, and the fourth — the one that was already right — had a latent 1-in-101
   chance of speaking the wrong line, which is fixed too. New lint `everyExclusiveMemberIsReadBack`.
 
+### Added — ages, and the day after
+
+- **Toddlers have their own voice in nine more topics.** `food`, `life`, `dreams`, `hopes`,
+  `feelings`, `village` and `checkin` routed three-year-olds into replies written for a ten-year-old,
+  so a toddler who said *"I'm little! I do puddles and snacks and naps"* could be answered with *"Go
+  on, tell me properly"* and reply *"Right — nobody ever asks for the long version."* Each now has a
+  real toddler node. `weather` and `season` had the opposite problem — their "young" nodes were
+  reached by toddlers and nobody else and were already written that way — so those are renamed to
+  match what they are.
+- **Children can report the village news, in a child's words.** `news` declared `child` and `teen`
+  and shipped no age content at all, so children delivered adult lines about deaths and divorces.
+  There is now a child's telling of every event type, rendered through
+  `conversations_gossip_say`'s `phrase_prefix` — a parameter with zero uses until now, and one the
+  lint had no opinion about; `gossipTypeLinesExistForEveryPrefixInUse` now requires any prefix in use
+  to cover every type it can be asked to tell. `noticed` went the other way and is adult-only:
+  reading an adult's mood and naming it is an adult move.
+- **The second day of an arc is a real conversation.** Eight arc-resume nodes were terminal — every
+  answer went straight back to the category — so returning to a villager you had opened up with was
+  thinner than meeting them for the first time. Each substantive answer now continues into a second
+  tier and then into the topic's existing close, while brush-offs and exits still end where they did.
+
+### Fixed — a topic nobody could reach, and three that had no wrong answer
+
+- **The ordinary day was unreachable.** The catch-all branch for a villager in no particular mood
+  doing no particular chore — much the commonest state in the game — was authored with
+  `baseChance: 0` and nothing but negative sinks, so it could never score. MCA's zero-weight rule then
+  handed the click to the *last* result, which is the branching-disabled legacy line. Most villagers,
+  most of the time, were getting the 1.0.0 experience with branching switched on. New lint
+  `everyResultCanActuallyBeChosen` fails any result MCA could never pick.
+- **`work_offer`, `rumors` and `noticed` had no wrong button**: every answer had exactly one authored
+  outcome for every villager in every state. Each now varies — validating a grieving villager lands
+  differently on a crabby one than a sensitive one, challenging a rumour lands differently on someone
+  who trades in them, and asking what the job pays is a different conversation with a greedy villager.
+- **Their branching-off state is the old experience again, not a stub.** All three answered with one
+  unconditional line, and `work_offer` never opened the quest screen even when a quest was waiting —
+  contradicting the documented promise that all three toggles off is exactly the 0.6.0 experience.
+- **The depth floor is measured on every normal adult branch**, not just the deepest one
+  (`topicsMeetTheirDepthFloorOnEveryNormalAdultPath`). That is what let the eight arc paths above ship
+  at one decision while their topics claimed to be Deep. Age branches, cooldowns, below-gate deflects
+  and "there is no news" branches are excluded — those are meant to be short.
+- **The path simulator covers every topic**, not two of twenty-seven
+  (`TopicPathSimulationTest`, renamed from `PilotPathSimulationTest`). It walks each catalogued topic
+  from its opener back to the category through the real progress store, checking that asking never
+  pays, that every state resolves to exactly one result rather than a lottery, that the walk
+  terminates, and that the total stays inside the topic's budget. It also refuses to pass vacuously:
+  a topic whose opener does not reach a branching node is reported rather than skipped.
+
 ### Fixed — documentation that had drifted from the code
 
 - `README.md`, `CURSEFORGE.md` and the catalog's own comment all still said two pilot topics were

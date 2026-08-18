@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -773,6 +774,51 @@ class ConversationGraphLintTest {
         return null;
     }
 
+    /**
+     * A result that can never score above zero is dead unless it is the last one.
+     *
+     * <p>MCA picks a result by lottery over {@code max(0, total)} and, when every result scores zero,
+     * falls back to the <em>last</em> element. So a result with {@code baseChance: 0} carrying nothing
+     * but negative sinks is only ever reachable in final position. The ordinary-day branch — the
+     * catch-all for a villager in no particular mood doing no particular chore, which is the
+     * commonest state in the game — was authored that way at index 7 of 10, and the click therefore
+     * fell through to the branching-disabled legacy line for most villagers most of the time.
+     */
+    @Test
+    @DisplayName("no result is authored where MCA could never choose it")
+    void everyResultCanActuallyBeChosen() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> {
+            for (JsonElement a : json.getAsJsonArray("answers")) {
+                JsonObject answer = a.getAsJsonObject();
+                JsonArray results = answer.getAsJsonArray("results");
+                String answerName = answer.has("name") ? answer.get("name").getAsString() : "(auto)";
+                for (int i = 0; i < results.size() - 1; i++) {
+                    JsonObject result = results.get(i).getAsJsonObject();
+                    int base = result.has("baseChance") ? result.get("baseChance").getAsInt() : 0;
+                    if (base > 0) {
+                        continue;
+                    }
+                    boolean canScore = false;
+                    if (result.has("conditions")) {
+                        for (JsonElement c : result.getAsJsonArray("conditions")) {
+                            if (c.getAsJsonObject().get("chance").getAsInt() > 0) {
+                                canScore = true;
+                            }
+                        }
+                    }
+                    if (!canScore) {
+                        problems.add(name + "/" + answerName + " result " + i + " of " + results.size()
+                                + ": baseChance " + base + " with no positive condition can never be"
+                                + " chosen unless it is last — MCA's zero-weight fallback picks the"
+                                + " final result, so this branch is unreachable");
+                    }
+                }
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
     @Test
     @DisplayName("no branching node is orphaned and no next hop dangles")
     void graphIsConnected() {
@@ -796,9 +842,19 @@ class ConversationGraphLintTest {
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
     }
 
+    /**
+     * The depth floor has to hold on the branches an ordinary adult actually gets, not merely
+     * somewhere in the topic.
+     *
+     * <p>Measuring the deepest branch let seven arc-resume paths ship at one decision each while
+     * their topics claimed to be Deep: returning to a villager you had opened up with was thinner
+     * than meeting them for the first time, and the lint said nothing because the first-meeting
+     * branch was three deep. Age branches and deflects are excluded — a toddler's two lines and a
+     * "not yet, we barely know each other" are supposed to be short.
+     */
     @Test
-    @DisplayName("each catalog topic reaches its declared minimum number of player decisions")
-    void topicsMeetTheirDepthFloor() {
+    @DisplayName("each catalog topic meets its depth floor on every normal adult branch")
+    void topicsMeetTheirDepthFloorOnEveryNormalAdultPath() {
         List<String> problems = new ArrayList<>();
         for (TopicEntry topic : catalog.topics()) {
             if (!isConverted(topic)) {
@@ -808,16 +864,112 @@ class ConversationGraphLintTest {
             for (String entry : openerTargets(topic)) {
                 deepest = Math.max(deepest, longestDecisionChain(entry, new ArrayDeque<>()));
             }
-            if (deepest < topic.depth().minDecisions()) {
-                problems.add(topic.id() + ": deepest path offers " + deepest + " player decision(s) but "
-                        + topic.depth().key() + " requires " + topic.depth().minDecisions());
-            }
             if (deepest > DepthClass.MAX_DECISIONS) {
                 problems.add(topic.id() + ": " + deepest + " chained decisions exceeds the cap of "
                         + DepthClass.MAX_DECISIONS);
             }
+            for (Map.Entry<String, String> branch : normalAdultOpenerTargets(topic).entrySet()) {
+                int decisions = longestDecisionChain(branch.getKey(), new ArrayDeque<>());
+                if (decisions < topic.depth().minDecisions()) {
+                    problems.add(topic.id() + ": the '" + branch.getValue() + "' branch offers "
+                            + decisions + " player decision(s) but " + topic.depth().key()
+                            + " requires " + topic.depth().minDecisions()
+                            + " — a normal adult reaching this branch gets a thinner conversation"
+                            + " than the topic promises");
+                }
+            }
         }
+        problems.sort(null);
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * The opener branches an ordinary adult can land on, mapped to a human name for the message.
+     *
+     * <p>Excluded: anything gated on a non-adult age, on being under a heart gate, on a cooldown
+     * having been set, on a scar or other "we have been here before, badly" milestone, and on a
+     * feature being switched off. Those are all deliberately short by design.
+     */
+    private static Map<String, String> normalAdultOpenerTargets(TopicEntry topic) {
+        Map<String, String> branches = new LinkedHashMap<>();
+        JsonObject question = questions.get(topic.entryQuestion());
+        if (question == null) {
+            return branches;
+        }
+        answer(question, topic.entryAnswer()).ifPresent(answer -> {
+            for (JsonElement r : answer.getAsJsonArray("results")) {
+                JsonObject result = r.getAsJsonObject();
+                JsonObject actions = result.getAsJsonObject("actions");
+                if (!actions.has("next")) {
+                    continue;
+                }
+                String target = actions.get("next").getAsString();
+                if (!isBranchingNode(target) || isDeflectBranch(result)) {
+                    continue;
+                }
+                branches.putIfAbsent(target, target.substring(target.lastIndexOf('.', target.length() - 10) + 1));
+            }
+        });
+        return branches;
+    }
+
+    /**
+     * True when this opener result is one of the deliberately short routes.
+     *
+     * <p>The unifying idea is that the branch is selected by an <em>absence</em> — there is no
+     * gossip to tell, the villager has no village, you are not close enough yet, you already spoke
+     * today, or the speaker is a child. All of those are supposed to be brief, and holding them to
+     * a Deep topic's three-decision floor would mean padding a shrug.
+     */
+    private static boolean isDeflectBranch(JsonObject result) {
+        if (!result.has("conditions")) {
+            return false;
+        }
+        for (JsonElement c : result.getAsJsonArray("conditions")) {
+            JsonObject condition = c.getAsJsonObject();
+            boolean negative = condition.has("chance") && condition.get("chance").getAsInt() <= 0;
+            if (negative) {
+                // "…and there is no news of any kind" is what makes a none-branch a none-branch.
+                if (condition.has("conversations_gossip")) {
+                    return true;
+                }
+                continue; // any other sink excludes a state, it does not describe this branch
+            }
+            if (condition.has("age_group") && !"adult".equals(condition.get("age_group").getAsString())) {
+                return true;
+            }
+            if (condition.has("hearts_max") || condition.has("conversations_disabled")) {
+                return true;
+            }
+            if (condition.has("constraints")) {
+                for (String token : condition.get("constraints").getAsString().split(",")) {
+                    // !has_village and friends: the thing the topic is about does not exist.
+                    if (token.trim().startsWith("!") && !AGE_GROUPS.contains(token.trim().substring(1))) {
+                        return true;
+                    }
+                }
+            }
+            if (condition.has("memory")) {
+                JsonObject memory = condition.getAsJsonObject("memory");
+                String id = memory.has("id") ? memory.get("id").getAsString() : "";
+                boolean matchesWhenAbsent = memory.has("dividend");
+                // Set-and-matching cooldowns mean "we just did this"; an unlock that matches while
+                // ABSENT means "not close enough yet". Both are short by design.
+                if (!matchesWhenAbsent && (id.contains(".cooldown.") || id.endsWith(".today"))) {
+                    return true;
+                }
+                if (matchesWhenAbsent && id.contains(".unlock.")) {
+                    return true;
+                }
+            }
+            if (condition.has("conversations_progress")) {
+                JsonObject progress = condition.getAsJsonObject("conversations_progress");
+                if (progress.has("milestone") && progress.get("milestone").getAsString().endsWith(".scar")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Test

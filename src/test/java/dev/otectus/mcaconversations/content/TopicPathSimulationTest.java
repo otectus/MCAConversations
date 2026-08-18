@@ -5,7 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.otectus.mcaconversations.check.CheckTier;
+import dev.otectus.mcaconversations.conversation.ConversationCatalog;
 import dev.otectus.mcaconversations.conversation.DepthClass;
+import dev.otectus.mcaconversations.conversation.TopicEntry;
 import dev.otectus.mcaconversations.personality.Personalities;
 import dev.otectus.mcaconversations.progress.AffectionApply;
 import dev.otectus.mcaconversations.progress.AffectionContext;
@@ -36,9 +38,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Walks the two pilot topics end to end the way MCA would (plan §13.6), against the real guard
- * chain: the shipped JSON decides which result fires, and a real {@link ProgressStore} decides what
- * the player actually receives.
+ * Walks the shipped topics end to end the way MCA would (plan §13.6), against the real guard chain:
+ * the shipped JSON decides which result fires, and a real {@link ProgressStore} decides what the
+ * player actually receives.
+ *
+ * <p>Two halves. The hand-written scenarios pin down specific beats — a rough day handled well, a
+ * promise that is exclusive, a rebuff that scars — and read as documentation of what the content is
+ * supposed to do. {@code everyTopicWalksEndToEndInsideItsBudget} is the coverage half, and drives
+ * every catalogued topic rather than the two pilots this file was originally written for.
  *
  * <p>This is the test that would have caught "the numbers look right in the file but the player can
  * farm it anyway". It is not a substitute for playing the mod — §14 production verification is a
@@ -48,13 +55,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>The simulator refuses to guess: an unmodelled condition key inside pilot content fails the
  * test rather than being silently treated as neutral, so new content cannot quietly escape it.
  */
-class PilotPathSimulationTest {
+class TopicPathSimulationTest {
 
     private static final Path DIALOGUES = Path.of("src/main/resources/data/mcaconversations/dialogues");
     private static final UUID VILLAGER = UUID.nameUUIDFromBytes("sim-villager".getBytes());
     private static final UUID PLAYER = UUID.nameUUIDFromBytes("sim-player".getBytes());
 
     private static Map<String, JsonObject> questions;
+    private static ConversationCatalog CATALOG;
 
     @BeforeAll
     static void load() throws IOException {
@@ -65,6 +73,21 @@ class PilotPathSimulationTest {
                         JsonParser.parseString(Files.readString(file)).getAsJsonObject());
             }
         }
+
+        List<TopicEntry> topics = new ArrayList<>();
+        Path catalog = Path.of("src/main/resources/data/mcaconversations/conversation_catalog");
+        try (var files = Files.list(catalog)) {
+            for (Path file : files.filter(p -> p.toString().endsWith(".json")).toList()) {
+                JsonObject root = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+                if (!root.has("topics")) {
+                    continue;
+                }
+                for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("topics").entrySet()) {
+                    topics.add(TopicEntry.fromJson(e.getKey(), e.getValue().getAsJsonObject()));
+                }
+            }
+        }
+        CATALOG = ConversationCatalog.build(topics);
     }
 
     // ------------------------------------------------------------------
@@ -79,7 +102,13 @@ class PilotPathSimulationTest {
         String ageGroup = "adult";
         String mood = "fine";
         String chore = "none";
+        /** conversations.work fans out over 40 professions and needs exactly one of them to match. */
+        String profession = "minecraft:farmer";
         int hearts = 60;
+        /** Whether "is it raining / is there a festival / is a quest waiting" answers yes. */
+        boolean worldFacts;
+        /** Constraint tokens this villager satisfies (spouse, family, kids, has_village, …). */
+        final Set<String> traits = new HashSet<>();
         final Set<String> memories = new HashSet<>();
         CheckTier tier = CheckTier.SUCCESS;
 
@@ -252,6 +281,27 @@ class PilotPathSimulationTest {
                             .equals(world.tier.key()) ? 1 : 0;
                 case "conversations_progress":
                     return progressValue(condition.getAsJsonObject(key), world);
+                // The world facts below are all "is the world currently like this?" questions with
+                // no bearing on the guard chain. The simulated world answers no to every one, which
+                // makes the walk deterministic and lands it on each topic's ordinary branch — the
+                // one an adult with no weather, no festival and no gossip waiting actually gets.
+                case "conversations_weather":
+                case "conversations_season":
+                case "conversations_holiday":
+                case "conversations_gossip":
+                case "conversations_reputation":
+                case "conversations_reputation_incident":
+                case "conversations_quest_available":
+                case "conversations_quest_active":
+                case "conversations_quest_ready":
+                case "conversations_quest_completed":
+                case "trait":
+                case "is_pregnant":
+                    return world.worldFacts ? 1 : 0;
+                case "profession":
+                    return condition.get(key).getAsString().equals(world.profession) ? 1 : 0;
+                case "constraints":
+                    return constraintsValue(condition.get(key).getAsString(), world);
                 default:
                     throw new AssertionError(where + ": the path simulator does not model condition '"
                             + key + "'. Add it here rather than letting pilot content escape the"
@@ -282,6 +332,29 @@ class PilotPathSimulationTest {
     }
 
     /** MCA's memory condition: {@code clamp(remaining / dividend + add, 0, max)} with 1/0/1 defaults. */
+    /**
+     * MCA's constraint string, evaluated against the villager the walk is talking to. A bare token
+     * must hold, a {@code !}-prefixed one must not. Age tokens read the world's age group; everything
+     * else reads the trait set.
+     */
+    private static int constraintsValue(String constraints, World world) {
+        for (String raw : constraints.split(",")) {
+            String token = raw.trim();
+            if (token.isEmpty()) {
+                continue;
+            }
+            boolean negated = token.startsWith("!");
+            String name = negated ? token.substring(1) : token;
+            boolean holds = Set.of("baby", "toddler", "child", "teen", "adult").contains(name)
+                    ? name.equals(world.ageGroup)
+                    : world.traits.contains(name);
+            if (holds == negated) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+
     private static int memoryValue(JsonObject memory, World world) {
         boolean has = world.memories.contains(memory.get("id").getAsString());
         boolean inverted = memory.has("dividend") && memory.get("dividend").getAsDouble() < 0;
@@ -725,6 +798,178 @@ class PilotPathSimulationTest {
         assertTrue(run.heartsMoved <= 8,
                 "a whole day of the same two kindnesses must not exceed the daily cap; got "
                         + run.heartsMoved + " — " + run.trace);
+    }
+
+    // ------------------------------------------------------------------
+    // Coverage: every catalog topic, not just the two pilots
+    // ------------------------------------------------------------------
+
+    /**
+     * Walk every converted topic from its opener to the category it returns to, taking the most
+     * generous reply available at each step, and drive it through the real {@link ProgressStore}.
+     *
+     * <p>The hand-written scenarios above pin down specific beats but covered two topics of
+     * twenty-seven. This is the coverage half, and it asks the questions only execution can answer:
+     * does every state resolve to exactly one result (rather than leaving MCA a lottery), does asking
+     * ever pay, does the walk terminate, and does the guard chain hold the total inside the topic's
+     * budget once the store — not the JSON — has had its say.
+     *
+     * <p>It deliberately does not assert that a bad path exists: {@code everyTopicHasABetterAndAWorseRoute}
+     * already proves that over the whole graph, which is a stronger statement than one greedy walk.
+     */
+    @Test
+    @DisplayName("every catalog topic walks end to end, deterministically and inside its budget")
+    void everyTopicWalksEndToEndInsideItsBudget() {
+        List<String> problems = new ArrayList<>();
+        Set<String> walked = new HashSet<>();
+        for (TopicEntry topic : CATALOG.topics()) {
+            if (NOT_SIMULATABLE.contains(topic.id())) {
+                continue;
+            }
+            walked.add(topic.id());
+            try {
+                Run run = new Run(worldFor(topic));
+                run.newConversation(topic.depth());
+                String node = click(topic.entryQuestion(), topic.entryAnswer(), run);
+                if (run.heartsMoved != 0) {
+                    problems.add(topic.id() + ": asking the question moved " + run.heartsMoved
+                            + " hearts — the act of asking must never pay");
+                }
+                if (node == null || !isBranchingNode(node)) {
+                    // Without this the test would pass vacuously for any topic whose opener falls
+                    // through to its off-state fallback: nothing is walked, so nothing can fail.
+                    problems.add(topic.id() + ": the opener landed on '" + node + "' instead of a"
+                            + " branching node, so this topic is not actually being simulated");
+                    continue;
+                }
+                int steps = 0;
+                Set<String> visited = new HashSet<>();
+                while (node != null && isBranchingNode(node) && steps++ <= DepthClass.MAX_DECISIONS) {
+                    if (!visited.add(node)) {
+                        break; // an answer looped back to a node we already answered; stop walking
+                    }
+                    JsonObject page = questions.get(node);
+                    if (page.has("auto") && page.get("auto").getAsBoolean()) {
+                        // MCA resolves an auto question itself and recurses straight into whatever it
+                        // routes to; the player is never asked, so this is not a decision.
+                        steps--;
+                        node = apply(soleResult(node, run), run);
+                        continue;
+                    }
+                    String answer = mostGenerousAnswer(node);
+                    if (answer == null) {
+                        problems.add(topic.id() + ": node '" + node + "' offers nothing to click");
+                        break;
+                    }
+                    node = click(node, answer, run);
+                }
+                if (node != null && isBranchingNode(node)) {
+                    problems.add(topic.id() + ": still inside the tree after " + steps
+                            + " decisions — every topic has to end up back at a category page");
+                }
+                if (run.heartsMoved > topic.depth().positiveBudget()) {
+                    problems.add(topic.id() + ": the most generous walk gained " + run.heartsMoved
+                            + " hearts against a " + topic.depth().key() + " budget of "
+                            + topic.depth().positiveBudget() + " — " + run.trace);
+                }
+            } catch (AssertionError | RuntimeException e) {
+                problems.add(topic.id() + ": " + e.getClass().getSimpleName() + ": " + e.getMessage()
+                        + (e.getStackTrace().length > 0 ? " @ " + e.getStackTrace()[0] : ""));
+            }
+        }
+        problems.sort(null);
+        assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
+        assertEquals(CATALOG.topics().size() - NOT_SIMULATABLE.size(), walked.size(),
+                "every topic except the documented exclusions has to be walked");
+    }
+
+    /**
+     * Topics the simulator deliberately does not walk, and why.
+     *
+     * <p>{@code standing} branches on MCA: Reputation's tier ordering ({@code min_tier} /
+     * {@code max_tier}), and that ordering lives in Reputation, not here — Conversations passes the
+     * tier names through as opaque strings. Modelling it would mean inventing a ranking this
+     * codebase does not own, which is exactly the guessing the simulator refuses to do elsewhere.
+     * Its branches are covered by {@code ReputationIntegrationTest} instead.
+     */
+    private static final Set<String> NOT_SIMULATABLE = Set.of("standing");
+
+    /**
+     * The world a topic's ordinary adult branch expects.
+     *
+     * <p>Hearts are set well above every gate, and the unlock memories the deep topics check for are
+     * granted, so the walk lands on the real tree rather than on a "not yet, we barely know each
+     * other" deflect. Everything else is left at its default.
+     */
+    private static World worldFor(TopicEntry topic) {
+        World world = new World().hearts(120);
+        world.memories.add("mcaconversations.unlock.confided");
+        world.memories.add("mcaconversations.unlock.intimate");
+        world.traits.addAll(Set.of("spouse", "family", "kids", "parent", "has_village"));
+        // standing only exists when MCA: Reputation is answering, so the walk has to say yes to the
+        // world questions for that one topic or there is nothing to simulate.
+        world.worldFacts = topic.id().equals("standing");
+        return world;
+    }
+
+    /**
+     * The result an {@code auto} question resolves to in the current world.
+     *
+     * <p>Auto questions carry a single unnamed answer — {@code autoQuestionsAreDeterministic}
+     * enforces that — so there is no name to select by. Unlike a player decision, several results
+     * being positive at once is <em>correct</em> here: {@code conversations.work} is a weighted
+     * flavour lottery over forty professions plus mood and personality colour, and any of its
+     * outcomes is a legitimate line. The walk takes the heaviest so it stays reproducible.
+     */
+    private static JsonObject soleResult(String question, Run run) {
+        JsonArray answers = questions.get(question).getAsJsonArray("answers");
+        assertEquals(1, answers.size(), question + ": an auto question must have exactly one answer");
+        JsonArray results = answers.get(0).getAsJsonObject().getAsJsonArray("results");
+        JsonObject heaviest = null;
+        int best = 0;
+        for (JsonElement r : results) {
+            int w = weight(r.getAsJsonObject(), question + "/(auto)", run.world);
+            if (w > best) {
+                best = w;
+                heaviest = r.getAsJsonObject();
+            }
+        }
+        return heaviest != null ? heaviest : results.get(results.size() - 1).getAsJsonObject();
+    }
+
+    /** The answer on this node whose best authored outcome is worth the most hearts. */
+    private static String mostGenerousAnswer(String node) {
+        String best = null;
+        int bestDelta = Integer.MIN_VALUE;
+        for (JsonElement a : questions.get(node).getAsJsonArray("answers")) {
+            JsonObject answer = a.getAsJsonObject();
+            if (!answer.has("name")) {
+                continue;
+            }
+            int delta = 0;
+            for (JsonElement r : answer.getAsJsonArray("results")) {
+                JsonObject actions = r.getAsJsonObject().getAsJsonObject("actions");
+                if (actions.has("conversations_affection_apply")) {
+                    delta = Math.max(delta,
+                            actions.getAsJsonObject("conversations_affection_apply").get("delta").getAsInt());
+                }
+            }
+            if (delta > bestDelta) {
+                best = answer.get("name").getAsString();
+                bestDelta = delta;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Nodes the walk should keep walking through. {@code conversations.work} is included because it
+     * is the {@code auto} profession node: MCA resolves it without asking the player anything and
+     * immediately recurses into the tree behind it, so it is part of the topic, not a way out of it.
+     */
+    private static boolean isBranchingNode(String question) {
+        return question.startsWith("conversations.topic.") || question.startsWith("conversations.arc.")
+                || question.equals("conversations.work");
     }
 
     @Test

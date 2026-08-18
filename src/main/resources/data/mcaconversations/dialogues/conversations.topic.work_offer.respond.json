@@ -22,6 +22,29 @@
       "name": "ask_terms",
       "results": [
         {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.respond.ask_terms",
+              "deltas": {
+                "respect": 5,
+                "tension": 2
+              }
+            },
+            "next": "conversations.topic.work_offer.followup",
+            "say": "conversations.work_offer.ask_terms.hard_bargain"
+          },
+          "conditions": [
+            {
+              "conversations_personality": [
+                "greedy",
+                "confident"
+              ],
+              "chance": 100
+            }
+          ]
+        },
+        {
           "baseChance": 1,
           "actions": {
             "conversations_disposition_apply": {
@@ -32,7 +55,16 @@
             },
             "next": "conversations.topic.work_offer.followup",
             "say": "conversations.work_offer.ask_terms"
-          }
+          },
+          "conditions": [
+            {
+              "conversations_personality": [
+                "greedy",
+                "confident"
+              ],
+              "chance": -2000
+            }
+          ]
         }
       ]
     },
