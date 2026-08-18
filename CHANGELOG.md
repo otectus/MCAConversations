@@ -253,6 +253,39 @@ Six small engine changes, each of which existed to make content possible that ha
 - **Quest gossip is tellable.** `GossipEventType.QUEST` was seeded, localized in both languages, and
   reachable only through `rumors`, so a village whose one untold event was a quest said "quiet week".
 
+### Added — new content
+
+- **The personalities speak past the first sentence.** Overlays covered 27 of 1,442
+  `dialogue.conversations.*` keys and every one was a topic *opener*, so a villager said one line in
+  their own voice and handed the next six exchanges to a single narrator. All 21 namespaces now also
+  voice the first **reply** in six registers — accepting sympathy on a bad day, accepting an offer of
+  help, being seen as a person rather than a pair of hands, being promised support, being given room
+  to hope, and being asked again days later. Two lints hold it: every namespace must cover the set,
+  and no two personalities may ship the same sentence for the same key.
+- **You can ask about someone in particular.** `people` and `rumors` covered the neighbours in the
+  abstract; there was no way to ask about a *person*, despite gossip having always templated real
+  villager names. The new `neighbour` topic tells the same events as a considered opinion of somebody
+  the villager has known for years — with its own voice, through `conversations_gossip_say`'s
+  `phrase_prefix`. You can ask what they are really like, defend them, tell the villager it is not
+  theirs to tell, or push for more and be turned down for it.
+- **"I don't know what to say."** Every deep node forced warm, curious, cruel or leave, so honest
+  inarticulacy — the most natural response to a confession — was unrepresentable in 593 labels.
+  `life`, `regrets`, `fears` and `dreams` now let you say nothing useful and stay anyway, and are
+  warmer for it than the composed answer would have been.
+- **Blunt honesty is a stance.** `candor` was in the vocabulary, carried personality bias, and no
+  topic required it. `noticed`, `people` and `work` now do: *"You're not fine and we both know it."*
+- **Deferral and reciprocal disclosure**, the two other moves the trees never allowed: you can ask a
+  villager to tell you when they are ready, and you can trade a story instead of only receiving one —
+  which `deflect.secret` had been explicitly inviting (*"Secrets are traded, not given"*) with no way
+  to accept.
+
+### Known unbuilt
+
+- **`flirtation` and `attraction` remain scaffolded and unwritten**, along with the three orientation
+  traits. Both are in the stance and axis vocabularies, both carry interiority bias, and no content
+  requires either. This is a deliberate scope decision rather than an oversight: the romance vertical
+  needs a design pass of its own, and half-writing it would be worse than leaving it clearly empty.
+
 ### Fixed — documentation that had drifted from the code
 
 - `README.md`, `CURSEFORGE.md` and the catalog's own comment all still said two pilot topics were

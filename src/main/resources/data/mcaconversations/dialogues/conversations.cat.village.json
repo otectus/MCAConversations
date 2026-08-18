@@ -1317,6 +1317,97 @@
       ]
     },
     {
+      "name": "neighbour",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_gossip": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.neighbour",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "neighbour",
+              "budget": "standard",
+              "branch": "someone"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.neighbour",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.neighbour.respond",
+            "conversations_gossip_say": {
+              "phrase_prefix": "conversations.neighbour"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_gossip": {}
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "neighbour",
+              "budget": "standard",
+              "branch": "none"
+            },
+            "next": "conversations.topic.neighbour.none.respond",
+            "say": "conversations.neighbour.none"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village",
+            "say": "conversations.neighbour.none"
+          }
+        }
+      ]
+    },
+    {
       "name": "back",
       "results": [
         {

@@ -17,7 +17,7 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   to say back, and that is what lands. Sit with someone's bad day and offer to take something off
   their hands, and you've earned something. Tell them everyone has bad days and then double down
   when they bristle, and you've lost it — and apologising settles the air without buying the hearts
-  back, because a slight isn't undone by saying sorry. **All 27 catalogued topics are converted** —
+  back, because a slight isn't undone by saying sorry. **All 28 catalogued topics are converted** —
   from the weather and what's for supper up through fears, regrets, secrets, and the spouse and
   family topics — and no topic pays hearts for being clicked any more.
 - **Conversations that remember (new)** — tell a villager you'll stand with them and they hold you
@@ -72,8 +72,10 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   7.7 successors, so a villager keeps its voice across an MCA upgrade. 21 overlay namespaces in all. Each covers the
   high-traffic lines (greetings, check-ins, day/work/village, the topic openers, deflects, gossip and
   the personality-voiced chat-mode deflections), each with 2–3 variants — a crabby villager and a
-  peppy one answer the same question in visibly different words. The overlays sit on the openers and
-  the deflections; the bodies of the branching trees are spoken in one shared voice
+  peppy one answer the same question in visibly different words. **New in 1.2.0:** the overlays reach
+  the first *reply* as well as the opener, so accepting sympathy, accepting help, being promised
+  support and being asked again days later all sound like the villager saying them — not like one
+  narrator speaking for everyone after the first sentence
 
 ## Requirements
 
@@ -93,7 +95,7 @@ Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run o
 
 **English (`en_us`)** and **Brazilian Portuguese (`pt_br`)** — both complete: UI strings, the full
 base dialogue pool, every personality overlay, the age voices and the whole chat-mode vocabulary
-(4,724 translated strings per locale, across 23 namespaces). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
+(5,524 translated strings per locale, across 23 namespaces). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
 client-only hook widens that gate to the locales this mod ships complete overlays for, while
 preserving MCA's voice-pack and online-TTS restrictions untouched.
 

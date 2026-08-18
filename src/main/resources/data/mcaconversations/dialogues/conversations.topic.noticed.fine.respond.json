@@ -69,6 +69,31 @@
       ]
     },
     {
+      "name": "blunt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.blunt",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.blunt",
+              "deltas": {
+                "respect": 4,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.blunt"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {

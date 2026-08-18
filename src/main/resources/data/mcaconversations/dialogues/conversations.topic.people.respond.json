@@ -173,6 +173,31 @@
       ]
     },
     {
+      "name": "blunt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "people.blunt",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.blunt",
+              "deltas": {
+                "respect": 4,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.blunt"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {

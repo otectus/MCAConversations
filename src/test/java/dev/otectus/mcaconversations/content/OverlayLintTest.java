@@ -39,6 +39,22 @@ class OverlayLintTest {
      * The core-20 high-traffic topics every personality overlay must cover (v0.5.0 anti-repetition
      * pass). Long-tail topics gain per-personality overlays in later releases.
      */
+    /**
+     * The reply tier (1.2.0). Overlays used to stop at the topic openers, so the personality spoke
+     * one sentence and handed the next six exchanges to a single generic narrator. These six are the
+     * first <em>reply</em> in each of six distinct emotional registers — accepting sympathy,
+     * accepting help, being seen as a person rather than a pair of hands, being promised support,
+     * being given room to hope, and being asked again days later. A personality that sounds the same
+     * across those six is not a personality, which is what makes them worth enforcing here.
+     */
+    private static final Set<String> REPLY_TIER_KEYS = Set.of(
+            "dialogue.conversations.day.rough.empathize",
+            "dialogue.conversations.checkin.rough.offer_help",
+            "dialogue.conversations.work.followup.hear_burnout",
+            "dialogue.conversations.fears.open.pledge",
+            "dialogue.conversations.hopes.respond.listen",
+            "dialogue.conversations.life.revisit");
+
     private static final Set<String> STANDARD_KEYS = Set.of(
             "dialogue.chat",
             "dialogue.conversations",
@@ -169,13 +185,39 @@ class OverlayLintTest {
     @Test
     void overlaysCoverTheStandardKeySet() {
         List<String> problems = new ArrayList<>();
+        Set<String> required = new java.util.LinkedHashSet<>(STANDARD_KEYS);
+        required.addAll(REPLY_TIER_KEYS);
         overlays.forEach((personality, lang) -> {
-            for (String key : STANDARD_KEYS) {
+            for (String key : required) {
                 if (!lang.containsKey(personality + "." + key)) {
                     problems.add(personality + ": missing standard overlay key '" + key + "'");
                 }
             }
         });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * The whole point of an overlay is that it does not sound like the others. Two personalities
+     * shipping the same sentence for the same key is a copy-paste, not a voice.
+     */
+    @Test
+    void noTwoPersonalitiesGiveTheSameReply() {
+        List<String> problems = new ArrayList<>();
+        for (String key : REPLY_TIER_KEYS) {
+            Map<String, List<String>> byLine = new java.util.TreeMap<>();
+            overlays.forEach((personality, lang) -> {
+                String line = lang.get(personality + "." + key);
+                if (line != null) {
+                    byLine.computeIfAbsent(line, l -> new ArrayList<>()).add(personality);
+                }
+            });
+            byLine.forEach((line, personalities) -> {
+                if (personalities.size() > 1) {
+                    problems.add(key + ": " + personalities + " all say \"" + line + "\"");
+                }
+            });
+        }
         assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 

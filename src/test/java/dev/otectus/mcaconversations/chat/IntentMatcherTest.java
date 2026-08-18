@@ -141,6 +141,10 @@ class IntentMatcherTest {
         t.put("any regrets", "personal.regrets");
         t.put("do you regret anything", "personal.regrets");
         t.put("what is your biggest regret", "personal.regrets");
+        // village: asking about a named neighbour rather than the neighbours in the abstract
+        t.put("is there anyone on your mind", "neighbour");
+        t.put("anyone on your mind", "neighbour");
+        t.put("is somebody on your mind", "neighbour");
         // personal: secret
         t.put("tell me a secret", "personal.secret");
         t.put("any secrets", "personal.secret");
@@ -520,6 +524,36 @@ class IntentMatcherTest {
             {"then you should have one of mine", "conversations.topic.secret.close", "secret.close.confide"},
             {"you should have one of mine", "conversations.topic.secret.close", "secret.close.confide"},
             {"take one of mine in return", "conversations.topic.secret.close", "secret.close.confide"},
+            {"what are they like really", "conversations.topic.neighbour.respond", "neighbour.ask_more"},
+            {"what are they actually like", "conversations.topic.neighbour.respond", "neighbour.ask_more"},
+            {"what sort of person are they", "conversations.topic.neighbour.respond", "neighbour.ask_more"},
+            {"they have always been decent to me", "conversations.topic.neighbour.respond", "neighbour.defend_them"},
+            {"they have been decent to me", "conversations.topic.neighbour.respond", "neighbour.defend_them"},
+            {"they are decent enough", "conversations.topic.neighbour.respond", "neighbour.defend_them"},
+            {"that is theirs to tell not yours", "conversations.topic.neighbour.respond", "neighbour.not_my_business"},
+            {"that is theirs to tell", "conversations.topic.neighbour.respond", "neighbour.not_my_business"},
+            {"not yours to tell", "conversations.topic.neighbour.respond", "neighbour.not_my_business"},
+            {"go on what else do you know", "conversations.topic.neighbour.respond", "neighbour.encourage_more"},
+            {"what else do you know", "conversations.topic.neighbour.respond", "neighbour.encourage_more"},
+            {"tell me what else you know", "conversations.topic.neighbour.respond", "neighbour.encourage_more"},
+            {"how long have you known them", "conversations.topic.neighbour.followup", "neighbour.ask_history"},
+            {"how long have you known each other", "conversations.topic.neighbour.followup", "neighbour.ask_history"},
+            {"known them long", "conversations.topic.neighbour.followup", "neighbour.ask_history"},
+            {"you do not sound sure about them", "conversations.topic.neighbour.followup", "neighbour.be_honest"},
+            {"you are not sure about them", "conversations.topic.neighbour.followup", "neighbour.be_honest"},
+            {"you sound unsure", "conversations.topic.neighbour.followup", "neighbour.be_honest"},
+            {"let us leave them be", "conversations.topic.neighbour.followup", "neighbour.let_it_lie"},
+            {"leave them be", "conversations.topic.neighbour.followup", "neighbour.let_it_lie"},
+            {"we should leave them alone", "conversations.topic.neighbour.followup", "neighbour.let_it_lie"},
+            {"nobody at all", "conversations.topic.neighbour.none.respond", "neighbour.ask_anyway"},
+            {"nobody at all then", "conversations.topic.neighbour.none.respond", "neighbour.ask_anyway"},
+            {"really nobody", "conversations.topic.neighbour.none.respond", "neighbour.ask_anyway"},
+            {"that sounds like a good week", "conversations.topic.neighbour.none.respond", "neighbour.glad"},
+            {"sounds like a good week", "conversations.topic.neighbour.none.respond", "neighbour.glad"},
+            {"a good week then", "conversations.topic.neighbour.none.respond", "neighbour.glad"},
+            {"someone must have done something", "conversations.topic.neighbour.none.respond", "neighbour.press"},
+            {"somebody must have done something", "conversations.topic.neighbour.none.respond", "neighbour.press"},
+            {"surely someone did something", "conversations.topic.neighbour.none.respond", "neighbour.press"},
             {"sorry, i asked twice", "conversations.topic.fears.again.respond", "fears.again.apologize"},
             {"i should not have asked again", "conversations.topic.fears.again.respond", "fears.again.apologize"},
             {"my mistake", "conversations.topic.fears.again.respond", "fears.again.apologize"},

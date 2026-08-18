@@ -29,7 +29,7 @@ one asks you not to. Offer the busy farmer a faster way to do her job and she'll
 for being blunt or add it to the list of things she's apparently doing wrong — depending entirely on
 who she is.
 
-All 27 topics are converted — from the weather and what's for supper up through fears, regrets,
+All 28 topics are converted — from the weather and what's for supper up through fears, regrets,
 secrets, and the topics you only get with a spouse or your own children. Nothing pays you hearts
 just for asking any more, and one config toggle puts it all back the old way.
 

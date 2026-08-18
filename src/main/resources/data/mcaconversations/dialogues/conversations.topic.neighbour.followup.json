@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "ask_history",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "neighbour.ask_history",
+              "deltas": {
+                "familiarity": 4
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.neighbour.ask_history"
+          }
+        }
+      ]
+    },
+    {
+      "name": "be_honest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "neighbour.be_honest",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.be_honest",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.neighbour.be_honest"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_it_lie",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "neighbour.let_it_lie",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.let_it_lie",
+              "deltas": {
+                "respect": 4,
+                "tension": -3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.neighbour.let_it_lie"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.neighbour.followup_leave"
+          }
+        }
+      ]
+    }
+  ]
+}

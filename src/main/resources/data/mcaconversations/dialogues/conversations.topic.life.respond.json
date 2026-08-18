@@ -151,6 +151,31 @@
       ]
     },
     {
+      "name": "no_words",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "life.no_words",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.no_words",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.life.followup",
+            "say": "conversations.life.no_words"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {
