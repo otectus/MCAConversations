@@ -9,6 +9,41 @@ asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
 
 ## [1.2.0] - unreleased
 
+### Fixed — one line, two different sentences
+
+- **A villager's reply no longer differs between the dialogue screen and the chat log.** MCA picks
+  which `/N` variant of a pooled line to speak on the *client*, at random, once per `Component`
+  instance — and it renders every interaction-screen line from three separate instances: the chat
+  copy and the text-to-speech copy are each re-parsed out of the packet's JSON, while the panel keeps
+  the original. Three parses, three independent draws, so the screen could read *"Straight to the
+  terms."* while chat read *"Whatever's fair."* for the same click, and a voice pack could speak a
+  third line again. The message now serves back the components it was built with, so all three read
+  the same sentence. (It also stopped MCA's profession branch, which flips a coin per resolution,
+  from putting the two surfaces in different *pools* rather than merely different variants.)
+- **3,518 authored sentences that could never be shown are back in rotation.** MCA's pool builder
+  indexes only the `/N` keys and always draws from them once any exist, so a plain base sentence left
+  beside a `/1` is dead content — MCA's own lang has no such key anywhere, and ours had 3,518 of them.
+  Every pooled family has been renumbered so its base line is simply its first variant. 1,678 of
+  those families had exactly one live line where two were written, including 34 of the 38 pooled lines
+  in *every* personality overlay: a crabby villager now has both of their answers instead of one. No
+  sentence was edited, added or removed — the keys were renumbered around them.
+- **The lint that was supposed to guarantee variety was counting a line nobody sees.** The pool floor
+  added one for the plain base key, so a family with a floor of "three lines" was shipping two. It now
+  counts only what MCA can draw, and a plain key beside a pool is a build failure rather than the
+  house style. Coverage lints learned the same rule: a key exists if it is plain *or* pooled.
+- **Two players standing together hear the same words.** A chat-mode reply is sent to the speaker and
+  to every bystander in range as separate messages, and each client used to roll its own variant.
+  The variant is now chosen once on the server and sent as a concrete key, read straight from the lang
+  files inside the mod's own jar — so it works on a dedicated server, where `assets/` is never mounted,
+  and there is no generated index that could drift. The index deliberately excludes the five pools that
+  extend MCA's own (`dialogue.main` and friends), where we ship only half the lines, and never names a
+  variant past the end of a villager's personality overlay, which would silently drop them to the
+  generic voice.
+- **The humanised reply delay no longer scales with the length of a lang key.** On a dedicated server
+  the line cannot be resolved, so `getString()` returned the raw key and the "typing time" tracked its
+  spelling. The delay now uses the chosen variant's real length, falling back to the corpus median
+  when there is nothing to measure.
+
 ### Added — the ledger speaks (MCA: Reputation, optional)
 
 The 1.1.0 bridge supplied normalized gossip candidates but nothing rendered them, and the standing

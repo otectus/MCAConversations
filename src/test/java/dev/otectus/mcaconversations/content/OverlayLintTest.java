@@ -174,7 +174,7 @@ class OverlayLintTest {
         overlays.forEach((personality, lang) -> {
             for (String key : lang.keySet()) {
                 String base = bareTopic(personality, key);
-                if (!baseLang.containsKey(base)) {
+                if (!LangKeys.hasLine(baseLang, base)) {
                     problems.add(personality + ": overlay key '" + key + "' has no base line to override");
                 }
             }
@@ -189,7 +189,7 @@ class OverlayLintTest {
         required.addAll(REPLY_TIER_KEYS);
         overlays.forEach((personality, lang) -> {
             for (String key : required) {
-                if (!lang.containsKey(personality + "." + key)) {
+                if (!LangKeys.hasLine(lang, personality + "." + key)) {
                     problems.add(personality + ": missing standard overlay key '" + key + "'");
                 }
             }
@@ -231,7 +231,7 @@ class OverlayLintTest {
                 continue;
             }
             for (String key : CHATMODE_KEYS) {
-                if (!lang.containsKey(personality + "." + key)) {
+                if (!LangKeys.hasLine(lang, personality + "." + key)) {
                     problems.add(personality + ": missing chat-mode overlay key '" + key + "'");
                 }
             }

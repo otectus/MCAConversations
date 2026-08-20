@@ -153,7 +153,7 @@ Ops can inspect matching live with `/conversations chat debug <message>`.
 | `chatModeAmbientMinScore` | `0.75` | 0–1 | stricter threshold for ambient messages (raise on chatty servers) |
 | `chatModeReplyDelayTicks` | `15` | 0–100 | base humanized reply delay (scaled by line length) |
 | `chatModeCooldownTicks` | `40` | 0–1200 | per-player floor between processed messages (anti-spam) |
-| `chatModePublicReplies` | `true` | | villager replies are shown to other players within the addressed radius |
+| `chatModePublicReplies` | `true` | | villager replies are shown to other players within the addressed radius (everyone in range reads the same wording — the line's variant is chosen once, server-side) |
 | `chatModeShowHeartChanges` | `true` | | subtle `(+2 ♥)` feedback, once per exchange, speaker-only |
 | `chatModeMessageFormat` | `<%1$s> %2$s` | | chat line template (`%1$s` villager name, `%2$s` line) |
 | `chatModeMuteTicks` | `6000` | 200–72000 | duration of a "stop talking" mute, per villager↔player pairing |

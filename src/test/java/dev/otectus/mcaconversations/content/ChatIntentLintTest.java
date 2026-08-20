@@ -209,7 +209,7 @@ class ChatIntentLintTest {
         List<String> problems = new ArrayList<>();
         for (String key : DEFLECTION_KEYS) {
             String full = "dialogue.chatmode." + key;
-            if (!lang.containsKey(full)) {
+            if (!LangKeys.hasLine(lang, full)) {
                 problems.add("missing deflection line: " + full);
             }
         }

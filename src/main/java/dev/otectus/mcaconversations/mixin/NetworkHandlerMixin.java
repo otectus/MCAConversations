@@ -35,7 +35,10 @@ public abstract class NetworkHandlerMixin {
         try {
             ChatModeSession.markRedirectInstalled();
             if (message instanceof InteractionDialogueQuestionResponse response) {
-                if (ChatModeSession.deliverQuestion(player, response.getQuestionText(), response.silent)) {
+                // getQuestionText() re-parses the line out of JSON, so ask whether we are redirecting
+                // before paying for it: with no scope open this fires for every GUI dialogue packet.
+                if (ChatModeSession.activeFor(player)
+                        && ChatModeSession.deliverQuestion(player, response.getQuestionText(), response.silent)) {
                     ci.cancel();
                 }
             } else if (message instanceof InteractionDialogueResponse response) {

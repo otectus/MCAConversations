@@ -449,7 +449,7 @@ class ContentLintTest {
         questions.entrySet().stream()
                 .filter(e -> !extensions.contains(e.getKey()))
                 .filter(e -> !(e.getValue().has("auto") && e.getValue().get("auto").getAsBoolean()))
-                .forEach(e -> assertTrue(lang.containsKey("dialogue." + e.getKey()),
+                .forEach(e -> assertTrue(LangKeys.hasLine(lang, "dialogue." + e.getKey()),
                         "question '" + e.getKey() + "' needs prompt text dialogue." + e.getKey()));
     }
 
@@ -563,9 +563,16 @@ class ContentLintTest {
                     // Check-tier and guard lines are precision-targeted (one tier of one stance).
                     || alwaysChecked.contains(key) || key.endsWith(".guard") ? 2 : 3;
             String base = "dialogue." + key;
-            int pool = (lang.containsKey(base) ? 1 : 0);
+            // Count only the /N entries. MCA's PooledTranslationStorage indexes nothing else, and
+            // mca$onGet always draws from the pool when one exists, so a plain base sentence sitting
+            // beside a variant is never shown to anyone. The bare key counts as a line of its own
+            // only when it has no variants at all.
+            int pool = 0;
             for (int i = 1; lang.containsKey(base + "/" + i); i++) {
                 pool++;
+            }
+            if (pool == 0 && lang.containsKey(base)) {
+                pool = 1;
             }
             if (pool < floor) {
                 problems.add(base + ": pool " + pool + " < floor " + floor);
@@ -583,7 +590,7 @@ class ContentLintTest {
         }
         List<String> problems = new ArrayList<>();
         for (String path : expectedPaths) {
-            if (!lang.containsKey("dialogue.conversations.work.prof." + path)) {
+            if (!LangKeys.hasLine(lang, "dialogue.conversations.work.prof." + path)) {
                 problems.add("missing profession line: dialogue.conversations.work.prof." + path);
             }
         }
@@ -603,7 +610,7 @@ class ContentLintTest {
         List<String> problems = new ArrayList<>();
         for (String prefix : gossipPrefixesInUse()) {
             for (GossipEventType type : GossipEventType.values()) {
-                if (!lang.containsKey("dialogue." + prefix + "." + type.jsonName())) {
+                if (!LangKeys.hasLine(lang, "dialogue." + prefix + "." + type.jsonName())) {
                     problems.add("gossip prefix '" + prefix + "' has no line for " + type
                             + " — a phrase_prefix must cover every type it can be asked to tell");
                 }
@@ -635,18 +642,56 @@ class ContentLintTest {
         return prefixes;
     }
 
+    /**
+     * The shape MCA's pool builder actually reads: a family is either a single plain key or a
+     * contiguous {@code /1../N} run, never both. {@code PooledTranslationStorage} indexes only keys
+     * matching {@code /[0-9]+$}, and {@code mca$onGet} always draws from that index once it is
+     * non-empty — so a plain base sentence left beside a variant is dead content, and a hole in the
+     * run is an authored line the builder will never pick.
+     */
     @Test
     void conversationsVariantSequencesHaveNoHoles() {
         for (String key : lang.keySet()) {
             if (key.contains("/") && key.startsWith("dialogue.conversations")) {
                 String base = key.substring(0, key.indexOf('/'));
                 int n = Integer.parseInt(key.substring(key.indexOf('/') + 1));
-                assertTrue(lang.containsKey(base), "variant " + key + " without base key " + base);
+                assertTrue(!lang.containsKey(base),
+                        "pooled key " + base + " also carries a plain base sentence, which MCA can "
+                                + "never show — its pool builder indexes only /N. Fold it in as a variant.");
                 for (int i = 1; i <= n; i++) {
                     assertTrue(lang.containsKey(base + "/" + i), base + " variant sequence has a hole at /" + i);
                 }
             }
         }
+    }
+
+    /**
+     * Five of our pools deliberately EXTEND MCA's own rather than starting fresh: MCA ships
+     * {@code dialogue.main/1../7} and we append {@code /8../12} into the same shared namespace. They
+     * must keep their offsets — renumbering one down to {@code /1} would silently overwrite an MCA
+     * line — and they must never grow a plain base key, which would shadow the whole shared pool.
+     */
+    @Test
+    void mcaExtensionPoolsKeepTheirOffsets() {
+        Map<String, Integer> firstIndex = Map.of(
+                "dialogue.main", 8,
+                "dialogue.greet.success", 6,
+                "dialogue.greet.fail", 6,
+                "dialogue.story.success", 10,
+                "dialogue.shake_hand.success", 6);
+        List<String> problems = new ArrayList<>();
+        firstIndex.forEach((base, first) -> {
+            if (lang.containsKey(base)) {
+                problems.add(base + ": plain base key would shadow MCA's shared pool");
+            }
+            if (!lang.containsKey(base + "/" + first)) {
+                problems.add(base + ": expected the run to start at /" + first);
+            }
+            if (lang.containsKey(base + "/" + (first - 1))) {
+                problems.add(base + ": /" + (first - 1) + " overlaps MCA's own variants");
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 
     /**
@@ -1439,7 +1484,7 @@ class ContentLintTest {
     }
 
     private static void requireLang(String key, String where, List<String> problems) {
-        if (!lang.containsKey(key) && !lang.containsKey(key + "/1")) {
+        if (!LangKeys.hasLine(lang, key)) {
             problems.add(where + ": lang key '" + key + "' missing from mca_dialogue en_us.json");
         }
     }
