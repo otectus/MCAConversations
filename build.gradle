@@ -5,11 +5,13 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = mod_version
+// Loader and game version both live in the artifact name and the mod version, so a 1.21.1
+// NeoForge build can never be mistaken for -- or overwrite -- the 1.20.1 Forge one.
+version = "${mod_version}+${minecraft_version}"
 group = mod_group_id
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-neoforge"
 }
 
 // Minecraft 1.20.5+ requires Java 21. The foojay resolver provisions it if the system JDK is older.
@@ -153,7 +155,8 @@ tasks.named('processResources', ProcessResources).configure {
             neoforge_version: neoforge_version, neoforge_version_range: neoforge_version_range,
             loader_version_range: loader_version_range,
             mca_version: mca_version, mca_version_range: mca_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license,
+            mod_version: project.version.toString(),
             mod_authors: mod_authors, mod_description: mod_description,
     ]
     inputs.properties replaceProperties
@@ -173,6 +176,16 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_authors
         ])
+    }
+}
+
+// Forward the build's stdin to the game's console. ModDevGradle's run tasks otherwise get an
+// empty input stream, so a piped `reload` or `stop` is silently swallowed and the only way to end
+// a headless server is to kill it. With this, CI can boot the server, issue /reload to re-parse
+// every dialogue file through MCA's loader, and stop cleanly.
+tasks.matching { it.name.startsWith('run') }.configureEach {
+    if (it instanceof JavaExec) {
+        it.standardInput = System.in
     }
 }
 

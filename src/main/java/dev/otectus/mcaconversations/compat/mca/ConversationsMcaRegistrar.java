@@ -131,7 +131,26 @@ public final class ConversationsMcaRegistrar {
         }
     }
 
+    /**
+     * Guards against a second registration pass.
+     *
+     * <p>MCA's {@code GiftPredicate}/{@code Actions} registries are plain static maps with no
+     * duplicate check, so registering the same key twice would quietly replace the first adapter
+     * with an identical one -- harmless today, but it means the "registered vocabulary" log line
+     * could appear more than once and an unusual lifecycle (a test bootstrap, a future mod-reload
+     * feature) would give no signal that it had happened. One call, once, and say so if something
+     * asks for a second.
+     */
+    private static final java.util.concurrent.atomic.AtomicBoolean REGISTERED =
+            new java.util.concurrent.atomic.AtomicBoolean();
+
     public static void register() {
+        if (!REGISTERED.compareAndSet(false, true)) {
+            McaConversations.LOGGER.warn("Conversations dialogue vocabulary was already registered; "
+                    + "ignoring the duplicate request.");
+            return;
+        }
+
         // --- Conditions (dialogue JSON shares the gift-predicate condition registry) ---
 
         GiftPredicate.register("conversations_enabled",

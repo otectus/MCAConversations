@@ -1,0 +1,140 @@
+name: build
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+# One in-flight run per ref. A superseded push has nothing useful left to say.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    # Both, deliberately. The content lints and the migration fixtures read files by path, and
+    # path handling is the classic thing that works on one OS and not the other.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      # `build` depends on verifyJarContents, so this also proves the jar ships the right
+      # metadata and content and nothing shaded.
+      - name: Build and test
+        run: ./gradlew --no-daemon clean test build
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ matrix.os }}
+          path: |
+            build/reports/tests/test
+            build/test-results/test
+          retention-days: 14
+
+      - name: Upload candidate jar
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcaconversations-neoforge
+          path: build/libs/*.jar
+          retention-days: 30
+
+  dedicated-server-smoke:
+    # The one thing the unit suite cannot answer: do the mixins actually apply against the real
+    # MCA jar, and does a dedicated server reach "Done" without loading a client class. Every
+    # mixin here targets MCA or vanilla internals, so a silent apply failure is the failure mode
+    # this job exists to catch.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: true
+
+      - name: Prepare the run directory
+        run: |
+          mkdir -p run-server
+          echo "eula=true" > run-server/eula.txt
+          {
+            echo "level-name=smoke"
+            echo "online-mode=false"
+            echo "max-tick-time=-1"
+            echo "sync-chunk-writes=false"
+            echo "view-distance=6"
+            echo "level-type=minecraft\\:flat"
+          } > run-server/server.properties
+          # A stale mod jar here would crash as a duplicate mod rather than fail informatively.
+          rm -rf run-server/mods run-server/smoke
+
+      - name: Boot the dedicated server, reload, and stop
+        run: |
+          set -o pipefail
+          (sleep 90; echo "reload"; sleep 30; echo "stop"; sleep 20) \
+            | ./gradlew --no-daemon runServer 2>&1 | tee server.log
+
+      - name: Assert a clean start
+        run: |
+          fail() { echo "::error::$1"; exit 1; }
+
+          grep -q 'Done (' server.log || fail "server never finished starting"
+
+          # /reload is what re-parses every dialogue file through MCA's loader, which has no error
+          # containment -- a bad condition key there takes the whole reload down. Assert on our own
+          # loaders rather than just the vanilla "Reloading!" line, so a reload that ran but skipped
+          # our content still fails.
+          grep -q 'Reloading!' server.log || fail "/reload never ran"
+          test "$(grep -c 'Loaded .* chat intents from' server.log)" -ge 2             || fail "the chat-intent loader did not re-run on /reload"
+          test "$(grep -c 'Loaded .* conversation topics from' server.log)" -ge 2             || fail "the conversation catalog did not re-run on /reload"
+          test "$(grep -c 'Loaded .* interiority profiles from' server.log)" -ge 2             || fail "the interiority profile did not re-run on /reload"
+
+          # Every mixin in the config must actually attach. require=0 on most of them means a
+          # missed target is silent at runtime, so this is where it has to be caught.
+          for mixin in BreedableRelationshipMixin DialoguesMixin InteractionDialogueMessageMixin \
+                       McaNetworkMixin PlayerLegacyDataMixin QuestionMixin; do
+            grep -q "Mixing $mixin from mcaconversations.mixins.json" server.log \
+              || fail "$mixin did not apply"
+          done
+
+          grep -q 'dialogue conditions/actions registered with MCA' server.log \
+            || fail "the MCA registrar never ran"
+
+          if grep -qE '\[(ERROR|FATAL)\].*mcaconversations' server.log; then
+            grep -E '\[(ERROR|FATAL)\].*mcaconversations' server.log
+            fail "the mod logged an error"
+          fi
+          if grep -q 'net.minecraft.client' server.log; then
+            grep -n 'net.minecraft.client' server.log | head
+            fail "a client class reached the dedicated server"
+          fi
+
+          echo "dedicated server start, /reload and all six mixins: OK"
+
+      - name: Upload server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dedicated-server-log
+          path: server.log
+          retention-days: 14

@@ -43,16 +43,21 @@ and 7.6.20 (still supported at runtime).
     value silently never matches rather than crashing)
   - `age_group`: `baby, toddler, child, teen, adult` · `rank`: `outlaw, peasant, merchant, noble,
     mayor, monarch`
-  - **`personality`: do not use MCA's native condition.** MCA 7.7 renamed four personalities and
-    turned `athletic` into a trait, and the native parser throws on an id the running MCA does not
-    know — which aborts the datapack reload and the world load. Any single value is therefore a
-    crash on one MCA version or the other. Use this mod's parse-safe **`conversations_personality`**
-    instead: it never throws, and it resolves legacy ids to their successors so one authored value
-    works on both. Accepts a string or an array.
-    Canonical (MCA 7.7): `confident, peppy, friendly, flirty, playful, gloomy, sensitive, greedy,
-    odd, crabby, extroverted, introverted, relaxed, anxious, peaceful, upbeat`.
+  - **`personality`: do not use MCA's native condition.** MCA has renamed personalities more than
+    once — four in 7.7, and `confident`/`peppy` dropped again for 1.21.1 — and its native parser
+    throws on an id the running MCA does not know, which aborts the datapack reload and the world
+    load with it. Any single value is therefore a crash on one MCA version or another. Use this
+    mod's parse-safe **`conversations_personality`** instead: it never throws, and it resolves
+    legacy ids to their successors so one authored value keeps working across an upgrade. Accepts a
+    string or an array.
+    Rollable on MCA 1.21.1 — the only ids a freshly generated villager can have: `friendly,
+    flirty, playful, gloomy, sensitive, greedy, odd, crabby, extroverted, introverted, relaxed,
+    anxious, peaceful, upbeat`.
     Legacy ids that still resolve: `witty`→`upbeat`, `shy`→`introverted`, `lazy`→`relaxed`,
-    `grumpy`→`crabby`; `athletic` matches only itself (MCA 7.6 worlds).
+    `grumpy`→`crabby`. And `athletic`, `confident` and `peppy` match only themselves — MCA no
+    longer registers any of the three, so no new villager is one, but an upgraded save or a
+    third-party pack can still present one and this mod still ships their voices. Authoring one is
+    valid; it simply never matches on a stock install.
   This mod's own `conversations_*` keys are **parse-safe**: malformed JSON logs an ERROR and the entry
   degrades to a no-op action / never-matching condition instead of crashing the reload.
 

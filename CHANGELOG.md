@@ -3,9 +3,72 @@
 All notable changes to this project will be documented in this file. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow SemVer.
 
-Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
-Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
-asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
+Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA Reborn
+`[7.7.36-beta.3,7.7.37)` for NeoForge. Architectury is not used. Optional: Serene Seasons.
+
+Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
+separate download and is not superseded by this one.
+
+## [2.0.0] - unreleased
+
+The Minecraft 1.21.1 / NeoForge line. No feature was added, removed or redesigned: every topic,
+every line, every config key and every saved byte is what 1.2.1 shipped. What changed is the
+platform underneath, and two bugs that the port surfaced.
+
+The major version is about the artifact, not the content. `mcaconversations-neoforge-2.0.0+1.21.1.jar`
+and `mcaconversations-1.2.1.jar` are different files for different games and neither replaces the
+other.
+
+### Fixed
+
+- **Refused gifts were recorded as accepted.** MCA decides inside `acceptGift` whether it will
+  actually take an item: it turns the gift down when the villager's inventory is full, when the
+  response scores as a failure, and again when repetition drags an otherwise-fine gift down to a
+  failure. The gift observer hooked the *start* of that method, so all three rejections were
+  written down as gifts received — granting gratitude, and leaving a `last_gift_item` a villager
+  would then talk about having been given something they had just handed back. The hook now sits on
+  the single point where MCA takes the item, and records exactly one of it.
+- **The one-locale personality gate was documented as two.** The hook that lets Brazilian
+  Portuguese resolve per-personality dialogue described MCA as allowing `en_us` and `ru_ru`. MCA
+  allows `en_us` alone. The behaviour was already correct; only the explanation was wrong, and it
+  was the explanation someone would have relied on.
+
+### Changed — platform
+
+- Minecraft 1.21.1, NeoForge 21.1.234+, Java 21, built with ModDevGradle instead of ForgeGradle.
+- Player data moved from Forge capabilities to NeoForge data attachments. **Your remembered gifts
+  and your chat-mode choice are imported automatically** the first time each player loads an
+  upgraded world, and data you have already created on 1.21.1 is never overwritten.
+- The three world files — `mcaconversations_dispositions.dat`, `mcaconversations_gossip.dat`,
+  `mcaconversations_progress.dat` — keep their names and their contents. Dispositions, gossip and
+  conversation progress carry over untouched.
+- The typing-attention packet was rebuilt on the 1.21 payload system. It still carries one boolean
+  and nothing else, and the server still re-derives the player and re-checks every gate itself.
+- The personality roster is now the fourteen MCA actually registers on 1.21.1. `confident` and
+  `peppy` are no longer among them, so no new villager is one; their voices ship anyway, alongside
+  `athletic`, so a villager who already *is* one keeps speaking in character instead of falling
+  back to the generic pool.
+- The villager-line mixin is gone. It existed to stop MCA re-parsing a line out of JSON on every
+  read, which made the menu and the chat copy draw different random variants. MCA now passes one
+  finished line to both, so there is nothing left to fix.
+
+### Known limitations
+
+- **MCA: Quests and MCA: Reputation integrations are dormant.** Neither has a 1.21.1 NeoForge
+  release. Quest-aware conversation lines never fire and reputation-aware dialogue scores zero —
+  the same behaviour as an install without those mods. The code is still here and comes back when
+  they do.
+- **Back up before upgrading.** Conversations migrates its own data, but MCA 7.7.36 also changes
+  how it persists personalities and traits compared with older 7.7 builds, and that conversion is
+  MCA's, not ours.
+
+### For developers
+
+- `docs/PORT-1.21.1-EVIDENCE.md` records the exact MCA jar this was built against, its SHA-256, and
+  every mixin target descriptor read out of that binary.
+- Unlike the 1.20.1 line, `runClient` and `runServer` are real tests of MCA integration: MCA's
+  1.21.1 jar uses official Mojang names and loads as a normal mod in development. On 1.20.1 its
+  mixins were SRG-named with no refmap, so only a production instance could exercise them.
 
 ## [1.2.1] - unreleased
 

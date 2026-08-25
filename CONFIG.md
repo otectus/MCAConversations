@@ -82,7 +82,7 @@ gates on them with a plain `{"memory": {"id": "mcaconversations.state.<name>"}}`
 
 Scan cost: one nearest village per online player per interval, deduplicated. Relationship detection reads
 loaded residents only; arrival/departure reads the village's stored residency set (load-independent) and
-diffs it against a persisted snapshot — both negligible on `/forge tps`.
+diffs it against a persisted snapshot — both negligible on `/neoforge tps`.
 
 ## `[rpg]`
 

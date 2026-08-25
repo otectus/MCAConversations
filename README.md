@@ -1,8 +1,8 @@
 # MCA: Conversations
 
-![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-green)
-![Forge](https://img.shields.io/badge/Forge-47.x-orange)
-![Requires](https://img.shields.io/badge/Requires-MCA%20Reborn%207.6%20%E2%80%93%207.7-blue)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green)
+![NeoForge](https://img.shields.io/badge/NeoForge-21.1.x-orange)
+![Requires](https://img.shields.io/badge/Requires-MCA%20Reborn%207.7.36-blue)
 ![License](https://img.shields.io/badge/License-GPL--3.0-lightgrey)
 ![Status](https://img.shields.io/badge/Status-alpha-red)
 
@@ -67,9 +67,11 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   vanilla trades plus every profession mod in the pack: MCA, More Villagers, Ars Nouveau, Chef's
   Delight, Ice and Fire, Vampirism, Werewolves — and a self-personalizing generic line for any
   other mod's professions); food talk respects MCA traits (vegetarian, lactose intolerance, ...);
-  children and teens answer in their own voice. **Every personality has a flavored overlay** — all 16 of MCA 7.7's, plus MCA 7.6's
-  `athletic` and the four 7.6 spellings (`witty`/`shy`/`lazy`/`grumpy`) kept as aliases of their
-  7.7 successors, so a villager keeps its voice across an MCA upgrade. 21 overlay namespaces in all. Each covers the
+  children and teens answer in their own voice. **Every personality has a flavored overlay** — all 14 MCA
+  rolls on 1.21.1, plus `athletic`, `confident` and `peppy` (dropped from MCA's roster but still
+  possible on an upgraded save) and the four older spellings (`witty`/`shy`/`lazy`/`grumpy`) kept
+  as aliases of their successors, so a villager keeps its voice across an MCA upgrade. 21 overlay
+  namespaces in all. Each covers the
   high-traffic lines (greetings, check-ins, day/work/village, the topic openers, deflects, gossip and
   the personality-voiced chat-mode deflections), each with 2–3 variants — a crabby villager and a
   peppy one answer the same question in visibly different words. **New in 1.2.0:** the overlays reach
@@ -79,28 +81,50 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 
 ## Requirements
 
-Minecraft 1.20.1 · Forge 47.x · requires **MCA Reborn `[7.6,8)`**.
+Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires **MCA Reborn 7.7.36-beta.3 for
+NeoForge**.
 
-Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run on **MCA 7.6.20**.
+The MCA range is deliberately narrow (`[7.7.36-beta.3,7.7.37)`). This mod mixes into MCA
+internals, so every release it claims to support has to be tested against, not assumed. If you are
+on a different 7.7.x build and want it supported, say so rather than editing the range yourself —
+a mixin that silently stops applying looks like a missing feature, not a version mismatch.
 
-> **Architectury is no longer declared as a dependency of this mod.** MCA 7.6 requires it and asks
-> for it itself; MCA 7.7 dropped it. Conversations has never referenced Architectury, and declaring
-> it mandatory only blocked people upgrading to 7.7 who had removed it.
+> **This jar is for NeoForge only and will not load on Forge 1.20.1.** The 1.20.1 Forge line is a
+> separate download (`mcaconversations-1.2.1.jar`); this one is
+> `mcaconversations-neoforge-2.0.0+1.21.1.jar`. They are not interchangeable in either direction.
 
-> **MCA 7.7.0-beta.1 does not work — with or without this mod.** That build ships a truncated
-> `forge-mca.refmap.json`, so MCA's own `MixinLivingEntity` fails to apply in a production runtime.
-> Reproduced with MCA alone. Use **7.7.0-beta.2** or newer.
+> **Back up your world before upgrading.** Conversations migrates its own player data
+> automatically (see below), but MCA 7.7.36 also changes how it persists personalities and traits
+> relative to older 7.7 builds, and that conversion is not ours to undo.
+
+> **Architectury is not a dependency.** MCA's 1.21.1 NeoForge artifact dropped it entirely, and
+> Conversations has never referenced it.
+
+### Upgrading a 1.20.1 world
+
+Your remembered gifts and your chat-mode choice were stored as Forge capabilities. NeoForge does
+not read those, so the first time each player loads, Conversations imports them from the old
+`ForgeCaps` block into the equivalent data attachment. It runs once per player, never overwrites
+data you have already made on 1.21.1, and logs one line per player when it fires.
+
+The three world-level files — `mcaconversations_dispositions.dat`, `mcaconversations_gossip.dat`
+and `mcaconversations_progress.dat` — keep their names and their contents, so dispositions, gossip
+and conversation progress carry over untouched.
+
+MCA: Reputation integration is temporarily absent: that mod has no 1.21.1 NeoForge release yet.
+Reputation-aware dialogue scores zero and the reputation template variables fall back to their
+existing text, exactly as they do on an install without the mod. Nothing else changes.
 
 ### Languages
 
 **English (`en_us`)** and **Brazilian Portuguese (`pt_br`)** — both complete: UI strings, the full
 base dialogue pool, every personality overlay, the age voices and the whole chat-mode vocabulary
-(5,524 translated strings per locale, across 23 namespaces). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
-client-only hook widens that gate to the locales this mod ships complete overlays for, while
-preserving MCA's voice-pack and online-TTS restrictions untouched.
+(5,524 translated strings per locale, across 23 namespaces). MCA gates per-personality dialogue to
+`en_us` alone; a narrow client-only hook widens that gate to the locales this mod ships complete
+overlays for, while preserving MCA's voice-pack and online-TTS restrictions untouched.
 
-Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar fallback
-otherwise) — both soft dependencies; the mod works fully without them.
+Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar
+fallback otherwise) — both soft dependencies; the mod works fully without them.
 
 ## How it works
 
@@ -108,8 +132,9 @@ MCA's dialogue system loads datapack JSON from any namespace and merges same-nam
 most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
 (`conversations_gossip`, `conversations_disposition`, `conversations_check`, `conversations_say`, ...) into
-MCA's public registries — no runtime patching of MCA except three small soft-fail mixins (the Chat→hub
-redirect, a gift observer, and chat mode's dialogue-packet-to-chat redirect). Chat mode's matcher is a
+MCA's public registries — no runtime patching of MCA except a handful of small, narrowly scoped
+mixins (the Chat→hub redirect, a gift observer, chat mode's dialogue-payload-to-chat redirect, a
+submission guard, and the hub-button visibility filter). Chat mode's matcher is a
 second *frontend* to the same engine: free text resolves to the exact `(question, answer)` a GUI click
 would send, so parity is structural, not re-implemented; its intents live in
 `data/<any-namespace>/chat_intents/*.json` and are fully datapack-extensible (including synonym packs).
@@ -122,10 +147,13 @@ their own checked stances) and [CONFIG.md](CONFIG.md) for configuration.
 
 ## Status
 
-Alpha. Pure logic (gossip log, diffing, templates, content lint) is unit-tested; **MCA-touching
-behavior can only be verified in a production-style instance** — MCA Reborn does not load under a
-ForgeGradle dev runtime (its bundled mixins only resolve against SRG names), so `runClient` is not
-a valid test of MCA integration. See the in-world checklist in [CHANGELOG.md](CHANGELOG.md).
+Alpha. Pure logic (gossip log, diffing, templates, content lint, the player-data migration) is
+unit-tested, and the suite now runs with real Minecraft classes on the classpath.
+
+Unlike the 1.20.1 line, **`runClient` and `runServer` are valid tests of MCA integration**: MCA's
+1.21.1 NeoForge jar uses official Mojang names, so it loads as a normal mod in a development
+runtime. On 1.20.1 its mixins were SRG-named with no refmap and only resolved in a production
+instance. The in-world acceptance checklist is in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

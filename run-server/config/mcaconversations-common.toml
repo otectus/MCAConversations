@@ -1,0 +1,278 @@
+[features]
+	#How the Conversations hub is reached from MCA's villager interaction screen.
+	#  ADDITIVE (default) - MCA's 'Chat' button keeps its own behaviour and Conversations
+	#                       appears as a SEPARATE button. Both are available.
+	#  REPLACE            - MCA's 'Chat' button opens the Conversations hub instead, and the
+	#                       separate button is hidden (this was the 0.2.0-0.9.x behaviour).
+	#  HIDDEN             - No Conversations button; MCA's Chat is untouched. Gossip, memory,
+	#                       chat mode and every other feature still run.
+	#Replaces the old boolean 'replaceChatWithConversations'. This is about the interaction
+	#SCREEN only - it is unrelated to enableChatMode (talking to villagers in normal chat),
+	#and no mode affects MCA's own AI chat, which never routes through the dialogue system.
+	#Allowed Values: ADDITIVE, REPLACE, HIDDEN
+	hubEntryMode = "ADDITIVE"
+	#Enable the Conversations conversation topics (heart-gated personal questions).
+	enableTopics = true
+	#Enable conversation states (e.g. gratitude after a gift influences dialogue).
+	enableStates = true
+	#Enable personalized (templated) lines, e.g. referencing the last gift by name.
+	enableTemplates = true
+	#Enable village gossip (villagers mention marriages, births, deaths of others).
+	enableGossip = true
+	#Enable MCA: Quests integration (only active when the 'mcaquests' mod is installed):
+	#villagers acknowledge available/active/completed quests in conversation, finished quests
+	#seed gossip + memory, and quest lines can speak in the villager's personality.
+	enableQuests = true
+	#Enable branching conversations (1.1.0): a topic opens a short authored exchange in which
+	#the villager answers and YOU choose what to say back, and your reply — not the act of
+	#asking — is what moves hearts. When false, every converted topic falls back to its
+	#legacy one-line result and returns to its category, exactly as in 1.0.0. Turning this
+	#off never leaves an empty page: each starter carries an explicit legacy fallback result.
+	enableBranching = true
+
+[gift]
+	#Most recent gifts remembered per player (oldest dropped first).
+	# Default: 16
+	# Range: 1 ~ 256
+	giftMemoryPerPlayerCap = 16
+	#How long (game ticks) a villager stays 'grateful' after an accepted gift (24000 = 1 MC day).
+	# Default: 24000
+	# Range: 1200 ~ 168000
+	gratitudeWindowTicks = 24000
+
+[states]
+	#Conversation states (moods) are short-lived flags an event leaves on a villager that colour
+	#its dialogue for a while. All require enableStates; each value is a duration in game ticks
+	#(24000 = 1 MC day). Set a window to its minimum to make a state effectively momentary.
+	#How long residents stay 'grieving' after a death in their village.
+	# Default: 48000
+	# Range: 1200 ~ 168000
+	stateGriefWindowTicks = 48000
+	#How long residents stay 'elated' after a birth or marriage in their village.
+	# Default: 24000
+	# Range: 1200 ~ 168000
+	stateElatedWindowTicks = 24000
+	#How long a villager stays 'annoyed' at a player who struck it.
+	# Default: 12000
+	# Range: 1200 ~ 168000
+	stateAnnoyedWindowTicks = 12000
+	#How long a villager stays 'smitten' with a player after a gift given while very fond.
+	# Default: 24000
+	# Range: 1200 ~ 168000
+	stateSmittenWindowTicks = 24000
+	#How long a villager stays 'proud' of a player after they complete a quest for it (needs MCA: Quests).
+	# Default: 24000
+	# Range: 1200 ~ 168000
+	stateProudWindowTicks = 24000
+	#Minimum hearts at gift time for the gift to also make the villager 'smitten' (as well as grateful).
+	# Default: 100
+	# Range: 1 ~ 1000
+	stateSmittenMinHearts = 100
+
+[world]
+	#Enable weather-aware conversation lines — villagers can remark on rain and storms,
+	#and the 'weather' template variable resolves to the current sky. Gates the
+	#conversations_weather dialogue condition and the 'world' feature flag.
+	enableWeatherLines = true
+	#Enable season-aware conversation lines — villagers can remark on the time of year, and
+	#the 'season' template variable resolves to spring/summer/autumn/winter. When Serene
+	#Seasons is installed the season is read from it; otherwise it is derived from the world
+	#day via seasonYearLengthDays. Gates the conversations_season dialogue condition.
+	enableSeasonLines = true
+	#Enable festival-day conversation lines — villagers can remark on calendar holidays
+	#(spring bloom, midsummer, harvest festival, midwinter), and the 'holiday' template
+	#variable resolves to the current festival (or 'none'). Holidays are always calendar-based
+	#(seasonYearLengthDays), independent of Serene Seasons. Gates the conversations_holiday condition.
+	enableHolidayLines = true
+	#Length of a full year in MC days, used to derive the calendar season (without Serene
+	#Seasons) and all holiday dates. Split into four equal quarters starting at spring on day 0.
+	#The default 96 matches Serene Seasons' default 24-day seasons.
+	# Default: 96
+	# Range: 4 ~ 4096
+	seasonYearLengthDays = 96
+
+[gossip]
+	#Ticks between village relationship scans for gossip events (600 = 30s).
+	# Default: 600
+	# Range: 100 ~ 24000
+	gossipScanIntervalTicks = 600
+	#How many MC days a gossip event stays tellable before it expires.
+	# Default: 7
+	# Range: 1 ~ 64
+	gossipRetentionDays = 7
+	#Maximum retained gossip events per village (oldest dropped first).
+	# Default: 32
+	# Range: 4 ~ 256
+	maxEventsPerVillage = 32
+	detectMarriage = true
+	detectDivorce = true
+	detectDeath = true
+	detectBirth = true
+	#Notice villagers moving INTO a village (residency-set diffing).
+	detectArrival = true
+	#Notice villagers moving AWAY from a village for good (not deaths).
+	detectDeparture = true
+
+[rpg]
+	#The 1.0.0 RPG layer: an internal per-(villager, player) disposition vector (Trust, Respect,
+	#Warmth, Attraction, Tension, Familiarity) that gates and voices dialogue, plus dialogue checks
+	#with success tiers. Hearts remain MCA's sole visible relationship economy — the vector never
+	#shows as a number and never grants hearts. Each toggle degrades to a documented simpler
+	#behavior; everything off is exactly the 0.6.0 experience.
+	#Master toggle for the disposition vector. When false, no vector state is read or written:
+	#disposition-gated results never match (their authored fallbacks fire) and checks run on a
+	#hearts-only formula.
+	enableDispositions = true
+	#Master toggle for dialogue checks. When false, checked stances resolve through their
+	#authored plain fallback result (the 0.6.0-style single outcome).
+	enableChecks = true
+	#Four-tier check outcomes (crit/success/partial/rebuff). When false, checks collapse to
+	#binary success/rebuff at the same difficulty.
+	enableCheckTiers = true
+	#Scale on all disposition gains and losses (0 freezes the vector).
+	# Default: 1.0
+	# Range: 0.0 ~ 4.0
+	dispositionGainMultiplier = 1.0
+	#Scale on disposition decay toward the personality baseline (0 = values never drift back).
+	# Default: 1.0
+	# Range: 0.0 ~ 4.0
+	dispositionDecayMultiplier = 1.0
+	#Per-axis, per-MC-day cap on total disposition movement from conversations (anti-farming).
+	# Default: 8
+	# Range: 1 ~ 50
+	dispositionDailyAxisCap = 8
+	#Prune disposition records untouched for this many MC days (0 = only prune on villager death).
+	# Default: 0
+	# Range: 0 ~ 365
+	dispositionStaleDays = 0
+	#Verbose logging for disposition reads/writes, check inputs, tier selection, seed derivation.
+	debugRpg = false
+
+[conversation]
+	#The branching-conversation economy (1.1.0). Hearts move on what you SAY BACK, never on
+	#asking a question, navigating, or leaving. Every heart change from a conversation passes
+	#through a guarded ledger: an authored delta is scaled by the multiplier, clamped by the
+	#depth class's per-conversation budget, clamped again by the per-day budget, diminished on
+	#repeat (full -> half -> nothing for the same decision on the same day), and applied at most
+	#once per transaction. Milestone outcomes fire once ever. These caps stay active even when
+	#the disposition vector is switched off.
+	#Scale on every conversation-sourced heart change, positive and negative. 0 makes
+	#conversation heart-neutral (the trees still play, the vector and arcs still move).
+	# Default: 1.0
+	# Range: 0.0 ~ 4.0
+	conversationHeartMultiplier = 1.0
+	#Per-villager, per-player, per-MC-day ceiling on hearts GAINED from conversation.
+	#Counted separately from the negative budget, so antagonising a villager can never
+	#manufacture extra room to earn hearts back.
+	# Default: 8
+	# Range: 0 ~ 100
+	conversationDailyPositiveCap = 8
+	#Per-villager, per-player, per-MC-day floor on hearts LOST to conversation (as a positive
+	#number). Stops rage-baiting a villager to farm reconciliation content.
+	# Default: 10
+	# Range: 0 ~ 100
+	conversationDailyNegativeCap = 10
+	#Double the authored negative deltas (before the caps) for players who want dismissiveness
+	#and boundary-pushing to bite harder. Positive outcomes are unaffected.
+	strongerNegativeOutcomes = false
+	#How long (game ticks) a conversation session survives without activity before it expires
+	#and its per-conversation budget resets (1200 = 60 s). Sessions are transient and never
+	#persist across a restart; arcs, milestones and the daily budgets do.
+	# Default: 1200
+	# Range: 200 ~ 24000
+	conversationSessionTimeoutTicks = 1200
+	#Verbose logging for the branching layer: topic and node transitions, decision ids, check
+	#inputs and tier, requested vs applied hearts, disposition deltas, and arc/milestone moves.
+	debugBranching = false
+
+[chat]
+	#Chat-only mode: a second frontend to the same dialogue engine. Players talk to villagers
+	#by typing in the vanilla chat box and villagers answer in chat, in their own voice,
+	#applying the identical heart gates, cooldowns, dispositions, moods, checks, and gossip as
+	#the interact GUI. No AI/LLM — all matching is deterministic and datapack-driven.
+	#On by default since 0.8.0; set enableChatMode=false for the pre-chat-mode experience.
+	#Master switch. When false, no chat listener work happens and behavior is unchanged.
+	enableChatMode = true
+	#Whether players are opted in to chat mode before running '/conversations chat on'.
+	chatModeDefaultOn = true
+	#Ambient hearing radius (blocks) for unaddressed messages — villagers this close may
+	#answer a message that clearly matches a topic but names no one.
+	# Default: 12.0
+	# Range: 1.0 ~ 64.0
+	chatModeRadius = 12.0
+	#Radius (blocks) when the villager is named or the sticky conversation partner
+	#('calling out' across the square). Larger than the ambient radius.
+	# Default: 24.0
+	# Range: 1.0 ~ 96.0
+	chatModeAddressedRadius = 24.0
+	#How long (game ticks) the last conversation partner stays the default target (600 = 30s).
+	# Default: 600
+	# Range: 0 ~ 72000
+	chatModeStickinessTicks = 600
+	#Half-angle (degrees) of the look-at targeting cone. 0 disables look-at addressing.
+	# Default: 25.0
+	# Range: 0.0 ~ 90.0
+	chatModeLookConeDegrees = 25.0
+	#Maximum villagers that may answer one ambient (unaddressed) message.
+	# Default: 2
+	# Range: 1 ~ 5
+	chatModeMaxResponders = 2
+	#Confidence threshold (0-1) for addressed messages — lower favors recall (answer more often).
+	# Default: 0.55
+	# Range: 0.0 ~ 1.0
+	chatModeMinScore = 0.55
+	#Stricter threshold (0-1) for ambient messages so eavesdropping villagers do not misfire on
+	#player-to-player chatter. Raise on busy town-square servers.
+	# Default: 0.75
+	# Range: 0.0 ~ 1.0
+	chatModeAmbientMinScore = 0.75
+	#Base humanized delay (game ticks) before a villager's reply appears (scaled up by line length).
+	# Default: 15
+	# Range: 0 ~ 100
+	chatModeReplyDelayTicks = 15
+	#Per-player floor (game ticks) between processed chat messages (anti-spam).
+	# Default: 40
+	# Range: 0 ~ 1200
+	chatModeCooldownTicks = 40
+	#When true (default), a villager's reply is also shown to other players near the villager
+	#(roleplay feel). When false, only the speaking player sees it (whisper model, GUI parity).
+	chatModePublicReplies = true
+	#Append a subtle '(+2 heart)'-style suffix to lines for players who want heart-change feedback.
+	chatModeShowHeartChanges = true
+	#Chat line template: %1$s = villager name (colored), %2$s = the line. Roleplay servers may
+	#prefer e.g. "%1$s: %2$s".
+	chatModeMessageFormat = "<%1$s> %2$s"
+	#Duration (game ticks) of a 'stop talking' mute per villager->player pairing (6000 = 5 min).
+	# Default: 6000
+	# Range: 200 ~ 72000
+	chatModeMuteTicks = 6000
+	#Map obvious in-game insults to an in-character rebuke and an ANNOYED state (never censors chat).
+	chatModeInsultDetection = true
+	#EXPERIMENTAL: cancel and rebroadcast opted-in players' chat only within the addressed
+	#radius (proximity/RP chat). This downgrades their messages to unsigned system messages
+	#(disables client-side chat reporting for them; they are still logged to the server
+	#console) and effectively removes global chat for opted-in players. Off by default since
+	#0.8.1 — solo players and RP packs can safely enable it; on public servers understand the
+	#chat-signing and moderation implications first. See the spec's chat-signing notes.
+	chatModeLocalChat = false
+	#Villagers may proactively greet an opted-in player entering the radius (once per
+	#villager per player per day; see chatModeGreetChance).
+	chatModeGreetOnApproach = true
+	#Chance (0-1) that a given villager greets a given player on a given day. Scaled by
+	#personality (outgoing villagers greet more, reserved ones less); deterministic per day,
+	#so re-entering the radius never re-rolls. 1.0 = everyone always greets.
+	# Default: 0.35
+	# Range: 0.0 ~ 1.0
+	chatModeGreetChance = 0.35
+	#Nearby villagers stop and look at a player while their chat screen is open (requires the
+	#client half of this mod, which MCA already requires anyway).
+	chatModeTypingAttention = true
+	#How long (game ticks) a villager keeps standing with its conversation partner after the
+	#last exchange before wandering off (600 = 30s; refreshed per exchange; 0 disables).
+	# Default: 600
+	# Range: 0 ~ 72000
+	chatModeAttentionTicks = 600
+
+[debug]
+	#Verbose logging for gossip detection and dialogue condition evaluation.
+	debugLogging = false

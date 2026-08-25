@@ -171,14 +171,24 @@ about our future? Is anything weighing on you?*
 
 | | |
 |---|---|
-| **Minecraft** | 1.20.1 |
-| **Mod loader** | Forge 47.x |
-| **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.6` – `7.7` (built against 7.7.0-beta.2; **not** 7.7.0-beta.1, which is broken upstream) |
-| **Only if MCA needs it** | [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api) — required by MCA 7.6, dropped by MCA 7.7. This mod never asks for it |
-| **Optional** | MCA: Quests — unlocks quest-aware conversation lines when installed |
+| **Minecraft** | 1.21.1 |
+| **Mod loader** | NeoForge 21.1.234+ |
+| **Java** | 21 |
+| **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.7.36-beta.3` for NeoForge |
 | **Optional** | Serene Seasons — villagers track the real season when installed (calendar fallback otherwise) |
+| **Temporarily unavailable** | MCA: Quests and MCA: Reputation integrations — neither sibling has a 1.21.1 NeoForge release yet |
 
 > This is an **add-on** — MCA Reborn must be installed for it to do anything.
+
+> **Not the same file as the 1.20.1 download.** This is
+> `mcaconversations-neoforge-2.0.0+1.21.1.jar` and will not load on Forge; the Forge 1.20.1 line
+> stays on `mcaconversations-1.2.1.jar`. Architectury is not required by either — MCA's 1.21.1
+> NeoForge build dropped it entirely.
+
+> **Back up your world before upgrading from 1.20.1.** Conversations imports your remembered gifts
+> and chat-mode choice automatically on first load, and the three world data files keep their names
+> and contents. MCA 7.7.36 separately changes how it stores personalities and traits, and that part
+> is not ours to undo.
 
 ---
 
@@ -188,6 +198,9 @@ If you also run **MCA: Quests**, villagers become quest-aware in conversation: t
 that needs doing, react to quests you have active or ready to turn in, and the whole village hears
 about a finished quest as fresh gossip. Everything degrades cleanly if Quests isn't installed —
 *MCA: Conversations* works fully on its own.
+
+> On 1.21.1 this is dormant for now: MCA: Quests has no NeoForge release yet. The conversation
+> lines that ask about quests simply never fire, exactly as on an install without the mod.
 
 ---
 
