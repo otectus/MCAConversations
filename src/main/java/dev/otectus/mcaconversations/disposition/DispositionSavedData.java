@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.disposition;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -26,11 +27,22 @@ public final class DispositionSavedData extends SavedData {
         this.store = store;
     }
 
+    // 1.21.1 SavedData API: computeIfAbsent takes a SavedData.Factory (constructor + loader) plus
+    // the file name, and both the loader and save() receive a HolderLookup.Provider. The DATA_NAME
+    // and the stored payload are deliberately unchanged, so an upgraded world keeps its .dat file
+    // and every record in it. The DataFixTypes is null: no vanilla data fixer applies to this file.
     public static DispositionSavedData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(
-                tag -> new DispositionSavedData(DispositionStore.load(tag)),
-                () -> new DispositionSavedData(new DispositionStore()),
+                new SavedData.Factory<>(DispositionSavedData::create, DispositionSavedData::load, null),
                 DATA_NAME);
+    }
+
+    private static DispositionSavedData create() {
+        return new DispositionSavedData(new DispositionStore());
+    }
+
+    private static DispositionSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
+        return new DispositionSavedData(DispositionStore.load(tag));
     }
 
     /** Read-only decayed axis view; absent records read as the personality baseline. */
@@ -68,7 +80,7 @@ public final class DispositionSavedData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         return store.save(tag);
     }
 }

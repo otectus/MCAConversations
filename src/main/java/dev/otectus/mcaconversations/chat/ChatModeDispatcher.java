@@ -13,7 +13,7 @@ import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.Dispositions;
-import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
+import dev.otectus.mcaconversations.gift.ConversationsAttachments;
 import dev.otectus.mcaconversations.state.ConversationState;
 import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.network.chat.Component;
@@ -21,7 +21,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.ServerChatEvent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -958,8 +958,9 @@ public final class ChatModeDispatcher {
     }
 
     static boolean isOptedIn(ServerPlayer player) {
-        return ConversationsCapabilities.getChatMode(player)
-                .map(ChatModePlayerState::isEnabled)
-                .orElse(McaConversationsConfig.COMMON.chatModeDefaultOn.get());
+        // The attachment always resolves, and ChatModePlayerState.isEnabled() already falls back to
+        // chatModeDefaultOn when the player has made no explicit choice — so the capability era's
+        // orElse(default) is now built into the value itself.
+        return ConversationsAttachments.chatMode(player).isEnabled();
     }
 }

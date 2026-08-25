@@ -3,12 +3,10 @@ package dev.otectus.mcaconversations.mixin;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.ConversationGuard;
-import forge.net.mca.network.c2s.InteractionDialogueMessage;
+import net.conczin.mca.network.c2s.InteractionDialogueMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,11 +16,12 @@ import java.util.UUID;
 /**
  * Validates GUI dialogue submissions for this mod's own questions before MCA acts on them.
  *
- * <p>MCA's {@code receive} resolves the villager by UUID out of the player's level and calls
+ * <p>MCA's {@code handleServer} resolves the villager by UUID out of the player's level and calls
  * {@code selectAnswer} — no distance check, no open-screen check, no constraint re-check, no replay
- * protection (verified byte-identical in MCA 7.6.20 and 7.7.0-beta.2). A crafted or duplicated
- * client packet can therefore drive any question/answer pair against any villager in the level. That
- * is cheap today and expensive once an answer can set a one-shot milestone.
+ * protection (verified against the resolved MCA 7.7.36-beta.3 jar; the 1.20.1 {@code receive} it
+ * replaced was byte-identical in this respect). A crafted or duplicated client packet can therefore
+ * drive any question/answer pair against any villager in the level. That is cheap today and
+ * expensive once an answer can set a one-shot milestone.
  *
  * <p>Scope is deliberately tiny: {@link ConversationGuard} judges only questions whose id starts with
  * {@code conversations}, and every native MCA question returns immediately. Nothing about MCA's own
@@ -36,21 +35,21 @@ import java.util.UUID;
 @Mixin(value = InteractionDialogueMessage.class, remap = false)
 public abstract class InteractionDialogueMessageMixin {
 
-    @Shadow
-    @Final
-    private UUID villagerUUID;
-
-    @Shadow
-    @Final
-    private String question;
-
-    @Shadow
-    @Final
-    private String answer;
-
-    @Inject(method = "receive", at = @At("HEAD"), cancellable = true, require = 0)
+    @Inject(
+            method = "handleServer(Lnet/minecraft/server/level/ServerPlayer;)V",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 0)
     private void mcaconversations$validateSubmission(ServerPlayer player, CallbackInfo ci) {
         try {
+            // The target is a record in 1.21.1. Reading its components through the generated
+            // accessors rather than @Shadow-ing the private final fields avoids shadowing a record
+            // component, which Mixin cannot do safely.
+            InteractionDialogueMessage self = (InteractionDialogueMessage) (Object) this;
+            UUID villagerUUID = self.villagerUUID();
+            String question = self.question();
+            String answer = self.answer();
+
             if (player == null || !ConversationGuard.isOurQuestion(question)) {
                 return;
             }

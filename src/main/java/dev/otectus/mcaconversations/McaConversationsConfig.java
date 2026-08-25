@@ -1,6 +1,6 @@
 package dev.otectus.mcaconversations;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Locale;
@@ -9,16 +9,16 @@ import java.util.Locale;
 public final class McaConversationsConfig {
 
     public static final Common COMMON;
-    public static final ForgeConfigSpec COMMON_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
     public static final Client CLIENT;
-    public static final ForgeConfigSpec CLIENT_SPEC;
+    public static final ModConfigSpec CLIENT_SPEC;
 
     static {
-        final Pair<Common, ForgeConfigSpec> common = new ForgeConfigSpec.Builder().configure(Common::new);
+        final Pair<Common, ModConfigSpec> common = new ModConfigSpec.Builder().configure(Common::new);
         COMMON = common.getLeft();
         COMMON_SPEC = common.getRight();
 
-        final Pair<Client, ForgeConfigSpec> client = new ForgeConfigSpec.Builder().configure(Client::new);
+        final Pair<Client, ModConfigSpec> client = new ModConfigSpec.Builder().configure(Client::new);
         CLIENT = client.getLeft();
         CLIENT_SPEC = client.getRight();
     }
@@ -67,80 +67,80 @@ public final class McaConversationsConfig {
     }
 
     public static final class Common {
-        public final ForgeConfigSpec.EnumValue<HubEntryMode> hubEntryMode;
-        public final ForgeConfigSpec.BooleanValue enableTopics;
-        public final ForgeConfigSpec.BooleanValue enableStates;
-        public final ForgeConfigSpec.BooleanValue enableTemplates;
-        public final ForgeConfigSpec.BooleanValue enableGossip;
-        public final ForgeConfigSpec.BooleanValue enableQuests;
-        public final ForgeConfigSpec.BooleanValue enableBranching;
+        public final ModConfigSpec.EnumValue<HubEntryMode> hubEntryMode;
+        public final ModConfigSpec.BooleanValue enableTopics;
+        public final ModConfigSpec.BooleanValue enableStates;
+        public final ModConfigSpec.BooleanValue enableTemplates;
+        public final ModConfigSpec.BooleanValue enableGossip;
+        public final ModConfigSpec.BooleanValue enableQuests;
+        public final ModConfigSpec.BooleanValue enableBranching;
 
-        public final ForgeConfigSpec.DoubleValue conversationHeartMultiplier;
-        public final ForgeConfigSpec.IntValue conversationDailyPositiveCap;
-        public final ForgeConfigSpec.IntValue conversationDailyNegativeCap;
-        public final ForgeConfigSpec.BooleanValue strongerNegativeOutcomes;
-        public final ForgeConfigSpec.IntValue conversationSessionTimeoutTicks;
-        public final ForgeConfigSpec.BooleanValue debugBranching;
+        public final ModConfigSpec.DoubleValue conversationHeartMultiplier;
+        public final ModConfigSpec.IntValue conversationDailyPositiveCap;
+        public final ModConfigSpec.IntValue conversationDailyNegativeCap;
+        public final ModConfigSpec.BooleanValue strongerNegativeOutcomes;
+        public final ModConfigSpec.IntValue conversationSessionTimeoutTicks;
+        public final ModConfigSpec.BooleanValue debugBranching;
 
-        public final ForgeConfigSpec.IntValue giftMemoryPerPlayerCap;
-        public final ForgeConfigSpec.IntValue gratitudeWindowTicks;
+        public final ModConfigSpec.IntValue giftMemoryPerPlayerCap;
+        public final ModConfigSpec.IntValue gratitudeWindowTicks;
 
-        public final ForgeConfigSpec.IntValue stateGriefWindowTicks;
-        public final ForgeConfigSpec.IntValue stateElatedWindowTicks;
-        public final ForgeConfigSpec.IntValue stateAnnoyedWindowTicks;
-        public final ForgeConfigSpec.IntValue stateSmittenWindowTicks;
-        public final ForgeConfigSpec.IntValue stateProudWindowTicks;
-        public final ForgeConfigSpec.IntValue stateSmittenMinHearts;
+        public final ModConfigSpec.IntValue stateGriefWindowTicks;
+        public final ModConfigSpec.IntValue stateElatedWindowTicks;
+        public final ModConfigSpec.IntValue stateAnnoyedWindowTicks;
+        public final ModConfigSpec.IntValue stateSmittenWindowTicks;
+        public final ModConfigSpec.IntValue stateProudWindowTicks;
+        public final ModConfigSpec.IntValue stateSmittenMinHearts;
 
-        public final ForgeConfigSpec.BooleanValue enableWeatherLines;
-        public final ForgeConfigSpec.BooleanValue enableSeasonLines;
-        public final ForgeConfigSpec.BooleanValue enableHolidayLines;
-        public final ForgeConfigSpec.IntValue seasonYearLengthDays;
+        public final ModConfigSpec.BooleanValue enableWeatherLines;
+        public final ModConfigSpec.BooleanValue enableSeasonLines;
+        public final ModConfigSpec.BooleanValue enableHolidayLines;
+        public final ModConfigSpec.IntValue seasonYearLengthDays;
 
-        public final ForgeConfigSpec.IntValue gossipScanIntervalTicks;
-        public final ForgeConfigSpec.IntValue gossipRetentionDays;
-        public final ForgeConfigSpec.IntValue maxEventsPerVillage;
-        public final ForgeConfigSpec.BooleanValue detectMarriage;
-        public final ForgeConfigSpec.BooleanValue detectDivorce;
-        public final ForgeConfigSpec.BooleanValue detectDeath;
-        public final ForgeConfigSpec.BooleanValue detectBirth;
-        public final ForgeConfigSpec.BooleanValue detectArrival;
-        public final ForgeConfigSpec.BooleanValue detectDeparture;
+        public final ModConfigSpec.IntValue gossipScanIntervalTicks;
+        public final ModConfigSpec.IntValue gossipRetentionDays;
+        public final ModConfigSpec.IntValue maxEventsPerVillage;
+        public final ModConfigSpec.BooleanValue detectMarriage;
+        public final ModConfigSpec.BooleanValue detectDivorce;
+        public final ModConfigSpec.BooleanValue detectDeath;
+        public final ModConfigSpec.BooleanValue detectBirth;
+        public final ModConfigSpec.BooleanValue detectArrival;
+        public final ModConfigSpec.BooleanValue detectDeparture;
 
-        public final ForgeConfigSpec.BooleanValue enableDispositions;
-        public final ForgeConfigSpec.BooleanValue enableChecks;
-        public final ForgeConfigSpec.BooleanValue enableCheckTiers;
-        public final ForgeConfigSpec.DoubleValue dispositionGainMultiplier;
-        public final ForgeConfigSpec.DoubleValue dispositionDecayMultiplier;
-        public final ForgeConfigSpec.IntValue dispositionDailyAxisCap;
-        public final ForgeConfigSpec.IntValue dispositionStaleDays;
-        public final ForgeConfigSpec.BooleanValue debugRpg;
+        public final ModConfigSpec.BooleanValue enableDispositions;
+        public final ModConfigSpec.BooleanValue enableChecks;
+        public final ModConfigSpec.BooleanValue enableCheckTiers;
+        public final ModConfigSpec.DoubleValue dispositionGainMultiplier;
+        public final ModConfigSpec.DoubleValue dispositionDecayMultiplier;
+        public final ModConfigSpec.IntValue dispositionDailyAxisCap;
+        public final ModConfigSpec.IntValue dispositionStaleDays;
+        public final ModConfigSpec.BooleanValue debugRpg;
 
-        public final ForgeConfigSpec.BooleanValue enableChatMode;
-        public final ForgeConfigSpec.BooleanValue chatModeDefaultOn;
-        public final ForgeConfigSpec.DoubleValue chatModeRadius;
-        public final ForgeConfigSpec.DoubleValue chatModeAddressedRadius;
-        public final ForgeConfigSpec.IntValue chatModeStickinessTicks;
-        public final ForgeConfigSpec.DoubleValue chatModeLookConeDegrees;
-        public final ForgeConfigSpec.IntValue chatModeMaxResponders;
-        public final ForgeConfigSpec.DoubleValue chatModeMinScore;
-        public final ForgeConfigSpec.DoubleValue chatModeAmbientMinScore;
-        public final ForgeConfigSpec.IntValue chatModeReplyDelayTicks;
-        public final ForgeConfigSpec.IntValue chatModeCooldownTicks;
-        public final ForgeConfigSpec.BooleanValue chatModePublicReplies;
-        public final ForgeConfigSpec.BooleanValue chatModeShowHeartChanges;
-        public final ForgeConfigSpec.ConfigValue<String> chatModeMessageFormat;
-        public final ForgeConfigSpec.IntValue chatModeMuteTicks;
-        public final ForgeConfigSpec.BooleanValue chatModeInsultDetection;
-        public final ForgeConfigSpec.BooleanValue chatModeLocalChat;
-        public final ForgeConfigSpec.BooleanValue chatModeGreetOnApproach;
-        public final ForgeConfigSpec.DoubleValue chatModeGreetChance;
-        public final ForgeConfigSpec.BooleanValue chatModeTypingAttention;
-        public final ForgeConfigSpec.IntValue chatModeAttentionTicks;
+        public final ModConfigSpec.BooleanValue enableChatMode;
+        public final ModConfigSpec.BooleanValue chatModeDefaultOn;
+        public final ModConfigSpec.DoubleValue chatModeRadius;
+        public final ModConfigSpec.DoubleValue chatModeAddressedRadius;
+        public final ModConfigSpec.IntValue chatModeStickinessTicks;
+        public final ModConfigSpec.DoubleValue chatModeLookConeDegrees;
+        public final ModConfigSpec.IntValue chatModeMaxResponders;
+        public final ModConfigSpec.DoubleValue chatModeMinScore;
+        public final ModConfigSpec.DoubleValue chatModeAmbientMinScore;
+        public final ModConfigSpec.IntValue chatModeReplyDelayTicks;
+        public final ModConfigSpec.IntValue chatModeCooldownTicks;
+        public final ModConfigSpec.BooleanValue chatModePublicReplies;
+        public final ModConfigSpec.BooleanValue chatModeShowHeartChanges;
+        public final ModConfigSpec.ConfigValue<String> chatModeMessageFormat;
+        public final ModConfigSpec.IntValue chatModeMuteTicks;
+        public final ModConfigSpec.BooleanValue chatModeInsultDetection;
+        public final ModConfigSpec.BooleanValue chatModeLocalChat;
+        public final ModConfigSpec.BooleanValue chatModeGreetOnApproach;
+        public final ModConfigSpec.DoubleValue chatModeGreetChance;
+        public final ModConfigSpec.BooleanValue chatModeTypingAttention;
+        public final ModConfigSpec.IntValue chatModeAttentionTicks;
 
-        public final ForgeConfigSpec.BooleanValue debugLogging;
+        public final ModConfigSpec.BooleanValue debugLogging;
 
-        Common(ForgeConfigSpec.Builder b) {
+        Common(ModConfigSpec.Builder b) {
             b.push("features");
             hubEntryMode = b.comment(
                     "How the Conversations hub is reached from MCA's villager interaction screen.",
@@ -408,7 +408,7 @@ public final class McaConversationsConfig {
     }
 
     public static final class Client {
-        Client(ForgeConfigSpec.Builder b) {
+        Client(ModConfigSpec.Builder b) {
             // Reserved for forward-compat (siblings keep an always-registered client spec).
             b.push("display");
             b.pop();

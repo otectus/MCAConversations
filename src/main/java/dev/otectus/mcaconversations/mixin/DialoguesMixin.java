@@ -2,8 +2,9 @@ package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
-import forge.net.mca.resources.Dialogues;
-import forge.net.mca.resources.data.dialogue.Question;
+import net.conczin.mca.resources.Dialogues;
+import net.conczin.mca.resources.data.dialogue.Question;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +31,9 @@ import java.util.Map;
 @Mixin(value = Dialogues.class, remap = false)
 public abstract class DialoguesMixin {
 
+    // private FINAL in the target (verified against the resolved jar), and only read here.
     @Shadow
+    @Final
     private Map<String, Question> questions;
 
     @Inject(method = "getQuestion", at = @At("HEAD"), cancellable = true, require = 0)

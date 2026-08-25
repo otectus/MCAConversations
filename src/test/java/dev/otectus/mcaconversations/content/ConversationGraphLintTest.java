@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Structural lint for the branching conversation graph (plan §13.1).
@@ -48,9 +49,9 @@ class ConversationGraphLintTest {
 
     private static final String SEP = System.lineSeparator();
 
-    private static final Path DIALOGUES = Path.of("src/main/resources/data/mcaconversations/dialogues");
-    private static final Path CATALOG = Path.of("src/main/resources/data/mcaconversations/conversation_catalog");
-    private static final Path LANG = Path.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
+    private static final Path DIALOGUES = TestPaths.of("src/main/resources/data/mcaconversations/dialogues");
+    private static final Path CATALOG = TestPaths.of("src/main/resources/data/mcaconversations/conversation_catalog");
+    private static final Path LANG = TestPaths.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
 
     /** Question-id prefixes that hold converted branching content. */
     private static final String TOPIC_PREFIX = "conversations.topic.";

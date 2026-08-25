@@ -1,14 +1,14 @@
 package dev.otectus.mcaconversations.client;
 
 import dev.otectus.mcaconversations.McaConversations;
-import dev.otectus.mcaconversations.network.ConversationsNetwork;
-import dev.otectus.mcaconversations.network.ConversationsNetwork.TypingStatusC2S;
+import dev.otectus.mcaconversations.network.TypingStatusC2S;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Client-side typing detector (the mod's only client code): edge-detects the vanilla chat screen and
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
  * the screen stays open — the server expires a hold ~3 s after the last ping, so a lost "closed"
  * packet can never pin villagers forever. Sends nothing while not connected or outside a world.
  */
-@Mod.EventBusSubscriber(modid = McaConversations.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = McaConversations.MOD_ID, value = Dist.CLIENT)
 public final class ChatTypingTracker {
 
     /** Re-ping cadence while the chat screen is open (ticks). Must stay well under the server expiry. */
@@ -29,10 +29,8 @@ public final class ChatTypingTracker {
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
+    public static void onClientTick(ClientTickEvent.Post event) {
+        // Post replaces the old TickEvent.ClientTickEvent + phase == END guard.
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.getConnection() == null) {
             wasOpen = false;
@@ -43,11 +41,11 @@ public final class ChatTypingTracker {
             if (open) {
                 ticksSincePing++;
                 if (!wasOpen || ticksSincePing >= PING_INTERVAL_TICKS) {
-                    ConversationsNetwork.CHANNEL.sendToServer(new TypingStatusC2S(true));
+                    PacketDistributor.sendToServer(new TypingStatusC2S(true));
                     ticksSincePing = 0;
                 }
             } else if (wasOpen) {
-                ConversationsNetwork.CHANNEL.sendToServer(new TypingStatusC2S(false));
+                PacketDistributor.sendToServer(new TypingStatusC2S(false));
             }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("typing ping failed; ignoring", t);

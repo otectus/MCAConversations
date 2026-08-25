@@ -9,7 +9,7 @@ import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 /**
  * Records an accepted gift (called from the {@code BreedableRelationship.acceptGift} mixin hook):
@@ -32,13 +32,13 @@ public final class GiftTracker {
             return;
         }
         try {
-            String itemId = String.valueOf(ForgeRegistries.ITEMS.getKey(stack.getItem()));
+            String itemId = String.valueOf(BuiltInRegistries.ITEM.getKey(stack.getItem()));
             long now = player.serverLevel().getGameTime();
 
-            ConversationsCapabilities.get(player).ifPresent(data -> data.recordGift(
+            ConversationsAttachments.giftMemory(player).recordGift(
                     villager.getUUID(),
                     new LastGift(itemId, stack.getCount(), now),
-                    McaConversationsConfig.COMMON.giftMemoryPerPlayerCap.get()));
+                    McaConversationsConfig.COMMON.giftMemoryPerPlayerCap.get());
 
             StateTracker.apply(villager, player, ConversationState.GRATEFUL);
             // A gift given while already very fond deepens gratitude into being smitten.

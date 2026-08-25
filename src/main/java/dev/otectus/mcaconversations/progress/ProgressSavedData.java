@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.progress;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -29,11 +30,22 @@ public final class ProgressSavedData extends SavedData {
         this.store = store;
     }
 
+    // 1.21.1 SavedData API: computeIfAbsent takes a SavedData.Factory (constructor + loader) plus
+    // the file name, and both the loader and save() receive a HolderLookup.Provider. The DATA_NAME
+    // and the stored payload are deliberately unchanged, so an upgraded world keeps its .dat file
+    // and every record in it. The DataFixTypes is null: no vanilla data fixer applies to this file.
     public static ProgressSavedData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(
-                tag -> new ProgressSavedData(ProgressStore.load(tag)),
-                () -> new ProgressSavedData(new ProgressStore()),
+                new SavedData.Factory<>(ProgressSavedData::create, ProgressSavedData::load, null),
                 DATA_NAME);
+    }
+
+    private static ProgressSavedData create() {
+        return new ProgressSavedData(new ProgressStore());
+    }
+
+    private static ProgressSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
+        return new ProgressSavedData(ProgressStore.load(tag));
     }
 
     public Optional<ProgressRecord> peek(UUID villager, UUID player) {
@@ -99,7 +111,7 @@ public final class ProgressSavedData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         return store.save(tag);
     }
 }

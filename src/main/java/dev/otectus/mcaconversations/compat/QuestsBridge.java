@@ -3,7 +3,7 @@ package dev.otectus.mcaconversations.compat;
 import dev.otectus.mcaconversations.McaConversations;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 /**
  * The classloading gate in front of everything MCA: Quests-shaped — the exact sibling of
@@ -90,7 +90,13 @@ public final class QuestsBridge {
             return;
         }
         try {
-            dev.otectus.mcaconversations.compat.quests.ConversationsQuestsCompat.register();
+            // Named as a string, never referenced directly: a direct call would put every
+            // MCA: Quests type that class mentions into this class's constant pool, and this
+            // class loads everywhere. It also lets a core-only build (no sibling classes on
+            // the compile path) drop the Quests adapter without breaking this bridge.
+            Class.forName("dev.otectus.mcaconversations.compat.quests.ConversationsQuestsCompat")
+                    .getMethod("register")
+                    .invoke(null);
             available = true;
             McaConversations.LOGGER.info("MCA: Quests detected; Conversations quest integration registered.");
         } catch (Throwable t) {

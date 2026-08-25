@@ -7,13 +7,15 @@ import dev.otectus.mcaquests.quest.QuestManager;
 import dev.otectus.mcaquests.quest.situation.QuestDefinitions;
 import dev.otectus.mcaquests.state.ActiveQuest;
 import dev.otectus.mcaquests.state.PlayerQuestData;
-import dev.otectus.mcaquests.state.QuestCapabilities;
+// PORT: MCA: Quests replaced its Forge capability with a NeoForge data attachment. The accessor
+// kept its Optional-returning shape, so this is a rename and nothing more.
+import dev.otectus.mcaquests.state.QuestAttachments;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Optional;
 
@@ -39,11 +41,11 @@ public final class ConversationsQuestsCompat implements QuestsBridge.QuestQuerie
     public static void register() {
         QuestsBridge.setQueries(new ConversationsQuestsCompat());
         TalkAboutObjective.TYPE = McaQuestsApi.registerObjective(
-                new ResourceLocation("mcaconversations", "talk_about"), TalkAboutObjective.CODEC);
+                ResourceLocation.fromNamespaceAndPath("mcaconversations", "talk_about"), TalkAboutObjective.CODEC);
         UnlockTopicReward.TYPE = McaQuestsApi.registerReward(
-                new ResourceLocation("mcaconversations", "unlock_topic"), UnlockTopicReward.CODEC);
+                ResourceLocation.fromNamespaceAndPath("mcaconversations", "unlock_topic"), UnlockTopicReward.CODEC);
         QuestDialogueHooks.setResolver(new QuestVoiceResolver());
-        MinecraftForge.EVENT_BUS.register(new ConversationsQuestsEvents());
+        NeoForge.EVENT_BUS.register(new ConversationsQuestsEvents());
         McaConversations.LOGGER.info("MCA: Quests integration: registered talk_about objective, unlock_topic reward, "
                 + "voice resolver, and quest-event subscriber.");
     }
@@ -63,7 +65,7 @@ public final class ConversationsQuestsCompat implements QuestsBridge.QuestQuerie
     @Override
     public boolean hasActive(ServerPlayer player, Entity villager, boolean thisVillagerOnly, int min) {
         try {
-            Optional<PlayerQuestData> data = QuestCapabilities.get(player);
+            Optional<PlayerQuestData> data = QuestAttachments.get(player);
             if (data.isEmpty()) {
                 return false;
             }
@@ -83,7 +85,7 @@ public final class ConversationsQuestsCompat implements QuestsBridge.QuestQuerie
             if (thisVillagerOnly) {
                 return QuestManager.hasReadyTurnIn(player, villager);
             }
-            Optional<PlayerQuestData> data = QuestCapabilities.get(player);
+            Optional<PlayerQuestData> data = QuestAttachments.get(player);
             if (data.isEmpty()) {
                 return false;
             }
@@ -103,7 +105,7 @@ public final class ConversationsQuestsCompat implements QuestsBridge.QuestQuerie
     @Override
     public int completedCount(ServerPlayer player, Entity villager, boolean thisVillagerOnly) {
         try {
-            Optional<PlayerQuestData> data = QuestCapabilities.get(player);
+            Optional<PlayerQuestData> data = QuestAttachments.get(player);
             if (data.isEmpty()) {
                 return 0;
             }

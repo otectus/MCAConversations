@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.personality;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -27,13 +28,18 @@ import java.util.Set;
 public final class Personalities {
 
     /**
-     * The rollable personalities of MCA 7.7, in MCA's own registration order. {@code unassigned}
-     * is deliberately absent: it is a sentinel, never rolled onto a villager, and MCA's resolver
-     * falls back to it only when an id fails to parse.
+     * The rollable personalities MCA registers on 1.21.1, in MCA's own registration order.
+     * {@code unassigned} is deliberately absent: it is a sentinel, never rolled onto a villager
+     * (MCA's {@code getRandom} skips it explicitly), and its resolver falls back to it only when an
+     * id fails to parse.
+     *
+     * <p>Read straight off {@code Personality}'s built-in registrations in the resolved MCA jar —
+     * see {@code docs/PORT-1.21.1-EVIDENCE.md}. {@code confident} and {@code peppy} were rollable in
+     * the 1.20.1-era 7.7 beta but are not registered here, so they moved to {@link #LEGACY_ONLY}.
      */
-    public static final Set<String> CANONICAL = Collections.unmodifiableSet(new LinkedHashSet<>(Set.of(
-            "confident", "peppy", "friendly", "flirty", "playful", "gloomy", "sensitive", "greedy",
-            "odd", "crabby", "extroverted", "introverted", "relaxed", "anxious", "peaceful", "upbeat")));
+    public static final Set<String> CANONICAL = Collections.unmodifiableSet(new LinkedHashSet<>(List.of(
+            "friendly", "flirty", "playful", "gloomy", "sensitive", "greedy", "odd", "crabby",
+            "extroverted", "introverted", "relaxed", "anxious", "peaceful", "upbeat")));
 
     /**
      * MCA 7.6 personality ids that 7.7 renamed, mapped to their 7.7 successor. MCA migrates saved
@@ -43,11 +49,17 @@ public final class Personalities {
     public static final Map<String, String> LEGACY_ALIASES;
 
     /**
-     * MCA 7.6 personalities with no 7.7 successor. {@code athletic} became the {@code mca:athletic}
-     * trait, so it is not a personality on 7.7 — but a villager on MCA 7.6 can still *be* athletic,
-     * so its voice is kept as a legacy-only overlay rather than deleted.
+     * Personality ids this mod still ships a voice for, but which the target MCA does not register.
+     *
+     * <p>{@code athletic} became the {@code mca:athletic} trait back in 7.7. {@code confident} and
+     * {@code peppy} were rollable in the 1.20.1-era 7.7 beta and are gone from the 1.21.1 registry.
+     * None of the three can be rolled onto a villager here, but all three can still arrive from an
+     * upgraded save or a third-party pack, so their overlays are retained as compatibility assets
+     * rather than deleted — a villager who *is* one keeps their voice instead of falling back to the
+     * generic pool.
      */
-    public static final Set<String> LEGACY_ONLY = Set.of("athletic");
+    public static final Set<String> LEGACY_ONLY =
+            Collections.unmodifiableSet(new LinkedHashSet<>(List.of("athletic", "confident", "peppy")));
 
     static {
         Map<String, String> aliases = new LinkedHashMap<>();

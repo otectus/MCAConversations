@@ -2,22 +2,22 @@ package dev.otectus.mcaconversations.compat;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.personality.Personalities;
-import forge.net.mca.cobalt.network.NetworkHandler;
-import forge.net.mca.entity.VillagerEntityMCA;
-import forge.net.mca.entity.VillagerLike;
-import forge.net.mca.entity.ai.Memories;
-import forge.net.mca.entity.ai.relationship.AgeState;
-import forge.net.mca.entity.ai.relationship.EntityRelationship;
-import forge.net.mca.entity.interaction.Constraint;
-import forge.net.mca.network.s2c.InteractionDialogueQuestionResponse;
-import forge.net.mca.resources.Dialogues;
-import forge.net.mca.resources.data.dialogue.Answer;
-import forge.net.mca.resources.data.dialogue.Question;
-import forge.net.mca.server.world.data.FamilyTree;
-import forge.net.mca.server.world.data.FamilyTreeNode;
-import forge.net.mca.server.world.data.PlayerSaveData;
-import forge.net.mca.server.world.data.Village;
-import forge.net.mca.server.world.data.VillageManager;
+import net.conczin.mca.network.Network;
+import net.conczin.mca.entity.VillagerEntityMCA;
+import net.conczin.mca.entity.VillagerLike;
+import net.conczin.mca.entity.ai.Memories;
+import net.conczin.mca.entity.ai.relationship.AgeState;
+import net.conczin.mca.entity.ai.relationship.EntityRelationship;
+import net.conczin.mca.entity.interaction.Constraint;
+import net.conczin.mca.network.s2c.InteractionDialogueQuestionResponse;
+import net.conczin.mca.resources.Dialogues;
+import net.conczin.mca.resources.data.dialogue.Answer;
+import net.conczin.mca.resources.data.dialogue.Question;
+import net.conczin.mca.server.world.data.FamilyTree;
+import net.conczin.mca.server.world.data.FamilyTreeNode;
+import net.conczin.mca.server.world.data.PlayerSaveData;
+import net.conczin.mca.server.world.data.Village;
+import net.conczin.mca.server.world.data.VillageManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -39,10 +39,10 @@ import java.util.UUID;
  * The single point of contact with Minecraft Comes Alive: Reborn (together with the
  * {@code compat.mca} adapter package, which implements MCA functional interfaces).
  *
- * <p><b>Why {@code forge.net.mca.*} and not {@code net.mca.*}?</b> MCA Reborn ships a Forgix-merged
- * "Universal" jar (Forge + Fabric + Quilt). Forgix relocates each loader's classes under a
- * loader-named root package, so the Forge classes are physically {@code forge.net.mca.*} in both
- * the production jar and our dev-remapped (deobf) jar.
+ * <p><b>Why {@code net.conczin.mca.*}?</b> That is simply where MCA's classes live. The 1.20.1 line
+ * shipped a Forgix-merged "Universal" jar that relocated each loader's copy under a loader-named
+ * root ({@code forge.net.mca.*}); the 1.21.1 line drops that entirely and publishes a per-loader
+ * artifact — {@code net.conczin.mca:mca-neoforge} — with the classes at their real package.
  *
  * <p>Every method here fails safe: instanceof guards, {@code try/catch (Throwable)}, DEBUG log,
  * documented safe default. MCA API drift must never crash a server.
@@ -237,7 +237,9 @@ public final class McaCompat {
             return;
         }
         try {
-            NetworkHandler.sendToPlayer(new InteractionDialogueQuestionResponse(false, line.get()), player);
+            // 1.21.1 argument order is (Component, boolean), the reverse of the 1.20.1 packet's
+            // (boolean, Component). silent=false keeps MCA's own delivery sound.
+            Network.sendToPlayer(new InteractionDialogueQuestionResponse(line.get(), false), player);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("MCA sayInDialogue({}) failed; falling back to chat", phrase, t);
             try {
@@ -332,16 +334,17 @@ public final class McaCompat {
      * The villager's MCA personality as its bare lowercase id (e.g. {@code odd}, {@code upbeat}) —
      * the same token MCA uses as the personality prefix on dialogue lang keys. Safe default: empty.
      *
-     * <p><b>Version-agnostic on purpose.</b> MCA 7.6 declares {@code Personality} as an enum and 7.7
-     * as a registry-backed class, so neither {@code name()} (gone in 7.7) nor {@code getPersonalityId()}
-     * (absent in 7.6) can be called from a single binary without reflection. {@code toString()} exists
-     * in both — inherited from {@code Enum} on 7.6 ({@code "ODD"}) and overridden to the namespaced id
-     * on 7.7 ({@code "mca:odd"}) — and {@link Personalities#normalize} reduces both to {@code "odd"}.
+     * <p>Reads the stable registry id rather than {@code toString()}. The 1.20.1 build had to go
+     * through {@code toString()} because it targeted both MCA 7.6 (where {@code Personality} was an
+     * enum) and 7.7 (where it became a registry-backed class); this line targets 7.7 on 1.21.1 only,
+     * where {@code getPersonalityId()} is the documented stable accessor.
+     * {@link Personalities#normalize} still strips the {@code mca:} namespace and handles a
+     * third-party personality registered under some other namespace.
      */
     public static Optional<String> getPersonality(Entity villager) {
         if (villager instanceof VillagerEntityMCA mca) {
             try {
-                return Optional.ofNullable(mca.getVillagerBrain().getPersonality())
+                return Optional.ofNullable(mca.getVillagerBrain().getPersonalityId())
                         .map(Object::toString)
                         .map(Personalities::normalize)
                         .filter(s -> !s.isEmpty());

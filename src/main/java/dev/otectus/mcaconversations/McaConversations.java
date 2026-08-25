@@ -4,14 +4,13 @@ import com.mojang.logging.LogUtils;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
 import dev.otectus.mcaconversations.compat.SeasonsBridge;
-import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
+import dev.otectus.mcaconversations.gift.ConversationsAttachments;
 import dev.otectus.mcaconversations.network.ConversationsNetwork;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
 /**
@@ -31,16 +30,21 @@ public final class McaConversations {
     public static final String MOD_ID = "mcaconversations";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public McaConversations() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, McaConversationsConfig.COMMON_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, McaConversationsConfig.CLIENT_SPEC);
+    public McaConversations(IEventBus modBus, ModContainer container) {
+        container.registerConfig(ModConfig.Type.COMMON, McaConversationsConfig.COMMON_SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, McaConversationsConfig.CLIENT_SPEC);
 
-        final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::onCommonSetup);
-        modBus.addListener(ConversationsCapabilities::onRegisterCapabilities);
 
-        // The chat-mode typing-attention channel (one C2S ping; server re-validates everything).
-        ConversationsNetwork.register();
+        // Gift memory and the chat-mode opt-in are NeoForge data attachments now, not Forge
+        // capabilities: no provider, no LazyOptional, no attach event, and copyOnDeath replaces
+        // the old PlayerEvent.Clone copy.
+        ConversationsAttachments.REGISTER.register(modBus);
+
+        // The chat-mode typing-attention payload (one C2S ping; the server re-validates
+        // everything). This has to be a mod-bus listener — registering a payload later, from
+        // common setup's enqueueWork the way the Forge SimpleChannel did, throws on NeoForge.
+        modBus.addListener(ConversationsNetwork::onRegisterPayloads);
 
         LOGGER.info("MCA: Conversations initialising (mod id '{}')", MOD_ID);
     }

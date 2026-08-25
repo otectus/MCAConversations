@@ -218,7 +218,7 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
         }
         ReputationRequest.Builder request = ReputationRequest
                 .builder(player.server, player.getUUID(), key.get(), incident,
-                        new ResourceLocation("mcaconversations", "conversations"))
+                        ResourceLocation.fromNamespaceAndPath("mcaconversations", "conversations"))
                 // §14.2's conversation shape. The decision id is what makes a second click on the same
                 // apology a no-op while a genuinely different authored choice still records.
                 .dedupeKey("conversation:" + villager.getUUID() + ":" + player.getUUID() + ":"

@@ -4,7 +4,6 @@ import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.ChatIntentLoader;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
-import dev.otectus.mcaconversations.chat.ChatModePlayerStateProvider;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
 import dev.otectus.mcaconversations.chat.GreetOnApproach;
@@ -17,32 +16,34 @@ import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
 import dev.otectus.mcaconversations.interiority.Interiority;
 import dev.otectus.mcaconversations.progress.ProgressSavedData;
-import dev.otectus.mcaconversations.gift.GiftMemoryProvider;
-import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
 import dev.otectus.mcaconversations.gossip.GossipDetectors;
 import dev.otectus.mcaconversations.state.ConversationState;
 import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
- * Forge-bus wiring. Every MCA-dependent handler early-outs on {@link McaBridge#isAvailable()} and
- * the relevant config toggle before touching {@link McaCompat}.
+ * NeoForge game-bus wiring. Every MCA-dependent handler early-outs on
+ * {@link McaBridge#isAvailable()} and the relevant config toggle before touching {@link McaCompat}.
+ *
+ * <p>There is no capability lifecycle here any more. Gift memory and the chat-mode opt-in are data
+ * attachments, which need no attach event, no invalidation, and no {@code PlayerEvent.Clone} copy —
+ * {@code copyOnDeath} on the attachment type covers death and respawn, and NeoForge already carries
+ * serializable attachments through an End return. See
+ * {@link dev.otectus.mcaconversations.gift.ConversationsAttachments}.
  */
-@Mod.EventBusSubscriber(modid = McaConversations.MOD_ID)
+@EventBusSubscriber(modid = McaConversations.MOD_ID)
 public final class ConversationsEvents {
 
     /** Greet-on-approach proximity-scan cadence (2 s) — cheap AABB queries, not worth a config knob. */
@@ -51,31 +52,7 @@ public final class ConversationsEvents {
     private ConversationsEvents() {
     }
 
-    // --- Capability lifecycle -------------------------------------------------
-
-    @SubscribeEvent
-    public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            GiftMemoryProvider provider = new GiftMemoryProvider();
-            event.addCapability(ConversationsCapabilities.ID, provider);
-            event.addListener(provider::invalidate);
-
-            ChatModePlayerStateProvider chatProvider = new ChatModePlayerStateProvider();
-            event.addCapability(ConversationsCapabilities.CHAT_MODE_ID, chatProvider);
-            event.addListener(chatProvider::invalidate);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onClone(PlayerEvent.Clone event) {
-        // The original player's caps are invalidated on death; revive to read, then re-invalidate.
-        event.getOriginal().reviveCaps();
-        ConversationsCapabilities.get(event.getOriginal()).ifPresent(old ->
-                ConversationsCapabilities.get(event.getEntity()).ifPresent(fresh -> fresh.copyFrom(old)));
-        ConversationsCapabilities.getChatMode(event.getOriginal()).ifPresent(old ->
-                ConversationsCapabilities.getChatMode(event.getEntity()).ifPresent(fresh -> fresh.copyFrom(old)));
-        event.getOriginal().invalidateCaps();
-    }
+    // --- Player session lifecycle ---------------------------------------------
 
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
@@ -196,7 +173,7 @@ public final class ConversationsEvents {
     // --- Conversation states ---------------------------------------------------
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
+    public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
         if (!McaBridge.isAvailable() || event.getEntity().level().isClientSide()
                 || !McaConversationsConfig.COMMON.enableStates.get()) {
             return;
@@ -208,8 +185,9 @@ public final class ConversationsEvents {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || !McaBridge.isAvailable()) {
+    public static void onServerTick(ServerTickEvent.Post event) {
+        // Post replaces the old TickEvent.ServerTickEvent + phase == END guard.
+        if (!McaBridge.isAvailable()) {
             return;
         }
         // Deferred chat-mode replies are due-checked every tick (deadline queue, not the modulo cadence).

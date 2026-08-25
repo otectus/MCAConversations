@@ -2,61 +2,60 @@ package dev.otectus.mcaconversations.network;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 /**
- * The mod's (first and only) network channel. One tiny C2S message: {@link TypingStatusC2S}, sent by
- * the client while the chat screen is open so nearby villagers can turn toward the typing player
- * (chat-mode attention). The server fully re-validates on receipt — feature flags, opt-in — so a
- * stray or malicious packet can at most make villagers glance at the sender.
+ * The mod's (first and only) network registration. One tiny C2S payload,
+ * {@link TypingStatusC2S}, sent by the client while the chat screen is open so nearby villagers can
+ * turn toward the typing player (chat-mode attention).
  *
  * <p>This is chat mode's one deviation from the "no new client code/packets" posture: typing state
- * simply does not exist server-side. The mod is already required on both sides (MCA dependency), and
- * a client that never sends pings just gets no typing-attention — everything else works unchanged.
+ * simply does not exist server-side. The mod is already required on both sides (MCA dependency), so
+ * strict protocol compatibility is correct — a 1.20 client cannot reach a 1.21 server anyway, and
+ * no legacy decoder is needed.
+ *
+ * <p>Registration must happen from a {@code RegisterPayloadHandlersEvent} listener on the mod bus.
+ * The 1.20.1 build registered its {@code SimpleChannel} straight from the mod constructor; doing the
+ * equivalent late on NeoForge throws.
  */
 public final class ConversationsNetwork {
 
-    private static final String PROTOCOL = "1";
-
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(McaConversations.MOD_ID, "main"),
-            () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
+    /**
+     * Bumped from the Forge channel's {@code "1"}: the payload id, encoding and framing all changed
+     * with the loader, so nothing on the old protocol could have talked to this anyway.
+     */
+    private static final String PROTOCOL = "2";
 
     private ConversationsNetwork() {
     }
 
-    public static void register() {
-        CHANNEL.registerMessage(0, TypingStatusC2S.class,
-                TypingStatusC2S::encode, TypingStatusC2S::decode, TypingStatusC2S::handle);
+    /** Mod-bus listener; wired up in the {@link McaConversations} constructor. */
+    public static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(McaConversations.MOD_ID).versioned(PROTOCOL);
+        registrar.playToServer(
+                TypingStatusC2S.TYPE,
+                TypingStatusC2S.STREAM_CODEC,
+                ConversationsNetwork::handleTyping);
     }
 
-    /** {@code typing=true} while the chat screen is open (re-pinged ~1/s); {@code false} on close. */
-    public record TypingStatusC2S(boolean typing) {
-
-        static void encode(TypingStatusC2S msg, FriendlyByteBuf buf) {
-            buf.writeBoolean(msg.typing);
-        }
-
-        static TypingStatusC2S decode(FriendlyByteBuf buf) {
-            return new TypingStatusC2S(buf.readBoolean());
-        }
-
-        static void handle(TypingStatusC2S msg, Supplier<NetworkEvent.Context> ctx) {
-            NetworkEvent.Context context = ctx.get();
-            context.enqueueWork(() -> {
-                ServerPlayer sender = context.getSender();
-                if (sender != null) {
-                    ChatModeDispatcher.onTypingStatus(sender, msg.typing());
-                }
-            });
-            context.setPacketHandled(true);
+    /**
+     * NeoForge runs payload handlers on the main thread by default, which is the same guarantee the
+     * old {@code ctx.enqueueWork(...)} wrapper provided.
+     *
+     * <p>Kept defensive on purpose: an exception escaping a NeoForge payload handler disconnects the
+     * player, where the Forge {@code SimpleChannel} merely logged. A failed typing ping is never
+     * worth kicking someone out of the game over.
+     */
+    private static void handleTyping(TypingStatusC2S payload, IPayloadContext context) {
+        try {
+            if (context.player() instanceof ServerPlayer sender) {
+                ChatModeDispatcher.onTypingStatus(sender, payload.typing());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("typing status handler failed; ignoring", t);
         }
     }
 }

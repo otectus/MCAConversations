@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Build-time lint over the shipped dialogue datapack and lang files: every condition/action key is
@@ -40,8 +41,8 @@ class ContentLintTest {
     /** Join separator for problem lists. */
     private static final String SEP = System.lineSeparator();
 
-    private static final Path DIALOGUES = Path.of("src/main/resources/data/mcaconversations/dialogues");
-    private static final Path LANG = Path.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
+    private static final Path DIALOGUES = TestPaths.of("src/main/resources/data/mcaconversations/dialogues");
+    private static final Path LANG = TestPaths.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
 
     /** MCA 7.6.23 condition vocabulary (from GiftPredicate registrations) + ours. */
     private static final Set<String> CONDITION_KEYS = Set.of(
@@ -86,12 +87,31 @@ class ContentLintTest {
     private static final Set<String> CHORES = Set.of("none", "prospect", "harvest", "chop", "hunt", "fish");
     private static final Set<String> MOODS = Set.of("depressed", "sad", "unhappy", "passive", "fine", "happy", "overjoyed");
     /**
-     * Values accepted by our own {@code conversations_personality} condition. Content names the MCA
-     * 7.7 canonical id: MCA's native {@code personality} condition is unusable across versions (it
-     * throws on an unknown id and takes the datapack reload down with it), so every use of it was
-     * replaced — see {@link #contentNeverUsesMcasCrashProneNativePersonalityCondition}.
+     * Values accepted by our own {@code conversations_personality} condition. MCA's native
+     * {@code personality} condition is unusable across versions (it throws on an unknown id and
+     * takes the datapack reload down with it), so every use of it was replaced — see
+     * {@link #contentNeverUsesMcasCrashProneNativePersonalityCondition}.
+     *
+     * <p>Deliberately the full overlay roster, not just {@link Personalities#CANONICAL}. Three
+     * tiers are legitimate here and they are not the same thing:
+     *
+     * <ul>
+     *   <li><b>canonical</b> — the 14 personalities the target MCA actually rolls. These are the
+     *       only ids a fresh villager can have, and {@code OverlayLintTest} requires a complete
+     *       lang overlay for each.</li>
+     *   <li><b>renamed aliases</b> ({@code witty}, {@code shy}, {@code lazy}, {@code grumpy}) —
+     *       resolve to a canonical successor, so authoring either spelling matches the same
+     *       villager.</li>
+     *   <li><b>retained legacy</b> ({@code athletic}, {@code confident}, {@code peppy}) — no longer
+     *       registered by MCA, so no new villager rolls one, but an upgraded save or a third-party
+     *       pack can still present one. The condition simply never matches on a stock install; it
+     *       cannot crash, because ours parses defensively.</li>
+     * </ul>
+     *
+     * <p>What this still catches is the thing that matters: a typo or an invented id, which would
+     * silently never match and quietly disable a line.
      */
-    private static final Set<String> PERSONALITIES = Personalities.CANONICAL;
+    private static final Set<String> PERSONALITIES = Personalities.overlayPrefixes();
     private static final Set<String> AGE_GROUPS = Set.of("unassigned", "baby", "toddler", "child", "teen", "adult");
     private static final Set<String> RANKS = Set.of("outlaw", "peasant", "merchant", "noble", "mayor", "monarch");
     private static final Set<String> CONSTRAINTS = Set.of(
@@ -1109,7 +1129,7 @@ class ContentLintTest {
 
     /** Every en_us lang file this mod ships, base pool and personality overlays alike. */
     private static List<Path> langFiles() throws IOException {
-        try (var dirs = Files.list(Path.of("src/main/resources/assets"))) {
+        try (var dirs = Files.list(TestPaths.of("src/main/resources/assets"))) {
             List<Path> files = new ArrayList<>();
             for (Path dir : dirs.toList()) {
                 Path file = dir.resolve("lang").resolve("en_us.json");

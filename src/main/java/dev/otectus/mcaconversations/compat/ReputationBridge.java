@@ -4,7 +4,7 @@ import dev.otectus.mcaconversations.McaConversations;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 import java.util.List;
 import java.util.Optional;

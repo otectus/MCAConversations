@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Walks the shipped topics end to end the way MCA would (plan §13.6), against the real guard chain:
@@ -58,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class TopicPathSimulationTest {
 
-    private static final Path DIALOGUES = Path.of("src/main/resources/data/mcaconversations/dialogues");
+    private static final Path DIALOGUES = TestPaths.of("src/main/resources/data/mcaconversations/dialogues");
     private static final UUID VILLAGER = UUID.nameUUIDFromBytes("sim-villager".getBytes());
     private static final UUID PLAYER = UUID.nameUUIDFromBytes("sim-player".getBytes());
 
@@ -76,7 +77,7 @@ class TopicPathSimulationTest {
         }
 
         List<TopicEntry> topics = new ArrayList<>();
-        Path catalog = Path.of("src/main/resources/data/mcaconversations/conversation_catalog");
+        Path catalog = TestPaths.of("src/main/resources/data/mcaconversations/conversation_catalog");
         try (var files = Files.list(catalog)) {
             for (Path file : files.filter(p -> p.toString().endsWith(".json")).toList()) {
                 JsonObject root = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
@@ -587,7 +588,7 @@ class TopicPathSimulationTest {
     private static int shippedHumourBias(String personality) {
         try {
             JsonObject profiles = JsonParser.parseString(Files.readString(
-                            Path.of("src/main/resources/data/mcaconversations/interiority/personalities.json")))
+                            TestPaths.of("src/main/resources/data/mcaconversations/interiority/personalities.json")))
                     .getAsJsonObject().getAsJsonObject("profiles");
             JsonObject bias = profiles.getAsJsonObject(personality).getAsJsonObject("stance_bias");
             return bias.has("humor") ? bias.get("humor").getAsInt() : 0;

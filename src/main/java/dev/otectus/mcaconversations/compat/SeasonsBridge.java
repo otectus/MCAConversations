@@ -2,7 +2,7 @@ package dev.otectus.mcaconversations.compat;
 
 import dev.otectus.mcaconversations.McaConversations;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 import java.util.Optional;
 

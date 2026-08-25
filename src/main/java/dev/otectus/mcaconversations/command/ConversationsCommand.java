@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.chat.ChatModePlayerState;
-import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
+import dev.otectus.mcaconversations.gift.ConversationsAttachments;
 import dev.otectus.mcaconversations.gossip.GossipEvent;
 import dev.otectus.mcaconversations.gossip.GossipSavedData;
 import net.minecraft.commands.CommandSourceStack;
@@ -82,7 +82,7 @@ public final class ConversationsCommand {
 
     private static int setChat(CommandSourceStack source, boolean enabled) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        ConversationsCapabilities.getChatMode(player).ifPresent(state -> state.setEnabled(enabled));
+        ConversationsAttachments.chatMode(player).setEnabled(enabled);
         String note = McaConversationsConfig.COMMON.enableChatMode.get()
                 ? ""
                 : " (note: chat mode is disabled server-side, so this has no effect yet)";
@@ -94,9 +94,7 @@ public final class ConversationsCommand {
     private static int chatStatus(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         boolean serverOn = McaConversationsConfig.COMMON.enableChatMode.get();
-        boolean playerOn = ConversationsCapabilities.getChatMode(player)
-                .map(ChatModePlayerState::isEnabled)
-                .orElse(McaConversationsConfig.COMMON.chatModeDefaultOn.get());
+        boolean playerOn = ConversationsAttachments.chatMode(player).isEnabled();
         source.sendSuccess(() -> Component.literal("Chat mode: server " + (serverOn ? "on" : "off")
                 + ", you " + (playerOn ? "on" : "off")
                 + (serverOn && playerOn ? " — talk to villagers by typing." : ".")), false);

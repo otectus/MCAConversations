@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Lints the personality overlay lang files ({@code assets/mca_dialogue_<personality>/lang/}):
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class OverlayLintTest {
 
-    private static final Path ASSETS = Path.of("src/main/resources/assets");
+    private static final Path ASSETS = TestPaths.of("src/main/resources/assets");
     private static final Path BASE_LANG = ASSETS.resolve("mca_dialogue/lang/en_us.json");
 
     /** MCA 7.6.26 personalities (lowercase). */

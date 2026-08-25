@@ -1,11 +1,11 @@
 package dev.otectus.mcaconversations.compat;
 
 import dev.otectus.mcaconversations.McaConversations;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 /**
  * The classloading gate in front of everything MCA-shaped. This class has <b>no</b>
- * {@code forge.net.mca.*} imports; {@code compat.mca.ConversationsMcaRegistrar} (which does) is only
+ * {@code net.conczin.mca.*} imports; {@code compat.mca.ConversationsMcaRegistrar} (which does) is only
  * <em>named</em> here, so the JVM does not load any MCA class until after the
  * {@link ModList#isLoaded} check, and {@code catch (Throwable)} additionally absorbs
  * {@code NoClassDefFoundError}/{@code NoSuchMethodError} from MCA API drift.

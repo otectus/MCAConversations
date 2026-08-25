@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.gossip;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -27,9 +28,18 @@ public final class GossipSavedData extends SavedData {
     /** Last-seen resident UUID set per village id — drives arrival/departure diffing. */
     private final Map<Integer, Set<UUID>> residency = new HashMap<>();
 
+    // 1.21.1 SavedData API: computeIfAbsent takes a SavedData.Factory (constructor + loader) plus
+    // the file name, and both the loader and save() receive a HolderLookup.Provider. The DATA_NAME
+    // and the stored payload are deliberately unchanged, so an upgraded world keeps its .dat file
+    // and every record in it. The DataFixTypes is null: no vanilla data fixer applies to this file.
     public static GossipSavedData get(MinecraftServer server) {
-        return server.overworld().getDataStorage()
-                .computeIfAbsent(GossipSavedData::load, GossipSavedData::new, DATA_NAME);
+        return server.overworld().getDataStorage().computeIfAbsent(
+                new SavedData.Factory<>(GossipSavedData::new, GossipSavedData::load, null),
+                DATA_NAME);
+    }
+
+    private static GossipSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
+        return load(tag);
     }
 
     public GossipLog log() {
@@ -78,7 +88,7 @@ public final class GossipSavedData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         ListTag eventsTag = new ListTag();
         for (GossipEvent event : log.events()) {
             eventsTag.add(event.toNbt());

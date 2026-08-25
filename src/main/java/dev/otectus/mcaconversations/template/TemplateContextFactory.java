@@ -2,14 +2,14 @@ package dev.otectus.mcaconversations.template;
 
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
-import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
+import dev.otectus.mcaconversations.gift.ConversationsAttachments;
 import dev.otectus.mcaconversations.season.SeasonContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.List;
 
@@ -36,14 +36,18 @@ public final class TemplateContextFactory {
                         .ifPresent(name -> context.with(var, Component.literal(name)));
                 case VILLAGE_NAME -> McaCompat.getHomeVillageName(villager)
                         .ifPresent(name -> context.with(var, Component.literal(name)));
-                case LAST_GIFT_ITEM -> ConversationsCapabilities.get(player)
-                        .flatMap(data -> data.lastGiftTo(villager.getUUID()))
+                case LAST_GIFT_ITEM -> ConversationsAttachments.giftMemory(player)
+                        .lastGiftTo(villager.getUUID())
                         .ifPresent(gift -> {
                             ResourceLocation id = ResourceLocation.tryParse(gift.itemId());
-                            Item item = id == null ? null : ForgeRegistries.ITEMS.getValue(id);
-                            if (item != null) {
-                                context.with(var, Component.translatable(item.getDescriptionId()));
+                            // getOptional, not getValue: an item id from a mod that has since been
+                            // removed must leave the variable unresolved so the template falls back
+                            // to its existing text, never resolve to AIR.
+                            if (id == null) {
+                                return;
                             }
+                            BuiltInRegistries.ITEM.getOptional(id).ifPresent(item ->
+                                    context.with(var, Component.translatable(item.getDescriptionId())));
                         });
                 case TIME_OF_DAY -> context.with(var,
                         Component.translatable(timeOfDayKey(player.serverLevel().getDayTime() % 24000L)));

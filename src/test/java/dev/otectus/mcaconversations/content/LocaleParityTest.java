@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Holds every shipped locale to the same shape as {@code en_us}.
@@ -29,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class LocaleParityTest {
 
-    private static final Path ASSETS = Path.of("src/main/resources/assets");
+    private static final Path ASSETS = TestPaths.of("src/main/resources/assets");
     private static final Pattern PLACEHOLDER = Pattern.compile("%(\\d+)\\$s");
     private static final Pattern BARE_PLACEHOLDER = Pattern.compile("%s");
     private static final Gson GSON = new Gson();

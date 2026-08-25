@@ -2,7 +2,9 @@ package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
-import forge.net.mca.resources.data.dialogue.Question;
+import net.conczin.mca.entity.VillagerEntityMCA;
+import net.conczin.mca.resources.data.dialogue.Question;
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,7 +39,9 @@ public abstract class QuestionMixin {
     private static final String CONVERSATIONS_ANSWER = "conversations";
 
     @Inject(method = "getValidAnswers", at = @At("RETURN"), require = 0)
-    private void mcaconversations$hideHubButtonWhenNotAdditive(CallbackInfoReturnable<List<String>> cir) {
+    private void mcaconversations$hideHubButtonWhenNotAdditive(ServerPlayer player,
+                                                               VillagerEntityMCA villager,
+                                                               CallbackInfoReturnable<List<String>> cir) {
         try {
             if (McaConversationsConfig.hubEntryMode().showsOwnButton()) {
                 return;

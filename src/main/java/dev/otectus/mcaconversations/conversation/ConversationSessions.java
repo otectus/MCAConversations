@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Never persisted. Cleared on logout, on the target villager's death, when a session times out,
  * and whenever the player switches to a different villager.
  *
- * <p>Deliberately free of any {@code forge.net.mca.*} import: mixins and dialogue adapters hand it
+ * <p>Deliberately free of any {@code net.conczin.mca.*} import: mixins and dialogue adapters hand it
  * plain UUIDs and strings, keeping MCA behind {@code compat/} and {@code mixin/}.
  */
 public final class ConversationSessions {

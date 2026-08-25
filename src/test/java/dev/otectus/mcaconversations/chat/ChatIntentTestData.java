@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Shared test fixture: loads the shipped {@code chat_intents/*.json} straight off disk (mirroring
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
  */
 public final class ChatIntentTestData {
 
-    public static final Path INTENTS = Path.of("src/main/resources/data/mcaconversations/chat_intents");
+    public static final Path INTENTS = TestPaths.of("src/main/resources/data/mcaconversations/chat_intents");
 
     private ChatIntentTestData() {
     }

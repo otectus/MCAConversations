@@ -2,8 +2,8 @@ package dev.otectus.mcaconversations.mixin.client;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.locale.OverlayLocales;
-import forge.net.mca.Config;
-import forge.net.mca.MCAClient;
+import net.conczin.mca.Config;
+import net.conczin.mca.MCAClient;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,11 +14,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Lets per-personality dialogue resolve in the extra locales this mod ships complete overlays for.
  *
  * <p>MCA gates personality lines behind {@code MCAClient.useExpandedPersonalityTranslations()}:
- * <pre>{@code !isTTSPackActive && (language is en_us or ru_ru) && !Config.enableOnlineTTS}</pre>
- * The language list is a content decision — upstream only ships personality packs for those two —
- * so on any other locale {@code DialogueType.applyFallback} skips the personality branch entirely
- * and every villager falls through to the generic pool. Shipping a complete {@code pt_br} overlay
- * set is therefore not enough on its own; without this hook it would never be read.
+ * <pre>{@code !isTTSPackActive && language.equals("en_us") && !Config.enableOnlineTTS}</pre>
+ * That is a single locale — {@code en_us} — verified against the resolved MCA 7.7.36-beta.3 jar.
+ * (The 1.20.1 comment here claimed {@code en_us} or {@code ru_ru}; that is no longer the target's
+ * behaviour, if it ever was.) The language check is a content decision — upstream only ships
+ * personality packs for English — so on any other locale {@code DialogueType.applyFallback} skips
+ * the personality branch entirely and every villager falls through to the generic pool. Shipping a
+ * complete {@code pt_br} overlay set is therefore not enough on its own; without this hook it would
+ * never be read.
  *
  * <p><b>This only ever widens the language check, never the other two.</b> The TTS-pack and
  * online-TTS guards exist because MCA's voice packs record one audio file per base key and cannot

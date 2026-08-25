@@ -1,0 +1,46 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+# NeoForge reads the mixin configs from here, not from a MixinConfigs manifest attribute.
+[[mixins]]
+    config="mcaconversations.mixins.json"
+
+# MCA: Conversations is meaningless without MCA Reborn, so MCA is a required dependency.
+# We load AFTER MCA so its entities, dialogue registries, and resource loaders are present.
+#
+# The MCA range is deliberately narrow. This mod mixes into MCA internals, so widen it only
+# after running the full compatibility matrix against each additional MCA release.
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="${neoforge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="mca"
+    type="required"
+    versionRange="${mca_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+
+# NOTE: Architectury is deliberately NOT declared. MCA's 1.21.1 NeoForge artifact does not use
+# it at all, and Conversations has zero Architectury references.
+#
+# NOTE: the optional mcaquests / mcareputation dependency entries from the 1.20.1 build are
+# deliberately absent for now. Their old ranges ([0.8,) and [0.2,)) admit Forge-only jars that
+# cannot load here, and no 1.21.1 NeoForge release of either sibling has a fixed version yet.
+# They come back with real ranges once those releases exist.

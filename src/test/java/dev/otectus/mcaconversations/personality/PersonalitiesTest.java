@@ -13,26 +13,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PersonalitiesTest {
 
     @Test
-    void rosterMatchesMca77Exactly() {
-        // Read off `javap forge.net.mca.entity.ai.relationship.Personality` for
-        // 7.7.0-beta.2, minus UNASSIGNED (a sentinel, never rolled onto a villager).
-        assertEquals(16, Personalities.CANONICAL.size());
-        for (String p : new String[]{"confident", "peppy", "friendly", "flirty", "playful", "gloomy",
-                "sensitive", "greedy", "odd", "crabby", "extroverted", "introverted", "relaxed",
-                "anxious", "peaceful", "upbeat"}) {
+    void rosterMatchesTargetMcaExactly() {
+        // Read off `javap net.conczin.mca.entity.ai.relationship.Personality` for the resolved
+        // 7.7.36-beta.3+1.21.1 jar, minus UNASSIGNED (a sentinel, excluded from MCA's own
+        // getRandom and never rolled onto a villager). See docs/PORT-1.21.1-EVIDENCE.md.
+        assertEquals(14, Personalities.CANONICAL.size());
+        for (String p : new String[]{"friendly", "flirty", "playful", "gloomy", "sensitive",
+                "greedy", "odd", "crabby", "extroverted", "introverted", "relaxed", "anxious",
+                "peaceful", "upbeat"}) {
             assertTrue(Personalities.CANONICAL.contains(p), "roster missing " + p);
         }
         assertFalse(Personalities.CANONICAL.contains("unassigned"));
-        // Renamed away in 7.7 — must not reappear as canonical.
-        for (String gone : new String[]{"witty", "shy", "lazy", "grumpy", "athletic"}) {
-            assertFalse(Personalities.CANONICAL.contains(gone), gone + " is not a 7.7 personality");
+        // Renamed away in 7.7, or dropped between the 1.20.1-era 7.7 beta and 1.21.1 — none of
+        // these may reappear as rollable.
+        for (String gone : new String[]{"witty", "shy", "lazy", "grumpy", "athletic",
+                "confident", "peppy"}) {
+            assertFalse(Personalities.CANONICAL.contains(gone),
+                    gone + " is not registered by the target MCA");
         }
     }
 
     @Test
     void normalizeAcceptsEverySpellingMcaCanProduce() {
-        assertEquals("odd", Personalities.normalize("mca:odd"));   // 7.7 Personality.toString()
-        assertEquals("odd", Personalities.normalize("ODD"));       // 7.6 enum toString()
+        assertEquals("odd", Personalities.normalize("mca:odd"));   // VillagerBrain.getPersonalityId()
+        assertEquals("odd", Personalities.normalize("ODD"));       // a 7.6-era enum name in old data
         assertEquals("odd", Personalities.normalize("odd"));       // dialogue JSON
         assertEquals("odd", Personalities.normalize("  Odd  "));
         assertEquals("", Personalities.normalize(null));
@@ -57,25 +61,34 @@ class PersonalitiesTest {
     }
 
     @Test
-    void athleticSurvivesAsLegacyOnlyAndIsNotCanonical() {
-        // 7.7 turned athletic into the mca:athletic trait. It is still a *personality* on 7.6, so
-        // its voice stays, but it must never be presented as a 7.7 personality.
-        assertTrue(Personalities.LEGACY_ONLY.contains("athletic"));
-        assertFalse(Personalities.isCanonical("athletic"));
-        assertEquals("athletic", Personalities.canonical("athletic"));
-        assertTrue(Personalities.overlayPrefixes().contains("athletic"));
+    void droppedPersonalitiesSurviveAsLegacyOnlyAndAreNotCanonical() {
+        // 7.7 turned athletic into the mca:athletic trait; confident and peppy were rollable in the
+        // 1.20.1-era 7.7 beta and are simply not registered on 1.21.1. None can be rolled onto a
+        // villager here, but all three can still arrive from an upgraded save or a third-party
+        // pack, so their voices stay — they just must never be presented as target personalities.
+        for (String legacy : new String[]{"athletic", "confident", "peppy"}) {
+            assertTrue(Personalities.LEGACY_ONLY.contains(legacy), legacy + " should be legacy-only");
+            assertFalse(Personalities.isCanonical(legacy));
+            assertEquals(legacy, Personalities.canonical(legacy));
+            assertTrue(Personalities.overlayPrefixes().contains(legacy));
+        }
     }
 
     @Test
     void overlayPrefixesCoverCanonicalAndLegacy() {
-        assertEquals(21, Personalities.overlayPrefixes().size()); // 16 + 4 aliases + athletic
+        // 14 canonical + 4 renamed aliases + 3 legacy-only. Unchanged at 21 across the port: the
+        // roster shrank by two, and exactly those two moved into LEGACY_ONLY rather than being
+        // dropped, so every shipped lang overlay still has a prefix that claims it.
+        assertEquals(21, Personalities.overlayPrefixes().size());
         assertTrue(Personalities.overlayPrefixes().containsAll(Personalities.CANONICAL));
         assertTrue(Personalities.overlayPrefixes().containsAll(Personalities.LEGACY_ALIASES.keySet()));
+        assertTrue(Personalities.overlayPrefixes().containsAll(Personalities.LEGACY_ONLY));
     }
 
     @Test
     void matchesBridgesBothMcaVersions() {
-        // The whole point: one authored id matches a villager on either MCA version.
+        // The whole point: one authored id matches a villager whose personality was written by
+        // either MCA generation, so dialogue authored once keeps working across an upgrade.
         assertTrue(Personalities.matches("upbeat", "mca:upbeat"));  // 7.7 villager
         assertTrue(Personalities.matches("upbeat", "WITTY"));       // same villager on 7.6
         assertTrue(Personalities.matches("witty", "mca:upbeat"));
@@ -89,7 +102,7 @@ class PersonalitiesTest {
         PersonalityQuery single = PersonalityQuery.fromJson(JsonParser.parseString("\"odd\""));
         assertNotNull(single);
         assertTrue(single.matches("mca:odd"));
-        assertFalse(single.matches("mca:peppy"));
+        assertFalse(single.matches("mca:playful"));
 
         PersonalityQuery many = PersonalityQuery.fromJson(JsonParser.parseString("[\"odd\",\"playful\"]"));
         assertNotNull(many);

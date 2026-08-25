@@ -17,12 +17,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /** Interiority parsing, bounds, and the coverage the shipped data must have (plan §5.5, §13.5). */
 class InteriorityTest {
 
     private static final Path PROFILES =
-            Path.of("src/main/resources/data/mcaconversations/interiority/personalities.json");
+            TestPaths.of("src/main/resources/data/mcaconversations/interiority/personalities.json");
 
     private static JsonObject json(String raw) {
         return JsonParser.parseString(raw).getAsJsonObject();

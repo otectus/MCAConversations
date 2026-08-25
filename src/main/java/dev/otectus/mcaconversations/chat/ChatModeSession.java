@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * open sub-question, mute/cooldown bookkeeping) plus the <b>delivery-redirect scope</b> that
  * {@code NetworkHandlerMixin} consults while MCA's {@code selectAnswer} runs.
  *
- * <p>This class is deliberately free of any {@code forge.net.mca.*} import — the mixin extracts the
+ * <p>This class is deliberately free of any {@code net.conczin.mca.*} import — the mixin extracts the
  * public packet fields and hands us plain vanilla types, so MCA stays isolated behind {@code compat/}
  * and {@code mixin/}. Sessions are not persisted (a relog loses only the sticky pointer, matching how
  * closing a GUI screen behaves); long-term consequences live in MCA memories and this mod's SavedData.

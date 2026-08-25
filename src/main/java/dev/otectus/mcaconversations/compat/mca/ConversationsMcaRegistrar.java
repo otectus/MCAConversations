@@ -38,9 +38,9 @@ import dev.otectus.mcaconversations.template.SayDirective;
 import dev.otectus.mcaconversations.template.WorldContext;
 import dev.otectus.mcaconversations.util.SafeParse;
 import dev.otectus.mcaconversations.world.WorldQuery;
-import forge.net.mca.entity.ai.LongTermMemory;
-import forge.net.mca.entity.interaction.gifts.GiftPredicate;
-import forge.net.mca.resources.data.dialogue.Actions;
+import net.conczin.mca.entity.ai.LongTermMemory;
+import net.conczin.mca.entity.interaction.gifts.GiftPredicate;
+import net.conczin.mca.resources.data.dialogue.Actions;
 
 /**
  * Registers this mod's dialogue conditions and actions into MCA's public static registries.
@@ -91,7 +91,7 @@ public final class ConversationsMcaRegistrar {
     }
 
     private static void recordOne(com.google.gson.JsonObject json,
-                                  forge.net.mca.entity.VillagerEntityMCA villager,
+                                  net.conczin.mca.entity.VillagerEntityMCA villager,
                                   net.minecraft.server.level.ServerPlayer player) {
         // Reuse MCA's own id parsing so "var": "player" scoping matches remember/memory.
         String id = LongTermMemory.parseId(json, player);
@@ -109,7 +109,7 @@ public final class ConversationsMcaRegistrar {
      * {@code conversations_record} (topic-ever flags use MCA's native {@code remember}, which we can't hook), so
      * this fires exactly once per completed topic conversation. No-op when Quests is absent.
      */
-    private static void signalQuestTopic(String id, forge.net.mca.entity.VillagerEntityMCA villager,
+    private static void signalQuestTopic(String id, net.conczin.mca.entity.VillagerEntityMCA villager,
                                          net.minecraft.server.level.ServerPlayer player) {
         QuestsBridge.QuestQueries q = QuestsBridge.queries();
         if (q == null) {
@@ -573,7 +573,7 @@ public final class ConversationsMcaRegistrar {
      * result overrides it, so a topic's depth is declared in exactly one place.
      */
     private static void applySession(SessionDirective directive,
-                                     forge.net.mca.entity.VillagerEntityMCA villager,
+                                     net.conczin.mca.entity.VillagerEntityMCA villager,
                                      net.minecraft.server.level.ServerPlayer player) {
         long now = villager.level().getGameTime();
         switch (directive.op()) {
@@ -596,7 +596,7 @@ public final class ConversationsMcaRegistrar {
 
     /** Parses and applies one {@code conversations_progress_apply} entry, containing parse failures. */
     private static void applyProgress(com.google.gson.JsonObject json,
-                                      forge.net.mca.entity.VillagerEntityMCA villager,
+                                      net.conczin.mca.entity.VillagerEntityMCA villager,
                                       net.minecraft.server.level.ServerPlayer player) {
         ProgressApply directive = SafeParse.orNull("conversations_progress_apply", json,
                 () -> ProgressApply.fromJson(json));

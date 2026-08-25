@@ -17,7 +17,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -26,9 +26,9 @@ import java.util.UUID;
 
 /**
  * Bridges MCA: Quests lifecycle events into Conversations's memory + gossip so a player's quest deeds ripple
- * through village conversation. Registered on {@code MinecraftForge.EVENT_BUS} <b>only</b> from
+ * through village conversation. Registered on {@code NeoForge.EVENT_BUS} <b>only</b> from
  * {@code ConversationsQuestsCompat.register()} (i.e. only when Quests is present) — deliberately NOT an
- * {@code @Mod.EventBusSubscriber}, which would force {@code dev.otectus.mcaquests.*} onto the classpath on
+ * {@code @EventBusSubscriber}, which would force {@code dev.otectus.mcaquests.*} onto the classpath on
  * an MCA-only install and break the standalone case.
  *
  * <p>A completed quest writes a permanent {@code mcaconversations.quest.done.*} flag on the giver (so dialogue

@@ -1,12 +1,13 @@
 package dev.otectus.mcaconversations.chat;
 
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 /**
- * Per-player chat-mode opt-in, stored as a Forge capability (mirrors the gift-memory capability) so it
- * survives relog and death. The feature being enabled in config only makes chat mode <em>available</em>;
+ * Per-player chat-mode opt-in, stored as a NeoForge data attachment (mirrors the gift-memory
+ * attachment) so it survives relog and death. The feature being enabled in config only makes chat mode <em>available</em>;
  * each player chooses for themselves with {@code /conversations chat on|off}. Until a player chooses,
  * their state is the {@code chatModeDefaultOn} config default.
  */
@@ -31,16 +32,46 @@ public final class ChatModePlayerState implements INBTSerializable<CompoundTag> 
         this.enabled = other.enabled;
     }
 
+    /** True when the player has never made an explicit choice. */
+    public boolean isExplicit() {
+        return explicit;
+    }
+
+    /**
+     * The stored choice, ignoring the config default.
+     *
+     * <p>{@link #isEnabled()} falls back to {@code chatModeDefaultOn} when no choice was made, which
+     * is the right answer for gameplay but the wrong one for logging or migration reporting.
+     */
+    public boolean storedChoice() {
+        return enabled;
+    }
+
+    /** Reads the raw capability/attachment compound. Used by {@code ForgeCapsMigration}. */
+    public static ChatModePlayerState fromNbt(CompoundTag tag) {
+        ChatModePlayerState state = new ChatModePlayerState();
+        state.load(tag);
+        return state;
+    }
+
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        return save();
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
+        load(tag);
+    }
+
+    CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("explicit", explicit);
         tag.putBoolean("enabled", enabled);
         return tag;
     }
 
-    @Override
-    public void deserializeNBT(CompoundTag tag) {
+    void load(CompoundTag tag) {
         this.explicit = tag.getBoolean("explicit");
         this.enabled = tag.getBoolean("enabled");
     }

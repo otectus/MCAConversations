@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * The MCA: Reputation companion-release regression suite (spec §36.4).
@@ -200,7 +201,7 @@ class ReputationIntegrationTest {
     void everyReputationTemplateVariableHasALocalizedFallback() throws IOException {
         for (String locale : List.of("en_us", "pt_br")) {
             String json = Files.readString(
-                    Paths.get("src/main/resources/assets/mcaconversations/lang/" + locale + ".json"),
+                    TestPaths.of("src/main/resources/assets/mcaconversations/lang/" + locale + ".json"),
                     StandardCharsets.UTF_8);
             var lang = JsonParser.parseString(json).getAsJsonObject();
             for (TemplateVariable var : TemplateVariable.values()) {
@@ -219,7 +220,7 @@ class ReputationIntegrationTest {
     // The classloading seam (§30.1, §36.4)
     // ------------------------------------------------------------------
 
-    private static final Path SOURCE_ROOT = Paths.get("src/main/java/dev/otectus/mcaconversations");
+    private static final Path SOURCE_ROOT = TestPaths.of("src/main/java/dev/otectus/mcaconversations");
 
     @Test
     void onlyTheGuardedPackageNamesReputationTypes() throws IOException {
@@ -252,14 +253,25 @@ class ReputationIntegrationTest {
     }
 
     @Test
-    void modsTomlDeclaresReputationAsOptional() throws IOException {
-        String toml = Files.readString(Paths.get("src/main/resources/META-INF/mods.toml"),
+    void modMetadataNeverMakesReputationRequired() throws IOException {
+        String toml = Files.readString(TestPaths.of("src/main/resources/META-INF/neoforge.mods.toml"),
                 StandardCharsets.UTF_8);
+
         int index = toml.indexOf("modId=\"mcareputation\"");
-        assertTrue(index > 0, "the optional dependency entry is missing");
+        if (index < 0) {
+            // The current, deliberate state on 1.21.1: MCA: Reputation has no NeoForge release yet,
+            // and the 1.20.1 entry's [0.2,) range would admit Forge-only jars that cannot load here.
+            // Conversations must still build and run without it, which the rest of this class covers.
+            return;
+        }
+        // Once a real 1.21.1 Reputation release exists and the entry comes back, it must come back
+        // optional and ordered after — never as a hard dependency.
         String block = toml.substring(index, Math.min(toml.length(), index + 200));
-        assertTrue(block.contains("mandatory=false"));
+        assertTrue(block.contains("type=\"optional\""),
+                "Reputation must never become a required dependency");
         assertTrue(block.contains("ordering=\"AFTER\""));
+        assertFalse(block.contains("versionRange=\"[0.2,)\""),
+                "that range admits the Forge-only 1.20.1 jars");
     }
 
     @Test

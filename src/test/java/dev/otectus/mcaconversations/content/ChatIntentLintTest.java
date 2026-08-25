@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * Build-time lint over the shipped {@code chat_intents/*.json} (spec §7.2, §14). A keyword-table typo
@@ -36,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ChatIntentLintTest {
 
-    private static final Path DIALOGUES = Path.of("src/main/resources/data/mcaconversations/dialogues");
-    private static final Path LANG = Path.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
+    private static final Path DIALOGUES = TestPaths.of("src/main/resources/data/mcaconversations/dialogues");
+    private static final Path LANG = TestPaths.of("src/main/resources/assets/mca_dialogue/lang/en_us.json");
 
     /** Deflection/system phrase families referenced from chat/ Java (ChatModeDispatcher). */
     private static final Set<String> DEFLECTION_KEYS = Set.of(

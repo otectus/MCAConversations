@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
  * The hub-entry behaviour matrix, and the datapack file that implements the additive button.
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HubEntryModeTest {
 
     private static final Path MAIN_JSON =
-            Path.of("src/main/resources/data/mcaconversations/dialogues/main.json");
+            TestPaths.of("src/main/resources/data/mcaconversations/dialogues/main.json");
 
     @Test
     void defaultModeIsAdditiveSoBothEntriesWork() {
@@ -106,7 +107,7 @@ class HubEntryModeTest {
     void injectedAnswerHasALabelInEveryAuthoredLocale() throws IOException {
         for (String locale : new String[]{"en_us", "pt_br"}) {
             String lang = Files.readString(
-                    Path.of("src/main/resources/assets/mca_dialogue/lang/" + locale + ".json"));
+                    TestPaths.of("src/main/resources/assets/mca_dialogue/lang/" + locale + ".json"));
             assertTrue(JsonParser.parseString(lang).getAsJsonObject().has("dialogue.main.conversations"),
                     locale + " is missing the dialogue.main.conversations button label");
         }
