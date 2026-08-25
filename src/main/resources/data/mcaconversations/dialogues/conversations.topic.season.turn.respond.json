@@ -1,0 +1,241 @@
+{
+  "answers": [
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.agree",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.agree",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.agree.passive"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "passive"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.agree",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.agree",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.turn.agree"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "passive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ask_favourite",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "season.turn.ask_favourite",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.ask_favourite.plain"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_holiday": {
+                "is": "none"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "holidays"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "season.turn.ask_favourite",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.turn.ask_favourite"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "none"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "complain",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted",
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.complain",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.complain",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.turn.complain.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "playful",
+                "peppy",
+                "upbeat",
+                "odd",
+                "relaxed",
+                "extroverted",
+                "flirty"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.complain",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.complain",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.turn.complain.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted",
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "playful",
+                "peppy",
+                "upbeat",
+                "odd",
+                "relaxed",
+                "extroverted",
+                "flirty"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "season.turn.complain",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.season.turn.followup",
+            "say": "conversations.season.turn.complain.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.turn.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

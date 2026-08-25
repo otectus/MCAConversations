@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "reassure",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.young.reassure",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.young.reassure",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.young.reassure"
+          }
+        }
+      ]
+    },
+    {
+      "name": "normalize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.young.normalize",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.young.normalize",
+              "deltas": {
+                "trust": 3,
+                "respect": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.young.normalize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "fears.young.dismiss",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.young.dismiss",
+              "deltas": {
+                "warmth": -3,
+                "tension": 4
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.young.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.young.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

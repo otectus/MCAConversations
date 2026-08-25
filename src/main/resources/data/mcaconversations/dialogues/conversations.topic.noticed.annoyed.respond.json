@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.apologize",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.apologize",
+              "deltas": {
+                "tension": -6,
+                "respect": 2
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.annoyed.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "explain",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.explain",
+              "deltas": {
+                "tension": -2
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.annoyed.explain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "brush_off",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.brush_off",
+              "delta": -2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.brush_off",
+              "deltas": {
+                "tension": 6,
+                "warmth": -3
+              }
+            },
+            "next": "conversations.topic.noticed.followup",
+            "say": "conversations.noticed.annoyed.brush_off"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

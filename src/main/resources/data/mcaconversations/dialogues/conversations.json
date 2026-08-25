@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "chitchat",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.chitchat"
+          }
+        }
+      ]
+    },
+    {
+      "name": "profession",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.profession"
+          }
+        }
+      ]
+    },
+    {
+      "name": "village",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village"
+          }
+        }
+      ]
+    },
+    {
+      "name": "events",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.events"
+          }
+        }
+      ]
+    },
+    {
+      "name": "personal",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal"
+          }
+        }
+      ]
+    },
+    {
+      "name": "relationships",
+      "constraints": "family,!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.relationships"
+          }
+        }
+      ]
+    },
+    {
+      "name": "babble",
+      "constraints": "baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "main",
+            "say": "conversations.babble.baby"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "main"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "call_them_friend",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "feelings",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "feelings.platonic.call_them_friend",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.platonic.call_them_friend",
+              "deltas": {
+                "warmth": 5,
+                "trust": 3
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.platonic.call_them_friend"
+          }
+        }
+      ]
+    },
+    {
+      "name": "be_honest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "feelings",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "feelings.platonic.be_honest",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.platonic.be_honest",
+              "deltas": {
+                "respect": 5
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.platonic.be_honest"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.platonic.dismiss",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.platonic.dismiss",
+              "deltas": {
+                "warmth": -5,
+                "tension": 5
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.platonic.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.platonic.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

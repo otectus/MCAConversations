@@ -1,0 +1,84 @@
+{
+  "answers": [
+    {
+      "name": "accept",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.accept",
+              "deltas": {
+                "respect": 3,
+                "trust": 2
+              }
+            },
+            "conversations_quest_open": {
+              "mode": "menu"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.accept"
+          }
+        }
+      ]
+    },
+    {
+      "name": "decline",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.followup.decline",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.decline"
+          }
+        }
+      ]
+    },
+    {
+      "name": "refuse_rudely",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "work_offer.followup.refuse_rudely",
+              "delta": -1,
+              "budget": "service",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work_offer.followup.refuse_rudely",
+              "deltas": {
+                "respect": -3,
+                "tension": 4
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.refuse_rudely"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

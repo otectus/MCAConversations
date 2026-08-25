@@ -1,0 +1,1916 @@
+{
+  "answers": [
+    {
+      "name": "day",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "again"
+            },
+            "next": "conversations.topic.day.again.respond",
+            "say": "conversations.day.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "toddler"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.toddler.respond",
+            "say": "conversations.day.toddler"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "child"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.young.respond",
+            "say": "conversations.day.child"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "teen"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.young.respond",
+            "say": "conversations.day.teen"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "depressed"
+            },
+            {
+              "chance": 100,
+              "mood": "sad"
+            },
+            {
+              "chance": 100,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "rough"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.rough.respond",
+            "say": "conversations.day.rough"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "happy"
+            },
+            {
+              "chance": 100,
+              "mood": "overjoyed"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "good"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.good.respond",
+            "say": "conversations.day.good"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "current_chore": "chop"
+            },
+            {
+              "chance": 100,
+              "current_chore": "harvest"
+            },
+            {
+              "chance": 100,
+              "current_chore": "fish"
+            },
+            {
+              "chance": 100,
+              "current_chore": "hunt"
+            },
+            {
+              "chance": 100,
+              "current_chore": "prospect"
+            },
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "mood": "happy"
+            },
+            {
+              "chance": -2000,
+              "mood": "overjoyed"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "working"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.ordinary.respond",
+            "say": "conversations.day.working"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "mood": "happy"
+            },
+            {
+              "chance": -2000,
+              "mood": "overjoyed"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "chop"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "harvest"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "fish"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "hunt"
+            },
+            {
+              "chance": -2000,
+              "current_chore": "prospect"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "quick",
+              "branch": "plain"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.day.ordinary.respond",
+            "say": "conversations.day.plain"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "depressed"
+            },
+            {
+              "chance": 100,
+              "mood": "sad"
+            },
+            {
+              "chance": 100,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.day",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "positive": 3,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.rough"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.day.plain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "food",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "again"
+            },
+            "next": "conversations.topic.food.again.respond",
+            "say": "conversations.food.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "toddler"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.toddler.respond",
+            "say": "conversations.food.toddler"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "child"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.young.respond",
+            "say": "conversations.food.child"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "teen"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.young.respond",
+            "say": "conversations.food.teen"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "coeliac_disease"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "trait"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.trait.respond",
+            "say": "conversations.food.trait.coeliac"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "lactose_intolerance"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "trait"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.trait.respond",
+            "say": "conversations.food.trait.lactose"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "diabetes"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "trait"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.trait.respond",
+            "say": "conversations.food.trait.diabetes"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "vegetarian"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "trait"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.trait.respond",
+            "say": "conversations.food.trait.vegetarian"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "trait": "sirben"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "trait"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.trait.respond",
+            "say": "conversations.food.trait.sirben"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.topic.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "trait": "coeliac_disease"
+            },
+            {
+              "chance": -2000,
+              "trait": "lactose_intolerance"
+            },
+            {
+              "chance": -2000,
+              "trait": "diabetes"
+            },
+            {
+              "chance": -2000,
+              "trait": "vegetarian"
+            },
+            {
+              "chance": -2000,
+              "trait": "sirben"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "revisit"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.normal.respond",
+            "say": "conversations.food.revisit"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.topic.food",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            },
+            {
+              "chance": -2000,
+              "trait": "coeliac_disease"
+            },
+            {
+              "chance": -2000,
+              "trait": "lactose_intolerance"
+            },
+            {
+              "chance": -2000,
+              "trait": "diabetes"
+            },
+            {
+              "chance": -2000,
+              "trait": "vegetarian"
+            },
+            {
+              "chance": -2000,
+              "trait": "sirben"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.food",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "quick",
+              "branch": "first"
+            },
+            "remember": {
+              "id": "mcaconversations.topic.food",
+              "var": "player"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.topic.food.normal.respond",
+            "say": "conversations.food.first"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "remember": {
+              "id": "mcaconversations.topic.food",
+              "var": "player"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.first"
+          }
+        }
+      ]
+    },
+    {
+      "name": "weather",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "weather",
+              "budget": "quick",
+              "branch": "toddler"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 6000
+            },
+            "next": "conversations.topic.weather.toddler.respond",
+            "say": "conversations.weather.toddler"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "storm"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "weather",
+              "budget": "quick",
+              "branch": "storm"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 6000
+            },
+            "next": "conversations.topic.weather.storm.respond",
+            "say": "conversations.weather.storm"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "rain"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "weather",
+              "budget": "quick",
+              "branch": "rain"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 6000
+            },
+            "next": "conversations.topic.weather.mild.respond",
+            "say": "conversations.weather.rain"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "conversations_weather": {
+                "is": "storm"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_weather": {
+                "is": "rain"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "weather",
+              "budget": "quick",
+              "branch": "clear"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 6000
+            },
+            "next": "conversations.topic.weather.mild.respond",
+            "say": "conversations.weather.clear"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 1,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 6000
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.clear"
+          }
+        }
+      ]
+    },
+    {
+      "name": "season",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "again"
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "toddler"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.toddler.respond",
+            "say": "conversations.season.toddler"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "spring_bloom"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.holiday.respond",
+            "say": "conversations.season.holiday.spring_bloom"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "midsummer"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.holiday.respond",
+            "say": "conversations.season.holiday.midsummer"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "harvest_festival"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.holiday.respond",
+            "say": "conversations.season.holiday.harvest_festival"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "midwinter"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.holiday.respond",
+            "say": "conversations.season.holiday.midwinter"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_season": {
+                "is": "spring"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "spring"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.spring"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_season": {
+                "is": "summer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "summer"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.summer"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_season": {
+                "is": "autumn"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "autumn"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.autumn"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_season": {
+                "is": "winter"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "winter"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.winter"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "conversations_season": {
+                "is": "spring"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_season": {
+                "is": "summer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_season": {
+                "is": "autumn"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_season": {
+                "is": "winter"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "any"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.any"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.any"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

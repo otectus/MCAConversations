@@ -1,0 +1,97 @@
+{
+  "answers": [
+    {
+      "name": "offer_anyway",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "work_offer.none.offer_anyway",
+              "delta": 1,
+              "budget": "service",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work_offer.none.offer_anyway",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.none.offer_anyway"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_later",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.none.ask_later",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.ask_later.proud"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "memory": {
+                "id": "mcaconversations.state.proud",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "states"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "work_offer.none.ask_later",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.none.ask_later"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.proud",
+                "var": "player"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work_offer.none.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

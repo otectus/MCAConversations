@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "mutual",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.romantic.mutual",
+              "delta": 3,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.romantic.mutual",
+              "deltas": {
+                "attraction": 6,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.feelings.romantic.followup",
+            "say": "conversations.feelings.romantic.mutual"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_needs",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.romantic.ask_needs",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.romantic.ask_needs",
+              "deltas": {
+                "trust": 5,
+                "respect": 2
+              }
+            },
+            "next": "conversations.topic.feelings.romantic.followup",
+            "say": "conversations.feelings.romantic.ask_needs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "candid_concern",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.romantic.candid_concern",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.romantic.candid_concern",
+              "deltas": {
+                "trust": 4,
+                "tension": 2
+              }
+            },
+            "next": "conversations.topic.feelings.romantic.followup",
+            "say": "conversations.feelings.romantic.candid_concern"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.romantic.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

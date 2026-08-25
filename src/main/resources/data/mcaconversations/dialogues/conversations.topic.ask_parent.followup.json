@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_worries",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "family.parent.ask_worries",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.parent.ask_worries",
+              "deltas": {
+                "trust": 5,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.parent.ask_worries"
+          }
+        }
+      ]
+    },
+    {
+      "name": "thank_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "family.parent.thank_them",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.parent.thank_them",
+              "deltas": {
+                "warmth": 5
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.parent.thank_them"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deflect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "family.parent.deflect",
+              "delta": -1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.parent.deflect",
+              "deltas": {
+                "trust": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.family.close",
+            "say": "conversations.family.parent.deflect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.parent.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

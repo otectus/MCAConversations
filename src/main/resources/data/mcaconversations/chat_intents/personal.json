@@ -1,0 +1,568 @@
+{
+  "synonyms": {
+    "fear": [
+      "fears",
+      "afraid",
+      "scared",
+      "frightened",
+      "terrified",
+      "dread",
+      "terror"
+    ]
+  },
+  "intents": {
+    "personal.life": {
+      "question": "conversations.cat.personal",
+      "answer": "life",
+      "keywords": {
+        "life": 1.2,
+        "yourself": 1.0,
+        "story": 0.8,
+        "background": 0.8,
+        "living": 0.6
+      },
+      "requiresAny": [
+        "life",
+        "yourself",
+        "story",
+        "background"
+      ],
+      "phrases": [
+        "tell me about yourself",
+        "tell me about your life",
+        "your life",
+        "what is your story",
+        "tell me your story"
+      ],
+      "category": "topics"
+    },
+    "personal.dreams": {
+      "question": "conversations.cat.personal",
+      "answer": "dreams",
+      "keywords": {
+        "dream": 1.5,
+        "ambition": 1.0,
+        "aspire": 1.0,
+        "goal": 1.0,
+        "wish": 0.6
+      },
+      "requiresAny": [
+        "dream",
+        "ambition",
+        "aspire",
+        "goal"
+      ],
+      "phrases": [
+        "what are your dreams",
+        "your ambitions",
+        "do you dream"
+      ],
+      "antiKeywords": [
+        "nightmare"
+      ],
+      "category": "topics"
+    },
+    "personal.fears": {
+      "question": "conversations.cat.personal",
+      "answer": "fears",
+      "keywords": {
+        "fear": 1.5,
+        "scare": 1.2,
+        "worry": 0.8,
+        "nightmare": 0.8
+      },
+      "requiresAny": [
+        "fear",
+        "scare"
+      ],
+      "phrases": [
+        "what are you afraid of",
+        "what scares you",
+        "your fears",
+        "what do you fear"
+      ],
+      "category": "topics"
+    },
+    "personal.hopes": {
+      "question": "conversations.cat.personal",
+      "answer": "hopes",
+      "keywords": {
+        "hope": 1.5,
+        "wish": 1.0,
+        "someday": 0.8,
+        "better": 0.6
+      },
+      "requiresAny": [
+        "hope",
+        "wish",
+        "someday"
+      ],
+      "phrases": [
+        "what do you hope for",
+        "what do you wish for",
+        "your hopes",
+        "hope for the future"
+      ],
+      "category": "topics"
+    },
+    "personal.feelings": {
+      "question": "conversations.cat.personal",
+      "answer": "feelings",
+      "keywords": {
+        "feel": 1.5,
+        "emotion": 1.0,
+        "mood": 0.8,
+        "okay": 0.6
+      },
+      "requiresAny": [
+        "feel",
+        "emotion",
+        "mood"
+      ],
+      "phrases": [
+        "how do you feel",
+        "how are you feeling",
+        "what are you feeling",
+        "your feelings"
+      ],
+      "category": "topics"
+    },
+    "personal.regrets": {
+      "question": "conversations.cat.personal",
+      "answer": "regrets",
+      "keywords": {
+        "regret": 1.5,
+        "mistake": 1.0,
+        "guilt": 1.0,
+        "sorry": 0.8,
+        "wrong": 0.6
+      },
+      "requiresAny": [
+        "regret",
+        "mistake",
+        "guilt"
+      ],
+      "antiKeywords": [
+        "pushed",
+        "came",
+        "shut"
+      ],
+      "phrases": [
+        "any regrets",
+        "do you regret",
+        "your biggest regret",
+        "your biggest mistake"
+      ],
+      "category": "topics"
+    },
+    "personal.secret": {
+      "question": "conversations.cat.personal",
+      "answer": "secret",
+      "keywords": {
+        "secret": 1.5,
+        "hidden": 1.0,
+        "confide": 1.0,
+        "private": 0.8,
+        "hide": 0.6
+      },
+      "requiresAny": [
+        "secret",
+        "hidden",
+        "confide",
+        "private"
+      ],
+      "phrases": [
+        "any secrets",
+        "tell me a secret",
+        "something hidden"
+      ],
+      "category": "topics"
+    },
+    "life.toddler.delight": {
+      "question": "conversations.topic.life.toddler.respond",
+      "answer": "delight",
+      "context": "conversations.topic.life.toddler.respond",
+      "keywords": {
+        "life": 1.5,
+        "good": 1.0
+      },
+      "requiresAny": [
+        "life",
+        "good"
+      ],
+      "antiKeywords": [
+        "part",
+        "day"
+      ],
+      "phrases": [
+        "that sounds like a very good life",
+        "sounds like a good life",
+        "a very good life"
+      ],
+      "category": "topics"
+    },
+    "life.toddler.ask": {
+      "question": "conversations.topic.life.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.life.toddler.respond",
+      "keywords": {
+        "part": 1.5,
+        "day": 1.0
+      },
+      "requiresAny": [
+        "part",
+        "day"
+      ],
+      "antiKeywords": [
+        "life",
+        "good"
+      ],
+      "phrases": [
+        "what is the best part of a day",
+        "best part of the day",
+        "which part of the day is best"
+      ],
+      "category": "topics"
+    },
+    "dreams.toddler.delight": {
+      "question": "conversations.topic.dreams.toddler.respond",
+      "answer": "delight",
+      "context": "conversations.topic.dreams.toddler.respond",
+      "keywords": {
+        "believe": 1.5,
+        "you": 1.0
+      },
+      "requiresAny": [
+        "believe"
+      ],
+      "antiKeywords": [
+        "how",
+        "do"
+      ],
+      "phrases": [
+        "i believe you",
+        "i do believe you",
+        "i believe that"
+      ],
+      "category": "topics"
+    },
+    "dreams.toddler.ask": {
+      "question": "conversations.topic.dreams.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.dreams.toddler.respond",
+      "keywords": {
+        "how": 1.5,
+        "do": 1.0
+      },
+      "requiresAny": [
+        "how"
+      ],
+      "antiKeywords": [
+        "believe",
+        "you"
+      ],
+      "phrases": [
+        "how will you do it",
+        "how are you going to do it",
+        "how will that happen"
+      ],
+      "category": "topics"
+    },
+    "hopes.toddler.delight": {
+      "question": "conversations.topic.hopes.toddler.respond",
+      "answer": "delight",
+      "context": "conversations.topic.hopes.toddler.respond",
+      "keywords": {
+        "hope": 1.5,
+        "too": 1.0
+      },
+      "requiresAny": [
+        "hope"
+      ],
+      "antiKeywords": [
+        "else",
+        "hoping"
+      ],
+      "phrases": [
+        "i hope so too",
+        "i hope that too",
+        "so do i, i hope so"
+      ],
+      "category": "topics"
+    },
+    "hopes.toddler.ask": {
+      "question": "conversations.topic.hopes.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.hopes.toddler.respond",
+      "keywords": {
+        "else": 1.5,
+        "hoping": 1.0
+      },
+      "requiresAny": [
+        "else",
+        "hoping"
+      ],
+      "antiKeywords": [
+        "hope",
+        "too"
+      ],
+      "phrases": [
+        "what else are you hoping for",
+        "anything else you hope for",
+        "is there anything else"
+      ],
+      "category": "topics"
+    },
+    "feelings.toddler.delight": {
+      "question": "conversations.topic.feelings.toddler.respond",
+      "answer": "delight",
+      "context": "conversations.topic.feelings.toddler.respond",
+      "keywords": {
+        "feelings": 1.5,
+        "good": 1.0
+      },
+      "requiresAny": [
+        "feelings",
+        "good"
+      ],
+      "antiKeywords": [
+        "feel",
+        "like"
+      ],
+      "phrases": [
+        "those are good feelings to have",
+        "good feelings to have",
+        "those are good feelings"
+      ],
+      "category": "topics"
+    },
+    "feelings.toddler.ask": {
+      "question": "conversations.topic.feelings.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.feelings.toddler.respond",
+      "keywords": {
+        "feel": 1.5,
+        "like": 1.0
+      },
+      "requiresAny": [
+        "feel",
+        "like"
+      ],
+      "antiKeywords": [
+        "feelings",
+        "good"
+      ],
+      "phrases": [
+        "what does it feel like",
+        "how does that feel",
+        "what is that like"
+      ],
+      "category": "topics"
+    },
+    "life.followup.joke": {
+      "question": "conversations.topic.life.followup",
+      "answer": "joke",
+      "context": "conversations.topic.life.followup",
+      "keywords": {
+        "busier": 1.6,
+        "mayor": 1.3
+      },
+      "requiresAny": [
+        "busier",
+        "mayor"
+      ],
+      "antiKeywords": [
+        "happened",
+        "more"
+      ],
+      "phrases": [
+        "you have had a busier life than the mayor",
+        "busier than the mayor then",
+        "that is busier than the mayor"
+      ],
+      "category": "topics"
+    },
+    "life.close.confide": {
+      "question": "conversations.topic.life.close",
+      "answer": "confide",
+      "context": "conversations.topic.life.close",
+      "keywords": {
+        "mine": 1.5,
+        "one": 0.8
+      },
+      "requiresAny": [
+        "mine"
+      ],
+      "antiKeywords": [
+        "thank",
+        "took"
+      ],
+      "phrases": [
+        "here is one of mine then",
+        "let me tell you one of mine",
+        "i have one of my own"
+      ],
+      "category": "topics"
+    },
+    "dreams.close.confide": {
+      "question": "conversations.topic.dreams.close",
+      "answer": "confide",
+      "context": "conversations.topic.dreams.close",
+      "keywords": {
+        "want": 1.5,
+        "too": 1.1
+      },
+      "requiresAny": [
+        "want"
+      ],
+      "antiKeywords": [
+        "thank",
+        "took"
+      ],
+      "phrases": [
+        "i will tell you what i want too",
+        "let me tell you what i want",
+        "i want something too"
+      ],
+      "category": "topics"
+    },
+    "hopes.close.confide": {
+      "question": "conversations.topic.hopes.close",
+      "answer": "confide",
+      "context": "conversations.topic.hopes.close",
+      "keywords": {
+        "mine": 1.5,
+        "tell": 0.8
+      },
+      "requiresAny": [
+        "mine"
+      ],
+      "antiKeywords": [
+        "thank",
+        "took"
+      ],
+      "phrases": [
+        "i will tell you mine if you want it",
+        "let me tell you mine",
+        "here is mine then"
+      ],
+      "category": "topics"
+    },
+    "regrets.close.confide": {
+      "question": "conversations.topic.regrets.close",
+      "answer": "confide",
+      "context": "conversations.topic.regrets.close",
+      "keywords": {
+        "own": 1.5,
+        "helps": 1.0
+      },
+      "requiresAny": [
+        "own",
+        "helps"
+      ],
+      "antiKeywords": [
+        "thank",
+        "took"
+      ],
+      "phrases": [
+        "i have one of my own if it helps",
+        "i have my own if that helps",
+        "i carry one of my own"
+      ],
+      "category": "topics"
+    },
+    "regrets.sit_with_it.stay": {
+      "question": "conversations.topic.regrets.sit_with_it",
+      "answer": "stay",
+      "context": "conversations.topic.regrets.sit_with_it",
+      "keywords": {
+        "here": 1.6,
+        "gone": 1.3,
+        "anywhere": 1.1
+      },
+      "requiresAny": [
+        "here",
+        "gone",
+        "anywhere"
+      ],
+      "antiKeywords": [
+        "room",
+        "space"
+      ],
+      "phrases": [
+        "i am still here",
+        "i have not gone anywhere",
+        "i am not going anywhere"
+      ],
+      "category": "topics"
+    },
+    "dreams.close.honest.thank": {
+      "question": "conversations.topic.dreams.close.honest",
+      "answer": "thank",
+      "context": "conversations.topic.dreams.close.honest",
+      "keywords": {
+        "thank": 1.5,
+        "anyway": 1.1
+      },
+      "requiresAny": [
+        "thank"
+      ],
+      "antiKeywords": [
+        "took",
+        "want"
+      ],
+      "phrases": [
+        "thank you for telling me anyway",
+        "thanks for telling me anyway",
+        "thank you for saying it anyway"
+      ],
+      "category": "topics"
+    },
+    "dreams.close.honest.say_means": {
+      "question": "conversations.topic.dreams.close.honest",
+      "answer": "say_means",
+      "context": "conversations.topic.dreams.close.honest",
+      "keywords": {
+        "took": 1.5,
+        "something": 1.1
+      },
+      "requiresAny": [
+        "took"
+      ],
+      "antiKeywords": [
+        "thank",
+        "want"
+      ],
+      "phrases": [
+        "that took something to say",
+        "saying that took something",
+        "it took something to say that"
+      ],
+      "category": "topics"
+    },
+    "dreams.close.honest.confide": {
+      "question": "conversations.topic.dreams.close.honest",
+      "answer": "confide",
+      "context": "conversations.topic.dreams.close.honest",
+      "keywords": {
+        "want": 1.5,
+        "mine": 1.2,
+        "also": 0.9
+      },
+      "requiresAny": [
+        "want",
+        "mine"
+      ],
+      "antiKeywords": [
+        "thank",
+        "took"
+      ],
+      "phrases": [
+        "i will tell you what i want too",
+        "let me tell you what i want",
+        "i want something too"
+      ],
+      "category": "topics"
+    }
+  }
+}

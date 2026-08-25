@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "value_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.platonic.value_them",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.platonic.value_them",
+              "deltas": {
+                "warmth": 5,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.feelings.platonic.followup",
+            "say": "conversations.feelings.platonic.value_them"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_theirs",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.platonic.ask_theirs",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.platonic.ask_theirs",
+              "deltas": {
+                "familiarity": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.feelings.platonic.followup",
+            "say": "conversations.feelings.platonic.ask_theirs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_distance",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "feelings.platonic.keep_distance",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.feelings.platonic.followup",
+            "say": "conversations.feelings.platonic.keep_distance"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.platonic.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

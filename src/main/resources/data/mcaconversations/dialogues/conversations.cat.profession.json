@@ -1,0 +1,301 @@
+{
+  "answers": [
+    {
+      "name": "work",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "again"
+            },
+            "next": "conversations.topic.work.again.respond",
+            "say": "conversations.work.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "child"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.work.young.respond",
+            "say": "conversations.work.child"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "teen"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.work.young.respond",
+            "say": "conversations.work.teen"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.work",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "prof"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.work"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.work.legacy"
+          }
+        }
+      ]
+    },
+    {
+      "name": "work_offer",
+      "constraints": "adult",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_quest_available": {
+                "scope": "this"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work_offer",
+              "budget": "service",
+              "branch": "offer"
+            },
+            "next": "conversations.topic.work_offer.respond",
+            "say": "conversations.quest.offer"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "conversations_quest_available": {
+                "scope": "this"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work_offer",
+              "budget": "service",
+              "branch": "none"
+            },
+            "next": "conversations.topic.work_offer.none.respond",
+            "say": "conversations.quest.none"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_quest_available": {
+                "scope": "this"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work_offer",
+              "var": "player",
+              "time": 0
+            },
+            "conversations_quest_open": {
+              "mode": "menu"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.quest.offer"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work_offer",
+              "var": "player",
+              "time": 0
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.quest.none"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

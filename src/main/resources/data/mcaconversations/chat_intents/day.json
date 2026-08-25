@@ -1,0 +1,276 @@
+{
+  "_comment": [
+    "Context-scoped stances for the branching Day tree. Each is live only while its exact question is",
+    "the open one, and only when its answer is among the choices MCA actually offered. Numbered",
+    "quick-replies cover the same answers for players who would rather pick than phrase; these exist so",
+    "that saying the thing in your own words works too, which is the whole point of chat mode."
+  ],
+  "intents": {
+    "day.rough.empathize": {
+      "question": "conversations.topic.day.rough.respond",
+      "answer": "empathize",
+      "context": "conversations.topic.day.rough.respond",
+      "keywords": { "sorry": 1.2, "rough": 1.0, "heavy": 1.2, "hard": 1.0, "sounds": 0.4 },
+      "requiresAny": ["sorry", "rough", "heavy", "hard", "awful", "rubbish"],
+      "phrases": ["that sounds hard", "sounds rough", "i'm sorry", "that's a lot", "sounds heavy", "that sounds awful"],
+      "category": "topics"
+    },
+    "day.rough.ask": {
+      "question": "conversations.topic.day.rough.respond",
+      "answer": "ask",
+      "context": "conversations.topic.day.rough.respond",
+      "keywords": { "happened": 1.5, "what": 0.6, "wrong": 1.2, "why": 0.8 },
+      "requiresAny": ["happened", "wrong", "why", "tell"],
+      "phrases": ["what happened", "what went wrong", "what's wrong", "tell me what happened", "how come"],
+      "category": "topics"
+    },
+    "day.rough.brush_off": {
+      "question": "conversations.topic.day.rough.respond",
+      "answer": "brush_off",
+      "context": "conversations.topic.day.rough.respond",
+      "keywords": { "everyone": 1.5, "worse": 1.2, "whatever": 1.0, "life": 1.2, "always": 0.6 },
+      "requiresAny": ["everyone", "worse", "whatever", "life"],
+      "phrases": ["everyone has bad days", "could be worse", "that is just life", "that's life", "everyone has days like that"],
+      "category": "topics"
+    },
+    "day.rough.offer_help": {
+      "question": "conversations.topic.day.rough.followup",
+      "answer": "offer_help",
+      "context": "conversations.topic.day.rough.followup",
+      "keywords": { "help": 1.5, "hand": 1.2, "carry": 0.8, "do": 0.3 },
+      "requiresAny": ["help", "hand", "carry", "take"],
+      "phrases": ["let me help", "give you a hand", "can i help", "let me take that", "i'll help"],
+      "category": "topics"
+    },
+    "day.rough.lighten": {
+      "question": "conversations.topic.day.rough.followup",
+      "answer": "lighten",
+      "context": "conversations.topic.day.rough.followup",
+      "keywords": { "cat": 1.5, "won": 1.2, "funny": 1.0, "laugh": 1.0 },
+      "requiresAny": ["cat", "won", "funny", "laugh", "joke"],
+      "phrases": ["the cat won", "at least it's funny", "you have to laugh", "that's a bit funny"],
+      "category": "topics"
+    },
+    "day.rough.let_be": {
+      "question": "conversations.topic.day.rough.followup",
+      "answer": "let_be",
+      "context": "conversations.topic.day.rough.followup",
+      "keywords": { "have": 0.4, "fine": 1.0, "okay": 1.0, "allowed": 1.2, "just": 0.6 },
+      "requiresAny": ["fine", "okay", "allowed", "have", "need"],
+      "phrases": ["it's okay to have a bad day", "you don't have to explain", "that's fine", "you don't need to make it into anything", "it can just be a bad day"],
+      "category": "topics"
+    },
+    "day.rough.apologize": {
+      "question": "conversations.topic.day.rough.repair",
+      "answer": "apologize",
+      "context": "conversations.topic.day.rough.repair",
+      "keywords": { "sorry": 1.5, "apologise": 1.5, "wrong": 0.8, "meant": 0.8 },
+      "requiresAny": ["sorry", "apologise", "meant", "wrong"],
+      "phrases": ["that came out wrong", "i'm sorry", "i didn't mean that", "sorry, that was harsh"],
+      "category": "topics"
+    },
+    "day.rough.double_down": {
+      "question": "conversations.topic.day.rough.repair",
+      "answer": "double_down",
+      "context": "conversations.topic.day.rough.repair",
+      "keywords": { "tragedy": 1.5, "drama": 1.2, "overreacting": 1.5, "pretend": 1.0 },
+      "requiresAny": ["tragedy", "drama", "overreacting", "pretend"],
+      "phrases": ["it's not a tragedy", "you're overreacting", "stop being dramatic", "i won't pretend it's a tragedy"],
+      "category": "topics"
+    },
+
+    "day.good.celebrate": {
+      "question": "conversations.topic.day.good.respond",
+      "answer": "celebrate",
+      "context": "conversations.topic.day.good.respond",
+      "keywords": { "earned": 1.5, "deserve": 1.5, "glad": 1.0, "good": 0.4 },
+      "requiresAny": ["earned", "deserve", "glad", "happy"],
+      "phrases": ["you've earned it", "you deserve that", "glad to hear it", "good for you"],
+      "category": "topics"
+    },
+    "day.good.ask_more": {
+      "question": "conversations.topic.day.good.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.day.good.respond",
+      "keywords": { "what": 0.6, "made": 1.2, "why": 0.8, "more": 1.0 },
+      "requiresAny": ["made", "what", "why", "more"],
+      "phrases": ["what made it good", "why's that", "tell me more", "what happened"],
+      "category": "topics"
+    },
+    "day.good.deflate": {
+      "question": "conversations.topic.day.good.respond",
+      "answer": "deflate",
+      "context": "conversations.topic.day.good.respond",
+      "keywords": { "nice": 1.0, "work": 1.2, "some": 0.6, "alright": 0.8 },
+      "requiresAny": ["nice", "work", "alright", "lucky"],
+      "phrases": ["must be nice", "some of us work", "alright for some", "lucky you"],
+      "category": "topics"
+    },
+    "day.good.share_own": {
+      "question": "conversations.topic.day.good.followup",
+      "answer": "share_own",
+      "context": "conversations.topic.day.good.followup",
+      "keywords": { "mine": 1.5, "too": 1.0, "same": 1.0, "also": 0.8 },
+      "requiresAny": ["mine", "too", "same", "also"],
+      "phrases": ["mine's been good too", "me too", "same here", "mine as well"],
+      "category": "topics"
+    },
+    "day.good.tease": {
+      "question": "conversations.topic.day.good.followup",
+      "answer": "tease",
+      "context": "conversations.topic.day.good.followup",
+      "keywords": { "careful": 1.5, "happy": 1.0, "think": 0.6, "reputation": 1.2 },
+      "requiresAny": ["careful", "happy", "reputation", "smiling"],
+      "phrases": ["careful, people will think you're happy", "don't let it get out", "you're smiling", "mind your reputation"],
+      "category": "topics"
+    },
+    "day.good.wish_well": {
+      "question": "conversations.topic.day.good.followup",
+      "answer": "wish_well",
+      "context": "conversations.topic.day.good.followup",
+      "keywords": { "hope": 1.5, "holds": 1.2, "lasts": 1.2, "keep": 0.6 },
+      "requiresAny": ["hope", "holds", "lasts", "keeps"],
+      "phrases": ["hope it holds", "hope it lasts", "long may it continue", "keep it up"],
+      "category": "topics"
+    },
+
+    "day.ordinary.ask_work": {
+      "question": "conversations.topic.day.ordinary.respond",
+      "answer": "ask_work",
+      "context": "conversations.topic.day.ordinary.respond",
+      "keywords": { "working": 1.5, "doing": 1.0, "making": 1.2, "what": 0.5 },
+      "requiresAny": ["working", "doing", "making", "busy"],
+      "phrases": ["what are you working on", "what are you doing", "what's that you're making", "what are you up to"],
+      "category": "topics"
+    },
+    "day.ordinary.share_own_day": {
+      "question": "conversations.topic.day.ordinary.respond",
+      "answer": "share_own_day",
+      "context": "conversations.topic.day.ordinary.respond",
+      "keywords": { "mine": 1.5, "same": 1.2, "similar": 1.0, "too": 0.8 },
+      "requiresAny": ["mine", "same", "similar", "too"],
+      "phrases": ["mine's been the same", "same here", "much the same", "mine too"],
+      "category": "topics"
+    },
+    "day.ordinary.hurry": {
+      "question": "conversations.topic.day.ordinary.respond",
+      "answer": "hurry",
+      "context": "conversations.topic.day.ordinary.respond",
+      "keywords": { "slow": 1.2, "busy": 1.0, "keep": 0.8, "on": 0.3, "quick": 1.0 },
+      "requiresAny": ["slow", "busy", "quick", "hurry"],
+      "phrases": ["don't let me slow you down", "get on with it then", "hurry up", "you're busy, clearly"],
+      "category": "topics"
+    },
+    "day.ordinary.praise": {
+      "question": "conversations.topic.day.ordinary.followup",
+      "answer": "praise",
+      "context": "conversations.topic.day.ordinary.followup",
+      "keywords": { "good": 1.0, "skilled": 1.5, "impressive": 1.5, "well": 0.8 },
+      "requiresAny": ["good", "skilled", "impressive", "well"],
+      "phrases": ["you're good at that", "that's impressive", "you do that well", "you know your craft"],
+      "category": "topics"
+    },
+    "day.ordinary.advise": {
+      "question": "conversations.topic.day.ordinary.followup",
+      "answer": "advise",
+      "context": "conversations.topic.day.ordinary.followup",
+      "keywords": { "faster": 1.5, "quicker": 1.5, "should": 0.8, "try": 1.0 },
+      "requiresAny": ["faster", "quicker", "should", "try"],
+      "phrases": ["you could do that faster", "there's a quicker way", "you should try", "why not do it this way"],
+      "category": "topics"
+    },
+    "day.ordinary.let_them_work": {
+      "question": "conversations.topic.day.ordinary.followup",
+      "answer": "let_them_work",
+      "context": "conversations.topic.day.ordinary.followup",
+      "keywords": { "quiet": 1.2, "stop": 1.0, "talking": 1.2, "finish": 1.2 },
+      "requiresAny": ["quiet", "talking", "finish", "stop"],
+      "phrases": ["i'll stop talking", "let you finish", "i'll be quiet", "carry on, i'll watch"],
+      "category": "topics"
+    },
+
+    "day.young.interested": {
+      "question": "conversations.topic.day.young.respond",
+      "answer": "interested",
+      "context": "conversations.topic.day.young.respond",
+      "keywords": { "tell": 1.2, "properly": 1.5, "more": 1.0, "go": 0.4 },
+      "requiresAny": ["tell", "properly", "more", "hear"],
+      "phrases": ["tell me properly", "go on then", "i want to hear it", "tell me more"],
+      "category": "topics"
+    },
+    "day.young.encourage": {
+      "question": "conversations.topic.day.young.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.day.young.respond",
+      "keywords": { "work": 1.2, "proud": 1.5, "good": 0.8, "well": 0.8 },
+      "requiresAny": ["work", "proud", "good", "well"],
+      "phrases": ["that sounds like good work", "that's a good day's work", "well done", "i'd be proud of that"],
+      "category": "topics"
+    },
+    "day.young.dismiss": {
+      "question": "conversations.topic.day.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.day.young.respond",
+      "keywords": { "news": 1.5, "boring": 1.5, "whatever": 1.0, "really": 0.4 },
+      "requiresAny": ["news", "boring", "whatever", "care"],
+      "phrases": ["that's not really news", "that's boring", "who cares", "so what"],
+      "category": "topics"
+    },
+    "day.young.play_along": {
+      "question": "conversations.topic.day.young.followup",
+      "answer": "play_along",
+      "context": "conversations.topic.day.young.followup",
+      "keywords": { "then": 1.0, "happened": 1.5, "next": 1.2, "and": 0.3 },
+      "requiresAny": ["happened", "next", "then"],
+      "phrases": ["and then what", "what happened next", "and then", "go on, what next"],
+      "category": "topics"
+    },
+    "day.young.ask_more": {
+      "question": "conversations.topic.day.young.followup",
+      "answer": "ask_more",
+      "context": "conversations.topic.day.young.followup",
+      "keywords": { "usually": 1.5, "always": 1.2, "normally": 1.5, "every": 0.8 },
+      "requiresAny": ["usually", "always", "normally", "every"],
+      "phrases": ["is it usually like that", "is it always like this", "does that happen a lot", "is that normal"],
+      "category": "topics"
+    },
+
+    "day.toddler.delighted": {
+      "question": "conversations.topic.day.toddler.respond",
+      "answer": "delighted",
+      "context": "conversations.topic.day.toddler.respond",
+      "keywords": { "best": 1.5, "amazing": 1.5, "wow": 1.5, "news": 0.8 },
+      "requiresAny": ["best", "amazing", "wow", "great"],
+      "phrases": ["that's the best news", "wow", "that's amazing", "brilliant"],
+      "category": "topics"
+    },
+    "day.toddler.ask": {
+      "question": "conversations.topic.day.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.day.toddler.respond",
+      "keywords": { "more": 1.2, "tell": 1.0, "much": 1.2, "many": 1.2 },
+      "requiresAny": ["more", "tell", "much", "many"],
+      "phrases": ["tell me more", "how much", "how many", "really, how much"],
+      "category": "topics"
+    },
+
+    "day.again.apologize": {
+      "question": "conversations.topic.day.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.day.again.respond",
+      "keywords": { "sorry": 1.5, "forgot": 1.5, "asked": 0.8, "already": 0.8 },
+      "requiresAny": ["sorry", "forgot", "already"],
+      "phrases": ["sorry, i forgot i asked", "i forgot", "sorry, asked already", "my mistake"],
+      "category": "topics"
+    },
+    "day.again.press": {
+      "question": "conversations.topic.day.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.day.again.respond",
+      "keywords": { "humour": 1.5, "anyway": 1.2, "again": 1.0, "come": 0.4 },
+      "requiresAny": ["humour", "anyway", "again", "on"],
+      "phrases": ["humour me", "tell me anyway", "go on, again", "come on"],
+      "category": "topics"
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "answers": [
+    {
+      "name": "negotiate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "us.future.negotiate",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.future.negotiate",
+              "deltas": {
+                "respect": 5,
+                "trust": 3
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.future.negotiate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "promise_nothing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "us.future.promise_nothing",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.future.promise_nothing",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.future.promise_nothing"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reject",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.future.reject",
+              "delta": -3,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.future.reject",
+              "deltas": {
+                "warmth": -6,
+                "tension": 7,
+                "trust": -3
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.future.reject"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.future.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

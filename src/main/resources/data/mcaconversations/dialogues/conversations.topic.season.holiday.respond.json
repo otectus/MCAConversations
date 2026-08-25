@@ -1,0 +1,81 @@
+{
+  "answers": [
+    {
+      "name": "ask_tradition",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "season.holiday.ask_tradition",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.season.holiday.followup",
+            "say": "conversations.season.holiday.ask_tradition"
+          }
+        }
+      ]
+    },
+    {
+      "name": "accept",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.holiday.accept",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once_per_day"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.holiday.accept",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.season.holiday.followup",
+            "say": "conversations.season.holiday.accept"
+          }
+        }
+      ]
+    },
+    {
+      "name": "decline",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "season.holiday.decline",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.season.holiday.followup",
+            "say": "conversations.season.holiday.decline"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.holiday.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

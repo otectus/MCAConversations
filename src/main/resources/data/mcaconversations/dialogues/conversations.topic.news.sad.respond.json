@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "compassion",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.sad.compassion",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.sad.compassion",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.news.followup",
+            "say": "conversations.news.sad.compassion"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "news.sad.ask_more",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.news.followup",
+            "say": "conversations.news.sad.ask_more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "amused",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.sad.amused",
+              "delta": -3,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.sad.amused",
+              "deltas": {
+                "warmth": -6,
+                "tension": 8,
+                "trust": -3
+              }
+            },
+            "next": "conversations.topic.news.followup",
+            "say": "conversations.news.sad.amused"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.sad.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

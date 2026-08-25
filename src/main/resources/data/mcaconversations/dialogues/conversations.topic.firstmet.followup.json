@@ -1,0 +1,98 @@
+{
+  "answers": [
+    {
+      "name": "ask_stood_out",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "us.firstmet.ask_stood_out",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.firstmet.ask_stood_out",
+              "deltas": {
+                "warmth": 4,
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.firstmet.ask_stood_out"
+          }
+        }
+      ]
+    },
+    {
+      "name": "correct_gently",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.firstmet.correct_gently",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.firstmet.correct_gently",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.firstmet.correct_gently"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.firstmet.dismiss",
+              "delta": -1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.firstmet.dismiss",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.firstmet.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.firstmet.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

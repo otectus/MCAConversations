@@ -1,0 +1,74 @@
+{
+  "answers": [
+    {
+      "name": "back_off",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "fears.pressed.back_off",
+              "deltas": {
+                "tension": -4,
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.pressed.back_off"
+          }
+        }
+      ]
+    },
+    {
+      "name": "push",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "milestone": "fears.scar"
+              },
+              {
+                "arc": "fears",
+                "op": "regress",
+                "to": 0
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "fears.pressed.push",
+              "delta": -5,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.pressed.push",
+              "deltas": {
+                "tension": 10,
+                "trust": -6,
+                "warmth": -4
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.pressed.push"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.pressed.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

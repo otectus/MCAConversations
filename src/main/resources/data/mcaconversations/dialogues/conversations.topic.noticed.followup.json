@@ -1,0 +1,81 @@
+{
+  "answers": [
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.followup.offer_help",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.followup.offer_help",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.followup.offer_help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "just_be_there",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "noticed.followup.just_be_there",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.followup.just_be_there",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.followup.just_be_there"
+          }
+        }
+      ]
+    },
+    {
+      "name": "change_subject",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.followup.change_subject"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

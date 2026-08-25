@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "share_plan",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.share_plan",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.share_plan",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.turn.share_plan"
+          }
+        }
+      ]
+    },
+    {
+      "name": "look_forward",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.look_forward",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.look_forward",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.turn.look_forward"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "season.turn.dismiss",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.turn.dismiss",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.turn.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.season.turn.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

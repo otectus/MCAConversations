@@ -1,0 +1,180 @@
+{
+  "answers": [
+    {
+      "name": "affirm",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.respond.affirm",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.respond.affirm",
+              "deltas": {
+                "warmth": 4,
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.village.followup",
+            "say": "conversations.village.respond.agree.longknown"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_disposition": {
+                "axis": "familiarity",
+                "min": 45
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dispositions"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.respond.affirm",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.respond.affirm",
+              "deltas": {
+                "warmth": 4,
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.village.followup",
+            "say": "conversations.village.respond.affirm"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disposition": {
+                "axis": "familiarity",
+                "min": 45
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ask_improve",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "village.respond.ask_improve",
+              "deltas": {
+                "respect": 3,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.village.followup",
+            "say": "conversations.village.ask_improve.smith"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "village_has_building": "blacksmith"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "village.respond.ask_improve",
+              "deltas": {
+                "respect": 3,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.village.followup",
+            "say": "conversations.village.ask_improve.passive"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "village_has_building": "blacksmith"
+            },
+            {
+              "chance": 100,
+              "mood": "passive"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "village.respond.ask_improve",
+              "deltas": {
+                "respect": 3,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.village.followup",
+            "say": "conversations.village.respond.ask_improve"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "passive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "insult",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "village.respond.insult",
+              "delta": -2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.respond.insult",
+              "deltas": {
+                "warmth": -4,
+                "tension": 6
+              }
+            },
+            "next": "conversations.topic.village.followup",
+            "say": "conversations.village.respond.insult"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

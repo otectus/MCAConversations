@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "warm",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.resume.followup.warm",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.resume.followup.warm",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.resume.followup.warm"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "feelings.resume.followup.ask_more",
+              "deltas": {
+                "familiarity": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.resume.followup.ask_more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "boundary",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "feelings.resume.followup.boundary",
+              "deltas": {
+                "respect": 5,
+                "tension": 2
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.resume.followup.boundary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.resume.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

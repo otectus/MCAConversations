@@ -1,0 +1,464 @@
+{
+  "synonyms": {
+    "village": [
+      "town",
+      "settlement",
+      "hamlet"
+    ],
+    "people": [
+      "folk",
+      "folks",
+      "neighbors",
+      "neighbours",
+      "villagers"
+    ],
+    "rumor": [
+      "rumors",
+      "rumour",
+      "rumours",
+      "gossip",
+      "hearsay"
+    ]
+  },
+  "intents": {
+    "village.village": {
+      "question": "conversations.cat.village",
+      "answer": "village",
+      "keywords": {
+        "village": 1.5,
+        "place": 0.8,
+        "live": 0.8,
+        "home": 0.8,
+        "around": 0.6
+      },
+      "requiresAny": [
+        "village",
+        "place",
+        "live",
+        "home"
+      ],
+      "phrases": [
+        "about the village",
+        "this town",
+        "tell me about the village"
+      ],
+      "category": "topics"
+    },
+    "village.people": {
+      "question": "conversations.cat.village",
+      "answer": "people",
+      "keywords": {
+        "people": 1.4,
+        "everyone": 1.0,
+        "others": 0.8,
+        "someone": 0.6,
+        "live": 0.8
+      },
+      "requiresAny": [
+        "people",
+        "everyone",
+        "others"
+      ],
+      "phrases": [
+        "the other villagers",
+        "who lives here",
+        "tell me about the people",
+        "how is everyone",
+        "how is everyone doing"
+      ],
+      "category": "topics"
+    },
+    "village.rumors": {
+      "question": "conversations.cat.village",
+      "answer": "rumors",
+      "keywords": {
+        "rumor": 1.6,
+        "heard": 1.0,
+        "saying": 1.5,
+        "latest": 0.6
+      },
+      "requiresAny": [
+        "rumor",
+        "heard",
+        "saying"
+      ],
+      "phrases": [
+        "heard any rumors",
+        "any gossip",
+        "what are people saying",
+        "hear anything",
+        "heard anything"
+      ],
+      "category": "topics"
+    },
+    "village.standing": {
+      "question": "conversations.cat.village",
+      "answer": "standing",
+      "keywords": {
+        "think": 1.4,
+        "reputation": 1.6,
+        "standing": 1.6,
+        "me": 1.0,
+        "opinion": 1.2,
+        "regarded": 1.0
+      },
+      "requiresAny": [
+        "think",
+        "reputation",
+        "standing",
+        "opinion",
+        "regarded"
+      ],
+      "phrases": [
+        "what do people think of me",
+        "what do people think of me around here",
+        "how am i regarded",
+        "what is my reputation",
+        "what is my standing",
+        "do people like me",
+        "what do they say about me"
+      ],
+      "category": "topics"
+    },
+    "village.toddler.delight": {
+      "question": "conversations.topic.village.toddler.respond",
+      "answer": "delight",
+      "context": "conversations.topic.village.toddler.respond",
+      "keywords": {
+        "village": 1.5,
+        "good": 1.0
+      },
+      "requiresAny": [
+        "village",
+        "good"
+      ],
+      "antiKeywords": [
+        "favourite",
+        "bit"
+      ],
+      "phrases": [
+        "it is a good village",
+        "that is a good village",
+        "a good village"
+      ],
+      "category": "topics"
+    },
+    "village.toddler.ask": {
+      "question": "conversations.topic.village.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.village.toddler.respond",
+      "keywords": {
+        "favourite": 1.5,
+        "bit": 1.0
+      },
+      "requiresAny": [
+        "favourite",
+        "bit"
+      ],
+      "antiKeywords": [
+        "village",
+        "good"
+      ],
+      "phrases": [
+        "what is your favourite bit of it",
+        "favourite bit of the village",
+        "which bit do you like best"
+      ],
+      "category": "topics"
+    },
+    "village.followup.joke": {
+      "question": "conversations.topic.village.followup",
+      "answer": "joke",
+      "context": "conversations.topic.village.followup",
+      "keywords": {
+        "string": 1.6,
+        "stubbornness": 1.4
+      },
+      "requiresAny": [
+        "string",
+        "stubbornness"
+      ],
+      "antiKeywords": [
+        "fix",
+        "better"
+      ],
+      "phrases": [
+        "it is held together with string and stubbornness",
+        "string and stubbornness, that place",
+        "held together by stubbornness"
+      ],
+      "category": "topics"
+    },
+    "people.followup.joke": {
+      "question": "conversations.topic.people.followup",
+      "answer": "joke",
+      "context": "conversations.topic.people.followup",
+      "keywords": {
+        "complain": 1.5,
+        "lost": 1.2
+      },
+      "requiresAny": [
+        "complain",
+        "lost"
+      ],
+      "antiKeywords": [
+        "exhausting",
+        "talking"
+      ],
+      "phrases": [
+        "you would all be lost without somebody to complain about",
+        "you would be lost with nobody to complain about",
+        "without complaining you would be lost"
+      ],
+      "category": "topics"
+    },
+    "neighbour": {
+      "question": "conversations.cat.village",
+      "answer": "neighbour",
+      "keywords": {
+        "anyone": 1.4,
+        "mind": 1.3,
+        "somebody": 1.0
+      },
+      "requiresAny": [
+        "anyone",
+        "somebody",
+        "mind"
+      ],
+      "phrases": [
+        "is there anyone on your mind",
+        "anyone on your mind",
+        "is somebody on your mind"
+      ],
+      "category": "topics"
+    },
+    "neighbour.ask_more": {
+      "question": "conversations.topic.neighbour.respond",
+      "answer": "ask_more",
+      "context": "conversations.topic.neighbour.respond",
+      "keywords": {
+        "like": 1.4,
+        "really": 1.2
+      },
+      "requiresAny": [
+        "like",
+        "really"
+      ],
+      "antiKeywords": [
+        "decent",
+        "theirs",
+        "else"
+      ],
+      "phrases": [
+        "what are they like really",
+        "what are they actually like",
+        "what sort of person are they"
+      ],
+      "category": "topics"
+    },
+    "neighbour.defend_them": {
+      "question": "conversations.topic.neighbour.respond",
+      "answer": "defend_them",
+      "context": "conversations.topic.neighbour.respond",
+      "keywords": {
+        "decent": 1.6,
+        "always": 1.0
+      },
+      "requiresAny": [
+        "decent"
+      ],
+      "antiKeywords": [
+        "like",
+        "theirs",
+        "else"
+      ],
+      "phrases": [
+        "they have always been decent to me",
+        "they have been decent to me",
+        "they are decent enough"
+      ],
+      "category": "topics"
+    },
+    "neighbour.not_my_business": {
+      "question": "conversations.topic.neighbour.respond",
+      "answer": "not_my_business",
+      "context": "conversations.topic.neighbour.respond",
+      "keywords": {
+        "theirs": 1.6,
+        "tell": 1.1
+      },
+      "requiresAny": [
+        "theirs"
+      ],
+      "antiKeywords": [
+        "like",
+        "decent",
+        "else"
+      ],
+      "phrases": [
+        "that is theirs to tell not yours",
+        "that is theirs to tell",
+        "not yours to tell"
+      ],
+      "category": "topics"
+    },
+    "neighbour.encourage_more": {
+      "question": "conversations.topic.neighbour.respond",
+      "answer": "encourage_more",
+      "context": "conversations.topic.neighbour.respond",
+      "keywords": {
+        "else": 1.5,
+        "know": 1.0
+      },
+      "requiresAny": [
+        "else"
+      ],
+      "antiKeywords": [
+        "like",
+        "decent",
+        "theirs"
+      ],
+      "phrases": [
+        "go on what else do you know",
+        "what else do you know",
+        "tell me what else you know"
+      ],
+      "category": "topics"
+    },
+    "neighbour.ask_history": {
+      "question": "conversations.topic.neighbour.followup",
+      "answer": "ask_history",
+      "context": "conversations.topic.neighbour.followup",
+      "keywords": {
+        "long": 1.5,
+        "known": 1.3
+      },
+      "requiresAny": [
+        "long",
+        "known"
+      ],
+      "antiKeywords": [
+        "sure",
+        "leave"
+      ],
+      "phrases": [
+        "how long have you known them",
+        "how long have you known each other",
+        "known them long"
+      ],
+      "category": "topics"
+    },
+    "neighbour.be_honest": {
+      "question": "conversations.topic.neighbour.followup",
+      "answer": "be_honest",
+      "context": "conversations.topic.neighbour.followup",
+      "keywords": {
+        "sure": 1.5,
+        "sound": 1.1
+      },
+      "requiresAny": [
+        "sure",
+        "sound"
+      ],
+      "antiKeywords": [
+        "long",
+        "leave"
+      ],
+      "phrases": [
+        "you do not sound sure about them",
+        "you are not sure about them",
+        "you sound unsure"
+      ],
+      "category": "topics"
+    },
+    "neighbour.let_it_lie": {
+      "question": "conversations.topic.neighbour.followup",
+      "answer": "let_it_lie",
+      "context": "conversations.topic.neighbour.followup",
+      "keywords": {
+        "leave": 1.5,
+        "be": 1.0
+      },
+      "requiresAny": [
+        "leave"
+      ],
+      "antiKeywords": [
+        "long",
+        "sure"
+      ],
+      "phrases": [
+        "let us leave them be",
+        "leave them be",
+        "we should leave them alone"
+      ],
+      "category": "topics"
+    },
+    "neighbour.ask_anyway": {
+      "question": "conversations.topic.neighbour.none.respond",
+      "answer": "ask_anyway",
+      "context": "conversations.topic.neighbour.none.respond",
+      "keywords": {
+        "nobody": 1.5,
+        "all": 1.0
+      },
+      "requiresAny": [
+        "nobody"
+      ],
+      "antiKeywords": [
+        "week",
+        "must"
+      ],
+      "phrases": [
+        "nobody at all",
+        "nobody at all then",
+        "really nobody"
+      ],
+      "category": "topics"
+    },
+    "neighbour.glad": {
+      "question": "conversations.topic.neighbour.none.respond",
+      "answer": "glad",
+      "context": "conversations.topic.neighbour.none.respond",
+      "keywords": {
+        "week": 1.5,
+        "good": 1.2
+      },
+      "requiresAny": [
+        "week",
+        "good"
+      ],
+      "antiKeywords": [
+        "nobody",
+        "must"
+      ],
+      "phrases": [
+        "that sounds like a good week",
+        "sounds like a good week",
+        "a good week then"
+      ],
+      "category": "topics"
+    },
+    "neighbour.press": {
+      "question": "conversations.topic.neighbour.none.respond",
+      "answer": "press",
+      "context": "conversations.topic.neighbour.none.respond",
+      "keywords": {
+        "must": 1.5,
+        "someone": 1.2
+      },
+      "requiresAny": [
+        "must"
+      ],
+      "antiKeywords": [
+        "nobody",
+        "week"
+      ],
+      "phrases": [
+        "someone must have done something",
+        "somebody must have done something",
+        "surely someone did something"
+      ],
+      "category": "topics"
+    }
+  }
+}

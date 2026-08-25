@@ -1,0 +1,64 @@
+{
+  "synonyms": {
+    "parent": ["mother", "father", "mom", "dad", "mum", "mommy", "daddy", "parents"],
+    "child": ["kid", "kids", "children", "son", "daughter", "little"]
+  },
+  "intents": {
+    "us.happy": {
+      "question": "conversations.us",
+      "answer": "happy",
+      "keywords": { "happy": 1.5, "content": 1.0, "glad": 0.8, "satisfied": 0.8 },
+      "requiresAny": ["happy", "content", "glad", "satisfied"],
+      "phrases": ["are you happy", "happy with us", "happy with me"],
+      "category": "topics"
+    },
+    "us.firstmet": {
+      "question": "conversations.us",
+      "answer": "firstmet",
+      "keywords": { "met": 1.5, "meet": 1.2, "remember": 1.0, "first": 0.6 },
+      "requiresAny": ["met", "meet", "remember"],
+      "phrases": ["when we met", "remember when we met", "first met", "how we met"],
+      "category": "topics"
+    },
+    "us.future": {
+      "question": "conversations.us",
+      "answer": "future",
+      "keywords": { "future": 1.5, "plan": 1.0, "tomorrow": 0.8, "ahead": 0.6 },
+      "requiresAny": ["future", "plan", "tomorrow", "ahead"],
+      "phrases": ["our future", "for the future", "future together"],
+      "category": "topics"
+    },
+    "us.worries": {
+      "question": "conversations.us",
+      "answer": "worries",
+      "keywords": { "worry": 1.2, "weigh": 1.2, "bother": 1.0, "trouble": 0.8, "mind": 0.6 },
+      "requiresAny": ["worry", "weigh", "bother", "trouble"],
+      "phrases": ["weighing on you", "on your mind", "bothering you", "anything wrong"],
+      "category": "topics"
+    },
+    "family.checkin_child": {
+      "question": "conversations.family",
+      "answer": "checkin_child",
+      "keywords": { "child": 1.4, "holding": 1.0, "okay": 0.6 },
+      "requiresAny": ["child", "holding"],
+      "phrases": ["holding up", "how are the kids", "little one", "how is your child"],
+      "category": "topics"
+    },
+    "family.ask_parent": {
+      "question": "conversations.family",
+      "answer": "ask_parent",
+      "keywords": { "parent": 1.5, "raised": 0.8, "advice": 0.8 },
+      "requiresAny": ["parent", "raised"],
+      "phrases": ["your parents", "parent to child", "raised you"],
+      "category": "topics"
+    },
+    "family.memories": {
+      "question": "conversations.family",
+      "answer": "memories",
+      "keywords": { "memory": 1.2, "story": 1.2, "past": 0.8, "remember": 0.8 },
+      "requiresAny": ["memory", "story", "past"],
+      "phrases": ["family story", "a memory", "tell me a story", "family memories"],
+      "category": "topics"
+    }
+  }
+}

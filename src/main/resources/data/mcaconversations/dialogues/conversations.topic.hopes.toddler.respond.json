@@ -1,0 +1,62 @@
+{
+  "answers": [
+    {
+      "name": "delight",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "hopes.toddler.delight",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.toddler.delight",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.toddler.delight"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "hopes.toddler.ask",
+              "deltas": {
+                "warmth": 1,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.toddler.ask"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.hopes.toddler.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

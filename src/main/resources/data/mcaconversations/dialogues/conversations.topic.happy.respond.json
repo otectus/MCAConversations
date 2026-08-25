@@ -1,0 +1,133 @@
+{
+  "answers": [
+    {
+      "name": "listen",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "arc": "us",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.happy.listen",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.listen",
+              "deltas": {
+                "trust": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.happy.followup",
+            "say": "conversations.us.happy.listen.again"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "us",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.happy.listen",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.listen",
+              "deltas": {
+                "trust": 4,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.happy.followup",
+            "say": "conversations.us.happy.listen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "affirm",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.happy.affirm",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.affirm",
+              "deltas": {
+                "warmth": 5
+              }
+            },
+            "next": "conversations.topic.happy.followup",
+            "say": "conversations.us.happy.affirm"
+          }
+        }
+      ]
+    },
+    {
+      "name": "defensive",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.happy.defensive",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.defensive",
+              "deltas": {
+                "tension": 6,
+                "warmth": -3
+              }
+            },
+            "next": "conversations.topic.happy.followup",
+            "say": "conversations.us.happy.defensive"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.happy.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

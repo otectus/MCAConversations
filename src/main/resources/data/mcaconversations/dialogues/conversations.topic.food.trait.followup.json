@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "offer_alternative",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "food.trait.offer_alternative",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.trait.offer_alternative",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.offer_alternative"
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "food.trait.share_own",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.trait.share_own",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.share_own"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_be",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "food.trait.let_be",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.let_be"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

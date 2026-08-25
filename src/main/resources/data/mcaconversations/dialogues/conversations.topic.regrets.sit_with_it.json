@@ -1,0 +1,44 @@
+{
+  "answers": [
+    {
+      "name": "stay",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "regrets.sit_with_it.stay",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.sit_with_it.stay",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.regrets.followup",
+            "say": "conversations.regrets.sit_with_it.stay"
+          }
+        }
+      ]
+    },
+    {
+      "name": "step_away",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.regrets.sit_with_it.step_away"
+          }
+        }
+      ]
+    }
+  ]
+}

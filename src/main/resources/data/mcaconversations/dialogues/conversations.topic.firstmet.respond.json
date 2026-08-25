@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "share_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.firstmet.share_own",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.firstmet.share_own",
+              "deltas": {
+                "familiarity": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.firstmet.followup",
+            "say": "conversations.us.firstmet.share_own"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tease",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.firstmet.tease",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.firstmet.tease",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.firstmet.followup",
+            "say": "conversations.us.firstmet.tease"
+          }
+        }
+      ]
+    },
+    {
+      "name": "brush_off",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.firstmet.brush_off",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.firstmet.brush_off",
+              "deltas": {
+                "warmth": -4,
+                "tension": 4
+              }
+            },
+            "next": "conversations.topic.firstmet.followup",
+            "say": "conversations.us.firstmet.brush_off"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.firstmet.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

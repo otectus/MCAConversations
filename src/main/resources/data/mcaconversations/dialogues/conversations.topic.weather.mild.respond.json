@@ -1,0 +1,244 @@
+{
+  "answers": [
+    {
+      "name": "enjoy",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.mild.enjoy",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.enjoy",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.enjoy.high"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "happy"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.mild.enjoy",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.enjoy",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.mild.enjoy"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "happy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "talk_crops",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.talk_crops",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "conversations_say": {
+              "phrase": "conversations.weather.talk_crops.clear",
+              "vars": [
+                "weather"
+              ]
+            }
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "clear"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "world"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.talk_crops",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.mild.talk_crops"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_weather": {
+                "is": "clear"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "grumble",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted",
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.mild.grumble",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.grumble",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.mild.grumble.landed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "playful",
+                "peppy",
+                "upbeat",
+                "odd",
+                "relaxed",
+                "extroverted",
+                "flirty"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "weather.mild.grumble",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.grumble",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.mild.grumble.flat"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "gloomy",
+                "sensitive",
+                "anxious",
+                "crabby",
+                "introverted",
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful"
+              ]
+            },
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "playful",
+                "peppy",
+                "upbeat",
+                "odd",
+                "relaxed",
+                "extroverted",
+                "flirty"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "weather.mild.grumble",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.weather.mild.followup",
+            "say": "conversations.weather.mild.grumble.polite"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.weather.mild.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

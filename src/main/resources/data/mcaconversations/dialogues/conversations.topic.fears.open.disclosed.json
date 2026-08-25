@@ -1,0 +1,57 @@
+{
+  "answers": [
+    {
+      "name": "hold_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "fears.open.disclosed.hold_it",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.fears.open.followup",
+            "say": "conversations.fears.open.disclosed.hold_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_when",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "fears.open.disclosed.ask_when",
+              "deltas": {
+                "familiarity": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.fears.open.followup",
+            "say": "conversations.fears.open.disclosed.ask_when"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.open.disclosed.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

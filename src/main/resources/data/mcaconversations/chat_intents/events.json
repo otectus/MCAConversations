@@ -1,0 +1,122 @@
+{
+  "intents": {
+    "events.news": {
+      "question": "conversations.cat.events",
+      "answer": "news",
+      "keywords": {
+        "news": 1.5,
+        "happening": 1.0,
+        "latest": 1.0,
+        "update": 0.8,
+        "anything": 0.6
+      },
+      "requiresAny": [
+        "news",
+        "happening",
+        "latest",
+        "update"
+      ],
+      "phrases": [
+        "any news",
+        "what is new",
+        "anything happening",
+        "what is going on"
+      ],
+      "category": "topics"
+    },
+    "events.noticed": {
+      "question": "conversations.cat.events",
+      "answer": "noticed",
+      "keywords": {
+        "notice": 1.2,
+        "noticed": 1.2,
+        "unusual": 1.0,
+        "strange": 1.0,
+        "different": 0.8,
+        "seen": 0.8
+      },
+      "requiresAny": [
+        "notice",
+        "noticed",
+        "unusual",
+        "strange",
+        "seen"
+      ],
+      "phrases": [
+        "noticed anything",
+        "seen anything strange",
+        "anything unusual",
+        "anything different"
+      ],
+      "category": "topics"
+    },
+    "news.young.take_seriously": {
+      "question": "conversations.topic.news.young.respond",
+      "answer": "take_seriously",
+      "context": "conversations.topic.news.young.respond",
+      "keywords": {
+        "properly": 1.5,
+        "telling": 1.1
+      },
+      "requiresAny": [
+        "properly",
+        "telling"
+      ],
+      "antiKeywords": [
+        "find",
+        "repeat"
+      ],
+      "phrases": [
+        "thank you for telling me properly",
+        "thank you for telling me that properly",
+        "you told me that properly"
+      ],
+      "category": "topics"
+    },
+    "news.young.ask_how_they_know": {
+      "question": "conversations.topic.news.young.respond",
+      "answer": "ask_how_they_know",
+      "context": "conversations.topic.news.young.respond",
+      "keywords": {
+        "find": 1.5,
+        "know": 1.0
+      },
+      "requiresAny": [
+        "find",
+        "know"
+      ],
+      "antiKeywords": [
+        "properly",
+        "repeat"
+      ],
+      "phrases": [
+        "how did you find that out",
+        "how do you know that",
+        "where did you hear that"
+      ],
+      "category": "topics"
+    },
+    "news.young.dismiss": {
+      "question": "conversations.topic.news.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.news.young.respond",
+      "keywords": {
+        "repeat": 1.5,
+        "should": 1.0
+      },
+      "requiresAny": [
+        "repeat"
+      ],
+      "antiKeywords": [
+        "properly",
+        "find"
+      ],
+      "phrases": [
+        "you should not repeat things",
+        "do not repeat things like that",
+        "that is just repeating gossip"
+      ],
+      "category": "topics"
+    }
+  }
+}

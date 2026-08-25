@@ -1,0 +1,121 @@
+{
+  "answers": [
+    {
+      "name": "follow_thread",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": [
+              {
+                "arc": "life",
+                "op": "advance",
+                "to": 1
+              },
+              {
+                "milestone": "life.chapter"
+              }
+            ],
+            "conversations_affection_apply": {
+              "decision": "life.followup.follow_thread",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.followup.follow_thread",
+              "deltas": {
+                "trust": 5,
+                "familiarity": 4
+              }
+            },
+            "next": "conversations.topic.life.close",
+            "say": "conversations.life.followup.follow_thread"
+          }
+        }
+      ]
+    },
+    {
+      "name": "compare_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "life",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "life.followup.compare_own",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.followup.compare_own",
+              "deltas": {
+                "familiarity": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.life.close",
+            "say": "conversations.life.followup.compare_own"
+          }
+        }
+      ]
+    },
+    {
+      "name": "change_subject",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal",
+            "say": "conversations.life.followup.change_subject"
+          }
+        }
+      ]
+    },
+    {
+      "name": "joke",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "life.followup.joke",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.followup.joke",
+              "deltas": {
+                "warmth": 4,
+                "tension": -2
+              }
+            },
+            "next": "conversations.topic.life.close",
+            "say": "conversations.life.followup.joke"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.life.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

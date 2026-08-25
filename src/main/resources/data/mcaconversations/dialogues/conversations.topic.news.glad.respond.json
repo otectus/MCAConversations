@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "celebrate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.glad.celebrate",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.glad.celebrate",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.news.followup",
+            "say": "conversations.news.glad.celebrate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "news.glad.ask_more",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.news.followup",
+            "say": "conversations.news.glad.ask_more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sour",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "news.glad.sour",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.glad.sour",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.news.followup",
+            "say": "conversations.news.glad.sour"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.glad.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,843 @@
+{
+  "_comment": [
+    "Context-scoped stances for the branching Fears tree. The pre-1.1.0 fears.* intents in depth.json",
+    "stay bound to conversations.fears, which is now the branching-disabled sub-tree; these are bound",
+    "to the new decision nodes. Ids are namespaced by node so the two sets never collide."
+  ],
+  "intents": {
+    "fears.open.comfort": {
+      "question": "conversations.topic.fears.open.respond",
+      "answer": "comfort",
+      "context": "conversations.topic.fears.open.respond",
+      "keywords": {
+        "carry": 1.5,
+        "heavy": 1.2,
+        "sorry": 1.0,
+        "hard": 0.8
+      },
+      "requiresAny": [
+        "carry",
+        "heavy",
+        "sorry",
+        "hard"
+      ],
+      "phrases": [
+        "that sounds hard to carry",
+        "that is heavy",
+        "i am sorry",
+        "that sounds hard"
+      ],
+      "category": "topics"
+    },
+    "fears.open.press": {
+      "question": "conversations.topic.fears.open.respond",
+      "answer": "press",
+      "context": "conversations.topic.fears.open.respond",
+      "keywords": {
+        "rest": 1.5,
+        "more": 1.0,
+        "everything": 1.2,
+        "all": 0.6
+      },
+      "requiresAny": [
+        "rest",
+        "more",
+        "everything",
+        "all"
+      ],
+      "phrases": [
+        "tell me the rest",
+        "the rest of it",
+        "tell me everything",
+        "there is more"
+      ],
+      "category": "topics"
+    },
+    "fears.open.share": {
+      "question": "conversations.topic.fears.open.respond",
+      "answer": "share",
+      "context": "conversations.topic.fears.open.respond",
+      "keywords": {
+        "too": 1.2,
+        "also": 1.0,
+        "same": 1.0,
+        "myself": 1.2,
+        "scared": 0.8,
+        "afraid": 0.8
+      },
+      "requiresAny": [
+        "too",
+        "also",
+        "same",
+        "myself"
+      ],
+      "phrases": [
+        "me too",
+        "i am scared of that too",
+        "same here",
+        "i fear that myself",
+        "i am afraid of that as well"
+      ],
+      "category": "topics"
+    },
+    "fears.open.pledge": {
+      "question": "conversations.topic.fears.open.followup",
+      "answer": "pledge",
+      "context": "conversations.topic.fears.open.followup",
+      "keywords": {
+        "alone": 1.5,
+        "together": 1.5,
+        "with": 0.5,
+        "promise": 1.2
+      },
+      "requiresAny": [
+        "alone",
+        "together",
+        "promise",
+        "beside"
+      ],
+      "phrases": [
+        "you will not face it alone",
+        "not alone",
+        "we face it together",
+        "i promise"
+      ],
+      "category": "topics"
+    },
+    "fears.open.step_back": {
+      "question": "conversations.topic.fears.open.followup",
+      "answer": "step_back",
+      "context": "conversations.topic.fears.open.followup",
+      "keywords": {
+        "cannot": 1.5,
+        "listening": 1.5,
+        "honest": 1.2,
+        "wont": 1.0
+      },
+      "requiresAny": [
+        "cannot",
+        "listening",
+        "honest",
+        "wont"
+      ],
+      "phrases": [
+        "i cannot promise that",
+        "i will not promise",
+        "but i am listening",
+        "i would rather be honest"
+      ],
+      "category": "topics"
+    },
+    "fears.open.challenge": {
+      "question": "conversations.topic.fears.open.followup",
+      "answer": "challenge",
+      "context": "conversations.topic.fears.open.followup",
+      "keywords": {
+        "face": 1.5,
+        "stand": 1.2,
+        "beat": 1.2,
+        "could": 0.5
+      },
+      "requiresAny": [
+        "face",
+        "stand",
+        "beat",
+        "overcome"
+      ],
+      "phrases": [
+        "you could face it",
+        "you could beat this",
+        "stand up to it",
+        "you can overcome it"
+      ],
+      "category": "topics"
+    },
+    "fears.open.thank": {
+      "question": "conversations.topic.fears.open.close",
+      "answer": "thank",
+      "context": "conversations.topic.fears.open.close",
+      "keywords": {
+        "thank": 1.5,
+        "trusting": 1.5,
+        "grateful": 1.2
+      },
+      "requiresAny": [
+        "thank",
+        "trusting",
+        "grateful",
+        "trust"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thank you for trusting me",
+        "i am grateful"
+      ],
+      "category": "topics"
+    },
+    "fears.open.means": {
+      "question": "conversations.topic.fears.open.close",
+      "answer": "means",
+      "context": "conversations.topic.fears.open.close",
+      "keywords": {
+        "took": 1.5,
+        "brave": 1.5,
+        "courage": 1.5,
+        "say": 0.4
+      },
+      "requiresAny": [
+        "took",
+        "brave",
+        "courage",
+        "easy"
+      ],
+      "phrases": [
+        "that took something to say",
+        "that was brave",
+        "that took courage",
+        "that cannot have been easy"
+      ],
+      "category": "topics"
+    },
+    "fears.pressed.back_off": {
+      "question": "conversations.topic.fears.pressed",
+      "answer": "back_off",
+      "context": "conversations.topic.fears.pressed",
+      "keywords": {
+        "forget": 1.5,
+        "right": 1.0,
+        "sorry": 1.0,
+        "asked": 0.8
+      },
+      "requiresAny": [
+        "forget",
+        "right",
+        "sorry",
+        "drop"
+      ],
+      "phrases": [
+        "forget i asked",
+        "you are right",
+        "sorry i asked",
+        "i will drop it"
+      ],
+      "category": "topics"
+    },
+    "fears.pressed.push": {
+      "question": "conversations.topic.fears.pressed",
+      "answer": "push",
+      "context": "conversations.topic.fears.pressed",
+      "keywords": {
+        "now": 1.5,
+        "want": 1.2,
+        "demand": 1.5,
+        "insist": 1.5
+      },
+      "requiresAny": [
+        "now",
+        "demand",
+        "insist",
+        "want"
+      ],
+      "phrases": [
+        "i want the rest now",
+        "tell me now",
+        "i insist",
+        "no, tell me"
+      ],
+      "category": "topics"
+    },
+    "fears.guarded.respect": {
+      "question": "conversations.topic.fears.guarded.respond",
+      "answer": "respect",
+      "context": "conversations.topic.fears.guarded.respond",
+      "keywords": {
+        "yours": 1.5,
+        "keep": 1.2,
+        "fair": 1.2,
+        "private": 1.5
+      },
+      "requiresAny": [
+        "yours",
+        "keep",
+        "fair",
+        "private"
+      ],
+      "phrases": [
+        "that is yours to keep",
+        "fair enough",
+        "keep it private",
+        "i understand"
+      ],
+      "category": "topics"
+    },
+    "fears.guarded.ask_safer": {
+      "question": "conversations.topic.fears.guarded.respond",
+      "answer": "ask_safer",
+      "context": "conversations.topic.fears.guarded.respond",
+      "keywords": {
+        "easier": 1.5,
+        "lighter": 1.5,
+        "else": 1.0,
+        "something": 0.5
+      },
+      "requiresAny": [
+        "easier",
+        "lighter",
+        "else",
+        "instead"
+      ],
+      "phrases": [
+        "tell me something easier",
+        "something lighter then",
+        "what else then",
+        "ask something else"
+      ],
+      "category": "topics"
+    },
+    "fears.guarded.press": {
+      "question": "conversations.topic.fears.guarded.respond",
+      "answer": "press",
+      "context": "conversations.topic.fears.guarded.respond",
+      "keywords": {
+        "come": 1.2,
+        "out": 1.0,
+        "tell": 1.0,
+        "anyway": 1.2
+      },
+      "requiresAny": [
+        "come",
+        "anyway",
+        "tell",
+        "out"
+      ],
+      "phrases": [
+        "come on",
+        "out with it",
+        "tell me anyway",
+        "just tell me"
+      ],
+      "category": "topics"
+    },
+    "fears.scarred.apologize": {
+      "question": "conversations.topic.fears.scarred.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.fears.scarred.respond",
+      "keywords": {
+        "pushed": 1.5,
+        "wrong": 1.5,
+        "sorry": 1.2,
+        "shouldnt": 1.2
+      },
+      "requiresAny": [
+        "pushed",
+        "wrong",
+        "sorry",
+        "shouldnt"
+      ],
+      "phrases": [
+        "i pushed you and i was wrong",
+        "i should not have pushed",
+        "i am sorry for that",
+        "that was wrong of me"
+      ],
+      "category": "topics"
+    },
+    "fears.scarred.give_space": {
+      "question": "conversations.topic.fears.scarred.respond",
+      "answer": "give_space",
+      "context": "conversations.topic.fears.scarred.respond",
+      "keywords": {
+        "again": 1.5,
+        "space": 1.5,
+        "never": 1.2,
+        "ask": 0.5
+      },
+      "requiresAny": [
+        "again",
+        "space",
+        "never"
+      ],
+      "phrases": [
+        "i will not ask again",
+        "i will give you space",
+        "never again",
+        "i will leave it alone"
+      ],
+      "category": "topics"
+    },
+    "fears.again.apologize": {
+      "question": "conversations.topic.fears.again.respond",
+      "answer": "apologize",
+      "context": "conversations.topic.fears.again.respond",
+      "keywords": {
+        "twice": 1.5,
+        "sorry": 1.2,
+        "forgot": 1.2,
+        "shouldnt": 1.0
+      },
+      "requiresAny": [
+        "twice",
+        "sorry",
+        "forgot",
+        "shouldnt"
+      ],
+      "phrases": [
+        "sorry, i asked twice",
+        "i should not have asked again",
+        "sorry, i forgot",
+        "my mistake"
+      ],
+      "category": "topics"
+    },
+    "fears.again.press": {
+      "question": "conversations.topic.fears.again.respond",
+      "answer": "press",
+      "context": "conversations.topic.fears.again.respond",
+      "keywords": {
+        "anyway": 1.5,
+        "again": 1.2,
+        "humour": 1.5
+      },
+      "requiresAny": [
+        "anyway",
+        "again",
+        "humour"
+      ],
+      "phrases": [
+        "tell me again anyway",
+        "humour me",
+        "go on, again"
+      ],
+      "category": "topics"
+    },
+    "fears.toddler.reassure": {
+      "question": "conversations.topic.fears.toddler.respond",
+      "answer": "reassure",
+      "context": "conversations.topic.fears.toddler.respond",
+      "keywords": {
+        "safe": 1.5,
+        "scary": 1.0,
+        "okay": 1.0,
+        "here": 0.5
+      },
+      "requiresAny": [
+        "safe",
+        "okay",
+        "scary",
+        "protect"
+      ],
+      "phrases": [
+        "you are safe here",
+        "that does sound scary",
+        "it is okay",
+        "nothing will get you"
+      ],
+      "category": "topics"
+    },
+    "fears.toddler.ask": {
+      "question": "conversations.topic.fears.toddler.respond",
+      "answer": "ask",
+      "context": "conversations.topic.fears.toddler.respond",
+      "keywords": {
+        "like": 1.0,
+        "look": 1.5,
+        "what": 0.6,
+        "describe": 1.5
+      },
+      "requiresAny": [
+        "like",
+        "look",
+        "describe",
+        "what"
+      ],
+      "phrases": [
+        "what is it like",
+        "what does it look like",
+        "describe it to me",
+        "what is the scary thing"
+      ],
+      "category": "topics"
+    },
+    "fears.young.reassure": {
+      "question": "conversations.topic.fears.young.respond",
+      "answer": "reassure",
+      "context": "conversations.topic.fears.young.respond",
+      "keywords": {
+        "real": 1.5,
+        "valid": 1.5,
+        "fair": 1.0
+      },
+      "requiresAny": [
+        "real",
+        "valid",
+        "fair"
+      ],
+      "phrases": [
+        "that is a real thing to fear",
+        "that is fair",
+        "that is valid",
+        "that is a real fear"
+      ],
+      "category": "topics"
+    },
+    "fears.young.normalize": {
+      "question": "conversations.topic.fears.young.respond",
+      "answer": "normalize",
+      "context": "conversations.topic.fears.young.respond",
+      "keywords": {
+        "everyone": 1.5,
+        "everybody": 1.5,
+        "normal": 1.2,
+        "all": 0.6
+      },
+      "requiresAny": [
+        "everyone",
+        "everybody",
+        "normal"
+      ],
+      "phrases": [
+        "everyone is scared of something",
+        "everybody has fears",
+        "that is normal",
+        "we all have one"
+      ],
+      "category": "topics"
+    },
+    "fears.young.dismiss": {
+      "question": "conversations.topic.fears.young.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.fears.young.respond",
+      "keywords": {
+        "grow": 1.5,
+        "silly": 1.5,
+        "childish": 1.5,
+        "out": 0.5
+      },
+      "requiresAny": [
+        "grow",
+        "silly",
+        "childish"
+      ],
+      "phrases": [
+        "you will grow out of it",
+        "do not be silly",
+        "that is childish",
+        "you will get over it"
+      ],
+      "category": "topics"
+    },
+    "fears.plan.ask_what_helps": {
+      "question": "conversations.arc.fears.plan.respond",
+      "answer": "ask_what_helps",
+      "context": "conversations.arc.fears.plan.respond",
+      "keywords": {
+        "help": 1.5,
+        "helps": 1.5,
+        "need": 1.2,
+        "what": 0.4
+      },
+      "requiresAny": [
+        "help",
+        "helps",
+        "need"
+      ],
+      "phrases": [
+        "what would help",
+        "what do you need",
+        "what actually helps",
+        "how can i help"
+      ],
+      "category": "topics"
+    },
+    "fears.plan.offer_plan": {
+      "question": "conversations.arc.fears.plan.respond",
+      "answer": "offer_plan",
+      "context": "conversations.arc.fears.plan.respond",
+      "keywords": {
+        "do": 0.5,
+        "something": 1.2,
+        "plan": 1.5,
+        "try": 1.2
+      },
+      "requiresAny": [
+        "something",
+        "plan",
+        "try",
+        "act"
+      ],
+      "phrases": [
+        "let us do something about it",
+        "we need a plan",
+        "let us try something",
+        "we should act"
+      ],
+      "category": "topics"
+    },
+    "fears.plan.just_listen": {
+      "question": "conversations.arc.fears.plan.respond",
+      "answer": "just_listen",
+      "context": "conversations.arc.fears.plan.respond",
+      "keywords": {
+        "here": 1.2,
+        "listen": 1.5,
+        "fix": 1.2,
+        "need": 0.4
+      },
+      "requiresAny": [
+        "here",
+        "listen",
+        "fix"
+      ],
+      "phrases": [
+        "you do not need a plan",
+        "i am here",
+        "i am just listening",
+        "i do not need to fix it"
+      ],
+      "category": "topics"
+    },
+    "fears.followthrough.ask_how": {
+      "question": "conversations.arc.fears.followthrough.respond",
+      "answer": "ask_how",
+      "context": "conversations.arc.fears.followthrough.respond",
+      "keywords": {
+        "going": 1.5,
+        "how": 0.8,
+        "getting": 1.2
+      },
+      "requiresAny": [
+        "going",
+        "getting",
+        "how"
+      ],
+      "phrases": [
+        "how is it going",
+        "how have you been getting on",
+        "how are you doing with it"
+      ],
+      "category": "topics"
+    },
+    "fears.followthrough.celebrate": {
+      "question": "conversations.arc.fears.followthrough.respond",
+      "answer": "celebrate",
+      "context": "conversations.arc.fears.followthrough.respond",
+      "keywords": {
+        "proud": 1.5,
+        "look": 1.0,
+        "nothing": 1.2,
+        "well": 0.6
+      },
+      "requiresAny": [
+        "proud",
+        "nothing",
+        "look",
+        "done"
+      ],
+      "phrases": [
+        "look at you",
+        "that is not nothing",
+        "i am proud of you",
+        "you have done well"
+      ],
+      "category": "topics"
+    },
+    "fears.followthrough.recall_promise": {
+      "question": "conversations.arc.fears.followthrough.respond",
+      "answer": "recall_promise",
+      "context": "conversations.arc.fears.followthrough.respond",
+      "keywords": {
+        "meant": 1.5,
+        "said": 1.2,
+        "then": 0.6,
+        "back": 0.6
+      },
+      "requiresAny": [
+        "meant",
+        "said",
+        "words"
+      ],
+      "phrases": [
+        "i meant what i said",
+        "i meant it back then",
+        "i stand by what i said"
+      ],
+      "category": "topics"
+    },
+    "fears.rebuffed.apologize": {
+      "question": "conversations.topic.fears.open.close.rebuffed",
+      "answer": "apologize",
+      "context": "conversations.topic.fears.open.close.rebuffed",
+      "keywords": {
+        "wrong": 1.5,
+        "sorry": 1.3,
+        "came": 0.8
+      },
+      "requiresAny": [
+        "wrong",
+        "sorry"
+      ],
+      "antiKeywords": [
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "that came out wrong",
+        "fair, that was the wrong thing to say",
+        "sorry, that came out badly"
+      ],
+      "category": "topics"
+    },
+    "fears.rebuffed.accept": {
+      "question": "conversations.topic.fears.open.close.rebuffed",
+      "answer": "accept",
+      "context": "conversations.topic.fears.open.close.rebuffed",
+      "keywords": {
+        "understood": 1.5,
+        "quiet": 1.2,
+        "shut": 1.2
+      },
+      "requiresAny": [
+        "understood",
+        "quiet",
+        "shut"
+      ],
+      "phrases": [
+        "understood, i will shut up",
+        "i will be quiet then",
+        "understood"
+      ],
+      "category": "topics"
+    },
+    "fears.repaired.ask_safer": {
+      "question": "conversations.topic.fears.repaired",
+      "answer": "ask_safer",
+      "context": "conversations.topic.fears.repaired",
+      "keywords": {
+        "easier": 1.5,
+        "easily": 1.2,
+        "simple": 1.0
+      },
+      "requiresAny": [
+        "easier",
+        "easily",
+        "simple"
+      ],
+      "phrases": [
+        "ask me something i can answer easily",
+        "something easier then",
+        "let us keep to easy things"
+      ],
+      "category": "topics"
+    },
+    "fears.repaired.respect": {
+      "question": "conversations.topic.fears.repaired",
+      "answer": "respect",
+      "context": "conversations.topic.fears.repaired",
+      "keywords": {
+        "pace": 1.6,
+        "slower": 1.1,
+        "lead": 0.8
+      },
+      "requiresAny": [
+        "pace",
+        "slower"
+      ],
+      "phrases": [
+        "you set the pace",
+        "we go at your pace",
+        "i will keep to your pace"
+      ],
+      "category": "topics"
+    },
+    "fears.disclosed.hold_it": {
+      "question": "conversations.topic.fears.open.disclosed",
+      "answer": "hold_it",
+      "context": "conversations.topic.fears.open.disclosed",
+      "keywords": {
+        "carry": 1.5,
+        "help": 1.0,
+        "share": 1.1
+      },
+      "requiresAny": [
+        "carry",
+        "share"
+      ],
+      "phrases": [
+        "i will help you carry that",
+        "let me carry some of that",
+        "we can share the weight of it"
+      ],
+      "category": "topics"
+    },
+    "fears.disclosed.ask_when": {
+      "question": "conversations.topic.fears.open.disclosed",
+      "answer": "ask_when",
+      "context": "conversations.topic.fears.open.disclosed",
+      "keywords": {
+        "long": 1.5,
+        "when": 1.2,
+        "had": 0.7
+      },
+      "requiresAny": [
+        "long",
+        "when"
+      ],
+      "antiKeywords": [
+        "carry",
+        "share"
+      ],
+      "phrases": [
+        "how long have you had that",
+        "when did that start",
+        "how long has it been like that"
+      ],
+      "category": "topics"
+    },
+    "fears.lapsed.apologize": {
+      "question": "conversations.topic.fears.lapsed",
+      "answer": "apologize",
+      "context": "conversations.topic.fears.lapsed",
+      "keywords": {
+        "right": 1.3,
+        "there": 1.2,
+        "sorry": 1.3
+      },
+      "requiresAny": [
+        "right",
+        "sorry",
+        "there"
+      ],
+      "antiKeywords": [
+        "now",
+        "let"
+      ],
+      "phrases": [
+        "you are right, i was not there",
+        "i was not there and i am sorry",
+        "you are right about that"
+      ],
+      "category": "topics"
+    },
+    "fears.lapsed.make_good": {
+      "question": "conversations.topic.fears.lapsed",
+      "answer": "make_good",
+      "context": "conversations.topic.fears.lapsed",
+      "keywords": {
+        "now": 1.5,
+        "here": 1.2,
+        "make": 1.0
+      },
+      "requiresAny": [
+        "now",
+        "here",
+        "make"
+      ],
+      "phrases": [
+        "then let me be there now",
+        "let me make it good now",
+        "i am here now"
+      ],
+      "category": "topics"
+    }
+  }
+}

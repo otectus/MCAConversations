@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "dreams.resume.followup.encourage",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.followup.encourage",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.dreams.close",
+            "say": "conversations.dreams.resume.followup.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "practical",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "dreams.resume.followup.practical",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.followup.practical",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.dreams.close",
+            "say": "conversations.dreams.resume.followup.practical"
+          }
+        }
+      ]
+    },
+    {
+      "name": "honest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.followup.honest",
+              "deltas": {
+                "respect": 5,
+                "tension": 2
+              }
+            },
+            "next": "conversations.topic.dreams.close",
+            "say": "conversations.dreams.resume.followup.honest"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.resume.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

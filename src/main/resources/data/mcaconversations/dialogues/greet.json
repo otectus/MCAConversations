@@ -1,0 +1,341 @@
+{
+  "answers": [
+    {
+      "name": "checkin",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "time_min": 13000
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "late"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.late.respond",
+            "say": "conversations.checkin.late"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "again"
+            },
+            "next": "conversations.topic.checkin.again.respond",
+            "say": "conversations.checkin.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "toddler"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.toddler.respond",
+            "say": "conversations.checkin.toddler"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "child"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.young.respond",
+            "say": "conversations.checkin.child"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "teen"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.young.respond",
+            "say": "conversations.checkin.teen"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "depressed"
+            },
+            {
+              "chance": 100,
+              "mood": "sad"
+            },
+            {
+              "chance": 100,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "rough"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.rough.respond",
+            "say": "conversations.checkin.rough"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "hearts_min": 0
+            },
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.greet.today",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin",
+              "budget": "quick",
+              "branch": "good"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.topic.checkin.good.respond",
+            "say": "conversations.checkin.good"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "main",
+            "say": "conversations.checkin.good"
+          }
+        }
+      ]
+    }
+  ]
+}

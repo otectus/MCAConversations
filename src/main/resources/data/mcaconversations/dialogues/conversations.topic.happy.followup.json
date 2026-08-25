@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_improve",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "us.happy.ask_improve",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.ask_improve",
+              "deltas": {
+                "trust": 5,
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.happy.ask_improve"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reassure",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "us.happy.reassure",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.reassure",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.happy.reassure"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "us.happy.dismiss",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.happy.dismiss",
+              "deltas": {
+                "warmth": -5,
+                "tension": 5
+              }
+            },
+            "next": "conversations.topic.us.close",
+            "say": "conversations.us.happy.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.happy.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

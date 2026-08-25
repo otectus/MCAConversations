@@ -1,0 +1,225 @@
+{
+  "answers": [
+    {
+      "name": "ask_progress",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "exclusive": "dreams.support",
+                "is": "pledged"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.pledge.dreams",
+                "var": "player",
+                "dividend": -1.0,
+                "add": 1.0
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "dreams",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "dreams.resume.ask_progress",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.ask_progress",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.dreams.resume.followup",
+            "say": "conversations.dreams.resume.ask_progress.pledged"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "exclusive": "dreams.support",
+                "is": "pledged"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.pledge.dreams",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "dreams",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.ask_progress",
+              "deltas": {
+                "trust": -3,
+                "tension": 4
+              }
+            },
+            "next": "conversations.arc.dreams.resume.followup",
+            "say": "conversations.dreams.resume.ask_progress.lapsed"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "exclusive": "dreams.support",
+                "is": "honest"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "dreams",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "dreams.resume.ask_progress",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.ask_progress",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.arc.dreams.resume.followup",
+            "say": "conversations.dreams.resume.ask_progress.honest"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "exclusive": "dreams.support",
+                "is": "pledged"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "exclusive": "dreams.support",
+                "is": "honest"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "dreams",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.ask_progress",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.dreams.resume.followup",
+            "say": "conversations.dreams.resume.ask_progress.plain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_step",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "dreams",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "dreams.resume.offer_step",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.offer_step",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.arc.dreams.resume.followup",
+            "say": "conversations.dreams.resume.offer_step"
+          }
+        }
+      ]
+    },
+    {
+      "name": "doubt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "dreams.resume.doubt",
+              "delta": -1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.resume.doubt",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.resume.doubt"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.dreams.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

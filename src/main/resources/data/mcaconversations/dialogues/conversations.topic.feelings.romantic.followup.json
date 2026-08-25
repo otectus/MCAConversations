@@ -1,0 +1,104 @@
+{
+  "answers": [
+    {
+      "name": "say_it_plainly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "feelings",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "feelings.romantic.say_it_plainly",
+              "delta": 3,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.romantic.say_it_plainly",
+              "deltas": {
+                "attraction": 6,
+                "trust": 3
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.romantic.say_it_plainly"
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_boundary",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "feelings",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "feelings.romantic.set_boundary",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.romantic.set_boundary",
+              "deltas": {
+                "respect": 5,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.romantic.set_boundary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deflect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_affection_apply": {
+              "decision": "feelings.romantic.deflect",
+              "delta": -1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.romantic.deflect",
+              "deltas": {
+                "warmth": -3,
+                "tension": 3
+              }
+            },
+            "next": "conversations.topic.feelings.close",
+            "say": "conversations.feelings.romantic.deflect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.feelings.romantic.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

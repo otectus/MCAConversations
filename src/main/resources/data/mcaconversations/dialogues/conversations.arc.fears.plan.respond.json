@@ -1,0 +1,142 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_helps",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_progress": {
+                "milestone": "fears.revelation"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.plan.ask_what_helps",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.ask_what_helps",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.fears.plan.followup",
+            "say": "conversations.fears.plan.ask_what_helps.remembered"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "milestone": "fears.revelation"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.plan.ask_what_helps",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.ask_what_helps",
+              "deltas": {
+                "trust": 3
+              }
+            },
+            "next": "conversations.arc.fears.plan.followup",
+            "say": "conversations.fears.plan.ask_what_helps.plain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_plan",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "fears.plan.offer_plan",
+              "delta": 1,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.offer_plan",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.arc.fears.plan.followup",
+            "say": "conversations.fears.plan.offer_plan"
+          }
+        }
+      ]
+    },
+    {
+      "name": "just_listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "fears",
+              "op": "hold"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.plan.just_listen",
+              "deltas": {
+                "trust": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.arc.fears.plan.followup",
+            "say": "conversations.fears.plan.just_listen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.fears.plan.leave"
+          }
+        }
+      ]
+    }
+  ]
+}
