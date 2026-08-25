@@ -73,7 +73,8 @@ public final class GiftMemoryData implements INBTSerializable<CompoundTag> {
         load(tag);
     }
 
-    CompoundTag save() {
+    /** The raw attachment tag. Public so the migration fixtures can freeze these exact bytes. */
+    public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         for (Map.Entry<UUID, LastGift> entry : byVillager.entrySet()) {
             tag.put(entry.getKey().toString(), entry.getValue().toNbt());

@@ -64,7 +64,8 @@ public final class ChatModePlayerState implements INBTSerializable<CompoundTag> 
         load(tag);
     }
 
-    CompoundTag save() {
+    /** The raw attachment tag. Public so the migration fixtures can freeze these exact bytes. */
+    public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("explicit", explicit);
         tag.putBoolean("enabled", enabled);

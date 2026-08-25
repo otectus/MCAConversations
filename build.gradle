@@ -180,3 +180,108 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release = 21
 }
+
+/**
+ * Fails the build if the packaged jar is not exactly what we intend to ship.
+ *
+ * Two failure modes this exists for. First, a dependency getting bundled: MCA, NeoForge and the
+ * sibling mods are all on the compile path, and a stray `implementation files(...)` or a shadow
+ * plugin would quietly fold their classes in, producing a jar that overrides the real mod at
+ * runtime. Second, metadata drift: a jar with the old mods.toml, or missing the mixin config,
+ * loads as far as the main menu and then behaves as if half the mod were not installed.
+ */
+tasks.register('verifyJarContents') {
+    dependsOn tasks.named('jar')
+    def jarFile = tasks.named('jar', Jar).flatMap { it.archiveFile }
+    def expectedVersion = project.version.toString()
+    inputs.file(jarFile)
+    outputs.upToDateWhen { false }
+
+    doLast {
+        def problems = []
+        def entries = [] as Set
+        def classMajors = [] as Set
+        String implementationVersion = null
+
+        new java.util.zip.ZipFile(jarFile.get().asFile).withCloseable { zip ->
+            zip.entries().each { entry ->
+                entries << entry.name
+                if (entry.name == 'META-INF/MANIFEST.MF') {
+                    zip.getInputStream(entry).withCloseable { input ->
+                        implementationVersion = new java.util.jar.Manifest(input)
+                                .mainAttributes.getValue('Implementation-Version')
+                    }
+                } else if (entry.name.endsWith('.class')) {
+                    zip.getInputStream(entry).withCloseable { input ->
+                        def header = new byte[8]
+                        if (input.read(header) == 8) {
+                            classMajors << (((header[6] & 0xFF) << 8) | (header[7] & 0xFF))
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- required metadata ---
+        ['META-INF/neoforge.mods.toml', 'mcaconversations.mixins.json', 'pack.mcmeta'].each {
+            if (!entries.contains(it)) {
+                problems << "missing ${it}"
+            }
+        }
+        if (entries.contains('META-INF/mods.toml')) {
+            problems << 'META-INF/mods.toml is the Forge spelling and is ignored by NeoForge'
+        }
+
+        // --- content namespaces ---
+        ['data/mcaconversations/dialogues/', 'data/mcaconversations/chat_intents/',
+         'data/mcaconversations/conversation_catalog/', 'data/mcaconversations/interiority/',
+         'assets/mcaconversations/lang/', 'assets/mca_dialogue/lang/'].each { prefix ->
+            if (!entries.any { it.startsWith(prefix) }) {
+                problems << "no entries under ${prefix}"
+            }
+        }
+        def dialogues = entries.count { it.startsWith('data/mcaconversations/dialogues/') && it.endsWith('.json') }
+        if (dialogues < 173) {
+            problems << "only ${dialogues} dialogue files; 173 are expected (content must not shrink)"
+        }
+        def langFiles = entries.count { it.startsWith('assets/') && it.endsWith('.json') }
+        if (langFiles < 46) {
+            problems << "only ${langFiles} lang files; 46 are expected across 23 namespaces"
+        }
+
+        // --- nothing shaded ---
+        ['net/conczin/mca/', 'forge/net/mca/', 'net/minecraftforge/', 'net/neoforged/',
+         'dev/architectury/', 'dev/otectus/mcaquests/', 'dev/otectus/mcareputation/',
+         'org/spongepowered/'].each { prefix ->
+            def leaked = entries.findAll { it.startsWith(prefix) && it.endsWith('.class') }
+            if (!leaked.isEmpty()) {
+                problems << "${leaked.size()} shaded class(es) under ${prefix}, e.g. ${leaked.first()}"
+            }
+        }
+        def nested = entries.findAll { it.endsWith('.jar') }
+        if (!nested.isEmpty()) {
+            problems << "nested jar(s): ${nested.join(', ')}"
+        }
+
+        // --- build identity ---
+        if (implementationVersion != expectedVersion) {
+            problems << "Implementation-Version is '${implementationVersion}', expected '${expectedVersion}'"
+        }
+        // 65 == Java 21. A stray 61 would mean something compiled against the wrong release.
+        def wrong = classMajors.findAll { it != 65 }
+        if (!wrong.isEmpty()) {
+            problems << "class-file major version(s) ${wrong} present; Java 21 is 65"
+        }
+
+        if (!problems.isEmpty()) {
+            throw new GradleException("verifyJarContents failed:" + System.lineSeparator()
+                    + "  - " + problems.join(System.lineSeparator() + "  - "))
+        }
+        logger.lifecycle("verifyJarContents: ${entries.size()} entries, ${dialogues} dialogues, " +
+                "${langFiles} lang files, nothing shaded.")
+    }
+}
+
+tasks.named('build').configure {
+    dependsOn tasks.named('verifyJarContents')
+}
