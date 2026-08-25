@@ -141,6 +141,9 @@ class ContentLintTest {
             "iceandfire:scribe", "vampirism:hunter_expert", "vampirism:priest",
             "vampirism:vampire_expert", "werewolves:werewolf_expert");
 
+    /** A Minecraft positional format argument: the {@code N} of {@code %N$s}. */
+    private static final java.util.regex.Pattern FORMAT_ARG = java.util.regex.Pattern.compile("%(\\d+)\\$s");
+
     private static final java.util.regex.Pattern RESOURCE_LOCATION =
             java.util.regex.Pattern.compile("^[a-z0-9_.-]+:[a-z0-9_./-]+$");
 
@@ -412,6 +415,139 @@ class ContentLintTest {
             }
         }));
         assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    /**
+     * A line may not name an argument its call site never passes. MCA's {@code getTranslatable} supplies
+     * exactly one argument of its own — the spouse-aware player name at {@code %1$s} — so a plain
+     * {@code say} caps there, and a {@code conversations_say} earns one further slot per declared var.
+     *
+     * <p>Overrunning does not crash: {@code TranslatableContents.decompose} catches the format error and
+     * renders the raw template instead, so the player reads a literal <em>"%2$s? It's home."</em> on
+     * screen. Four shipped openers did exactly that, one of them behind all 21 personality overlays.
+     */
+    @Test
+    void sayLinesNeverNameAnArgumentTheCallSiteDoesNotPass() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            JsonObject actions = result.getAsJsonObject("actions");
+            String where = name + "/" + answerName;
+            if (actions.has("say")) {
+                checkArity(actions.get("say").getAsString(), 1, where + " say", problems);
+            }
+            if (actions.has("conversations_say")) {
+                JsonObject say = actions.getAsJsonObject("conversations_say");
+                int vars = say.has("vars") ? say.getAsJsonArray("vars").size() : 0;
+                checkArity(say.get("phrase").getAsString(), 1 + vars, where + " conversations_say", problems);
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    private static void checkArity(String key, int supplied, String where, List<String> problems) {
+        int highest = 0;
+        for (String line : LangKeys.linesOf(lang, "dialogue." + key)) {
+            java.util.regex.Matcher m = FORMAT_ARG.matcher(line);
+            while (m.find()) {
+                highest = Math.max(highest, Integer.parseInt(m.group(1)));
+            }
+        }
+        if (highest > supplied) {
+            problems.add(where + ": " + key + " names %" + highest + "$s but the call site passes only "
+                    + supplied + " argument(s)");
+        }
+    }
+
+    /**
+     * A declared var that no line in the pool reads is a mistake, not a spare. Either the sentence meant
+     * to name it and wrote {@code %1$s} — which puts the player's name in the noun slot, as in
+     * <em>"In Steve you don't ask why"</em> — or the var should not be declared at all. Six pools shipped
+     * that way, so the season, weather, holiday and gift hooks never actually reached the screen.
+     *
+     * <p>An individual variant may skip a var; the pool as a whole may not.
+     */
+    @Test
+    void everyDeclaredTemplateVarIsReadBySomeVariant() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (!actions.has("conversations_say")) {
+                return;
+            }
+            JsonObject say = actions.getAsJsonObject("conversations_say");
+            if (!say.has("vars")) {
+                return;
+            }
+            String key = say.get("phrase").getAsString();
+            List<String> lines = LangKeys.linesOf(lang, "dialogue." + key);
+            JsonArray vars = say.getAsJsonArray("vars");
+            for (int i = 0; i < vars.size(); i++) {
+                String token = "%" + (i + 2) + "$s";
+                if (lines.stream().noneMatch(line -> line.contains(token))) {
+                    problems.add(name + "/" + answerName + ": " + key + " declares var '"
+                            + vars.get(i).getAsString() + "' but no variant reads " + token);
+                }
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * {@code say} and {@code conversations_say} both push a finished line to the player, so a result
+     * carrying both sends two packets and the client keeps whichever landed last. The earlier line — and
+     * any template var it resolved — is bought and thrown away.
+     */
+    @Test
+    void noResultSpeaksTwice() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            JsonObject actions = result.getAsJsonObject("actions");
+            if (actions.has("say") && actions.has("conversations_say")) {
+                problems.add(name + "/" + answerName + ": speaks both conversations_say '"
+                        + actions.getAsJsonObject("conversations_say").get("phrase").getAsString()
+                        + "' and say '" + actions.get("say").getAsString() + "'; only the last one shows");
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * Weights accumulate per condition entry, so a term listed twice counts twice. Both spellings of that
+     * mistake shipped, and both silently unreach a branch:
+     *
+     * <ul>
+     *   <li>the same entry written twice — seven results repeated their own {@code -1000} cooldown and
+     *       scored {@code -2000}, losing to the fallback they were written to beat;</li>
+     *   <li>one term both boosted and sunk — three repeat branches paired {@code +1000} with
+     *       {@code -1000} on their own cooldown memory, netting zero, so the "you already asked me"
+     *       line could never win and the opener fell through to the legacy heart-paying result.</li>
+     * </ul>
+     */
+    @Test
+    void conditionsNeitherRepeatNorCancelThemselves() {
+        List<String> problems = new ArrayList<>();
+        questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
+            if (!result.has("conditions")) {
+                return;
+            }
+            String where = name + "/" + answerName;
+            Set<String> seen = new HashSet<>();
+            Map<String, Integer> signs = new HashMap<>();
+            for (JsonElement e : result.getAsJsonArray("conditions")) {
+                JsonObject condition = e.getAsJsonObject();
+                if (!seen.add(condition.toString())) {
+                    problems.add(where + ": condition listed twice, doubling its weight: " + condition);
+                }
+                JsonObject term = condition.deepCopy();
+                term.remove("chance");
+                int sign = Integer.signum(condition.has("chance") ? condition.get("chance").getAsInt() : 0);
+                Integer previous = signs.put(term.toString(), sign);
+                if (previous != null && previous * sign < 0) {
+                    problems.add(where + ": condition is both boosted and sunk, cancelling itself: " + term);
+                }
+            }
+        }));
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
     }
 
     @Test

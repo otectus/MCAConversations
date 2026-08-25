@@ -7,6 +7,77 @@ Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
 Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
 
+## [1.2.1] - unreleased
+
+A content pass over every shipped conversation, in both locales. Nothing here changes a system;
+it fixes lines that reached the screen wrong and exchanges that did not cohere once read end to end.
+
+### Fixed — lines that rendered as their own source code
+
+- **Four topic openers showed the player a raw format string.** A plain `say` hands MCA exactly one
+  argument — the spouse-aware player name at `%1$s` — but `conversations.village.home`,
+  `conversations.us.happy.grateful`, `conversations.us.firstmet.memory` and
+  `conversations.family.memories.share` each named `%2$s`. Minecraft catches that at render and
+  substitutes the untouched template, so *"What's it like living here?"* answered with a literal
+  *"%2$s? It's home."* — and because all 21 personality overlays override `village.home`, every
+  villager in the game was broken on it. The three that wanted a real value are now
+  `conversations_say` with the variable they were written for; the family story, which wanted a
+  relative's name and no template variable supplies one, names one of the villager's own instead.
+- **Six pooled families wrote their template variable at `%1$s`.** The declared var was never read,
+  so the resolved value was discarded and the player's own name landed in the noun slot: *"Why? In
+  **Steve** you don't ask why."*, *"that **Steve** you brought me is still doing its work."*, *"In
+  **Steve**? Whatever's ripe…"* The season, weather, holiday and last-gift hooks never once reached
+  the screen. Moved to `%2$s` in both locales.
+- **One result spoke twice.** `topic.checkin.good.respond#ask_more` carried both a
+  `conversations_say` and a `say`; both push a finished line, so the client kept whichever landed
+  last and the holiday line — variable and all — was resolved and thrown away.
+
+### Fixed — branches that could not be reached
+
+- **Eight topics paid hearts for being asked a second time.** Ten results either listed a condition
+  twice (doubling its weight) or paired `+1000` with `-1000` on their own cooldown memory (cancelling
+  it), which sank the repeat branch below the branching-disabled fallback. MCA picks the last result
+  when everything scores zero or less, so re-asking dropped into the legacy path: the first-time line
+  again, no session, and 2–4 hearts every time. Simulating all 28 topics at their cooldown now finds
+  none that reward.
+- **Five topics had no repeat branch at all.** `us.happy`, `us.future`, `family.checkin_child`,
+  `family.ask_parent` and `season` are gated by a cooldown that nothing was written to catch. Each
+  now has the "you already asked me" beat its twenty siblings have.
+
+### Changed — content that read as the same line twice
+
+- **The five deep topics shipped one refusal between them.** `life`, `dreams`, `hopes`, `regrets` and
+  `secret` all answered a guarded villager with *"Some things stay mine for now."* over the identical
+  four buttons, even though the replies behind those buttons were already topic-specific. Each is now
+  written to the reply that follows it — a half-built thing, a hope you jinx by naming, a stone put
+  down on purpose. The three young-villager screens (`life`, `dreams`, `hopes`) were cloned the same
+  way and are likewise distinct.
+- **69 second variants were rewordings of the first.** Reviving the dead base lines in 1.2.0 made both
+  halves of every overlay pool visible for the first time, which exposed the pairs whose second line
+  restated the first in different words — concentrated in `gloomy`, `greedy`, `peppy`, `sensitive` and
+  `odd`. Rewritten as separate beats.
+- **A crit read exactly like a success.** `day.lighten` shared its best-outcome line with its ordinary
+  one, so the check system's top result was indistinguishable from a pass.
+- **Villagers describing themselves as the wrong gender.** The `flirty` overlay called itself "a girl"
+  five times and the player a "Handsome nuisance"; the base pack reported the player as "she" and
+  spoke of "the man doing his job" in three places; the Portuguese carried "o homem" and "uma moça" in
+  the same lines. Overlays apply to villagers and players of any gender.
+- **House style is now consistent across both locales**: em dash throughout (82 bare hyphens
+  replaced), ASCII ellipsis throughout (134 unicode ones replaced), and one missing comma.
+
+### Changed — Brazilian Portuguese
+
+`pt_br` is re-synchronised with every line above: 141 strings retranslated, the five new repeat pools
+authored, and the gendered self-references fixed independently of the English. Key sets and
+placeholder signatures remain identical across locales in all 23 namespaces.
+
+### Added — five lints for the classes above
+
+`ContentLintTest` now fails the build on: a line naming an argument its call site does not pass; a
+declared template var no variant reads; a result that sets the speech slot twice; a condition listed
+twice; and a condition both boosted and sunk. `LangKeys.linesOf` gives them one shared rule for
+"every line MCA can actually draw for this key".
+
 ## [1.2.0] - unreleased
 
 ### Fixed — one line, two different sentences

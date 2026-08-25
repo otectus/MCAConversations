@@ -1268,6 +1268,36 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.season",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "quick",
+              "branch": "again"
+            },
+            "next": "conversations.topic.season.turn.respond",
+            "say": "conversations.season.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "age_group": "toddler"
             },

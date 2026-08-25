@@ -10,6 +10,41 @@
             {
               "chance": 1000,
               "memory": {
+                "id": "mcaconversations.cooldown.happy",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "happy",
+              "budget": "relationship",
+              "branch": "again"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.happy",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.happy.respond",
+            "say": "conversations.us.happy.again"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
                 "id": "mcaconversations.state.grateful",
                 "var": "player"
               }
@@ -43,7 +78,12 @@
               "time": 36000
             },
             "next": "conversations.topic.happy.respond",
-            "say": "conversations.us.happy.grateful"
+            "conversations_say": {
+              "phrase": "conversations.us.happy.grateful",
+              "vars": [
+                "last_gift_item"
+              ]
+            }
           }
         },
         {
@@ -194,13 +234,6 @@
               }
             },
             {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.firstmet",
-                "var": "player"
-              }
-            },
-            {
               "chance": -2000,
               "conversations_disabled": "branching"
             },
@@ -245,13 +278,6 @@
               }
             },
             {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.firstmet",
-                "var": "player"
-              }
-            },
-            {
               "chance": -2000,
               "conversations_disabled": "branching"
             },
@@ -273,7 +299,12 @@
               "time": 36000
             },
             "next": "conversations.topic.firstmet.respond",
-            "say": "conversations.us.firstmet.memory"
+            "conversations_say": {
+              "phrase": "conversations.us.firstmet.memory",
+              "vars": [
+                "village_name"
+              ]
+            }
           }
         },
         {
@@ -291,13 +322,6 @@
                 "gloomy",
                 "peaceful"
               ]
-            },
-            {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.firstmet",
-                "var": "player"
-              }
             },
             {
               "chance": -1000,
@@ -356,6 +380,41 @@
       "name": "future",
       "constraints": "spouse",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.future",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "future",
+              "budget": "relationship",
+              "branch": "again"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.future",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.future.respond",
+            "say": "conversations.us.future.again"
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -521,13 +580,6 @@
               }
             },
             {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.worries",
-                "var": "player"
-              }
-            },
-            {
               "chance": -2000,
               "conversations_disabled": "branching"
             },
@@ -566,13 +618,6 @@
             {
               "chance": 100,
               "mood": "unhappy"
-            },
-            {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.worries",
-                "var": "player"
-              }
             },
             {
               "chance": -1000,
@@ -624,13 +669,6 @@
             {
               "chance": -2000,
               "mood": "unhappy"
-            },
-            {
-              "chance": -1000,
-              "memory": {
-                "id": "mcaconversations.cooldown.worries",
-                "var": "player"
-              }
             },
             {
               "chance": -1000,

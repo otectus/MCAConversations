@@ -1,5 +1,7 @@
 package dev.otectus.mcaconversations.content;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,5 +25,22 @@ final class LangKeys {
     /** True when {@code key} resolves at runtime — as a plain key, or as the head of a {@code /N} pool. */
     static boolean hasLine(Map<String, String> lang, String key) {
         return lang.containsKey(key) || lang.containsKey(key + "/1");
+    }
+
+    /**
+     * Every line MCA can actually draw for {@code key}, in variant order — the {@code /1../N} pool when
+     * one exists, otherwise the single plain key, otherwise empty. Lints that reason about what a player
+     * may read (placeholders, length, wording) have to look at all of them, because the draw is random
+     * per render and any one of them can be the line on screen.
+     */
+    static List<String> linesOf(Map<String, String> lang, String key) {
+        List<String> lines = new ArrayList<>();
+        for (int i = 1; lang.containsKey(key + "/" + i); i++) {
+            lines.add(lang.get(key + "/" + i));
+        }
+        if (lines.isEmpty() && lang.containsKey(key)) {
+            lines.add(lang.get(key));
+        }
+        return lines;
     }
 }
