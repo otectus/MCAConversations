@@ -1,10 +1,17 @@
-# Gradle / ForgeGradle
+# Gradle / ModDevGradle
 .gradle/
 build/
-run/
-run-data/
 out/
 src/generated/resources/.cache/
+
+# Every ModDevGradle run directory. These are generated game installs -- worlds, generated
+# configs, eula.txt, caches -- and none of it belongs in the repository. run-server in
+# particular would otherwise carry a committed eula.txt, which is not ours to accept on
+# anyone's behalf.
+run/
+run-data/
+run-server/
+run-gametest/
 
 # Eclipse / IntelliJ / VS Code
 *.iml
