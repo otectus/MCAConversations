@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "celebrate_too",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.celebrate_too"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.glad.celebrate_too",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.glad.celebrate_too",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.glad.celebrate_too"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pass_it_on",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.pass_it_on"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.glad.pass_it_on",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.glad.pass_it_on",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.glad.pass_it_on"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_how_they_are",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.asked_after"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.glad.ask_how_they_are",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.asked_after",
+              "deltas": {
+                "trust": 1,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.followup.ask_how_they_are"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

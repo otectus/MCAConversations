@@ -12,10 +12,12 @@ import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.BeatContractLoader;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
 import dev.otectus.mcaconversations.interiority.Interiority;
+import dev.otectus.mcaconversations.profession.ProfessionProfileLoader;
 import dev.otectus.mcaconversations.progress.ProgressSavedData;
 import dev.otectus.mcaconversations.gift.GiftMemoryProvider;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
@@ -275,8 +277,8 @@ public final class ConversationsEvents {
     // --- Datapack listeners ------------------------------------------------------
 
     /**
-     * Registers this mod's datapack loaders — chat intents, the conversation catalog and the
-     * per-personality interiority profiles, each merged across namespaces so packs can extend them.
+     * Registers this mod's datapack loaders — chat intents, the conversation catalog, the semantic beat
+     * contracts, the profession profiles and the per-personality interiority profiles, each merged across namespaces so packs can extend them.
      * MCA-independent — these are our own resources — so they attach regardless of
      * {@link McaBridge#isAvailable()}; each loaded index is inert until its feature is on.
      */
@@ -284,6 +286,8 @@ public final class ConversationsEvents {
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(new ChatIntentLoader());
         event.addListener(new ConversationCatalogLoader());
+        event.addListener(new BeatContractLoader());
+        event.addListener(new ProfessionProfileLoader());
         event.addListener(new Interiority());
     }
 }

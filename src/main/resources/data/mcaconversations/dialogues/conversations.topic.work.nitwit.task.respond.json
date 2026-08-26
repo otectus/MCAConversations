@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_road",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.task.ask_road"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.task.ask_road",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "say": "conversations.work.prof.nitwit.task.ask_road"
+          }
+        }
+      ]
+    },
+    {
+      "name": "take_seriously",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.task.take_seriously"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.nitwit.task.take_seriously",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.task.take_seriously",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "say": "conversations.work.prof.nitwit.task.take_seriously"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_nothing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.task.ask_nothing"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.task.ask_nothing",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "say": "conversations.work.prof.nitwit.task.ask_nothing"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.nitwit.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

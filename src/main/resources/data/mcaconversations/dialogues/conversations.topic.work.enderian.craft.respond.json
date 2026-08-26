@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_meant",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.craft.ask_meant"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.craft.ask_meant",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.enderian.followup",
+            "say": "conversations.work.prof.enderian.craft.ask_meant"
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.enderian.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.enderian.followup",
+            "say": "conversations.work.prof.enderian.craft.admire"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_tenth",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.craft.ask_tenth"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.craft.ask_tenth",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.enderian.followup",
+            "say": "conversations.work.prof.enderian.craft.ask_tenth"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.enderian.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

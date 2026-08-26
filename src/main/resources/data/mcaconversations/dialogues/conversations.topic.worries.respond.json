@@ -56,6 +56,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.dismissed.open"
+            },
             "conversations_affection_apply": {
               "decision": "us.worries.dismiss",
               "delta": -2,
@@ -69,8 +73,24 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.worries.followup",
+            "next": "conversations.topic.worries.dismissed.followup",
             "say": "conversations.us.worries.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "just_listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.heard"
+            },
+            "next": "conversations.topic.worries.heard",
+            "say": "conversations.worries.heard"
           }
         }
       ]

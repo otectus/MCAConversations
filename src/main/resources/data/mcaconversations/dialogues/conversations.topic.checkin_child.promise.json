@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "keep_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.promise.keep"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.promise.keep",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.promise.keep",
+              "deltas": {
+                "respect": 2,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.family",
+            "say": "conversations.checkin_child.promise.keep"
+          }
+        }
+      ]
+    },
+    {
+      "name": "own_the_miss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.promise.owned"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.promise.owned",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.promise.owned",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.family",
+            "say": "conversations.checkin_child.promise.owned"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.checkin_child.promise.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

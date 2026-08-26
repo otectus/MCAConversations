@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "your_read",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.unknown.your_read"
+            },
+            "next": "conversations.topic.standing.unknown.followup",
+            "say": "conversations.standing.unknown.your_read"
+          }
+        }
+      ]
+    },
+    {
+      "name": "no_ledger",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.unknown.no_ledger"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.unknown.no_ledger",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.unknown.no_ledger",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.topic.standing.unknown.followup",
+            "say": "conversations.standing.unknown.no_ledger"
+          }
+        }
+      ]
+    },
+    {
+      "name": "who_would",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.unknown.who_would"
+            },
+            "next": "conversations.topic.standing.unknown.followup",
+            "say": "conversations.standing.unknown.who_would"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.unknown.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.unknown.dismissed",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.unknown.dismissed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.unknown.back"
+          }
+        }
+      ]
+    }
+  ]
+}

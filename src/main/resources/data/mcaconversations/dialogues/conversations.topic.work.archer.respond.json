@@ -1,0 +1,149 @@
+{
+  "answers": [
+    {
+      "name": "ask_hard",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.hard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.hard",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.hard"
+          }
+        }
+      ]
+    },
+    {
+      "name": "value",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.value"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.archer.value",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.value",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.value"
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "relaxed",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.challenge.landed"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.archer.challenge",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.challenge",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.challenge.landed"
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "relaxed",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.challenge.stung"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.archer.challenge",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.challenge",
+              "deltas": {
+                "respect": -1,
+                "tension": 4
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.challenge.stung"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.archer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

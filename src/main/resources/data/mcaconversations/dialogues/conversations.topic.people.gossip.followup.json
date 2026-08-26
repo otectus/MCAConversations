@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "push_gossip",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.gossip.refused"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.followup.push_gossip",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.gossip.refused",
+              "deltas": {
+                "tension": 5,
+                "trust": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.push_gossip"
+          }
+        }
+      ]
+    },
+    {
+      "name": "promise_discretion",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.gossip.discretion"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.gossip.discretion",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.gossip.discretion",
+              "deltas": {
+                "trust": 4
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.gossip.discretion"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_off",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.gossip.back_off"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.gossip.back_off",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.gossip.back_off"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

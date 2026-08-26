@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "family.scolded.apologize"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.scolded.apologize",
+              "deltas": {
+                "tension": -4
+              }
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.scolded.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "soften",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "family.scolded.soften"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.hurt.soften",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.scolded.soften",
+              "deltas": {
+                "tension": -2,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.scolded.soften"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "say": "conversations.family.scolded.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

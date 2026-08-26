@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "concede",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.closed.concede"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.closed.concede",
+              "deltas": {
+                "respect": 2,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.closed.concede"
+          }
+        }
+      ]
+    },
+    {
+      "name": "explain_intent",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.closed.explain_intent"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.closed.explain_intent",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.closed.explain_intent",
+              "deltas": {
+                "tension": -2,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.closed.explain_intent"
+          }
+        }
+      ]
+    },
+    {
+      "name": "accept_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.closed.accept_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.closed.accept_it",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.closed.accept_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.closed.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

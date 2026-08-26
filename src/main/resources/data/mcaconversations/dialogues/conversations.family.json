@@ -28,7 +28,8 @@
               "op": "begin",
               "topic": "checkin_child",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "family.child.again.to.checkin_child"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.checkin_child",
@@ -71,7 +72,8 @@
               "op": "begin",
               "topic": "checkin_child",
               "budget": "relationship",
-              "branch": "little"
+              "branch": "little",
+              "beat": "family.child.little.to.checkin_child"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.checkin_child",
@@ -110,7 +112,8 @@
               "op": "begin",
               "topic": "checkin_child",
               "budget": "relationship",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "family.child.teen.to.checkin_child"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.checkin_child",
@@ -126,7 +129,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -161,7 +166,8 @@
               "op": "begin",
               "topic": "checkin_child",
               "budget": "relationship",
-              "branch": "doing"
+              "branch": "doing",
+              "beat": "family.child.doing.to.checkin_child"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.checkin_child",
@@ -221,7 +227,8 @@
               "op": "begin",
               "topic": "ask_parent",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "family.parent.again.to.ask_parent"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.ask_parent",
@@ -268,7 +275,8 @@
               "op": "begin",
               "topic": "ask_parent",
               "budget": "relationship",
-              "branch": "worried"
+              "branch": "worried",
+              "beat": "family.parent.worried.to.ask_parent"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.ask_parent",
@@ -284,7 +292,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -319,7 +329,8 @@
               "op": "begin",
               "topic": "ask_parent",
               "budget": "relationship",
-              "branch": "proud"
+              "branch": "proud",
+              "beat": "family.parent.proud.to.ask_parent"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.ask_parent",
@@ -359,6 +370,59 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "conversations_progress": {
+                "arc": "family",
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_relationship": {
+                "bands": [
+                  "tense",
+                  "hostile"
+                ]
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.memories",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "memories",
+              "budget": "relationship",
+              "branch": "resume",
+              "beat": "family.resume.opener"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.memories",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.arc.family.resume.respond",
+            "say": "conversations.family.revisit"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.memories",
@@ -379,7 +443,8 @@
               "op": "begin",
               "topic": "memories",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "family.memories.again.to.memories"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.memories",
@@ -418,7 +483,8 @@
               "op": "begin",
               "topic": "memories",
               "budget": "relationship",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "family.memories.toddler.to.memories"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.memories",
@@ -466,7 +532,8 @@
               "op": "begin",
               "topic": "memories",
               "budget": "relationship",
-              "branch": "share"
+              "branch": "share",
+              "beat": "family.memories.share.to.memories"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.memories",
@@ -482,7 +549,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -518,7 +587,8 @@
               "op": "begin",
               "topic": "memories",
               "budget": "relationship",
-              "branch": "tell"
+              "branch": "tell",
+              "beat": "family.memories.tell.to.memories"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.memories",

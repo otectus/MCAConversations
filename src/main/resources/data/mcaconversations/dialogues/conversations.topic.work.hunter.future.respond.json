@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_written",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.future.ask_written"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.future.ask_written",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.hunter.followup",
+            "say": "conversations.work.prof.hunter.future.ask_written"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.hunter.followup",
+            "say": "conversations.work.prof.hunter.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_knees",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.future.ask_knees"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.future.ask_knees",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.hunter.followup",
+            "say": "conversations.work.prof.hunter.future.ask_knees"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.hunter.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

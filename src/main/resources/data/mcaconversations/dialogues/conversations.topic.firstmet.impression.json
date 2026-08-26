@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "and_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.impression.now"
+            },
+            "conversations_affection_apply": {
+              "decision": "firstmet.impression.now",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "firstmet.impression.now",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.us",
+            "say": "conversations.firstmet.impression.now"
+          }
+        }
+      ]
+    },
+    {
+      "name": "fair_enough",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.impression.fair"
+            },
+            "conversations_disposition_apply": {
+              "topic": "firstmet.impression.fair",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.us",
+            "say": "conversations.firstmet.impression.fair"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.firstmet.impression.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

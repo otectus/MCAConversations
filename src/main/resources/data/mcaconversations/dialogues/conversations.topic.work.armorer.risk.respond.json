@@ -1,0 +1,97 @@
+{
+  "answers": [
+    {
+      "name": "ask_bet",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.risk.ask_bet"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.risk.ask_bet",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.armorer.followup",
+            "say": "conversations.work.prof.armorer.risk.ask_bet"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.armorer.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.armorer.followup",
+            "say": "conversations.work.prof.armorer.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_fuel",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.risk.ask_fuel"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.armorer.risk.ask_fuel",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.risk.ask_fuel",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.armorer.followup",
+            "say": "conversations.work.prof.armorer.risk.ask_fuel"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.armorer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

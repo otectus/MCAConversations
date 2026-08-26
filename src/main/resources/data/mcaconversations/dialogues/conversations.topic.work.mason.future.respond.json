@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_arch",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.future.ask_arch"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.future.ask_arch",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.mason.followup",
+            "say": "conversations.work.prof.mason.future.ask_arch"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mason.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.mason.followup",
+            "say": "conversations.work.prof.mason.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_only",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.future.ask_only"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.future.ask_only",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.mason.followup",
+            "say": "conversations.work.prof.mason.future.ask_only"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mason.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

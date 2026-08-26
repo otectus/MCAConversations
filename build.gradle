@@ -269,6 +269,21 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
+// Phase 9: the generated review and coverage reports are release artifacts, not build leftovers.
+// `./gradlew build` leaves them beside the jar in build/libs/reports/, so a release can be cut
+// with the adjacency report (English and Portuguese) and the content coverage table attached.
+tasks.register('conversationsReports', Copy) {
+    description = 'Collects the conversation adjacency and coverage reports next to the jar.'
+    group = 'documentation'
+    dependsOn tasks.named('test')
+    from layout.buildDirectory.dir('reports/conversations')
+    into layout.buildDirectory.dir('libs/reports')
+}
+
+tasks.named('build').configure {
+    dependsOn 'conversationsReports'
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }

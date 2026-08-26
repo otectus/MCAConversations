@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_carry",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.risk.ask_carry"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.risk.ask_carry",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "say": "conversations.work.prof.nitwit.risk.ask_carry"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.nitwit.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "say": "conversations.work.prof.nitwit.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_forty",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.risk.ask_forty"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.risk.ask_forty",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "say": "conversations.work.prof.nitwit.risk.ask_forty"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.nitwit.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

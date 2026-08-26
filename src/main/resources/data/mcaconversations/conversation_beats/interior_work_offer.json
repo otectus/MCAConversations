@@ -1,0 +1,235 @@
+{
+  "beats": {
+    "quest.none.to.work_offer.none": {
+      "topic": "work_offer",
+      "say": "conversations.quest.none",
+      "response_question": "conversations.topic.work_offer.none.respond",
+      "npc_act": "accept",
+      "subject": "work_offer.none",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "quest.offer.to.work_offer": {
+      "topic": "work_offer",
+      "say": "conversations.quest.offer",
+      "response_question": "conversations.topic.work_offer.respond",
+      "npc_act": "accept",
+      "subject": "work_offer",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "work_offer.ask_needed.to.work_offer": {
+      "topic": "work_offer",
+      "say": "conversations.work_offer.ask_needed",
+      "response_question": "conversations.topic.work_offer.followup",
+      "npc_act": "accept",
+      "subject": "work_offer",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "work_offer.ask_terms.hard_bargain.to.work_offer": {
+      "topic": "work_offer",
+      "say": "conversations.work_offer.ask_terms.hard_bargain",
+      "response_question": "conversations.topic.work_offer.followup",
+      "npc_act": "accept",
+      "subject": "work_offer",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "work_offer.ask_terms.to.work_offer": {
+      "topic": "work_offer",
+      "say": "conversations.work_offer.ask_terms",
+      "response_question": "conversations.topic.work_offer.followup",
+      "npc_act": "accept",
+      "subject": "work_offer",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.work_offer.followup/accept": {
+      "stance": "restraint",
+      "responds_to": [
+        "work_offer.ask_needed.to.work_offer",
+        "work_offer.ask_terms.hard_bargain.to.work_offer",
+        "work_offer.ask_terms.to.work_offer"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.work_offer.followup/decline": {
+      "stance": "candor",
+      "responds_to": [
+        "work_offer.ask_needed.to.work_offer",
+        "work_offer.ask_terms.hard_bargain.to.work_offer",
+        "work_offer.ask_terms.to.work_offer"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.work_offer.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "work_offer.ask_needed.to.work_offer",
+        "work_offer.ask_terms.hard_bargain.to.work_offer",
+        "work_offer.ask_terms.to.work_offer"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.work_offer.followup/refuse_rudely": {
+      "stance": "dismissal",
+      "responds_to": [
+        "work_offer.ask_needed.to.work_offer",
+        "work_offer.ask_terms.hard_bargain.to.work_offer",
+        "work_offer.ask_terms.to.work_offer"
+      ],
+      "tone": "hostile"
+    },
+    "conversations.topic.work_offer.none.respond/ask_later": {
+      "stance": "exit",
+      "responds_to": [
+        "quest.none.to.work_offer.none"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.work_offer.none.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "quest.none.to.work_offer.none"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.work_offer.none.respond/offer_anyway": {
+      "stance": "practical_help",
+      "responds_to": [
+        "quest.none.to.work_offer.none"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.work_offer.respond/accept": {
+      "stance": "restraint",
+      "responds_to": [
+        "quest.offer.to.work_offer"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.work_offer.respond/ask_needed": {
+      "stance": "curiosity",
+      "responds_to": [
+        "quest.offer.to.work_offer"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.work_offer.respond/ask_terms": {
+      "stance": "curiosity",
+      "responds_to": [
+        "quest.offer.to.work_offer"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.work_offer.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "quest.offer.to.work_offer"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

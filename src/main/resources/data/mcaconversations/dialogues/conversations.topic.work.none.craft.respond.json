@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_six",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.craft.ask_six"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.craft.ask_six",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.none.followup",
+            "say": "conversations.work.prof.none.craft.ask_six"
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.none.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.none.followup",
+            "say": "conversations.work.prof.none.craft.admire"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_sixteen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.craft.ask_sixteen"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.craft.ask_sixteen",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.none.followup",
+            "say": "conversations.work.prof.none.craft.ask_sixteen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.none.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

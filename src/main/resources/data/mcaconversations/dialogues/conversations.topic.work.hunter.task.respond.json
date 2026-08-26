@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_four",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.task.ask_four"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.task.ask_four",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.hunter.followup",
+            "say": "conversations.work.prof.hunter.task.ask_four"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.hunter.followup",
+            "say": "conversations.work.prof.hunter.task.offer_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_worth",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.task.ask_worth"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.task.ask_worth",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.hunter.followup",
+            "say": "conversations.work.prof.hunter.task.ask_worth"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.hunter.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

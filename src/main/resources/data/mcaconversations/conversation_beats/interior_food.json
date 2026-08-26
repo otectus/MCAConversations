@@ -1,0 +1,195 @@
+{
+  "beats": {
+    "food.again.to.food.again": {
+      "topic": "food",
+      "say": "conversations.food.again",
+      "response_question": "conversations.topic.food.again.respond",
+      "npc_act": "accept",
+      "subject": "food.again",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "food.child.to.food.young": {
+      "topic": "food",
+      "say": "conversations.food.child",
+      "response_question": "conversations.topic.food.young.respond",
+      "npc_act": "accept",
+      "subject": "food.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "food.teen.to.food.young": {
+      "topic": "food",
+      "say": "conversations.food.teen",
+      "response_question": "conversations.topic.food.young.respond",
+      "npc_act": "accept",
+      "subject": "food.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "food.toddler.to.food.toddler": {
+      "topic": "food",
+      "say": "conversations.food.toddler",
+      "response_question": "conversations.topic.food.toddler.respond",
+      "npc_act": "accept",
+      "subject": "food.toddler",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.food.again.respond/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "food.again.to.food.again"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.food.again.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "food.again.to.food.again"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.food.again.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "food.again.to.food.again"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.food.toddler.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "food.toddler.to.food.toddler"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.food.toddler.respond/delight": {
+      "stance": "encouragement",
+      "responds_to": [
+        "food.toddler.to.food.toddler"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.food.toddler.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "food.toddler.to.food.toddler"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.food.young.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "food.child.to.food.young",
+        "food.teen.to.food.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.food.young.respond/delight": {
+      "stance": "encouragement",
+      "responds_to": [
+        "food.child.to.food.young",
+        "food.teen.to.food.young"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.food.young.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "food.child.to.food.young",
+        "food.teen.to.food.young"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.food.young.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "food.child.to.food.young",
+        "food.teen.to.food.young"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

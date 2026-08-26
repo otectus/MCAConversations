@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.steady_valued"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.fine.glad",
               "delta": 1,
@@ -18,7 +22,7 @@
                 "warmth": 2
               }
             },
-            "next": "conversations.topic.noticed.followup",
+            "next": "conversations.topic.noticed.fine.followup",
             "say": "conversations.noticed.fine.glad"
           }
         }
@@ -30,6 +34,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.small_thing"
+            },
             "conversations_disposition_apply": {
               "topic": "noticed.fine.dig",
               "deltas": {
@@ -37,7 +45,7 @@
                 "trust": 1
               }
             },
-            "next": "conversations.topic.noticed.followup",
+            "next": "conversations.topic.noticed.fine.opened.followup",
             "say": "conversations.noticed.fine.dig"
           }
         }
@@ -49,6 +57,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.answer_defended"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.fine.dismiss",
               "delta": -1,
@@ -62,7 +74,7 @@
                 "tension": 2
               }
             },
-            "next": "conversations.topic.noticed.followup",
+            "next": "conversations.topic.noticed.fine.closed.followup",
             "say": "conversations.noticed.fine.dismiss"
           }
         }
@@ -74,6 +86,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.not_fine"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.fine.blunt",
               "delta": 1,
@@ -87,7 +103,7 @@
                 "tension": 2
               }
             },
-            "next": "conversations.cat.events",
+            "next": "conversations.topic.noticed.fine.admitted.followup",
             "say": "conversations.noticed.fine.blunt"
           }
         }

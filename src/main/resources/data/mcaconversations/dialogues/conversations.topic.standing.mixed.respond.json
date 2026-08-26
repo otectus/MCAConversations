@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "which_half",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.mixed.which_half"
+            },
+            "next": "conversations.topic.standing.mixed.followup",
+            "say": "conversations.standing.mixed.which_half"
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_held",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.mixed.what_held"
+            },
+            "next": "conversations.topic.standing.mixed.followup",
+            "say": "conversations.standing.mixed.what_held"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.mixed.let_them"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.mixed.let_them",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.standing.mixed.followup",
+            "say": "conversations.standing.mixed.let_them"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.mixed.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.mixed.dismissed",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.mixed.dismissed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.mixed.back"
+          }
+        }
+      ]
+    }
+  ]
+}

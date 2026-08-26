@@ -1,0 +1,819 @@
+{
+  "beats": {
+    "news.asked_after": {
+      "topic": "news",
+      "say": "conversations.news.followup.ask_how_they_are",
+      "response_question": "conversations.cat.events",
+      "npc_act": "disclose",
+      "subject": "news.aftermath",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.callous.apologize": {
+      "topic": "news",
+      "say": "conversations.news.callous.apologize",
+      "response_question": "conversations.cat.events",
+      "npc_act": "qualify",
+      "subject": "news.repair",
+      "polarity": "acute",
+      "openness": "guarded",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.deflated.apologize": {
+      "topic": "news",
+      "say": "conversations.news.deflated.apologize",
+      "response_question": "conversations.cat.events",
+      "npc_act": "qualify",
+      "subject": "news.repair",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.deflated.let_it_be": {
+      "topic": "news",
+      "say": "conversations.news.deflated.let_it_be",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "news.repair",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.glad.celebrate_too": {
+      "topic": "news",
+      "say": "conversations.news.glad.celebrate_too",
+      "response_question": "conversations.cat.events",
+      "npc_act": "celebrate",
+      "subject": "news.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.glad.pass_it_on": {
+      "topic": "news",
+      "say": "conversations.news.glad.pass_it_on",
+      "response_question": "conversations.cat.events",
+      "npc_act": "invite",
+      "subject": "news.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.glad.shared": {
+      "topic": "news",
+      "say": "conversations.news.glad.celebrate",
+      "response_question": "conversations.topic.news.glad.followup",
+      "npc_act": "celebrate",
+      "subject": "news.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "news:good"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "restraint"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.glad.soured": {
+      "topic": "news",
+      "say": "conversations.news.glad.sour",
+      "response_question": "conversations.topic.news.deflated.followup",
+      "npc_act": "hurt",
+      "subject": "news.good",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "news:good",
+        "player:soured_it"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement",
+        "curiosity",
+        "self_disclosure"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.glad.told": {
+      "topic": "news",
+      "say": "conversations.news.glad.ask_more",
+      "response_question": "conversations.topic.news.glad.followup",
+      "npc_act": "explain",
+      "subject": "news.good",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "news:good"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "restraint"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.grave.borne": {
+      "topic": "news",
+      "say": "conversations.news.sad.compassion",
+      "response_question": "conversations.topic.news.grave.followup",
+      "npc_act": "disclose",
+      "subject": "news.grave",
+      "polarity": "acute",
+      "openness": "guarded",
+      "facts": [
+        "news:death",
+        "village:grieving"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge",
+        "humor",
+        "encouragement",
+        "self_disclosure"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.grave.mocked": {
+      "topic": "news",
+      "say": "conversations.news.sad.amused",
+      "response_question": "conversations.topic.news.callous.followup",
+      "npc_act": "hurt",
+      "subject": "news.grave",
+      "polarity": "acute",
+      "openness": "closes_subject",
+      "facts": [
+        "news:death",
+        "player:laughed_at_death"
+      ],
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge",
+        "humor",
+        "encouragement",
+        "self_disclosure",
+        "curiosity",
+        "practical_help",
+        "restraint",
+        "empathy"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.grave.offer_help": {
+      "topic": "news",
+      "say": "conversations.news.grave.offer_help",
+      "response_question": "conversations.cat.events",
+      "npc_act": "request_help",
+      "subject": "news.grave",
+      "polarity": "acute",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "news",
+        "resumes": [
+          "news.resume.anything_else",
+          "news.resume.ask_after_them_now",
+          "news.resume.glad_it_helped",
+          "news.resume.opener"
+        ]
+      }
+    },
+    "news.grave.withheld": {
+      "topic": "news",
+      "say": "conversations.news.sad.ask_more",
+      "response_question": "conversations.topic.news.grave.followup",
+      "npc_act": "deflect",
+      "subject": "news.grave",
+      "polarity": "acute",
+      "openness": "guarded",
+      "facts": [
+        "news:death",
+        "village:grieving"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge",
+        "humor",
+        "encouragement",
+        "self_disclosure"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.kept_quiet": {
+      "topic": "news",
+      "say": "conversations.news.followup.keep_quiet",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "news.aftermath",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.left": {
+      "topic": "news",
+      "say": "conversations.news.followup.leave",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "news.aftermath",
+      "polarity": "acute",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.mixed.guessed": {
+      "topic": "news",
+      "say": "conversations.news.mixed.curious",
+      "response_question": "conversations.topic.news.mixed.followup",
+      "npc_act": "report",
+      "subject": "news.mixed",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "news:unclear"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.mixed.let_them_be": {
+      "topic": "news",
+      "say": "conversations.news.mixed.let_them_be",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "news.mixed",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.mixed.suspicion_allowed": {
+      "topic": "news",
+      "say": "conversations.news.mixed.skeptical.polite",
+      "response_question": "conversations.topic.news.mixed.followup",
+      "npc_act": "qualify",
+      "subject": "news.mixed",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "news:unclear"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.mixed.suspicion_checked": {
+      "topic": "news",
+      "say": "conversations.news.mixed.skeptical.flat",
+      "response_question": "conversations.topic.news.mixed.followup",
+      "npc_act": "resist",
+      "subject": "news.mixed",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "facts": [
+        "news:unclear"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.mixed.suspicion_shared": {
+      "topic": "news",
+      "say": "conversations.news.mixed.skeptical.landed",
+      "response_question": "conversations.topic.news.mixed.followup",
+      "npc_act": "accept",
+      "subject": "news.mixed",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "news:unclear"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "news.mixed.wished_well": {
+      "topic": "news",
+      "say": "conversations.news.mixed.wish_well",
+      "response_question": "conversations.topic.news.mixed.followup",
+      "npc_act": "accept",
+      "subject": "news.mixed",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "news:unclear"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "news",
+        "resumes": [
+          "news.resume.anything_else",
+          "news.resume.ask_after_them_now",
+          "news.resume.glad_it_helped",
+          "news.resume.opener"
+        ]
+      }
+    },
+    "news.spread_refused": {
+      "topic": "news",
+      "say": "conversations.news.followup.spread",
+      "response_question": "conversations.cat.events",
+      "npc_act": "refuse",
+      "subject": "news.spreading",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.news.callous.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "news.grave.mocked"
+      ],
+      "requires_facts": [
+        "player:laughed_at_death"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.news.callous.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.grave.mocked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.news.deflated.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "news.glad.soured"
+      ],
+      "requires_facts": [
+        "player:soured_it"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.news.deflated.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.glad.soured"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.news.deflated.followup/let_it_be": {
+      "stance": "restraint",
+      "responds_to": [
+        "news.glad.soured"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.news.glad.followup/ask_how_they_are": {
+      "stance": "curiosity",
+      "responds_to": [
+        "news.glad.shared",
+        "news.glad.told"
+      ],
+      "requires_facts": [
+        "news:good"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.glad.followup/celebrate_too": {
+      "stance": "encouragement",
+      "responds_to": [
+        "news.glad.shared",
+        "news.glad.told"
+      ],
+      "requires_facts": [
+        "news:good"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.glad.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.glad.shared",
+        "news.glad.told"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.news.glad.followup/pass_it_on": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "news.glad.shared",
+        "news.glad.told"
+      ],
+      "requires_facts": [
+        "news:good"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.grave.followup/ask_how_they_are": {
+      "stance": "curiosity",
+      "responds_to": [
+        "news.grave.borne",
+        "news.grave.withheld"
+      ],
+      "requires_facts": [
+        "news:death"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.grave.followup/keep_quiet": {
+      "stance": "restraint",
+      "responds_to": [
+        "news.grave.borne",
+        "news.grave.withheld"
+      ],
+      "requires_facts": [
+        "news:death"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.grave.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.grave.borne",
+        "news.grave.withheld"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.news.grave.followup/offer_help": {
+      "stance": "practical_help",
+      "responds_to": [
+        "news.grave.borne",
+        "news.grave.withheld"
+      ],
+      "requires_facts": [
+        "village:grieving"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.news.mixed.followup/keep_quiet": {
+      "stance": "restraint",
+      "responds_to": [
+        "news.mixed.guessed",
+        "news.mixed.wished_well",
+        "news.mixed.suspicion_shared",
+        "news.mixed.suspicion_checked",
+        "news.mixed.suspicion_allowed"
+      ],
+      "requires_facts": [
+        "news:unclear"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.mixed.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.mixed.guessed",
+        "news.mixed.wished_well",
+        "news.mixed.suspicion_shared",
+        "news.mixed.suspicion_checked",
+        "news.mixed.suspicion_allowed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.news.mixed.followup/let_them_be": {
+      "stance": "restraint",
+      "responds_to": [
+        "news.mixed.guessed",
+        "news.mixed.wished_well",
+        "news.mixed.suspicion_shared",
+        "news.mixed.suspicion_checked",
+        "news.mixed.suspicion_allowed"
+      ],
+      "requires_facts": [
+        "news:unclear"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.news.mixed.followup/spread": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "news.mixed.guessed",
+        "news.mixed.wished_well",
+        "news.mixed.suspicion_shared",
+        "news.mixed.suspicion_checked",
+        "news.mixed.suspicion_allowed"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "rebuffed"
+      ]
+    }
+  }
+}

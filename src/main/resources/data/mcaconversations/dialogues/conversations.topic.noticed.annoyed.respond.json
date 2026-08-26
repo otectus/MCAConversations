@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.apology_accepted"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.annoyed.apologize",
               "delta": 1,
@@ -19,7 +23,7 @@
                 "respect": 2
               }
             },
-            "next": "conversations.topic.noticed.followup",
+            "next": "conversations.topic.noticed.annoyed.repair.followup",
             "say": "conversations.noticed.annoyed.apologize"
           }
         }
@@ -31,13 +35,17 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.explain_invited"
+            },
             "conversations_disposition_apply": {
               "topic": "noticed.annoyed.explain",
               "deltas": {
                 "tension": -2
               }
             },
-            "next": "conversations.topic.noticed.followup",
+            "next": "conversations.topic.noticed.annoyed.explain.followup",
             "say": "conversations.noticed.annoyed.explain"
           }
         }
@@ -49,6 +57,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.rebuffed"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.annoyed.brush_off",
               "delta": -2,
@@ -62,7 +74,7 @@
                 "warmth": -3
               }
             },
-            "next": "conversations.topic.noticed.followup",
+            "next": "conversations.topic.noticed.annoyed.boundary.followup",
             "say": "conversations.noticed.annoyed.brush_off"
           }
         }

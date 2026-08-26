@@ -1,0 +1,114 @@
+{
+  "answers": [
+    {
+      "name": "respect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.guarded.respect"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.guarded.respect",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.guarded.respect",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.noticed.guarded.followup",
+            "say": "conversations.noticed.guarded.respect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "lighter",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.guarded.lighter"
+            },
+            "next": "conversations.topic.noticed.guarded.followup",
+            "say": "conversations.noticed.guarded.lighter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "trade",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.guarded.trade"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.guarded.trade",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.noticed.guarded.followup",
+            "say": "conversations.noticed.guarded.trade"
+          }
+        }
+      ]
+    },
+    {
+      "name": "press",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.guarded.press",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.guarded.pressed",
+              "deltas": {
+                "respect": -2,
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.guarded.pressed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.guarded.back"
+          }
+        }
+      ]
+    }
+  ]
+}

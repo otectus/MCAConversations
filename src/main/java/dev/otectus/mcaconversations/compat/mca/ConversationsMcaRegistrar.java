@@ -14,6 +14,11 @@ import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.conversation.SessionQuery;
 import dev.otectus.mcaconversations.progress.BudgetQuery;
 import dev.otectus.mcaconversations.conversation.DepthClass;
+import dev.otectus.mcaconversations.conversation.BeatContract;
+import dev.otectus.mcaconversations.conversation.BeatContractLoader;
+import dev.otectus.mcaconversations.conversation.OutcomeFamily;
+import dev.otectus.mcaconversations.conversation.RelationshipQuery;
+import dev.otectus.mcaconversations.conversation.Relationships;
 import dev.otectus.mcaconversations.conversation.SessionDirective;
 import dev.otectus.mcaconversations.conversation.TopicEntry;
 import dev.otectus.mcaconversations.progress.Affection;
@@ -231,6 +236,25 @@ public final class ConversationsMcaRegistrar {
                                 .isPresent() ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_personality failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        // Lets dialogue ask "has this person earned this?" by name instead of by heart number. The
+        // thresholds live in RelationshipBand and nowhere else (spec section 9.4), so raising what
+        // "confidant" means is one edit rather than a search across the datapack. Fails closed: an
+        // unreadable relationship is a stranger, and a stranger is told least.
+        McaHandles.registerCondition("conversations_relationship",
+                (json, name) -> SafeParse.orNull("conversations_relationship", json,
+                        () -> RelationshipQuery.fromJson(json)),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || player == null) {
+                            return 0.0f;
+                        }
+                        return query.matches(Relationships.bandOf(villager, player)) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_relationship failed; defaulting 0", t);
                         return 0.0f;
                     }
                 });
@@ -588,7 +612,34 @@ public final class ConversationsMcaRegistrar {
             }
             case BRANCH -> ConversationSessions.get(player.getUUID(), now)
                     .setBranch(directive.branch().orElse(null));
+            case TURN -> { /* handled below, alongside the beat that may ride on begin/branch */ }
             case END -> ConversationSessions.endTopic(player.getUUID(), now);
+        }
+        if (directive.op() != SessionDirective.Op.END) {
+            directive.beat().ifPresent(beatId -> enterBeat(beatId, player, now));
+        }
+    }
+
+    /**
+     * Moves the session onto a declared beat. Bookkeeping only: it records what is being said and the
+     * facts the line establishes, and never speaks or grants anything (spec §6.4).
+     *
+     * <p>An unknown beat id is logged and ignored rather than thrown. A third-party pack that names a
+     * beat it forgot to ship should lose its semantic breadcrumbs, not the player's conversation.
+     */
+    private static void enterBeat(String beatId,
+                                  net.minecraft.server.level.ServerPlayer player,
+                                  long now) {
+        BeatContract beat = BeatContractLoader.active().beat(beatId).orElse(null);
+        if (beat == null) {
+            McaConversations.LOGGER.warn("conversations_session named beat '{}', which no datapack declares", beatId);
+            return;
+        }
+        ConversationSessions.get(player.getUUID(), now).enterBeat(beat);
+        if (McaConversationsConfig.COMMON.debugBranching.get()) {
+            McaConversations.LOGGER.info("[branch] beat={} subject={} act={} openness={} outcome={}",
+                    beat.id(), beat.subject(), beat.npcAct().key(), beat.openness().key(),
+                    beat.outcome().map(OutcomeFamily::key).orElse("-"));
         }
     }
 

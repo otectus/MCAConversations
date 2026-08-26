@@ -55,6 +55,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.rebuffed.open"
+            },
             "conversations_affection_apply": {
               "decision": "family.child.dismiss",
               "delta": -2,
@@ -68,8 +72,24 @@
                 "tension": 5
               }
             },
-            "next": "conversations.topic.checkin_child.followup",
+            "next": "conversations.topic.checkin_child.rebuffed.followup",
             "say": "conversations.family.child.dismiss"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_promise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.promise"
+            },
+            "next": "conversations.topic.checkin_child.promise",
+            "say": "conversations.checkin_child.promise"
           }
         }
       ]

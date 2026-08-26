@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.neutral.followup.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.neutral.followup.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.neutral.followup.thanks",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.neutral.followup.thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_to_work",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.neutral.followup.set_to_work"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.neutral.followup.set_to_work",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.neutral.followup.set_to_work",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.neutral.followup.set_to_work"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.neutral.followup.back"
+          }
+        }
+      ]
+    }
+  ]
+}

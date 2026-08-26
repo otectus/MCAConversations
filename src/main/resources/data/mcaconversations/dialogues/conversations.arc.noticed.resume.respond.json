@@ -1,0 +1,92 @@
+{
+  "answers": [
+    {
+      "name": "sorry_i_didnt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.resume.sorry_i_didnt"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.resume.sorry",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.resume.sorry_i_didnt",
+              "deltas": {
+                "respect": 1,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.noticed.resume.followup",
+            "say": "conversations.noticed.resume.sorry_i_didnt"
+          }
+        }
+      ]
+    },
+    {
+      "name": "how_is_it_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.resume.how_is_it_now"
+            },
+            "next": "conversations.arc.noticed.resume.followup",
+            "say": "conversations.noticed.resume.how_is_it_now"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ill_come_regular",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.resume.ill_come_regular"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.resume.regular",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.resume.ill_come_regular",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.arc.noticed.resume.followup",
+            "say": "conversations.noticed.resume.ill_come_regular"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

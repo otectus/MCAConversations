@@ -56,6 +56,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "ask_parent.rebuffed.open"
+            },
             "conversations_affection_apply": {
               "decision": "family.parent.snap",
               "delta": -2,
@@ -69,8 +73,24 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.ask_parent.followup",
+            "next": "conversations.topic.ask_parent.rebuffed.followup",
             "say": "conversations.family.parent.snap"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_pride",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "ask_parent.pride"
+            },
+            "next": "conversations.topic.ask_parent.pride",
+            "say": "conversations.ask_parent.pride"
           }
         }
       ]

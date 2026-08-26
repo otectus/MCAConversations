@@ -56,6 +56,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "regrets.rebuked"
+            },
             "conversations_affection_apply": {
               "decision": "regrets.respond.pry",
               "delta": -2,
@@ -69,7 +73,7 @@
                 "trust": -3
               }
             },
-            "next": "conversations.topic.regrets.sit_with_it",
+            "next": "conversations.topic.regrets.pried.followup",
             "say": "conversations.regrets.respond.pry"
           }
         }

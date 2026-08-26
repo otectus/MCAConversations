@@ -1,0 +1,128 @@
+{
+  "beats": {
+    "day.young.snubbed.apologize": {
+      "topic": "day",
+      "say": "conversations.day.young.snubbed.apologize",
+      "response_question": "conversations.cat.chitchat",
+      "npc_act": "qualify",
+      "subject": "day.young",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "child",
+          "teen"
+        ]
+      }
+    },
+    "day.young.snubbed.explain": {
+      "topic": "day",
+      "say": "conversations.day.young.snubbed.explain",
+      "response_question": "conversations.cat.chitchat",
+      "npc_act": "qualify",
+      "subject": "day.young",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "child",
+          "teen"
+        ]
+      }
+    },
+    "day.young.snubbed.leave": {
+      "topic": "day",
+      "say": "conversations.day.young.snubbed.leave",
+      "response_question": "conversations.cat.chitchat",
+      "npc_act": "accept",
+      "subject": "day.young",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "child",
+          "teen"
+        ]
+      }
+    },
+    "day.young.snubbed.open": {
+      "topic": "day",
+      "say": "conversations.day.young.dismiss",
+      "response_question": "conversations.topic.day.young.snubbed.followup",
+      "npc_act": "hurt",
+      "subject": "day.young",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement",
+        "self_disclosure",
+        "respectful_disagreement"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "child",
+          "teen"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.day.young.snubbed.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "day.young.snubbed.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.day.young.snubbed.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "day.young.snubbed.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.day.young.snubbed.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "day.young.snubbed.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

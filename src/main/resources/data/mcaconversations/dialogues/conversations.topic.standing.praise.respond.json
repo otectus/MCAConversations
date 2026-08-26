@@ -1,0 +1,112 @@
+{
+  "answers": [
+    {
+      "name": "who",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.praise.who"
+            },
+            "next": "conversations.topic.standing.praise.followup",
+            "say": "conversations.standing.praise.who"
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_said",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.praise.what_said"
+            },
+            "next": "conversations.topic.standing.praise.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.praise.what_said",
+              "vars": [
+                "reputation_recent_deed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "awkward",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.praise.awkward"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.praise.awkward",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.praise.awkward",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.standing.praise.followup",
+            "say": "conversations.standing.praise.awkward"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.praise.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.praise.dismissed",
+              "deltas": {
+                "respect": -1,
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.praise.dismissed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.praise.back"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_fishermen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.village.ask_fishermen"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.village.ask_fishermen",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.oceanographer.followup",
+            "say": "conversations.work.prof.oceanographer.village.ask_fishermen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.oceanographer.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.oceanographer.followup",
+            "say": "conversations.work.prof.oceanographer.village.say_thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_post",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.village.ask_post"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.village.ask_post",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.oceanographer.followup",
+            "say": "conversations.work.prof.oceanographer.village.ask_post"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.oceanographer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

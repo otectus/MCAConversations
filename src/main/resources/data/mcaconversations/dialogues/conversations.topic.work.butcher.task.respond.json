@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_race",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.task.ask_race"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.task.ask_race",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.butcher.followup",
+            "say": "conversations.work.prof.butcher.task.ask_race"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.butcher.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.butcher.followup",
+            "say": "conversations.work.prof.butcher.task.offer_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_february",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.task.ask_february"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.task.ask_february",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.butcher.followup",
+            "say": "conversations.work.prof.butcher.task.ask_february"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.butcher.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

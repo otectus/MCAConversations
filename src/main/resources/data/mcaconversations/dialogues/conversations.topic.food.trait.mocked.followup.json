@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.trait.mocked.apologize"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.trait.mocked.apologize",
+              "deltas": {
+                "tension": -4
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.mocked.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_properly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.trait.mocked.ask_properly"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.trait.mocked.ask_properly",
+              "deltas": {
+                "familiarity": 1,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.mocked.ask_properly"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.trait.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

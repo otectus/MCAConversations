@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "nobody_told_me",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.stale.untold"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.stale.untold",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.stale.untold"
+          }
+        }
+      ]
+    },
+    {
+      "name": "then_let_it_die",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.stale.die"
+            },
+            "conversations_affection_apply": {
+              "decision": "rumors.stale.die",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.stale.die",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.stale.die"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.stale.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

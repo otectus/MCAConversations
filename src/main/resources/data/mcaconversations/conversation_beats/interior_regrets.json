@@ -1,0 +1,882 @@
+{
+  "beats": {
+    "deflect.intimate.to.regrets.guarded": {
+      "topic": "regrets",
+      "say": "conversations.deflect.intimate",
+      "response_question": "conversations.topic.regrets.guarded.respond",
+      "npc_act": "deflect",
+      "subject": "regrets.guarded",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "qualified"
+    },
+    "regrets.first.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.first",
+      "response_question": "conversations.topic.regrets.respond",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.followup.forgive.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.followup.forgive",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.followup.sit_with_it.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.followup.sit_with_it",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.forgive.crit.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.forgive.crit",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.forgive.partial.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.forgive.partial",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.forgive.success.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.forgive.success",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.no_words.to.regrets.sit_with_it": {
+      "topic": "regrets",
+      "say": "conversations.regrets.no_words",
+      "response_question": "conversations.topic.regrets.sit_with_it",
+      "npc_act": "accept",
+      "subject": "regrets.sit_with_it",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.respond.ask_repair.to.regrets.sit_with_it": {
+      "topic": "regrets",
+      "say": "conversations.regrets.respond.ask_repair",
+      "response_question": "conversations.topic.regrets.sit_with_it",
+      "npc_act": "accept",
+      "subject": "regrets.sit_with_it",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.respond.listen.to.regrets.sit_with_it": {
+      "topic": "regrets",
+      "say": "conversations.regrets.respond.listen",
+      "response_question": "conversations.topic.regrets.sit_with_it",
+      "npc_act": "accept",
+      "subject": "regrets.sit_with_it",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.resume.ask_since.forgave.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.ask_since.forgave",
+      "response_question": "conversations.arc.regrets.resume.followup",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.resume.ask_since.listened.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.ask_since.listened",
+      "response_question": "conversations.arc.regrets.resume.followup",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.resume.ask_since.plain.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.ask_since.plain",
+      "response_question": "conversations.arc.regrets.resume.followup",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.resume.encourage_repair.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.encourage_repair",
+      "response_question": "conversations.arc.regrets.resume.followup",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.resume.followup.absolve.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.followup.absolve",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.resume.followup.hold.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.followup.hold",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.resume.followup.practical.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.followup.practical",
+      "response_question": "conversations.topic.regrets.close",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.revisit.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.revisit",
+      "response_question": "conversations.topic.regrets.respond",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "regrets.sit_with_it.stay.to.regrets": {
+      "topic": "regrets",
+      "say": "conversations.regrets.sit_with_it.stay",
+      "response_question": "conversations.topic.regrets.followup",
+      "npc_act": "accept",
+      "subject": "regrets",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.arc.regrets.resume.followup/absolve": {
+      "stance": "empathy",
+      "responds_to": [
+        "regrets.resume.ask_since.forgave.to.regrets",
+        "regrets.resume.ask_since.listened.to.regrets",
+        "regrets.resume.ask_since.plain.to.regrets",
+        "regrets.resume.encourage_repair.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.arc.regrets.resume.followup/hold": {
+      "stance": "restraint",
+      "responds_to": [
+        "regrets.resume.ask_since.forgave.to.regrets",
+        "regrets.resume.ask_since.listened.to.regrets",
+        "regrets.resume.ask_since.plain.to.regrets",
+        "regrets.resume.encourage_repair.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.arc.regrets.resume.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.resume.ask_since.forgave.to.regrets",
+        "regrets.resume.ask_since.listened.to.regrets",
+        "regrets.resume.ask_since.plain.to.regrets",
+        "regrets.resume.encourage_repair.to.regrets"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.arc.regrets.resume.followup/practical": {
+      "stance": "curiosity",
+      "responds_to": [
+        "regrets.resume.ask_since.forgave.to.regrets",
+        "regrets.resume.ask_since.listened.to.regrets",
+        "regrets.resume.ask_since.plain.to.regrets",
+        "regrets.resume.encourage_repair.to.regrets"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.regrets.resume.respond/ask_since": {
+      "stance": "curiosity",
+      "responds_to": [
+        "regrets.revisit.opens"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.regrets.resume.respond/bring_it_up": {
+      "stance": "curiosity",
+      "responds_to": [
+        "regrets.revisit.opens"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.arc.regrets.resume.respond/encourage_repair": {
+      "stance": "encouragement",
+      "responds_to": [
+        "regrets.revisit.opens"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.regrets.resume.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.revisit.opens"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.regrets.close/confide": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "regrets.followup.forgive.to.regrets",
+        "regrets.followup.sit_with_it.to.regrets",
+        "regrets.forgive.crit.to.regrets",
+        "regrets.forgive.partial.to.regrets",
+        "regrets.forgive.success.to.regrets",
+        "regrets.resume.followup.absolve.to.regrets",
+        "regrets.resume.followup.hold.to.regrets",
+        "regrets.resume.followup.practical.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.followup.forgive.to.regrets",
+        "regrets.followup.sit_with_it.to.regrets",
+        "regrets.forgive.crit.to.regrets",
+        "regrets.forgive.partial.to.regrets",
+        "regrets.forgive.success.to.regrets",
+        "regrets.resume.followup.absolve.to.regrets",
+        "regrets.resume.followup.hold.to.regrets",
+        "regrets.resume.followup.practical.to.regrets"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.regrets.close/say_means": {
+      "stance": "candor",
+      "responds_to": [
+        "regrets.followup.forgive.to.regrets",
+        "regrets.followup.sit_with_it.to.regrets",
+        "regrets.forgive.crit.to.regrets",
+        "regrets.forgive.partial.to.regrets",
+        "regrets.forgive.success.to.regrets",
+        "regrets.resume.followup.absolve.to.regrets",
+        "regrets.resume.followup.hold.to.regrets",
+        "regrets.resume.followup.practical.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.close/thank": {
+      "stance": "candor",
+      "responds_to": [
+        "regrets.followup.forgive.to.regrets",
+        "regrets.followup.sit_with_it.to.regrets",
+        "regrets.forgive.crit.to.regrets",
+        "regrets.forgive.partial.to.regrets",
+        "regrets.forgive.success.to.regrets",
+        "regrets.resume.followup.absolve.to.regrets",
+        "regrets.resume.followup.hold.to.regrets",
+        "regrets.resume.followup.practical.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.followup/challenge": {
+      "stance": "challenge",
+      "responds_to": [
+        "regrets.sit_with_it.stay.to.regrets"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.regrets.followup/forgive": {
+      "stance": "empathy",
+      "responds_to": [
+        "regrets.sit_with_it.stay.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.sit_with_it.stay.to.regrets"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.regrets.followup/sit_with_it": {
+      "stance": "restraint",
+      "responds_to": [
+        "regrets.sit_with_it.stay.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.guarded.respond/ask_safer": {
+      "stance": "curiosity",
+      "responds_to": [
+        "deflect.intimate.to.regrets.guarded"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.guarded.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "deflect.intimate.to.regrets.guarded"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.regrets.guarded.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "deflect.intimate.to.regrets.guarded"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.regrets.guarded.respond/respect": {
+      "stance": "restraint",
+      "responds_to": [
+        "deflect.intimate.to.regrets.guarded"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.regrets.respond/ask_repair": {
+      "stance": "curiosity",
+      "responds_to": [
+        "regrets.first.to.regrets",
+        "regrets.revisit.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.first.to.regrets",
+        "regrets.revisit.to.regrets"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.regrets.respond/listen": {
+      "stance": "restraint",
+      "responds_to": [
+        "regrets.first.to.regrets",
+        "regrets.revisit.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.respond/no_words": {
+      "stance": "restraint",
+      "responds_to": [
+        "regrets.first.to.regrets",
+        "regrets.revisit.to.regrets"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.respond/pry": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "regrets.first.to.regrets",
+        "regrets.revisit.to.regrets"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.regrets.sit_with_it/stay": {
+      "stance": "restraint",
+      "responds_to": [
+        "regrets.no_words.to.regrets.sit_with_it",
+        "regrets.respond.ask_repair.to.regrets.sit_with_it",
+        "regrets.respond.listen.to.regrets.sit_with_it"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.regrets.sit_with_it/step_away": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.no_words.to.regrets.sit_with_it",
+        "regrets.respond.ask_repair.to.regrets.sit_with_it",
+        "regrets.respond.listen.to.regrets.sit_with_it"
+      ],
+      "tone": "gentle",
+      "exit": true
+    }
+  }
+}

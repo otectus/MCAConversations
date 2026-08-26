@@ -1,0 +1,1225 @@
+{
+  "beats": {
+    "people.agreed": {
+      "topic": "people",
+      "say": "conversations.people.respond.agree",
+      "response_question": "conversations.topic.people.grumble.followup",
+      "npc_act": "accept",
+      "subject": "people.affection",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "people:mixed",
+        "grievance:shared"
+      ],
+      "allowed_stances": [
+        "empathy",
+        "respectful_disagreement",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge",
+        "self_disclosure"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.blunted": {
+      "topic": "people",
+      "say": "conversations.people.blunt",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "people.conflict",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.defend_rebuffed": {
+      "topic": "people",
+      "say": "conversations.people.respond.defend.flat",
+      "response_question": "conversations.topic.people.rebuffed.followup",
+      "npc_act": "refuse",
+      "subject": "people.conflict",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "people:sour",
+        "player:too_new"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "humor",
+        "challenge",
+        "self_disclosure",
+        "practical_help",
+        "empathy",
+        "encouragement",
+        "curiosity",
+        "respectful_disagreement"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.empathised": {
+      "topic": "people",
+      "say": "conversations.people.followup.empathise",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.empathy",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.empathised.outlaw": {
+      "topic": "people",
+      "say": "conversations.people.empathise.outlaw",
+      "response_question": "conversations.cat.village",
+      "npc_act": "disclose",
+      "subject": "people.empathy",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.example_offered": {
+      "topic": "people",
+      "say": "conversations.people.respond.ask_example",
+      "response_question": "conversations.topic.people.gossip.followup",
+      "npc_act": "invite",
+      "subject": "people.guarded",
+      "polarity": "mixed",
+      "openness": "guarded",
+      "facts": [
+        "people:mixed",
+        "gossip:offered"
+      ],
+      "allowed_stances": [
+        "boundary_push",
+        "restraint",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "humor",
+        "encouragement",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.first_view": {
+      "topic": "people",
+      "say": "conversations.people.first",
+      "response_question": "conversations.topic.people.mixed.respond",
+      "npc_act": "report",
+      "subject": "people.neighbours",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "people:mixed"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "empathy"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.fond.agreed": {
+      "topic": "people",
+      "say": "conversations.people.fond.agree",
+      "response_question": "conversations.topic.people.fond.followup",
+      "npc_act": "accept",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "people:fond"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "respectful_disagreement",
+        "challenge",
+        "humor"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.fond.favourite": {
+      "topic": "people",
+      "say": "conversations.people.fond.favourite",
+      "response_question": "conversations.topic.people.fond.followup",
+      "npc_act": "disclose",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "people:fond"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "respectful_disagreement",
+        "challenge",
+        "humor"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.fond.how_long": {
+      "topic": "people",
+      "say": "conversations.people.fond.how_long",
+      "response_question": "conversations.cat.village",
+      "npc_act": "reminisce",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.fond.left": {
+      "topic": "people",
+      "say": "conversations.people.fond.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.fond.share_own": {
+      "topic": "people",
+      "say": "conversations.people.fond.share_own",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.fond.teased": {
+      "topic": "people",
+      "say": "conversations.people.fond.tease",
+      "response_question": "conversations.topic.people.fond.followup",
+      "npc_act": "accept",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "people:fond"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "respectful_disagreement",
+        "challenge",
+        "humor"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.gossip.back_off": {
+      "topic": "people",
+      "say": "conversations.people.gossip.back_off",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.gossip",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.gossip.discretion": {
+      "topic": "people",
+      "say": "conversations.people.gossip.discretion",
+      "response_question": "conversations.cat.village",
+      "npc_act": "disclose",
+      "subject": "people.gossip",
+      "polarity": "mixed",
+      "openness": "guarded",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.gossip.refused": {
+      "topic": "people",
+      "say": "conversations.people.followup.push_gossip",
+      "response_question": "conversations.cat.village",
+      "npc_act": "refuse",
+      "subject": "people.gossip",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.guarded_view": {
+      "topic": "people",
+      "say": "conversations.people.shy",
+      "response_question": "conversations.topic.people.mixed.respond",
+      "npc_act": "disclose",
+      "subject": "people.guarded",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "people:mixed"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "empathy"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.joked": {
+      "topic": "people",
+      "say": "conversations.people.followup.joke",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.wry",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.left": {
+      "topic": "people",
+      "say": "conversations.people.respond.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.first",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.rebuffed.concede": {
+      "topic": "people",
+      "say": "conversations.people.rebuffed.concede",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.conflict",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.rebuffed.hold": {
+      "topic": "people",
+      "say": "conversations.people.rebuffed.hold",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "people.conflict",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.repair.crit": {
+      "topic": "people",
+      "say": "conversations.people.encourage_repair.crit",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.repair",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.repair.partial": {
+      "topic": "people",
+      "say": "conversations.people.encourage_repair.partial",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "people.repair",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.repair.plain": {
+      "topic": "people",
+      "say": "conversations.people.followup.encourage_repair",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.repair",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "people",
+        "resumes": [
+          "people.resume.ask_what_said",
+          "people.resume.glad",
+          "people.resume.no_hurry_people",
+          "people.resume.opener"
+        ]
+      }
+    },
+    "people.repair.rebuff": {
+      "topic": "people",
+      "say": "conversations.people.encourage_repair.rebuff",
+      "response_question": "conversations.cat.village",
+      "npc_act": "refuse",
+      "subject": "people.repair",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.repair.success": {
+      "topic": "people",
+      "say": "conversations.people.encourage_repair.success",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.repair",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "people",
+        "resumes": [
+          "people.resume.ask_what_said",
+          "people.resume.glad",
+          "people.resume.no_hurry_people",
+          "people.resume.opener"
+        ]
+      }
+    },
+    "people.revisited": {
+      "topic": "people",
+      "say": "conversations.people.revisit",
+      "response_question": "conversations.topic.people.mixed.respond",
+      "npc_act": "report",
+      "subject": "people.repeat",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "people:mixed",
+        "people:asked_before"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "empathy"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.softened.landed": {
+      "topic": "people",
+      "say": "conversations.people.respond.defend.landed",
+      "response_question": "conversations.topic.people.softened.followup",
+      "npc_act": "accept",
+      "subject": "people.repair",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "people:sour",
+        "villager:softened"
+      ],
+      "allowed_stances": [
+        "respectful_disagreement",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "humor",
+        "challenge",
+        "self_disclosure",
+        "practical_help"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.softened.low": {
+      "topic": "people",
+      "say": "conversations.people.defend.low",
+      "response_question": "conversations.topic.people.softened.followup",
+      "npc_act": "qualify",
+      "subject": "people.repair",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "facts": [
+        "people:sour",
+        "villager:softened"
+      ],
+      "allowed_stances": [
+        "respectful_disagreement",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "humor",
+        "challenge",
+        "self_disclosure",
+        "practical_help"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.softened.polite": {
+      "topic": "people",
+      "say": "conversations.people.respond.defend.polite",
+      "response_question": "conversations.topic.people.softened.followup",
+      "npc_act": "qualify",
+      "subject": "people.repair",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "people:sour",
+        "villager:softened"
+      ],
+      "allowed_stances": [
+        "respectful_disagreement",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "humor",
+        "challenge",
+        "self_disclosure",
+        "practical_help"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.softened.reassure": {
+      "topic": "people",
+      "say": "conversations.people.softened.reassure",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "people.repair",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.sour_view": {
+      "topic": "people",
+      "say": "conversations.people.judgy",
+      "response_question": "conversations.topic.people.sour.respond",
+      "npc_act": "complain",
+      "subject": "people.conflict",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "facts": [
+        "people:mixed",
+        "people:sour"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "respectful_disagreement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "empathy",
+        "humor"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.warm_view": {
+      "topic": "people",
+      "say": "conversations.people.warm",
+      "response_question": "conversations.topic.people.fond.respond",
+      "npc_act": "celebrate",
+      "subject": "people.affection",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "people:fond"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "respectful_disagreement",
+        "challenge"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "people.wry_view": {
+      "topic": "people",
+      "say": "conversations.people.wry",
+      "response_question": "conversations.topic.people.mixed.respond",
+      "npc_act": "explain",
+      "subject": "people.wry",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "people:mixed"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "empathy"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.people.fond.followup/ask_how_long": {
+      "stance": "curiosity",
+      "responds_to": [
+        "people.fond.agreed",
+        "people.fond.favourite",
+        "people.fond.teased"
+      ],
+      "requires_facts": [
+        "people:fond"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.people.fond.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.fond.agreed",
+        "people.fond.favourite",
+        "people.fond.teased"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.fond.followup/share_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "people.fond.agreed",
+        "people.fond.favourite",
+        "people.fond.teased"
+      ],
+      "requires_facts": [
+        "people:fond"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.fond.respond/agree": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "people.warm_view"
+      ],
+      "requires_facts": [
+        "people:fond"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.fond.respond/ask_favourite": {
+      "stance": "curiosity",
+      "responds_to": [
+        "people.warm_view"
+      ],
+      "requires_facts": [
+        "people:fond"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.people.fond.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.warm_view"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.fond.respond/tease": {
+      "stance": "humor",
+      "responds_to": [
+        "people.warm_view"
+      ],
+      "requires_facts": [
+        "people:fond"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.gossip.followup/back_off": {
+      "stance": "candor",
+      "responds_to": [
+        "people.example_offered"
+      ],
+      "requires_facts": [
+        "gossip:offered"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.gossip.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.example_offered"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.gossip.followup/promise_discretion": {
+      "stance": "restraint",
+      "responds_to": [
+        "people.example_offered"
+      ],
+      "requires_facts": [
+        "gossip:offered"
+      ],
+      "introduces_facts": [
+        "player:promised_discretion"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.people.gossip.followup/push_gossip": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "people.example_offered"
+      ],
+      "requires_facts": [
+        "gossip:offered"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "rebuffed"
+      ]
+    },
+    "conversations.topic.people.grumble.followup/empathise": {
+      "stance": "empathy",
+      "responds_to": [
+        "people.agreed"
+      ],
+      "requires_facts": [
+        "grievance:shared"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.grumble.followup/encourage_repair": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "people.agreed"
+      ],
+      "requires_facts": [
+        "grievance:shared"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted",
+        "rebuffed"
+      ]
+    },
+    "conversations.topic.people.grumble.followup/joke": {
+      "stance": "humor",
+      "responds_to": [
+        "people.agreed"
+      ],
+      "requires_facts": [
+        "grievance:shared"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.grumble.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.agreed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.mixed.respond/agree": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "people.first_view",
+        "people.revisited",
+        "people.wry_view",
+        "people.guarded_view"
+      ],
+      "requires_facts": [
+        "people:mixed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.mixed.respond/ask_example": {
+      "stance": "curiosity",
+      "responds_to": [
+        "people.first_view",
+        "people.revisited",
+        "people.wry_view",
+        "people.guarded_view"
+      ],
+      "requires_facts": [
+        "people:mixed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.people.mixed.respond/blunt": {
+      "stance": "challenge",
+      "responds_to": [
+        "people.first_view",
+        "people.revisited",
+        "people.wry_view",
+        "people.guarded_view"
+      ],
+      "requires_facts": [
+        "people:mixed"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.people.mixed.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.first_view",
+        "people.revisited",
+        "people.wry_view",
+        "people.guarded_view"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.rebuffed.followup/concede": {
+      "stance": "candor",
+      "responds_to": [
+        "people.defend_rebuffed"
+      ],
+      "requires_facts": [
+        "player:too_new"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.people.rebuffed.followup/hold": {
+      "stance": "restraint",
+      "responds_to": [
+        "people.defend_rebuffed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "resisted"
+      ]
+    },
+    "conversations.topic.people.rebuffed.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.defend_rebuffed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.softened.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.softened.landed",
+        "people.softened.polite",
+        "people.softened.low"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.people.softened.followup/reassure": {
+      "stance": "encouragement",
+      "responds_to": [
+        "people.softened.landed",
+        "people.softened.polite",
+        "people.softened.low"
+      ],
+      "requires_facts": [
+        "villager:softened"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.sour.respond/agree": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "people.sour_view"
+      ],
+      "requires_facts": [
+        "people:sour"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.people.sour.respond/ask_example": {
+      "stance": "curiosity",
+      "responds_to": [
+        "people.sour_view"
+      ],
+      "requires_facts": [
+        "people:sour"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.people.sour.respond/defend": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "people.sour_view"
+      ],
+      "requires_facts": [
+        "people:sour"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.people.sour.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.sour_view"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

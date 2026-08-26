@@ -6,6 +6,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.wary"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.rough.listen",
               "delta": 1,
@@ -39,6 +43,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.told"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.rough.listen",
               "delta": 1,
@@ -73,6 +81,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.unnamed"
+            },
             "conversations_disposition_apply": {
               "topic": "checkin.rough.ask",
               "deltas": {
@@ -92,6 +104,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.brushed_off"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.rough.dismiss",
               "delta": -1,
@@ -105,7 +121,7 @@
                 "tension": 4
               }
             },
-            "next": "conversations.topic.checkin.rough.followup",
+            "next": "conversations.topic.checkin.rough.dismissed.followup",
             "say": "conversations.checkin.rough.dismiss"
           }
         }

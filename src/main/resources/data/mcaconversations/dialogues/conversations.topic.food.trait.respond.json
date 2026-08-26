@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.trait.respected"
+            },
             "conversations_affection_apply": {
               "decision": "food.trait.respect",
               "delta": 1,
@@ -31,6 +35,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.trait.explained"
+            },
             "conversations_disposition_apply": {
               "topic": "food.trait.ask_about",
               "deltas": {
@@ -50,6 +58,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.trait.mocked"
+            },
             "conversations_affection_apply": {
               "decision": "food.trait.mock",
               "delta": -2,
@@ -64,7 +76,7 @@
                 "trust": -3
               }
             },
-            "next": "conversations.topic.food.trait.followup",
+            "next": "conversations.topic.food.trait.mocked.followup",
             "say": "conversations.food.trait.mock"
           }
         }

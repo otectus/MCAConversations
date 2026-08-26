@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_company",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.future.ask_company"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.future.ask_company",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.mercenary.followup",
+            "say": "conversations.work.prof.mercenary.future.ask_company"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mercenary.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.mercenary.followup",
+            "say": "conversations.work.prof.mercenary.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_wage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.future.ask_wage"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.future.ask_wage",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.mercenary.followup",
+            "say": "conversations.work.prof.mercenary.future.ask_wage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mercenary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

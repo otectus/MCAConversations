@@ -66,6 +66,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "feelings.romantic.withdrawn"
+            },
             "conversations_affection_apply": {
               "decision": "feelings.romantic.deflect",
               "delta": -1,
@@ -79,7 +83,7 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.feelings.close",
+            "next": "conversations.topic.feelings.hurt.close",
             "say": "conversations.feelings.romantic.deflect"
           }
         }

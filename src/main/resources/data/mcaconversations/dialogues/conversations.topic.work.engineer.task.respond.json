@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_tooth",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.task.ask_tooth"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.task.ask_tooth",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.engineer.followup",
+            "say": "conversations.work.prof.engineer.task.ask_tooth"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.engineer.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.engineer.followup",
+            "say": "conversations.work.prof.engineer.task.offer_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_race",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.task.ask_race"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.task.ask_race",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.engineer.followup",
+            "say": "conversations.work.prof.engineer.task.ask_race"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.engineer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

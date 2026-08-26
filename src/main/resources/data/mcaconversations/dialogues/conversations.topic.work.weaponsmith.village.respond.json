@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_raid",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.village.ask_raid"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.village.ask_raid",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.weaponsmith.followup",
+            "say": "conversations.work.prof.weaponsmith.village.ask_raid"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.weaponsmith.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.weaponsmith.followup",
+            "say": "conversations.work.prof.weaponsmith.village.say_thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_coin",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.village.ask_coin"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.village.ask_coin",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.weaponsmith.followup",
+            "say": "conversations.work.prof.weaponsmith.village.ask_coin"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.weaponsmith.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

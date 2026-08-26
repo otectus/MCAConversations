@@ -1,0 +1,84 @@
+{
+  "answers": [
+    {
+      "name": "both_sides",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.mixed.followup.both"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.mixed.followup.both",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.mixed.followup.both",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "standing",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.mixed.followup.both"
+          }
+        }
+      ]
+    },
+    {
+      "name": "one_answer",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.mixed.followup.keep"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.mixed.followup.keep",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.mixed.followup.keep",
+              "deltas": {
+                "respect": 2,
+                "warmth": 1
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "standing",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.mixed.followup.keep"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.mixed.followup.back"
+          }
+        }
+      ]
+    }
+  ]
+}

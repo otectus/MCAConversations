@@ -1,0 +1,79 @@
+{
+  "answers": [
+    {
+      "name": "when",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.resume.when"
+            },
+            "next": "conversations.arc.village.resume.followup",
+            "say": "conversations.village.resume.when"
+          }
+        }
+      ]
+    },
+    {
+      "name": "still_stands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.resume.still_stands"
+            },
+            "conversations_affection_apply": {
+              "decision": "village.resume.stands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.resume.still_stands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.arc.village.resume.followup",
+            "say": "conversations.village.resume.still_stands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "cannot",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.resume.cannot"
+            },
+            "next": "conversations.arc.village.resume.followup",
+            "say": "conversations.village.resume.cannot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

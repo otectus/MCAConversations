@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "thank_you_for_passing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.praise.followup.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.praise.followup.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.praise.followup.thanks",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.praise.followup.thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "send_it_back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.praise.followup.back"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.praise.followup.back",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.praise.followup.back",
+              "deltas": {
+                "respect": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.praise.followup.back"
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.praise.followup.back"
+          }
+        }
+      ]
+    }
+  ]
+}

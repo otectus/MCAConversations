@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_first_name",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.risk.ask_first_name"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.risk.ask_first_name",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shady_wizard.followup",
+            "say": "conversations.work.prof.shady_wizard.risk.ask_first_name"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shady_wizard.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.shady_wizard.followup",
+            "say": "conversations.work.prof.shady_wizard.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_shelf",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.risk.ask_shelf"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.risk.ask_shelf",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shady_wizard.followup",
+            "say": "conversations.work.prof.shady_wizard.risk.ask_shelf"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shady_wizard.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

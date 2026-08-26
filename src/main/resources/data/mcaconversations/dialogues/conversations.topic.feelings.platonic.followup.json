@@ -65,6 +65,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "feelings.platonic.corrected"
+            },
             "conversations_affection_apply": {
               "decision": "feelings.platonic.dismiss",
               "delta": -2,
@@ -78,7 +82,7 @@
                 "tension": 5
               }
             },
-            "next": "conversations.topic.feelings.close",
+            "next": "conversations.topic.feelings.hurt.close",
             "say": "conversations.feelings.platonic.dismiss"
           }
         }

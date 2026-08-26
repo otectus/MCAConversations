@@ -1,0 +1,378 @@
+{
+  "intents": {
+    "work.prof.scribe.more": {
+      "question": "conversations.topic.work.scribe.followup",
+      "answer": "ask_more",
+      "context": "conversations.topic.work.scribe.followup",
+      "keywords": {
+        "oldest": 1.5,
+        "saved": 1.2,
+        "recovered": 1.2
+      },
+      "requiresAny": [
+        "oldest",
+        "saved",
+        "recovered"
+      ],
+      "phrases": [
+        "what's the oldest thing you've saved"
+      ],
+      "category": "topics"
+    },
+    "work.prof.scribe.thanks": {
+      "question": "conversations.topic.work.scribe.followup",
+      "answer": "thanks",
+      "context": "conversations.topic.work.scribe.followup",
+      "keywords": {
+        "thought": 1.2,
+        "emergency": 1.5,
+        "quiet": 0.8
+      },
+      "requiresAny": [
+        "thought",
+        "emergency"
+      ],
+      "phrases": [
+        "i'd not thought about it that way",
+        "i had not thought of it like that",
+        "that is a new way to see it"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.challenge": {
+      "question": "conversations.topic.work.scribe.respond",
+      "answer": "challenge",
+      "context": "conversations.topic.work.scribe.respond",
+      "keywords": {
+        "copying": 1.5,
+        "understand": 1.2,
+        "words": 0.8
+      },
+      "requiresAny": [
+        "copying",
+        "understand"
+      ],
+      "phrases": [
+        "you're copying words you don't understand"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.craft.admire": {
+      "question": "conversations.topic.work.scribe.craft.respond",
+      "answer": "admire",
+      "context": "conversations.topic.work.scribe.craft.respond",
+      "keywords": {
+        "burning": 1.5,
+        "cruel": 1.2,
+        "eleven": 1.0
+      },
+      "requiresAny": [
+        "burning",
+        "cruel",
+        "eleven"
+      ],
+      "phrases": [
+        "burning ten of eleven sounds cruel and probably wasn't"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.craft.ask_firsthand": {
+      "question": "conversations.topic.work.scribe.craft.respond",
+      "answer": "ask_firsthand",
+      "context": "conversations.topic.work.scribe.craft.respond",
+      "keywords": {
+        "firsthand": 1.5,
+        "difference": 1.2,
+        "account": 1.0
+      },
+      "requiresAny": [
+        "firsthand",
+        "difference",
+        "account"
+      ],
+      "phrases": [
+        "how do you tell the difference"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.craft.ask_page": {
+      "question": "conversations.topic.work.scribe.craft.respond",
+      "answer": "ask_page",
+      "context": "conversations.topic.work.scribe.craft.respond",
+      "keywords": {
+        "page": 1.5,
+        "copied": 1.2,
+        "contained": 1.0
+      },
+      "requiresAny": [
+        "page",
+        "copied",
+        "contained"
+      ],
+      "phrases": [
+        "what was on the page"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.future.ask_eleven": {
+      "question": "conversations.topic.work.scribe.future.respond",
+      "answer": "ask_eleven",
+      "context": "conversations.topic.work.scribe.future.respond",
+      "keywords": {
+        "disagreements": 1.5,
+        "eleven": 1.2,
+        "about": 0.4
+      },
+      "requiresAny": [
+        "disagreements",
+        "eleven"
+      ],
+      "phrases": [
+        "what are the eleven disagreements about"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.future.ask_second_copy": {
+      "question": "conversations.topic.work.scribe.future.respond",
+      "answer": "ask_second_copy",
+      "context": "conversations.topic.work.scribe.future.respond",
+      "keywords": {
+        "copy": 1.5,
+        "second": 1.2,
+        "elsewhere": 1.2
+      },
+      "requiresAny": [
+        "copy",
+        "second",
+        "elsewhere"
+      ],
+      "phrases": [
+        "where would the second copy live"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.future.encourage": {
+      "question": "conversations.topic.work.scribe.future.respond",
+      "answer": "encourage",
+      "context": "conversations.topic.work.scribe.future.respond",
+      "keywords": {
+        "send": 1.5,
+        "unsent": 1.2,
+        "copy": 1.0
+      },
+      "requiresAny": [
+        "send",
+        "unsent",
+        "copy"
+      ],
+      "phrases": [
+        "send it. an unsent copy is the same as no copy"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.hard": {
+      "question": "conversations.topic.work.scribe.respond",
+      "answer": "ask_hard",
+      "context": "conversations.topic.work.scribe.respond",
+      "keywords": {
+        "bite": 1.5,
+        "dangerous": 1.2,
+        "mean": 0.6
+      },
+      "requiresAny": [
+        "bite",
+        "dangerous"
+      ],
+      "phrases": [
+        "what do you mean, some of them bite"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.risk.ask_burned": {
+      "question": "conversations.topic.work.scribe.risk.respond",
+      "answer": "ask_burned",
+      "context": "conversations.topic.work.scribe.risk.respond",
+      "keywords": {
+        "burn": 1.5,
+        "who": 0.5,
+        "destroy": 1.2
+      },
+      "requiresAny": [
+        "burn",
+        "destroy"
+      ],
+      "phrases": [
+        "who would burn it"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.risk.ask_wrong": {
+      "question": "conversations.topic.work.scribe.risk.respond",
+      "answer": "ask_wrong",
+      "context": "conversations.topic.work.scribe.risk.respond",
+      "keywords": {
+        "copied": 1.2,
+        "wrong": 1.5,
+        "error": 1.2
+      },
+      "requiresAny": [
+        "copied",
+        "wrong",
+        "error"
+      ],
+      "phrases": [
+        "have you ever copied something wrong"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.risk.sympathise": {
+      "question": "conversations.topic.work.scribe.risk.respond",
+      "answer": "sympathise",
+      "context": "conversations.topic.work.scribe.risk.respond",
+      "keywords": {
+        "thatched": 1.5,
+        "roof": 1.2,
+        "solving": 1.0
+      },
+      "requiresAny": [
+        "thatched",
+        "roof",
+        "solving"
+      ],
+      "phrases": [
+        "a thatched roof over that is a thing worth solving"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.task.ask_believe": {
+      "question": "conversations.topic.work.scribe.task.respond",
+      "answer": "ask_believe",
+      "context": "conversations.topic.work.scribe.task.respond",
+      "keywords": {
+        "believe": 1.5,
+        "happened": 1.0,
+        "true": 1.2
+      },
+      "requiresAny": [
+        "believe",
+        "happened",
+        "true"
+      ],
+      "phrases": [
+        "do you believe it happened"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.task.ask_who": {
+      "question": "conversations.topic.work.scribe.task.respond",
+      "answer": "ask_who",
+      "context": "conversations.topic.work.scribe.task.respond",
+      "keywords": {
+        "disagree": 1.5,
+        "who": 0.5,
+        "versions": 1.0
+      },
+      "requiresAny": [
+        "disagree",
+        "versions"
+      ],
+      "phrases": [
+        "why would they disagree about who was there"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.task.offer_hands": {
+      "question": "conversations.topic.work.scribe.task.respond",
+      "answer": "offer_hands",
+      "context": "conversations.topic.work.scribe.task.respond",
+      "keywords": {
+        "aloud": 1.5,
+        "read": 1.0,
+        "versions": 1.2
+      },
+      "requiresAny": [
+        "aloud",
+        "read",
+        "versions"
+      ],
+      "phrases": [
+        "i could read one version aloud while you check the other"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.value": {
+      "question": "conversations.topic.work.scribe.respond",
+      "answer": "value",
+      "context": "conversations.topic.work.scribe.respond",
+      "keywords": {
+        "lost": 1.5,
+        "preserve": 1.5,
+        "saved": 1.0
+      },
+      "requiresAny": [
+        "lost",
+        "preserve",
+        "saved"
+      ],
+      "phrases": [
+        "somebody has to keep these from being lost"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.village.ask_librarian": {
+      "question": "conversations.topic.work.scribe.village.respond",
+      "answer": "ask_librarian",
+      "context": "conversations.topic.work.scribe.village.respond",
+      "keywords": {
+        "librarian": 1.5,
+        "compare": 1.2,
+        "together": 1.0
+      },
+      "requiresAny": [
+        "librarian",
+        "compare",
+        "together"
+      ],
+      "phrases": [
+        "do you and the librarian ever compare"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.village.ask_two_hundred": {
+      "question": "conversations.topic.work.scribe.village.respond",
+      "answer": "ask_two_hundred",
+      "context": "conversations.topic.work.scribe.village.respond",
+      "keywords": {
+        "hundred": 1.5,
+        "patient": 1.2,
+        "years": 0.6
+      },
+      "requiresAny": [
+        "hundred",
+        "patient"
+      ],
+      "phrases": [
+        "two hundred years is a long time to be patient"
+      ],
+      "category": "topics"
+    },
+    "work.scribe.village.say_thanks": {
+      "question": "conversations.topic.work.scribe.village.respond",
+      "answer": "say_thanks",
+      "context": "conversations.topic.work.scribe.village.respond",
+      "keywords": {
+        "memory": 1.5,
+        "half": 1.0,
+        "nothing": 0.8
+      },
+      "requiresAny": [
+        "memory",
+        "half"
+      ],
+      "phrases": [
+        "half the memory of a place is not nothing"
+      ],
+      "category": "topics"
+    }
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "answers": [
+    {
+      "name": "empathise",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.empathised.outlaw"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.followup.empathise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.empathise",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.empathise.outlaw"
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "rank": "outlaw"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.empathised"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.followup.empathise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.empathise",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.empathise"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "rank": "outlaw"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "encourage_repair",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.repair.crit"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.encourage_repair.crit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.encourage_repair",
+              "deltas": {
+                "respect": 6,
+                "trust": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.encourage_repair.crit"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "people.encourage_repair",
+                "tier": "crit",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "respectful_disagreement"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.repair.success"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.encourage_repair.success",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.encourage_repair",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "people",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.encourage_repair.success"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "people.encourage_repair",
+                "tier": "success",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "respectful_disagreement"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.repair.partial"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.encourage_repair.partial",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.encourage_repair",
+              "deltas": {
+                "respect": 1,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.encourage_repair.partial"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "people.encourage_repair",
+                "tier": "partial",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "respectful_disagreement"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.repair.rebuff"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.encourage_repair.rebuff",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.encourage_repair",
+              "deltas": {
+                "tension": 5,
+                "respect": -3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.encourage_repair.rebuff"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "people.encourage_repair",
+                "tier": "rebuff",
+                "axis": "respect",
+                "difficulty": 45,
+                "stance": "respectful_disagreement"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.repair.plain"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.followup.encourage_repair",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.encourage_repair",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "people",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.encourage_repair"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "checks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "joke",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.joked"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.followup.joke",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.followup.joke",
+              "deltas": {
+                "warmth": 3,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.followup.joke"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.people.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

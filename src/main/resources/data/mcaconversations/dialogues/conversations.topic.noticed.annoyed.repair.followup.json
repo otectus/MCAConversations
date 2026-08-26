@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "ask_repair",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.repair.ask_repair"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.repair.ask_repair",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.repair.ask_repair",
+              "deltas": {
+                "tension": -2,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.repair.ask_repair"
+          }
+        }
+      ]
+    },
+    {
+      "name": "promise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.repair.promise"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.repair.promise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.repair.promise",
+              "deltas": {
+                "respect": 3,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.repair.promise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_rest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.repair.let_rest"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.repair.let_rest",
+              "deltas": {
+                "respect": 2,
+                "tension": -1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.repair.let_rest"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.repair.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

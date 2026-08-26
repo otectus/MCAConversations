@@ -85,6 +85,22 @@
       ]
     },
     {
+      "name": "ask_event",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "ask_parent.event"
+            },
+            "next": "conversations.topic.ask_parent.event",
+            "say": "conversations.ask_parent.event"
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {

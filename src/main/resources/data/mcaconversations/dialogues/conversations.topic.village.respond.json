@@ -6,6 +6,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praise_earned"
+            },
             "conversations_affection_apply": {
               "decision": "village.respond.affirm",
               "delta": 2,
@@ -19,7 +23,7 @@
                 "respect": 1
               }
             },
-            "next": "conversations.topic.village.followup",
+            "next": "conversations.topic.village.praised.followup",
             "say": "conversations.village.respond.agree.longknown"
           },
           "conditions": [
@@ -39,6 +43,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praise_taken"
+            },
             "conversations_affection_apply": {
               "decision": "village.respond.affirm",
               "delta": 2,
@@ -52,7 +60,7 @@
                 "respect": 1
               }
             },
-            "next": "conversations.topic.village.followup",
+            "next": "conversations.topic.village.praised.followup",
             "say": "conversations.village.respond.affirm"
           },
           "conditions": [
@@ -73,6 +81,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.fault_smith"
+            },
             "conversations_disposition_apply": {
               "topic": "village.respond.ask_improve",
               "deltas": {
@@ -80,7 +92,7 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.village.followup",
+            "next": "conversations.topic.village.fault.followup",
             "say": "conversations.village.ask_improve.smith"
           },
           "conditions": [
@@ -93,6 +105,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.no_complaint"
+            },
             "conversations_disposition_apply": {
               "topic": "village.respond.ask_improve",
               "deltas": {
@@ -100,7 +116,7 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.village.followup",
+            "next": "conversations.topic.village.settled.followup",
             "say": "conversations.village.ask_improve.passive"
           },
           "conditions": [
@@ -117,6 +133,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.fault_named"
+            },
             "conversations_disposition_apply": {
               "topic": "village.respond.ask_improve",
               "deltas": {
@@ -124,7 +144,7 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.village.followup",
+            "next": "conversations.topic.village.fault.followup",
             "say": "conversations.village.respond.ask_improve"
           },
           "conditions": [
@@ -142,6 +162,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.insulted"
+            },
             "conversations_affection_apply": {
               "decision": "village.respond.insult",
               "delta": -2,
@@ -155,7 +179,7 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.village.followup",
+            "next": "conversations.topic.village.insulted.followup",
             "say": "conversations.village.respond.insult"
           }
         }

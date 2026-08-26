@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_proportions",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.craft.ask_proportions"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.craft.ask_proportions",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.delightcook.followup",
+            "say": "conversations.work.prof.delightcook.craft.ask_proportions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightcook.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.delightcook.followup",
+            "say": "conversations.work.prof.delightcook.craft.admire"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_matched",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.craft.ask_matched"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.craft.ask_matched",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.delightcook.followup",
+            "say": "conversations.work.prof.delightcook.craft.ask_matched"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.delightcook.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

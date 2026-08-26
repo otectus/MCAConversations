@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_twice",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.risk.ask_twice"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.risk.ask_twice",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "say": "conversations.work.prof.fisherman.risk.ask_twice"
+          }
+        }
+      ]
+    },
+    {
+      "name": "concern",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.risk.concern"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fisherman.risk.concern",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.risk.concern",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "say": "conversations.work.prof.fisherman.risk.concern"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_rule",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.risk.ask_rule"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.risk.ask_rule",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "say": "conversations.work.prof.fisherman.risk.ask_rule"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.fisherman.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

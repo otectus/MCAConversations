@@ -49,6 +49,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.good.deflated.open"
+            },
             "conversations_affection_apply": {
               "decision": "day.good.deflate",
               "delta": -1,
@@ -62,7 +66,7 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.day.good.followup",
+            "next": "conversations.topic.day.good.deflated.followup",
             "say": "conversations.day.good.deflate"
           }
         }

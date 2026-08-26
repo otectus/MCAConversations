@@ -28,7 +28,8 @@
               "op": "begin",
               "topic": "happy",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "us.happy.again.to.happy"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.happy",
@@ -70,7 +71,8 @@
               "op": "begin",
               "topic": "happy",
               "budget": "relationship",
-              "branch": "grateful"
+              "branch": "grateful",
+              "beat": "us.happy.grateful.to.happy"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.happy",
@@ -129,7 +131,8 @@
               "op": "begin",
               "topic": "happy",
               "budget": "relationship",
-              "branch": "low"
+              "branch": "low",
+              "beat": "us.happy.low.to.happy"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.happy",
@@ -145,7 +148,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -187,7 +192,8 @@
               "op": "begin",
               "topic": "happy",
               "budget": "relationship",
-              "branch": "yes"
+              "branch": "yes",
+              "beat": "us.happy.yes.to.happy"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.happy",
@@ -247,7 +253,8 @@
               "op": "begin",
               "topic": "firstmet",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "us.firstmet.again.to.firstmet"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.firstmet",
@@ -291,7 +298,8 @@
               "op": "begin",
               "topic": "firstmet",
               "budget": "relationship",
-              "branch": "memory"
+              "branch": "memory",
+              "beat": "us.firstmet.memory.to.firstmet"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.firstmet",
@@ -312,7 +320,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -344,7 +354,8 @@
               "op": "begin",
               "topic": "firstmet",
               "budget": "relationship",
-              "branch": "tell"
+              "branch": "tell",
+              "beat": "us.firstmet.tell.to.firstmet"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.firstmet",
@@ -384,6 +395,73 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 100,
+              "conversations_progress": {
+                "arc": "us",
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.future",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "future",
+              "budget": "relationship",
+              "branch": "resume",
+              "beat": "us.resume.opener"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.future",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.arc.us.resume.respond",
+            "say": "conversations.us.revisit"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.future",
@@ -404,7 +482,8 @@
               "op": "begin",
               "topic": "future",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "us.future.again.to.future"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.future",
@@ -443,7 +522,8 @@
               "op": "begin",
               "topic": "future",
               "budget": "relationship",
-              "branch": "baby"
+              "branch": "baby",
+              "beat": "us.future.baby.to.future"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.future",
@@ -486,7 +566,8 @@
               "op": "begin",
               "topic": "future",
               "budget": "relationship",
-              "branch": "kids"
+              "branch": "kids",
+              "beat": "us.future.kids.to.future"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.future",
@@ -502,7 +583,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -533,7 +616,8 @@
               "op": "begin",
               "topic": "future",
               "budget": "relationship",
-              "branch": "together"
+              "branch": "together",
+              "beat": "us.future.together.to.future"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.future",
@@ -593,7 +677,8 @@
               "op": "begin",
               "topic": "worries",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "us.worries.again.to.worries"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.worries",
@@ -640,7 +725,8 @@
               "op": "begin",
               "topic": "worries",
               "budget": "relationship",
-              "branch": "open"
+              "branch": "open",
+              "beat": "us.worries.open.to.worries"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.worries",
@@ -656,7 +742,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -691,7 +779,8 @@
               "op": "begin",
               "topic": "worries",
               "budget": "relationship",
-              "branch": "fine"
+              "branch": "fine",
+              "beat": "us.worries.fine.to.worries"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.worries",

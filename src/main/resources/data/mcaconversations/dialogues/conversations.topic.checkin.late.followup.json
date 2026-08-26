@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "awake_too",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.late.awake_too"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.late.awake_too",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.late.awake_too"
+          }
+        }
+      ]
+    },
+    {
+      "name": "name_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.late.name_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.late.name_it",
+              "deltas": {
+                "familiarity": 1,
+                "trust": 3
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.late.name_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sit_with",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.late.sit_with"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin.late.sit_with",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.late.sit_with",
+              "deltas": {
+                "trust": 2,
+                "warmth": 3
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.late.sit_with"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "main",
+            "say": "conversations.checkin.late.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

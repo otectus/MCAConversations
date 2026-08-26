@@ -6,6 +6,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.pref.plain_is_fine"
+            },
             "conversations_affection_apply": {
               "decision": "food.normal.share_pref",
               "delta": 1,
@@ -19,7 +23,7 @@
                 "warmth": 1
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.pref.followup",
             "say": "conversations.food.agree.fine"
           },
           "conditions": [
@@ -32,6 +36,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.pref.shared"
+            },
             "conversations_affection_apply": {
               "decision": "food.normal.share_pref",
               "delta": 1,
@@ -45,7 +53,7 @@
                 "warmth": 1
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.pref.followup",
             "say": "conversations.food.normal.share_pref"
           },
           "conditions": [
@@ -63,6 +71,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.recipe.seasonal"
+            },
             "conversations_disposition_apply": {
               "topic": "food.normal.ask_recipe",
               "deltas": {
@@ -70,7 +82,7 @@
                 "familiarity": 1
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.recipe.followup",
             "conversations_say": {
               "phrase": "conversations.food.ask_recipe.season",
               "vars": [
@@ -94,6 +106,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.recipe.told"
+            },
             "conversations_disposition_apply": {
               "topic": "food.normal.ask_recipe",
               "deltas": {
@@ -101,7 +117,7 @@
                 "familiarity": 1
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.recipe.followup",
             "say": "conversations.food.normal.ask_recipe"
           },
           "conditions": [
@@ -139,6 +155,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.debate.invited"
+            },
             "conversations_affection_apply": {
               "decision": "food.normal.disagree",
               "delta": 1,
@@ -151,7 +171,7 @@
                 "respect": 3
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.debate.followup",
             "say": "conversations.food.normal.disagree.landed"
           }
         },
@@ -169,6 +189,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.debate.unwanted"
+            },
             "conversations_affection_apply": {
               "decision": "food.normal.disagree",
               "delta": -1,
@@ -182,7 +206,7 @@
                 "tension": 2
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.snubbed.followup",
             "say": "conversations.food.normal.disagree.flat"
           }
         },
@@ -216,13 +240,17 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.debate.allowed"
+            },
             "conversations_disposition_apply": {
               "topic": "food.normal.disagree",
               "deltas": {
                 "familiarity": 1
               }
             },
-            "next": "conversations.topic.food.normal.followup",
+            "next": "conversations.topic.food.debate.followup",
             "say": "conversations.food.normal.disagree.polite"
           }
         }

@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.snubbed.apologize"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.snubbed.apologize",
+              "deltas": {
+                "tension": -3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.snubbed.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "explain",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.snubbed.explain"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.snubbed.explain",
+              "deltas": {
+                "tension": -1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.snubbed.explain"
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.snubbed.respect"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.snubbed.respect",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.snubbed.respect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.food.normal.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

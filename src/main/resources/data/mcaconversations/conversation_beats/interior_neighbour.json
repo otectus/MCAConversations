@@ -1,0 +1,184 @@
+{
+  "beats": {
+    "neighbour.ask_more.to.neighbour": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.ask_more",
+      "response_question": "conversations.topic.neighbour.followup",
+      "npc_act": "explain",
+      "subject": "neighbour.history",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "engaged"
+    },
+    "neighbour.defend_them.to.neighbour": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.defend_them",
+      "response_question": "conversations.topic.neighbour.followup",
+      "npc_act": "accept",
+      "subject": "neighbour.defence",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "neighbour.encourage_more.to.neighbour": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.encourage_more",
+      "response_question": "conversations.topic.neighbour.followup",
+      "npc_act": "accept",
+      "subject": "neighbour.fondness",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "neighbour.none.to.neighbour.none": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.none",
+      "response_question": "conversations.topic.neighbour.none.respond",
+      "npc_act": "accept",
+      "subject": "neighbour.none",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.neighbour.followup/ask_history": {
+      "stance": "curiosity",
+      "responds_to": [
+        "neighbour.ask_more.to.neighbour",
+        "neighbour.defend_them.to.neighbour",
+        "neighbour.encourage_more.to.neighbour"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.neighbour.followup/be_honest": {
+      "stance": "candor",
+      "responds_to": [
+        "neighbour.ask_more.to.neighbour",
+        "neighbour.defend_them.to.neighbour",
+        "neighbour.encourage_more.to.neighbour"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.neighbour.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.ask_more.to.neighbour",
+        "neighbour.defend_them.to.neighbour",
+        "neighbour.encourage_more.to.neighbour"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.neighbour.followup/let_it_lie": {
+      "stance": "restraint",
+      "responds_to": [
+        "neighbour.ask_more.to.neighbour",
+        "neighbour.defend_them.to.neighbour",
+        "neighbour.encourage_more.to.neighbour"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.neighbour.none.respond/ask_anyway": {
+      "stance": "curiosity",
+      "responds_to": [
+        "neighbour.none.to.neighbour.none"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.neighbour.none.respond/glad": {
+      "stance": "encouragement",
+      "responds_to": [
+        "neighbour.none.to.neighbour.none"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.neighbour.none.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.none.to.neighbour.none"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.neighbour.none.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "neighbour.none.to.neighbour.none"
+      ],
+      "tone": "blunt"
+    }
+  }
+}

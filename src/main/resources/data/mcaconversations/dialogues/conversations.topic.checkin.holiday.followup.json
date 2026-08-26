@@ -1,0 +1,92 @@
+{
+  "answers": [
+    {
+      "name": "ask_tradition",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.holiday.tradition"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.holiday.tradition",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.holiday.tradition"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_well",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.holiday.wish_well"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin.holiday.wish_well",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.holiday.wish_well",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.holiday.wish_well"
+          }
+        }
+      ]
+    },
+    {
+      "name": "join_in",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.holiday.join_in"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.holiday.join_in",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.holiday.join_in"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "main",
+            "say": "conversations.checkin.holiday.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

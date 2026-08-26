@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_stay",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.ask_why_stay"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hate.ask_why_stay",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.work.hate.followup",
+            "say": "conversations.work.hate.why_stay"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hate.sympathise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hate.sympathise",
+              "deltas": {
+                "trust": 3,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.work.hate.followup",
+            "say": "conversations.work.hate.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.keep_it"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hate.keep_it",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hate.keep_it",
+              "deltas": {
+                "trust": 5
+              }
+            },
+            "next": "conversations.topic.work.hate.followup",
+            "say": "conversations.work.hate.keep_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.hate.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

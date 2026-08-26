@@ -1,0 +1,242 @@
+{
+  "answers": [
+    {
+      "name": "offer_idea",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.idea"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.followup.offer_idea",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.followup.offer_idea",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.followup.offer_idea"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hear_burnout",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.burnout.crit"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hear_burnout.crit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hear_burnout",
+              "deltas": {
+                "respect": 6,
+                "trust": 3
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.hear_burnout.crit"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "work.hear_burnout",
+                "tier": "crit",
+                "axis": "respect",
+                "difficulty": 35,
+                "stance": "curiosity"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.burnout.success"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hear_burnout.success",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hear_burnout",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.hear_burnout.success"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "work.hear_burnout",
+                "tier": "success",
+                "axis": "respect",
+                "difficulty": 35,
+                "stance": "curiosity"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.burnout.partial"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hear_burnout.partial",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hear_burnout",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.hear_burnout.partial"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "work.hear_burnout",
+                "tier": "partial",
+                "axis": "respect",
+                "difficulty": 35,
+                "stance": "curiosity"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.burnout.rebuff"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hear_burnout.rebuff",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hear_burnout",
+              "deltas": {
+                "tension": 4,
+                "respect": -2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.hear_burnout.rebuff"
+          },
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_check": {
+                "id": "work.hear_burnout",
+                "tier": "rebuff",
+                "axis": "respect",
+                "difficulty": 35,
+                "stance": "curiosity"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "checks"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hate.burnout"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.followup.hear_burnout",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.followup.hear_burnout",
+              "deltas": {
+                "trust": 5,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.followup.hear_burnout"
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "checks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.hate.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

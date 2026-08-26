@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_smaller",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.future.ask_smaller"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.future.ask_smaller",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.future.ask_smaller"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shepherd.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_hill",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.future.ask_hill"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.future.ask_hill",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.future.ask_hill"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shepherd.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

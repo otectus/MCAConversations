@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_four",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.task.ask_four"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.task.ask_four",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.task.ask_four"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.archer.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.task.offer_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_draws",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.task.ask_draws"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.task.ask_draws",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "say": "conversations.work.prof.archer.task.ask_draws"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.archer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

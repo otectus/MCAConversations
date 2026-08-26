@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "keep_quiet",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.kept_quiet"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.mixed.keep_quiet",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.kept_quiet",
+              "deltas": {
+                "trust": 5
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.followup.keep_quiet"
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_them_be",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.mixed.let_them_be"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.mixed.let_them_be",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.mixed.let_them_be",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.mixed.let_them_be"
+          }
+        }
+      ]
+    },
+    {
+      "name": "spread",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.spread_refused"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.mixed.spread",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.spread_refused",
+              "deltas": {
+                "tension": 3,
+                "trust": -4
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.followup.spread"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

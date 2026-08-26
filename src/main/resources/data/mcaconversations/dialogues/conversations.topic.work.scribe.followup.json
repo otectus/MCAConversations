@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.prof.scribe.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.scribe.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.prof.scribe.thanks",
+              "deltas": {
+                "respect": 2,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.scribe.thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.prof.scribe.more"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.prof.scribe.more",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.scribe.more"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.scribe.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

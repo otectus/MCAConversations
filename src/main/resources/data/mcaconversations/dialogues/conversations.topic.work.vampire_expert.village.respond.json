@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_furniture",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.village.ask_furniture"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.village.ask_furniture",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "say": "conversations.work.prof.vampire_expert.village.ask_furniture"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.vampire_expert.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "say": "conversations.work.prof.vampire_expert.village.say_thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_prove",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.village.ask_prove"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.village.ask_prove",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "say": "conversations.work.prof.vampire_expert.village.ask_prove"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.vampire_expert.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

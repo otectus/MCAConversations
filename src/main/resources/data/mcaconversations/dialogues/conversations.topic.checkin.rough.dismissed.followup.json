@@ -1,0 +1,92 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.dismissed.apologize"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin.rough.dismissed.apologize",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.dismissed.apologize",
+              "deltas": {
+                "tension": -3
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.dismissed.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_properly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.dismissed.ask_properly"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.dismissed.ask_properly",
+              "deltas": {
+                "tension": -1,
+                "trust": 2
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.dismissed.ask_properly"
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.rough.dismissed.respect"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.rough.dismissed.respect",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.dismissed.respect"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "main",
+            "say": "conversations.checkin.rough.dismissed.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

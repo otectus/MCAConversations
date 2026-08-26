@@ -1,0 +1,130 @@
+{
+  "beats": {
+    "life.rebuked": {
+      "topic": "life",
+      "say": "conversations.life.respond.judge",
+      "response_question": "conversations.topic.life.rebuked.followup",
+      "npc_act": "refuse",
+      "subject": "life.history",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "player:marked_their_life"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement",
+        "curiosity",
+        "self_disclosure",
+        "respectful_disagreement"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "life.rebuked.apologize": {
+      "topic": "life",
+      "say": "conversations.life.rebuked.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "qualify",
+      "subject": "life.history",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "life.rebuked.explain": {
+      "topic": "life",
+      "say": "conversations.life.rebuked.explain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "qualify",
+      "subject": "life.history",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "life.rebuked.leave": {
+      "topic": "life",
+      "say": "conversations.life.rebuked.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "life.history",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.life.rebuked.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "life.rebuked"
+      ],
+      "requires_facts": [
+        "player:marked_their_life"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.life.rebuked.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "life.rebuked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.life.rebuked.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.rebuked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

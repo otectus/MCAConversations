@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_stone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.future.ask_stone"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.future.ask_stone",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.netherian.followup",
+            "say": "conversations.work.prof.netherian.future.ask_stone"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.netherian.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.netherian.followup",
+            "say": "conversations.work.prof.netherian.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_successor",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.future.ask_successor"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.future.ask_successor",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.netherian.followup",
+            "say": "conversations.work.prof.netherian.future.ask_successor"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.netherian.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

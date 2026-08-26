@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.otectus.mcaconversations.conversation.RelationshipBand;
+import dev.otectus.mcaconversations.conversation.RelationshipQuery;
 import dev.otectus.mcaconversations.conversation.ConversationCatalog;
 import dev.otectus.mcaconversations.conversation.DepthClass;
 import dev.otectus.mcaconversations.conversation.TopicEntry;
@@ -939,6 +941,13 @@ class ConversationGraphLintTest {
                 return true;
             }
             if (condition.has("hearts_max") || condition.has("conversations_disabled")) {
+                return true;
+            }
+            // The same exclusion by its new name: a branch reserved for people who have not earned
+            // the topic yet is not the branch a normal adult walks (spec section 9.4).
+            if (condition.has("conversations_relationship")
+                    && !RelationshipQuery.fromJson(condition.get("conversations_relationship"))
+                    .matches(RelationshipBand.FRIEND)) {
                 return true;
             }
             if (condition.has("constraints")) {

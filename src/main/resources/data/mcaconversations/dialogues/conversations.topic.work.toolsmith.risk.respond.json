@@ -1,0 +1,97 @@
+{
+  "answers": [
+    {
+      "name": "ask_finger",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.risk.ask_finger"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.risk.ask_finger",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "say": "conversations.work.prof.toolsmith.risk.ask_finger"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.toolsmith.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "say": "conversations.work.prof.toolsmith.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_prevent",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.risk.ask_prevent"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.toolsmith.risk.ask_prevent",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.risk.ask_prevent",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "say": "conversations.work.prof.toolsmith.risk.ask_prevent"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.toolsmith.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

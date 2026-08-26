@@ -83,6 +83,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.mocked.open"
+            },
             "conversations_progress_apply": {
               "arc": "dreams",
               "op": "advance",
@@ -101,7 +105,7 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.dreams.close",
+            "next": "conversations.topic.dreams.mocked.close",
             "say": "conversations.dreams.followup.mock"
           }
         }

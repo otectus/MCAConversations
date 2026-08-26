@@ -1,0 +1,130 @@
+{
+  "beats": {
+    "regrets.rebuked": {
+      "topic": "regrets",
+      "say": "conversations.regrets.respond.pry",
+      "response_question": "conversations.topic.regrets.pried.followup",
+      "npc_act": "refuse",
+      "subject": "regrets.past",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "player:pried"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement",
+        "curiosity",
+        "self_disclosure",
+        "respectful_disagreement"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "regrets.rebuked.apologize": {
+      "topic": "regrets",
+      "say": "conversations.regrets.rebuked.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "qualify",
+      "subject": "regrets.past",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "regrets.rebuked.explain": {
+      "topic": "regrets",
+      "say": "conversations.regrets.rebuked.explain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "qualify",
+      "subject": "regrets.past",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "regrets.rebuked.leave": {
+      "topic": "regrets",
+      "say": "conversations.regrets.rebuked.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.past",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.regrets.pried.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "regrets.rebuked"
+      ],
+      "requires_facts": [
+        "player:pried"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.regrets.pried.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "regrets.rebuked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.regrets.pried.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "regrets.rebuked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

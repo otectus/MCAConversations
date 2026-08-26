@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.late.told"
+            },
             "conversations_disposition_apply": {
               "topic": "checkin.late.ask_why_up",
               "deltas": {
@@ -13,7 +17,7 @@
                 "warmth": 2
               }
             },
-            "next": "conversations.topic.checkin.rough.followup",
+            "next": "conversations.topic.checkin.late.followup",
             "say": "conversations.checkin.late.ask_why_up"
           }
         }

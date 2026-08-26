@@ -1,0 +1,62 @@
+{
+  "answers": [
+    {
+      "name": "thank_you_for_telling",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.resume.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.resume.thank_you_for_telling",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.resume.thank_you_for_telling"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave_it_with_you",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.resume.leave_it_with_you"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

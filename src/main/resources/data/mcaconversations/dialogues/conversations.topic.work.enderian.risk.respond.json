@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.risk.ask_hands"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.risk.ask_hands",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.enderian.followup",
+            "say": "conversations.work.prof.enderian.risk.ask_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.enderian.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.enderian.followup",
+            "say": "conversations.work.prof.enderian.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_note",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.risk.ask_note"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.risk.ask_note",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.enderian.followup",
+            "say": "conversations.work.prof.enderian.risk.ask_note"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.enderian.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "then_we_build_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "future.home.build"
+            },
+            "conversations_affection_apply": {
+              "decision": "future.home.build",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "future.home.build",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.us",
+            "say": "conversations.future.home.build"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_when",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "future.home.when"
+            },
+            "conversations_disposition_apply": {
+              "topic": "future.home.when",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.us",
+            "say": "conversations.future.home.when"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.future.home.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

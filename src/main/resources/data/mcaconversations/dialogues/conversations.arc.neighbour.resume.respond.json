@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "say_nothing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.resume.say_nothing"
+            },
+            "conversations_affection_apply": {
+              "decision": "neighbour.resume.quiet",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.resume.say_nothing",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.arc.neighbour.resume.followup",
+            "say": "conversations.neighbour.resume.say_nothing"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_how_they_are",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.resume.ask_how_they_are"
+            },
+            "next": "conversations.arc.neighbour.resume.followup",
+            "say": "conversations.neighbour.resume.ask_how_they_are"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ill_keep_going",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.resume.ill_keep_going"
+            },
+            "conversations_affection_apply": {
+              "decision": "neighbour.resume.again",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.resume.ill_keep_going",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.neighbour.resume.followup",
+            "say": "conversations.neighbour.resume.ill_keep_going"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.neighbour.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

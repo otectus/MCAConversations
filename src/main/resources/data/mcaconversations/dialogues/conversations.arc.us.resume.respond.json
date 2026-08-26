@@ -1,0 +1,97 @@
+{
+  "answers": [
+    {
+      "name": "ask_where_it_stands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.resume.ask_where_it_stands",
+              "deltas": {
+                "familiarity": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.arc.us.resume.followup",
+            "say": "conversations.us.resume.ask_where_it_stands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hold_to_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "us.resume.hold_to_it",
+              "delta": 2,
+              "budget": "deep",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.resume.hold_to_it",
+              "deltas": {
+                "warmth": 4,
+                "trust": 4
+              }
+            },
+            "next": "conversations.arc.us.resume.followup",
+            "say": "conversations.us.resume.hold_to_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "admit_drift",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "us",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_disposition_apply": {
+              "topic": "us.resume.admit_drift",
+              "deltas": {
+                "trust": 3,
+                "warmth": -1
+              }
+            },
+            "next": "conversations.arc.us.resume.followup",
+            "say": "conversations.us.resume.admit_drift"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.us.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

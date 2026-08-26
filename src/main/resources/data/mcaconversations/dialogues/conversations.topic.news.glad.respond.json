@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.shared"
+            },
             "conversations_affection_apply": {
               "decision": "news.glad.celebrate",
               "delta": 2,
@@ -18,7 +22,7 @@
                 "warmth": 4
               }
             },
-            "next": "conversations.topic.news.followup",
+            "next": "conversations.topic.news.glad.followup",
             "say": "conversations.news.glad.celebrate"
           }
         }
@@ -30,13 +34,17 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.told"
+            },
             "conversations_disposition_apply": {
               "topic": "news.glad.ask_more",
               "deltas": {
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.news.followup",
+            "next": "conversations.topic.news.glad.followup",
             "say": "conversations.news.glad.ask_more"
           }
         }
@@ -48,6 +56,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.soured"
+            },
             "conversations_affection_apply": {
               "decision": "news.glad.sour",
               "delta": -1,
@@ -61,7 +73,7 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.news.followup",
+            "next": "conversations.topic.news.deflated.followup",
             "say": "conversations.news.glad.sour"
           }
         }

@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_frost",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.risk.ask_frost"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.risk.ask_frost",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.florist.followup",
+            "say": "conversations.work.prof.florist.risk.ask_frost"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.florist.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.florist.followup",
+            "say": "conversations.work.prof.florist.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_fifty",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.risk.ask_fifty"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.risk.ask_fifty",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.florist.followup",
+            "say": "conversations.work.prof.florist.risk.ask_fifty"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.florist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

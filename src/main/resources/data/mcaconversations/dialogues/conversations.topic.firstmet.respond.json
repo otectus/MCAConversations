@@ -55,6 +55,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.brushed.open"
+            },
             "conversations_affection_apply": {
               "decision": "us.firstmet.brush_off",
               "delta": -2,
@@ -68,8 +72,24 @@
                 "tension": 4
               }
             },
-            "next": "conversations.topic.firstmet.followup",
+            "next": "conversations.topic.firstmet.brushed.followup",
             "say": "conversations.us.firstmet.brush_off"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_impression",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.impression"
+            },
+            "next": "conversations.topic.firstmet.impression",
+            "say": "conversations.firstmet.impression"
           }
         }
       ]

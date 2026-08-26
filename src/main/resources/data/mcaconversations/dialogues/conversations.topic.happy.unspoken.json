@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "say_it_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.unspoken.said"
+            },
+            "conversations_affection_apply": {
+              "decision": "happy.unspoken.said",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "happy.unspoken.said",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.us",
+            "say": "conversations.happy.unspoken.said"
+          }
+        }
+      ]
+    },
+    {
+      "name": "not_ready",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.unspoken.waited"
+            },
+            "conversations_affection_apply": {
+              "decision": "happy.unspoken.waited",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "happy.unspoken.waited",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.us",
+            "say": "conversations.happy.unspoken.waited"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.happy.unspoken.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

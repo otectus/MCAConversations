@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "ask_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.opened.ask_now"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.opened.ask_now",
+              "deltas": {
+                "familiarity": 1,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.opened.ask_now"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_later",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.opened.offer_later"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.opened.offer_later",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.opened.offer_later",
+              "deltas": {
+                "respect": 2,
+                "trust": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.opened.offer_later"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reassure",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.opened.reassure"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.opened.reassure",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.opened.reassure",
+              "deltas": {
+                "trust": 2,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.opened.reassure"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.fine.opened.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,732 @@
+{
+  "beats": {
+    "fears.again.apologize.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.again.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.again.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.again.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.again.press.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.again.press",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "resist",
+      "subject": "fears.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.challenge.crit.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.challenge.crit",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.challenge.partial.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.challenge.partial",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.challenge.plain.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.challenge.plain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.challenge.rebuff.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.challenge.rebuff",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "refuse",
+      "subject": "fears.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.challenge.success.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.challenge.success",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.comfort.brushoff.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.comfort.brushoff",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.comfort.crit.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.comfort.crit",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.comfort.plain.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.comfort.plain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.comfort.rebuff.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.comfort.rebuff",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "refuse",
+      "subject": "fears.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.comfort.thanks.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.comfort.thanks",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.followthrough.followup.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.followthrough.followup.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.followthrough.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.followthrough.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.followthrough.recall.plain.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.followthrough.recall.plain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "callback": {
+        "fact": "arc",
+        "value": "fears",
+        "resumes": [
+          "fears.followthrough.ask_how.to.fears.followthrough",
+          "fears.followthrough.celebrate.to.fears.followthrough",
+          "fears.plan.ask_what_helps.plain.to.fears.plan",
+          "fears.plan.ask_what_helps.remembered.to.fears.plan",
+          "fears.plan.just_listen.to.fears.plan",
+          "fears.plan.offer_plan.to.fears.plan",
+          "fears.resume.followthrough.to.fears.followthrough",
+          "fears.resume.plan.to.fears.plan"
+        ]
+      }
+    },
+    "fears.followthrough.recall.pledged.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.followthrough.recall.pledged",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "callback": {
+        "fact": "arc",
+        "value": "fears",
+        "resumes": [
+          "fears.followthrough.ask_how.to.fears.followthrough",
+          "fears.followthrough.celebrate.to.fears.followthrough",
+          "fears.plan.ask_what_helps.plain.to.fears.plan",
+          "fears.plan.ask_what_helps.remembered.to.fears.plan",
+          "fears.plan.just_listen.to.fears.plan",
+          "fears.plan.offer_plan.to.fears.plan",
+          "fears.resume.followthrough.to.fears.followthrough",
+          "fears.resume.plan.to.fears.plan"
+        ]
+      }
+    },
+    "fears.followthrough.recall.stepped_back.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.followthrough.recall.stepped_back",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "callback": {
+        "fact": "arc",
+        "value": "fears",
+        "resumes": [
+          "fears.followthrough.ask_how.to.fears.followthrough",
+          "fears.followthrough.celebrate.to.fears.followthrough",
+          "fears.plan.ask_what_helps.plain.to.fears.plan",
+          "fears.plan.ask_what_helps.remembered.to.fears.plan",
+          "fears.plan.just_listen.to.fears.plan",
+          "fears.plan.offer_plan.to.fears.plan",
+          "fears.resume.followthrough.to.fears.followthrough",
+          "fears.resume.plan.to.fears.plan"
+        ]
+      }
+    },
+    "fears.guarded.ask_safer.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.guarded.ask_safer",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "deflect",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.guarded.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.guarded.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.guarded.respect.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.guarded.respect",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "deflect",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.lapsed.apologize.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.lapsed.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.lapsed.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.lapsed.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.lapsed.make_good.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.lapsed.make_good",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.close_leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.close_leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.disclosed.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.disclosed.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.means.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.means",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.rebuffed.accept.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.rebuffed.accept",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.rebuffed.apologize.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.rebuffed.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.rebuffed.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.rebuffed.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.thank.spent.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.thank.spent",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.open.thank.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.open.thank",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.plan.followup.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.plan.followup.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.plan.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.plan.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.press.crit.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.press.crit",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "resist",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.press.plain.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.press.plain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "resist",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.press.rebuff.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.press.rebuff",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "refuse",
+      "subject": "fears.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.press.success.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.press.success",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "resist",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.pressed.back_off.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.pressed.back_off",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.pressed.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.pressed.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.pressed.push.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.pressed.push",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "callback": {
+        "fact": "arc",
+        "value": "fears",
+        "resumes": [
+          "fears.followthrough.ask_how.to.fears.followthrough",
+          "fears.followthrough.celebrate.to.fears.followthrough",
+          "fears.plan.ask_what_helps.plain.to.fears.plan",
+          "fears.plan.ask_what_helps.remembered.to.fears.plan",
+          "fears.plan.just_listen.to.fears.plan",
+          "fears.plan.offer_plan.to.fears.plan",
+          "fears.resume.followthrough.to.fears.followthrough",
+          "fears.resume.plan.to.fears.plan"
+        ]
+      }
+    },
+    "fears.repaired.ask_safer.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.repaired.ask_safer",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.repaired.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.repaired.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.repaired.respect.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.repaired.respect",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.scarred.give_space.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.scarred.give_space",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.scarred.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.scarred.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.share.grateful.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.share.grateful",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.share.joke.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.share.joke",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.toddler.ask.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.toddler.ask",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "ask",
+      "subject": "fears.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.toddler.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.toddler.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.toddler.reassure.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.toddler.reassure",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.young.dismiss.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.young.dismiss",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "dismiss",
+      "subject": "fears.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.young.leave.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.young.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.young.normalize.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.young.normalize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "fears.young.reassure.terminal": {
+      "topic": "fears",
+      "say": "conversations.fears.young.reassure",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "fears.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    }
+  }
+}

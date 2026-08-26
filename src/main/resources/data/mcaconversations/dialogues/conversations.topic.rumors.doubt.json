@@ -1,0 +1,67 @@
+{
+  "answers": [
+    {
+      "name": "then_dont_pass_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.doubt.hold"
+            },
+            "conversations_affection_apply": {
+              "decision": "rumors.doubt.hold",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.doubt.hold",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "rumors",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.doubt.hold"
+          }
+        }
+      ]
+    },
+    {
+      "name": "who_would_know",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.doubt.who_would"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.doubt.who_would"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.rumors.doubt.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_frightened",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.craft.ask_frightened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.craft.ask_frightened",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.butcher.followup",
+            "say": "conversations.work.prof.butcher.craft.ask_frightened"
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.butcher.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.butcher.followup",
+            "say": "conversations.work.prof.butcher.craft.admire"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_waste",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.craft.ask_waste"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.craft.ask_waste",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.butcher.followup",
+            "say": "conversations.work.prof.butcher.craft.ask_waste"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.butcher.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

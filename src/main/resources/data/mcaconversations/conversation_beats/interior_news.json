@@ -1,0 +1,56 @@
+{
+  "beats": {
+    "gossip.none.to.news.none": {
+      "topic": "news",
+      "say": "conversations.gossip.none",
+      "response_question": "conversations.topic.news.none.respond",
+      "npc_act": "accept",
+      "subject": "news.none",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.news.none.respond/chat_anyway": {
+      "stance": "encouragement",
+      "responds_to": [
+        "gossip.none.to.news.none"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.news.none.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "gossip.none.to.news.none"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.news.none.respond/share_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "gossip.none.to.news.none"
+      ],
+      "tone": "plain"
+    }
+  }
+}

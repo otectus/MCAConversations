@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.otectus.mcaconversations.conversation.RelationshipBand;
+import dev.otectus.mcaconversations.conversation.RelationshipQuery;
 import dev.otectus.mcaconversations.check.CheckTier;
 import dev.otectus.mcaconversations.conversation.ConversationCatalog;
 import dev.otectus.mcaconversations.conversation.DepthClass;
@@ -284,6 +286,11 @@ class TopicPathSimulationTest {
                     return world.hearts <= condition.get(key).getAsInt() ? 1 : 0;
                 case "hearts_min":
                     return world.hearts >= condition.get(key).getAsInt() ? 1 : 0;
+                // Named bands rather than heart numbers (spec section 9.4). The simulated pair is
+                // unmarried and not relatives, so the band is whatever the heart total says it is.
+                case "conversations_relationship":
+                    return RelationshipQuery.fromJson(condition.get(key))
+                            .matches(RelationshipBand.of(world.hearts, false, false, false)) ? 1 : 0;
                 case "conversations_personality":
                     return personalityMatches(condition.get(key), world.personality) ? 1 : 0;
                 case "memory":
@@ -350,6 +357,7 @@ class TopicPathSimulationTest {
                 case "conversations_quest_completed":
                 case "trait":
                 case "is_pregnant":
+                case "min_infection_progress":
                     return world.worldFacts ? 1 : 0;
                 case "profession":
                     return condition.get(key).getAsString().equals(world.profession) ? 1 : 0;

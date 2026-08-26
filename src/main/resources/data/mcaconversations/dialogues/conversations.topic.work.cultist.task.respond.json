@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_lines",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.task.ask_lines"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.task.ask_lines",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cultist.followup",
+            "say": "conversations.work.prof.cultist.task.ask_lines"
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cultist.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.cultist.followup",
+            "say": "conversations.work.prof.cultist.task.offer_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_lamp",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.task.ask_lamp"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.task.ask_lamp",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cultist.followup",
+            "say": "conversations.work.prof.cultist.task.ask_lamp"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.cultist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

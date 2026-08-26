@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_best",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praised.ask_best"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.praised.ask_best",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.praised.ask_best"
+          }
+        }
+      ]
+    },
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praised.agree"
+            },
+            "conversations_affection_apply": {
+              "decision": "village.praised.agree",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.praised.agree",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.praised.agree"
+          }
+        }
+      ]
+    },
+    {
+      "name": "joke",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praised.joke"
+            },
+            "conversations_affection_apply": {
+              "decision": "village.praised.joke",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.praised.joke",
+              "deltas": {
+                "tension": -1,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.praised.joke"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.village.respond.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

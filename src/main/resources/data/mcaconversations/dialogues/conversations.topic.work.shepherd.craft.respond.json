@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.craft.ask_hands"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.craft.ask_hands",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.craft.ask_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shepherd.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.craft.admire"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_teach",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.craft.ask_teach"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.craft.ask_teach",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.craft.ask_teach"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shepherd.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

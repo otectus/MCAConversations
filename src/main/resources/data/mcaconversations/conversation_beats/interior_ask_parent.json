@@ -1,0 +1,216 @@
+{
+  "beats": {
+    "family.parent.again.to.ask_parent": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.again",
+      "response_question": "conversations.topic.ask_parent.respond",
+      "npc_act": "accept",
+      "subject": "ask_parent",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.parent.answer_honestly.to.ask_parent": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.answer_honestly",
+      "response_question": "conversations.topic.ask_parent.followup",
+      "npc_act": "accept",
+      "subject": "ask_parent",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.parent.proud.to.ask_parent": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.proud",
+      "response_question": "conversations.topic.ask_parent.respond",
+      "npc_act": "accept",
+      "subject": "ask_parent",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.parent.reassure.to.ask_parent": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.reassure",
+      "response_question": "conversations.topic.ask_parent.followup",
+      "npc_act": "accept",
+      "subject": "ask_parent",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.parent.worried.to.ask_parent": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.worried",
+      "response_question": "conversations.topic.ask_parent.respond",
+      "npc_act": "accept",
+      "subject": "ask_parent",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.ask_parent.followup/ask_worries": {
+      "stance": "curiosity",
+      "responds_to": [
+        "family.parent.answer_honestly.to.ask_parent",
+        "family.parent.reassure.to.ask_parent"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.ask_parent.followup/deflect": {
+      "stance": "candor",
+      "responds_to": [
+        "family.parent.answer_honestly.to.ask_parent",
+        "family.parent.reassure.to.ask_parent"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.ask_parent.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "family.parent.answer_honestly.to.ask_parent",
+        "family.parent.reassure.to.ask_parent"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.ask_parent.followup/thank_them": {
+      "stance": "empathy",
+      "responds_to": [
+        "family.parent.answer_honestly.to.ask_parent",
+        "family.parent.reassure.to.ask_parent"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.ask_parent.respond/answer_honestly": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "family.parent.again.to.ask_parent",
+        "family.parent.proud.to.ask_parent",
+        "family.parent.worried.to.ask_parent"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.ask_parent.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "family.parent.again.to.ask_parent",
+        "family.parent.proud.to.ask_parent",
+        "family.parent.worried.to.ask_parent"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.ask_parent.respond/reassure": {
+      "stance": "restraint",
+      "responds_to": [
+        "family.parent.again.to.ask_parent",
+        "family.parent.proud.to.ask_parent",
+        "family.parent.worried.to.ask_parent"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.ask_parent.respond/snap": {
+      "stance": "dismissal",
+      "responds_to": [
+        "family.parent.again.to.ask_parent",
+        "family.parent.proud.to.ask_parent",
+        "family.parent.worried.to.ask_parent"
+      ],
+      "tone": "hostile"
+    }
+  }
+}

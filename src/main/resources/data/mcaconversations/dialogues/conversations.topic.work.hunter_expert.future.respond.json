@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_rule",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.future.ask_rule"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.future.ask_rule",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.hunter_expert.followup",
+            "say": "conversations.work.prof.hunter_expert.future.ask_rule"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter_expert.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.hunter_expert.followup",
+            "say": "conversations.work.prof.hunter_expert.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_hate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.future.ask_hate"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.future.ask_hate",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.hunter_expert.followup",
+            "say": "conversations.work.prof.hunter_expert.future.ask_hate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.hunter_expert.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

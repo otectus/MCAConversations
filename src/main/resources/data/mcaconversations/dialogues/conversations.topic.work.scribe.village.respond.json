@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_two_hundred",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.village.ask_two_hundred"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.village.ask_two_hundred",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.scribe.followup",
+            "say": "conversations.work.prof.scribe.village.ask_two_hundred"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.scribe.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.scribe.followup",
+            "say": "conversations.work.prof.scribe.village.say_thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_librarian",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.village.ask_librarian"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.village.ask_librarian",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.scribe.followup",
+            "say": "conversations.work.prof.scribe.village.ask_librarian"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.scribe.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

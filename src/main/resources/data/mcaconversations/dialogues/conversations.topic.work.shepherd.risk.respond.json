@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_lost",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.risk.ask_lost"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.risk.ask_lost",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.risk.ask_lost"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shepherd.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.risk.sympathise"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_wolves",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.risk.ask_wolves"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.risk.ask_wolves",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.risk.ask_wolves"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shepherd.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "answers": [
+    {
+      "name": "apologize_properly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.boundary.apologize_properly"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.boundary.apologize_properly",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.boundary.apologize_properly",
+              "deltas": {
+                "tension": -4
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.boundary.apologize_properly"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.boundary.ask_what"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.boundary.ask_what",
+              "deltas": {
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.boundary.ask_what"
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.boundary.respect_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.boundary.respect_it",
+              "deltas": {
+                "respect": 3,
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.boundary.respect_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.noticed.annoyed.boundary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

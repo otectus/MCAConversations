@@ -1,0 +1,91 @@
+{
+  "answers": [
+    {
+      "name": "ask_cradle",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.village.ask_cradle"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.village.ask_cradle",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.woodworker.followup",
+            "say": "conversations.work.prof.woodworker.village.ask_cradle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.woodworker.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.woodworker.followup",
+            "say": "conversations.work.prof.woodworker.village.say_thanks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_doors",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.village.ask_doors"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.village.ask_doors",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.woodworker.followup",
+            "say": "conversations.work.prof.woodworker.village.ask_doors"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.woodworker.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

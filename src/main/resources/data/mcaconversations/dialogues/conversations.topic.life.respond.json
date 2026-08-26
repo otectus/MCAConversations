@@ -130,6 +130,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "life.rebuked"
+            },
             "conversations_affection_apply": {
               "decision": "life.respond.judge",
               "delta": -2,
@@ -144,7 +148,7 @@
                 "trust": -2
               }
             },
-            "next": "conversations.topic.life.followup",
+            "next": "conversations.topic.life.rebuked.followup",
             "say": "conversations.life.respond.judge"
           }
         }

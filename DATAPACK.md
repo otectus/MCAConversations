@@ -419,13 +419,193 @@ A third-party pack can add its own menu entry the same way:
 MCA keeps the top-level flags of whichever same-named file loads last, and that order is undefined,
 so an extension file must mirror the original question's flags.
 
+## Semantic contracts (`conversation_beats/`)
+
+MCA decides which buttons to show from the **answer's** own constraints. It never looks at which
+villager line led there. So if two lines need different replies, no condition anywhere can stop the
+wrong button appearing — the lines have to open different questions. A beat contract is how that
+becomes something the build can check.
+
+A **beat** is one `say` pool paired with the `next` question it opens, treated as a single authored
+unit:
+
+```json
+{
+  "beats": {
+    "work.armorer.identity": {
+      "topic": "work",
+      "say": "conversations.work.prof.armorer",
+      "response_question": "conversations.topic.work.armorer.respond",
+      "npc_act": "explain",
+      "subject": "work.armorer.identity",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": ["work:armorer"],
+      "allowed_stances": ["curiosity", "encouragement", "challenge", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "empathy", "practical_help"],
+      "context": {"ages": ["adult"], "profession": "minecraft:armorer"},
+      "callback": {"fact": "work.armorer.issue", "value": "repeated_split", "expires_after": 168000}
+    }
+  }
+}
+```
+
+- `npc_act` — what the line *does*: `report`, `explain`, `disclose`, `disclose_problem`, `complain`,
+  `celebrate`, `ask`, `invite`, `reminisce`, `request_help`, `offer_work`, `accept`, `qualify`,
+  `resist`, `deflect`, and the four ruptures `refuse`, `hurt`, `set_boundary`, `dismiss`.
+- `polarity` — `positive`, `neutral`, `mixed`, `negative`, `acute`. `acute` is grief, fear and fresh
+  harm: humour and flirtation are never appropriate there, however playful the villager is.
+- `openness` — `invites_followup`, `permits_followup`, `guarded`, `closes_subject`,
+  `ends_conversation`. A page may not be opened both by a line inviting more and a line closing the
+  subject; lint splits them.
+- `facts` — written `type:value`, and shared by **every variant** of the pool. MCA picks the variant
+  on the client and the server never learns which one, so a claim only one variant makes is a claim
+  no reply may answer.
+- `allowed_stances` / `forbidden_stances` — which player stances make sense afterwards. Must include
+  `exit`: every page needs a door.
+- `outcome` — present when the beat is the villager *reacting* to a player line: `accepted`,
+  `appreciated`, `engaged`, `qualified`, `misunderstood`, `resisted`, and the ruptures `rebuffed`,
+  `hurt`, `boundary_closed`, `conversation_ended`. A rupture may only open apology, clarification,
+  respect for the boundary, or the door.
+
+A **reply** is one button, bound to its exact `question/answer`:
+
+```json
+{
+  "replies": {
+    "conversations.topic.work.armorer.respond/value": {
+      "stance": "encouragement",
+      "responds_to": ["work.armorer.identity"],
+      "requires_facts": ["work:armorer"],
+      "introduces_facts": [],
+      "tone": "plain",
+      "outcomes": ["appreciated"],
+      "exit": false
+    }
+  }
+}
+```
+
+`responds_to` accepts exact beat ids, `subject:work.armorer.*` patterns, or `*`. `requires_facts` is
+what the wording takes for granted — it is why "I'll bring you some" cannot be offered on a route
+where nothing established a *some*. `tone` is how the button sounds (`gentle`, `plain`, `playful`,
+`blunt`, `hostile`, `intimate`) as distinct from what it wants, so a gentle wording cannot hide a
+hostile consequence.
+
+Results name their beat through the session action, which grants and speaks nothing:
+
+```json
+"conversations_session": {"op": "turn", "beat": "work.armorer.identity"}
+```
+
+An unknown beat id is logged and ignored rather than thrown, so a pack that names a beat it forgot
+to ship loses its breadcrumbs, not the player's conversation.
+
 ## Extending profession work-talk
 
 `data/mcaconversations/dialogues/conversations.work.json` is an `auto` question whose results are scored per
 profession — third-party packs can merge additional profession results into it (same-basename
 merge) with `{"chance": 100, "profession": "yourmod:yourprofession"}` and their own say keys.
 Conditions naming professions from uninstalled mods never match and never crash. Professions with
-no hand-written result fall through to the generic templated line (`profession_name` var).
+no hand-written result fall through to the generic templated line (`profession_name` var), which is
+the deliberate coherent fallback for a trade this mod has never heard of.
+
+**A profession this mod ships routes to its own page** — `conversations.topic.work.<path>.respond` —
+and a pack adding a profession should do the same rather than merging into another trade's page.
+Declare what the trade is in `data/<namespace>/profession_profiles/*.json`:
+
+```json
+{
+  "profiles": {
+    "yourmod:chandler": {
+      "archetype": "craft",
+      "owner": "yourmod",
+      "display_fallback": "chandler",
+      "subjects": ["current_task", "craft", "risk", "village_value", "learning", "aspiration",
+                   "tallow", "wicks"],
+      "materials": ["tallow", "wick", "mould"],
+      "risks": ["fire", "shortage"],
+      "beneficiaries": ["every_household"],
+      "callback_types": ["order_placed", "player_help"],
+      "season_affinity": false,
+      "weather_affinity": false
+    }
+  }
+}
+```
+
+- `archetype` — `cultivation`, `food`, `craft`, `knowledge`, `defense`, `exploration`, `occult`,
+  `untraded`. Archetypes exist so trades can share routing, condition shapes and callback plumbing.
+  They may never share villager lines: a mason and a woodworker both build things that outlive them,
+  and that is worth a shared schema, not a shared sentence.
+- `subjects` — at least six, because a trade with fewer becomes one line and a shrug.
+- `callback_types` — at least two, because a trade that remembers nothing cannot have a second
+  conversation.
+- `owner` — the mod that supplies the profession, or `base`. An optional profession whose mod is
+  absent simply never matches; it must not look like a missing base profession.
+
+**Keep one mod's professions in files named after that mod.** The loaders merge every file in a
+directory, so which file a profile, beat or intent sits in changes nothing at runtime — and changes
+everything when the owning mod renames a profession. This mod ships its optional trades that way and
+the build enforces it: `profession_profiles/<owner>.json`, `conversation_beats/work_<owner>.json`,
+`conversation_beats/terminal_work_<owner>.json` and `chat_intents/profession_<owner>.json` hold that
+owner's professions and nothing else, while the dialogue pages are already one file each and named
+after the trade. A pack adding professions from someone else's mod should follow the same split, so
+that removing one mod's support means deleting files rather than editing shared ones.
+
+No optional profession may appear in `mods.toml`. A declared dependency — even `mandatory=false` —
+is a claim about a mod that is not needed to load, and a profession condition naming an absent mod
+simply never matches.
+
+## Relationship bands (`conversations_relationship`)
+
+Dialogue asks how close two people are by name, never by heart number. The thresholds live in
+`RelationshipBand` and nowhere else, so changing what "confidant" means is one edit.
+
+```json
+{"chance": 100, "conversations_relationship": {"at_least": "friend"}}
+{"chance": 100, "conversations_relationship": ["stranger", "tense", "hostile"]}
+{"chance": 100, "conversations_relationship": {"at_least": "friend", "not": ["partner"]}}
+```
+
+- Bands: `stranger` (0), `acquaintance` (25), `friend` (60), `confidant` (80) on the warmth line;
+  `partner` (married to this player) and `family` (a role, not a score); `tense` and `hostile` for a
+  relationship that has gone wrong regardless of what preceded it.
+- `at_least` counts `partner` and `family` as at least `confidant` — a spouse or a relative may hear
+  anything a confidant may. The ruptured bands are never "at least" anything.
+- A rupture outranks warmth and a marriage outranks a heart total, in that order.
+- It fails soft: an unreadable relationship resolves to `stranger`, the band that discloses least.
+- `family` parses but this build never resolves it — MCA's parent/child relations are not among the
+  members the compat layer binds. Do not gate content on it alone.
+
+## Personality overlays and voice families
+
+MCA resolves a villager's line by looking for `<personality>.dialogue.<key>` before
+`dialogue.<key>`, so an overlay is a complete replacement line for one personality. This mod ships
+one overlay namespace per personality — `assets/mca_dialogue_<personality>/lang/` — covering the
+MCA 7.7 roster, the 7.6 spellings that were renamed, and `athletic`.
+
+**Overlays are authored per voice family, not per personality.** Six families —
+`plainspoken`, `bright`, `warm`, `quiet`, `tender`, `settled` — group the sixteen personalities by
+*how* they say a hard thing rather than by temperament adjectives, and one authored line is expanded
+into every member namespace. `VoiceFamily` is the source of truth for the mapping and the build
+fails if a personality belongs to none or to two. Writing sixteen versions of one sentence produces
+sixteen paraphrases, which the paraphrase lint rejects and a player notices; six approaches are a
+real distinction.
+
+Where a pool already has per-personality lines, those are finer-grained than a family line and are
+kept: the build tops such pools up rather than overwriting them.
+
+**Signature beats must be covered in full.** `SignatureBeat` derives, from the beat contracts, the
+lines where personality has to be audible: a trade's identity and craft openers, any beat whose
+speech act or outcome is a rupture, deep-topic disclosures, invitations, and callbacks. Every one of
+those pools must exist in every personality namespace at the base pool's full variant count — an
+overlay with fewer variants lets MCA ask for an index the personality never wrote, and the villager
+falls back mid-pool. A signature pool with no coverage fails the build unless it is listed in
+`src/test/resources/signature_overlay_debt.txt`.
+
+Two rules that catch the common mistakes: an overlay key must have a base line to override, and a
+single-line base pool is written without a `/1` suffix — so its overlay must be written bare too.
 
 ## Chat-mode intents (`chat_intents/`, chat-mode feature)
 
@@ -485,6 +665,9 @@ that are not are the ones worth being honest with yourself about.
 
 - [ ] The topic has a row in `conversation_catalog/topics.json`, with a depth class, the ages it is
       reachable by, and `exit` among its required stance families.
+- [ ] Every beat's `subject` names what the villager is talking about, and the topic reaches the
+      subject-family count its depth class asks for — or its shortfall shrinks in
+      `topic_depth_debt.txt`.
 - [ ] The opener routes into a `conversations.topic.<topic>.*` node and grants **nothing** — no
       hearts, no vector, no progress. First-seen and cooldown memories are fine; those are bookkeeping.
 - [ ] Every normal adult path offers at least the decisions its depth class requires (Quick 2,
@@ -514,6 +697,7 @@ that are not are the ones worth being honest with yourself about.
       several natural paraphrases.
 - [ ] At least three test utterances per stance in `IntentMatcherTest`, and they pass in context.
 - [ ] The intent's keyword set is distinct from every other intent's.
+- [ ] `ChatCoverageTest` is green: no reply button without an intent, no intent without a button.
 
 **Words**
 
@@ -539,6 +723,8 @@ that are not are the ones worth being honest with yourself about.
       last result that sinks `-2000` on *all* of them - not an explicit `{"is": "none"}` scoring
       1 beside a member scoring 100, which leaves MCA a 1-in-101 chance of the wrong line.
 - [ ] The node's own prompt reads acceptably on its own, even though it is only a fallback.
+- [ ] Nothing in the new lines pushes a marked word past 2% of the corpus or an exact sentence
+      past twelve copies. If a farewell already exists twelve times, write a different one.
 
 **Then**
 
@@ -546,6 +732,119 @@ that are not are the ones worth being honest with yourself about.
       `LEGACY_REWARDED_STARTERS`, because the debt is paid.
 - [ ] Add the topic's interesting paths to `TopicPathSimulationTest`. Its coverage half walks every
       catalogued topic automatically; the hand-written scenarios are for beats worth naming.
+
+## Subjects, and the depth a topic owes
+
+A beat's `subject` is **what the villager is actually talking about**, not which page the line lives
+on. It is the field the session stores for the whole exchange, the one the trace exporter prints, and
+the one `TopicDepthTest` counts — so a topic whose every beat says `village.home` is measured as one
+conversation in several costumes, however many beats it has.
+
+Name it after the content. The village topic carries `village.praise`, `village.criticism`,
+`village.fault`, `village.help`, `village.insult`, `village.belonging`, `village.season`,
+`village.home`, `village.repeat`, `village.no_home`, `village.toddler` and `village.young`, because
+those are twelve different things to talk about. If two beats would honestly carry the same subject,
+they should — the count is a measurement, not a target to game.
+
+Each depth class owes a number of subject families, from spec §8.1:
+
+| Depth class | Subject families | Disclosure levels | Also |
+|---|---:|---:|---|
+| `quick` | 2 | 2 | at least 2 decisions on normal paths |
+| `standard` | 10 | 3 | state-sensitive revisits |
+| `deep` | 4 | 4 | explicit boundaries and a durable callback |
+| `relationship` | 4 | 2 | relationship-state entry families |
+| `service` | 2 | 2 | need and terms established before acceptance |
+
+A topic below its floor must be named in `src/test/resources/topic_depth_debt.txt` with the number
+it is short by. That ledger is a ceiling, not a note: falling further behind fails the build, and so
+does reaching the target while still listed. It can only shrink. It is currently empty.
+
+## Wildcard reply contracts (`responds_to: ["*"]`)
+
+Most reply contracts name the beats they answer. The gossip-driven pages cannot: their opener is not
+a `say` key at all but `conversations_gossip_say`, which chooses a line by event type at runtime, so
+there is no single inbound beat to name. Those buttons declare `"responds_to": ["*"]` — legal after
+any line that opens their page — which for a page whose opener is chosen at runtime is the truth
+rather than a shrug.
+
+Use it only for that case. Everywhere else, naming the inbound beats is what makes the lint able to
+tell you that a button no longer answers the line above it.
+
+## Verbal tics
+
+Two habits are invisible while writing and unmistakable while playing, and no paraphrase check can
+see either, because each individual line is fine:
+
+- **A catchphrase.** A marked word creeping to the front of everything. "Aye" once opened 3.7% of the
+  English corpus. `VerbalTicLintTest` caps any word that is not an ordinary sentence opener at **2%**
+  of a locale's villager lines, with a per-locale list of what counts as ordinary — Portuguese gets a
+  Portuguese list, not a translated English one.
+- **One goodbye for everybody.** "Right you are." once stood fifty times. No exact sentence of two
+  words or more may stand more than **twelve** times.
+
+Both caps skip button labels, and the lint asks the dialogue files which keys are labels rather than
+guessing from the key's shape. A label reading the same on every page is an affordance; two answers
+with different consequences sharing one is the actual bug, and `answerLabelsAreUniqueWithinATopic`
+catches that.
+
+## Generated reports
+
+`./gradlew build` leaves four documents in `build/libs/reports/`, all generated and all asserted
+deterministic so they can be diffed against the previous release:
+
+| File | What it is |
+|---|---|
+| `adjacency.md` | Every question node, every line that can open it, every button, every reaction and every onward page. This is the reading material for the §13.4 human review. |
+| `adjacency.pt_br.md` | The same document rendered through the Portuguese lang file. Key parity is satisfied by a key existing; this is how you find out whether the Portuguese conversation reads. |
+| `coverage.md` | The counts: contracts, per-topic depth against each topic's own target, personality overlay coverage, chat intents, profession profiles, locale key totals. |
+| `uncontracted-routes.txt` | Every `say → next` route with no beat contract. Currently empty, and the ledger that keeps it that way is `src/test/resources/legacy_unverified_routes.txt`. |
+
+## Debug commands for bug reports
+
+The tracing tools stay in the shipped jar. A conversation bug is almost always "the wrong line
+followed the right one", and that is very hard to report without them.
+
+| Command | Permission | What it does |
+|---|---|---|
+| `/conversations chat debug <message>` | op | Scores `<message>` against every live intent and prints the ranking, the winning binding, and why anything close lost. This is how you find out whether a phrase failed to match or matched the wrong button. |
+| `/conversations chat debug-ask <question> <answer>` | op | Drives the villager you are looking at straight to a `(question, answer)` pair and surfaces the reply in chat. Reproduces a specific adjacency without playing to it. |
+| `/conversations chat status` | any | Whether chat mode is on for the server and for you. |
+| `/conversations gossip list` / `clear` | op | The gossip log the news and rumours topics read from. |
+| `/conversations compat townstead status` | op | What the Townstead binding actually resolved. |
+
+When reporting a bad adjacency, the useful pair is the node id and the button name from
+`build/libs/reports/adjacency.md` plus the output of `debug-ask` on them.
+
+## Migration notes for pack authors
+
+Nothing here breaks a third-party pack that only uses MCA's own dialogue vocabulary. These are the
+conventions this mod's own content now follows, and which its lints will hold a contributed topic to.
+
+- **Heart numbers are gone from branching content.** `hearts`, `hearts_min` and `hearts_max` still
+  work — they are MCA's conditions, not ours — but our content asks `conversations_relationship` for
+  a *band* instead: `stranger`, `acquaintance`, `friend`, `confidant`, `partner`, `family`, `tense`,
+  `hostile`. The band thresholds were chosen so the old gates survive exactly: `hearts_max: 24` is
+  `stranger`, `hearts_max: 59` is at-most-`acquaintance`, `hearts_min: 0` is
+  at-least-`acquaintance`. `RelationshipBandLintTest` fails a raw heart number in our dialogue files,
+  and `migrationPreservedBehaviour` walks −100…120 hearts asserting the equivalence.
+- **Never use MCA's native `personality` condition.** It throws on an unknown id and takes the whole
+  datapack reload down with it, and the id set changed between supported MCA versions. Use
+  `conversations_personality`, which accepts a string or an array and scores zero on an id it does
+  not know. `contentNeverUsesMcasCrashProneNativePersonalityCondition` enforces this.
+- **Optional-mod professions live in that mod's own file.** A profession from Ars Nouveau, Farmer's
+  Delight, Ice and Fire, More Villagers, Vampirism or Werewolves is authored in `work_<owner>.json`,
+  and no optional mod appears in `mods.toml`. `OptionalProfessionIsolationTest` fails a mixed file,
+  so an install without that mod loads exactly the content it can use.
+- **Beat `subject` ids were renamed** in the 1.2.0 depth pass, from per-topic blanket names to what
+  each beat is about. Only reply contracts using `subject:` patterns in `responds_to` read them, and
+  the corpus uses exactly one such pattern; if your pack matches on a subject id, check it against
+  the current names.
+- **Every reply button needs a chat intent.** `ChatCoverageTest` fails a non-exit answer with no
+  intent, and an intent naming a button that no longer exists. Menus (`conversations`,
+  `conversations.cat.*`, `conversations.family`, `conversations.us`) and `back` are exempt: chat mode
+  jumps straight to a question-and-answer pair rather than walking the menus, and "never mind" is the
+  way out.
 
 ## Conventions for content that degrades gracefully
 

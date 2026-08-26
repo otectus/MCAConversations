@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "ask_go",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.future.ask_go"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.future.ask_go",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "say": "conversations.work.prof.fisherman.future.ask_go"
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fisherman.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "say": "conversations.work.prof.fisherman.future.encourage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.future.ask_hands"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.future.ask_hands",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "say": "conversations.work.prof.fisherman.future.ask_hands"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.fisherman.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

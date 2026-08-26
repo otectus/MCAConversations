@@ -1,0 +1,79 @@
+{
+  "answers": [
+    {
+      "name": "who_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.resume.who_changed"
+            },
+            "next": "conversations.arc.standing.resume.followup",
+            "say": "conversations.standing.resume.who_changed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_going",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.resume.keep_going"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.resume.keep",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.resume.keep_going",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.arc.standing.resume.followup",
+            "say": "conversations.standing.resume.keep_going"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tired_of_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.resume.tired_of_it"
+            },
+            "next": "conversations.arc.standing.resume.followup",
+            "say": "conversations.standing.resume.tired_of_it"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.standing.resume.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

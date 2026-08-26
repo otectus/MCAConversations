@@ -1,0 +1,41 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.callous.apologize"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.callous.apologize",
+              "deltas": {
+                "tension": -4
+              }
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.callous.apologize"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.news.followup.leave"
+          }
+        }
+      ]
+    }
+  ]
+}
