@@ -1,11 +1,11 @@
 package dev.otectus.mcaconversations.mixin.client;
 
 import dev.otectus.mcaconversations.McaConversations;
+import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.locale.OverlayLocales;
-import forge.net.mca.Config;
-import forge.net.mca.MCAClient;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -25,13 +25,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * follow a personality-specific key; overriding those would silently break voiced dialogue. So we
  * re-test both conditions ourselves and bail out if either holds — the hook can turn
  * {@code false} into {@code true} only when the sole reason for the {@code false} was the locale.
+ * MCA's own config flag is read through {@link McaHandles#onlineTtsEnabled()}, which defaults to
+ * "leave MCA's answer alone" when it cannot be read, so an unreadable config can never widen the gate.
+ *
+ * <p><b>Two targets, one jar</b> — see {@code NetworkHandlerMixin} for why both MCA package roots are
+ * listed and why {@link Pseudo} is set.
  *
  * <p>Client-only by construction ({@code Minecraft}, {@code MCAClient}) and declared in the
  * {@code "client"} section of the mixin config, so a dedicated server never loads it.
  * {@code remap = false} (MCA's own method) and {@code require = 0}: if MCA reshapes the method we
  * simply fall back to its own behaviour rather than failing to start.
  */
-@Mixin(value = MCAClient.class, remap = false)
+@Pseudo
+@Mixin(targets = {
+        "forge.net.mca.MCAClient",
+        "forge.net.conczin.mca.MCAClient",
+}, remap = false)
 public abstract class MCAClientMixin {
 
     @Inject(method = "useExpandedPersonalityTranslations", at = @At("RETURN"),
@@ -49,7 +58,7 @@ public abstract class MCAClientMixin {
                 return; // a locale we have no overlays for — MCA's answer stands.
             }
             // Preserve MCA's own two restrictions verbatim.
-            if (Config.getInstance().enableOnlineTTS) {
+            if (McaHandles.onlineTtsEnabled()) {
                 return;
             }
             boolean voicePackActive = client.getResourceManager().listPacks()

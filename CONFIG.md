@@ -164,6 +164,42 @@ Ops can inspect matching live with `/conversations chat debug <message>`.
 | `chatModeTypingAttention` | `true` | | nearby villagers stop and face a player whose chat box is open |
 | `chatModeAttentionTicks` | `600` | 0–72000 | how long a conversation partner stays put facing you after the last exchange (0 disables) |
 
+## `[townstead]`
+
+The optional [Townstead](https://www.curseforge.com/minecraft/mc-mods/townstead) integration. **With
+Townstead not installed, none of this does anything and nothing changes**: every Townstead dialogue
+condition scores `0`, every Townstead template variable falls back to its neutral wording, no
+Townstead class is ever loaded, and every existing seeded check resolves exactly as it does today.
+
+Supported Townstead range: `[0.7.5,0.8)`, gated on `0.7.6`. Conversations reads Townstead state and
+never writes it — needs, schedules, professions, skills, roots, genes, the calendar, buildings and
+village spirit all stay Townstead's to own. The three things Conversations does tell Townstead are a
+measured heart change, a typed-chat conversation opening and closing, and an authored, heart-neutral
+reaction.
+
+Run `/conversations compat townstead status` in game to see what actually bound.
+
+| Option | Default | Range | Meaning |
+|---|---|---|---|
+| `enabled` | `true` | | master switch. Off, Conversations behaves exactly as though Townstead were absent |
+| `contentEnabled` | `true` | | offer the Townstead conversation topics (wellbeing, daily rhythm, work and mastery, age and life, roots, home and place, community identity, calendar) |
+| `contextConditionsEnabled` | `true` | | let the `conversations_townstead*` dialogue conditions read Townstead state. Off, they score `0` and authored fallback branches fire instead |
+| `contextCheckFitEnabled` | `true` | | let an authored `townstead_fit` block colour a dialogue check. Off, the term is exactly `0` |
+| `reactionsEnabled` | `true` | | fire Townstead reactions on conversation outcomes. Every bundled reaction is heart-neutral. **Townstead can only play a reaction through Emotecraft**, so without that mod this degrades to no reaction rather than to an error |
+| `emotionEffectsEnabled` | `true` | | supply Conversations emotion tags inside Townstead's RPG dialogue typewriter. Client side only; never leaks markup into chat mode, system chat, TTS or base MCA UI |
+| `scheduleRespectEnabled` | `true` | | let a villager's Townstead shift affect greetings, ambient replies, deep-topic availability and how firmly chat mode holds their attention. Off, a working villager is interrupted exactly as before |
+| `typedChatDialogueTrackingEnabled` | `true` | | tell Townstead when a typed-chat conversation opens and closes, so its `in_dialogue_with_player` and `dialogue_just_ended` tags are true for chat mode as well as the RPG screen |
+| `giftNeedObservationEnabled` | `true` | | after an accepted gift, re-read the villager's needs a tick later and only then let gratitude lines claim it helped. Conversations never fills a need itself |
+| `gossipEnabled` | `true` | | let the existing village gossip sweep also notice Townstead changes: need crises and recoveries, profession progress, newly learned skills, life-stage and birthday milestones, buildings appearing and disappearing, and village spirit shifting |
+| `customPersonalityProfilesEnabled` | `true` | | match a Townstead custom personality to its exact interiority profile before falling back to the MCA personality it is based on |
+| `calendarSource` | `AUTO` | `AUTO`, `TOWNSTEAD`, `SERENE_SEASONS`, `BUILTIN` | which mod decides the narrative date and season. `AUTO` prefers Townstead when healthy, then Serene Seasons, then the built-in calendar. Exactly one source ever answers, so two installed calendars cannot contradict each other in one conversation |
+| `useLegacyHolidayFallbackWithTownstead` | `false` | | when Townstead owns the calendar and no `townstead_holidays` mapping matches today, fall back to the built-in fixed festival cycle. Off by default because that cycle is keyed to Conversations' own year length and would land on unrelated dates in a Townstead calendar |
+| `maxCheckFit` | `8` | 0–14 | hard clamp on the `townstead_fit` dialogue-check term, in points. Kept below the 15-point tier margin so Townstead state can colour a borderline exchange without deciding one |
+| `contextCacheTicks` | `20` | 1–100 | how long a Townstead context read is reused by the chat scans. Dialogue evaluation always caches for exactly one tick regardless, because MCA scores many candidate results for a single click |
+| `needCrisisCooldownDays` | `2` | 0–60 | days before the same villager can produce another need-crisis rumour |
+| `buildingRemovalConfirmScans` | `2` | 1–10 | how many consecutive sweeps must agree a known building is gone before that becomes news. Guards against a reload transient reading as a demolition |
+| `debug` | `false` | | verbose logging for Townstead binding, context reads and reactions |
+
 ## `[debug]`
 
 | Option | Default | Meaning |

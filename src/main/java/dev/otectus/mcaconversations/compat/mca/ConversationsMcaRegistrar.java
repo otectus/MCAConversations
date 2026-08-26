@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.compat.mca;
 
+import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.check.CheckContextFactory;
@@ -38,9 +39,6 @@ import dev.otectus.mcaconversations.template.SayDirective;
 import dev.otectus.mcaconversations.template.WorldContext;
 import dev.otectus.mcaconversations.util.SafeParse;
 import dev.otectus.mcaconversations.world.WorldQuery;
-import forge.net.mca.entity.ai.LongTermMemory;
-import forge.net.mca.entity.interaction.gifts.GiftPredicate;
-import forge.net.mca.resources.data.dialogue.Actions;
 
 /**
  * Registers this mod's dialogue conditions and actions into MCA's public static registries.
@@ -91,14 +89,14 @@ public final class ConversationsMcaRegistrar {
     }
 
     private static void recordOne(com.google.gson.JsonObject json,
-                                  forge.net.mca.entity.VillagerEntityMCA villager,
+                                  net.minecraft.world.entity.Entity villager,
                                   net.minecraft.server.level.ServerPlayer player) {
         // Reuse MCA's own id parsing so "var": "player" scoping matches remember/memory.
-        String id = LongTermMemory.parseId(json, player);
+        String id = McaHandles.parseMemoryId(json, player);
         if (json.has("time")) {
-            villager.getLongTermMemory().remember(id, json.get("time").getAsLong());
+            McaCompat.remember(villager, id, json.get("time").getAsLong());
         } else {
-            villager.getLongTermMemory().remember(id);
+            McaCompat.rememberForever(villager, id);
         }
         signalQuestTopic(id, villager, player);
     }
@@ -109,7 +107,7 @@ public final class ConversationsMcaRegistrar {
      * {@code conversations_record} (topic-ever flags use MCA's native {@code remember}, which we can't hook), so
      * this fires exactly once per completed topic conversation. No-op when Quests is absent.
      */
-    private static void signalQuestTopic(String id, forge.net.mca.entity.VillagerEntityMCA villager,
+    private static void signalQuestTopic(String id, net.minecraft.world.entity.Entity villager,
                                          net.minecraft.server.level.ServerPlayer player) {
         QuestsBridge.QuestQueries q = QuestsBridge.queries();
         if (q == null) {
@@ -134,7 +132,7 @@ public final class ConversationsMcaRegistrar {
     public static void register() {
         // --- Conditions (dialogue JSON shares the gift-predicate condition registry) ---
 
-        GiftPredicate.register("conversations_enabled",
+        McaHandles.registerCondition("conversations_enabled",
                 (json, name) -> SafeParse.orNull("conversations_enabled", json, json::getAsString),
                 feature -> (villager, stack, player) -> {
                     try {
@@ -145,7 +143,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        GiftPredicate.register("conversations_disabled",
+        McaHandles.registerCondition("conversations_disabled",
                 (json, name) -> SafeParse.orNull("conversations_disabled", json, json::getAsString),
                 feature -> (villager, stack, player) -> {
                     try {
@@ -156,7 +154,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        GiftPredicate.register("conversations_gossip",
+        McaHandles.registerCondition("conversations_gossip",
                 (json, name) -> SafeParse.orNull("conversations_gossip", json,
                         () -> GossipQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -169,7 +167,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        GiftPredicate.register("conversations_weather",
+        McaHandles.registerCondition("conversations_weather",
                 (json, name) -> SafeParse.orNull("conversations_weather", json,
                         () -> WorldQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -186,7 +184,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        GiftPredicate.register("conversations_season",
+        McaHandles.registerCondition("conversations_season",
                 (json, name) -> SafeParse.orNull("conversations_season", json,
                         () -> WorldQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -201,7 +199,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        GiftPredicate.register("conversations_holiday",
+        McaHandles.registerCondition("conversations_holiday",
                 (json, name) -> SafeParse.orNull("conversations_holiday", json,
                         () -> WorldQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -220,7 +218,7 @@ public final class ConversationsMcaRegistrar {
         // MCA parses that one with orElseThrow inside an uncontained datapack reload, so an id the
         // running MCA does not know (7.7 dropped witty/shy/lazy/grumpy/athletic) aborts world load.
         // This one is parse-safe and alias-aware, so a single authored id works on 7.6 and 7.7.
-        GiftPredicate.register("conversations_personality",
+        McaHandles.registerCondition("conversations_personality",
                 (json, name) -> SafeParse.orNull("conversations_personality", json,
                         () -> PersonalityQuery.fromJson(json)),
                 query -> (villager, stack, player) -> {
@@ -242,7 +240,7 @@ public final class ConversationsMcaRegistrar {
         // Matches while the decayed axis value lies in [min, max]. Never matches when the vector
         // subsystem is off (content authors an explicit fallback result; lint enforces it) and never
         // matches on Attraction for romance-ineligible targets, whatever range is asked for.
-        GiftPredicate.register("conversations_disposition",
+        McaHandles.registerCondition("conversations_disposition",
                 (json, name) -> SafeParse.orNull("conversations_disposition", json,
                         () -> DispositionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -265,7 +263,7 @@ public final class ConversationsMcaRegistrar {
         // branch and nothing ever read one back, so content duplicated the branch into the node name
         // instead. Registered unconditionally: dialogue naming an unregistered key is a load error,
         // so a pack written for this must still load on a build that has it.
-        GiftPredicate.register("conversations_session",
+        McaHandles.registerCondition("conversations_session",
                 (json, name) -> SafeParse.orNull("conversations_session", json,
                         () -> SessionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -284,7 +282,7 @@ public final class ConversationsMcaRegistrar {
 
         // Reads today's affection ledger so the villager can voice the cap instead of the player
         // quietly receiving nothing once it is reached.
-        GiftPredicate.register("conversations_budget",
+        McaHandles.registerCondition("conversations_budget",
                 (json, name) -> SafeParse.orNull("conversations_budget", json,
                         () -> BudgetQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -300,7 +298,7 @@ public final class ConversationsMcaRegistrar {
         // All four tier results of a stance carry the same id/axis/difficulty, so exactly one matches
         // per click; the resolver is pure and seeded, so re-evaluating per candidate result (and
         // re-opening the screen inside a time bucket) cannot change the outcome.
-        GiftPredicate.register("conversations_check",
+        McaHandles.registerCondition("conversations_check",
                 (json, name) -> SafeParse.orNull("conversations_check", json,
                         () -> CheckDefinition.fromJson(json.getAsJsonObject())),
                 check -> (villager, stack, player) -> {
@@ -328,7 +326,7 @@ public final class ConversationsMcaRegistrar {
         // Where a relationship stands in an authored arc, or whether a one-shot milestone or an
         // exclusive promise has been recorded. Reads the progress ledger, which is deliberately
         // independent of the disposition vector so narrative state survives with that feature off.
-        GiftPredicate.register("conversations_progress",
+        McaHandles.registerCondition("conversations_progress",
                 (json, name) -> SafeParse.orNull("conversations_progress", json,
                         () -> ProgressQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> {
@@ -345,22 +343,22 @@ public final class ConversationsMcaRegistrar {
         // scores 0 (never a crash) on an MCA-only install. The lambdas touch a Quests class only through
         // the pure QuestsBridge SPI, so no mcaquests class loads unless MCA: Quests is present.
 
-        GiftPredicate.register("conversations_quest_available",
+        McaHandles.registerCondition("conversations_quest_available",
                 (json, name) -> SafeParse.orNull("conversations_quest_available", json,
                         () -> QuestConditionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> questScore(query, player, villager, QuestKind.AVAILABLE));
 
-        GiftPredicate.register("conversations_quest_active",
+        McaHandles.registerCondition("conversations_quest_active",
                 (json, name) -> SafeParse.orNull("conversations_quest_active", json,
                         () -> QuestConditionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> questScore(query, player, villager, QuestKind.ACTIVE));
 
-        GiftPredicate.register("conversations_quest_ready",
+        McaHandles.registerCondition("conversations_quest_ready",
                 (json, name) -> SafeParse.orNull("conversations_quest_ready", json,
                         () -> QuestConditionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> questScore(query, player, villager, QuestKind.READY));
 
-        GiftPredicate.register("conversations_quest_completed",
+        McaHandles.registerCondition("conversations_quest_completed",
                 (json, name) -> SafeParse.orNull("conversations_quest_completed", json,
                         () -> QuestConditionQuery.fromJson(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> questScore(query, player, villager, QuestKind.COMPLETED));
@@ -371,13 +369,13 @@ public final class ConversationsMcaRegistrar {
         // on an install without Reputation. Scoring 0 there lets the pack's own fallback branch fire
         // (spec 30.2). Both lambdas reach Reputation only through the pure ReputationBridge SPI.
 
-        GiftPredicate.register("conversations_reputation",
+        McaHandles.registerCondition("conversations_reputation",
                 (json, name) -> SafeParse.orNull("conversations_reputation", json,
                         () -> dev.otectus.mcaconversations.compat.ReputationQueryJson
                                 .standing(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> standingScore(query, player, villager));
 
-        GiftPredicate.register("conversations_reputation_incident",
+        McaHandles.registerCondition("conversations_reputation_incident",
                 (json, name) -> SafeParse.orNull("conversations_reputation_incident", json,
                         () -> dev.otectus.mcaconversations.compat.ReputationQueryJson
                                 .incident(json.getAsJsonObject())),
@@ -385,7 +383,7 @@ public final class ConversationsMcaRegistrar {
 
         // --- Actions ---
 
-        Actions.register("conversations_record",
+        McaHandles.registerAction("conversations_record",
                 (json, name) -> json,
                 json -> (villager, player) -> {
                     try {
@@ -403,7 +401,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        Actions.register("conversations_say",
+        McaHandles.registerAction("conversations_say",
                 (json, name) -> SafeParse.orNull("conversations_say", json,
                         () -> SayDirective.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
@@ -416,7 +414,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        Actions.register("conversations_gossip_say",
+        McaHandles.registerAction("conversations_gossip_say",
                 (json, name) -> SafeParse.orNull("conversations_gossip_say", json,
                         () -> GossipSayDirective.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
@@ -432,7 +430,7 @@ public final class ConversationsMcaRegistrar {
         // Moves disposition axes through the farming guards (per-day cap, same-day repeat
         // diminishing). No-op when the vector subsystem is off; Attraction deltas are dropped for
         // romance-ineligible targets inside Dispositions.apply.
-        Actions.register("conversations_disposition_apply",
+        McaHandles.registerAction("conversations_disposition_apply",
                 (json, name) -> SafeParse.orNull("conversations_disposition_apply", json,
                         () -> DispositionApply.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
@@ -449,7 +447,7 @@ public final class ConversationsMcaRegistrar {
 
         // Starts, branches, or ends a topic on the shared conversation session. Carries no reward of
         // its own — an opener is not kindness (plan §3.2) — it only frames what follows.
-        Actions.register("conversations_session",
+        McaHandles.registerAction("conversations_session",
                 (json, name) -> SafeParse.orNull("conversations_session", json,
                         () -> SessionDirective.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
@@ -465,7 +463,7 @@ public final class ConversationsMcaRegistrar {
         // The one guarded route from authored content to a visible heart change. Runs the full chain:
         // duplicate-transaction refusal, replay policy, per-conversation budget, per-day budget, then
         // MCA's own rewardHearts. Content must never use native positive/negative inside a branch.
-        Actions.register("conversations_affection_apply",
+        McaHandles.registerAction("conversations_affection_apply",
                 (json, name) -> SafeParse.orNull("conversations_affection_apply", json,
                         () -> AffectionApply.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
@@ -481,7 +479,7 @@ public final class ConversationsMcaRegistrar {
         // Moves durable narrative state: an arc stage (one step at a time, clamped to the catalog
         // bound), a one-shot milestone, or one side of a mutually exclusive choice. Accepts one object
         // or an array of them, because a result may need several and JSON keys cannot repeat.
-        Actions.register("conversations_progress_apply",
+        McaHandles.registerAction("conversations_progress_apply",
                 (json, name) -> json,
                 json -> (villager, player) -> {
                     try {
@@ -498,7 +496,7 @@ public final class ConversationsMcaRegistrar {
                 });
 
         // Opens (or directly accepts from) the MCA: Quests menu for this villager. No-op when Quests absent.
-        Actions.register("conversations_quest_open",
+        McaHandles.registerAction("conversations_quest_open",
                 (json, name) -> SafeParse.orNull("conversations_quest_open", json,
                         () -> QuestOpenDirective.fromJson(json.getAsJsonObject())),
                 directive -> (villager, player) -> {
@@ -533,7 +531,7 @@ public final class ConversationsMcaRegistrar {
          * a no-op. Generic small talk, navigation, and asking the opener cannot reach this action at
          * all, because nothing authors it on them.
          */
-        Actions.register("conversations_reputation_signal",
+        McaHandles.registerAction("conversations_reputation_signal",
                 (json, name) -> SafeParse.orNull("conversations_reputation_signal", json,
                         () -> json.getAsJsonObject()),
                 obj -> (villager, player) -> {
@@ -573,7 +571,7 @@ public final class ConversationsMcaRegistrar {
      * result overrides it, so a topic's depth is declared in exactly one place.
      */
     private static void applySession(SessionDirective directive,
-                                     forge.net.mca.entity.VillagerEntityMCA villager,
+                                     net.minecraft.world.entity.Entity villager,
                                      net.minecraft.server.level.ServerPlayer player) {
         long now = villager.level().getGameTime();
         switch (directive.op()) {
@@ -596,7 +594,7 @@ public final class ConversationsMcaRegistrar {
 
     /** Parses and applies one {@code conversations_progress_apply} entry, containing parse failures. */
     private static void applyProgress(com.google.gson.JsonObject json,
-                                      forge.net.mca.entity.VillagerEntityMCA villager,
+                                      net.minecraft.world.entity.Entity villager,
                                       net.minecraft.server.level.ServerPlayer player) {
         ProgressApply directive = SafeParse.orNull("conversations_progress_apply", json,
                 () -> ProgressApply.fromJson(json));

@@ -1,9 +1,9 @@
 package dev.otectus.mcaconversations.mixin.client;
 
 import dev.otectus.mcaconversations.McaConversations;
-import forge.net.mca.network.s2c.VillagerMessage;
 import net.minecraft.network.chat.MutableComponent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,8 +55,16 @@ import java.util.UUID;
  * the {@code "client"} section of the mixin config. {@code remap = false}: MCA's own class.
  * {@code require = 0} (config default): if MCA ever reshapes this class the injections silently no-op
  * and lines behave exactly as they do without this mod.
+ *
+ * <p><b>Two targets, one jar</b> — see {@code NetworkHandlerMixin} for why both MCA package roots are
+ * listed. No {@code @Coerce} is needed: the constructor takes two {@code MutableComponent}s and a
+ * {@code UUID}, and both getters return {@code MutableComponent}, so nothing here names an MCA type.
  */
-@Mixin(value = VillagerMessage.class, remap = false)
+@Pseudo
+@Mixin(targets = {
+        "forge.net.mca.network.s2c.VillagerMessage",
+        "forge.net.conczin.mca.network.s2c.VillagerMessage",
+}, remap = false)
 public abstract class VillagerMessageMixin {
 
     @Unique

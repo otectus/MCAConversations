@@ -93,12 +93,55 @@ repositories {
     }
 }
 
+// Every MCA build McaBindingProbeTest verifies the manifest against, one configuration each. Two
+// versions of the same module cannot share a configuration -- Gradle's conflict resolution would
+// collapse them to the newer and the older package root would go untested, which is how MCA's rename
+// reached players in the first place. Each is probed in its own class loader.
+ext.mcaProbeVersions = (project.findProperty('mcaProbeVersions') ?: mca_probe_versions)
+        .toString().split(',').collect { it.trim() }.findAll { !it.isEmpty() }
+
+configurations {
+    // Keep MCA off the unit-test runtime. Gradle's testRuntimeOnly extends runtimeOnly, so the dev-run
+    // MCA jar would otherwise land on testRuntimeClasspath -- and the unit suite is precisely where
+    // "MCA is absent" has to be the real, exercised state. McaBindingProbeTest still reaches the real
+    // MCA jars, by opening each in a throwaway class loader rather than by having them on the classpath.
+    testRuntimeClasspath {
+        exclude group: 'maven.modrinth', module: 'minecraft-comes-alive-reborn'
+    }
+}
+
+mcaProbeVersions.eachWithIndex { version, i ->
+    configurations.create("mcaProbe${i}") {
+        canBeConsumed = false
+        // Just the MCA jar: the probe opens it against the test classloader, which already carries
+        // Minecraft, and pulling MCA's own dependency graph in would only slow the build.
+        transitive = false
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // MCA Reborn — obfuscated production (Universal) jar, remapped to our dev mappings
-    // by fg.deobf. All MCA access is isolated behind dev.otectus.mcaconversations.compat.
-    implementation fg.deobf("maven.modrinth:minecraft-comes-alive-reborn:${mca_version}")
+    // MCA Reborn — obfuscated production (Universal) jar, remapped to our dev mappings by fg.deobf.
+    //
+    // runtimeOnly, NOT implementation: no class in src/main/java names an MCA type any more, because
+    // compat.mca.McaBinding resolves every MCA class and member by name at runtime and the mixins
+    // declare their targets as strings. That is what lets one jar serve both MCA's forge.net.mca.*
+    // layout and the renamed forge.net.conczin.mca.* one. A compile dependency would only invite the
+    // static linkage back -- NoMcaStaticLinkTest fails the build if it ever returns. runtimeOnly also
+    // keeps MCA off testRuntimeClasspath, so the unit suite exercises the genuine "MCA absent"
+    // degradation path rather than a half-bound one.
+    runtimeOnly fg.deobf("maven.modrinth:minecraft-comes-alive-reborn:${mca_version}")
+
+    // The probe fleet McaBindingProbeTest replays the manifest against (see ext.mcaProbeVersions).
+    // Deliberately NOT fg.deobf: only Minecraft's methods and fields carry SRG names in a production
+    // jar, never its class names, so MCA's own declarations already read as e.g.
+    // `getResidents(net.minecraft.server.level.ServerLevel)` -- exactly what the manifest's parameter
+    // hints compare against. Skipping the deobf round-trip also keeps these configurations out of
+    // ForgeGradle's remap pipeline, which cannot serve one resolved from a test task's doFirst.
+    mcaProbeVersions.eachWithIndex { version, i ->
+        add("mcaProbe${i}", "maven.modrinth:minecraft-comes-alive-reborn:${version}")
+    }
 
     // Architectury API (Forge) — required at runtime by MCA. deobf for dev remapping.
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
@@ -142,6 +185,52 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    // The MCA jars travel as paths, not a classpath: McaBindingProbeTest opens each in its own
+    // URLClassLoader, so the binding manifest is verified against real MCA without a single MCA class
+    // being linked into the test JVM.
+    //
+    // Resolved in doFirst, not at configuration time: resolving a configuration while the build is
+    // still being configured freezes ForgeGradle's deobf repository before every fg.deobf dependency
+    // is registered ("cannot mutate content repository descriptor after repository has been used").
+    doFirst {
+        systemProperty 'mcaconversations.probe.jars', mcaProbeVersions.indices
+                .collect { i -> configurations.getByName("mcaProbe${i}").files }
+                .flatten()
+                .findAll { it.name.contains('minecraft-comes-alive') }
+                .join(File.pathSeparator)
+    }
+}
+
+// Resolves TownsteadBinding's manifest against a real Townstead jar, in its own JVM and its own
+// classloader. Separate from `test` because it needs a jar nobody can resolve from a maven: Townstead
+// is published on CurseForge only, so the path is supplied by the person running it.
+//
+//     ./gradlew townsteadProbeTest -PtownsteadLegacyJar=/path/townstead-0.7.6+1.20.1.jar
+//
+// Both -PtownsteadModernJar and -PtownsteadLegacyJar are accepted and either may be given alone.
+// MCA rides along on `mcaconversations.probe.jars` for a load-bearing reason: Townstead is compiled
+// against MCA, so enumerating TownsteadAPI's methods resolves an MCA parameter type, and without MCA
+// present the whole class reads as unbound and the probe would pass vacuously. Minecraft itself comes
+// from sourceSets.test.runtimeClasspath for the same reason.
+tasks.register('townsteadProbeTest', Test) {
+    group = 'verification'
+    description = 'Verifies the Townstead binding manifest against a supplied Townstead jar.'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter { includeTestsMatching 'dev.otectus.mcaconversations.compat.TownsteadBindingProbeTest' }
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+    doFirst {
+        systemProperty 'mcaconversations.townstead.probe.jars',
+                ['townsteadModernJar', 'townsteadLegacyJar']
+                        .findAll { project.hasProperty(it) }
+                        .collect { project.property(it).toString() }
+                        .join(File.pathSeparator)
+        systemProperty 'mcaconversations.probe.jars', configurations.runtimeClasspath
+                .findAll { it.name.contains('minecraft-comes-alive') }
+                .join(File.pathSeparator)
+    }
 }
 
 // MixinGradle: generate the refmap for our mixin and register the config for reobfuscation.

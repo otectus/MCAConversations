@@ -58,5 +58,9 @@ public final class McaConversations {
         event.enqueueWork(dev.otectus.mcaconversations.compat.ReputationBridge::tryRegister);
         // And the optional Serene Seasons integration (reflection-only; calendar fallback when absent).
         event.enqueueWork(SeasonsBridge::tryRegister);
+        // Last, and by name: the Townstead implementation is reached through a string so no
+        // Townstead class resolves on the many installs that do not have it. Must follow
+        // McaBridge, because the spirit read needs an MCA village that only McaCompat produces.
+        event.enqueueWork(dev.otectus.mcaconversations.compat.TownsteadCompat::init);
     }
 }

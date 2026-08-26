@@ -61,3 +61,13 @@ description='''${mod_description}'''
     versionRange="[0.2,)"
     ordering="AFTER"
     side="BOTH"
+
+# Townstead - OPTIONAL. When absent, nothing changes: every Townstead dialogue condition
+# scores 0, every Townstead template variable falls back, and no Townstead class is resolved.
+# Ordered AFTER so its registries and reaction data exist before we read them.
+[[dependencies.${mod_id}]]
+    modId="townstead"
+    mandatory=false
+    versionRange="[0.7.5,0.8)"
+    ordering="AFTER"
+    side="BOTH"

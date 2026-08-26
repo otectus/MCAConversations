@@ -9,8 +9,41 @@ asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, Serene Seasons.
 
 ## [1.2.1] - unreleased
 
-A content pass over every shipped conversation, in both locales. Nothing here changes a system;
-it fixes lines that reached the screen wrong and exchanges that did not cohere once read end to end.
+A content pass over every shipped conversation, in both locales, plus the one binding defect that was
+corrupting every value those conversations substitute. Apart from that defect nothing here changes a
+system; it fixes lines that reached the screen wrong and exchanges that did not cohere once read end
+to end.
+
+### Fixed — every substituted value, in every voiced line
+
+- **Villagers spoke the argument array instead of the value it held.** Any line that substitutes
+  something — a quest title, a name, a season, a gift, a village — drew its first argument as
+  `[Ljava.lang.Object;@7fd2575c`: *"Otectus, thank you. [Ljava.lang.Object;@7fd2575c has been weighing
+  on me."* MCA's `getTranslatable(Player, String, Object...)` is varargs, so `Lookup#unreflect` returns
+  a **varargs collector**, and `asType` to the binding's erased all-`Object` shape does not pass the
+  trailing array through: `Object[]` is not assignable from `Object`, so `asType` silently builds a
+  *one-element* collector that wraps our argument array inside another array. MCA received exactly one
+  argument — the array — and printed its identity at `%2$s`. `McaBinding` now pins every resolved
+  handle to `asFixedArity()` before erasing it, which is the whole fix here and a no-op for the other
+  65 members.
+- **The blast radius was every templated line the mod has ever shipped**, because `conversations_say`
+  and `conversations_gossip` both deliver through this handle: 509 English lines name `%2$s` across the
+  base pool and the 21 personality overlays, and each has a `pt_br` twin. It was never version- or
+  layout-specific — every MCA build and both package roots resolve the same varargs method. The 163
+  lines naming `%3$s` failed differently and more visibly: with only one argument present Minecraft
+  aborts the substitution and draws the untouched template, `%3$s` and all. Lines with no substitutions
+  were unaffected in appearance, having no slot to show the stray argument in.
+- **Only the Forge build was ever wrong.** The Fabric source calls `getTranslatable` directly, where
+  javac spreads the array into the varargs slot correctly; nothing there changes.
+- **`TownsteadBinding` is pinned the same way**, at both its method and constructor sites. Townstead
+  declares varargs members of its own (`getTranslatable`, `aliases`, `context`, `applyToBase`) and
+  binds none of them today, so this changes nothing now and stops the first one that is bound from
+  being silently corrupted instead.
+- **A test now holds it.** `McaBindingErasureTest` binds a local varargs method through
+  `McaBinding.erase` and asserts the tail arrives as the argument array itself. Dropping the
+  `asFixedArity()` again binds cleanly, throws nothing and logs nothing — the probe tests would still
+  pass, because the manifest still resolves — so without this test the next reader has only the
+  comment to go on.
 
 ### Fixed — lines that rendered as their own source code
 

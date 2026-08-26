@@ -267,9 +267,11 @@ class ReputationIntegrationTest {
         // §30.2: the keys must be known even without the mod, or a suite-authored pack fails to load.
         String registrar = Files.readString(SOURCE_ROOT.resolve("compat/mca/ConversationsMcaRegistrar.java"),
                 StandardCharsets.UTF_8);
-        assertTrue(registrar.contains("GiftPredicate.register(\"conversations_reputation\""));
-        assertTrue(registrar.contains("GiftPredicate.register(\"conversations_reputation_incident\""));
-        assertTrue(registrar.contains("Actions.register(\"conversations_reputation_signal\""));
+        // The registration entry points moved to McaHandles when MCA's package root stopped being
+        // knowable at compile time; the keys and the unconditional-registration rule are unchanged.
+        assertTrue(registrar.contains("McaHandles.registerCondition(\"conversations_reputation\""));
+        assertTrue(registrar.contains("McaHandles.registerCondition(\"conversations_reputation_incident\""));
+        assertTrue(registrar.contains("McaHandles.registerAction(\"conversations_reputation_signal\""));
         assertFalse(registrar.contains("import dev.otectus.mcareputation."),
                 "the registrar is always loaded and must not name a Reputation type");
     }

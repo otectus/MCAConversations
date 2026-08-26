@@ -3,11 +3,11 @@ package dev.otectus.mcaconversations.mixin;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.ConversationGuard;
-import forge.net.mca.network.c2s.InteractionDialogueMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,8 +32,17 @@ import java.util.UUID;
  * reshapes this class the injection silently no-ops and submissions behave exactly as they do
  * without this mod. Any runtime failure likewise falls through to normal handling — the guarded
  * affection and progress actions enforce their own idempotency and caps regardless.
+ *
+ * <p><b>Two targets, one jar</b> — see {@link NetworkHandlerMixin} for why both MCA package roots are
+ * listed and why {@link org.spongepowered.asm.mixin.Pseudo} is set. No {@code @Coerce} is needed
+ * here: every shadowed field is a {@link UUID} or a {@link String}, and {@code receive} takes only a
+ * {@code ServerPlayer}, so this mixin never had to name an MCA type in the first place.
  */
-@Mixin(value = InteractionDialogueMessage.class, remap = false)
+@Pseudo
+@Mixin(targets = {
+        "forge.net.mca.network.c2s.InteractionDialogueMessage",
+        "forge.net.conczin.mca.network.c2s.InteractionDialogueMessage",
+}, remap = false)
 public abstract class InteractionDialogueMessageMixin {
 
     @Shadow

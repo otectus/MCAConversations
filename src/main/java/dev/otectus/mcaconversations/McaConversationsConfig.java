@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
+import dev.otectus.mcaconversations.season.CalendarSource;
 import java.util.Locale;
 
 /** Forge common + client configuration. See CONFIG.md for the user-facing documentation. */
@@ -48,6 +49,7 @@ public final class McaConversationsConfig {
             case "checks" -> COMMON.enableChecks.get();
             case "branching" -> COMMON.enableBranching.get();
             case "chat" -> COMMON.enableChatMode.get();
+            case "townstead" -> COMMON.townsteadEnabled.get();
             default -> true;
         };
     }
@@ -137,6 +139,25 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.DoubleValue chatModeGreetChance;
         public final ForgeConfigSpec.BooleanValue chatModeTypingAttention;
         public final ForgeConfigSpec.IntValue chatModeAttentionTicks;
+
+        public final ForgeConfigSpec.BooleanValue townsteadEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadContentEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadContextConditionsEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadContextCheckFitEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadReactionsEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadEmotionEffectsEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadScheduleRespectEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadTypedChatDialogueTrackingEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadGiftNeedObservationEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadGossipEnabled;
+        public final ForgeConfigSpec.BooleanValue townsteadCustomPersonalityProfilesEnabled;
+        public final ForgeConfigSpec.EnumValue<CalendarSource> calendarSource;
+        public final ForgeConfigSpec.BooleanValue useLegacyHolidayFallbackWithTownstead;
+        public final ForgeConfigSpec.IntValue townsteadMaxCheckFit;
+        public final ForgeConfigSpec.IntValue townsteadContextCacheTicks;
+        public final ForgeConfigSpec.IntValue townsteadNeedCrisisCooldownDays;
+        public final ForgeConfigSpec.IntValue townsteadBuildingRemovalConfirmScans;
+        public final ForgeConfigSpec.BooleanValue townsteadDebug;
 
         public final ForgeConfigSpec.BooleanValue debugLogging;
 
@@ -398,6 +419,96 @@ public final class McaConversationsConfig {
                     "How long (game ticks) a villager keeps standing with its conversation partner after the",
                     "last exchange before wandering off (600 = 30s; refreshed per exchange; 0 disables).")
                     .defineInRange("chatModeAttentionTicks", 600, 0, 72000);
+            b.pop();
+
+            b.push("townstead");
+            townsteadEnabled = b.comment(
+                    "Master switch for the optional Townstead integration. With Townstead absent this",
+                    "changes nothing at all. With Townstead installed and this off, Conversations behaves",
+                    "exactly as though it were absent: every Townstead condition scores 0, every Townstead",
+                    "template variable falls back, and no Townstead state is read or written.")
+                    .define("enabled", true);
+            townsteadContentEnabled = b.comment(
+                    "Offer the Townstead conversation topics (wellbeing, daily rhythm, work and mastery,",
+                    "age and life, roots, home and place, community identity, calendar).")
+                    .define("contentEnabled", true);
+            townsteadContextConditionsEnabled = b.comment(
+                    "Let the conversations_townstead* dialogue conditions read Townstead state. Off, they",
+                    "all score 0 and authored fallback branches fire instead.")
+                    .define("contextConditionsEnabled", true);
+            townsteadContextCheckFitEnabled = b.comment(
+                    "Let an authored townstead_fit block colour a dialogue check. Off, the term is exactly",
+                    "0 and every check resolves precisely as it does without Townstead.")
+                    .define("contextCheckFitEnabled", true);
+            townsteadReactionsEnabled = b.comment(
+                    "Fire Townstead reactions on conversation outcomes. Every bundled reaction is",
+                    "heart-neutral. Townstead can only play a reaction through Emotecraft, so without that",
+                    "mod this degrades to no reaction rather than to an error.")
+                    .define("reactionsEnabled", true);
+            townsteadEmotionEffectsEnabled = b.comment(
+                    "Supply Conversations emotion tags inside Townstead's RPG dialogue typewriter. Client",
+                    "side only, and never leaks markup into chat mode, system chat, TTS or base MCA UI.")
+                    .define("emotionEffectsEnabled", true);
+            townsteadScheduleRespectEnabled = b.comment(
+                    "Let a villager's Townstead shift affect greetings, ambient replies, deep-topic",
+                    "availability and how firmly chat mode holds their attention. Off, the existing rules",
+                    "apply unchanged and a working villager is interrupted exactly as before.")
+                    .define("scheduleRespectEnabled", true);
+            townsteadTypedChatDialogueTrackingEnabled = b.comment(
+                    "Tell Townstead when a typed-chat conversation opens and closes, so its",
+                    "in_dialogue_with_player and dialogue_just_ended context tags are true for chat mode",
+                    "as well as for the RPG screen.")
+                    .define("typedChatDialogueTrackingEnabled", true);
+            townsteadGiftNeedObservationEnabled = b.comment(
+                    "After an accepted gift, re-read the villager's Townstead needs one tick later and only",
+                    "then let gratitude lines claim the gift helped. Conversations never fills a need",
+                    "itself; this only observes whether Townstead's own value improved.")
+                    .define("giftNeedObservationEnabled", true);
+            townsteadGossipEnabled = b.comment(
+                    "Let the existing village gossip sweep also notice Townstead changes: need crises and",
+                    "recoveries, profession progress, newly learned skills, life-stage and birthday",
+                    "milestones, buildings appearing and disappearing, and village spirit shifting.")
+                    .define("gossipEnabled", true);
+            townsteadCustomPersonalityProfilesEnabled = b.comment(
+                    "Match a Townstead custom personality to its exact interiority profile before falling",
+                    "back to the MCA personality it is based on. Off, custom personalities always use their",
+                    "MCA base profile.")
+                    .define("customPersonalityProfilesEnabled", true);
+            calendarSource = b.comment(
+                    "Which mod decides the narrative date and season.",
+                    "AUTO           - Townstead when healthy, then Serene Seasons, then the built-in calendar.",
+                    "TOWNSTEAD      - Townstead only, falling back to the built-in calendar when absent.",
+                    "SERENE_SEASONS - Serene Seasons only, falling back to the built-in calendar when absent.",
+                    "BUILTIN        - always the built-in quarter-split of the world day.",
+                    "Exactly one source ever answers, so two installed calendars cannot contradict",
+                    "each other in the same conversation.")
+                    .defineEnum("calendarSource", CalendarSource.AUTO);
+            useLegacyHolidayFallbackWithTownstead = b.comment(
+                    "When Townstead owns the calendar and no townstead_holidays mapping matches today,",
+                    "fall back to the built-in fixed festival cycle. Off by default because that cycle is",
+                    "keyed to Conversations' own year length and would land on unrelated dates in a",
+                    "Townstead calendar.")
+                    .define("useLegacyHolidayFallbackWithTownstead", false);
+            townsteadMaxCheckFit = b.comment(
+                    "Hard clamp on the townstead_fit dialogue-check term, in points. Kept below the",
+                    "15-point tier margin so Townstead state can colour a borderline exchange without",
+                    "deciding one on its own.")
+                    .defineInRange("maxCheckFit", 8, 0, 14);
+            townsteadContextCacheTicks = b.comment(
+                    "How long a Townstead context read is reused by the chat scans, in ticks. Dialogue",
+                    "evaluation always caches for exactly one tick regardless of this, because MCA scores",
+                    "many candidate results for a single click.")
+                    .defineInRange("contextCacheTicks", 20, 1, 100);
+            townsteadNeedCrisisCooldownDays = b.comment(
+                    "Days before the same villager can produce another need-crisis rumour, so a villager",
+                    "hovering at the edge of hunger is news once rather than every sweep.")
+                    .defineInRange("needCrisisCooldownDays", 2, 0, 60);
+            townsteadBuildingRemovalConfirmScans = b.comment(
+                    "How many consecutive sweeps must agree a known building is gone before that becomes",
+                    "news. Guards against a reload or chunk-loading transient reading as a demolition.")
+                    .defineInRange("buildingRemovalConfirmScans", 2, 1, 10);
+            townsteadDebug = b.comment("Verbose logging for Townstead binding, context reads and reactions.")
+                    .define("debug", false);
             b.pop();
 
             b.push("debug");
