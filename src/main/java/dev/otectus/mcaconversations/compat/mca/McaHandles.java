@@ -17,6 +17,7 @@ import java.lang.invoke.MethodHandleProxies;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -145,6 +146,29 @@ public final class McaHandles {
     private static final MethodHandle H_ONLINE_TTS = R.handle(McaBinding.CONFIG_ONLINE_TTS);
     private static final MethodHandle H_ACTIONS_REGISTER = R.handle(McaBinding.ACTIONS_REGISTER);
     private static final MethodHandle H_GIFT_REGISTER = R.handle(McaBinding.GIFT_REGISTER);
+
+    // Living-histories context capabilities (spec §7.3).
+    private static final MethodHandle H_PROFESSION_ID = R.handle(McaBinding.GET_PROFESSION_ID);
+    private static final MethodHandle H_VILLAGER_INVENTORY = R.handle(McaBinding.GET_VILLAGER_INVENTORY);
+    private static final MethodHandle H_GET_TRAITS = R.handle(McaBinding.GET_TRAITS);
+    private static final MethodHandle H_TRAITS_SET = R.handle(McaBinding.TRAITS_GET_TRAITS);
+    private static final MethodHandle H_TRAIT_ID = R.handle(McaBinding.TRAIT_GET_ID);
+    private static final MethodHandle H_TRAIT_ID_LEGACY = R.handle(McaBinding.TRAIT_ID_LEGACY);
+    private static final MethodHandle H_CURRENT_JOB = R.handle(McaBinding.BRAIN_GET_CURRENT_JOB);
+    private static final MethodHandle H_IS_PANICKING = R.handle(McaBinding.BRAIN_IS_PANICKING);
+    private static final MethodHandle H_SHOULD_GRIEVE = R.handle(McaBinding.BRAIN_SHOULD_GRIEVE);
+    private static final MethodHandle H_WORKPLACE = R.handle(McaBinding.RESIDENCY_GET_WORKPLACE);
+    private static final MethodHandle H_HOME_POS = R.handle(McaBinding.RESIDENCY_GET_HOME);
+    private static final MethodHandle H_NODE_DECEASED = R.handle(McaBinding.NODE_IS_DECEASED);
+    private static final MethodHandle H_NODE_PARTNER = R.handle(McaBinding.NODE_PARTNER);
+    private static final MethodHandle H_NODE_FATHER = R.handle(McaBinding.NODE_FATHER);
+    private static final MethodHandle H_NODE_MOTHER = R.handle(McaBinding.NODE_MOTHER);
+    private static final MethodHandle H_NODE_SIBLINGS = R.handle(McaBinding.NODE_SIBLINGS);
+    private static final MethodHandle H_NODE_CHILDREN = R.handle(McaBinding.NODE_CHILDREN);
+    private static final MethodHandle H_NODE_PROFESSION_ID = R.handle(McaBinding.NODE_PROFESSION_ID);
+    private static final MethodHandle H_VILLAGE_POPULATION = R.handle(McaBinding.VILLAGE_GET_POPULATION);
+    private static final MethodHandle H_BUILDING_AT = R.handle(McaBinding.VILLAGE_BUILDING_AT);
+    private static final MethodHandle H_BUILDING_TYPE = R.handle(McaBinding.BUILDING_GET_TYPE);
 
     // ==============================================================================================
     // Type tests
@@ -790,6 +814,215 @@ public final class McaHandles {
                         MethodType.methodType(void.class, Entity.class, ServerPlayer.class))
                 .bindTo(body)
                 .asType(MethodType.methodType(void.class, villagerType, ServerPlayer.class));
+    }
+
+    // ==============================================================================================
+    // Living-histories context capabilities (spec §7.3)
+    //
+    // Every accessor here answers one field of ConversationContextSnapshot. They return Optional or an
+    // empty collection on any miss, so the context source can report the field UNKNOWN rather than
+    // inventing a default — the whole point of the capability group (spec §10.7).
+    // ==============================================================================================
+
+    /** The exact profession registry id, {@code "minecraft:farmer"}. Empty when unbound or unset. */
+    public static Optional<String> professionId(Object villager) {
+        if (!isVillager(villager)) {
+            return Optional.empty();
+        }
+        Object id = ref(H_PROFESSION_ID, villager);
+        return id == null ? Optional.empty() : Optional.of(id.toString());
+    }
+
+    /** MCA's assigned chore, lowercased ({@code none}, {@code harvest}, {@code fish}…). */
+    public static Optional<String> currentChore(Object villager) {
+        String name = isVillager(villager) ? enumName(ref(H_CURRENT_JOB, brain(villager))) : null;
+        return name == null ? Optional.empty() : Optional.of(name);
+    }
+
+    /** True while MCA's brain says the villager is panicking — ordinary initiative must stay quiet. */
+    public static boolean isPanicking(Object villager) {
+        return isVillager(villager) && boolOf(H_IS_PANICKING, brain(villager));
+    }
+
+    /** True while MCA's brain says the villager is grieving. */
+    public static boolean isGrieving(Object villager) {
+        return isVillager(villager) && boolOf(H_SHOULD_GRIEVE, brain(villager));
+    }
+
+    /** The assigned workplace block, if MCA has one for this villager. */
+    public static Optional<BlockPos> workplace(Object villager) {
+        Object residency = isVillager(villager) ? ref(H_RESIDENCY, villager) : null;
+        // getWorkplace() returns a bare BlockPos, not an Optional: unwrapping it would always be null.
+        return ref(H_WORKPLACE, residency) instanceof BlockPos pos ? Optional.of(pos) : Optional.empty();
+    }
+
+    /** The assigned home block, dropping the dimension of MCA's {@code GlobalPos}. */
+    public static Optional<BlockPos> homePos(Object villager) {
+        Object residency = isVillager(villager) ? ref(H_RESIDENCY, villager) : null;
+        Object global = unwrap(ref(H_HOME_POS, residency));
+        if (global instanceof net.minecraft.core.GlobalPos gp) {
+            return Optional.of(gp.pos());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Registry ids of the villager's MCA traits.
+     *
+     * <p>Read through {@code Traits#getTraits} and {@code Trait#getId} rather than {@code hasTrait},
+     * because {@code hasTrait} has two arity-1 overloads and would need a parameter hint for something
+     * the set already answers.
+     */
+    public static Set<String> traitIds(Object villager) {
+        Object traits = isVillagerLike(villager) ? ref(H_GET_TRAITS, villager) : null;
+        Object set = ref(H_TRAITS_SET, traits);
+        if (!(set instanceof Iterable<?> items)) {
+            return Set.of();
+        }
+        Set<String> out = new HashSet<>();
+        for (Object trait : items) {
+            // 7.7's getId() first, then 7.6's id(). An unbound member is a stub returning null, so the
+            // fallback costs one null check rather than a version test.
+            Object id = ref(H_TRAIT_ID, trait);
+            if (id == null) {
+                id = ref(H_TRAIT_ID_LEGACY, trait);
+            }
+            if (id != null) {
+                out.add(id.toString().toLowerCase(Locale.ROOT));
+            }
+        }
+        return Set.copyOf(out);
+    }
+
+    /**
+     * Which of {@code probes} the villager is carrying at least one of.
+     *
+     * <p>Presence only. A count would be an economy claim, and the plan is explicit that a villager
+     * may say "I have iron" and may not say "the village consumed twelve iron" (spec §12.2).
+     */
+    public static Set<String> inventoryTags(Object villager, Collection<String> probes) {
+        if (!isVillager(villager) || probes == null || probes.isEmpty()) {
+            return Set.of();
+        }
+        Object inventory = ref(H_VILLAGER_INVENTORY, villager);
+        if (!(inventory instanceof net.minecraft.world.Container container)) {
+            return Set.of();
+        }
+        Set<String> found = new HashSet<>();
+        try {
+            for (int slot = 0; slot < container.getContainerSize(); slot++) {
+                ItemStack stack = container.getItem(slot);
+                if (stack == null || stack.isEmpty()) {
+                    continue;
+                }
+                for (String probe : probes) {
+                    if (found.contains(probe)) {
+                        continue;
+                    }
+                    net.minecraft.resources.ResourceLocation id =
+                            net.minecraft.resources.ResourceLocation.tryParse(probe);
+                    if (id != null && stack.is(net.minecraft.tags.TagKey.create(
+                            net.minecraft.core.registries.Registries.ITEM, id))) {
+                        found.add(probe);
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            return Set.copyOf(found);
+        }
+        return Set.copyOf(found);
+    }
+
+    // --- Family tree, read as the authoritative social graph (spec §16.1) -------------------------
+
+    /** True when MCA's family tree records this villager as dead — the referent-drift guard. */
+    public static boolean isDeceased(ServerLevel level, UUID villagerUuid) {
+        return boolOf(H_NODE_DECEASED, familyNode(level, villagerUuid));
+    }
+
+    public static Optional<UUID> partnerOf(ServerLevel level, UUID villagerUuid) {
+        return nodeUuid(H_NODE_PARTNER, familyNode(level, villagerUuid));
+    }
+
+    /** Father then mother, in that order, skipping absent and MCA's zero-UUID placeholder. */
+    public static List<UUID> parentsOf(ServerLevel level, UUID villagerUuid) {
+        Object node = familyNode(level, villagerUuid);
+        List<UUID> out = new ArrayList<>();
+        nodeUuid(H_NODE_FATHER, node).ifPresent(out::add);
+        nodeUuid(H_NODE_MOTHER, node).ifPresent(out::add);
+        return List.copyOf(out);
+    }
+
+    public static Set<UUID> siblingsOf(ServerLevel level, UUID villagerUuid) {
+        return nodeUuidSet(H_NODE_SIBLINGS, familyNode(level, villagerUuid));
+    }
+
+    public static Set<UUID> childrenOf(ServerLevel level, UUID villagerUuid) {
+        return nodeUuidSet(H_NODE_CHILDREN, familyNode(level, villagerUuid));
+    }
+
+    /** A family member's profession id, so "my sister the mason" is a fact rather than a guess. */
+    public static Optional<String> familyTreeProfessionId(ServerLevel level, UUID villagerUuid) {
+        Object id = ref(H_NODE_PROFESSION_ID, familyNode(level, villagerUuid));
+        return id == null ? Optional.empty() : Optional.of(id.toString());
+    }
+
+    // --- Village and buildings --------------------------------------------------------------------
+
+    public static OptionalInt villagePopulation(ServerLevel level, int villageId) {
+        Object village = village(level, villageId);
+        if (village == null) {
+            return OptionalInt.empty();
+        }
+        try {
+            return OptionalInt.of((int) H_VILLAGE_POPULATION.invoke(village));
+        } catch (Throwable t) {
+            return OptionalInt.empty();
+        }
+    }
+
+    /** MCA's building type token at {@code pos} ({@code library}, {@code smithy}, {@code house}…). */
+    public static Optional<String> buildingTypeAt(ServerLevel level, int villageId, BlockPos pos) {
+        if (pos == null) {
+            return Optional.empty();
+        }
+        Object building = unwrap(ref(H_BUILDING_AT, village(level, villageId), pos));
+        return ref(H_BUILDING_TYPE, building) instanceof String type && !type.isBlank()
+                ? Optional.of(type.toLowerCase(Locale.ROOT))
+                : Optional.empty();
+    }
+
+    private static Object familyNode(ServerLevel level, UUID villagerUuid) {
+        if (level == null || villagerUuid == null) {
+            return null;
+        }
+        Object tree = staticRef(H_FAMILY_TREE_GET, level);
+        return unwrap(ref(H_TREE_GET_OR_EMPTY, tree, villagerUuid));
+    }
+
+    /** MCA writes an all-zero UUID where a relation is absent; that is "nobody", not a resident. */
+    private static Optional<UUID> nodeUuid(MethodHandle handle, Object node) {
+        Object value = ref(handle, node);
+        if (value instanceof UUID uuid
+                && (uuid.getMostSignificantBits() != 0L || uuid.getLeastSignificantBits() != 0L)) {
+            return Optional.of(uuid);
+        }
+        return Optional.empty();
+    }
+
+    private static Set<UUID> nodeUuidSet(MethodHandle handle, Object node) {
+        Object value = ref(handle, node);
+        if (!(value instanceof Iterable<?> items)) {
+            return Set.of();
+        }
+        Set<UUID> out = new HashSet<>();
+        for (Object item : items) {
+            if (item instanceof UUID uuid
+                    && (uuid.getMostSignificantBits() != 0L || uuid.getLeastSignificantBits() != 0L)) {
+                out.add(uuid);
+            }
+        }
+        return Set.copyOf(out);
     }
 
     // ==============================================================================================

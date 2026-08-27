@@ -788,9 +788,447 @@ guessing from the key's shape. A label reading the same on every page is an affo
 with different consequences sharing one is the actual bug, and `answerLabelsAreUniqueWithinATopic`
 catches that.
 
+## Living histories
+
+1.4.0 adds a layer *above* the dialogue graph. It does not replace anything: every route in this
+document still works, and with `dynamic.enabled = false` the mod selects exactly what 1.4.0 selected.
+What the layer adds is the ability for a scene to be chosen because of who this villager is, what is
+currently happening to them, and what the two of you have already said.
+
+Four new data directories, all merged across namespaces like everything else here.
+
+### `identity_tokens/` — the stable anchors a villager can be generated with
+
+```json
+{
+  "tokens": {
+    "animals": {
+      "family": "interest",
+      "weight": 12,
+      "ages": ["teen", "adult"],
+      "favour_archetypes": ["cultivation"],
+      "never_with_personalities": [],
+      "conflicts": ["crowds"]
+    }
+  },
+  "aliases": {"beasts": "animals"}
+}
+```
+
+Families and their caps: `interest` (2), `value` (2), `comfort` (1), `aversion` (1), `work_style` (1),
+`social_style` (1), `disclosure_style` (1), `origin_motif` (1).
+
+Three different mechanisms, and they are not interchangeable:
+
+| Field | Kind | Meaning |
+|---|---|---|
+| `ages`, `professions`, `archetypes` | **gate** | non-empty means *only these* |
+| `favour_archetypes`, `favour_personalities` | **weight** | +8 to the selection weight; a thumb on the scale, never a rail |
+| `never_with_professions`, `never_with_personalities` | **ban** | may never be generated for these |
+| `conflicts` | **exclusion** | symmetric; one villager may not hold both |
+
+Bans exist for one reason: a profile must never infer a sensitive identity from a job or a mood. A
+cleric is not automatically devout in a particular way, an outlaw is not automatically cruel, and a
+"sensitive" villager is not fragile. `VillagerIdentityGeneratorTest` asserts this over the shipped
+catalog rather than trusting it.
+
+`aliases` is how a token is renamed without rerolling anybody: existing profiles keep the string they
+were generated with and the catalog resolves it forward.
+
+A profile is generated once, from a seed made of the **world seed and the villager UUID only** — not
+the day, not their position, not their name, and not the player asking. Two players meet the same
+person; a restart changes nothing; rebalancing weights later leaves existing villagers alone.
+
+### `episode_templates/` — the shape of a situation
+
+```json
+{
+  "episodes": {
+    "work.damaged_volume": {
+      "subject": "work.librarian.damaged_volume",
+      "professions": ["minecraft:librarian"],
+      "initial_state": "blocked",
+      "states": ["blocked", "active", "succeeded", "failed", "abandoned", "remembered"],
+      "transitions": ["blocked->active", "active->succeeded", "active->failed"],
+      "required_slots": ["volume", "damage"],
+      "slot_options": {
+        "volume": ["ledger", "atlas", "herbal"],
+        "damage": ["damp", "mould"]
+      },
+      "privacy": "ordinary",
+      "knowledge": "participant",
+      "share": "may_describe_anonymously",
+      "salience": 55,
+      "due_after_days": 6,
+      "expires_after_days": 24
+    }
+  }
+}
+```
+
+States are `planned`, `active`, `blocked`, `succeeded`, `failed`, `abandoned`, `remembered`. A
+template may **narrow** the machine and never widen it; declaring `succeeded->active` is refused at
+load, because a legal-looking transition table that contradicts the state machine would let a
+resolved project become unresolved again through data.
+
+#### Provenance: how a villager knows a thing
+
+`privacy` no longer stands alone. Every episode carries the four fields section 16.3 of the plan asks
+for, and three of them are authorable:
+
+| Field | Values | Default |
+|---|---|---|
+| `knowledge` | `witnessed`, `participant`, `family`, `coworker`, `told_by`, `public_notice`, `unknown_rumor` | `participant` |
+| `privacy` | `public`, `ordinary`, `discreet`, `confidential`, `speaker_only` | `ordinary` |
+| `share` | `may_name`, `may_describe_anonymously`, `may_not_share` | implied by `privacy` |
+| `distortion` | `none`, `omitted_detail`, `mistaken_interpretation` | `none` |
+
+Confidence is derived rather than declared, because the source is what a footing can honestly rest
+on: a `public_notice` supports certainty, `told_by` supports "likely", and an `unknown_rumor` cannot
+be held more firmly than "uncertain" no matter what a pack writes. Declaring a firmer confidence than
+the source can bear is not an error — the value is simply lowered, and the line hedges.
+
+`share` may be **narrower** than the privacy level implies and never wider, so a confidence cannot be
+laundered by relabelling what may be done with it. What it governs is passing a thing on to a third
+party; it never stops the person a thing happened to from speaking about their own life.
+
+`distortion` is the one field nothing in the runtime ever sets. Propagation weakens confidence and
+adds hedging; it does not invent detail. A villager's account is wrong only where an author has said
+so, which is what keeps two villagers able to disagree about what a public event *meant* without
+either of them contradicting the event log about what it *was*.
+
+Saves written before this release are read as they were: their loose `source`, `privacy` and
+`confidence` fields become a well-formed bundle, with permission derived from the privacy level they
+already recorded.
+
+`slot_options` are pools, and the pick is seeded on world + villager + kind — **not** the day. The
+book a librarian is worrying about is hers and stays hers until it is resolved; a daily roll would be
+combinatorial variety pretending to be a life.
+
+Every slot token needs a lang key at `mcaconversations.slot.<token>` in every locale, and it should
+render as a **complete noun phrase carrying its own article**. Write the sentence around it so
+nothing agrees with the noun — `"%2$s came back from the damp"` translates; `"The %2$s is damp"` does
+not.
+
+### `thread_templates/` — what a pair is in the middle of
+
+```json
+{
+  "threads": {
+    "work.librarian.damaged_volume": {
+      "topic": "work",
+      "subject": "work.librarian.damaged_volume",
+      "episode_kind": "work.damaged_volume",
+      "resume_scenes": ["work.librarian.damaged_volume.recovered"],
+      "cooldown_days": 1,
+      "expires_after_days": 20,
+      "privacy": "ordinary"
+    }
+  }
+}
+```
+
+`resume_scenes` is required. Coming back to a subject is an authored moment, not a restored screen: on
+return the player gets a line written for having been away, not the stale button page they left open.
+A thread with no way back could only ever be dropped, so the parser refuses one.
+
+Statuses: `open`, `waiting_on_world`, `waiting_on_player`, `ready_to_resume`, `resolved`, `lapsed`,
+`ruptured`. A rupture and an outstanding obligation are never lapsed by a timer.
+
+### `commitment_templates/` — a promise the game can check
+
+```json
+{
+  "commitments": {
+    "work.librarian.bring_absorbent": {
+      "resolver": "gift_tag_received",
+      "target": "registry_id:minecraft:wool",
+      "due_after_days": 3,
+      "made_by": "player",
+      "thread": "work.librarian.damaged_volume"
+    }
+  }
+}
+```
+
+Resolvers: `gift_tag_received`, `quest_state` (MCA: Quests only), `visit_after_day`,
+`conversation_choice`, `event_observed`, `manual_neutral`.
+
+**A promise must name a resolver, and a judging resolver must name a target.** This is enforced at
+parse and again by `SceneCatalogLintTest`. If nothing in the running game can observe the thing, the
+button has to be worded as willingness — "I'll see what I can find" — or declared `manual_neutral`,
+which is remembered as something that was said and never judged kept or broken.
+
+### `conversation_scenes/` — when a route is the right one
+
+```json
+{
+  "scenes": {
+    "work.librarian.damaged_volume.blocked": {
+      "purpose": "topic:work",
+      "shape": "problem_solve",
+      "profile": {"profession": "minecraft:librarian", "subjects_any": ["damaged_volume"]},
+      "context": {
+        "episode_kind": "work.damaged_volume",
+        "episode_state": ["blocked"],
+        "required_slots": {"volume": "localized_token", "damage": "localized_token"},
+        "conditions": [{"field": "weather.state", "is": "rain", "unknown": "neutral"}],
+        "identity": [{"family": "value", "any_of": ["precision"]}]
+      },
+      "selection": {
+        "base_priority": 28,
+        "identity_values": ["precision", "duty"],
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.work.librarian.damaged_volume.respond",
+        "opening_beat": "work.librarian.damaged_volume.blocked"
+      },
+      "episode": {"thread": "work.librarian.damaged_volume"},
+      "fallback": "work.librarian.current_task.evergreen"
+    }
+  }
+}
+```
+
+A scene is **not dialogue**. It names a question and an opening beat that already exist and are
+already contracted; everything else is the rule for when that route is the right one. Purposes:
+`topic:<id>`, `greeting`, `state_change`, `due_commitment`, `acute`, `shared_event`,
+`opinion_request`, `repair`, `low_stakes`, `resume`.
+
+Shapes — `problem_solve`, `reminisce`, `debate`, `teach_back`, `confide`, `celebrate`, `repair`,
+`plan`, `observe` — drive repetition suppression. Two scenes sharing no ids at all can still be the
+same conversation, and the shape is what lets the director notice.
+
+Slot types: `localized_token`, `registry_id`, `person`, `location_token`, `number_band`, `date`,
+`flag`. A `person` slot is stored as a UUID and re-resolved at render time, so a neighbour who has
+died or moved renders as the neutral fallback rather than being named as though still present.
+
+### Reaching a scene from a dialogue file
+
+The director freezes one plan when the player opens a topic. A route reads it, never re-selects:
+
+```json
+{
+  "baseChance": 0,
+  "conditions": [
+    {"chance": 900,  "conversations_scene": {"is": "work.librarian.damaged_volume.blocked"}},
+    {"chance": -5000, "conversations_scene": {"is": "work.librarian.damaged_volume.blocked", "not": true}},
+    {"chance": -2000, "conversations_disabled": "dynamic"}
+  ],
+  "actions": {
+    "conversations_session": {"op": "begin", "topic": "work", "budget": "standard",
+                              "beat": "work.librarian.damaged_volume.blocked"},
+    "next": "conversations.scene.work.librarian.damaged_volume.respond",
+    "conversations_say": {"phrase": "conversations.scene.work.librarian.damaged_volume.blocked",
+                          "slots": ["volume", "damage"]}
+  }
+}
+```
+
+The negated condition is load-bearing. MCA scores every candidate result and picks a winner, so
+without a large sink a dynamic route could win on base chance and speak a line whose slots were never
+bound.
+
+`conversations_say` gained a `slots` list. Slots fill the positional args **after** the vars, in
+declaration order — `"vars": ["villager_name"], "slots": ["volume"]` puts the villager at `%2$s` and
+the volume at `%3$s`, in every language.
+
+### New conditions
+
+| Condition | Shape | Notes |
+|---|---|---|
+| `conversations_profile` | `{family, any_of, not?}` or `{has_former_profession}` | An unprofiled villager is always a non-match, so this can only ever *add* a route |
+| `conversations_context` | `{field, is/any_of/has/min/max, not?, unknown}` | `unknown` is **required thinking**: `fail`, `neutral`, `fallback` or `error`. "Not raining" and "nothing could tell me" are different facts |
+| `conversations_episode` | `{kind, state?, overdue?, min_salience?, not?}` | The condition that lets one page say "still stuck" only while it is |
+| `conversations_thread` | `{template, status?, ready?, not?}` | |
+| `conversations_commitment` | `{id, state?, due?, not?}` | Uses the state the promise *is in today*, so a deadline that passed while the server was down reads correctly without writing anything |
+| `conversations_claim` | `{type, is?, disputed?, not?}` | |
+| `conversations_opinion` | `{axis, min?, max?, not?}` | Axes: reliability, warmth, respect, trust, fairness, skill |
+| `conversations_role` | `{role, min_days?, not?}` | Does this villager hold an observed role towards anybody, and for how long |
+| `conversations_culture` | `{token?, family?, stance?, not?}` | What this village keeps, and what this resident makes of it |
+| `conversations_recent` | `{level, id, within_days, not?}` | Levels: `scene`, `subject`, `shape`, `topic` |
+| `conversations_scene` | `{is, not?}` | Reads the frozen plan; never selects |
+
+### New actions
+
+| Action | Shape |
+|---|---|
+| `conversations_episode` | `{op: open\|advance\|witness\|correct, kind, state?, slots?}` |
+| `conversations_thread` | `{op: open\|advance\|resolve\|lapse\|rupture\|played, template, status?, obligation?, cooldown_days?}` |
+| `conversations_commitment` | `{op: make\|resolve, id, outcome?}` |
+| `conversations_claim` | `{op: record\|clarify, type, value?, source}` |
+| `conversations_opinion` | `{axis, target, delta, cause, privacy?, expires_days?}` |
+| `conversations_role` | `{role, target, cause, expires_days?, withdraw?}` |
+
+Every one instantiates an **authored template**, never a shape. A result cannot invent an episode kind
+or an unregistered promise from JSON, which is what keeps runtime state and authored content in step.
+
+`conversations_claim` requires `source` — the `question/answer` that introduced it. Without provenance
+there is no claim: the safety of storing anything a player said rests entirely on being able to point
+at the button they clicked. Free-form typed text may *select* a claim; it may never *become* one.
+
+`conversations_opinion` requires a `cause` and resolves its `target` from a bound `person` slot on the
+frozen plan rather than from the JSON. An opinion with no cause could only produce "I don't like
+them", which is generic drama; and a directive naming a UUID could not have been authored, because
+that villager did not exist when the pack was written.
+
+#### Rumours, and what happens to one on the way
+
+A story a villager knows can reach the villager next to them. The event id survives every hop, which
+is the point: a correction later addresses the same event rather than one villager's copy of it, and
+`{"op": "correct"}` on `conversations_episode` is how a scene sets an account straight. A correction
+changes the *footing* — the villager now holds it as certain and any authored distortion is cleared —
+and never the source, because being told the truth does not mean they were there after all.
+
+Every rule on propagation is a refusal:
+
+| Rule | Effect |
+|---|---|
+| Share permission | `may_not_share` never moves at all |
+| Chain length | three hops from the person it happened to, then it stops |
+| Confidence | falls one step per hop, and hedging appears in the wording |
+| Salience | falls by 15 per hop; below 10 nobody brings it up |
+| Privacy | travels with the fact; a confidence does not become ordinary by being repeated |
+| Naming | where the holder may describe but not name, the participants are **dropped from the copy** |
+| Player claims | what a player said about themselves never travels unless it is `public` |
+| Distortion | never introduced; the copy is faithful |
+
+Dropping the names rather than hiding them is deliberate. A name kept in a record and merely not
+spoken is one authoring mistake away from being spoken.
+
+Player permission has exactly one representation, and it is the privacy level. A player saying "you
+can tell people" makes the fact public; a flag beside the privacy level would allow the contradiction
+of a confidential fact that may nonetheless be repeated.
+
+Propagation runs on the existing low-frequency village sweep, among villagers near an online player,
+and moves at most four stories per pass across the whole server. The bound on where is not only a
+performance concession: a rumour spreading through empty chunks would be a simulation nobody could
+have witnessed, and the first a player heard of it would be a villager referring to something that had
+never happened in front of anyone.
+
+#### Observed social roles
+
+Kinship is **not** here. MCA's family tree is authoritative for parents, children, siblings,
+grandparents and partners, and the mod does not keep a second copy of it. `conversations_role` records
+the relationships nothing else does:
+
+| Role | Lasts |
+|---|---|
+| `coworker`, `supply_dependency`, `mentor`, `apprentice`, `cared_for` | until withdrawn |
+| `trusted_neighbour` | 90 days |
+| `customer` | 60 days |
+| `avoided` | 60 days |
+| `beneficiary` | 45 days |
+| `recurring_disagreement` | 30 days |
+| `shared_event` | 21 days |
+
+The lifetime belongs to the *kind* of relationship rather than to whichever code path noticed it, so a
+single argument fades and a mentorship does not. Seeing a role again refreshes its lapse date and
+keeps its original day, which is what lets a line say "for years now" and be right —
+`conversations_role` with `min_days` is the condition that checks it.
+
+A role that lasts until withdrawn has to be endable, so the action takes `withdraw: true`; that is the
+only form that does not need a `cause`, because it is the end of one. Everything else about the
+directive follows `conversations_opinion`: the cause is required, and the target comes from a bound
+`person` slot rather than the JSON.
+
+Roles are directional and the mirror is never created automatically. That a smith counts the farmer a
+supplier is not evidence that the farmer counts the smith a customer, and asserting it from one side's
+account would be inventing the other side.
+
+### `village_culture/` — what a village is like
+
+```json
+{
+  "tokens": {
+    "first_frost_supper": {
+      "family": "festival",
+      "weight": 12,
+      "endorsed_by": ["hospitality", "crowded_table"],
+      "questioned_by": ["crowds", "privacy"]
+    }
+  },
+  "aliases": {"frost_supper": "first_frost_supper"}
+}
+```
+
+Six families, and a village draws exactly one token from each: `tradition`, `value`, `work_concern`,
+`landmark`, `festival`, `debate`. The draw is seeded on the world seed and the village id and nothing
+else — not the day, not the population, not who is asking — so two players arriving from opposite
+directions find the same place, and a server restart does not rewrite what the village believes about
+itself. Generation happens once and is persisted; a pack that later adds ten festivals leaves existing
+villages exactly as they were.
+
+A village is all six families or none. A partial culture would hand every scene binding a landmark a
+hole to handle, so if a pack cannot fill a family the honest answer is that this install has no
+village culture at all.
+
+`endorsed_by` and `questioned_by` name **identity** token ids, which is what stops a culture from
+being a hive mind. The festival belongs to the village; whether a given resident is glad of it comes
+from who that resident already is. A villager who values hospitality endorses the frost supper; one
+who is averse to crowds has a reservation about it; most residents ignore it, which is not a failure
+state — most people have no view about most of what their village believes. A token listed in both
+sets is refused at load, because the tie would be settled by iteration order.
+
+`conversations_culture` asks both questions. `token` gates a line that names the split oak; `family`
+with `stance` gates a line that argues with whatever this village keeps in that family. Given both,
+both must hold — otherwise a page fires for a villager who questions a festival their village does not
+actually keep. A villager with no home village matches nothing, before negation: a wanderer has no
+culture, and "does not endorse" would assert something about a village that is not theirs.
+
+Every token needs a lang key at `mcaconversations.culture.<id>` in every locale, written as a phrase
+that can be dropped into a sentence — `"the first frost supper"`, `"whether to wall the village"`.
+
+On a village merge the surviving village keeps its own six tokens and records that it took the other
+one in, so the absorbed id keeps resolving. Blending two cultures would leave every resident of both
+waking up somewhere that had never existed.
+
+### Semantic contracts v2
+
+Beats gained an optional `frame` and replies an optional set of move fields. Both are opt-in: every
+contract written before this release behaves exactly as it did.
+
+```json
+"frame": {
+  "predicate": "work_problem",
+  "temporal": "current",
+  "epistemic": "observed",
+  "privacy": "ordinary",
+  "obligations": ["decide", "clarify", "promise"],
+  "referents": {"volume": "slot:volume"},
+  "slots": ["volume", "damage"],
+  "episode_states": ["blocked"],
+  "shape": "problem_solve"
+}
+```
+
+```json
+"answers_obligation": ["promise"],
+"targets_frame": "work_problem",
+"uses_referents": ["volume"],
+"commitment": "work.librarian.bring_absorbent",
+"move": "boundary",
+"epistemic_move": "ask_source",
+"privacy_move": "keep_private",
+"temporal_move": "ask_next"
+```
+
+The build then enforces four things v1 could not see:
+
+1. every non-exit reply either fulfils an obligation the inbound beat declared or performs a declared
+   topic move (`bridge`, `boundary`, `reciprocate`, `exit`);
+2. a page whose beat asks a question must contain a reply that answers it;
+3. every referent a reply presupposes is introduced by **every** beat that can open its page;
+4. a beat's tense never contradicts the episode states it plays in — no "still" on a finished thing.
+
+A `reported` or `rumoured` frame must name a source referent, so a rumour cannot be spoken as an
+observation.
+
 ## Generated reports
 
-`./gradlew build` leaves four documents in `build/libs/reports/`, all generated and all asserted
+`./gradlew build` leaves eight documents in `build/libs/reports/`, all generated and all asserted
 deterministic so they can be diffed against the previous release:
 
 | File | What it is |
@@ -799,6 +1237,10 @@ deterministic so they can be diffed against the previous release:
 | `adjacency.pt_br.md` | The same document rendered through the Portuguese lang file. Key parity is satisfied by a key existing; this is how you find out whether the Portuguese conversation reads. |
 | `coverage.md` | The counts: contracts, per-topic depth against each topic's own target, personality overlay coverage, chat intents, profession profiles, locale key totals. |
 | `uncontracted-routes.txt` | Every `say → next` route with no beat contract. Currently empty, and the ledger that keeps it that way is `src/test/resources/legacy_unverified_routes.txt`. |
+| `scenes.md` | Every scene, what gates it, what it needs bound, and where it routes. Plus the index bucket sizes, which is where a performance problem would show up first. |
+| `identity-coverage.md` | The token catalog: every token, its family, weight, gates, favours, bans and conflicts, and the alias table. |
+| `threads.md` | Every episode, thread and promise lifecycle, including which resolver each promise is checked by. |
+| `memory-schema.md` | What gets written to a world, the configured and hard caps on every collection, which provider owns each context field, and the shape cooldowns. |
 
 ## Debug commands for bug reports
 
@@ -812,6 +1254,14 @@ followed the right one", and that is very hard to report without them.
 | `/conversations chat status` | any | Whether chat mode is on for the server and for you. |
 | `/conversations gossip list` / `clear` | op | The gossip log the news and rumours topics read from. |
 | `/conversations compat townstead status` | op | What the Townstead binding actually resolved. |
+| `/conversations profile inspect` | op | The stable profile of the nearest villager: their interests, values, comfort, aversion, styles and origin, plus the seed they were generated from. |
+| `/conversations profile tokens` | op | The whole identity catalog, by family. |
+| `/conversations history inspect` | op | Every episode, opinion, observed role, thread, promise and claim the nearest villager holds; what their village keeps and what they make of it; the dynamic hub entries they would offer you; and what they share with you. |
+| `/conversations history forget confirm` | op | Drops one villager's profile and history. Narrow on purpose: MCA hearts, memories, arcs and disposition are untouched, and there is deliberately no wipe-everything command. |
+| `/conversations scene plan` | op | Why the scene you are in was chosen: candidate counts, every non-zero score term, the rejected finalists with the first reason each was dropped, the bound slots and where each came from. |
+| `/conversations scene candidates <topic>` | op | The same, as a dry run for a topic you have not opened. Does not store a plan, so inspecting cannot change what the next real conversation says. |
+| `/conversations context snapshot` | op | Every context field and its value, `~` marking the volatile ones. |
+| `/conversations context capabilities` | op | The MCA binding status and what each context provider managed to supply. |
 
 When reporting a bad adjacency, the useful pair is the node id and the button name from
 `build/libs/reports/adjacency.md` plus the output of `debug-ask` on them.

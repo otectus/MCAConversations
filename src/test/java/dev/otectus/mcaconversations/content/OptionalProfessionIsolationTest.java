@@ -53,8 +53,15 @@ class OptionalProfessionIsolationTest {
     private static final Set<String> DECLARED_MODS =
             Set.of("forge", "minecraft", "mca", "mcaquests", "mcareputation", "townstead");
 
-    private static final Pattern WORK_ID =
-            Pattern.compile("(?:conversations\\.topic\\.)?work\\.(?:prof\\.)?([a-z_]+)[.$]");
+    /**
+     * Matches every shape a work id takes, hand-authored or generated.
+     *
+     * <p>The generated corpus keys pages as {@code conversations.scene.work.<trade>.…}, which the
+     * original pattern did not recognise — so every generated reply read as unowned and this test
+     * would have passed without checking any of them.
+     */
+    private static final Pattern WORK_ID = Pattern.compile(
+            "(?:conversations\\.(?:topic|scene)\\.)?work\\.(?:prof\\.)?([a-z_]+)[.$]");
 
     /** profession path -> owning mod, for the optional ones only. */
     private static Map<String, String> owners;
@@ -196,6 +203,11 @@ class OptionalProfessionIsolationTest {
                 continue;
             }
             for (Map.Entry<String, JsonElement> section : file.getValue().entrySet()) {
+                // Generated files carry a "_generated" provenance header, which is an array of notes
+                // rather than a section of content.
+                if (!section.getValue().isJsonObject()) {
+                    continue;
+                }
                 for (Map.Entry<String, JsonElement> entry
                         : section.getValue().getAsJsonObject().entrySet()) {
                     String subject = section.getKey().equals("intents")

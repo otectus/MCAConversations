@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_true_season",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "place.the_place_this_season.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.this_season",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.place.followup",
+            "say": "conversations.scene.place.the_place_this_season.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_will_stay_to_see",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "place.the_place_this_season.open.counted_on"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.place.season.promised",
+              "delta": 2,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.this_season",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.place.followup",
+            "say": "conversations.scene.place.the_place_this_season.counted_on"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.place.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -218,6 +218,9 @@ public final class McaBinding {
     private static final String C_PLAYER_SAVE = "server.world.data.PlayerSaveData";
     private static final String C_VILLAGE = "server.world.data.Village";
     private static final String C_VILLAGE_MANAGER = "server.world.data.VillageManager";
+    private static final String C_BUILDING = "server.world.data.Building";
+    private static final String C_TRAITS = "entity.ai.Traits";
+    private static final String C_TRAIT = "entity.ai.Traits$Trait";
 
     // Classes ---------------------------------------------------------------------------------------
     public static final Member VILLAGER_CLASS = cls(C_VILLAGER);
@@ -349,6 +352,58 @@ public final class McaBinding {
     public static final Member ACTIONS_REGISTER = statik(C_ACTIONS, "register", void.class, 3);
     public static final Member GIFT_REGISTER = statik(C_GIFT_PREDICATE, "register", void.class, 3);
 
+    // Living-histories context capabilities (spec §7.3) ------------------------------------------------
+    //
+    // One capability group, added together because they answer one question the mod could not ask
+    // before: what is this villager's working life actually like right now. Every member below was
+    // verified present and identically named in 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2, so they are
+    // declared REQUIRED — a rename should fail McaBindingProbeTest rather than quietly turn every
+    // living-work scene into an evergreen one. At runtime an unbound member is still only a stub, and
+    // McaContextSource reports the group DEGRADED rather than asserting a fact it never read.
+
+    /** The exact profession registry id, which {@code getProfessionText} could only ever approximate. */
+    public static final Member GET_PROFESSION_ID = virtual(C_VILLAGER, "getProfessionId", Object.class, 0);
+    /** {@code SimpleContainer} — read for coarse tag presence only, never for counts (spec §12.2). */
+    public static final Member GET_VILLAGER_INVENTORY = virtual(C_VILLAGER, "getInventory", Object.class, 0);
+    public static final Member GET_TRAITS = virtual(C_VILLAGER, "getTraits", Object.class, 0);
+    public static final Member TRAITS_GET_TRAITS = virtual(C_TRAITS, "getTraits", Object.class, 0);
+    /**
+     * OPTIONAL PAIR, and a real MCA drift rather than a defensive one. 7.6.20 has
+     * {@code Trait#id()} returning a {@code String}; 7.7 renamed it to {@code getId()} returning a
+     * {@code ResourceLocation}. Both are declared optional and {@code McaHandles.traitIds} tries the
+     * modern name first, so one jar reads traits correctly on every supported build and a future
+     * third spelling degrades to "no traits" rather than failing the probe.
+     */
+    public static final Member TRAIT_GET_ID = optionalVirtual(C_TRAIT, "getId", Object.class, 0);
+    public static final Member TRAIT_ID_LEGACY = optionalVirtual(C_TRAIT, "id", Object.class, 0);
+
+    /** MCA's assigned chore — the difference between "working" and "working on what you asked". */
+    public static final Member BRAIN_GET_CURRENT_JOB = virtual(C_BRAIN, "getCurrentJob", Object.class, 0);
+    /** Panic and grief are the two states that must silence ordinary initiative (spec §11.2). */
+    public static final Member BRAIN_IS_PANICKING = virtual(C_BRAIN, "isPanicking", boolean.class, 0);
+    public static final Member BRAIN_SHOULD_GRIEVE = virtual(C_BRAIN, "shouldGrieve", boolean.class, 0);
+
+    /** {@code BlockPos} of the assigned workplace; compared against the villager's own position. */
+    public static final Member RESIDENCY_GET_WORKPLACE = virtual(C_RESIDENCY, "getWorkplace", Object.class, 0);
+    /** {@code Optional<GlobalPos>} of the assigned home. */
+    public static final Member RESIDENCY_GET_HOME = virtual(C_RESIDENCY, "getHome", Object.class, 0);
+
+    // FamilyTreeNode: the authoritative social graph, so this mod never persists a second one (§16.1).
+    public static final Member NODE_IS_DECEASED = virtual(C_FAMILY_NODE, "isDeceased", boolean.class, 0);
+    public static final Member NODE_PARTNER = virtual(C_FAMILY_NODE, "partner", Object.class, 0);
+    public static final Member NODE_FATHER = virtual(C_FAMILY_NODE, "father", Object.class, 0);
+    public static final Member NODE_MOTHER = virtual(C_FAMILY_NODE, "mother", Object.class, 0);
+    /** {@code Set<UUID>}; the arity-0 {@code siblings()} rather than the streaming overloads. */
+    public static final Member NODE_SIBLINGS = virtual(C_FAMILY_NODE, "siblings", Object.class, 0);
+    /** {@code Set<UUID>}. AMBIGUOUS-ADJACENT: {@code getChildren()} returns a Stream; names differ. */
+    public static final Member NODE_CHILDREN = virtual(C_FAMILY_NODE, "children", Object.class, 0);
+    public static final Member NODE_PROFESSION_ID = virtual(C_FAMILY_NODE, "getProfessionId", Object.class, 0);
+
+    public static final Member VILLAGE_GET_POPULATION = virtual(C_VILLAGE, "getPopulation", int.class, 0);
+    /** {@code Optional<Building>} for a position — how a scene learns it is being told in a library. */
+    public static final Member VILLAGE_BUILDING_AT = virtual(C_VILLAGE, "getBuildingAt", Object.class, 1);
+    public static final Member BUILDING_GET_TYPE = virtual(C_BUILDING, "getType", Object.class, 0);
+
     /** Every member above, in declaration order. The single source of truth for what MCA must provide. */
     public static final List<Member> MANIFEST = List.of(
             VILLAGER_CLASS, VILLAGER_LIKE_CLASS, QUESTION_RESPONSE_CLASS, DIALOGUE_RESPONSE_CLASS,
@@ -371,7 +426,14 @@ public final class McaBinding {
             NETWORK_SEND_TO_PLAYER, QUESTION_RESPONSE_NEW, QUESTION_RESPONSE_TEXT, QUESTION_RESPONSE_SILENT,
             DIALOGUE_RESPONSE_QUESTION, DIALOGUE_RESPONSE_ANSWERS,
             CONFIG_GET_INSTANCE, CONFIG_ONLINE_TTS,
-            ACTIONS_REGISTER, GIFT_REGISTER);
+            ACTIONS_REGISTER, GIFT_REGISTER,
+            GET_PROFESSION_ID, GET_VILLAGER_INVENTORY, GET_TRAITS, TRAITS_GET_TRAITS, TRAIT_GET_ID,
+            TRAIT_ID_LEGACY,
+            BRAIN_GET_CURRENT_JOB, BRAIN_IS_PANICKING, BRAIN_SHOULD_GRIEVE,
+            RESIDENCY_GET_WORKPLACE, RESIDENCY_GET_HOME,
+            NODE_IS_DECEASED, NODE_PARTNER, NODE_FATHER, NODE_MOTHER, NODE_SIBLINGS, NODE_CHILDREN,
+            NODE_PROFESSION_ID,
+            VILLAGE_GET_POPULATION, VILLAGE_BUILDING_AT, BUILDING_GET_TYPE);
 
     // ---------------------------------------------------------------------------------------------
     // Resolution

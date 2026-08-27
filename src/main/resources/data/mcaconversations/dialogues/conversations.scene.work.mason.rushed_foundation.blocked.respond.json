@@ -1,0 +1,114 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_happens",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.rushed_foundation.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.foundations",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.rushed_foundation"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.rushed_foundation.blocked.explained",
+              "slots": [
+                "build"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_her_judgement",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.rushed_foundation.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mason.foundation.backed",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.foundations",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.rushed_foundation"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.rushed_foundation.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.rushed_foundation.blocked.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.foundations",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.rushed_foundation"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.rushed_foundation.blocked.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mason.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

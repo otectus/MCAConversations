@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_they_found_out",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_one_who_shares_it.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.shared",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "say": "conversations.scene.interests.the_one_who_shares_it.told"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_is_lucky",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_one_who_shares_it.open.delighted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.shared",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "say": "conversations.scene.interests.the_one_who_shares_it.delighted"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.interests.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

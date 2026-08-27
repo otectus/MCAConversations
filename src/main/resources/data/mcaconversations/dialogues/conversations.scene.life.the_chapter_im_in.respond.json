@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "life.the_chapter_im_in.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.now",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.life.followup",
+            "say": "conversations.scene.life.the_chapter_im_in.explained"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_sounds_good",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "life.the_chapter_im_in.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.now",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.life.followup",
+            "say": "conversations.scene.life.the_chapter_im_in.acknowledged"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.life.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

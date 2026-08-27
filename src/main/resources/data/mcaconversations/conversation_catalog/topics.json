@@ -9,6 +9,81 @@
     "hearts for being clicked."
   ],
   "topics": {
+    "ask_parent": {
+      "entry": {
+        "question": "conversations.family",
+        "answer": "ask_parent"
+      },
+      "depth": "relationship",
+      "return_question": "conversations.family",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "candor",
+        "empathy",
+        "curiosity",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "family",
+        "max_stage": 2
+      }
+    },
+    "checkin": {
+      "entry": {
+        "question": "greet",
+        "answer": "checkin"
+      },
+      "depth": "quick",
+      "return_question": "main",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "dismissal",
+        "humor",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "checkin_child": {
+      "entry": {
+        "question": "conversations.family",
+        "answer": "checkin_child"
+      },
+      "depth": "relationship",
+      "return_question": "conversations.family",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "family",
+        "max_stage": 2
+      }
+    },
     "day": {
       "entry": {
         "question": "conversations.cat.chitchat",
@@ -31,6 +106,39 @@
         "exit"
       ],
       "chat_required": true
+    },
+    "dreams": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "dreams"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "encouragement",
+        "curiosity",
+        "respectful_disagreement",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "dreams",
+        "max_stage": 2
+      },
+      "exclusive_groups": {
+        "dreams.support": [
+          "pledged",
+          "honest"
+        ]
+      }
     },
     "fears": {
       "entry": {
@@ -68,13 +176,13 @@
         ]
       }
     },
-    "checkin": {
+    "feelings": {
       "entry": {
-        "question": "greet",
-        "answer": "checkin"
+        "question": "conversations.cat.personal",
+        "answer": "feelings"
       },
-      "depth": "quick",
-      "return_question": "main",
+      "depth": "relationship",
+      "return_question": "conversations.cat.personal",
       "ages": [
         "toddler",
         "child",
@@ -84,12 +192,38 @@
       "required_stance_families": [
         "empathy",
         "curiosity",
-        "encouragement",
-        "dismissal",
-        "humor",
+        "candor",
+        "restraint",
         "exit"
       ],
-      "chat_required": true
+      "chat_required": true,
+      "arc": {
+        "id": "feelings",
+        "max_stage": 2
+      }
+    },
+    "firstmet": {
+      "entry": {
+        "question": "conversations.us",
+        "answer": "firstmet"
+      },
+      "depth": "relationship",
+      "return_question": "conversations.us",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "self_disclosure",
+        "humor",
+        "curiosity",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "us",
+        "max_stage": 2
+      }
     },
     "food": {
       "entry": {
@@ -113,13 +247,59 @@
       ],
       "chat_required": true
     },
-    "weather": {
+    "future": {
       "entry": {
-        "question": "conversations.cat.chitchat",
-        "answer": "weather"
+        "question": "conversations.us",
+        "answer": "future"
       },
-      "depth": "quick",
-      "return_question": "conversations.cat.chitchat",
+      "depth": "relationship",
+      "return_question": "conversations.us",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "encouragement",
+        "curiosity",
+        "respectful_disagreement",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "us",
+        "max_stage": 2
+      }
+    },
+    "happy": {
+      "entry": {
+        "question": "conversations.us",
+        "answer": "happy"
+      },
+      "depth": "relationship",
+      "return_question": "conversations.us",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "us",
+        "max_stage": 2
+      }
+    },
+    "hopes": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "hopes"
+      },
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
       "ages": [
         "toddler",
         "child",
@@ -128,89 +308,46 @@
       ],
       "required_stance_families": [
         "empathy",
-        "practical_help",
-        "humor",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true
-    },
-    "season": {
-      "entry": {
-        "question": "conversations.cat.chitchat",
-        "answer": "season"
-      },
-      "depth": "quick",
-      "return_question": "conversations.cat.chitchat",
-      "ages": [
-        "toddler",
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "curiosity",
-        "self_disclosure",
         "encouragement",
-        "dismissal",
-        "humor",
-        "exit"
-      ],
-      "chat_required": true
-    },
-    "work": {
-      "entry": {
-        "question": "conversations.cat.profession",
-        "answer": "work"
-      },
-      "depth": "standard",
-      "return_question": "conversations.cat.profession",
-      "ages": [
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "encouragement",
-        "curiosity",
         "challenge",
         "dismissal",
-        "humor",
-        "self_disclosure",
-        "candor",
         "exit"
       ],
       "chat_required": true,
       "arc": {
-        "id": "work",
+        "id": "hopes",
         "max_stage": 2
-      }
-    },
-    "work_offer": {
-      "entry": {
-        "question": "conversations.cat.profession",
-        "answer": "work_offer"
       },
-      "depth": "service",
-      "return_question": "conversations.cat.profession",
+      "milestones": [
+        "hopes.named"
+      ]
+    },
+    "interests": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "interests"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.personal",
       "ages": [
+        "teen",
         "adult"
       ],
       "required_stance_families": [
         "curiosity",
-        "practical_help",
-        "respectful_disagreement",
+        "encouragement",
+        "dismissal",
         "exit"
       ],
       "chat_required": true
     },
-    "village": {
+    "life": {
       "entry": {
-        "question": "conversations.cat.village",
-        "answer": "village"
+        "question": "conversations.cat.personal",
+        "answer": "life"
       },
-      "depth": "standard",
-      "return_question": "conversations.cat.village",
+      "depth": "deep",
+      "return_question": "conversations.cat.personal",
       "ages": [
         "toddler",
         "child",
@@ -220,73 +357,51 @@
       "required_stance_families": [
         "empathy",
         "curiosity",
-        "practical_help",
+        "self_disclosure",
         "dismissal",
         "humor",
-        "self_disclosure",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "village",
-        "max_stage": 2
-      }
-    },
-    "people": {
-      "entry": {
-        "question": "conversations.cat.village",
-        "answer": "people"
-      },
-      "depth": "standard",
-      "return_question": "conversations.cat.village",
-      "ages": [
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "empathy",
-        "curiosity",
-        "respectful_disagreement",
-        "boundary_push",
-        "humor",
-        "self_disclosure",
-        "candor",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "people",
-        "max_stage": 2
-      }
-    },
-    "rumors": {
-      "entry": {
-        "question": "conversations.cat.village",
-        "answer": "rumors"
-      },
-      "depth": "standard",
-      "return_question": "conversations.cat.village",
-      "ages": [
-        "adult"
-      ],
-      "required_stance_families": [
-        "curiosity",
         "restraint",
-        "challenge",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "life",
+        "max_stage": 2
+      },
+      "milestones": [
+        "life.chapter"
+      ]
+    },
+    "memories": {
+      "entry": {
+        "question": "conversations.family",
+        "answer": "memories"
+      },
+      "depth": "relationship",
+      "return_question": "conversations.family",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "humor",
+        "curiosity",
+        "self_disclosure",
         "dismissal",
         "exit"
       ],
       "chat_required": true,
       "arc": {
-        "id": "rumors",
+        "id": "family",
         "max_stage": 2
       }
     },
-    "standing": {
+    "neighbour": {
       "entry": {
         "question": "conversations.cat.village",
-        "answer": "standing"
+        "answer": "neighbour"
       },
       "depth": "standard",
       "return_question": "conversations.cat.village",
@@ -297,12 +412,14 @@
       ],
       "required_stance_families": [
         "curiosity",
-        "practical_help",
+        "candor",
+        "restraint",
+        "dismissal",
         "exit"
       ],
       "chat_required": true,
       "arc": {
-        "id": "standing",
+        "id": "neighbour",
         "max_stage": 2
       }
     },
@@ -355,98 +472,90 @@
         "max_stage": 2
       }
     },
-    "life": {
+    "origin": {
       "entry": {
         "question": "conversations.cat.personal",
-        "answer": "life"
+        "answer": "origin"
       },
-      "depth": "deep",
+      "depth": "quick",
       "return_question": "conversations.cat.personal",
       "ages": [
-        "toddler",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "empathy",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "people": {
+      "entry": {
+        "question": "conversations.cat.village",
+        "answer": "people"
+      },
+      "depth": "standard",
+      "return_question": "conversations.cat.village",
+      "ages": [
         "child",
         "teen",
         "adult"
       ],
       "required_stance_families": [
         "empathy",
+        "curiosity",
+        "respectful_disagreement",
+        "boundary_push",
+        "humor",
+        "self_disclosure",
+        "candor",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "people",
+        "max_stage": 2
+      }
+    },
+    "place": {
+      "entry": {
+        "question": "conversations.cat.village",
+        "answer": "place"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.village",
+      "ages": [
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "player": {
+      "entry": {
+        "question": "conversations.cat.personal",
+        "answer": "player"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.personal",
+      "ages": [
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
         "curiosity",
         "self_disclosure",
         "dismissal",
-        "humor",
-        "restraint",
         "exit"
       ],
-      "chat_required": true,
-      "arc": {
-        "id": "life",
-        "max_stage": 2
-      },
-      "milestones": [
-        "life.chapter"
-      ]
-    },
-    "dreams": {
-      "entry": {
-        "question": "conversations.cat.personal",
-        "answer": "dreams"
-      },
-      "depth": "deep",
-      "return_question": "conversations.cat.personal",
-      "ages": [
-        "toddler",
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "encouragement",
-        "curiosity",
-        "respectful_disagreement",
-        "dismissal",
-        "restraint",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "dreams",
-        "max_stage": 2
-      },
-      "exclusive_groups": {
-        "dreams.support": [
-          "pledged",
-          "honest"
-        ]
-      }
-    },
-    "hopes": {
-      "entry": {
-        "question": "conversations.cat.personal",
-        "answer": "hopes"
-      },
-      "depth": "deep",
-      "return_question": "conversations.cat.personal",
-      "ages": [
-        "toddler",
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "empathy",
-        "encouragement",
-        "challenge",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "hopes",
-        "max_stage": 2
-      },
-      "milestones": [
-        "hopes.named"
-      ]
+      "chat_required": true
     },
     "regrets": {
       "entry": {
@@ -477,6 +586,71 @@
           "listened"
         ]
       }
+    },
+    "routine": {
+      "entry": {
+        "question": "conversations.cat.chitchat",
+        "answer": "routine"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
+      "ages": [
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "practical_help",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "rumors": {
+      "entry": {
+        "question": "conversations.cat.village",
+        "answer": "rumors"
+      },
+      "depth": "standard",
+      "return_question": "conversations.cat.village",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "rumors",
+        "max_stage": 2
+      }
+    },
+    "season": {
+      "entry": {
+        "question": "conversations.cat.chitchat",
+        "answer": "season"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
+      "ages": [
+        "toddler",
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "self_disclosure",
+        "encouragement",
+        "dismissal",
+        "humor",
+        "exit"
+      ],
+      "chat_required": true
     },
     "secret": {
       "entry": {
@@ -510,13 +684,72 @@
         ]
       }
     },
-    "feelings": {
+    "shared_history": {
+      "entry": {
+        "question": "conversations.cat.events",
+        "answer": "shared_history"
+      },
+      "depth": "quick",
+      "return_question": "conversations.cat.events",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "empathy",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "standing": {
+      "entry": {
+        "question": "conversations.cat.village",
+        "answer": "standing"
+      },
+      "depth": "standard",
+      "return_question": "conversations.cat.village",
+      "ages": [
+        "child",
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "practical_help",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "standing",
+        "max_stage": 2
+      }
+    },
+    "values": {
       "entry": {
         "question": "conversations.cat.personal",
-        "answer": "feelings"
+        "answer": "values"
       },
-      "depth": "relationship",
+      "depth": "quick",
       "return_question": "conversations.cat.personal",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "candor",
+        "dismissal",
+        "exit"
+      ],
+      "chat_required": true
+    },
+    "village": {
+      "entry": {
+        "question": "conversations.cat.village",
+        "answer": "village"
+      },
+      "depth": "standard",
+      "return_question": "conversations.cat.village",
       "ages": [
         "toddler",
         "child",
@@ -526,84 +759,85 @@
       "required_stance_families": [
         "empathy",
         "curiosity",
-        "candor",
-        "restraint",
+        "practical_help",
+        "dismissal",
+        "humor",
+        "self_disclosure",
         "exit"
       ],
       "chat_required": true,
       "arc": {
-        "id": "feelings",
+        "id": "village",
         "max_stage": 2
       }
     },
-    "happy": {
+    "weather": {
       "entry": {
-        "question": "conversations.us",
-        "answer": "happy"
+        "question": "conversations.cat.chitchat",
+        "answer": "weather"
       },
-      "depth": "relationship",
-      "return_question": "conversations.us",
+      "depth": "quick",
+      "return_question": "conversations.cat.chitchat",
       "ages": [
+        "toddler",
+        "child",
+        "teen",
         "adult"
       ],
       "required_stance_families": [
         "empathy",
-        "curiosity",
-        "encouragement",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "us",
-        "max_stage": 2
-      }
-    },
-    "firstmet": {
-      "entry": {
-        "question": "conversations.us",
-        "answer": "firstmet"
-      },
-      "depth": "relationship",
-      "return_question": "conversations.us",
-      "ages": [
-        "adult"
-      ],
-      "required_stance_families": [
-        "self_disclosure",
+        "practical_help",
         "humor",
-        "curiosity",
         "dismissal",
         "exit"
       ],
-      "chat_required": true,
-      "arc": {
-        "id": "us",
-        "max_stage": 2
-      }
+      "chat_required": true
     },
-    "future": {
+    "work": {
       "entry": {
-        "question": "conversations.us",
-        "answer": "future"
+        "question": "conversations.cat.profession",
+        "answer": "work"
       },
-      "depth": "relationship",
-      "return_question": "conversations.us",
+      "depth": "standard",
+      "return_question": "conversations.cat.profession",
       "ages": [
+        "child",
+        "teen",
         "adult"
       ],
       "required_stance_families": [
         "encouragement",
         "curiosity",
-        "respectful_disagreement",
+        "challenge",
         "dismissal",
+        "humor",
+        "self_disclosure",
+        "candor",
         "exit"
       ],
       "chat_required": true,
       "arc": {
-        "id": "us",
+        "id": "work",
         "max_stage": 2
       }
+    },
+    "work_offer": {
+      "entry": {
+        "question": "conversations.cat.profession",
+        "answer": "work_offer"
+      },
+      "depth": "service",
+      "return_question": "conversations.cat.profession",
+      "ages": [
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "practical_help",
+        "respectful_disagreement",
+        "exit"
+      ],
+      "chat_required": true
     },
     "worries": {
       "entry": {
@@ -625,109 +859,6 @@
       "chat_required": true,
       "arc": {
         "id": "us",
-        "max_stage": 2
-      }
-    },
-    "checkin_child": {
-      "entry": {
-        "question": "conversations.family",
-        "answer": "checkin_child"
-      },
-      "depth": "relationship",
-      "return_question": "conversations.family",
-      "ages": [
-        "toddler",
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "empathy",
-        "encouragement",
-        "practical_help",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "family",
-        "max_stage": 2
-      }
-    },
-    "ask_parent": {
-      "entry": {
-        "question": "conversations.family",
-        "answer": "ask_parent"
-      },
-      "depth": "relationship",
-      "return_question": "conversations.family",
-      "ages": [
-        "toddler",
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "candor",
-        "empathy",
-        "curiosity",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "family",
-        "max_stage": 2
-      }
-    },
-    "memories": {
-      "entry": {
-        "question": "conversations.family",
-        "answer": "memories"
-      },
-      "depth": "relationship",
-      "return_question": "conversations.family",
-      "ages": [
-        "toddler",
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "humor",
-        "curiosity",
-        "self_disclosure",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "family",
-        "max_stage": 2
-      }
-    },
-    "neighbour": {
-      "entry": {
-        "question": "conversations.cat.village",
-        "answer": "neighbour"
-      },
-      "depth": "standard",
-      "return_question": "conversations.cat.village",
-      "ages": [
-        "child",
-        "teen",
-        "adult"
-      ],
-      "required_stance_families": [
-        "curiosity",
-        "candor",
-        "restraint",
-        "dismissal",
-        "exit"
-      ],
-      "chat_required": true,
-      "arc": {
-        "id": "neighbour",
         "max_stage": 2
       }
     }

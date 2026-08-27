@@ -39,6 +39,48 @@ reproduce the old behaviour exactly.
 Feature toggles act through the `conversations_enabled`/`conversations_disabled` dialogue conditions and
 server-side early-outs — content degrades to fallback lines rather than disappearing mid-tree.
 
+## `[dynamic]` — living histories
+
+Every switch here has an off state that reproduces 1.4.0 exactly. The layer is additive: with
+`enabled = false` the complete 1.4.0 corpus is selected by the same static routers it always was, and
+nothing new is read, written or generated.
+
+| Option | Default | Effect |
+|---|---|---|
+| `enabled` | `true` | Master switch. Off means no scene is ever planned, every `conversations_scene` condition scores 0, and every dynamic route takes its sink. |
+| `identityEnabled` | `true` | Two interests, two values, a comfort, an aversion and three styles per villager, generated once from the world seed and their UUID and never rerolled. Off means no profile is generated or persisted and selection is identity-neutral. |
+| `episodesEnabled` | `true` | Villagers carry concrete situations between conversations with states that change. Off means only evergreen scenes are selected and no promise is ever created. |
+| `socialOpinionsEnabled` | `true` | Bounded, *caused* social knowledge: opinions of named neighbours and the observed roles they hold — coworker, mentor, customer, someone avoided. Never a resident-by-resident graph: an edge needs a family tie, shared work or an observed event. |
+| `villageCultureEnabled` | `true` | Shared village tokens residents can agree or disagree about. |
+| `maxInitiativesPerVillagerPlayerDay` | `1` | How often one villager may open a *decision page* unprompted, per player per day. A passing hello is not counted against it; an emergency and a genuine change in something you already know about are not rationed by it either, though both still wait out a fifteen-second cooldown. `0` disables villager initiative entirely. |
+| `dynamicTopicSlots` | `3` | Context-specific entries above the six fixed hub categories. `0` keeps the 1.4.0 hub exactly. |
+| `debugDirector` | `false` | Log why each scene was chosen. Verbose; for authoring. |
+
+## `[history]`
+
+| Option | Default | Effect |
+|---|---|---|
+| `enabled` | `true` | Persist episodes, threads, promises, claims and opinions to `data/mcaconversations_history.dat`. Off means nothing new is written and the 1.4.0 arcs, milestones, affection budgets and disposition vectors are untouched. |
+| `episodeRetentionDays` | `32` | Days a resolved episode stays callable before it is compressed and pruned. |
+| `activeEpisodeCap` | `6` | Simultaneous live episodes per villager. Over the cap the least salient is *abandoned* — a state a scene can speak from — never silently deleted. |
+| `resolvedEpisodeCap` | `24` | Resolved episodes kept as remembered history. |
+| `openThreadCapPerPair` | `8` | Storage bound, not a menu size: only the highest-priority item in each category is ever offered. |
+| `commitmentCapPerPair` | `8` | An outstanding promise is never evicted to make room. |
+| `playerClaimCapPerPair` | `16` | Things the player has told one villager about themselves. |
+| `socialEdgeCapPerVillager` | `16` | Opinions one villager may hold about named neighbours, and separately the observed roles they may hold. |
+| `topicRecencyCapPerPair` | `32` | Entries per repetition-suppression level. |
+
+Every cap is clamped to a hard ceiling the store enforces whatever the file says, so a mis-set value
+can make the mod remember *less* but never make a save grow without bound. The configured and hard
+numbers are both printed in `reports/memory-schema.md`.
+
+## `[group]`
+
+| Option | Default | Effect |
+|---|---|---|
+| `enabled` | `false` | Allow a second and third villager to join with a contracted interjection. Off by default: group scenes are chat-only for now, and every interjection must answer the beat just spoken and rest on a footing its speaker actually has. Five shapes exist and nothing else is allowed — corroborate something public, differ about a preference, add a detail from the same trade, remember a family event differently, or say that a thing is not yours to tell. |
+| `maxSpeakers` | `3` | Hard cap including the lead villager. |
+
 ## `[gift]`
 
 | Option | Default | Range | Meaning |

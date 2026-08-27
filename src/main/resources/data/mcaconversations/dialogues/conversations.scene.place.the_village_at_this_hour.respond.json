@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_where_to_stand",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "place.the_village_at_this_hour.open.directed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.at_this_hour",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.place.followup",
+            "say": "conversations.scene.place.the_village_at_this_hour.directed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "agree_it_is_worth_seeing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "place.the_village_at_this_hour.open.shared"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.place.hour.shared",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.at_this_hour",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.place.followup",
+            "say": "conversations.scene.place.the_village_at_this_hour.shared"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.place.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

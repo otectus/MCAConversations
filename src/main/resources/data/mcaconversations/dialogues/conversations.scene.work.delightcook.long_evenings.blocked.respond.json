@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_would_fix_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.long_evenings.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.the_hours",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.long_evenings"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.long_evenings.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_fewer_dishes",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.long_evenings.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.the_hours",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.long_evenings"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.long_evenings.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "notice_the_tiredness",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.long_evenings.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.the_hours",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.long_evenings"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.long_evenings.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.delightcook.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

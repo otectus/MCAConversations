@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_to_persuade",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.bad_joint.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.joints",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.woodworker.bad_joint"
+            },
+            "next": "conversations.scene.work.woodworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.woodworker.bad_joint.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_offering_both",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.bad_joint.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.joints",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.woodworker.bad_joint"
+            },
+            "next": "conversations.scene.work.woodworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.woodworker.bad_joint.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.woodworker.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

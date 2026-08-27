@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "encourage_asking",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.unanswered_question.active.resolved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.doubt",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cultist.unanswered_question"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.unanswered_question.active.resolved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_the_question",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.unanswered_question.active.declined_politely"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.doubt",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cultist.unanswered_question"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.unanswered_question.active.declined_politely"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.cultist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

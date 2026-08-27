@@ -1,0 +1,366 @@
+{
+  "_comment": [
+    "The shipped identity catalog (spec §6.3). Every token here is an identifier, never prose:",
+    "the locale files turn 'interest:animals' into a sentence, so a save file contains no English",
+    "and a translation change cannot rewrite anybody's personality.",
+    "",
+    "Three different mechanisms are used deliberately and must not be confused:",
+    "  ages / professions / archetypes  are GATES  - non-empty means 'only these'.",
+    "  favour_archetypes / favour_personalities are WEIGHTS - a thumb on the scale, never a rail.",
+    "  never_with_professions / never_with_personalities are BANS - they exist so a profile can",
+    "  never infer a sensitive identity from a job or a mood. A cleric is not automatically devout",
+    "  in a particular way, an outlaw is not automatically cruel, a 'sensitive' villager is not",
+    "  fragile, and a nitwit is not incompetent.",
+    "",
+    "conflicts is symmetric: declaring one direction is enough."
+  ],
+
+  "tokens": {
+    "local_history": {
+      "family": "interest",
+      "weight": 10,
+      "ages": ["teen", "adult"],
+      "favour_archetypes": ["knowledge"],
+      "conflicts": []
+    },
+    "animals": {
+      "family": "interest",
+      "weight": 12,
+      "favour_archetypes": ["cultivation", "exploration"]
+    },
+    "mechanisms": {
+      "family": "interest",
+      "weight": 10,
+      "ages": ["teen", "adult"],
+      "favour_archetypes": ["craft", "defense"]
+    },
+    "cooking": {
+      "family": "interest",
+      "weight": 12,
+      "favour_archetypes": ["food", "cultivation"]
+    },
+    "exploration": {
+      "family": "interest",
+      "weight": 10,
+      "favour_archetypes": ["exploration"],
+      "favour_personalities": ["confident", "peppy"]
+    },
+    "music": {
+      "family": "interest",
+      "weight": 11,
+      "favour_personalities": ["peppy", "upbeat", "odd"]
+    },
+    "gardening": {
+      "family": "interest",
+      "weight": 11,
+      "favour_archetypes": ["cultivation", "food"]
+    },
+    "games": {
+      "family": "interest",
+      "weight": 11,
+      "favour_personalities": ["playful", "peppy"]
+    },
+    "stories": {
+      "family": "interest",
+      "weight": 12,
+      "favour_archetypes": ["knowledge", "occult"]
+    },
+    "weather": {
+      "family": "interest",
+      "weight": 9,
+      "favour_archetypes": ["cultivation", "exploration"]
+    },
+    "building": {
+      "family": "interest",
+      "weight": 10,
+      "ages": ["teen", "adult"],
+      "favour_archetypes": ["craft"]
+    },
+    "quiet_places": {
+      "family": "interest",
+      "weight": 9,
+      "favour_personalities": ["introverted", "gloomy"],
+      "conflicts": ["crowded_table"]
+    },
+
+    "duty": {
+      "family": "value",
+      "weight": 11,
+      "favour_archetypes": ["defense"],
+      "conflicts": ["independence"]
+    },
+    "independence": {
+      "family": "value",
+      "weight": 11,
+      "favour_personalities": ["confident", "crabby"]
+    },
+    "tradition": {
+      "family": "value",
+      "weight": 10,
+      "conflicts": ["ambition"]
+    },
+    "mercy": {
+      "family": "value",
+      "weight": 10,
+      "favour_archetypes": ["occult", "food"],
+      "never_with_personalities": []
+    },
+    "precision": {
+      "family": "value",
+      "weight": 11,
+      "favour_archetypes": ["craft", "knowledge"]
+    },
+    "hospitality": {
+      "family": "value",
+      "weight": 10,
+      "favour_archetypes": ["food"],
+      "favour_personalities": ["friendly", "extroverted"],
+      "conflicts": ["privacy"]
+    },
+    "ambition": {
+      "family": "value",
+      "weight": 9,
+      "ages": ["teen", "adult"],
+      "favour_personalities": ["greedy", "confident"]
+    },
+    "fairness": {
+      "family": "value",
+      "weight": 11
+    },
+    "privacy": {
+      "family": "value",
+      "weight": 10,
+      "favour_personalities": ["introverted", "anxious"]
+    },
+    "curiosity": {
+      "family": "value",
+      "weight": 11,
+      "favour_archetypes": ["knowledge", "exploration"]
+    },
+
+    "early_morning": {
+      "family": "comfort",
+      "weight": 11,
+      "favour_archetypes": ["cultivation"]
+    },
+    "crowded_table": {
+      "family": "comfort",
+      "weight": 10,
+      "favour_personalities": ["extroverted", "friendly", "peppy"]
+    },
+    "rain_on_roof": {
+      "family": "comfort",
+      "weight": 11
+    },
+    "orderly_tools": {
+      "family": "comfort",
+      "weight": 10,
+      "ages": ["teen", "adult"],
+      "favour_archetypes": ["craft"],
+      "conflicts": ["disorder"]
+    },
+    "familiar_route": {
+      "family": "comfort",
+      "weight": 10
+    },
+    "first_light_on_water": {
+      "family": "comfort",
+      "weight": 9
+    },
+    "a_finished_row": {
+      "family": "comfort",
+      "weight": 9,
+      "ages": ["teen", "adult"]
+    },
+    "someone_else_talking": {
+      "family": "comfort",
+      "weight": 9,
+      "favour_personalities": ["introverted", "sensitive"],
+      "conflicts": ["silence"]
+    },
+
+    "waste": {
+      "family": "aversion",
+      "weight": 11,
+      "favour_archetypes": ["cultivation", "food"]
+    },
+    "lateness": {
+      "family": "aversion",
+      "weight": 10,
+      "favour_archetypes": ["defense"]
+    },
+    "boasting": {
+      "family": "aversion",
+      "weight": 11,
+      "conflicts": ["storyteller"]
+    },
+    "crowds": {
+      "family": "aversion",
+      "weight": 10,
+      "favour_personalities": ["introverted", "anxious"],
+      "conflicts": ["hospitality", "crowded_table", "host"]
+    },
+    "silence": {
+      "family": "aversion",
+      "weight": 9,
+      "favour_personalities": ["extroverted", "peppy"],
+      "conflicts": ["quiet_places"]
+    },
+    "risk_without_reason": {
+      "family": "aversion",
+      "weight": 11,
+      "ages": ["teen", "adult"]
+    },
+    "gossip": {
+      "family": "aversion",
+      "weight": 10,
+      "conflicts": ["storyteller"]
+    },
+    "disorder": {
+      "family": "aversion",
+      "weight": 10
+    },
+
+    "methodical": {
+      "family": "work_style",
+      "weight": 12,
+      "ages": ["teen", "adult"],
+      "conflicts": ["improvising"]
+    },
+    "improvising": {
+      "family": "work_style",
+      "weight": 11,
+      "ages": ["teen", "adult"],
+      "favour_personalities": ["playful", "odd"],
+      "conflicts": ["perfectionist"]
+    },
+    "teaching": {
+      "family": "work_style",
+      "weight": 10,
+      "ages": ["adult"],
+      "favour_archetypes": ["knowledge"],
+      "conflicts": ["solitary"]
+    },
+    "solitary": {
+      "family": "work_style",
+      "weight": 10,
+      "ages": ["teen", "adult"],
+      "favour_personalities": ["introverted", "gloomy"],
+      "conflicts": ["collaborative"]
+    },
+    "collaborative": {
+      "family": "work_style",
+      "weight": 11,
+      "ages": ["teen", "adult"],
+      "favour_personalities": ["friendly", "extroverted"]
+    },
+    "perfectionist": {
+      "family": "work_style",
+      "weight": 10,
+      "ages": ["teen", "adult"],
+      "favour_archetypes": ["craft"]
+    },
+    "pragmatic": {
+      "family": "work_style",
+      "weight": 12,
+      "ages": ["teen", "adult"]
+    },
+
+    "host": {
+      "family": "social_style",
+      "weight": 10,
+      "favour_personalities": ["friendly", "extroverted"],
+      "conflicts": ["observer"]
+    },
+    "listener": {
+      "family": "social_style",
+      "weight": 12,
+      "favour_personalities": ["sensitive", "peaceful"]
+    },
+    "mediator": {
+      "family": "social_style",
+      "weight": 10,
+      "ages": ["teen", "adult"]
+    },
+    "storyteller": {
+      "family": "social_style",
+      "weight": 11,
+      "favour_personalities": ["odd", "peppy", "upbeat"]
+    },
+    "challenger": {
+      "family": "social_style",
+      "weight": 10,
+      "favour_personalities": ["crabby", "confident"]
+    },
+    "observer": {
+      "family": "social_style",
+      "weight": 11,
+      "favour_personalities": ["introverted", "gloomy"]
+    },
+
+    "direct": {
+      "family": "disclosure_style",
+      "weight": 12,
+      "favour_personalities": ["confident", "crabby"],
+      "conflicts": ["sideways"]
+    },
+    "reciprocal": {
+      "family": "disclosure_style",
+      "weight": 11,
+      "favour_personalities": ["friendly"]
+    },
+    "sideways": {
+      "family": "disclosure_style",
+      "weight": 10,
+      "favour_personalities": ["odd", "playful"]
+    },
+    "gradual": {
+      "family": "disclosure_style",
+      "weight": 12,
+      "favour_personalities": ["introverted", "anxious", "sensitive"]
+    },
+    "humorous": {
+      "family": "disclosure_style",
+      "weight": 10,
+      "favour_personalities": ["playful", "peppy", "upbeat"]
+    },
+    "reluctant": {
+      "family": "disclosure_style",
+      "weight": 10,
+      "favour_personalities": ["gloomy", "introverted"]
+    },
+
+    "village_born": {
+      "family": "origin_motif",
+      "weight": 16
+    },
+    "joined_family": {
+      "family": "origin_motif",
+      "weight": 10,
+      "ages": ["teen", "adult"]
+    },
+    "followed_work": {
+      "family": "origin_motif",
+      "weight": 11,
+      "ages": ["adult"]
+    },
+    "returned_home": {
+      "family": "origin_motif",
+      "weight": 9,
+      "ages": ["adult"]
+    },
+    "displaced": {
+      "family": "origin_motif",
+      "weight": 8,
+      "ages": ["teen", "adult"]
+    },
+    "traveller_settled": {
+      "family": "origin_motif",
+      "weight": 9,
+      "ages": ["adult"],
+      "favour_archetypes": ["exploration"]
+    }
+  },
+
+  "aliases": {}
+}

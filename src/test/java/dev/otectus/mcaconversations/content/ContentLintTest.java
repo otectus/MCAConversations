@@ -57,7 +57,11 @@ class ContentLintTest {
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed",
             "conversations_reputation", "conversations_reputation_incident",
-            "conversations_session", "conversations_budget");
+            "conversations_session", "conversations_budget",
+            // Living histories, registered by LivingHistoriesRegistrar.
+            "conversations_profile", "conversations_context", "conversations_episode",
+            "conversations_thread", "conversations_commitment", "conversations_claim",
+            "conversations_opinion", "conversations_recent", "conversations_scene");
 
     /** MCA 7.6.23 action vocabulary (from Actions registrations) + ours. */
     private static final Set<String> ACTION_KEYS = Set.of(
@@ -65,7 +69,11 @@ class ContentLintTest {
             "conversations_record", "conversations_say", "conversations_gossip_say",
             "conversations_disposition_apply", "conversations_quest_open",
             "conversations_session", "conversations_affection_apply", "conversations_progress_apply",
-            "conversations_reputation_signal");
+            "conversations_reputation_signal",
+            // Living histories. Every one instantiates an authored template rather than a
+            // shape, so a result can never invent an episode kind or an unregistered promise.
+            "conversations_episode", "conversations_thread", "conversations_commitment",
+            "conversations_claim", "conversations_opinion");
 
     /** The four quest-aware condition keys, whose values are objects ({scope,min}), not MCA enum strings. */
     private static final Set<String> QUEST_CONDITION_KEYS = Set.of(
@@ -105,7 +113,11 @@ class ContentLintTest {
             // McaConversationsConfig.isFeatureEnabled learned them they fell through its default
             // and scored as permanently enabled, so a sink on either could never fire.
             "seasons", "holidays",
-            "branching", "chat");
+            "branching", "chat",
+            // Living-histories switches. Each is gated by dynamic.enabled as well as its own, so
+            // a sink on "dynamic" silences the whole layer and one on "episodes" silences a part.
+            "dynamic", "identity", "episodes", "history", "social_opinions", "village_culture",
+            "group");
 
     /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
     private static final Set<String> WEATHERS = Set.of("clear", "rain", "storm");
@@ -421,7 +433,9 @@ class ContentLintTest {
     /**
      * A line may not name an argument its call site never passes. MCA's {@code getTranslatable} supplies
      * exactly one argument of its own — the spouse-aware player name at {@code %1$s} — so a plain
-     * {@code say} caps there, and a {@code conversations_say} earns one further slot per declared var.
+     * {@code say} caps there, and a {@code conversations_say} earns one further slot per declared var
+     * and one per declared scene slot. Slots fill the positions after the vars, in declaration order,
+     * which is the ordering the locale files depend on (spec 18.5).
      *
      * <p>Overrunning does not crash: {@code TranslatableContents.decompose} catches the format error and
      * renders the raw template instead, so the player reads a literal <em>"%2$s? It's home."</em> on
@@ -439,7 +453,9 @@ class ContentLintTest {
             if (actions.has("conversations_say")) {
                 JsonObject say = actions.getAsJsonObject("conversations_say");
                 int vars = say.has("vars") ? say.getAsJsonArray("vars").size() : 0;
-                checkArity(say.get("phrase").getAsString(), 1 + vars, where + " conversations_say", problems);
+                int slots = say.has("slots") ? say.getAsJsonArray("slots").size() : 0;
+                checkArity(say.get("phrase").getAsString(), 1 + vars + slots,
+                        where + " conversations_say", problems);
             }
         }));
         assertTrue(problems.isEmpty(), String.join(SEP, problems));

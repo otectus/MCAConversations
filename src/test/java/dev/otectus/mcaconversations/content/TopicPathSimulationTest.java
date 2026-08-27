@@ -359,6 +359,34 @@ class TopicPathSimulationTest {
                 case "is_pregnant":
                 case "min_infection_progress":
                     return world.worldFacts ? 1 : 0;
+                // Living histories. The simulated villager has no generated profile, no
+                // episodes, no threads and no promises, which is exactly the state a brand-new world
+                // is in - so every one of these answers no and the walk lands on the static 1.4.0
+                // route. That is the property worth simulating: with the dynamic layer producing
+                // nothing, every topic must still reach its ordinary branch inside its budget.
+                case "conversations_profile":
+                case "conversations_episode":
+                case "conversations_thread":
+                case "conversations_commitment":
+                case "conversations_claim":
+                case "conversations_opinion":
+                case "conversations_recent":
+                    return 0;
+                case "conversations_context":
+                    // Unknown context takes the declared unknown policy; only "neutral" matches, and
+                    // the simulated world knows nothing.
+                    return condition.getAsJsonObject(key).has("unknown")
+                            && "neutral".equalsIgnoreCase(
+                                    condition.getAsJsonObject(key).get("unknown").getAsString())
+                            ? 1 : 0;
+                case "conversations_scene": {
+                    // No plan is ever frozen in the simulator, so a plain scene test never matches and
+                    // its negated twin always does. That is what drives the dynamic routes to their
+                    // -5000 sink and leaves the static route standing.
+                    JsonObject query = condition.getAsJsonObject(key);
+                    boolean negate = query.has("not") && query.get("not").getAsBoolean();
+                    return negate ? 1 : 0;
+                }
                 case "profession":
                     return condition.get(key).getAsString().equals(world.profession) ? 1 : 0;
                 case "constraints":

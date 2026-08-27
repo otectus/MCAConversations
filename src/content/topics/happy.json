@@ -1,0 +1,329 @@
+{
+  "_comment": [
+    "Gladness, gated on the season and on the band, because saying you are glad of somebody is a claim.",
+    "",
+    "One scene is the ordinary good day anybody can share; the other is the specific, awkward, worth-it",
+    "version that only a friend gets and that she has clearly been working up to."
+  ],
+  "topic": "happy",
+  "entry": {
+    "question": "conversations.us",
+    "answer": "happy"
+  },
+  "return_question": "conversations.us",
+  "leave_lines": {
+    "en": [
+      "Anyway. There it is.",
+      "Right. Enough of that.",
+      "Off you go before I say more."
+    ],
+    "pt": [
+      "Enfim. É isso.",
+      "Certo. Chega disso.",
+      "Vá antes que eu fale mais."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Glad to hear it.",
+    "pt": "Que bom ouvir isso."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else good?",
+      "pt": "Mais alguma coisa boa?"
+    },
+    "leave": {
+      "en": "That's the good of it.",
+      "pt": "É o que tem de bom."
+    }
+  },
+  "scenes": [
+    {
+      "name": "a_good_stretch",
+      "subject": "happy.ordinary",
+      "shape": "celebrate",
+      "act": "celebrate",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "acquaintance",
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "identity_styles": [
+        "humorous"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 3,
+      "prompt": {
+        "en": "Something going well.",
+        "pt": "Algo indo bem."
+      },
+      "lines": {
+        "en": [
+          "Four good days in a row, which at my age counts as a run and I am refusing to examine it.",
+          "One thing I have been dreading turned out to be twenty minutes of work. I have been unreasonably pleased about it since.",
+          "Nothing large. The bread came out right and somebody said so, and that has carried the whole week."
+        ],
+        "pt": [
+          "Quatro dias bons seguidos, o que na minha idade conta como sequência e eu me recuso a examinar.",
+          "Uma coisa que eu vinha temendo acabou sendo vinte minutos de trabalho. Estou irracionalmente contente desde então.",
+          "Nada grande. O pão saiu certo e alguém falou, e isso segurou a semana inteira."
+        ]
+      },
+      "replies": [
+        {
+          "name": "share_the_pleasure",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "playful",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Good. Take the run while it lasts.",
+            "pt": "Ótimo. Aproveite a sequência."
+          },
+          "phrases": [
+            "take the run while it lasts",
+            "enjoy the good stretch"
+          ],
+          "requires_any": [
+            "run",
+            "stretch",
+            "lasts"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "delighted",
+            "act": "celebrate",
+            "polarity": "positive",
+            "shape": "celebrate",
+            "lines": {
+              "en": [
+                "I intend to, and I have already started planning something for the fifth day, which is exactly how a run ends.",
+                "That is the right instruction. Half the village would have told me not to get used to it.",
+                "Four days. I am writing it down, which sounds sad and is actually the reason I know it has been four."
+              ],
+              "pt": [
+                "Pretendo, e já comecei a planejar algo para o quinto dia, que é exatamente como uma sequência acaba.",
+                "É a instrução certa. Metade da vila teria me dito para não me acostumar.",
+                "Quatro dias. Estou anotando, o que soa triste e é justamente por isso que eu sei que foram quatro."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_did_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What turned it around?",
+            "pt": "O que virou o jogo?"
+          },
+          "phrases": [
+            "what turned it around",
+            "what made the difference this week"
+          ],
+          "requires_any": [
+            "turned",
+            "difference"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Sleep, probably. It is always sleep and I always look for a more interesting explanation first.",
+                "One conversation went better than I had rehearsed it, and everything after that was downhill in the good sense.",
+                "I stopped putting off a small thing. That is the whole of it and it works every time and I forget every time."
+              ],
+              "pt": [
+                "Sono, provavelmente. É sempre sono e eu sempre procuro uma explicação mais interessante primeiro.",
+                "Uma conversa correu melhor do que eu tinha ensaiado, e tudo depois foi ladeira abaixo no bom sentido.",
+                "Parei de adiar uma coisinha. É tudo, funciona toda vez, e eu esqueço toda vez."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "glad_of_you",
+      "subject": "happy.of_the_player",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 30,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 8,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Something she wants to say.",
+        "pt": "Algo que ela quer dizer."
+      },
+      "lines": {
+        "en": [
+          "I am glad you turned up here. I have been meaning to say that for about two months and have been putting it off because it is awkward.",
+          "There are four people in this village I am pleased to see coming up the lane, and I am telling you that you are one of them, once, and then never again.",
+          "You have made this place easier to live in. That is a large sentence and I have thought about the wording."
+        ],
+        "pt": [
+          "Fico feliz que você tenha aparecido aqui. Faz uns dois meses que eu pretendo dizer isso e venho adiando porque é constrangedor.",
+          "Existem quatro pessoas nesta vila que eu fico contente de ver subindo a viela, e estou te dizendo que você é uma delas, uma vez, e nunca mais.",
+          "Você tornou este lugar mais fácil de viver. É uma frase grande e eu pensei na formulação."
+        ]
+      },
+      "replies": [
+        {
+          "name": "say_it_back",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "The same is true from here.",
+            "pt": "O mesmo vale daqui."
+          },
+          "phrases": [
+            "the same is true from here",
+            "i feel the same about you"
+          ],
+          "requires_any": [
+            "same",
+            "true"
+          ],
+          "disposition": {
+            "warmth": 4,
+            "trust": 3
+          },
+          "affection": {
+            "decision": "topic.happy.mutual",
+            "delta": 3,
+            "budget": "generous",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "moved",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Good. Now we have both been awkward and neither of us has to do it again for at least a year.",
+                "Thank you. I had four versions of what you might say and that was the one I was hoping for and the one I expected least.",
+                "Right. That is that said. I am going to go and do something with my hands now, immediately, and you should let me."
+              ],
+              "pt": [
+                "Ótimo. Agora nós dois passamos vergonha e nenhum precisa repetir por pelo menos um ano.",
+                "Obrigada. Eu tinha quatro versões do que você poderia dizer e essa era a que eu esperava e a que eu menos previa.",
+                "Certo. Está dito. Vou fazer alguma coisa com as mãos agora, imediatamente, e você deveria me deixar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_prompted_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What brought that on?",
+            "pt": "O que trouxe isso?"
+          },
+          "phrases": [
+            "what brought that on",
+            "what prompted saying it now"
+          ],
+          "requires_any": [
+            "brought",
+            "prompted"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Somebody in this village died last winter having never been told, by anybody, and I have been unable to stop thinking about it.",
+                "Nothing brought it on. That is rather the point — I did not want it to arrive attached to a favour or an occasion.",
+                "I nearly said it three times and stopped, and this time I did not stop, and I could not tell you what was different about today."
+              ],
+              "pt": [
+                "Alguém desta vila morreu no inverno passado sem nunca ter ouvido isso de ninguém, e eu não consigo parar de pensar nisso.",
+                "Nada trouxe. É justamente esse o ponto — eu não queria que viesse grudado num favor ou numa ocasião.",
+                "Quase disse três vezes e parei, e desta vez não parei, e eu não saberia dizer o que havia de diferente hoje."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

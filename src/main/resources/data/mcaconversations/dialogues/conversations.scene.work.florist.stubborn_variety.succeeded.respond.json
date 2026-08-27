@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "celebrate_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.stubborn_variety.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.a_plant_that_wont_take",
+              "deltas": {
+                "warmth": 4,
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.florist.stubborn_variety"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.stubborn_variety.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.florist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

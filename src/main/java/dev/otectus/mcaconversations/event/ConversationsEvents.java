@@ -84,6 +84,7 @@ public final class ConversationsEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             ChatModeSession.clear(player.getUUID());
             GreetOnApproach.clear(player.getUUID());
+            dev.otectus.mcaconversations.hub.DynamicHub.clear(player.getUUID());
             VillagerAttention.clearPlayer(player.getUUID());
         }
     }
@@ -162,6 +163,7 @@ public final class ConversationsEvents {
             GossipDetectors.onVillagerDeath(event.getEntity());
             dropDispositions(event.getEntity());
             dropProgress(event.getEntity());
+            dropLivingHistory(event.getEntity());
             ConversationSessions.clearVillager(event.getEntity().getUUID());
         }
     }
@@ -192,6 +194,26 @@ public final class ConversationsEvents {
             }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("progress death-prune failed; ignoring", t);
+        }
+    }
+
+    /**
+     * A dead villager's identity and history go the same way as their progress rows.
+     *
+     * <p>Their episodes were theirs, their threads were with them, and their opinions were about
+     * neighbours they can no longer discuss. Nothing left in the world could read any of it back, and
+     * keeping it would be the one way this store could grow without bound in a long-lived world.
+     */
+    private static void dropLivingHistory(Entity villager) {
+        try {
+            if (villager.getServer() != null) {
+                dev.otectus.mcaconversations.identity.Identity.forget(
+                        villager.getServer(), villager.getUUID());
+                dev.otectus.mcaconversations.history.History.forget(
+                        villager.getServer(), villager.getUUID());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("living-history death-prune failed; ignoring", t);
         }
     }
 
@@ -233,6 +255,8 @@ public final class ConversationsEvents {
             GossipDetectors.scan(event.getServer());
             pruneStaleDispositions(event.getServer());
             pruneStaleProgress(event.getServer());
+            pruneLivingHistory(event.getServer());
+            spreadVillageTalk(event.getServer());
             ConversationSessions.sweep(gameTime);
         }
     }
@@ -267,6 +291,38 @@ public final class ConversationsEvents {
         }
     }
 
+    /**
+     * Expiry-based history pruning, riding the same low-frequency cadence as everything else here.
+     *
+     * <p>Deliberately not a tick job of its own. §21.6 forbids a per-tick scan of history, and the
+     * gossip sweep already runs at exactly the frequency this needs: expired episodes, lapsed threads
+     * and settled promises are not urgent, and a pass every few thousand ticks is plenty.
+     */
+    private static void pruneLivingHistory(net.minecraft.server.MinecraftServer server) {
+        try {
+            long today = server.overworld().getDayTime() / 24000L;
+            dev.otectus.mcaconversations.history.History.prune(server, today);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("living-history prune failed; ignoring", t);
+        }
+    }
+
+    /**
+     * One pass of village talk, riding the same low-frequency cadence as everything else here.
+     *
+     * <p>Deliberately not a job of its own. §16.4 says propagation runs on the existing village sweep
+     * or as a conversation consequence, and the sweep already runs at the right frequency: a story
+     * moving between two neighbours is not urgent, and a pass every few thousand ticks is the point.
+     */
+    private static void spreadVillageTalk(net.minecraft.server.MinecraftServer server) {
+        try {
+            long today = server.overworld().getDayTime() / 24000L;
+            dev.otectus.mcaconversations.history.RumourPropagation.sweep(server, today);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("rumour sweep failed; ignoring", t);
+        }
+    }
+
     // --- Commands ----------------------------------------------------------------
 
     @SubscribeEvent
@@ -289,5 +345,12 @@ public final class ConversationsEvents {
         event.addListener(new BeatContractLoader());
         event.addListener(new ProfessionProfileLoader());
         event.addListener(new Interiority());
+        // Living histories: identity tokens, conversation scenes, and the three narrative
+        // template directories. Inert until dynamic.enabled is on, like every other index here.
+        event.addListener(new dev.otectus.mcaconversations.identity.IdentityCatalogLoader());
+        event.addListener(new dev.otectus.mcaconversations.scene.SceneCatalogLoader());
+        event.addListener(new dev.otectus.mcaconversations.village.VillageCultureCatalogLoader());
+        dev.otectus.mcaconversations.history.NarrativeCatalogLoader.listeners()
+                .forEach(event::addListener);
     }
 }

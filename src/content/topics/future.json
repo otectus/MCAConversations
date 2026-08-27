@@ -1,0 +1,325 @@
+{
+  "_comment": [
+    "The future between the two of them, gated on the band and on the season.",
+    "",
+    "One scene is the practical next-year question anybody can be asked; the other only exists for a",
+    "partner or family, and it is about a decision rather than a feeling."
+  ],
+  "topic": "future",
+  "entry": {
+    "question": "conversations.us",
+    "answer": "future"
+  },
+  "return_question": "conversations.us",
+  "leave_lines": {
+    "en": [
+      "We shall see how it falls.",
+      "Right. Plenty of time.",
+      "Ask me again when it is closer."
+    ],
+    "pt": [
+      "Vamos ver como fica.",
+      "Certo. Tem tempo de sobra.",
+      "Me pergunte quando estiver mais perto."
+    ]
+  },
+  "ages": [
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about it?",
+      "pt": "Mais alguma coisa sobre isso?"
+    },
+    "leave": {
+      "en": "We'll come back to it.",
+      "pt": "A gente volta nisso."
+    }
+  },
+  "scenes": [
+    {
+      "name": "next_year",
+      "subject": "future.practical",
+      "shape": "plan",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "plan",
+      "temporal": "future",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Next year.",
+        "pt": "O ano que vem."
+      },
+      "lines": {
+        "en": [
+          "Much like this one, which I say as a plan rather than as resignation, and I mean it as a plan.",
+          "There is one thing that will be different and I have not decided it yet, and everything else follows from it.",
+          "I stopped making five-year plans after two of them and I have not regretted it once."
+        ],
+        "pt": [
+          "Bem parecido com este, e digo isso como plano e não como resignação, e é plano mesmo.",
+          "Tem uma coisa que vai ser diferente e eu ainda não decidi, e todo o resto decorre disso.",
+          "Parei de fazer planos de cinco anos depois de dois deles e nunca me arrependi."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_one_thing",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's the one thing?",
+            "pt": "Qual é essa coisa?"
+          },
+          "phrases": [
+            "what is the one thing",
+            "which thing is undecided"
+          ],
+          "requires_any": [
+            "thing",
+            "undecided"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "Whether I take somebody on. It sounds like a small decision and it changes the shape of every day afterwards.",
+                "Where I spend the winter. It has been the same answer for eleven years and this year it is a question.",
+                "I would rather not say until it is decided. Saying a thing while it is still open makes it harder to close honestly."
+              ],
+              "pt": [
+                "Se eu pego alguém para trabalhar comigo. Parece uma decisão pequena e muda o formato de todos os dias depois.",
+                "Onde eu passo o inverno. Foi a mesma resposta por onze anos e este ano é uma pergunta.",
+                "Prefiro não dizer antes de decidir. Falar de uma coisa enquanto está aberta dificulta fechar com honestidade."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_hope_to_be_here",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope to still be around for it.",
+            "pt": "Espero ainda estar por aqui."
+          },
+          "phrases": [
+            "i hope to still be around for it",
+            "i expect to still be here"
+          ],
+          "requires_any": [
+            "around",
+            "here"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "pleased",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "Then that is one more thing in next year that I can count on, and I keep a short list of those.",
+                "Good. Half the people who say that are gone by the spring and the other half never say it at all.",
+                "I shall hold you to it in a mild way, which is the only way anybody should be held to anything."
+              ],
+              "pt": [
+                "Então é mais uma coisa no ano que vem com que eu posso contar, e eu mantenho uma lista curta dessas.",
+                "Ótimo. Metade de quem diz isso some até a primavera e a outra metade nunca diz.",
+                "Vou cobrar de um jeito leve, que é o único jeito de se cobrar qualquer coisa de alguém."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_decision_between_us",
+      "subject": "future.shared",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "plan",
+      "temporal": "future",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The thing we've not decided.",
+        "pt": "A coisa que a gente não decidiu."
+      },
+      "lines": {
+        "en": [
+          "There is a decision the two of us keep almost making, and I would rather make it badly than keep almost making it.",
+          "We have talked around it four times. I am raising it plainly because the talking around is costing more than the decision would.",
+          "I know which way I lean and I have not said, because I wanted to hear where you were before I put a thumb on it."
+        ],
+        "pt": [
+          "Existe uma decisão que nós dois quase tomamos toda vez, e eu prefiro tomar mal a continuar quase tomando.",
+          "Já demos volta nisso quatro vezes. Estou levantando com franqueza porque dar voltas custa mais do que a decisão custaria.",
+          "Eu sei para que lado eu pendo e não disse, porque queria ouvir onde você estava antes de pôr o polegar na balança."
+        ]
+      },
+      "replies": [
+        {
+          "name": "decide_it_together",
+          "stance": "candor",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Then let's settle it this week.",
+            "pt": "Então vamos resolver esta semana."
+          },
+          "phrases": [
+            "then let us settle it this week",
+            "we should decide it this week"
+          ],
+          "requires_any": [
+            "settle",
+            "decide",
+            "week"
+          ],
+          "disposition": {
+            "trust": 4,
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.future.settled",
+            "delta": 3,
+            "budget": "generous",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "resolved",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "privacy": "discreet",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "This week. Thursday evening, at the table, with nothing else on, because a decision made in a doorway gets unmade in one.",
+                "Right. And whichever way it falls we both hold it, and neither of us gets to say afterwards that it was the other one's idea.",
+                "Thank you. Four months of nearly, ended by somebody naming a day. That is usually all any of it needs."
+              ],
+              "pt": [
+                "Esta semana. Quinta à noite, na mesa, sem mais nada acontecendo, porque decisão tomada num vão de porta é desfeita em outro.",
+                "Certo. E para que lado cair, nós dois seguramos, e nenhum de nós pode dizer depois que a ideia foi do outro.",
+                "Obrigada. Quatro meses de quase, encerrados por alguém marcar um dia. Costuma ser tudo o que qualquer coisa precisa."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_where_they_lean",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which way do you lean?",
+            "pt": "Para que lado você pende?"
+          },
+          "phrases": [
+            "which way do you lean",
+            "where do you stand on it"
+          ],
+          "requires_any": [
+            "lean",
+            "stand"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Toward yes, and about two thirds of the way, and the last third is not about the decision at all.",
+                "I will tell you on Thursday and not now, because saying it now makes your answer a response to mine.",
+                "Toward waiting, which I know is the cowardly answer, and I would like to be argued out of it by somebody who is fair about it."
+              ],
+              "pt": [
+                "Para o sim, e uns dois terços do caminho, e o último terço não é sobre a decisão de jeito nenhum.",
+                "Eu te digo na quinta e não agora, porque dizer agora transforma a sua resposta numa reação à minha.",
+                "Para esperar, e eu sei que é a resposta covarde, e eu gostaria de ser convencida do contrário por alguém que seja justo."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

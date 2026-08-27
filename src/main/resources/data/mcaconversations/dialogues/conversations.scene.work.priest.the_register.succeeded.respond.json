@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_the_reading",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.the_register.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_register",
+              "deltas": {
+                "warmth": 3,
+                "respect": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.priest.the_register"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.the_register.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.priest.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

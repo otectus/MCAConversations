@@ -370,6 +370,98 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.memories.the_house_as_it_was"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.memories.the_house_as_it_was",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "memories",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "memories.the_house_as_it_was.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.memories",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.memories.the_house_as_it_was.respond",
+            "say": "conversations.scene.memories.the_house_as_it_was"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.memories.the_one_who_is_not_here"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.memories.the_one_who_is_not_here",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "memories",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "memories.the_one_who_is_not_here.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.memories",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.memories.the_one_who_is_not_here.respond",
+            "say": "conversations.scene.memories.the_one_who_is_not_here"
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "conversations_progress": {
                 "arc": "family",

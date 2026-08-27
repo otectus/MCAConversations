@@ -1,0 +1,315 @@
+{
+  "_comment": [
+    "Standing — how the village reckons the player — gated on the actual relationship band.",
+    "",
+    "The scene a stranger gets and the scene a friend gets are different reports about the same",
+    "person, and the difference is what makes it worth asking."
+  ],
+  "topic": "standing",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "standing"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "That is where you stand.",
+      "Right. Make of it what you like.",
+      "It changes. It always changes."
+    ],
+    "pt": [
+      "É aí que você está.",
+      "Certo. Faça o que quiser com isso.",
+      "Muda. Sempre muda."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thanks for being straight.",
+    "pt": "Obrigado pela franqueza."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "leave": {
+      "en": "That's the reckoning, then.",
+      "pt": "É a conta, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "still_being_read",
+      "subject": "standing.early",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "neutral",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "stranger",
+            "acquaintance"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "How I'm taken here.",
+        "pt": "Como me veem aqui."
+      },
+      "lines": {
+        "en": [
+          "Undecided, which is the honest answer and the one nobody wants. You have been here weeks, not seasons.",
+          "The lane is watching and being polite while it watches. That is the standard arrangement for a first year.",
+          "Nobody has anything against you. Nobody has anything for you either, and the second one takes longer to earn."
+        ],
+        "pt": [
+          "Indefinido, que é a resposta honesta e a que ninguém quer. Você está aqui há semanas, não há estações.",
+          "A viela está observando e sendo educada enquanto observa. É o arranjo padrão para um primeiro ano.",
+          "Ninguém tem nada contra você. Ninguém tem nada a seu favor também, e a segunda coisa leva mais tempo para conquistar."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_to_earn_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How does anyone earn it here?",
+            "pt": "Como se conquista isso aqui?"
+          },
+          "phrases": [
+            "how does anyone earn it here",
+            "what earns standing in this village"
+          ],
+          "requires_any": [
+            "earn",
+            "standing"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "By turning up at the same hour for a season and doing an ordinary thing well while nobody watches.",
+                "Not by favours. A favour is a transaction. What counts is being reliably present when nothing is happening.",
+                "One winter. That is the actual measure and nobody says it out loud. Anybody who is here in the spring is somebody."
+              ],
+              "pt": [
+                "Aparecendo na mesma hora por uma estação e fazendo uma coisa comum bem feita enquanto ninguém olha.",
+                "Não com favores. Favor é transação. O que conta é estar confiavelmente presente quando nada está acontecendo.",
+                "Um inverno. É essa a medida real e ninguém diz em voz alta. Quem está aqui na primavera é alguém."
+              ]
+            }
+          }
+        },
+        {
+          "name": "take_it_well",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Fair. I'd rather hear it straight.",
+            "pt": "Justo. Prefiro ouvir a verdade."
+          },
+          "phrases": [
+            "i would rather hear it straight",
+            "straight is better than polite"
+          ],
+          "requires_any": [
+            "straight"
+          ],
+          "disposition": {
+            "respect": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Then you will do well here eventually, because that is the whole disposition the place rewards.",
+                "Good. I have given that answer four times and two of them went badly, so I appreciate an easy one.",
+                "Ask me again after the winter and the answer will be different, and I will tell you that one straight as well."
+              ],
+              "pt": [
+                "Então você vai se dar bem aqui com o tempo, porque é essa a disposição inteira que o lugar recompensa.",
+                "Ótimo. Já dei essa resposta quatro vezes e duas correram mal, então eu agradeço uma fácil.",
+                "Me pergunte depois do inverno e a resposta vai ser outra, e eu vou te dar essa com franqueza também."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "settled_opinion",
+      "subject": "standing.established",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Where I stand now.",
+        "pt": "Onde eu estou agora."
+      },
+      "lines": {
+        "en": [
+          "Settled, and settled in your favour, and I will tell you the one household where it is not, because you would want to know.",
+          "You are on the list of people somebody sends a child to fetch in an emergency. That is the only ranking this village keeps.",
+          "Well thought of, and quietly. Nobody is going to say it to your face except me, right now, once."
+        ],
+        "pt": [
+          "Assentado, e a seu favor, e eu vou te dizer a única casa onde não está, porque você ia querer saber.",
+          "Você está na lista de gente para quem se manda uma criança correndo numa emergência. É a única classificação que esta vila mantém.",
+          "Bem visto, e em silêncio. Ninguém vai dizer na sua cara, exceto eu, agora, uma vez."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_household",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which household, and why?",
+            "pt": "Qual casa, e por quê?"
+          },
+          "phrases": [
+            "which household and why",
+            "who is the exception"
+          ],
+          "requires_any": [
+            "household",
+            "exception"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "The one at the top of the lane, and it is about a thing you did not do rather than a thing you did, which makes it harder to mend.",
+                "I will tell you the household and not the reason, because the reason is theirs. Ask them and they will probably say.",
+                "It is four months old and it will keep. Do nothing dramatic about it. Dramatic is how a coolness becomes a position."
+              ],
+              "pt": [
+                "A do fim da viela, e é sobre uma coisa que você não fez em vez de uma que fez, o que dificulta o conserto.",
+                "Vou te dizer a casa e não o motivo, porque o motivo é deles. Pergunte a eles e provavelmente vão dizer.",
+                "Tem quatro meses e não estraga. Não faça nada dramático. Dramático é como uma frieza vira uma posição."
+              ]
+            }
+          }
+        },
+        {
+          "name": "thank_them_for_saying",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Thank you for telling me plainly.",
+            "pt": "Obrigado por dizer com franqueza."
+          },
+          "phrases": [
+            "thank you for telling me plainly",
+            "i appreciate the plain answer"
+          ],
+          "requires_any": [
+            "plainly",
+            "plain"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Somebody should. A person can live here four years without ever being told where they actually stand.",
+                "It is easier to say to somebody who takes it well, and you have taken it well, so I shall do it again in the spring.",
+                "Thank me by telling somebody else theirs. It costs one awkward minute and it is worth a season of guessing."
+              ],
+              "pt": [
+                "Alguém deveria. Uma pessoa pode viver aqui quatro anos sem nunca ser informada de onde de fato está.",
+                "É mais fácil dizer a quem recebe bem, e você recebeu bem, então eu faço de novo na primavera.",
+                "Me agradeça contando a outra pessoa a dela. Custa um minuto constrangedor e vale uma estação de adivinhação."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

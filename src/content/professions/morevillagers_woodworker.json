@@ -1,0 +1,771 @@
+{
+  "_comment": [
+    "Woodworker (MoreVillagers). Timber has a grain and an opinion, and the trade is negotiating with it.",
+    "",
+    "The §12.4 anchors are the grain, seasoning, joints, commissions, the workshop and a piece that",
+    "went wrong. These three take a board that has warped after the piece was finished, a customer who",
+    "wants a joint she thinks will fail, and a chair her teacher made that has come back to be mended.",
+    "",
+    "The woodworker's habit of mind is patience with material. She talks about timber as something that",
+    "keeps moving for years after the tree is down, and her strongest opinions are about people who",
+    "rush seasoning.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when MoreVillagers",
+    "is installed."
+  ],
+  "profession": "morevillagers:woodworker",
+  "id": "woodworker",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_grain",
+    "seasoning",
+    "joints",
+    "commissions",
+    "the_workshop",
+    "a_piece_that_went_wrong"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the bench.",
+    "pt": "Vou deixar você voltar à bancada."
+  },
+  "slot_lang": {
+    "woo_a_table_top": {
+      "en": "a table top",
+      "pt": "um tampo de mesa"
+    },
+    "woo_a_door": {
+      "en": "a door",
+      "pt": "uma porta"
+    },
+    "woo_a_pair_of_shutters": {
+      "en": "a pair of shutters",
+      "pt": "um par de venezianas"
+    },
+    "woo_a_board_cut_too_green": {
+      "en": "a board cut too green",
+      "pt": "uma tábua cortada verde demais"
+    },
+    "woo_a_wet_winter": {
+      "en": "a wet winter",
+      "pt": "um inverno chuvoso"
+    },
+    "woo_a_knot_i_should_have_seen": {
+      "en": "a knot I should have seen",
+      "pt": "um nó que eu deveria ter visto"
+    },
+    "woo_a_nailed_joint": {
+      "en": "a nailed joint",
+      "pt": "uma junta pregada"
+    },
+    "woo_a_glued_butt": {
+      "en": "a glued butt joint",
+      "pt": "uma junta de topo colada"
+    },
+    "woo_a_shortcut_at_the_corner": {
+      "en": "a shortcut at the corner",
+      "pt": "um atalho no canto"
+    },
+    "woo_a_chair": {
+      "en": "a chair",
+      "pt": "uma cadeira"
+    },
+    "woo_a_kitchen_bench": {
+      "en": "a kitchen bench",
+      "pt": "um banco de cozinha"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.warped_piece",
+      "subject": "work.woodworker.seasoning",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 24,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "piece": [
+          "woo_a_table_top",
+          "woo_a_door",
+          "woo_a_pair_of_shutters"
+        ],
+        "cause": [
+          "woo_a_board_cut_too_green",
+          "woo_a_wet_winter",
+          "woo_a_knot_i_should_have_seen"
+        ]
+      },
+      "commitment": {
+        "id": "work.woodworker.bring_planks",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:oak_planks",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "piece",
+            "cause"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The piece that moved.",
+            "pt": "A peça que se mexeu."
+          },
+          "lines": {
+            "en": [
+              "%2$s I finished in the autumn has cupped, because of %3$s, and it is sitting in somebody's kitchen looking wrong.",
+              "%3$s. Wood keeps moving for years after you think you have finished with it, and that is not an excuse, it is the trade.",
+              "%2$s is out by the thickness of a fingernail. Nobody would notice and I have noticed and I cannot leave it."
+            ],
+            "pt": [
+              "%2$s que terminei no outono empenou, por causa de %3$s, e está na cozinha de alguém com cara de errado.",
+              "%3$s. Madeira continua se mexendo por anos depois de você achar que terminou, e isso não é desculpa, é o ofício.",
+              "%2$s está fora por uma espessura de unha. Ninguém repararia e eu reparei e eu não consigo deixar."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_it_matters",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Would anyone else notice?",
+                "pt": "Alguém mais notaria?"
+              },
+              "phrases": [
+                "would anyone else notice that",
+                "does that much movement matter"
+              ],
+              "requires_any": [
+                "notice",
+                "movement"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "piece"
+                ],
+                "lines": {
+                  "en": [
+                    "Not this year. In four years %2$s will rock on the floor and they will think it was always like that, and it was not.",
+                    "They notice without noticing. A door that has moved catches once a day, and after a year that is four hundred small irritations they cannot name.",
+                    "The honest answer is that I would notice, every time I visited that house, for the rest of my life."
+                  ],
+                  "pt": [
+                    "Este ano, não. Em quatro anos %2$s vai balançar no chão e vão achar que sempre foi assim, e não era.",
+                    "Notam sem notar. Uma porta que se moveu prende uma vez por dia, e depois de um ano são quatrocentas pequenas irritações que não sabem nomear.",
+                    "A resposta honesta é que eu notaria, toda vez que visitasse aquela casa, pelo resto da vida."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_planks",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you seasoned planks.",
+                "pt": "Vou trazer tábuas curadas."
+              },
+              "phrases": [
+                "i can bring you seasoned planks",
+                "let me fetch planks for that"
+              ],
+              "requires_any": [
+                "planks",
+                "seasoned"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.woodworker.warp.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "piece"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I remake %2$s and take the old one back, and nobody in that house has to be told anything at all.",
+                    "Bring quarter-sawn if you can see the end grain. It moves half as much and it costs twice as much and it is worth four times.",
+                    "Yes. And I will keep the warped one on the wall of the workshop, where I keep the others, in the order they taught me things."
+                  ],
+                  "pt": [
+                    "Então eu refaço %2$s e levo a antiga de volta, e ninguém naquela casa precisa ser informado de nada.",
+                    "Traga serrada em quartos, se você conseguir ver o topo da fibra. Move metade, custa o dobro e vale quatro vezes.",
+                    "Sim. E vou guardar a empenada na parede da oficina, onde ficam as outras, na ordem em que me ensinaram coisas."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_telling_them",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Tell them and offer to remake it.",
+                "pt": "Conte e ofereça refazer."
+              },
+              "phrases": [
+                "tell them and offer to remake it",
+                "own it with the customer and replace it"
+              ],
+              "requires_any": [
+                "remake",
+                "replace",
+                "customer"
+              ],
+              "disposition": {
+                "respect": 4
+              },
+              "reaction": {
+                "id": "resolved",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "They have no idea anything is wrong. Telling them is entirely my doing and it is the only version I can live with.",
+                    "Yes. And I will say it is the timber rather than my judgement, which is true, and I will not say which of those chose the timber.",
+                    "It costs me a week and the price of the boards. It buys me being the person who came back, and that is not purchasable any other way."
+                  ],
+                  "pt": [
+                    "Eles não fazem ideia de que há algo errado. Contar é inteiramente obra minha e é a única versão em que eu consigo viver.",
+                    "Sim. E vou dizer que é a madeira e não o meu julgamento, o que é verdade, e não vou dizer qual dos dois escolheu a madeira.",
+                    "Custa-me uma semana e o preço das tábuas. Compra-me ser a pessoa que voltou, e isso não se compra de outro jeito."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "piece"
+          ],
+          "prompt": {
+            "en": "That piece.",
+            "pt": "Aquela peça."
+          },
+          "lines": {
+            "en": [
+              "%2$s is remade in quarter-sawn oak and it will still be flat when the house has a new roof.",
+              "I went and told them and they had not noticed and were baffled, and then delighted, and then they told four people.",
+              "The old one is on the workshop wall. It is the seventh piece up there and I can tell you what every one of them taught me."
+            ],
+            "pt": [
+              "%2$s foi refeita em carvalho serrado em quartos e ainda vai estar plana quando a casa tiver telhado novo.",
+              "Fui contar e eles não tinham notado e ficaram confusos, depois encantados, e depois contaram para quatro pessoas.",
+              "A antiga está na parede da oficina. É a sétima peça lá em cima e eu sei dizer o que cada uma me ensinou."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_wall",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why keep the failures on the wall?",
+                "pt": "Por que guardar os fracassos na parede?"
+              },
+              "phrases": [
+                "why keep the failures on the wall",
+                "what is the wall of failures for"
+              ],
+              "requires_any": [
+                "failures",
+                "wall"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Because a lesson you cannot see goes soft in about two years, and a warped board on a wall stays exactly as warped as it was.",
+                    "My teacher had one. I thought it was morbid at nineteen and I understood it at thirty-one, and now I show it to apprentices on their first day.",
+                    "Everything on that wall was good work with one wrong decision in it. That is the useful kind of failure and it is the only kind worth keeping."
+                  ],
+                  "pt": [
+                    "Porque uma lição que você não vê amolece em uns dois anos, e uma tábua empenada numa parede fica exatamente tão empenada quanto era.",
+                    "Minha mestra tinha uma. Aos dezenove eu achava mórbido e aos trinta e um eu entendi, e agora eu mostro aos aprendizes no primeiro dia.",
+                    "Tudo naquela parede era bom trabalho com uma decisão errada dentro. É o tipo útil de fracasso e é o único que vale guardar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.bad_joint",
+      "subject": "work.woodworker.joints",
+      "initial_state": "active",
+      "salience": 54,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "shortcut": [
+          "woo_a_nailed_joint",
+          "woo_a_glued_butt",
+          "woo_a_shortcut_at_the_corner"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "debate",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "shortcut"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The commission.",
+            "pt": "A encomenda."
+          },
+          "lines": {
+            "en": [
+              "The customer wants %2$s because it is quicker and cheaper, and they are right about both and wrong about everything after that.",
+              "%2$s. I have explained why it fails and been heard politely, and politeness is the sound of somebody who has already decided.",
+              "I could make it their way. It will hold for six years and then come apart, and by then everybody will have forgotten this conversation except me."
+            ],
+            "pt": [
+              "O cliente quer %2$s porque é mais rápido e mais barato, e ele tem razão nas duas e está errado em tudo depois disso.",
+              "%2$s. Já expliquei por que falha e fui ouvida com educação, e educação é o som de quem já decidiu.",
+              "Eu poderia fazer do jeito deles. Aguenta seis anos e depois solta, e até lá todo mundo terá esquecido esta conversa menos eu."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_to_persuade",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How would you persuade them?",
+                "pt": "Como você os convenceria?"
+              },
+              "phrases": [
+                "how would you persuade them",
+                "what would convince the customer"
+              ],
+              "requires_any": [
+                "persuade",
+                "convince"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Show them the wall. It is the only argument I have that does not require them to take my word for anything.",
+                    "Price it over ten years instead of over one. Said that way it stops being about craftsmanship and becomes about money, which everybody can follow.",
+                    "I would not, honestly. I would offer both, price both, and let them choose, and then make whichever they chose properly."
+                  ],
+                  "pt": [
+                    "Mostrar a parede. É o único argumento que eu tenho que não exige que acreditem na minha palavra.",
+                    "Cotar por dez anos em vez de por um. Dito assim, deixa de ser sobre ofício e vira sobre dinheiro, que todo mundo acompanha.",
+                    "Eu não convenceria, sinceramente. Ofereceria os dois, cotaria os dois, deixaria escolher, e faria direito o que escolhessem."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_offering_both",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Offer both and price them honestly.",
+                "pt": "Ofereça as duas e cote com honestidade."
+              },
+              "phrases": [
+                "offer both and price them honestly",
+                "let them choose with the real prices"
+              ],
+              "requires_any": [
+                "both",
+                "price",
+                "choose"
+              ],
+              "disposition": {
+                "respect": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Both, with the years written next to the prices. Then it is their decision with their information, which is the only fair arrangement.",
+                    "Yes. And if they take the cheap one I will make it as well as a cheap joint can be made, and I will not sulk about it in the workshop.",
+                    "That is what my teacher did and I had forgotten. She never argued with anybody. She just put two prices on the same board."
+                  ],
+                  "pt": [
+                    "As duas, com os anos escritos ao lado dos preços. Aí é decisão deles com informação deles, que é o único arranjo justo.",
+                    "Sim. E se levarem a barata, eu vou fazer tão bem quanto uma junta barata pode ser feita, e não vou ficar emburrada na oficina.",
+                    "Foi o que minha mestra fazia e eu tinha esquecido. Ela nunca discutia com ninguém. Só punha dois preços na mesma tábua."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "prompt": {
+            "en": "That commission.",
+            "pt": "Aquela encomenda."
+          },
+          "lines": {
+            "en": [
+              "They took the expensive one. I put the years next to the prices and they read it and changed their minds in about four seconds.",
+              "Two prices on a board. Eleven years of arguing about joints, ended by a piece of chalk.",
+              "They chose the cheap one, actually, and I made it beautifully, and I have stopped feeling anything about that at all."
+            ],
+            "pt": [
+              "Levaram a cara. Pus os anos ao lado dos preços, eles leram e mudaram de ideia em uns quatro segundos.",
+              "Dois preços numa tábua. Onze anos discutindo sobre juntas, encerrados por um pedaço de giz.",
+              "Levaram a barata, na verdade, e eu fiz lindamente, e parei de sentir qualquer coisa a respeito."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_chalk",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Two prices did more than arguing.",
+                "pt": "Dois preços fizeram mais que discutir."
+              },
+              "phrases": [
+                "two prices did more than arguing",
+                "the chalk worked better than argument"
+              ],
+              "requires_any": [
+                "prices",
+                "chalk",
+                "arguing"
+              ],
+              "disposition": {
+                "warmth": 2,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Arguing puts a person on the other side of the bench. Two prices puts them next to you looking at the same board.",
+                    "Thank you. I had been treating it as a question of whether they respected the craft, and it was a question about their money and their years.",
+                    "It also means I have to be honest about the cheap joint being genuinely cheaper, which I was not, quite, before."
+                  ],
+                  "pt": [
+                    "Discutir põe a pessoa do outro lado da bancada. Dois preços põem ela ao seu lado olhando a mesma tábua.",
+                    "Obrigada. Eu vinha tratando como questão de respeitarem o ofício, e era questão do dinheiro deles e dos anos deles.",
+                    "Também significa que eu preciso ser honesta sobre a junta barata ser genuinamente mais barata, coisa que eu não era, bem, antes."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.teachers_chair",
+      "subject": "work.woodworker.the_workshop",
+      "initial_state": "succeeded",
+      "salience": 46,
+      "due_after_days": 2,
+      "expires_after_days": 34,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "piece": [
+          "woo_a_chair",
+          "woo_a_kitchen_bench"
+        ]
+      },
+      "states": [
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "predicate": "memory",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "piece"
+          ],
+          "identity_values": [
+            "tradition",
+            "precision"
+          ],
+          "prompt": {
+            "en": "That old piece on the bench.",
+            "pt": "Aquela peça velha na bancada."
+          },
+          "lines": {
+            "en": [
+              "%2$s came in for mending last week. My teacher made it, forty years ago, and I knew her joints before I turned it over.",
+              "Somebody brought me %2$s and did not know whose it was. I did. I have been sitting with it for two days doing nothing useful.",
+              "%2$s. Forty years of a family sitting on it, and one joint has finally let go, and it is the joint she told me she was unsure about."
+            ],
+            "pt": [
+              "%2$s chegou para conserto semana passada. Minha mestra fez, quarenta anos atrás, e reconheci as juntas dela antes de virar.",
+              "Alguém me trouxe %2$s e não sabia de quem era. Eu sabia. Faz dois dias que eu sento com aquilo sem fazer nada útil.",
+              "%2$s. Quarenta anos de uma família sentando, e uma junta finalmente soltou, e é a junta sobre a qual ela me disse que tinha dúvida."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_teacher",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What was she like to learn from?",
+                "pt": "Como era aprender com ela?"
+              },
+              "phrases": [
+                "what was she like to learn from",
+                "what kind of teacher was she"
+              ],
+              "requires_any": [
+                "learn",
+                "teacher"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Silent, mostly. She would take the plane out of my hand, do four strokes, hand it back, and walk off. It took a year to work out that this was teaching.",
+                    "Honest about what she did not know, which I did not appreciate at nineteen and think about weekly now.",
+                    "She told me she was unsure about that joint, out loud, forty years ago, and then made it anyway because there was no better way at the time."
+                  ],
+                  "pt": [
+                    "Calada, na maior parte. Tirava a plaina da minha mão, dava quatro passadas, devolvia e ia embora. Levei um ano para entender que aquilo era ensinar.",
+                    "Honesta sobre o que não sabia, coisa que eu não valorizei aos dezenove e em que penso toda semana agora.",
+                    "Ela me disse que tinha dúvida sobre aquela junta, em voz alta, quarenta anos atrás, e fez assim mesmo porque não havia jeito melhor na época."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "note_the_forty_years",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Forty years is a good run.",
+                "pt": "Quarenta anos é uma boa marca."
+              },
+              "phrases": [
+                "forty years is a good run",
+                "lasting forty years says plenty"
+              ],
+              "requires_any": [
+                "forty",
+                "lasting"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is, and she would have said forty was disappointing, and she would have been half serious.",
+                    "I am going to mend it the way she would have if she had known what I know. That is either respect or arrogance and I have decided it is respect.",
+                    "Thank you. The family have no idea any of this. They want a chair that works by Friday, and they are going to get one."
+                  ],
+                  "pt": [
+                    "É, e ela teria dito que quarenta era decepcionante, e estaria meio falando sério.",
+                    "Vou consertar do jeito que ela faria se soubesse o que eu sei. Isso é respeito ou arrogância, e eu decidi que é respeito.",
+                    "Obrigada. A família não faz ideia de nada disso. Querem uma cadeira que funcione até sexta, e vão ter."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything more from me?",
+      "pt": "Mais alguma coisa de mim?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a board that warps?",
+        "pt": "Qual é a parte mais difícil de uma tábua que empena?"
+      },
+      "requires_any": [
+        "hardest",
+        "board"
+      ],
+      "phrases": [
+        "what is the hardest part of a board that warps",
+        "hardest thing about a warping board"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the timber.",
+      "pt": "Vou deixar você com a madeira."
+    }
+  }
+}

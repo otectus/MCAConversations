@@ -1,0 +1,677 @@
+{
+  "_comment": [
+    "Origin — where a villager came from before here.",
+    "",
+    "The funnel covers the plain facts and the one thing she carried with her. The scenes are the two",
+    "places the subject actually hurts: the season that smells like the old place, and the question of",
+    "whether this one has become home yet."
+  ],
+  "topic": "origin",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "origin"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "That is the whole of the map, near enough.",
+      "It was a long time ago now.",
+      "Anyway. Here is where I ended up."
+    ],
+    "pt": [
+      "É o mapa inteiro, quase.",
+      "Já faz muito tempo agora.",
+      "Enfim. Foi aqui que eu vim parar."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for telling me.",
+    "pt": "Obrigado por contar."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Further back?",
+      "pt": "Mais para trás?"
+    },
+    "leave": {
+      "en": "That is far enough back for one day.",
+      "pt": "É longe o bastante por hoje."
+    }
+  },
+  "funnel": {
+    "legacy_lines": {
+      "en": [
+        "Somewhere flatter than this, and colder, and a good deal further off than people assume.",
+        "Not here. I came over as a young thing and stayed by accident, which is how most of us arrive.",
+        "A smaller place than this one, if you can credit it. Four families and a well."
+      ],
+      "pt": [
+        "Um lugar mais plano que este, e mais frio, e bem mais longe do que as pessoas supõem.",
+        "Não daqui. Cheguei ainda jovem e fiquei por acidente, que é como a maioria de nós chega.",
+        "Um lugar menor que este, se der para acreditar. Quatro famílias e um poço."
+      ]
+    },
+    "open": {
+      "subject": "origin.where_from",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "shape": "observe",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "Where you came from.",
+        "pt": "De onde você veio."
+      },
+      "lines": {
+        "en": [
+          "Not from here, which everybody worked out in my first fortnight and nobody has ever asked about since.",
+          "A long way off, and I can still draw the road, and I have not walked it in a very long time.",
+          "I was born somewhere with a different word for supper. That is the shortest way to explain the distance."
+        ],
+        "pt": [
+          "Não daqui, o que todo mundo deduziu na minha primeira quinzena e ninguém nunca perguntou depois.",
+          "Bem longe, e eu ainda sei desenhar a estrada, e não a percorro há muitíssimo tempo.",
+          "Nasci num lugar com outra palavra para a ceia. É o jeito mais curto de explicar a distância."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_why_they_left",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What brought you away?",
+            "pt": "O que te trouxe para longe?"
+          },
+          "phrases": [
+            "what brought you away",
+            "why did you leave there"
+          ],
+          "requires_any": [
+            "brought",
+            "leave"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Work, officially. Really it was that everybody there had already decided who I was going to be.",
+                "The place stopped feeding people. It happened over about four years and everybody pretended otherwise.",
+                "I followed somebody. They went home again after two seasons and I found that I had not wanted to."
+              ],
+              "pt": [
+                "Trabalho, oficialmente. Na verdade era que todo mundo lá já tinha decidido quem eu ia ser.",
+                "O lugar parou de alimentar as pessoas. Levou uns quatro anos e todo mundo fingiu o contrário.",
+                "Segui alguém. Essa pessoa voltou para casa depois de duas estações e eu descobri que não queria voltar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_a_long_road",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That's a long road to walk.",
+            "pt": "É uma estrada longa de percorrer."
+          },
+          "phrases": [
+            "that is a long road to walk",
+            "a long way to have come"
+          ],
+          "requires_any": [
+            "road",
+            "way"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It was, and the walking was the easy half. The arriving somewhere that already has all its people is the hard half.",
+                "Long enough that I stopped counting the days about a third of the way in.",
+                "Thank you. Half the people here have never been further than the next valley and it does not occur to them."
+              ],
+              "pt": [
+                "Foi, e caminhar era a metade fácil. Chegar num lugar que já tem toda a sua gente é a metade difícil.",
+                "Longa o bastante para eu parar de contar os dias lá pelo primeiro terço.",
+                "Obrigada. Quase todo mundo aqui nunca passou do vale seguinte e nem lhes ocorre pensar nisso."
+              ]
+            }
+          }
+        },
+        {
+          "name": "drop_the_subject",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "Everyone came from somewhere.",
+            "pt": "Todo mundo veio de algum lugar."
+          },
+          "phrases": [
+            "everyone came from somewhere",
+            "everybody is from somewhere else"
+          ],
+          "requires_any": [
+            "everyone",
+            "everybody"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.origin.dismissed",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "qualify",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They did. Some of us came from further, and that turns out to matter rather more than I expected it to.",
+                "True. It is also the only part of me that nobody in this village knows, so I mention it perhaps twice a decade.",
+                "Right. I shall keep the map to myself, then."
+              ],
+              "pt": [
+                "Vieram. Alguns de nós vieram de mais longe, e isso importa bem mais do que eu esperava.",
+                "Verdade. Também é a única parte de mim que ninguém nesta vila conhece, então eu menciono umas duas vezes por década.",
+                "Certo. Guardo o mapa para mim, então."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "more": {
+      "subject": "origin.what_i_carried",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "discreet",
+      "shape": "confide",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "What you brought with you.",
+        "pt": "O que você trouxe com você."
+      },
+      "lines": {
+        "en": [
+          "I brought one object and one habit, and the habit has outlasted the object by twenty years.",
+          "Everything I own from there fits in one hand, and I check that it is still there more often than I admit.",
+          "The only thing that really came with me was the way I say certain words, and children here still copy it."
+        ],
+        "pt": [
+          "Trouxe um objeto e um hábito, e o hábito sobreviveu ao objeto por vinte anos.",
+          "Tudo o que eu tenho de lá cabe numa mão, e eu confiro se ainda está lá mais vezes do que admito.",
+          "A única coisa que veio comigo de verdade foi o jeito de eu dizer certas palavras, e as crianças daqui ainda imitam."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_to_see_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What was the one object?",
+            "pt": "Qual era o objeto?"
+          },
+          "phrases": [
+            "what was the one object",
+            "what did you bring with you"
+          ],
+          "requires_any": [
+            "object",
+            "bring"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 1
+          },
+          "affection": {
+            "decision": "topic.origin.asked_after",
+            "delta": 1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "shown",
+            "act": "explain",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "A spoon, if you can believe it. Worth nothing, and I would go back into a burning house for it.",
+                "A bit of cloth off a coat. The coat is long gone and the cloth has moved house with me three times.",
+                "A small carved thing my grandmother made badly. Everyone who sees it assumes a child made it, and I let them."
+              ],
+              "pt": [
+                "Uma colher, se der para acreditar. Não vale nada, e eu voltaria a uma casa em chamas por ela.",
+                "Um pedaço de tecido de um casaco. O casaco sumiu faz tempo e o tecido já mudou de casa comigo três vezes.",
+                "Uma coisinha entalhada que minha avó fez mal feita. Quem vê acha que uma criança fez, e eu deixo achar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_is_worth_keeping",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Worth carrying that far.",
+            "pt": "Valeu carregar tão longe."
+          },
+          "phrases": [
+            "worth carrying that far",
+            "that was worth keeping"
+          ],
+          "requires_any": [
+            "carrying",
+            "keeping"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "I have never been sure. Some years it is a comfort and some years it is a stone in my pocket.",
+                "Thank you. It is the sort of thing you cannot explain the value of without sounding foolish.",
+                "It weighs almost nothing and it is the heaviest thing I own. Make of that what you like."
+              ],
+              "pt": [
+                "Nunca tive certeza. Em alguns anos é um consolo e em outros é uma pedra no bolso.",
+                "Obrigada. É o tipo de coisa cujo valor não dá para explicar sem soar boba.",
+                "Não pesa quase nada e é a coisa mais pesada que eu tenho. Faça o que quiser com isso."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wave_off_the_keepsake",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "Old things weigh people down.",
+            "pt": "Coisas velhas pesam nas pessoas."
+          },
+          "phrases": [
+            "old things weigh people down",
+            "keepsakes are a weight to carry"
+          ],
+          "requires_any": [
+            "weigh",
+            "keepsakes"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.origin.cut_short",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They do. It is one object and it weighs less than a loaf, so I judge myself to be bearing up.",
+                "Perhaps. The people I know with nothing from before are not noticeably lighter on their feet.",
+                "Right. We shall talk about something present, then."
+              ],
+              "pt": [
+                "Pesam. É um objeto e pesa menos que um pão, então eu me julgo aguentando bem.",
+                "Talvez. As pessoas que eu conheço sem nada de antes não andam visivelmente mais leves.",
+                "Certo. Falamos de algo do presente, então."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_season_that_smells_like_it",
+      "subject": "origin.season_memory",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.season",
+          "any_of": [
+            "autumn",
+            "winter"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "This time of year.",
+        "pt": "Esta época do ano."
+      },
+      "lines": {
+        "en": [
+          "This is the season that smells like where I grew up, and it ambushes me every single year.",
+          "The light goes a particular way about now and for about four days I am not entirely here.",
+          "Every year at this point I catch myself listening for a bell that has not rung in twenty years."
+        ],
+        "pt": [
+          "Esta é a estação que tem o cheiro de onde eu cresci, e ela me pega de surpresa todo santo ano.",
+          "A luz fica de um jeito específico por agora e por uns quatro dias eu não estou inteiramente aqui.",
+          "Todo ano nesta altura eu me pego escutando um sino que não toca há vinte anos."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_was_like",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What was it like there, this time of year?",
+            "pt": "Como era lá, nesta época?"
+          },
+          "phrases": [
+            "what was it like there this time of year",
+            "how was the season there"
+          ],
+          "requires_any": [
+            "season",
+            "there"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "described",
+            "act": "reminisce",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Louder. Everybody worked outdoors until the dark and then all of it happened in one room until sleep.",
+                "Wetter, and the whole village smelled of woodsmoke and wet wool for two solid months.",
+                "We had a thing we did on the shortest day that nobody here has ever heard of, and I have stopped explaining it."
+              ],
+              "pt": [
+                "Mais barulhento. Todo mundo trabalhava fora até escurecer e aí tudo acontecia num cômodo só até dormir.",
+                "Mais úmido, e a vila inteira cheirava a fumaça de lenha e lã molhada por dois meses inteiros.",
+                "A gente fazia uma coisa no dia mais curto que ninguém aqui nunca ouviu falar, e eu parei de explicar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "sit_with_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Some seasons carry more than weather.",
+            "pt": "Algumas estações carregam mais que clima."
+          },
+          "phrases": [
+            "some seasons carry more than weather",
+            "the season brings it back"
+          ],
+          "requires_any": [
+            "seasons",
+            "brings"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.origin.season.met",
+            "delta": 1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "eased",
+            "act": "accept",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They do. I used to fight it and now I let the four days happen and get on with the rest of the year.",
+                "That is a kind way to put it. I am usually told it is only the cold and that I ought to wear more.",
+                "Thank you. It helps to say it aloud once a year to somebody who does not immediately try to fix it."
+              ],
+              "pt": [
+                "Carregam. Eu costumava lutar contra e agora deixo os quatro dias acontecerem e sigo com o resto do ano.",
+                "É um jeito gentil de dizer. Quase todo mundo me diz que é só o frio e que eu devia me agasalhar mais.",
+                "Obrigada. Ajuda dizer em voz alta uma vez por ano para alguém que não tenta consertar na hora."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "whether_this_is_home",
+      "subject": "origin.is_this_home",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 25,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "tradition",
+        "independence"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Whether here is home.",
+        "pt": "Se aqui é casa."
+      },
+      "lines": {
+        "en": [
+          "I have been here longer than I was ever there, and I still say 'back home' about the other place.",
+          "Somebody asked me last winter which one was home and I gave an answer I have been arguing with ever since.",
+          "This is where my life is. Whether it is home is a separate question and I have not settled it."
+        ],
+        "pt": [
+          "Estou aqui há mais tempo do que estive lá, e ainda digo \"lá em casa\" falando do outro lugar.",
+          "Alguém me perguntou no inverno passado qual dos dois era casa e eu dei uma resposta com a qual discuto até hoje.",
+          "É aqui que a minha vida está. Se é casa é outra pergunta e eu não resolvi."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_answer",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What did you answer?",
+            "pt": "O que você respondeu?"
+          },
+          "phrases": [
+            "what did you answer",
+            "which one did you say"
+          ],
+          "requires_any": [
+            "answer",
+            "say"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "I said here, and I meant it, and I went quiet for the rest of the evening about it.",
+                "I said neither, which was true and which I would not say again, because it upset somebody who deserved better.",
+                "I said the old place, out of loyalty, and I have known ever since that it was the wrong answer."
+              ],
+              "pt": [
+                "Eu disse aqui, e falei sério, e fiquei calada o resto da noite por causa disso.",
+                "Eu disse nenhum dos dois, o que era verdade e o que eu não repetiria, porque magoou alguém que merecia melhor.",
+                "Eu disse o lugar antigo, por lealdade, e desde então eu sei que era a resposta errada."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_can_be_both",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "A person can hold two homes.",
+            "pt": "Uma pessoa pode ter duas casas."
+          },
+          "phrases": [
+            "a person can hold two homes",
+            "it can be both places"
+          ],
+          "requires_any": [
+            "homes",
+            "both"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 1
+          },
+          "affection": {
+            "decision": "topic.origin.home.met",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "settled",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "That is the first version of that sentence I have been able to hear without wanting to argue.",
+                "I would like that to be true. Some days I manage to believe it and today is one of them.",
+                "Then I shall try holding both, and stop treating one of them as a betrayal of the other."
+              ],
+              "pt": [
+                "É a primeira versão dessa frase que eu consegui ouvir sem querer discutir.",
+                "Eu gostaria que fosse verdade. Em alguns dias eu consigo acreditar e hoje é um deles.",
+                "Então vou tentar ter as duas, e parar de tratar uma delas como traição à outra."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

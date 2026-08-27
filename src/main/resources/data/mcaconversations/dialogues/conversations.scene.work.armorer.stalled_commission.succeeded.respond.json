@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_makes_it_good",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.stalled_commission.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.materials",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.armorer.stalled_commission"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.stalled_commission.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.armorer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

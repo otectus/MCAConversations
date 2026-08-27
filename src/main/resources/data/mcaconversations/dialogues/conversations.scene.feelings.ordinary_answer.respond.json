@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "ask_a_real_question",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "feelings.ordinary_answer.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.steady",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.feelings.followup",
+            "say": "conversations.scene.feelings.ordinary_answer.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave_it_polite",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "feelings.ordinary_answer.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "feelings.steady",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.feelings.followup",
+            "say": "conversations.scene.feelings.ordinary_answer.acknowledged"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.feelings.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

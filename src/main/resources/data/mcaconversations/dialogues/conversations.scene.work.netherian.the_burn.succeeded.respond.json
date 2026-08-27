@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_stopped_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.the_burn.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.burns",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.netherian.the_burn"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.the_burn.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "note_the_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.the_burn.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.burns",
+              "deltas": {
+                "warmth": 3,
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.netherian.the_burn"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.the_burn.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.netherian.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

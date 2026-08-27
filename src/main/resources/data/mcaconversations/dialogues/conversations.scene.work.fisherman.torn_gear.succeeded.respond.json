@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_haul",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.torn_gear.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.nets",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.fisherman.torn_gear"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.torn_gear.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.fisherman.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

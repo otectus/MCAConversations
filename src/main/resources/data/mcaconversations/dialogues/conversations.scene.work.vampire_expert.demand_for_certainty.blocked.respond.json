@@ -1,0 +1,128 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_tests",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.demand_for_certainty.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.families",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.vampire_expert.demand_for_certainty"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.demand_for_certainty.blocked.explained",
+              "slots": [
+                "symptom"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_bottles",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.demand_for_certainty.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.vampire_expert.case.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.families",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.demand_for_certainty",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.vampire_expert.demand_for_certainty",
+              "obligation": "commitment:work.vampire_expert.bring_bottles"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.vampire_expert.bring_bottles"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.demand_for_certainty.blocked.accepted",
+              "slots": [
+                "family"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_waiting",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.demand_for_certainty.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.families",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.vampire_expert.demand_for_certainty"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.demand_for_certainty.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.vampire_expert.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

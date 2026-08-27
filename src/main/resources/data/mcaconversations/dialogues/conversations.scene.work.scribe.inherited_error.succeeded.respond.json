@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_argument",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.inherited_error.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.errors",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.scribe.inherited_error"
+            },
+            "next": "conversations.scene.work.scribe.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.scribe.inherited_error.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.scribe.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

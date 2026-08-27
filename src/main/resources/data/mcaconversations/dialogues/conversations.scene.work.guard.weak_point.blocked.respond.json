@@ -1,0 +1,131 @@
+{
+  "answers": [
+    {
+      "name": "ask_consequence",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.weak_point.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.weak_points",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.weak_point"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.weak_point.blocked.explained",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_timber",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.weak_point.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.guard.weak_point.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.weak_points",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.weak_point",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.weak_point",
+              "obligation": "commitment:work.guard.bring_timber"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.guard.bring_timber"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.weak_point.blocked.accepted",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_escalate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.weak_point.blocked.resisted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.weak_points",
+              "deltas": {
+                "respect": 2,
+                "tension": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.weak_point"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.weak_point.blocked.resisted",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.guard.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

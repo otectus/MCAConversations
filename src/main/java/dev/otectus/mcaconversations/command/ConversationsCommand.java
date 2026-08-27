@@ -51,7 +51,15 @@ public final class ConversationsCommand {
                                 .requires(source -> source.hasPermission(2))
                                 .then(Commands.argument("message", StringArgumentType.greedyString())
                                         .executes(ctx -> debugScore(ctx.getSource(),
-                                                StringArgumentType.getString(ctx, "message")))))));
+                                                StringArgumentType.getString(ctx, "message"))))))
+                );
+
+        // The living-histories operator surface is a separate tree because it is a different kind of
+        // command: everything above is a feature switch or a chat test driver, and everything below
+        // inspects generated narrative state that ordinary play deliberately never shows.
+        for (var subtree : LivingHistoriesCommand.subtrees()) {
+            dispatcher.register(Commands.literal("conversations").then(subtree));
+        }
     }
 
     // --- gossip (op) ----------------------------------------------------------

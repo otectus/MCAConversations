@@ -1,0 +1,65 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_household",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.settled_opinion.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.established",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "say": "conversations.scene.standing.settled_opinion.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "thank_them_for_saying",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.settled_opinion.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.established",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "say": "conversations.scene.standing.settled_opinion.acknowledged"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.standing.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

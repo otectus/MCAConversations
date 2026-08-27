@@ -1,0 +1,65 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_helped",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.the_correction.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.corrected",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.rumors.followup",
+            "say": "conversations.scene.rumors.the_correction.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_the_admission",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.the_correction.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.corrected",
+              "deltas": {
+                "respect": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.rumors.followup",
+            "say": "conversations.scene.rumors.the_correction.acknowledged"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.rumors.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

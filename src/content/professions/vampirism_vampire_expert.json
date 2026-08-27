@@ -1,0 +1,855 @@
+{
+  "_comment": [
+    "Vampire expert (Vampirism). Diagnosis, in a field where being wrong ruins a family.",
+    "",
+    "The §12.4 anchors are symptoms, the tests, misdiagnosis, families, the books and what she will not",
+    "say. These three take a family who want certainty she cannot give, a case she got wrong years ago,",
+    "and the slow work of making her tests better.",
+    "",
+    "She is a diagnostician first: careful about confidence intervals in a village that has no word for",
+    "one, and completely unwilling to say a thing is certain in order to end an uncomfortable",
+    "conversation. Nothing she says will ever confirm a suspicion about a named person on thin",
+    "evidence, and she explains why every time.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when Vampirism is",
+    "installed."
+  ],
+  "profession": "vampirism:vampire_expert",
+  "id": "vampire_expert",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "symptoms",
+    "the_tests",
+    "misdiagnosis",
+    "families",
+    "the_books",
+    "what_i_wont_say"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to your records.",
+    "pt": "Vou deixar você voltar aos seus registros."
+  },
+  "slot_lang": {
+    "vex_a_mother_of_three": {
+      "en": "a mother of three",
+      "pt": "uma mãe de três"
+    },
+    "vex_a_pair_of_brothers": {
+      "en": "a pair of brothers",
+      "pt": "um par de irmãos"
+    },
+    "vex_an_old_couple": {
+      "en": "an old couple",
+      "pt": "um casal de idosos"
+    },
+    "vex_a_wasting_that_could_be_four_things": {
+      "en": "a wasting that could be four things",
+      "pt": "um definhamento que pode ser quatro coisas"
+    },
+    "vex_a_sleeplessness": {
+      "en": "a sleeplessness with no cause",
+      "pt": "uma insônia sem causa"
+    },
+    "vex_a_light_sensitivity": {
+      "en": "an aversion to daylight",
+      "pt": "uma aversão à luz do dia"
+    },
+    "vex_the_case_eleven_years_ago": {
+      "en": "the case eleven years ago",
+      "pt": "o caso de onze anos atrás"
+    },
+    "vex_the_winter_i_was_new": {
+      "en": "the winter I was newly qualified",
+      "pt": "o inverno em que eu era recém-formada"
+    },
+    "vex_the_second_test": {
+      "en": "the second test",
+      "pt": "o segundo teste"
+    },
+    "vex_the_waiting_period": {
+      "en": "the waiting period",
+      "pt": "o período de espera"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.demand_for_certainty",
+      "subject": "work.vampire_expert.families",
+      "initial_state": "blocked",
+      "salience": 64,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "vampirism"
+      ],
+      "slots": {
+        "family": [
+          "vex_a_mother_of_three",
+          "vex_a_pair_of_brothers",
+          "vex_an_old_couple"
+        ],
+        "symptom": [
+          "vex_a_wasting_that_could_be_four_things",
+          "vex_a_sleeplessness",
+          "vex_a_light_sensitivity"
+        ]
+      },
+      "commitment": {
+        "id": "work.vampire_expert.bring_bottles",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:glass_bottle",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "family",
+            "symptom"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The case.",
+            "pt": "O caso."
+          },
+          "lines": {
+            "en": [
+              "%2$s came to me about %3$s and what they want is a yes or a no, and what I have is four possibilities and a waiting period.",
+              "%3$s. It is consistent with the thing they are afraid of and with three duller things, and the three duller ones are far more likely.",
+              "%2$s asked me to be certain. I cannot be certain in under six weeks and I have said so, and six weeks is a very long time to be frightened."
+            ],
+            "pt": [
+              "%2$s me procurou por causa de %3$s, e o que querem é um sim ou um não, e o que eu tenho são quatro possibilidades e um período de espera.",
+              "%3$s. É compatível com a coisa que temem e com três coisas mais banais, e as três banais são muito mais prováveis.",
+              "%2$s me pediu certeza. Eu não consigo ter certeza em menos de seis semanas e eu disse isso, e seis semanas é muito tempo para se ficar com medo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_tests",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do the tests involve?",
+                "pt": "O que os testes envolvem?"
+              },
+              "phrases": [
+                "what do the tests involve",
+                "how does the testing work"
+              ],
+              "requires_any": [
+                "tests",
+                "testing"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "symptom"
+                ],
+                "lines": {
+                  "en": [
+                    "Time, mostly. %2$s that is one of the dull four resolves within six weeks, and one that is not does not, and that is the whole of the test.",
+                    "Observation and elimination. I rule out the ordinary things one at a time, and each one takes as long as it takes.",
+                    "There is no single test that answers it in a morning. Everybody wants there to be, and the people who claim to have one are the reason this field has a bad name."
+                  ],
+                  "pt": [
+                    "Tempo, principalmente. %2$s que seja uma das quatro banais se resolve em seis semanas, e a que não for, não se resolve, e é esse o teste inteiro.",
+                    "Observação e eliminação. Eu descarto as coisas comuns uma por vez, e cada uma leva o tempo que leva.",
+                    "Não existe um teste único que responda numa manhã. Todo mundo quer que exista, e quem alega ter um é o motivo de esta área ter má fama."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_bottles",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you bottles for the samples.",
+                "pt": "Vou trazer frascos para as amostras."
+              },
+              "phrases": [
+                "i can bring you bottles for samples",
+                "let me fetch bottles for that"
+              ],
+              "requires_any": [
+                "bottles",
+                "bottle"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.vampire_expert.case.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "family"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I can run the eliminations properly instead of by memory, and %2$s gets an answer six weeks from Tuesday rather than never.",
+                    "It sounds like a small thing to bring. It is the difference between a record and a recollection, and only one of those can be checked.",
+                    "Yes. And I will label every one with a date, so that if I am wrong somebody can find out exactly where I was wrong."
+                  ],
+                  "pt": [
+                    "Então eu posso fazer as eliminações direito em vez de de memória, e %2$s tem uma resposta seis semanas a partir de terça, em vez de nunca.",
+                    "Parece pouca coisa de se trazer. É a diferença entre um registro e uma lembrança, e só uma das duas pode ser conferida.",
+                    "Sim. E vou etiquetar cada um com data, para que, se eu errar, alguém possa descobrir exatamente onde eu errei."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_waiting",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Make them wait the six weeks.",
+                "pt": "Faça-os esperar as seis semanas."
+              },
+              "phrases": [
+                "make them wait the six weeks",
+                "hold to the waiting period"
+              ],
+              "requires_any": [
+                "weeks",
+                "waiting"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Six weeks, and I will visit every week so that the waiting has a shape and is not just a hole they are sitting in.",
+                    "Yes. The one time I shortened it, to be kind, I was wrong, and being kind for four days cost a family eleven years.",
+                    "Thank you. Holding a waiting period against a frightened family is the hardest thing this work asks and nobody who has not done it believes that."
+                  ],
+                  "pt": [
+                    "Seis semanas, e eu visito toda semana para que a espera tenha um formato e não seja só um buraco em que estão sentados.",
+                    "Sim. A única vez em que eu encurtei, por bondade, eu errei, e ser bondosa por quatro dias custou onze anos a uma família.",
+                    "Obrigada. Sustentar um período de espera diante de uma família assustada é a coisa mais difícil que este trabalho pede, e quem nunca fez não acredita."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "vampirism"
+          ],
+          "slots_used": [
+            "family"
+          ],
+          "prompt": {
+            "en": "That case.",
+            "pt": "Aquele caso."
+          },
+          "lines": {
+            "en": [
+              "Six weeks and it was the dullest of the four. %2$s is well and I have never seen anybody so tired by good news.",
+              "It resolved. I visited every week and by the fourth week we had stopped talking about it and started talking about the roof.",
+              "%2$s got an answer that was worth having because it took six weeks. A four-day answer would have been a guess with a confident face on it."
+            ],
+            "pt": [
+              "Seis semanas e era a mais banal das quatro. %2$s está bem e eu nunca vi ninguém tão cansada por uma boa notícia.",
+              "Se resolveu. Visitei toda semana e na quarta a gente tinha parado de falar disso e começado a falar do telhado.",
+              "%2$s recebeu uma resposta que valia a pena porque levou seis semanas. Uma resposta em quatro dias teria sido um palpite com cara de confiança."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_visits",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why visit every week?",
+                "pt": "Por que visitar toda semana?"
+              },
+              "phrases": [
+                "why visit every week",
+                "what do the weekly visits do"
+              ],
+              "requires_any": [
+                "visit",
+                "visits",
+                "weekly"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Because a waiting period without visits is abandonment with a technical name on it, and I have been on the receiving end of that once.",
+                    "It also lets me see the change week by week instead of at the end, which is better diagnosis as well as better manners.",
+                    "And it stops them going to somebody who will give them an answer in a morning. There is always somebody who will."
+                  ],
+                  "pt": [
+                    "Porque um período de espera sem visitas é abandono com nome técnico, e eu já estive do lado de quem recebe isso uma vez.",
+                    "Também me deixa ver a mudança semana a semana em vez de só no fim, o que é diagnóstico melhor além de educação melhor.",
+                    "E impede que procurem alguém que dê uma resposta numa manhã. Sempre tem alguém que dá."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_case_i_got_wrong",
+      "subject": "work.vampire_expert.misdiagnosis",
+      "initial_state": "failed",
+      "salience": 58,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "integrations": [
+        "vampirism"
+      ],
+      "slots": {
+        "when": [
+          "vex_the_case_eleven_years_ago",
+          "vex_the_winter_i_was_new"
+        ]
+      },
+      "states": [
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "when"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The one you got wrong.",
+            "pt": "O que você errou."
+          },
+          "lines": {
+            "en": [
+              "There was %2$s. I shortened the waiting period because a family was suffering, and I was wrong, and they left the village.",
+              "%2$s. Nobody died. I want to say that first and it does not do the work I want it to do.",
+              "I was certain. That is the part I go back to — not that I was wrong, that I sounded certain, and certainty is what they acted on."
+            ],
+            "pt": [
+              "Teve %2$s. Encurtei o período de espera porque uma família estava sofrendo, e eu errei, e eles deixaram a vila.",
+              "%2$s. Ninguém morreu. Quero dizer isso primeiro e isso não faz o trabalho que eu queria que fizesse.",
+              "Eu estava certa disso. É essa a parte à qual eu volto — não que eu errei, mas que eu soei certa, e foi na certeza que eles agiram."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_changed",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What changed in your practice?",
+                "pt": "O que mudou na sua prática?"
+              },
+              "phrases": [
+                "what changed in your practice",
+                "what did you do differently afterwards"
+              ],
+              "requires_any": [
+                "practice",
+                "differently"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "I say the number now. Not likely — four in five, or one in nine. A number can be argued with and a certainty cannot.",
+                    "The waiting period stopped being negotiable, and I lost two clients over it in the first year and have lost none since.",
+                    "I wrote it in the front of the book, with their name and mine. Every apprentice reads it before they read anything else."
+                  ],
+                  "pt": [
+                    "Agora eu digo o número. Não provável — quatro em cinco, ou um em nove. Um número pode ser contestado e uma certeza não.",
+                    "O período de espera deixou de ser negociável, e eu perdi dois clientes por isso no primeiro ano e nenhum desde então.",
+                    "Escrevi na frente do livro, com o nome deles e o meu. Toda aprendiz lê isso antes de ler qualquer outra coisa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "acknowledge_the_weight",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You've carried that a long time.",
+                "pt": "Você carrega isso há muito tempo."
+              },
+              "phrases": [
+                "you have carried that a long time",
+                "eleven years is a long time to carry it"
+              ],
+              "requires_any": [
+                "carried",
+                "carry",
+                "years"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.vampire_expert.error.seen",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "I intend to. Putting it down would mean the waiting period is negotiable again, and it is the only thing keeping it fixed.",
+                    "Thank you. People either tell me it was a long time ago or that anybody would have done the same, and neither of those is a thing I want.",
+                    "I wrote to them once, four years after. There was no reply and there did not need to be. The letter was for the record, not for an answer."
+                  ],
+                  "pt": [
+                    "Pretendo carregar. Largar significaria que o período de espera volta a ser negociável, e é a única coisa que o mantém firme.",
+                    "Obrigada. As pessoas me dizem que foi há muito tempo ou que qualquer um teria feito o mesmo, e eu não quero nenhuma das duas.",
+                    "Escrevi a eles uma vez, quatro anos depois. Não houve resposta e não precisava haver. A carta era para o registro, não para uma resposta."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "remembered",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "vampirism"
+          ],
+          "prompt": {
+            "en": "That case, looking back.",
+            "pt": "Aquele caso, olhando para trás."
+          },
+          "lines": {
+            "en": [
+              "Two people in this field now hold a fixed waiting period because of a story I tell about myself, and that is the only good that has come of it.",
+              "The family are well, four valleys over. I know because I asked, once, through somebody else, and then stopped asking.",
+              "It is in the front of the book and it is the first thing anybody reads, and I have stopped flinching when I turn to that page."
+            ],
+            "pt": [
+              "Duas pessoas desta área hoje mantêm um período de espera fixo por causa de uma história que eu conto sobre mim, e é o único bem que veio disso.",
+              "A família está bem, a quatro vales daqui. Eu sei porque perguntei, uma vez, por intermédio de outra pessoa, e depois parei de perguntar.",
+              "Está na frente do livro e é a primeira coisa que qualquer um lê, e eu parei de me encolher quando abro naquela página."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_teaching",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Two others hold the line because of you.",
+                "pt": "Duas outras pessoas mantêm isso por sua causa."
+              },
+              "phrases": [
+                "two others hold the line because of you",
+                "others practise differently because you told them"
+              ],
+              "requires_any": [
+                "others",
+                "practise",
+                "line"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Two, that I know of. It is a poor exchange for one family and it is the only exchange that was ever on offer.",
+                    "Thank you. I tell it badly on purpose, without any lesson at the end, because a tidy story is easier to forget than an awkward one.",
+                    "The useful part is the four days. Not the diagnosis, not the family leaving — the four days I took off the waiting because somebody cried."
+                  ],
+                  "pt": [
+                    "Duas, que eu saiba. É uma troca ruim por uma família e é a única troca que jamais esteve em oferta.",
+                    "Obrigada. Conto mal de propósito, sem lição no fim, porque uma história bem-arrumada é mais fácil de esquecer do que uma constrangedora.",
+                    "A parte útil são os quatro dias. Não o diagnóstico, não a família indo embora — os quatro dias que eu tirei da espera porque alguém chorou."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.better_tests",
+      "subject": "work.vampire_expert.the_tests",
+      "initial_state": "active",
+      "salience": 48,
+      "due_after_days": 3,
+      "expires_after_days": 32,
+      "integrations": [
+        "vampirism"
+      ],
+      "slots": {
+        "work": [
+          "vex_the_second_test",
+          "vex_the_waiting_period"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "work"
+          ],
+          "identity_values": [
+            "precision",
+            "curiosity"
+          ],
+          "prompt": {
+            "en": "Your method.",
+            "pt": "Seu método."
+          },
+          "lines": {
+            "en": [
+              "I am trying to shorten %2$s honestly rather than kindly, and honestly means four years of records before I change anything.",
+              "%2$s is six weeks because that is what I inherited. I have never seen the evidence for six and I have started collecting it.",
+              "If %2$s could be four weeks and be as good, that is two weeks off every frightened family for the rest of my life. That is worth four years."
+            ],
+            "pt": [
+              "Estou tentando encurtar %2$s com honestidade e não com bondade, e honestidade significa quatro anos de registros antes de mudar qualquer coisa.",
+              "%2$s são seis semanas porque foi o que eu herdei. Nunca vi a prova a favor de seis e comecei a reunir.",
+              "Se %2$s pudesse ser quatro semanas e ser igualmente bom, são duas semanas a menos para toda família assustada pelo resto da minha vida. Isso vale quatro anos."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_she_would_know",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How would you know it was safe?",
+                "pt": "Como você saberia que é seguro?"
+              },
+              "phrases": [
+                "how would you know it was safe",
+                "what would prove the shorter period works"
+              ],
+              "requires_any": [
+                "safe",
+                "prove",
+                "shorter"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Forty cases where I recorded the four-week reading and then waited the full six anyway. If the four-week reading was right every time, I have something.",
+                    "It has to be forty and it has to include the ones I expect to be dull, because a test that only looks at frightening cases learns nothing.",
+                    "And if it is right thirty-nine times out of forty, the answer is still six weeks. One in forty is a family."
+                  ],
+                  "pt": [
+                    "Quarenta casos em que eu anotei a leitura de quatro semanas e esperei as seis completas mesmo assim. Se a leitura de quatro semanas estiver certa toda vez, eu tenho algo.",
+                    "Tem que ser quarenta e tem que incluir os que eu espero que sejam banais, porque um teste que só olha casos assustadores não aprende nada.",
+                    "E se estiver certa trinta e nove vezes em quarenta, a resposta continua sendo seis semanas. Um em quarenta é uma família."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_patience",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Collect the forty first.",
+                "pt": "Reúna os quarenta primeiro."
+              },
+              "phrases": [
+                "collect the forty cases first",
+                "gather the records before changing anything"
+              ],
+              "requires_any": [
+                "forty",
+                "records",
+                "gather"
+              ],
+              "disposition": {
+                "respect": 4
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Four years at ten cases a year. I will be fifty-one when I know, and the alternative is guessing at forty-seven.",
+                    "Yes. And I will publish it either way, including if it says six weeks was right all along, which is the outcome I am quietly expecting.",
+                    "Everybody in this field shortens the period at some point on a feeling. I am trying to be the one who does it on a record, and it is much slower."
+                  ],
+                  "pt": [
+                    "Quatro anos a dez casos por ano. Vou ter cinquenta e um quando souber, e a alternativa é chutar aos quarenta e sete.",
+                    "Sim. E vou publicar de qualquer jeito, inclusive se disser que seis semanas estava certo desde sempre, que é o resultado que eu discretamente espero.",
+                    "Todo mundo nesta área encurta o período em algum momento por pressentimento. Eu tento ser quem faz isso com registro, e é muito mais lento."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "vampirism"
+          ],
+          "slots_used": [
+            "work"
+          ],
+          "prompt": {
+            "en": "Your records.",
+            "pt": "Seus registros."
+          },
+          "lines": {
+            "en": [
+              "Forty cases. %2$s stays at six weeks, because two of the forty would have been called wrong at four, and two is two families.",
+              "Four years and the answer is that I was already doing it correctly. I have never been so pleased to have wasted my time.",
+              "I sent the forty to the two others in the field. One of them had been quietly using four weeks and has stopped."
+            ],
+            "pt": [
+              "Quarenta casos. %2$s fica em seis semanas, porque dois dos quarenta teriam sido julgados errado aos quatro, e dois são duas famílias.",
+              "Quatro anos e a resposta é que eu já estava fazendo certo. Nunca fiquei tão contente de ter perdido meu tempo.",
+              "Mandei os quarenta às duas outras pessoas da área. Uma delas vinha usando quatro semanas em silêncio e parou."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_negative_result",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "A result that changes nothing is still a result.",
+                "pt": "Um resultado que não muda nada ainda é resultado."
+              },
+              "phrases": [
+                "a result that changes nothing is still a result",
+                "confirming the old method is worth knowing"
+              ],
+              "requires_any": [
+                "result",
+                "confirming",
+                "method"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is the result that never gets written down anywhere, which is why every generation shortens the period again and finds out the hard way.",
+                    "Thank you. Four years to prove that nothing should change is a difficult thing to be proud of and I have decided to be proud of it.",
+                    "The person who stopped using four weeks is the entire return on it. One colleague, one habit, and a number of families who will never know."
+                  ],
+                  "pt": [
+                    "É o resultado que nunca é anotado em lugar nenhum, e por isso cada geração encurta o período de novo e descobre do jeito difícil.",
+                    "Obrigada. Quatro anos para provar que nada deve mudar é uma coisa difícil de se ter orgulho, e eu decidi ter orgulho.",
+                    "A pessoa que parou de usar quatro semanas é o retorno inteiro. Uma colega, um hábito, e um número de famílias que nunca vão saber."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Another question?",
+      "pt": "Outra pergunta?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a wrong diagnosis?",
+        "pt": "Qual é a parte mais difícil de um diagnóstico errado?"
+      },
+      "requires_any": [
+        "hardest",
+        "diagnosis"
+      ],
+      "phrases": [
+        "what is the hardest part of a wrong diagnosis",
+        "hardest thing about getting a diagnosis wrong"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to your records.",
+      "pt": "Vou deixar você com os registros."
+    }
+  }
+}

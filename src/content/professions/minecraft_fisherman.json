@@ -1,0 +1,758 @@
+{
+  "_comment": [
+    "Fisherman. Waiting as a profession, and the arithmetic of a bad season.",
+    "",
+    "The §12.4 anchors are the water, the boat, nets and lines, the season, weather and the catch that",
+    "got away. These three take a net she cannot mend, a stretch of water that has gone empty, and the",
+    "morning she nearly did not come back.",
+    "",
+    "The fisherman's characteristic move is patience without romance. She is unsentimental about the",
+    "water, precise about tides and light, and openly annoyed by people who describe her work as",
+    "peaceful."
+  ],
+  "profession": "minecraft:fisherman",
+  "id": "fisherman",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_water",
+    "the_boat",
+    "nets",
+    "the_season",
+    "weather",
+    "the_one_that_got_away"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the water.",
+    "pt": "Vou deixar você voltar para a água."
+  },
+  "slot_lang": {
+    "fis_a_torn_net": {
+      "en": "a net torn along the head rope",
+      "pt": "uma rede rasgada na tralha"
+    },
+    "fis_a_rotted_line": {
+      "en": "a line that has rotted through",
+      "pt": "uma linha que apodreceu"
+    },
+    "fis_a_split_gunwale": {
+      "en": "a split gunwale",
+      "pt": "uma borda de proa rachada"
+    },
+    "fis_the_deep_bend": {
+      "en": "the deep bend",
+      "pt": "a curva funda"
+    },
+    "fis_the_reed_shallows": {
+      "en": "the reed shallows",
+      "pt": "o raso dos juncos"
+    },
+    "fis_the_stone_shelf": {
+      "en": "the stone shelf",
+      "pt": "a laje de pedra"
+    },
+    "fis_three_empty_weeks": {
+      "en": "three empty weeks",
+      "pt": "três semanas vazias"
+    },
+    "fis_water_gone_warm": {
+      "en": "water that has gone warm",
+      "pt": "água que esquentou"
+    },
+    "fis_silt_from_upstream": {
+      "en": "silt coming down from upstream",
+      "pt": "lodo descendo de montante"
+    },
+    "fis_a_squall": {
+      "en": "a squall out of nothing",
+      "pt": "uma rajada surgida do nada"
+    },
+    "fis_a_fouled_anchor": {
+      "en": "a fouled anchor",
+      "pt": "uma âncora presa"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.torn_gear",
+      "subject": "work.fisherman.nets",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "damage": [
+          "fis_a_torn_net",
+          "fis_a_rotted_line",
+          "fis_a_split_gunwale"
+        ],
+        "water": [
+          "fis_the_deep_bend",
+          "fis_the_reed_shallows",
+          "fis_the_stone_shelf"
+        ]
+      },
+      "commitment": {
+        "id": "work.fisherman.bring_string",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:string",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "damage",
+            "water"
+          ],
+          "identity_values": [
+            "precision",
+            "independence"
+          ],
+          "prompt": {
+            "en": "The gear.",
+            "pt": "O apetrecho."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s, so %3$s might as well be dry land for all the good it does me this week.",
+              "%2$s. I can mend it in an evening if I have twine, and I have been saying that for six evenings.",
+              "The fish are at %3$s and I am sitting on a bank with %2$s across my knees, which is the whole of my complaint."
+            ],
+            "pt": [
+              "Tenho %2$s, então %3$s pode muito bem ser terra seca, do bem que me faz esta semana.",
+              "%2$s. Conserto numa noite se eu tiver linha, e faz seis noites que eu digo isso.",
+              "O peixe está em %3$s e eu estou sentada na margem com %2$s no colo, e é essa a minha queixa inteira."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_mending",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How long does mending take?",
+                "pt": "Quanto tempo leva o conserto?"
+              },
+              "phrases": [
+                "how long does mending take",
+                "how long is the repair"
+              ],
+              "requires_any": [
+                "mending",
+                "repair",
+                "long"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "damage"
+                ],
+                "lines": {
+                  "en": [
+                    "%2$s is one evening with the right twine and four evenings with the wrong twine, and a season with none.",
+                    "The mending is quick. The finding of materials is what takes a week, which nobody believes until they try it.",
+                    "Longer than it should, because I do it properly. A hurried mend fails in the water, and a net that fails in the water takes the catch with it."
+                  ],
+                  "pt": [
+                    "%2$s leva uma noite com a linha certa, quatro noites com a linha errada, e uma estação com nenhuma.",
+                    "O conserto é rápido. Achar material é o que leva uma semana, coisa em que ninguém acredita antes de tentar.",
+                    "Mais do que deveria, porque eu faço direito. Remendo apressado falha na água, e rede que falha na água leva a pescaria junto."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_string",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you string for it.",
+                "pt": "Vou te trazer barbante para isso."
+              },
+              "phrases": [
+                "i can bring you string",
+                "let me fetch string for that"
+              ],
+              "requires_any": [
+                "string",
+                "twine"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.fisherman.gear.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "water"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I am at %2$s before light on Thursday, and there will be fish in this village by Thursday evening.",
+                    "Bring it and I will mend tonight. I would rather sit up late with a needle than sit on a bank being useless.",
+                    "Yes. And take two fish for it, and do not tell me it was nothing, because six days of nothing is not nothing."
+                  ],
+                  "pt": [
+                    "Então eu estou em %2$s antes de clarear na quinta, e vai ter peixe nesta vila na quinta à noite.",
+                    "Traga e eu remendo hoje à noite. Prefiro varar a noite com uma agulha a ficar sentada na margem sendo inútil.",
+                    "Sim. E leve dois peixes por isso, e não me diga que não foi nada, porque seis dias de nada não é nada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "suggest_borrowing",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Borrow a net from somebody.",
+                "pt": "Peça uma rede emprestada."
+              },
+              "phrases": [
+                "borrow a net from somebody",
+                "ask another boat to lend you gear"
+              ],
+              "requires_any": [
+                "borrow",
+                "lend"
+              ],
+              "disposition": {
+                "respect": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "A borrowed net is somebody else's living, and if I tear it I have taken their week to save mine.",
+                    "There are two other boats and both are out at dawn. A spare net is a thing nobody on the water actually has.",
+                    "I would rather ask for twine than for a net. Materials are a favour; gear is a hostage."
+                  ],
+                  "pt": [
+                    "Rede emprestada é o sustento de outra pessoa, e se eu rasgar, tomei a semana dela para salvar a minha.",
+                    "Existem dois outros barcos e os dois saem ao amanhecer. Rede sobrando é coisa que ninguém na água de fato tem.",
+                    "Prefiro pedir linha a pedir rede. Material é favor; apetrecho é refém."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "water"
+          ],
+          "prompt": {
+            "en": "The gear, mended.",
+            "pt": "O apetrecho, remendado."
+          },
+          "lines": {
+            "en": [
+              "Mended and back at %2$s before dawn, and the first haul was better than it had any right to be.",
+              "Two hours with a needle. Six days of waiting for two hours of work, which is the shape of most of my problems.",
+              "It holds. I tested it in the shallows before I trusted it at %2$s, because I have been caught out that way before."
+            ],
+            "pt": [
+              "Remendado e de volta a %2$s antes do amanhecer, e a primeira puxada foi melhor do que tinha direito de ser.",
+              "Duas horas com uma agulha. Seis dias de espera por duas horas de trabalho, que é o formato da maioria dos meus problemas.",
+              "Aguenta. Testei no raso antes de confiar em %2$s, porque já me pegaram desprevenida assim."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_haul",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How was the haul?",
+                "pt": "Como foi a pescaria?"
+              },
+              "phrases": [
+                "how was the haul",
+                "did the catch come good"
+              ],
+              "requires_any": [
+                "haul",
+                "catch"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Good enough that I gave two away on the walk home, which is my whole measure of a good morning.",
+                    "Ordinary. I want to be careful here — an ordinary haul after a bad fortnight feels enormous and is not, and I have made that mistake before.",
+                    "Better than the week before and worse than the week before that. The river does not know about my net."
+                  ],
+                  "pt": [
+                    "Boa o bastante para eu dar dois peixes no caminho de casa, que é a minha medida inteira de uma boa manhã.",
+                    "Comum. Quero ser cuidadosa aqui — uma pescaria comum depois de duas semanas ruins parece enorme e não é, e eu já errei assim.",
+                    "Melhor que a semana passada e pior que a retrasada. O rio não sabe da minha rede."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.empty_water",
+      "subject": "work.fisherman.the_season",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 26,
+      "slots": {
+        "sign": [
+          "fis_three_empty_weeks",
+          "fis_water_gone_warm",
+          "fis_silt_from_upstream"
+        ],
+        "water": [
+          "fis_the_deep_bend",
+          "fis_the_reed_shallows",
+          "fis_the_stone_shelf"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "sign",
+            "water"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The season.",
+            "pt": "A temporada."
+          },
+          "lines": {
+            "en": [
+              "%3$s has given me %2$s, and I have stopped being able to tell whether that is the river or me.",
+              "%2$s. Everybody has a theory and all the theories are about somebody else's fault, which is how I know none of them are measurements.",
+              "I have fished %3$s for nineteen years and I have never seen %2$s at this time of year."
+            ],
+            "pt": [
+              "%3$s me deu %2$s, e eu parei de conseguir dizer se isso é o rio ou sou eu.",
+              "%2$s. Todo mundo tem uma teoria e todas as teorias são sobre a culpa de outra pessoa, e é assim que sei que nenhuma é medição.",
+              "Pesco em %3$s há dezenove anos e nunca vi %2$s nesta época."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_the_cause",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you think is causing it?",
+                "pt": "O que você acha que está causando?"
+              },
+              "phrases": [
+                "what do you think is causing it",
+                "what is behind the empty water"
+              ],
+              "requires_any": [
+                "causing",
+                "behind",
+                "empty"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Warm water, most likely. Fish go deep and I fish shallow, and the honest answer is that I should change where I fish rather than complain.",
+                    "Something upstream. I would need to walk four days to find out, and four days is four days of not fishing, so I keep guessing instead.",
+                    "I genuinely do not know, and I am suspicious of everybody who does. A river is a large thing to be confident about."
+                  ],
+                  "pt": [
+                    "Água quente, muito provavelmente. O peixe desce e eu pesco raso, e a resposta honesta é que eu deveria mudar de lugar em vez de reclamar.",
+                    "Alguma coisa a montante. Eu precisaria caminhar quatro dias para descobrir, e quatro dias são quatro dias sem pescar, então sigo chutando.",
+                    "Sinceramente não sei, e desconfio de todo mundo que sabe. Um rio é uma coisa grande para se ter certeza sobre."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_moving",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Then fish somewhere deeper.",
+                "pt": "Então pesque em lugar mais fundo."
+              },
+              "phrases": [
+                "then fish somewhere deeper",
+                "try deeper water for a while"
+              ],
+              "requires_any": [
+                "deeper",
+                "deep"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "I know. I have known for a fortnight. Nineteen years of habit is a heavier anchor than any I own.",
+                    "Yes. It means longer lines and a heavier boat and asking a favour, and every one of those is easier than another empty week.",
+                    "You are right. I have been treating the river as if it owed me the same water it gave me last year."
+                  ],
+                  "pt": [
+                    "Eu sei. Sei há duas semanas. Dezenove anos de hábito são uma âncora mais pesada do que qualquer uma que eu tenha.",
+                    "Sim. Significa linhas mais longas, barco mais pesado e pedir um favor, e todas essas coisas são mais fáceis do que outra semana vazia.",
+                    "Você tem razão. Eu venho tratando o rio como se ele me devesse a mesma água que me deu no ano passado."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "The deeper water.",
+            "pt": "A água mais funda."
+          },
+          "lines": {
+            "en": [
+              "Deeper worked. Nineteen years of fishing one shelf and the fix was forty paces further out.",
+              "I moved, and the catch came back inside a week, and I have been quietly annoyed about it ever since.",
+              "It was the water temperature all along. I would like it on record that being right about the river feels worse than being wrong about myself."
+            ],
+            "pt": [
+              "O fundo funcionou. Dezenove anos pescando numa laje e a solução estava quarenta passos mais para fora.",
+              "Eu mudei, e a pescaria voltou em uma semana, e desde então ando discretamente irritada com isso.",
+              "Era a temperatura da água o tempo todo. Quero registrado que estar certa sobre o rio dói mais do que estar errada sobre mim."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_change",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Changing your habit took nerve.",
+                "pt": "Mudar seu hábito exigiu coragem."
+              },
+              "phrases": [
+                "changing your habit took nerve",
+                "shifting a habit like that is hard"
+              ],
+              "requires_any": [
+                "habit",
+                "nerve",
+                "shifting"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It took an empty fortnight and somebody saying it out loud. I do not think I would have got there alone before the winter.",
+                    "Thank you. A habit that has fed you for nineteen years is not a stupid thing to trust, which is exactly why it is hard to leave.",
+                    "The nerve was the first morning. After that it was just rowing further, and rowing further is not brave, it is only tiring."
+                  ],
+                  "pt": [
+                    "Exigiu duas semanas vazias e alguém dizendo em voz alta. Acho que sozinha eu não teria chegado lá antes do inverno.",
+                    "Obrigada. Um hábito que te alimentou por dezenove anos não é uma coisa boba de se confiar, e é justamente por isso que é difícil largar.",
+                    "A coragem foi na primeira manhã. Depois disso era só remar mais longe, e remar mais longe não é bravura, é só cansaço."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.bad_morning",
+      "subject": "work.fisherman.weather",
+      "initial_state": "succeeded",
+      "salience": 46,
+      "due_after_days": 2,
+      "expires_after_days": 30,
+      "slots": {
+        "trouble": [
+          "fis_a_squall",
+          "fis_a_fouled_anchor"
+        ]
+      },
+      "states": [
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "predicate": "memory",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trouble"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "That morning on the water.",
+            "pt": "Aquela manhã na água."
+          },
+          "lines": {
+            "en": [
+              "There was %2$s two springs back and I got home, and I have not talked about it much since.",
+              "%2$s. Half an hour. I have had worse days that felt like nothing and that half hour still sits somewhere behind my ribs.",
+              "I came in with %2$s behind me and tied up and went to the market as if it were an ordinary Tuesday, which is what you do."
+            ],
+            "pt": [
+              "Teve %2$s duas primaveras atrás e eu voltei para casa, e desde então falo pouco sobre isso.",
+              "%2$s. Meia hora. Já tive dias piores que não pesaram nada, e aquela meia hora ainda mora atrás das minhas costelas.",
+              "Cheguei com %2$s às minhas costas, amarrei o barco e fui à feira como se fosse uma terça comum, que é o que se faz."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_she_still_goes",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "Do you still go out alone?",
+                "pt": "Você ainda sai sozinha?"
+              },
+              "phrases": [
+                "do you still go out by yourself",
+                "are you still going out on your own"
+              ],
+              "requires_any": [
+                "still",
+                "yourself"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Every morning. I am more careful about the sky and less careful about the hour, and I tell somebody where I am going now.",
+                    "Yes, and the first week after was the hardest thing I have done. Not the water. Getting into the boat.",
+                    "I do. There is no other version of my life, and pretending there is would only mean sitting on a bank being frightened for free."
+                  ],
+                  "pt": [
+                    "Toda manhã. Sou mais cuidadosa com o céu e menos com o horário, e agora eu aviso alguém para onde vou.",
+                    "Sim, e a primeira semana depois foi a coisa mais difícil que eu já fiz. Não a água. Entrar no barco.",
+                    "Saio. Não existe outra versão da minha vida, e fingir que existe só significaria ficar na margem com medo de graça."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_glad_she_came_back",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "I'm glad you came home.",
+                "pt": "Que bom que você voltou."
+              },
+              "phrases": [
+                "i am glad you came home",
+                "glad you made it back"
+              ],
+              "requires_any": [
+                "glad",
+                "home"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.fisherman.squall.seen",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "softened",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "So am I. It is a plainer thing to say than anyone else managed, and it is the only thing that actually fits.",
+                    "Thank you. Nobody said that at the time. Everybody said the weather had been bad, which is true and is not the same sentence.",
+                    "I nearly did not. I have said that out loud twice, counting now, and it gets very slightly easier each time."
+                  ],
+                  "pt": [
+                    "Eu também. É uma coisa mais simples do que qualquer um conseguiu dizer, e é a única que de fato serve.",
+                    "Obrigada. Ninguém disse isso na época. Todo mundo dizia que o tempo tinha estado ruim, o que é verdade e não é a mesma frase.",
+                    "Eu quase não voltei. Já disse isso em voz alta duas vezes, contando agora, e fica levemente mais fácil a cada vez."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else you wanted?",
+      "pt": "Queria mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of an empty net?",
+        "pt": "Qual é a parte mais difícil de uma rede vazia?"
+      },
+      "requires_any": [
+        "hardest",
+        "net"
+      ],
+      "phrases": [
+        "what is the hardest part of an empty net",
+        "hardest thing about hauling an empty net"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the water.",
+      "pt": "Vou deixar você com a água."
+    }
+  }
+}

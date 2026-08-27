@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "offer_something_useful",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.the_practical_one.open.answered"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.worries.offered",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "worries.practical",
+              "deltas": {
+                "trust": 3,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.worries.followup",
+            "say": "conversations.scene.worries.the_practical_one.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_the_worst_is",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.the_practical_one.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "worries.practical",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.worries.followup",
+            "say": "conversations.scene.worries.the_practical_one.explained"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.scene.worries.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

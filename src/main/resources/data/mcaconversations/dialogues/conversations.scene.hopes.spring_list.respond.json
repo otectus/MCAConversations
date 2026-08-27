@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_large_one",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "hopes.spring_list.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.this_year",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.hopes.followup",
+            "say": "conversations.scene.hopes.spring_list.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_them_well",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "hopes.spring_list.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.this_year",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.hopes.followup",
+            "say": "conversations.scene.hopes.spring_list.thanked"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.hopes.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

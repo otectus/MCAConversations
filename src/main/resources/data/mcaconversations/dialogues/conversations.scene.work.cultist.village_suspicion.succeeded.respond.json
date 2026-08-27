@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.village_suspicion.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.suspicion",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.cultist.village_suspicion"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.village_suspicion.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.cultist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

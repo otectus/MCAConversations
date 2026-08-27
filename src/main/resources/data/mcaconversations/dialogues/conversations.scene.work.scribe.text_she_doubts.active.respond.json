@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_does_with_doubt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.text_she_doubts.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.a_text_i_doubt",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.scribe.text_she_doubts"
+            },
+            "next": "conversations.scene.work.scribe.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.scribe.text_she_doubts.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_faithful_copy",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.text_she_doubts.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.a_text_i_doubt",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.scribe.text_she_doubts"
+            },
+            "next": "conversations.scene.work.scribe.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.scribe.text_she_doubts.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.scribe.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

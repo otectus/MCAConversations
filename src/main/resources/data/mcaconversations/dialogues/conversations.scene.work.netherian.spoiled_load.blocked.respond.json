@@ -1,0 +1,120 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_crossing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.spoiled_load.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.what_travels",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.netherian.spoiled_load"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.spoiled_load.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_quartz",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.spoiled_load.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.netherian.load.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.what_travels",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.spoiled_load",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.netherian.spoiled_load",
+              "obligation": "commitment:work.netherian.bring_quartz"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.netherian.bring_quartz"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.spoiled_load.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_a_second_carrier",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.spoiled_load.blocked.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.what_travels",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.netherian.spoiled_load"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.spoiled_load.blocked.considered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.netherian.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

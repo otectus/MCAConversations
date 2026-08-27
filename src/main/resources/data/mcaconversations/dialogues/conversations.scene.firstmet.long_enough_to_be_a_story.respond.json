@@ -1,0 +1,65 @@
+{
+  "answers": [
+    {
+      "name": "correct_the_record",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.long_enough_to_be_a_story.open.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "firstmet.retold",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.firstmet.followup",
+            "say": "conversations.scene.firstmet.long_enough_to_be_a_story.conceded"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_for_the_good_line",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.long_enough_to_be_a_story.open.delighted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "firstmet.retold",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.firstmet.followup",
+            "say": "conversations.scene.firstmet.long_enough_to_be_a_story.delighted"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.scene.firstmet.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

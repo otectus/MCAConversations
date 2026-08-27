@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_one_thing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "future.next_year.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "future.practical",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.future.followup",
+            "say": "conversations.scene.future.next_year.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_hope_to_be_here",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "future.next_year.open.pleased"
+            },
+            "conversations_disposition_apply": {
+              "topic": "future.practical",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.future.followup",
+            "say": "conversations.scene.future.next_year.pleased"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.scene.future.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

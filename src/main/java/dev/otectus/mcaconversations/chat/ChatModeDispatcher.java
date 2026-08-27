@@ -272,6 +272,19 @@ public final class ChatModeDispatcher {
             }
         }
 
+        // A dynamic hub entry is an exact offer the villager has just made, so it is matched ahead
+        // of the general corpus: a phrase the player was shown a moment ago should not have to win a
+        // scoring contest against every topic in the pack (spec §14.2).
+        if (offered.isEmpty()) {
+            dev.otectus.mcaconversations.hub.HubPlan hub =
+                    dev.otectus.mcaconversations.hub.DynamicHub.open(target.entity(), player, gameDay(player));
+            java.util.Optional<dev.otectus.mcaconversations.hub.HubSlot> picked =
+                    dev.otectus.mcaconversations.hub.HubLabels.resolve(hub, address.message());
+            if (picked.isPresent() && driveHubSlot(target, player, picked.get(), now)) {
+                return;
+            }
+        }
+
         NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
             // "Hey Anna" strips to nothing, but the greeting itself is the message — answer it.
@@ -592,6 +605,12 @@ public final class ChatModeDispatcher {
                                        String answer, long now, int stagger, boolean makeSticky) {
         boolean showHearts = McaConversationsConfig.COMMON.chatModeShowHeartChanges.get();
         int heartsBefore = showHearts ? McaCompat.getHearts(player, target.entity()) : 0;
+        // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
+        // planning hook never fires here. Calling it explicitly is what keeps the two frontends
+        // behaviourally equivalent: the same topic opens the same scene whichever way it was asked
+        // for, and switching between them mid-conversation reuses one frozen plan (spec 3.1.8).
+        dev.otectus.mcaconversations.scene.ConversationPlanner
+                .onAnswerSubmitted(target.entity(), player, question, answer);
         boolean ok;
         try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity(), stagger)) {
             ok = McaCompat.selectAnswer(target.entity(), player, question, answer);
@@ -616,6 +635,10 @@ public final class ChatModeDispatcher {
                 ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
             }
             attend(target, player, now);
+            // The one place a bystander may join in. Off by default, capped at one voice per
+            // exchange, and every interjection has to answer the beat that was just spoken.
+            dev.otectus.mcaconversations.chat.group.GroupDirector
+                    .maybeInterject(target.entity(), player, now);
         } else {
             McaConversations.LOGGER.debug("chat-mode selectAnswer({}, {}) returned false", question, answer);
         }
@@ -657,6 +680,38 @@ public final class ChatModeDispatcher {
                 voiced(target.entity(), player, "chatmode.hint", eligibleTopics(target, player)));
     }
 
+    /** The current game day, for the records that count in days rather than ticks. */
+    private static long gameDay(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        return server == null || server.overworld() == null
+                ? 0L : server.overworld().getDayTime() / 24000L;
+    }
+
+    /**
+     * Opens the topic behind a dynamic hub entry, as though the player had pressed its button.
+     *
+     * <p>The entry never routes anywhere of its own: it drives the topic's real question and answer,
+     * so a contextual shortcut and the menu path are the same conversation reached two different
+     * ways. Returns false when the topic is unknown or its constraints refuse this pairing, so the
+     * message falls through to ordinary matching rather than being swallowed.
+     */
+    private static boolean driveHubSlot(VillagerCandidate target, ServerPlayer player,
+                                        dev.otectus.mcaconversations.hub.HubSlot slot, long now) {
+        java.util.Optional<dev.otectus.mcaconversations.conversation.TopicEntry> entry =
+                dev.otectus.mcaconversations.conversation.ConversationCatalogLoader.active()
+                        .topic(slot.topic());
+        if (entry.isEmpty()) {
+            return false;
+        }
+        String question = entry.get().entryQuestion();
+        String answer = entry.get().entryAnswer();
+        if (!McaCompat.checkConstraints(target.entity(), player, question, answer)) {
+            return false;
+        }
+        drive(target, player, question, answer, now);
+        return true;
+    }
+
     /** Preferred hint order for the shipped topic hubs; datapack-added topics follow alphabetically. */
     private static final List<String> TOPIC_ORDER =
             List.of("chitchat", "greet", "profession", "village", "events", "personal", "us", "family");
@@ -683,9 +738,23 @@ public final class ChatModeDispatcher {
             return Component.translatable("dialogue.chatmode.topics");
         }
         MutableComponent out = Component.empty();
+        // Contextual entries first and at most three of them (spec §14.2). They are what this
+        // villager has going on right now, so they belong above a list of standing categories — and
+        // each label says no more than its domain, which is what keeps a menu from leaking.
+        List<String> hubLabels = new ArrayList<>();
+        for (dev.otectus.mcaconversations.hub.HubSlot slot
+                : dev.otectus.mcaconversations.hub.DynamicHub.showing(player.getUUID()).slots()) {
+            hubLabels.add(dev.otectus.mcaconversations.hub.HubLabels.langKey(slot));
+        }
+        for (int i = 0; i < hubLabels.size(); i++) {
+            if (i > 0) {
+                out.append(Component.literal(", "));
+            }
+            out.append(Component.translatable(hubLabels.get(i)));
+        }
         List<String> ordered = orderedTopics(suffixes);
         for (int i = 0; i < ordered.size(); i++) {
-            if (i > 0) {
+            if (i > 0 || !hubLabels.isEmpty()) {
                 out.append(Component.literal(", "));
             }
             out.append(Component.translatableWithFallback(
@@ -800,6 +869,10 @@ public final class ChatModeDispatcher {
             return "No MCA villager within " + (int) radius + " blocks.";
         }
         VillagerFinder.VillagerCandidate target = candidates.get(0);
+        // The op test driver plans too, so "debug-ask a topic opener" reproduces what a real click
+        // would produce rather than a version of it with no scene behind it.
+        dev.otectus.mcaconversations.scene.ConversationPlanner
+                .onAnswerSubmitted(target.entity(), player, questionId, answerName);
         boolean ok;
         try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity())) {
             ok = McaCompat.selectAnswer(target.entity(), player, questionId, answerName);

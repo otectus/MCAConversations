@@ -1,0 +1,41 @@
+{
+  "answers": [
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.hard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.hard",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.shepherd.followup",
+            "say": "conversations.work.prof.shepherd.hard"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shepherd.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

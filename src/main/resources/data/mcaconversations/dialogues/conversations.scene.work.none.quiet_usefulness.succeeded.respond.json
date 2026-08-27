@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "glad",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.quiet_usefulness.succeeded.warmed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.freedom",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.none.quiet_usefulness"
+            },
+            "next": "conversations.scene.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.none.quiet_usefulness.succeeded.warmed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.quiet_usefulness.succeeded.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.freedom",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.none.quiet_usefulness"
+            },
+            "next": "conversations.scene.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.none.quiet_usefulness.succeeded.considered",
+              "slots": [
+                "task"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.none.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

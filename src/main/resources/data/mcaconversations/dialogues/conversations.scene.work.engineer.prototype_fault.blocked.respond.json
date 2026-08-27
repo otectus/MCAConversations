@@ -1,0 +1,131 @@
+{
+  "answers": [
+    {
+      "name": "ask_reproduce",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.prototype_fault.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.prototypes",
+              "deltas": {
+                "respect": 3,
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.prototype_fault"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.prototype_fault.blocked.explained",
+              "slots": [
+                "fault"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_iron",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.prototype_fault.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.engineer.prototype_fault.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.prototypes",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.prototype_fault",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.prototype_fault",
+              "obligation": "commitment:work.engineer.bring_iron"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.engineer.bring_iron"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.prototype_fault.blocked.accepted",
+              "slots": [
+                "device"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_simpler",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.prototype_fault.blocked.resisted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.prototypes",
+              "deltas": {
+                "respect": 2,
+                "tension": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.prototype_fault"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.prototype_fault.blocked.resisted",
+              "slots": [
+                "device"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.engineer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

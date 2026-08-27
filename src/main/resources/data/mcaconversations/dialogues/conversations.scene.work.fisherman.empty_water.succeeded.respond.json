@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_the_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.empty_water.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.the_season",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.fisherman.empty_water"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.empty_water.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.fisherman.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "_comment": [
+    "People, gated on how many of them there are and on whether she is the sort who watches.",
+    "",
+    "One scene is the person she has changed her mind about, which needs time to have passed; the",
+    "other is the newcomer, which only exists in a village big enough to have one."
+  ],
+  "topic": "people",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "people"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "They are what they are.",
+      "Right. That is the lot of them.",
+      "You will make your own mind up."
+    ],
+    "pt": [
+      "São o que são.",
+      "Certo. É essa a turma.",
+      "Você vai formar sua própria opinião."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about them?",
+      "pt": "Mais alguma coisa sobre eles?"
+    },
+    "leave": {
+      "en": "That's the people, then.",
+      "pt": "É o pessoal, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "changed_my_mind",
+      "subject": "people.reappraisal",
+      "shape": "reminisce",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 14,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Somebody you misjudged.",
+        "pt": "Alguém que você julgou mal."
+      },
+      "lines": {
+        "en": [
+          "There is somebody here I disliked for two years on the strength of one afternoon, and I was wrong.",
+          "I had a person filed as difficult and it turned out they were tired, and tired for a reason, and for four years.",
+          "The change happened in one conversation. Two years of a settled opinion, undone in about nine minutes."
+        ],
+        "pt": [
+          "Tem uma pessoa aqui de quem eu não gostei por dois anos com base numa tarde, e eu estava errada.",
+          "Eu tinha uma pessoa catalogada como difícil e acontece que estava cansada, e cansada por um motivo, e havia quatro anos.",
+          "A virada aconteceu numa conversa. Dois anos de opinião firmada, desfeitos em uns nove minutos."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_changed_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What changed your mind?",
+            "pt": "O que mudou sua opinião?"
+          },
+          "phrases": [
+            "what changed your mind",
+            "what turned that around"
+          ],
+          "requires_any": [
+            "changed",
+            "turned"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "past",
+            "privacy": "discreet",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "They told me why, unprompted, and did not ask me to feel differently about it, and that is what did it.",
+                "I watched them be kind to somebody who could do nothing for them, on a day nobody was looking, including them.",
+                "Nothing they did. I got tired myself, for a season, and recognised the walk."
+              ],
+              "pt": [
+                "Me contaram o porquê, sem eu pedir, e não me pediram para sentir diferente, e foi isso que virou.",
+                "Vi essa pessoa ser gentil com alguém que não podia fazer nada por ela, num dia em que ninguém olhava, nem ela.",
+                "Nada que fizeram. Eu mesma me cansei, por uma estação, e reconheci o jeito de andar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_takes_something",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Changing your mind takes something.",
+            "pt": "Mudar de ideia exige algo."
+          },
+          "phrases": [
+            "changing your mind takes something",
+            "that took some doing"
+          ],
+          "requires_any": [
+            "changing",
+            "doing",
+            "takes"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It takes admitting the two years, which is the expensive half and the half nobody mentions.",
+                "Thank you. I have not said any of this to them and I have thought about it about forty times.",
+                "It is the only part of getting older I would recommend to anybody. Everything else about it is knees."
+              ],
+              "pt": [
+                "Exige admitir os dois anos, que é a metade cara e a metade que ninguém menciona.",
+                "Obrigada. Eu não disse nada disso a essa pessoa e já pensei nisso umas quarenta vezes.",
+                "É a única parte de envelhecer que eu recomendaria a alguém. Todo o resto é joelho."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_newcomer",
+      "subject": "people.new_arrival",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "social.village_population",
+          "min": 10,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_values": [
+        "hospitality"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "The new one.",
+        "pt": "A pessoa nova."
+      },
+      "lines": {
+        "en": [
+          "Somebody arrived in the spring and the lane has been very polite to them for four months, which is its own kind of cold.",
+          "The new household has been asked where they are from eleven times and asked to supper nought times.",
+          "They are doing everything right and nobody has let them in yet, and I have started to think that is a thing I could fix."
+        ],
+        "pt": [
+          "Alguém chegou na primavera e a viela tem sido muito educada com essa pessoa por quatro meses, o que é um tipo de frieza.",
+          "A casa nova foi perguntada de onde vem onze vezes e convidada para jantar nenhuma.",
+          "Estão fazendo tudo certo e ninguém deixou entrar ainda, e comecei a achar que isso é uma coisa que eu podia resolver."
+        ]
+      },
+      "replies": [
+        {
+          "name": "urge_the_invitation",
+          "stance": "candor",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Then ask them to supper.",
+            "pt": "Então convide para jantar."
+          },
+          "phrases": [
+            "then ask them to supper",
+            "invite them round yourself"
+          ],
+          "requires_any": [
+            "supper",
+            "invite"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.people.newcomer.urged",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "resolved",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "This week. It is four months late and four months late is better than the alternative, which is a fifth month.",
+                "Yes. Somebody has to be first and everybody has been waiting to be second, which is how a lane stays cold for a year.",
+                "I will, and I will not make it a welcome. A welcome is a performance. Supper is just supper and that is the whole point."
+              ],
+              "pt": [
+                "Esta semana. Está quatro meses atrasado, e quatro meses atrasado é melhor que a alternativa, que é um quinto mês.",
+                "Sim. Alguém tem que ser o primeiro e todo mundo está esperando ser o segundo, que é como uma viela fica fria por um ano.",
+                "Vou, e não vou fazer disso boas-vindas. Boas-vindas é encenação. Jantar é só jantar e é esse o ponto."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_they_are_like",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What are they like?",
+            "pt": "Como eles são?"
+          },
+          "phrases": [
+            "what are they like",
+            "what sort of person are they"
+          ],
+          "requires_any": [
+            "like",
+            "sort"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "described",
+            "act": "report",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Quiet in the way that is being careful rather than being unfriendly, and the lane has read it as the second.",
+                "Competent, and slightly too eager to prove it, which is what everybody is like in their first year anywhere.",
+                "I do not know yet, and that is rather my point. Four months and nobody in this lane could tell you either."
+              ],
+              "pt": [
+                "Reservados do jeito de quem está sendo cuidadoso, não de quem é antipático, e a viela leu como a segunda coisa.",
+                "Competentes, e um pouco ansiosos demais para provar, que é como todo mundo é no primeiro ano em qualquer lugar.",
+                "Eu ainda não sei, e é justamente esse o meu ponto. Quatro meses e ninguém nesta viela saberia dizer também."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

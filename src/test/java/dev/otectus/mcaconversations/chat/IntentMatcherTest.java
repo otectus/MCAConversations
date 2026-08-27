@@ -10,6 +10,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -194,6 +198,63 @@ class IntentMatcherTest {
             contextCases5(),
             contextCases6(),
             contextCases7());
+
+
+    /** phrase, question, intent id, comma-separated answers offered on that page. */
+    private static List<String[]> generatedFixtures() {
+        Path file = Path.of("src/test/resources/generated_matcher_fixtures.tsv");
+        if (!Files.exists(file)) {
+            return List.of();
+        }
+        List<String[]> rows = new ArrayList<>();
+        try {
+            for (String line : Files.readAllLines(file)) {
+                if (line.isBlank() || line.startsWith("#")) {
+                    continue;
+                }
+                String[] parts = line.split("\t", -1);
+                if (parts.length == 4) {
+                    rows.add(parts);
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        return rows;
+    }
+
+    /**
+     * Every generated reply is reachable by typing, ranked the way play ranks it.
+     *
+     * <p>These replies only exist while their decision page is open, and while a decision is open the
+     * dispatcher suppresses global topic intents so that an idle "how's the weather" cannot be taken
+     * for an answer to the question on the table. Checking them against ordinary ranking would test a
+     * situation they are never in — and would fail on sentences that are perfectly unambiguous in the
+     * only context where they can be said.
+     */
+    @Test
+    void everyGeneratedReplyIsReachableByTyping() {
+        List<String> problems = new ArrayList<>();
+        for (String[] fixture : generatedFixtures()) {
+            String phrase = fixture[0];
+            String question = fixture[1];
+            String expected = fixture[2];
+            List<String> offered = fixture[3].isBlank()
+                    ? List.of() : List.of(fixture[3].split(","));
+            NormalizedMessage message = Normalizer.normalize(phrase, index.synonyms());
+            List<Scored> ranked = IntentMatcher.rank(index, message, question, offered);
+            Decision decision = IntentMatcher.decide(ranked, true, MIN, AMBIENT);
+            if (decision.outcome() != Outcome.MATCH
+                    || !expected.equals(decision.chosen().id())) {
+                problems.add("\"" + phrase + "\" on " + question + " expected " + expected
+                        + " but got " + decision.outcome()
+                        + (decision.chosen() == null ? "" : " (" + decision.chosen().id() + "="
+                                + String.format("%.3f", decision.chosen().score()) + ")"));
+            }
+        }
+        assertTrue(problems.isEmpty(), problems.size() + " problems:\n"
+                + String.join("\n", problems));
+    }
 
     /** Joins the chunked case tables; see {@link #contextCases0()} for why they are chunked. */
     private static String[][] concatCases(String[][]... parts) {
@@ -3494,6 +3555,11 @@ class IntentMatcherTest {
         }
         for (String[] c : SYSTEM_CASES) {
             covered.add(c[1]);
+        }
+        // Generated replies are covered by the compiler's own fixture file rather than by hand: it
+        // writes one utterance per reply as it emits the reply, so the two cannot drift apart.
+        for (String[] fixture : generatedFixtures()) {
+            covered.add(fixture[2]);
         }
         List<String> missing = new ArrayList<>();
         for (String id : ids) {

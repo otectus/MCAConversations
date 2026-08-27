@@ -1,0 +1,125 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_stop",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.misfire.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.a_misfire",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.misfire"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.misfire.blocked.explained",
+              "slots": [
+                "working"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_lapis",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.misfire.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shady_wizard.misfire.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.a_misfire",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.misfire",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.misfire",
+              "obligation": "commitment:work.shady_wizard.bring_lapis"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.shady_wizard.bring_lapis"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.misfire.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_caution",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.misfire.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.a_misfire",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.misfire"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.misfire.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shady_wizard.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

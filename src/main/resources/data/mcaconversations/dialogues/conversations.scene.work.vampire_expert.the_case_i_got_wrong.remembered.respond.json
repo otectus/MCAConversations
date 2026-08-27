@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_the_teaching",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.the_case_i_got_wrong.remembered.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.misdiagnosis",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.vampire_expert.the_case_i_got_wrong"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.the_case_i_got_wrong.remembered.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.vampire_expert.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

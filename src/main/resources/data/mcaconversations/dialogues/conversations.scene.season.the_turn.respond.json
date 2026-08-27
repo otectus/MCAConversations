@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_last_year",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "season.the_turn.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.autumn",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.season.followup",
+            "say": "conversations.scene.season.the_turn.explained"
+          }
+        }
+      ]
+    },
+    {
+      "name": "note_the_light",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "season.the_turn.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.autumn",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.season.followup",
+            "say": "conversations.scene.season.the_turn.agreed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.scene.season.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

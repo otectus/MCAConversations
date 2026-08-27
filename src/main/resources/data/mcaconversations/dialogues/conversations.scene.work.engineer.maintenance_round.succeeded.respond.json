@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "note_invisibility",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.maintenance_round.succeeded.wry"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.maintenance",
+              "deltas": {
+                "warmth": 2,
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.engineer.maintenance_round"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.maintenance_round.succeeded.wry"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_add",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.maintenance_round.succeeded.listed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.maintenance",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.engineer.maintenance_round"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.maintenance_round.succeeded.listed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.engineer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

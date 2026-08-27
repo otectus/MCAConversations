@@ -69,6 +69,9 @@ public final class ConversationSession {
     private OutcomeFamily lastOutcome;
     private StanceFamily lastPlayerStance;
 
+    private dev.otectus.mcaconversations.scene.ConversationPlan plan;
+    private dev.otectus.mcaconversations.context.ConversationContextSnapshot snapshot;
+
     private final Set<SemanticFact> turnFacts = new LinkedHashSet<>();
     private final Deque<String> recentBeats = new ArrayDeque<>();
     private final Deque<String> transactions = new ArrayDeque<>();
@@ -129,6 +132,47 @@ public final class ConversationSession {
         this.currentAnswers = answers == null ? List.of() : List.copyOf(answers);
     }
 
+    // --- Frozen plan and context snapshot (spec §9.3, §10.5) --------------------
+
+    /**
+     * The scene the director chose for this exchange, if the dynamic layer produced one.
+     *
+     * <p>Held here, on the session both frontends share, precisely so that reopening the screen or
+     * switching between the GUI and chat reuses the same decision instead of re-running selection.
+     * That is the whole of reroll resistance: a player who does not like the subject cannot close and
+     * reopen until they get a different one.
+     */
+    public Optional<dev.otectus.mcaconversations.scene.ConversationPlan> plan() {
+        return Optional.ofNullable(plan);
+    }
+
+    /** Freezes a plan onto the session. Replacing one is legal only when starting a new topic. */
+    public void setPlan(dev.otectus.mcaconversations.scene.ConversationPlan plan) {
+        this.plan = plan;
+    }
+
+    /**
+     * The world as it was when this exchange began.
+     *
+     * <p>Captured once and reused by every condition, so two checks in one click cannot see two
+     * different worlds. Volatile fields are refreshed through
+     * {@link #refreshSnapshot}; pinned fields never change for the life of the scene (spec §7.4).
+     */
+    public Optional<dev.otectus.mcaconversations.context.ConversationContextSnapshot> snapshot() {
+        return Optional.ofNullable(snapshot);
+    }
+
+    public void setSnapshot(dev.otectus.mcaconversations.context.ConversationContextSnapshot snapshot) {
+        this.snapshot = snapshot;
+    }
+
+    /** Merges a fresh capture's volatile fields onto the pinned snapshot at a turn boundary. */
+    public void refreshSnapshot(dev.otectus.mcaconversations.context.ConversationContextSnapshot fresh) {
+        if (snapshot != null && fresh != null) {
+            snapshot = snapshot.refreshed(fresh);
+        }
+    }
+
     /** Drops the open question without ending the conversation (a subject change, "never mind"). */
     public void clearOffer() {
         this.currentQuestion = null;
@@ -178,6 +222,10 @@ public final class ConversationSession {
     }
 
     private void resetTopic() {
+        // The plan and the snapshot belong to the exchange, not to the session object: carrying them
+        // into the next topic would let one scene's pinned referents leak into another's.
+        this.plan = null;
+        this.snapshot = null;
         this.topicId = null;
         this.branch = null;
         this.budget = DepthClass.QUICK;

@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_it_felt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.old_repair.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.old_repairs",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.leatherworker.old_repair"
+            },
+            "next": "conversations.scene.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.leatherworker.old_repair.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "note_the_craft",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.old_repair.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.old_repairs",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.leatherworker.old_repair"
+            },
+            "next": "conversations.scene.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.leatherworker.old_repair.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.leatherworker.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

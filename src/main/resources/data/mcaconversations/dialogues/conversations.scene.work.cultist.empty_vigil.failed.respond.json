@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_means",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.empty_vigil.failed.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.vigil",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.cultist.empty_vigil"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.empty_vigil.failed.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sit_with_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.empty_vigil.failed.softened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.vigil",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.cultist.empty_vigil"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.empty_vigil.failed.softened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.cultist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

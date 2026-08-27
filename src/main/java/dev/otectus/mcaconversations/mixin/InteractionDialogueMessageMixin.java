@@ -75,7 +75,13 @@ public abstract class InteractionDialogueMessageMixin {
             if (ConversationGuard.rejectSubmission(player.getUUID(), villagerUUID, question, answer,
                     otherPlayerInteracting, player.level().getGameTime())) {
                 ci.cancel();
+                return;
             }
+            // The submission is going through, so this is the last moment before MCA scores the
+            // answer's results — and therefore the only place a scene can be chosen once for the whole
+            // exchange rather than once per candidate condition (see ConversationPlanner).
+            dev.otectus.mcaconversations.scene.ConversationPlanner
+                    .onAnswerSubmitted(villager, player, question, answer);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("dialogue submission validation failed; passing through", t);
         }

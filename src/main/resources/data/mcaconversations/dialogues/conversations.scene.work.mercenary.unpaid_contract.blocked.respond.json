@@ -1,0 +1,123 @@
+{
+  "answers": [
+    {
+      "name": "ask_recourse",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.unpaid_contract.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.contract",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mercenary.unpaid_contract"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.unpaid_contract.blocked.explained",
+              "slots": [
+                "employer"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_wages",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.unpaid_contract.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mercenary.contract.covered",
+              "delta": 3,
+              "budget": "generous",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.contract",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.unpaid_contract",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mercenary.unpaid_contract",
+              "obligation": "commitment:work.mercenary.bring_wages"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.mercenary.bring_wages"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.unpaid_contract.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_the_headman",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.unpaid_contract.blocked.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.contract",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mercenary.unpaid_contract"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.unpaid_contract.blocked.considered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mercenary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

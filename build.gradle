@@ -233,6 +233,27 @@ tasks.register('townsteadProbeTest', Test) {
     }
 }
 
+// The content compiler: expands src/content/ authoring sources into runtime resources (spec 19).
+//
+// Deliberately NOT wired into processResources. The compiler lives in the test source set - it is
+// build tooling and has no business in the shipped jar - and compileTestJava already depends on
+// processResources through `classes`, so making processResources depend on it would be a cycle.
+//
+// Instead the generated files are committed, ContentCompilerTest regenerates and re-asserts them on
+// every `./gradlew test`, and this task exists for the edit-compile-look loop:
+//
+//     ./gradlew generateConversationContent
+//
+tasks.register('generateConversationContent', JavaExec) {
+    group = 'documentation'
+    description = 'Compiles src/content authoring sources into runtime data and lang resources.'
+    dependsOn tasks.named('compileTestJava'), tasks.named('processTestResources')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'dev.otectus.mcaconversations.authoring.ContentCompiler'
+    args 'src/content', 'src/main/resources'
+    outputs.upToDateWhen { false }
+}
+
 // MixinGradle: generate the refmap for our mixin and register the config for reobfuscation.
 mixin {
     add sourceSets.main, 'mcaconversations.refmap.json'

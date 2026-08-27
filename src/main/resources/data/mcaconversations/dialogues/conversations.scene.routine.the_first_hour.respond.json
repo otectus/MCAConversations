@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_is_planned",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "routine.the_first_hour.open.listed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "routine.first_hour",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.routine.followup",
+            "say": "conversations.scene.routine.the_first_hour.listed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_them_a_good_one",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "routine.the_first_hour.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.routine.first_hour.wished",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "routine.first_hour",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.routine.followup",
+            "say": "conversations.scene.routine.the_first_hour.thanked"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.scene.routine.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

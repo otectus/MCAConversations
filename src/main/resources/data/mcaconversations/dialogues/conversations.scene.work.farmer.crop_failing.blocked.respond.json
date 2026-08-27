@@ -1,0 +1,159 @@
+{
+  "answers": [
+    {
+      "name": "ask_cause",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.crop_failing.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.crop_health",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.farmer.crop_failing"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.crop_failing.blocked.explained",
+              "slots": [
+                "worksite"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_bonemeal",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.crop_failing.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.farmer.crop_failing.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.crop_health",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.crop_failing",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.farmer.crop_failing",
+              "obligation": "commitment:work.farmer.bring_bonemeal"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.farmer.bring_bonemeal"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.crop_failing.blocked.accepted",
+              "slots": [
+                "worksite"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_fallow",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.crop_failing.blocked.resisted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.crop_health",
+              "deltas": {
+                "respect": 2,
+                "tension": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.farmer.crop_failing"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.crop_failing.blocked.resisted",
+              "slots": [
+                "worksite"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "no_advice",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.crop_failing.blocked.excused"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.crop_health",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.farmer.crop_failing"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.crop_failing.blocked.excused"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.farmer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

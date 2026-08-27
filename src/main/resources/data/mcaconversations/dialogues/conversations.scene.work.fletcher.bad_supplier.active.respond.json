@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "advise_refusing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.bad_supplier.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.shafts",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.bad_supplier"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.bad_supplier.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_why_he_does_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.bad_supplier.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.shafts",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.bad_supplier"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.bad_supplier.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.fletcher.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

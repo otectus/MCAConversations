@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "ask_which_two",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.the_small_version.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.modest",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.dreams.followup",
+            "say": "conversations.scene.dreams.the_small_version.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_them_luck",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.the_small_version.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "dreams.modest",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.dreams.followup",
+            "say": "conversations.scene.dreams.the_small_version.thanked"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.dreams.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_plan",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_hour_for_it.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.tonight",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "say": "conversations.scene.interests.the_hour_for_it.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_them_the_hour",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_hour_for_it.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.tonight",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "say": "conversations.scene.interests.the_hour_for_it.thanked"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.interests.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_it_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.contradictory_readings.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.readings",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.oceanographer.contradictory_readings"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.contradictory_readings.blocked.explained",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_more_readings",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.contradictory_readings.blocked.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.readings",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.oceanographer.contradictory_readings"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.contradictory_readings.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_the_caution",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.contradictory_readings.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.oceanographer.readings.backed",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.readings",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.oceanographer.contradictory_readings"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.contradictory_readings.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.oceanographer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

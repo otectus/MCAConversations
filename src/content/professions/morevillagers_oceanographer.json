@@ -1,0 +1,842 @@
+{
+  "_comment": [
+    "Oceanographer (MoreVillagers). Measuring water that will not hold still to be measured.",
+    "",
+    "The §12.4 anchors are the tides, readings, instruments, the deep, what the fishermen say and a",
+    "record nobody reads. These three take a set of readings that contradict each other, an instrument",
+    "she cannot repair, and a warning she gave that nobody acted on.",
+    "",
+    "She is a scientist in a village that has no word for one. Her difficulty is not the water; it is",
+    "being believed, and she is deliberately careful never to overstate a result in order to be",
+    "listened to, because she has watched what that costs the next person who tries.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when MoreVillagers",
+    "is installed."
+  ],
+  "profession": "morevillagers:oceanographer",
+  "id": "oceanographer",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_tides",
+    "readings",
+    "instruments",
+    "the_deep",
+    "what_the_fishermen_say",
+    "the_record"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to your readings.",
+    "pt": "Vou deixar você voltar às medições."
+  },
+  "slot_lang": {
+    "oce_the_spring_tides": {
+      "en": "the spring tides",
+      "pt": "as marés de sizígia"
+    },
+    "oce_the_river_mouth": {
+      "en": "the river mouth",
+      "pt": "a foz do rio"
+    },
+    "oce_the_deep_channel": {
+      "en": "the deep channel",
+      "pt": "o canal fundo"
+    },
+    "oce_readings_that_disagree": {
+      "en": "readings that disagree with each other",
+      "pt": "medições que discordam entre si"
+    },
+    "oce_a_month_of_fog": {
+      "en": "a month of fog",
+      "pt": "um mês de neblina"
+    },
+    "oce_a_gauge_i_cannot_trust": {
+      "en": "a gauge I cannot trust",
+      "pt": "um medidor em que não confio"
+    },
+    "oce_a_cracked_glass": {
+      "en": "a cracked glass",
+      "pt": "um vidro rachado"
+    },
+    "oce_a_bent_arm": {
+      "en": "a bent arm on the sounder",
+      "pt": "um braço torto no sondador"
+    },
+    "oce_a_line_that_has_stretched": {
+      "en": "a sounding line that has stretched",
+      "pt": "uma linha de sondagem que esticou"
+    },
+    "oce_the_boats": {
+      "en": "the boats",
+      "pt": "os barcos"
+    },
+    "oce_the_headman": {
+      "en": "the headman",
+      "pt": "o chefe da vila"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.contradictory_readings",
+      "subject": "work.oceanographer.readings",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "place": [
+          "oce_the_spring_tides",
+          "oce_the_river_mouth",
+          "oce_the_deep_channel"
+        ],
+        "trouble": [
+          "oce_readings_that_disagree",
+          "oce_a_month_of_fog",
+          "oce_a_gauge_i_cannot_trust"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place",
+            "trouble"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The readings.",
+            "pt": "As medições."
+          },
+          "lines": {
+            "en": [
+              "I have %3$s for %2$s and I cannot tell you which of them is wrong, which means I cannot tell you anything.",
+              "%3$s. Four months of work on %2$s and the honest summary is a shrug in a notebook.",
+              "%2$s is doing something. I am certain of that and certain of nothing else, and certainty about one thing is not a result."
+            ],
+            "pt": [
+              "Tenho %3$s para %2$s e não sei dizer qual delas está errada, o que significa que não sei dizer nada.",
+              "%3$s. Quatro meses de trabalho em %2$s e o resumo honesto é um dar de ombros num caderno.",
+              "%2$s está fazendo alguma coisa. Disso eu tenho certeza, e de mais nada, e certeza de uma coisa só não é um resultado."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why_it_matters",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What would the answer change?",
+                "pt": "O que a resposta mudaria?"
+              },
+              "phrases": [
+                "what would the answer change",
+                "what depends on knowing that"
+              ],
+              "requires_any": [
+                "answer",
+                "depends"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Where the boats go in the spring. If %2$s is shifting, the safe channel is somewhere else and nobody knows it yet.",
+                    "Whether the river mouth silts up in ten years. That decides whether this village has a harbour or a marsh, and nobody here thinks in tens of years.",
+                    "Very little this week and a great deal in a decade, which is the worst possible shape for getting anybody's attention."
+                  ],
+                  "pt": [
+                    "Para onde os barcos vão na primavera. Se %2$s está mudando, o canal seguro está em outro lugar e ninguém sabe ainda.",
+                    "Se a foz assoreia em dez anos. Isso decide se esta vila tem um porto ou um pântano, e ninguém aqui pensa em dezenas de anos.",
+                    "Muito pouco esta semana e muitíssimo em uma década, que é o pior formato possível para conseguir a atenção de alguém."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_more_readings",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Then take another season of readings.",
+                "pt": "Então meça mais uma estação."
+              },
+              "phrases": [
+                "then take another season of readings",
+                "keep measuring for another season"
+              ],
+              "requires_any": [
+                "season",
+                "measuring",
+                "readings"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Another season and I will have eight months of contradictions instead of four, and that is genuinely progress.",
+                    "Yes. The alternative is to pick the reading I prefer and call it a finding, and I have watched a man do that and be believed.",
+                    "It is the answer and it is unbearable, because it means saying I do not know for another four months in a village that finds that annoying."
+                  ],
+                  "pt": [
+                    "Mais uma estação e eu vou ter oito meses de contradições em vez de quatro, e isso é progresso de verdade.",
+                    "Sim. A alternativa é escolher a medição que eu prefiro e chamar de conclusão, e eu já vi um homem fazer isso e ser acreditado.",
+                    "É a resposta e é insuportável, porque significa dizer que eu não sei por mais quatro meses numa vila que acha isso irritante."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "respect_the_caution",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Your caution there is right.",
+                "pt": "Sua cautela aí está certa."
+              },
+              "phrases": [
+                "holding back until you are sure is honest",
+                "your caution there is right"
+              ],
+              "requires_any": [
+                "honest",
+                "caution"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.oceanographer.readings.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is the honest answer and it is also the one that gets a person ignored, and I have decided to be ignored accurately.",
+                    "Thank you. Everybody wants a number. A wrong number is worse than no number and it takes about six years to find that out.",
+                    "I keep a page at the front of the book of everything I have been wrong about. It is a short page and it is the reason anybody trusts the rest."
+                  ],
+                  "pt": [
+                    "É a resposta honesta e também a que faz uma pessoa ser ignorada, e eu decidi ser ignorada com exatidão.",
+                    "Obrigada. Todo mundo quer um número. Um número errado é pior que nenhum número, e leva uns seis anos para descobrir isso.",
+                    "Guardo uma página no começo do caderno com tudo em que eu errei. É uma página curta e é o motivo de alguém confiar no resto."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "prompt": {
+            "en": "The readings, in the end.",
+            "pt": "As medições, no fim."
+          },
+          "lines": {
+            "en": [
+              "Eight months settled it. %2$s is shifting east, about a boat's length a year, and now I can say so with a straight face.",
+              "The contradiction was the gauge. Eight months to find out that the instrument was lying and the water was not.",
+              "%2$s has an answer. It took twice as long as anybody wanted and it will be right in ten years, which was always the point."
+            ],
+            "pt": [
+              "Oito meses resolveram. %2$s está se deslocando para leste, cerca de um comprimento de barco por ano, e agora eu posso dizer isso sem hesitar.",
+              "A contradição era o medidor. Oito meses para descobrir que o instrumento mentia e a água não.",
+              "%2$s tem uma resposta. Levou o dobro do que qualquer um queria e vai estar certa em dez anos, que era o objetivo desde sempre."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_they_listened",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Did anybody listen?",
+                "pt": "Alguém escutou?"
+              },
+              "phrases": [
+                "did anybody listen to the finding",
+                "who listened in the end"
+              ],
+              "requires_any": [
+                "listen",
+                "listened",
+                "finding"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "The fishermen did, immediately, because they had known it in their hands for two years and wanted somebody to write it down.",
+                    "Two boats moved their moorings. That is the entire visible consequence of eight months of work, and it is enough.",
+                    "The headman said he would consider it. In this village that means yes in about four years, and four years is inside my ten."
+                  ],
+                  "pt": [
+                    "Os pescadores, na hora, porque já sabiam disso nas mãos há dois anos e queriam alguém para anotar.",
+                    "Dois barcos mudaram de amarração. É a consequência visível inteira de oito meses de trabalho, e basta.",
+                    "O chefe disse que ia considerar. Nesta vila isso quer dizer sim em uns quatro anos, e quatro anos cabem dentro dos meus dez."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.broken_instrument",
+      "subject": "work.oceanographer.instruments",
+      "initial_state": "blocked",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "fault": [
+          "oce_a_cracked_glass",
+          "oce_a_bent_arm",
+          "oce_a_line_that_has_stretched"
+        ]
+      },
+      "commitment": {
+        "id": "work.oceanographer.bring_glass",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:glass",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "fault"
+          ],
+          "identity_values": [
+            "precision",
+            "independence"
+          ],
+          "prompt": {
+            "en": "The instrument.",
+            "pt": "O instrumento."
+          },
+          "lines": {
+            "en": [
+              "There is %2$s and until it is fixed everything I write down is a story rather than a measurement.",
+              "%2$s. Nobody within four days can make the part, and I have been taking readings I know I will have to throw away.",
+              "%2$s means I am guessing carefully, which is a thing people cannot tell apart from knowing, and that frightens me more than the gap in the record."
+            ],
+            "pt": [
+              "Tem %2$s, e até consertar, tudo o que eu anoto é história e não medição.",
+              "%2$s. Ninguém a quatro dias daqui faz a peça, e eu venho anotando medições que sei que vou ter que jogar fora.",
+              "%2$s significa que eu chuto com cuidado, coisa que as pessoas não distinguem de saber, e isso me assusta mais que a lacuna no registro."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_glass",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you glass for it.",
+                "pt": "Vou te trazer vidro para isso."
+              },
+              "phrases": [
+                "i can bring you glass",
+                "let me fetch glass for that"
+              ],
+              "requires_any": [
+                "glass"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.oceanographer.instrument.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then the record starts again on Thursday and the gap is nine days rather than a season.",
+                    "Bring it flat and thick if you have a choice. I can grind and I cannot make glass, and grinding is the part I actually enjoy.",
+                    "Yes. And I will write your name in the margin of the day it was repaired, which is how this book records everything that matters."
+                  ],
+                  "pt": [
+                    "Então o registro recomeça na quinta e a lacuna é de nove dias em vez de uma estação.",
+                    "Traga plano e grosso, se puder escolher. Eu sei polir e não sei fazer vidro, e polir é a parte de que eu de fato gosto.",
+                    "Sim. E vou escrever seu nome na margem do dia do conserto, que é como este caderno registra tudo o que importa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_about_the_gap",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What does a gap in the record cost?",
+                "pt": "O que uma lacuna no registro custa?"
+              },
+              "phrases": [
+                "what does a gap in the record cost",
+                "how bad is a break in the record"
+              ],
+              "requires_any": [
+                "gap",
+                "record",
+                "break"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "More than the days it covers. A record with a hole in it can be argued with, and once it can be argued with it stops being useful.",
+                    "Ten years from now somebody will want to know what happened this spring, and the honest answer will be a blank page with my name on it.",
+                    "It is not the missing numbers. It is that I will never again be certain the two halves of the record are the same measurement."
+                  ],
+                  "pt": [
+                    "Mais do que os dias que cobre. Um registro com buraco pode ser contestado, e assim que pode ser contestado deixa de ser útil.",
+                    "Daqui a dez anos alguém vai querer saber o que aconteceu nesta primavera, e a resposta honesta vai ser uma página em branco com o meu nome.",
+                    "Não são os números que faltam. É que eu nunca mais vou ter certeza de que as duas metades do registro são a mesma medição."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "prompt": {
+            "en": "The instrument, mended.",
+            "pt": "O instrumento, consertado."
+          },
+          "lines": {
+            "en": [
+              "Ground and set and reading true. Nine days lost, and I have marked them as lost rather than filling them in from memory.",
+              "It works. I spent an evening checking it against the old readings and it agrees with itself, which is all anybody can ask of an instrument.",
+              "Mended, and I have made a spare part while I had the materials out, which is eleven years overdue."
+            ],
+            "pt": [
+              "Polido, montado e medindo certo. Nove dias perdidos, e eu marquei como perdidos em vez de preencher de memória.",
+              "Funciona. Passei uma noite conferindo contra as medições antigas e ele concorda consigo mesmo, que é tudo o que se pode pedir de um instrumento.",
+              "Consertado, e fiz uma peça reserva enquanto tinha o material à mão, coisa atrasada em onze anos."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_marking_the_gap",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Marking the gap was right.",
+                "pt": "Marcar a lacuna estava certo."
+              },
+              "phrases": [
+                "marking the gap was right",
+                "leaving the days blank was correct"
+              ],
+              "requires_any": [
+                "marking",
+                "gap",
+                "blank"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It was tempting to fill them. I could have done it plausibly in an hour and nobody alive would have caught it.",
+                    "Thank you. A blank page is a claim too — it claims I was honest about the day I was not measuring, and that is worth more than nine numbers.",
+                    "The next person to read this book will not know me. All they will have is whether the blanks are where the blanks should be."
+                  ],
+                  "pt": [
+                    "Foi tentador preencher. Eu teria feito de forma plausível em uma hora e ninguém vivo teria percebido.",
+                    "Obrigada. Uma página em branco também é uma afirmação — afirma que eu fui honesta sobre o dia em que não medi, e isso vale mais que nove números.",
+                    "A próxima pessoa a ler este caderno não vai me conhecer. Tudo o que vai ter é se as lacunas estão onde deveriam estar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.ignored_warning",
+      "subject": "work.oceanographer.what_the_fishermen_say",
+      "initial_state": "failed",
+      "salience": 52,
+      "due_after_days": 3,
+      "expires_after_days": 28,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "audience": [
+          "oce_the_boats",
+          "oce_the_headman"
+        ]
+      },
+      "states": [
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "audience"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The warning.",
+            "pt": "O aviso."
+          },
+          "lines": {
+            "en": [
+              "I told %2$s about the spring channel in good time and nothing happened, and then a boat grounded.",
+              "%2$s heard me. That is the part I keep going over — it was not that I failed to speak. It is that speaking turned out to be the easy half.",
+              "Nobody was hurt. I have said that to myself about forty times and it is true and it is also not the point."
+            ],
+            "pt": [
+              "Avisei %2$s sobre o canal da primavera com antecedência e nada aconteceu, e aí um barco encalhou.",
+              "%2$s me ouviu. É essa a parte que eu fico remoendo — não é que eu tenha falhado em falar. É que falar acabou sendo a metade fácil.",
+              "Ninguém se machucou. Já disse isso a mim mesma umas quarenta vezes e é verdade e também não é o ponto."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_would_change",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What would you do differently?",
+                "pt": "O que você faria diferente?"
+              },
+              "phrases": [
+                "what would you do differently",
+                "what would you change about how you told them"
+              ],
+              "requires_any": [
+                "differently",
+                "change"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Tell the boats first and the headman second. I did it the other way round because I thought that was the correct order, and correctness is not the same as effective.",
+                    "Draw it. I gave them a number and they needed a picture, and I have spent four months since learning to draw badly on purpose.",
+                    "Say it three times. A thing said once is a remark. I had been treating one clear statement as though it discharged the duty."
+                  ],
+                  "pt": [
+                    "Avisar os barcos primeiro e o chefe depois. Fiz ao contrário porque achei que era a ordem correta, e correto não é o mesmo que eficaz.",
+                    "Desenhar. Dei um número e eles precisavam de uma figura, e passei quatro meses desde então aprendendo a desenhar mal de propósito.",
+                    "Dizer três vezes. Uma coisa dita uma vez é um comentário. Eu vinha tratando uma frase clara como se cumprisse o dever."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_was_not_hers",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You gave the warning in good time.",
+                "pt": "Você deu o aviso em tempo."
+              },
+              "phrases": [
+                "you gave the warning in good time",
+                "the warning was given"
+              ],
+              "requires_any": [
+                "warning",
+                "gave",
+                "given"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "qualified",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I did, and telling is not the job. The job is being understood, and I have decided that the difference is mine to close.",
+                    "Thank you. I will take half of that. The other half is that I know how this village listens and I spoke as if it listened differently.",
+                    "It is the comfortable version and I am wary of it, because a person who accepts it stops improving on the day they accept it."
+                  ],
+                  "pt": [
+                    "Avisei, e avisar não é o trabalho. O trabalho é ser compreendida, e eu decidi que essa diferença é minha para fechar.",
+                    "Obrigada. Aceito metade disso. A outra metade é que eu sei como esta vila escuta e falei como se ela escutasse de outro jeito.",
+                    "É a versão confortável e eu desconfio dela, porque quem aceita para de melhorar no dia em que aceita."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "remembered",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "prompt": {
+            "en": "The channel, since.",
+            "pt": "O canal, depois disso."
+          },
+          "lines": {
+            "en": [
+              "I drew it. Badly, on a board, at the quay, and eleven people stood and looked at it and two of them argued with me.",
+              "The boats moved. It took a picture and three tellings, and the numbers had been correct for a year and a half.",
+              "Nobody has grounded since. That is the whole result and it is not the sort of thing anybody thanks you for, because it is an absence."
+            ],
+            "pt": [
+              "Eu desenhei. Mal, numa tábua, no cais, e onze pessoas ficaram olhando e duas discutiram comigo.",
+              "Os barcos mudaram. Precisou de uma figura e três avisos, e os números estavam certos havia um ano e meio.",
+              "Ninguém encalhou desde então. É o resultado inteiro e não é o tipo de coisa pela qual alguém agradece, porque é uma ausência."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_absence",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "An absence is still your work.",
+                "pt": "Uma ausência ainda é trabalho seu."
+              },
+              "phrases": [
+                "an absence is still your work",
+                "the boats that did not ground are your result"
+              ],
+              "requires_any": [
+                "absence",
+                "boats",
+                "result"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is the only kind of result this trade produces, and it is invisible by definition, and I have made peace with that twice.",
+                    "Thank you. I keep a private list of things that have not happened. It is the most satisfying and least shareable document I own.",
+                    "The board is still at the quay. Somebody has repainted the lines, which means somebody else has taken it on, and that is better than being thanked."
+                  ],
+                  "pt": [
+                    "É o único tipo de resultado que este ofício produz, é invisível por definição, e eu já fiz as pazes com isso duas vezes.",
+                    "Obrigada. Guardo uma lista particular de coisas que não aconteceram. É o documento mais satisfatório e menos compartilhável que eu tenho.",
+                    "A tábua continua no cais. Alguém repintou as linhas, o que quer dizer que outra pessoa assumiu aquilo, e isso é melhor do que ser agradecida."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else you needed?",
+      "pt": "Precisava de mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a reading at sea?",
+        "pt": "Qual é a parte mais difícil de medir no mar?"
+      },
+      "requires_any": [
+        "hardest",
+        "sea"
+      ],
+      "phrases": [
+        "what is the hardest part of a reading at sea",
+        "hardest thing about taking readings at sea"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the tide.",
+      "pt": "Vou deixar você com a maré."
+    }
+  }
+}

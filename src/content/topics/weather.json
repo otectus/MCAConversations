@@ -1,0 +1,315 @@
+{
+  "_comment": [
+    "Weather, as a living topic rather than a stock remark.",
+    "",
+    "A profession scene is gated on an episode. This one is gated on the sky: the scenes below only",
+    "exist while it is actually raining, or actually has not rained, and a villager who cares about",
+    "weather is likelier to raise them than one who does not.",
+    "",
+    "Deliberately slotless. There is no object here to name — the specific thing is the context, and",
+    "binding a slot would only add a noun the snapshot cannot supply."
+  ],
+  "topic": "weather",
+  "entry": {
+    "question": "conversations.cat.chitchat",
+    "answer": "weather"
+  },
+  "return_question": "conversations.cat.chitchat",
+  "leave_lines": {
+    "en": [
+      "Aye. Get out in it while it holds.",
+      "Right you are. It will do what it does either way.",
+      "Mind how you go. It has a look about it."
+    ],
+    "pt": [
+      "Isso. Aproveite enquanto dura.",
+      "Pois é. Vai fazer o que quiser de qualquer jeito.",
+      "Vá com cuidado. O céu está com uma cara estranha."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the weather?",
+      "pt": "Mais alguma coisa sobre o tempo?"
+    },
+    "leave": {
+      "en": "I'll let the sky get on with it.",
+      "pt": "Vou deixar o céu se virar."
+    }
+  },
+  "scenes": [
+    {
+      "name": "working_in_the_wet",
+      "subject": "weather.working_in_it",
+      "shape": "observe",
+      "act": "complain",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "weather.state",
+          "any_of": [
+            "rain",
+            "storm"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_interests": [
+        "weather"
+      ],
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "prompt": {
+        "en": "The weather.",
+        "pt": "O tempo."
+      },
+      "lines": {
+        "en": [
+          "Everything takes twice as long in this and I have stopped pretending otherwise.",
+          "It is the third day of it. The first day is weather and the third day is a mood.",
+          "I do not mind rain. I mind rain on the days I had planned something, which is apparently all of them."
+        ],
+        "pt": [
+          "Tudo leva o dobro do tempo assim e eu parei de fingir o contrário.",
+          "É o terceiro dia disso. O primeiro dia é clima e o terceiro é humor.",
+          "Não me incomodo com chuva. Me incomodo com chuva nos dias em que eu tinha planejado algo, o que aparentemente é todos."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_stops",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does it stop you doing?",
+            "pt": "O que isso te impede de fazer?"
+          },
+          "phrases": [
+            "what does it stop you doing",
+            "which jobs does the rain hold up"
+          ],
+          "requires_any": [
+            "jobs",
+            "doing",
+            "rain"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Anything with a lid off. Half my week is things that must not get wet and the other half is carrying them indoors.",
+                "Nothing outright. It just moves every job an hour later and there are only so many hours to move them into.",
+                "The walking, mostly. Everything is further in the rain, and I have never been able to explain that to anybody who works under a roof."
+              ],
+              "pt": [
+                "Qualquer coisa sem tampa. Metade da minha semana são coisas que não podem molhar e a outra metade é carregar tudo para dentro.",
+                "Nada de vez. Só empurra cada tarefa uma hora para depois, e só existe um tanto de horas para onde empurrar.",
+                "A caminhada, principalmente. Tudo fica mais longe na chuva, e eu nunca consegui explicar isso a quem trabalha sob um teto."
+              ]
+            }
+          }
+        },
+        {
+          "name": "commiserate",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It's been a grim few days.",
+            "pt": "Foram dias sombrios."
+          },
+          "phrases": [
+            "it has been a grim few days",
+            "these days have been miserable"
+          ],
+          "requires_any": [
+            "grim",
+            "miserable",
+            "days"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They have. And the fields need it, which is the sentence everybody says on the fourth day through their teeth.",
+                "Grim is the word. Not bad — grim. Bad weather has an end you can see.",
+                "It will break on the day I have nothing planned. It always does, and I have stopped trying to trick it."
+              ],
+              "pt": [
+                "Foram. E os campos precisam, que é a frase que todo mundo diz no quarto dia entre os dentes.",
+                "Sombrio é a palavra. Não ruim — sombrio. Tempo ruim tem um fim que dá para ver.",
+                "Vai abrir no dia em que eu não tiver nada planejado. Sempre abre, e eu parei de tentar enganar isso."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_long_dry",
+      "subject": "weather.the_dry_spell",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "weather.state",
+          "any_of": [
+            "clear"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "This dry stretch.",
+        "pt": "Esta estiagem."
+      },
+      "lines": {
+        "en": [
+          "Lovely, and everybody says so, and the people who watch water have gone quiet about it.",
+          "Four clear days. On the fourth clear day the well drops a hand's width and nobody notices but the person who draws it.",
+          "I like it and I am counting. Those two things sit together perfectly well once you are old enough."
+        ],
+        "pt": [
+          "Lindo, e todo mundo diz isso, e quem observa a água ficou calado a respeito.",
+          "Quatro dias limpos. No quarto dia limpo o poço baixa um palmo e ninguém repara, só quem tira a água.",
+          "Eu gosto e estou contando. As duas coisas convivem perfeitamente bem depois de certa idade."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_well",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is the well dropping?",
+            "pt": "O poço está baixando?"
+          },
+          "phrases": [
+            "is the well dropping",
+            "how is the water holding up"
+          ],
+          "requires_any": [
+            "well",
+            "water"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "report",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "A hand's width since the weekend. That is ordinary for four days and it stops being ordinary at about nine.",
+                "It is. Nobody has said anything yet because saying it makes it a problem, and a problem needs somebody to own it.",
+                "I mark the stone every morning. Eleven years of marks and this is the fourth-fastest I have seen it go."
+              ],
+              "pt": [
+                "Um palmo desde o fim de semana. É comum em quatro dias e deixa de ser comum lá pelo nono.",
+                "Está. Ninguém disse nada ainda porque dizer transforma em problema, e problema precisa de um dono.",
+                "Marco a pedra toda manhã. Onze anos de marcas e esta é a quarta descida mais rápida que eu já vi."
+              ]
+            }
+          }
+        },
+        {
+          "name": "enjoy_it",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Take the good days while they're here.",
+            "pt": "Aproveite os dias bons enquanto duram."
+          },
+          "phrases": [
+            "take the good days while they are here",
+            "enjoy the clear days"
+          ],
+          "requires_any": [
+            "good",
+            "enjoy",
+            "clear"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "softened",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I will. I have eaten outside three evenings running and I have every intention of making it four.",
+                "That is the right instruction and I am poor at following it, because I am always half doing arithmetic about the next season.",
+                "The light in the evening this week has been worth the whole summer. I would say that out loud more often if it did not sound peculiar."
+              ],
+              "pt": [
+                "Vou. Já jantei do lado de fora três noites seguidas e pretendo firmemente fazer a quarta.",
+                "É a instrução certa e eu sou ruim em seguir, porque estou sempre meio fazendo contas sobre a próxima estação.",
+                "A luz no fim da tarde esta semana valeu o verão inteiro. Eu diria isso em voz alta mais vezes se não soasse esquisito."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

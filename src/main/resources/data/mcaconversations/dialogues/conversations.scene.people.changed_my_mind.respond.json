@@ -1,0 +1,65 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_changed_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.changed_my_mind.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.reappraisal",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.people.followup",
+            "say": "conversations.scene.people.changed_my_mind.explained"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_takes_something",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.changed_my_mind.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.reappraisal",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.people.followup",
+            "say": "conversations.scene.people.changed_my_mind.acknowledged"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.people.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

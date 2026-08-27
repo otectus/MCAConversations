@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_writing_it_down",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.stubborn_hide.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.hides",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.leatherworker.stubborn_hide"
+            },
+            "next": "conversations.scene.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.leatherworker.stubborn_hide.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.leatherworker.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

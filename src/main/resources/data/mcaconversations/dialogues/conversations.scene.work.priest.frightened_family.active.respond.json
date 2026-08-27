@@ -1,0 +1,120 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_helps",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.frightened_family.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_frightened",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.priest.frightened_family"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.frightened_family.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_candles",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.frightened_family.active.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.priest.frightened.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_frightened",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.frightened_family",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.priest.frightened_family",
+              "obligation": "commitment:work.priest.bring_candles"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.priest.bring_candles"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.frightened_family.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_hours",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.frightened_family.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_frightened",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.priest.frightened_family"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.frightened_family.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.priest.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

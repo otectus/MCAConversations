@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.reputation.active.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.reputation",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mercenary.reputation"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.reputation.active.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "urge_staying",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.reputation.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.reputation",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mercenary.reputation"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.reputation.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mercenary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

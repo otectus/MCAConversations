@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_it_worked",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.reputation.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.reputation",
+              "deltas": {
+                "warmth": 3,
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.mercenary.reputation"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.reputation.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mercenary.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_who_needs_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.after_something_happened.open.answered"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.village.offered_help",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.recent_event",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "say": "conversations.scene.village.after_something_happened.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.after_something_happened.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.recent_event",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "say": "conversations.scene.village.after_something_happened.agreed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.village.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

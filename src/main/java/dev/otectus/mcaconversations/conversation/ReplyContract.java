@@ -26,6 +26,12 @@ import java.util.TreeSet;
  * <p>{@link #respondsTo} is the author's claim about where this button is legal. It accepts exact beat
  * ids and {@code subject:} patterns, so a page shared by a genuinely equivalent family of beats does
  * not need its answers restating once per beat.
+ *
+ * <p>{@link #move} is the optional v2 half (spec §10.2): which obligation the button fulfils, which
+ * referents its wording presupposes, what the player is claiming by choosing it, and which promise it
+ * makes. A button can have a perfectly legal stance and still fail to answer the question that was
+ * asked, and v1 has no way to see that. Every reply authored before this release carries
+ * {@link ReplyMove#V1_DEFAULT} and behaves exactly as before.
  */
 public record ReplyContract(String question,
                             String answer,
@@ -35,12 +41,14 @@ public record ReplyContract(String question,
                             Set<SemanticFact> introducesFacts,
                             Tone tone,
                             Set<OutcomeFamily> outcomes,
-                            boolean exit) {
+                            boolean exit,
+                            ReplyMove move) {
 
     /** Wildcard {@code responds_to}: this button is legal after any beat that opens its question. */
     public static final String ANY_BEAT = "*";
 
     public ReplyContract {
+        move = move == null ? ReplyMove.V1_DEFAULT : move;
         respondsTo = Set.copyOf(respondsTo);
         requiresFacts = Set.copyOf(new TreeSet<>(requiresFacts));
         introducesFacts = Set.copyOf(new TreeSet<>(introducesFacts));
@@ -75,6 +83,37 @@ public record ReplyContract(String question,
             return subject.startsWith(prefix);
         }
         return pattern.equals("*") || pattern.equals(subject);
+    }
+
+    /** True when this reply carries declared v2 metadata rather than the v1 default. */
+    public boolean hasMove() {
+        return move.isDeclared();
+    }
+
+    /**
+     * True when this button is a legal thing to put on a page that declares {@code obligations}.
+     *
+     * <p>An exit always is. Anything else must fulfil one of the obligations the inbound beat made
+     * relevant, or perform a permitted topic move — the §10.3 invariant, checked here so both the
+     * build lint and the runtime guard read the same rule.
+     */
+    public boolean isResponsiveTo(java.util.Set<Obligation> obligations) {
+        if (exit || move.move().isPresent()) {
+            return true;
+        }
+        if (!move.isDeclared()) {
+            // A v1 reply makes no claim either way; v1 routing rules already govern it.
+            return true;
+        }
+        if (obligations == null || obligations.isEmpty()) {
+            return true;
+        }
+        for (Obligation obligation : obligations) {
+            if (move.fulfils(obligation)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** True when the wording carries warmth that a hostile stance would contradict. */
@@ -127,7 +166,16 @@ public record ReplyContract(String question,
             throw new IllegalArgumentException("reply '" + key + "' is an exit and must presuppose nothing");
         }
 
-        return new ReplyContract(question, answer, stance, respondsTo, requires, introduces, tone, outcomes, exit);
+        ReplyMove move = json.has("move") && json.get("move").isJsonObject()
+                ? ReplyMove.fromJson(json.getAsJsonObject("move"), key)
+                : ReplyMove.fromJson(json, key);
+        if (exit && move.hasCommitment()) {
+            throw new IllegalArgumentException("reply '" + key
+                    + "' is an exit and cannot also make a promise");
+        }
+
+        return new ReplyContract(question, answer, stance, respondsTo, requires, introduces, tone,
+                outcomes, exit, move);
     }
 
     private static String requireString(JsonObject json, String field, String key) {
@@ -144,6 +192,6 @@ public record ReplyContract(String question,
     /** A reply that has not been contracted yet, so migration can proceed one node at a time. */
     public static ReplyContract legacyUnverified(String question, String answer) {
         return new ReplyContract(question, answer, StanceFamily.CURIOSITY, Set.of(ANY_BEAT),
-                Set.of(), Set.of(), Tone.PLAIN, Set.of(), false);
+                Set.of(), Set.of(), Tone.PLAIN, Set.of(), false, ReplyMove.V1_DEFAULT);
     }
 }

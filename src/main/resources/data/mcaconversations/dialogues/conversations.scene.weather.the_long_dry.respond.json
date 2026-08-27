@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_well",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "weather.the_long_dry.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.the_dry_spell",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.weather.followup",
+            "say": "conversations.scene.weather.the_long_dry.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "enjoy_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "weather.the_long_dry.open.softened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.the_dry_spell",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.weather.followup",
+            "say": "conversations.scene.weather.the_long_dry.softened"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.scene.weather.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_arithmetic",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.spoiling_store.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.winter_store",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.spoiling_store"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.spoiling_store.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_salt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.spoiling_store.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.butcher.store.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.winter_store",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.spoiling_store",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.spoiling_store",
+              "obligation": "commitment:work.butcher.bring_salt"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.butcher.bring_salt"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.spoiling_store.blocked.accepted",
+              "slots": [
+                "meat"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "suggest_selling_cheap",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.spoiling_store.blocked.resisted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.winter_store",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.spoiling_store"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.spoiling_store.blocked.resisted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.butcher.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

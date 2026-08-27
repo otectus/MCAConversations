@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_the_written_page",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.pressed_for_a_name.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.the_village_fear",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.werewolf_expert.pressed_for_a_name"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.pressed_for_a_name.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.werewolf_expert.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

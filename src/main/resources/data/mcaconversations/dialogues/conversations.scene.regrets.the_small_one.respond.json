@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "say_it_is_fixable",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "regrets.the_small_one.open.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.ordinary",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.regrets.followup",
+            "say": "conversations.scene.regrets.the_small_one.considered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_the_friendship",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "regrets.the_small_one.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.ordinary",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.regrets.followup",
+            "say": "conversations.scene.regrets.the_small_one.explained"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.regrets.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "name_it_work",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.quiet_usefulness.active.named"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.none.quiet_usefulness.named",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.freedom",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.quiet_usefulness",
+              "state": "succeeded"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.none.quiet_usefulness"
+            },
+            "next": "conversations.scene.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.none.quiet_usefulness.active.named",
+              "slots": [
+                "task"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_who_asked",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.quiet_usefulness.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.freedom",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.none.quiet_usefulness"
+            },
+            "next": "conversations.scene.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.none.quiet_usefulness.active.explained",
+              "slots": [
+                "task"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.none.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

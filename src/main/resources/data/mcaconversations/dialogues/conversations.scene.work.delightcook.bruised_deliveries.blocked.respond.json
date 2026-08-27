@@ -1,0 +1,92 @@
+{
+  "answers": [
+    {
+      "name": "offer_produce",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.bruised_deliveries.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightcook.stores.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.stores",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.bruised_deliveries",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.bruised_deliveries",
+              "obligation": "commitment:work.delightcook.bring_potatoes"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.delightcook.bring_potatoes"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.bruised_deliveries.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_refusing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.bruised_deliveries.blocked.resolved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.stores",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.bruised_deliveries"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.bruised_deliveries.blocked.resolved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.delightcook.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

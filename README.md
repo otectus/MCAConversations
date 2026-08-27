@@ -8,11 +8,57 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-> **Since 1.1.0, asking a question is not what earns affection — answering one is.**
+## Features (1.4.0)
+
+> **Since 1.4.0, a villager is somebody in particular.**
+
+- **Two farmers stop being one farmer (new)** — every villager now carries a small set of stable
+  anchors: two things they are interested in, two things they value, a comfort, an aversion, and a
+  way of working, of being sociable, and of opening up. They are generated once from the world seed
+  and the villager's own id, and never rerolled — not on a restart, not when they move, not when a
+  different player talks to them. Two players meet the same person.
+- **Situations that are actually going on (new)** — a librarian has *a specific damaged book*: hers,
+  with a specific kind of damage, and it stays hers until it is dealt with. Ask about her work and
+  she tells you what is wrong with it. Come back and it has dried, or it has not. Two librarians in
+  one village are worrying about two different volumes.
+- **Promises the game can check (new)** — "I can bring you wool" is only ever offered when something
+  in the running game can actually watch for wool arriving. If nothing can, the button says what it
+  honestly means instead. No villager will ever thank you for something you did not do, or accuse
+  you of breaking a promise nothing was watching.
+- **She does not always agree with you (new)** — advise the librarian to save the ink and let the
+  pages warp, and whether she takes it depends on what she values. When she pushes back she names
+  the reason, and you can hold your ground or hand the judgement back to the person who actually
+  knows books.
+- **You cannot shop for a different subject (new)** — closing the screen and reopening it gets you
+  the same conversation. What she raises is decided once, from the world and your shared history,
+  and reopening a window is not a reroll.
+- **Seven more things to ask about (new)** — what she enjoys, what she will not do, how her days
+  run, where she came from, which corner of the village is hers, what she makes of you, and what the
+  two of you have been through. That last one is adult-only and needs time on the clock, because
+  there has to be a history before there is a topic.
+- **A village that is somewhere in particular (new)** — every village draws six things once and
+  keeps them: a tradition, a public value, a shared work worry, a landmark, a festival, and an
+  argument currently going on. Residents do not all agree about them — whether somebody is glad of
+  the frost supper depends on who they already are — and two players walking in from opposite
+  directions find the same place.
+- **News that travels, and can be corrected (new)** — a thing one villager knows can reach the
+  villager next to them. It loses confidence with every telling and never gains detail, a confidence
+  does not become ordinary by being repeated, and what you said about yourself never travels unless
+  you made it public. Because the event keeps its identity through the whole chain, setting the
+  record straight later corrects the actual event rather than one villager's copy of it.
+- **Villagers who know when not to talk to you (new)** — one unprompted conversation per villager
+  per day, nothing at all from somebody asleep, fighting, panicking or busy with another player, and
+  a "stop talking" that is honoured before anything else is even considered.
+- **Somebody else can join in (new, off by default)** — in chat mode, a second villager may
+  corroborate something public, differ about a preference, add a detail only their trade would know,
+  remember a family event differently, or tell the first one that it is not theirs to tell. Three
+  speakers, fixed turn order, and every line has to answer the one before it.
 
 ## Features (1.1.0)
 
-- **Your reply is what shapes the relationship (new)** — asking a villager how their day went used
+> Asking a question is not what earns affection — answering one is.
+
+- **Your reply is what shapes the relationship** — asking a villager how their day went used
   to hand you hearts for the click. It doesn't any more. Now they *answer*, and **you** choose what
   to say back, and that is what lands. Sit with someone's bad day and offer to take something off
   their hands, and you've earned something. Tell them everyone has bad days and then double down

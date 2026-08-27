@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "offer_glass",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.broken_instrument.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.oceanographer.instrument.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.instruments",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.broken_instrument",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.oceanographer.broken_instrument",
+              "obligation": "commitment:work.oceanographer.bring_glass"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.oceanographer.bring_glass"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.broken_instrument.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_the_gap",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.broken_instrument.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.instruments",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.oceanographer.broken_instrument"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.broken_instrument.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.oceanographer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

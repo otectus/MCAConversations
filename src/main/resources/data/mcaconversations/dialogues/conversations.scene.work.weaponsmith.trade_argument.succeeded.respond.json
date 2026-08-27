@@ -1,0 +1,51 @@
+{
+  "answers": [
+    {
+      "name": "note_the_method",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.trade_argument.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.balance",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.weaponsmith.trade_argument"
+            },
+            "next": "conversations.scene.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.weaponsmith.trade_argument.succeeded.acknowledged",
+              "slots": [
+                "other"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.weaponsmith.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

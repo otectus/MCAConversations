@@ -87,6 +87,12 @@ import dev.otectus.mcaconversations.world.WorldQuery;
  *   <li>action {@code conversations_progress_apply: {arc|milestone|exclusive, …}} (or an array) →
  *       moves arc stages, fires one-shot milestones, decides exclusive choices</li>
  * </ul>
+ *
+ * <p>The 1.4.0 living-histories vocabulary — {@code conversations_profile}, {@code conversations_context},
+ * {@code conversations_episode}, {@code conversations_thread}, {@code conversations_commitment},
+ * {@code conversations_claim}, {@code conversations_opinion}, {@code conversations_recent} and
+ * {@code conversations_scene} — is registered by {@link LivingHistoriesRegistrar}, which this class
+ * calls first. See DATAPACK.md for their shapes.
  */
 public final class ConversationsMcaRegistrar {
 
@@ -135,6 +141,11 @@ public final class ConversationsMcaRegistrar {
     }
 
     public static void register() {
+        // The living-histories living-histories vocabulary lives in its own registrar: nine orthogonal entries
+        // covering identity, context, episodes, threads, promises, claims, opinions, recency and the
+        // preselected scene (spec §10.6).
+        LivingHistoriesRegistrar.register();
+
         // --- Conditions (dialogue JSON shares the gift-predicate condition registry) ---
 
         McaHandles.registerCondition("conversations_enabled",
@@ -616,7 +627,13 @@ public final class ConversationsMcaRegistrar {
             case END -> ConversationSessions.endTopic(player.getUUID(), now);
         }
         if (directive.op() != SessionDirective.Op.END) {
-            directive.beat().ifPresent(beatId -> enterBeat(beatId, player, now));
+            directive.beat().ifPresent(beatId -> {
+                enterBeat(beatId, player, now);
+                // A plan that lost its scoring contest inside MCA was never seen, so recency is
+                // stamped here — when the beat actually plays — rather than when the plan was made.
+                dev.otectus.mcaconversations.scene.ConversationPlanner
+                        .onScenePlayed(villager, player, beatId);
+            });
         }
     }
 

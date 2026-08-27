@@ -7,6 +7,7 @@ import dev.otectus.mcaconversations.conversation.BeatContract;
 import dev.otectus.mcaconversations.conversation.Openness;
 import dev.otectus.mcaconversations.conversation.ReplyContract;
 import dev.otectus.mcaconversations.conversation.SignatureBeat;
+import dev.otectus.mcaconversations.conversation.VoiceWeight;
 import dev.otectus.mcaconversations.personality.Personalities;
 
 import org.junit.jupiter.api.DisplayName;
@@ -146,11 +147,15 @@ class ContentCoverageReportTest {
     private static void personalisation(StringBuilder out) throws IOException {
         Set<String> pools = new LinkedHashSet<>();
         Set<String> signature = new TreeSet<>();
+        // A pool spoken by more than one beat takes the highest tier any of them gives it: a line is
+        // as important as the most important place it is used.
+        Map<String, VoiceWeight> tiers = new TreeMap<>();
         for (BeatContract beat : ContentFixture.catalog().beats()) {
             pools.add(beat.say());
             if (SignatureBeat.isSignature(beat)) {
                 signature.add(beat.say());
             }
+            tiers.merge(beat.say(), VoiceWeight.of(beat), (a, b) -> a.weight() >= b.weight() ? a : b);
         }
 
         // Overlays live in their own asset namespaces: assets/mca_dialogue_<personality>/lang/.
@@ -196,6 +201,37 @@ class ContentCoverageReportTest {
         out.append("| Say pools with personality overlays | ").append(overlaid.size())
                 .append(String.format(" (%.1f%%) |", pools.isEmpty() ? 0.0
                         : 100.0 * overlaid.size() / pools.size())).append('\n');
+        // Salience-weighted coverage (spec §15.5). A signature line counts eight times a
+        // farewell, so the number cannot be moved by writing twenty-one voices for
+        // "see you later".
+        long weighted = 0;
+        long weightedCovered = 0;
+        Map<VoiceWeight, int[]> byTier = new java.util.EnumMap<>(VoiceWeight.class);
+        for (String pool : pools) {
+            VoiceWeight tier = tiers.getOrDefault(pool, VoiceWeight.FILLER);
+            weighted += tier.weight();
+            int[] counts = byTier.computeIfAbsent(tier, key -> new int[2]);
+            counts[1]++;
+            if (overlaid.contains(pool)) {
+                weightedCovered += tier.weight();
+                counts[0]++;
+            }
+        }
+        out.append("| Salience-weighted overlay coverage | ")
+                .append(String.format("%.1f%% |", weighted == 0 ? 0.0
+                        : 100.0 * weightedCovered / weighted)).append('\n');
+        out.append('\n');
+
+        out.append("| Voice tier | Weight | Pools | With overlays |\n|---|---:|---:|---:|\n");
+        for (VoiceWeight tier : VoiceWeight.values()) {
+            int[] counts = byTier.getOrDefault(tier, new int[2]);
+            out.append("| ").append(tier.name().toLowerCase(java.util.Locale.ROOT))
+                    .append(" | ").append(tier.weight())
+                    .append(" | ").append(counts[1])
+                    .append(" | ").append(counts[0])
+                    .append(String.format(" (%.1f%%) |", counts[1] == 0 ? 0.0
+                            : 100.0 * counts[0] / counts[1])).append('\n');
+        }
         out.append('\n');
     }
 

@@ -1,9 +1,10 @@
 package dev.otectus.mcaconversations.chat;
 
 import dev.otectus.mcaconversations.McaConversationsConfig;
-import dev.otectus.mcaconversations.chat.ChatModeSession.Session;
 import dev.otectus.mcaconversations.chat.VillagerFinder.VillagerCandidate;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.scene.InitiativeGate;
+import dev.otectus.mcaconversations.scene.ScenePurpose;
 import dev.otectus.mcaconversations.state.MemoryIds;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,7 +12,6 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,7 +76,6 @@ public final class GreetOnApproach {
             return;
         }
 
-        Session session = ChatModeSession.peek(player.getUUID());
         double baseChance = McaConversationsConfig.COMMON.chatModeGreetChance.get();
         long gameDay = now / 24000L;
 
@@ -84,9 +83,6 @@ public final class GreetOnApproach {
         for (VillagerCandidate c : candidates) { // already nearest-first
             if (!entered.contains(c.entity().getUUID())) {
                 continue;
-            }
-            if (session != null && session.isMuted(c.entity().getUUID(), now)) {
-                continue; // this pairing was told "stop talking" — no proactive greeting either
             }
             String memoryId = MemoryIds.playerScoped(GREET_MEMORY, player.getUUID());
             if (McaCompat.hasMemory(c.entity(), memoryId)) {
@@ -96,11 +92,16 @@ public final class GreetOnApproach {
             if (!rollGreet(c.entity().getUUID(), player.getUUID(), gameDay, baseChance * weight)) {
                 continue; // not the greeting type today — no memory spent, tomorrow re-rolls
             }
-            Optional<UUID> interacting = McaCompat.isInteractingWith(c.entity());
-            if (interacting.isPresent() && !interacting.get().equals(player.getUUID())) {
-                continue; // busy in another player's GUI
+            // Mute, what the villager is in the middle of, and the short real-time cooldown are
+            // all one policy and live in one place. A hail is a bark rather than a full initiative,
+            // so it does not spend the day's one chance to raise something that needs an answer.
+            if (InitiativeGate.decide(c.entity(), player, ScenePurpose.GREETING, false,
+                    InitiativeGate.Weight.BARK, gameDay, now).refused()) {
+                continue;
             }
             ChatModeDispatcher.proactiveGreet(c, player, now);
+            InitiativeGate.record(c.entity(), player, ScenePurpose.GREETING,
+                    InitiativeGate.Weight.BARK, gameDay, now);
             McaCompat.remember(c.entity(), memoryId, GREET_MEMORY_TICKS);
             return;
         }

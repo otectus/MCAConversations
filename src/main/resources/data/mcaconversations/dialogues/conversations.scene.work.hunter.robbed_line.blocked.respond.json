@@ -1,0 +1,95 @@
+{
+  "answers": [
+    {
+      "name": "offer_string",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.robbed_line.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter.line.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.the_long_walk",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.robbed_line",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter.robbed_line",
+              "obligation": "commitment:work.hunter.bring_string"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.hunter.bring_string"
+            },
+            "next": "conversations.scene.work.hunter.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter.robbed_line.blocked.accepted",
+              "slots": [
+                "line"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_watching",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.robbed_line.blocked.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.the_long_walk",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter.robbed_line"
+            },
+            "next": "conversations.scene.work.hunter.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter.robbed_line.blocked.considered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.hunter.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

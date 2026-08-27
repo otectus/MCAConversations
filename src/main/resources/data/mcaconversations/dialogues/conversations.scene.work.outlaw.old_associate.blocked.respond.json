@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_they_want",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.old_associate.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.old_business",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.outlaw.old_associate"
+            },
+            "next": "conversations.scene.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.outlaw.old_associate.blocked.explained",
+              "slots": [
+                "visitor"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_telling_someone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.old_associate.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.outlaw.visitor.declared",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.old_business",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.outlaw.old_associate"
+            },
+            "next": "conversations.scene.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.outlaw.old_associate.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.outlaw.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

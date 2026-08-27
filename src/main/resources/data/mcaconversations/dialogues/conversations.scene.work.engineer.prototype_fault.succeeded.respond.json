@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_fix",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.prototype_fault.succeeded.taught"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.prototypes",
+              "deltas": {
+                "familiarity": 3,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.engineer.prototype_fault"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.prototype_fault.succeeded.taught",
+              "slots": [
+                "device"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "credit_persistence",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.prototype_fault.succeeded.credited"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.engineer.prototype_fault.credit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.prototypes",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.engineer.prototype_fault"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.prototype_fault.succeeded.credited"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.engineer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

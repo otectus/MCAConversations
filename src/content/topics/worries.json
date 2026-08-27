@@ -1,0 +1,340 @@
+{
+  "_comment": [
+    "Worries, entered from the us page, gated on trust and on the hour.",
+    "",
+    "A worry is not a fear: a fear is about the world and a worry is about a specific thing that is",
+    "probably fine. One scene is the practical one; the other only comes out late and to somebody who",
+    "has earned it."
+  ],
+  "topic": "worries",
+  "entry": {
+    "question": "conversations.us",
+    "answer": "worries"
+  },
+  "return_question": "conversations.us",
+  "leave_lines": {
+    "en": [
+      "It is probably nothing.",
+      "Right. It will keep until morning.",
+      "Enough of that."
+    ],
+    "pt": [
+      "Provavelmente não é nada.",
+      "Certo. Isso espera até de manhã.",
+      "Chega disso."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thanks for saying.",
+    "pt": "Obrigado por dizer."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else on your mind?",
+      "pt": "Mais alguma coisa te preocupando?"
+    },
+    "leave": {
+      "en": "We'll leave it there.",
+      "pt": "Vamos deixar assim."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_practical_one",
+      "subject": "worries.practical",
+      "shape": "problem_solve",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "What's on your mind?",
+        "pt": "O que está te preocupando?"
+      },
+      "lines": {
+        "en": [
+          "A thing that is probably fine and that I have checked four times, which tells you it is not about the thing.",
+          "Money, in the ordinary way. Not a crisis. Just the arithmetic being tighter than I would like for a season.",
+          "I am waiting on somebody else's decision and I hate that more than I would hate a bad answer."
+        ],
+        "pt": [
+          "Uma coisa que provavelmente está bem e que eu conferi quatro vezes, o que já mostra que não é sobre a coisa.",
+          "Dinheiro, do jeito comum. Não é crise. Só a conta mais apertada do que eu gostaria por uma estação.",
+          "Estou esperando a decisão de outra pessoa e eu odeio isso mais do que odiaria uma resposta ruim."
+        ]
+      },
+      "replies": [
+        {
+          "name": "offer_something_useful",
+          "stance": "practical_help",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Tell me what would actually help.",
+            "pt": "Diga o que de fato ajudaria."
+          },
+          "phrases": [
+            "tell me what would actually help",
+            "what would be useful to you"
+          ],
+          "requires_any": [
+            "help",
+            "useful"
+          ],
+          "disposition": {
+            "trust": 3,
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.worries.offered",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "Ask me about it again on Thursday. That is genuinely the whole of it and it is the thing nobody thinks to offer.",
+                "Two hours of somebody else's hands on the Saturday. Nothing else. I have costed this out carefully.",
+                "You already did it by asking that instead of telling me it will be fine. It might not be fine and I know that."
+              ],
+              "pt": [
+                "Me pergunte de novo na quinta. É genuinamente tudo, e é a coisa que ninguém pensa em oferecer.",
+                "Duas horas das mãos de outra pessoa no sábado. Nada mais. Já fiz essa conta com cuidado.",
+                "Você já ajudou perguntando isso em vez de dizer que vai ficar tudo bem. Pode não ficar, e eu sei disso."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_the_worst_is",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's the worst case?",
+            "pt": "Qual é o pior caso?"
+          },
+          "phrases": [
+            "what is the worst case",
+            "how bad could it get"
+          ],
+          "requires_any": [
+            "worst",
+            "bad"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "A hard winter and asking for help, and the asking is the part I have been treating as the disaster.",
+                "Said out loud it is smaller than it is at three in the morning. That happens every time and I forget every time.",
+                "I do not know, which is exactly why it has been running around my head instead of sitting down on a list."
+              ],
+              "pt": [
+                "Um inverno duro e pedir ajuda, e o pedir é a parte que eu venho tratando como o desastre.",
+                "Dito em voz alta é menor do que é às três da manhã. Acontece toda vez e eu esqueço toda vez.",
+                "Eu não sei, que é exatamente por que isso vem correndo pela minha cabeça em vez de sentar numa lista."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_late_one",
+      "subject": "worries.private",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "night"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The one you don't say in daylight.",
+        "pt": "A que você não diz de dia."
+      },
+      "lines": {
+        "en": [
+          "I worry about somebody who is fine, constantly, and I have never told them and I am not going to.",
+          "There is a thing I check on that does not need checking on, three times a week, and I have started walking a longer way to do it.",
+          "It is about a person, and it is not about anything they have done, and that is why it will not go anywhere."
+        ],
+        "pt": [
+          "Eu me preocupo constantemente com alguém que está bem, e nunca contei a essa pessoa e não vou contar.",
+          "Existe uma coisa que eu confiro e que não precisa ser conferida, três vezes por semana, e passei a dar uma volta maior para fazer isso.",
+          "É sobre uma pessoa, e não é sobre nada que ela tenha feito, e é por isso que não vai a lugar nenhum."
+        ]
+      },
+      "replies": [
+        {
+          "name": "hold_it_with_them",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is a lot to carry by yourself.",
+            "pt": "É muita coisa para carregar por conta própria."
+          },
+          "phrases": [
+            "that is a lot to carry alone",
+            "carrying that by yourself is hard"
+          ],
+          "requires_any": [
+            "carry",
+            "carrying",
+            "yourself"
+          ],
+          "disposition": {
+            "trust": 4,
+            "warmth": 4
+          },
+          "affection": {
+            "decision": "topic.worries.held",
+            "delta": 3,
+            "budget": "generous",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It is, and it is mine to carry, and there is a difference between help and company and I only ever wanted the second.",
+                "Thank you. Now two people know it exists, and the person it is about still gets to be untroubled by it, which was the whole design.",
+                "I have said it once before and the person told the person. I would like it noted that I said it anyway, to you, tonight."
+              ],
+              "pt": [
+                "É, e é minha para carregar, e existe diferença entre ajuda e companhia, e eu só quis a segunda.",
+                "Obrigada. Agora duas pessoas sabem que isso existe, e a pessoa de quem se trata continua sem ser incomodada, que era o desenho inteiro.",
+                "Já disse uma vez antes e a pessoa contou à pessoa. Gostaria que ficasse registrado que eu disse mesmo assim, a você, hoje."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_if_saying_would_help",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would telling them help?",
+            "pt": "Contar a eles ajudaria?"
+          },
+          "phrases": [
+            "would telling them help",
+            "should they know about it"
+          ],
+          "requires_any": [
+            "telling",
+            "know"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "considered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It would help me and cost them, and that trade is the exact reason I have not made it in four years.",
+                "They would be careful with me afterwards. I have watched that happen to somebody else and I would rather have the worry.",
+                "Perhaps. I have gone round that eleven times and landed in the same place, and I keep going round it anyway."
+              ],
+              "pt": [
+                "Ajudaria a mim e custaria a eles, e é exatamente essa troca que eu não fiz em quatro anos.",
+                "Iam passar a ter cuidado comigo depois. Já vi isso acontecer com outra pessoa e eu prefiro ficar com a preocupação.",
+                "Talvez. Já dei essa volta onze vezes e cheguei no mesmo lugar, e continuo dando a volta assim mesmo."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

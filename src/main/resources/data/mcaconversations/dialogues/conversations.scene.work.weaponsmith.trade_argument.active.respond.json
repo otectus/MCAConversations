@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "ask_who_is_right",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.trade_argument.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.balance",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.weaponsmith.trade_argument"
+            },
+            "next": "conversations.scene.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.weaponsmith.trade_argument.active.explained",
+              "slots": [
+                "other"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_the_test",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.trade_argument.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.balance",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.weaponsmith.trade_argument"
+            },
+            "next": "conversations.scene.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.weaponsmith.trade_argument.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.weaponsmith.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

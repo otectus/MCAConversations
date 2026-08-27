@@ -1,0 +1,127 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_cost",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.stalled_commission.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.materials",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.armorer.stalled_commission"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.stalled_commission.blocked.explained",
+              "slots": [
+                "piece"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_iron",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.stalled_commission.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.armorer.commission.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.materials",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.stalled_commission",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.armorer.stalled_commission",
+              "obligation": "commitment:work.armorer.bring_iron"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.armorer.bring_iron"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.stalled_commission.blocked.accepted",
+              "slots": [
+                "piece"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_telling_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.stalled_commission.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.materials",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.armorer.stalled_commission"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.stalled_commission.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.armorer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

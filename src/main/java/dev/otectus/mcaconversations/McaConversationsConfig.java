@@ -50,8 +50,44 @@ public final class McaConversationsConfig {
             case "branching" -> COMMON.enableBranching.get();
             case "chat" -> COMMON.enableChatMode.get();
             case "townstead" -> COMMON.townsteadEnabled.get();
+            // Living-histories features. Each is gated by the master switch as well as its own, so
+            // dynamic.enabled=false silences the whole layer without touching seven other flags.
+            case "dynamic" -> COMMON.dynamicEnabled.get();
+            case "identity" -> COMMON.dynamicEnabled.get() && COMMON.identityEnabled.get();
+            case "episodes" -> COMMON.dynamicEnabled.get() && COMMON.episodesEnabled.get()
+                    && COMMON.historyEnabled.get();
+            case "history" -> COMMON.historyEnabled.get();
+            case "social_opinions" -> COMMON.dynamicEnabled.get() && COMMON.socialOpinionsEnabled.get();
+            case "village_culture" -> COMMON.dynamicEnabled.get() && COMMON.villageCultureEnabled.get();
+            case "group" -> COMMON.dynamicEnabled.get() && COMMON.groupEnabled.get();
             default -> true;
         };
+    }
+
+    /**
+     * Reads a living-histories feature switch without ever throwing.
+     *
+     * <p>{@link #isFeatureEnabled} is called from dialogue conditions, where a config read happens
+     * inside MCA's selection loop and a config that has not loaded yet (a datapack reload during world
+     * creation) would otherwise propagate. This wrapper answers {@code fallback} in that window rather
+     * than taking the reload with it.
+     */
+    public static boolean dynamicFeature(String feature, boolean fallback) {
+        try {
+            return isFeatureEnabled(feature);
+        } catch (Throwable t) {
+            return fallback;
+        }
+    }
+
+    /** An int from the living-histories sections, with the same never-throw contract. */
+    public static int dynamicInt(ForgeConfigSpec.IntValue value, int fallback) {
+        try {
+            Integer current = value.get();
+            return current == null ? fallback : current;
+        } catch (Throwable t) {
+            return fallback;
+        }
     }
 
     /**
@@ -158,6 +194,29 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.IntValue townsteadNeedCrisisCooldownDays;
         public final ForgeConfigSpec.IntValue townsteadBuildingRemovalConfirmScans;
         public final ForgeConfigSpec.BooleanValue townsteadDebug;
+
+        // --- Living histories (spec §22.5) ---------------------------------------------------------
+        public final ForgeConfigSpec.BooleanValue dynamicEnabled;
+        public final ForgeConfigSpec.BooleanValue identityEnabled;
+        public final ForgeConfigSpec.BooleanValue episodesEnabled;
+        public final ForgeConfigSpec.BooleanValue socialOpinionsEnabled;
+        public final ForgeConfigSpec.BooleanValue villageCultureEnabled;
+        public final ForgeConfigSpec.IntValue maxInitiativesPerVillagerPlayerDay;
+        public final ForgeConfigSpec.IntValue dynamicTopicSlots;
+        public final ForgeConfigSpec.BooleanValue debugDirector;
+
+        public final ForgeConfigSpec.BooleanValue historyEnabled;
+        public final ForgeConfigSpec.IntValue episodeRetentionDays;
+        public final ForgeConfigSpec.IntValue resolvedEpisodeCap;
+        public final ForgeConfigSpec.IntValue activeEpisodeCap;
+        public final ForgeConfigSpec.IntValue openThreadCapPerPair;
+        public final ForgeConfigSpec.IntValue commitmentCapPerPair;
+        public final ForgeConfigSpec.IntValue playerClaimCapPerPair;
+        public final ForgeConfigSpec.IntValue socialEdgeCapPerVillager;
+        public final ForgeConfigSpec.IntValue topicRecencyCapPerPair;
+
+        public final ForgeConfigSpec.BooleanValue groupEnabled;
+        public final ForgeConfigSpec.IntValue groupMaxSpeakers;
 
         public final ForgeConfigSpec.BooleanValue debugLogging;
 
@@ -509,6 +568,100 @@ public final class McaConversationsConfig {
                     .defineInRange("buildingRemovalConfirmScans", 2, 1, 10);
             townsteadDebug = b.comment("Verbose logging for Townstead binding, context reads and reactions.")
                     .define("debug", false);
+            b.pop();
+
+            // --- Living histories -------------------------------------------------------------------
+            //
+            // Every switch here has an OFF state that reproduces 1.4.0 behaviour exactly, because the
+            // whole layer is additive: with dynamic.enabled=false the complete 1.4.0 corpus is selected
+            // by the same static routers it always was, and nothing new is read, written or generated
+            // (spec §22.5). The caps below may be lowered but never raised past the hard limits the
+            // stores enforce for themselves.
+            b.push("dynamic");
+            dynamicEnabled = b.comment(
+                    "Master switch for the living-histories layer: stable villager identity,",
+                    "typed episodes and threads, and the conversation director that chooses which authored",
+                    "scene fits this villager, on this day, after this history.",
+                    "When false, topics are selected exactly as in 1.4.0 and no new state is read or written.")
+                    .define("enabled", true);
+            identityEnabled = b.comment(
+                    "Give each villager a small set of stable anchors - two interests, two values, a comfort,",
+                    "an aversion, and a work, social and disclosure style - generated once from the world seed",
+                    "and their UUID, then never rerolled. This is what makes two farmers different people.",
+                    "When false, no profile is generated or persisted and scene selection is identity-neutral.")
+                    .define("identityEnabled", true);
+            episodesEnabled = b.comment(
+                    "Let villagers carry concrete situations between conversations - a damaged book, a wet",
+                    "field, a repair that is still blocked - with real states that change and can be resumed.",
+                    "When false, only evergreen scenes are selected and no commitment is ever created.")
+                    .define("episodesEnabled", true);
+            socialOpinionsEnabled = b.comment(
+                    "Allow bounded, caused opinions of named neighbours ('Tomas was late, twice').",
+                    "Never a full resident-by-resident graph: an edge needs a family tie, shared work or an",
+                    "observed event. When false, only MCA's authoritative family and village relations are used.")
+                    .define("socialOpinionsEnabled", true);
+            villageCultureEnabled = b.comment(
+                    "Give each village a few shared tokens - a tradition, a public value, a current debate -",
+                    "that its residents can agree or disagree about. When false, villages have no culture and",
+                    "residents speak only for themselves.")
+                    .define("villageCultureEnabled", true);
+            maxInitiativesPerVillagerPlayerDay = b.comment(
+                    "How many times a day one villager may open a conversation with one player unprompted.",
+                    "Urgent acute-state lines and genuine episode state changes may still bypass this, but",
+                    "never the short real-time cooldown. 0 disables villager initiative entirely.")
+                    .defineInRange("maxInitiativesPerVillagerPlayerDay", 1, 0, 8);
+            dynamicTopicSlots = b.comment(
+                    "How many context-specific entries may appear above the six fixed hub categories",
+                    "(Continue..., What's on your mind?, Ask about...). 0 keeps the 1.4.0 hub exactly.")
+                    .defineInRange("dynamicTopicSlots", 3, 0, 3);
+            debugDirector = b.comment(
+                    "Log why each scene was chosen: candidate counts, every non-zero score term, the",
+                    "rejected finalists and the decisive reason each was dropped. Verbose; for authoring.")
+                    .define("debugDirector", false);
+            b.pop();
+
+            b.push("history");
+            historyEnabled = b.comment(
+                    "Persist typed episodes, shared threads, trackable commitments, player claims and social",
+                    "opinions to data/mcaconversations_history.dat. When false, nothing new is written and the",
+                    "1.4.0 arcs, milestones, affection budgets and disposition vectors are untouched.")
+                    .define("enabled", true);
+            episodeRetentionDays = b.comment(
+                    "How many in-game days a resolved episode stays available for callbacks before it is",
+                    "compressed to a milestone token and pruned.")
+                    .defineInRange("episodeRetentionDays", 32, 1, 365);
+            activeEpisodeCap = b.comment(
+                    "Most simultaneously active or blocked episodes one villager may carry. Beyond this the",
+                    "lowest-salience one is abandoned; an episode a live thread references is never pruned.")
+                    .defineInRange("activeEpisodeCap", 6, 1, 32);
+            resolvedEpisodeCap = b.comment("Most resolved episodes one villager keeps as remembered history.")
+                    .defineInRange("resolvedEpisodeCap", 24, 1, 128);
+            openThreadCapPerPair = b.comment(
+                    "Most open conversation threads between one villager and one player. Only the highest",
+                    "priority item in each category is ever offered, so this is a storage bound, not a menu size.")
+                    .defineInRange("openThreadCapPerPair", 8, 1, 32);
+            commitmentCapPerPair = b.comment("Most tracked promises between one villager and one player.")
+                    .defineInRange("commitmentCapPerPair", 8, 1, 32);
+            playerClaimCapPerPair = b.comment(
+                    "Most things a player has explicitly told one villager about themselves that are remembered.")
+                    .defineInRange("playerClaimCapPerPair", 16, 1, 64);
+            socialEdgeCapPerVillager = b.comment(
+                    "Most explicit opinions one villager may hold about named neighbours.")
+                    .defineInRange("socialEdgeCapPerVillager", 16, 1, 64);
+            topicRecencyCapPerPair = b.comment(
+                    "How many recent scenes, subjects and rhetorical shapes are remembered per pair for",
+                    "repetition suppression.")
+                    .defineInRange("topicRecencyCapPerPair", 32, 4, 128);
+            b.pop();
+
+            b.push("group");
+            groupEnabled = b.comment(
+                    "Allow a second and third villager to join a conversation with a contracted interjection.",
+                    "Off by default: group scenes are chat-mode only for now and every interjection must",
+                    "answer the line before it and have a real reason to know what it says.")
+                    .define("enabled", false);
+            groupMaxSpeakers = b.comment("Hard cap on speakers in one group scene, including the lead villager.")
+                    .defineInRange("maxSpeakers", 3, 2, 3);
             b.pop();
 
             b.push("debug");

@@ -1,0 +1,64 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_small_things",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.quiet_week.open.obliged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.nothing_much",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.news.followup",
+            "say": "conversations.scene.news.quiet_week.obliged"
+          }
+        }
+      ]
+    },
+    {
+      "name": "appreciate_the_quiet",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.quiet_week.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.nothing_much",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.news.followup",
+            "say": "conversations.scene.news.quiet_week.agreed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "say": "conversations.scene.news.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_she_wants_to_know",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.returned_blade.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.edges",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.weaponsmith.returned_blade"
+            },
+            "next": "conversations.scene.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.weaponsmith.returned_blade.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_iron",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.returned_blade.active.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.weaponsmith.blade.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.edges",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.returned_blade",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.weaponsmith.returned_blade",
+              "obligation": "commitment:work.weaponsmith.bring_iron"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.weaponsmith.bring_iron"
+            },
+            "next": "conversations.scene.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.weaponsmith.returned_blade.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.weaponsmith.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

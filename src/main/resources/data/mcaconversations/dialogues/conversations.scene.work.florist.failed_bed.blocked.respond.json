@@ -1,0 +1,126 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_recoverable",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.failed_bed.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.the_beds",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.florist.failed_bed"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.failed_bed.blocked.explained",
+              "slots": [
+                "bed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_bonemeal",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.failed_bed.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.florist.bed.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.the_beds",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.failed_bed",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.florist.failed_bed",
+              "obligation": "commitment:work.florist.bring_bonemeal"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.florist.bring_bonemeal"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.failed_bed.blocked.accepted",
+              "slots": [
+                "bed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_telling_the_orders",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.failed_bed.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.the_beds",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.florist.failed_bed"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.failed_bed.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.florist.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

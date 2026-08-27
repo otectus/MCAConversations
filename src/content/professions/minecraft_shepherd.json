@@ -1,0 +1,879 @@
+{
+  "_comment": [
+    "Shepherd. Long hours, few people, and animals that are not pets.",
+    "",
+    "The §12.4 anchors are the flock, lambing, the dog, the high pasture, shearing and predators. These",
+    "three take a lambing that is going badly, a dog getting too old for the hill, and a stretch of",
+    "fence nobody will help her mend.",
+    "",
+    "The shepherd's voice is shaped by solitude: she talks in long, unhurried sentences because she has",
+    "had nobody to interrupt her, and she is matter-of-fact about death in a way that startles people",
+    "who keep chickens and think they understand."
+  ],
+  "profession": "minecraft:shepherd",
+  "id": "shepherd",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_flock",
+    "lambing",
+    "the_dog",
+    "high_pasture",
+    "shearing",
+    "predators"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the flock.",
+    "pt": "Vou deixar você voltar ao rebanho."
+  },
+  "slot_lang": {
+    "she_a_ewe_with_twins": {
+      "en": "a ewe with twins",
+      "pt": "uma ovelha com gêmeos"
+    },
+    "she_a_first_time_mother": {
+      "en": "a first-time mother",
+      "pt": "uma mãe de primeira cria"
+    },
+    "she_three_at_once": {
+      "en": "three at once",
+      "pt": "três de uma vez"
+    },
+    "she_a_cold_snap": {
+      "en": "a cold snap",
+      "pt": "uma onda de frio"
+    },
+    "she_no_shelter_up_there": {
+      "en": "no shelter up on the top field",
+      "pt": "nenhum abrigo lá no campo alto"
+    },
+    "she_two_nights_without_sleep": {
+      "en": "two nights without sleep",
+      "pt": "duas noites sem dormir"
+    },
+    "she_the_top_fence": {
+      "en": "the top fence",
+      "pt": "a cerca de cima"
+    },
+    "she_the_beck_crossing": {
+      "en": "the beck crossing",
+      "pt": "a passagem do riacho"
+    },
+    "she_the_old_wall": {
+      "en": "the old wall",
+      "pt": "o muro velho"
+    },
+    "she_a_stiff_hip": {
+      "en": "a stiff hip",
+      "pt": "um quadril duro"
+    },
+    "she_a_slower_turn": {
+      "en": "a slower turn on the hill",
+      "pt": "uma virada mais lenta na encosta"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.hard_lambing",
+      "subject": "work.shepherd.lambing",
+      "initial_state": "blocked",
+      "salience": 62,
+      "due_after_days": 3,
+      "expires_after_days": 20,
+      "slots": {
+        "ewe": [
+          "she_a_ewe_with_twins",
+          "she_a_first_time_mother",
+          "she_three_at_once"
+        ],
+        "trouble": [
+          "she_a_cold_snap",
+          "she_no_shelter_up_there",
+          "she_two_nights_without_sleep"
+        ]
+      },
+      "commitment": {
+        "id": "work.shepherd.bring_wool",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:white_wool",
+        "due_after_days": 2
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "ewe",
+            "trouble"
+          ],
+          "identity_values": [
+            "duty",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The lambing.",
+            "pt": "A parição."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s in trouble and %3$s on top of it, and I am running out of hands and hours at the same rate.",
+              "%3$s. %2$s would be manageable on its own and the two together are how you lose a whole night and half a flock.",
+              "%2$s needs watching and I need sleeping, and one of those is going to lose. It is not going to be %2$s."
+            ],
+            "pt": [
+              "Tenho %2$s com problema e %3$s por cima, e estou ficando sem mãos e sem horas no mesmo ritmo.",
+              "%3$s. %2$s sozinha seria administrável, e as duas juntas são como se perde uma noite inteira e metade do rebanho.",
+              "%2$s precisa de vigia e eu preciso de sono, e um dos dois vai perder. Não vai ser %2$s."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_goes_wrong",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What actually goes wrong?",
+                "pt": "O que de fato dá errado?"
+              },
+              "phrases": [
+                "what actually goes wrong",
+                "what is the danger for them"
+              ],
+              "requires_any": [
+                "wrong",
+                "danger"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Cold, mostly. A lamb that is wet and small has about twenty minutes, and twenty minutes is exactly how long it takes me to walk the top field.",
+                    "The mother turns away from one of the twins. There is no reason and no cure and you either see it happen or you find out at dawn.",
+                    "Nothing dramatic. That is what people never understand — it is not wolves. It is weather and timing and being one person."
+                  ],
+                  "pt": [
+                    "Frio, principalmente. Um cordeiro molhado e pequeno tem uns vinte minutos, e vinte minutos é exatamente o que leva para eu atravessar o campo alto.",
+                    "A mãe rejeita um dos gêmeos. Não há motivo nem cura, e ou você vê acontecer ou descobre ao amanhecer.",
+                    "Nada dramático. É isso que as pessoas nunca entendem — não são lobos. É clima, é hora, e é ser uma pessoa só."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_wool",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring wool to keep them warm.",
+                "pt": "Vou trazer lã para aquecê-los."
+              },
+              "phrases": [
+                "i can bring wool to keep them warm",
+                "let me fetch wool for the lambs"
+              ],
+              "requires_any": [
+                "wool"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.shepherd.lambing.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "ewe"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s has a chance, and so does the small one, and I get to lie down for three hours.",
+                    "Bring it to the fold rather than the house. I will be at the fold. I have been at the fold since Sunday.",
+                    "Yes. And come and see them in a week, because you will have earned the look of them standing up."
+                  ],
+                  "pt": [
+                    "Então %2$s tem chance, e o pequeno também, e eu consigo deitar por três horas.",
+                    "Traga ao aprisco, não à casa. Vou estar no aprisco. Estou no aprisco desde domingo.",
+                    "Sim. E venha vê-los daqui a uma semana, porque você vai ter merecido a visão deles de pé."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_asking_for_hands",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Ask the village for a night's help.",
+                "pt": "Peça ajuda à vila por uma noite."
+              },
+              "phrases": [
+                "ask the village for a night of help",
+                "get somebody to share the night watch"
+              ],
+              "requires_any": [
+                "village",
+                "share",
+                "watch"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "I could. I have not, in nine years, and I could not tell you why in a way that would sound sensible out loud.",
+                    "Two people would halve it. I know that. The difficulty is that asking makes the flock everybody's business, and then everybody has opinions.",
+                    "You are right and I will ask the baker's lad, who is up before dawn anyway and who has never once made it awkward."
+                  ],
+                  "pt": [
+                    "Poderia. Não pedi em nove anos, e eu não saberia explicar por quê de um jeito que soasse sensato em voz alta.",
+                    "Duas pessoas cortariam pela metade. Eu sei. A dificuldade é que pedir torna o rebanho assunto de todo mundo, e aí todo mundo tem opinião.",
+                    "Você tem razão e eu vou pedir ao rapaz do padeiro, que já acorda antes do sol e nunca deixou a situação constrangedora."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "ewe"
+          ],
+          "prompt": {
+            "en": "The lambing, after.",
+            "pt": "A parição, depois."
+          },
+          "lines": {
+            "en": [
+              "%2$s came through and both lambs are up. I lost two elsewhere and I am counting this as a good year.",
+              "It is over. Nine nights. I slept for eleven hours and woke up in the same position I fell asleep in.",
+              "The small one from %2$s is the strongest of the lot now, which happens about a third of the time and never stops being a surprise."
+            ],
+            "pt": [
+              "%2$s superou e os dois cordeiros estão de pé. Perdi dois em outro lugar e estou contando este como um ano bom.",
+              "Acabou. Nove noites. Dormi onze horas e acordei na mesma posição em que peguei no sono.",
+              "O pequeno de %2$s é o mais forte de todos agora, o que acontece em um terço das vezes e nunca deixa de surpreender."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_losses",
+              "stance": "empathy",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you take the ones you lose?",
+                "pt": "Como você encara os que perde?"
+              },
+              "phrases": [
+                "how do you take the ones you lose",
+                "what do the losses do to you"
+              ],
+              "requires_any": [
+                "lose",
+                "losses"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Badly for one evening, and then not at all. That is not coldness. It is the only way to be any use to the rest of them in the morning.",
+                    "I bury them and I write the date. Nine years of dates. I have never read the list back and I would not stop keeping it.",
+                    "People expect me to be hardened. I am not hardened. I am busy, and busy is what hardened looks like from outside."
+                  ],
+                  "pt": [
+                    "Mal por uma noite, e depois nada. Não é frieza. É a única forma de servir para alguma coisa para os outros de manhã.",
+                    "Eu enterro e anoto a data. Nove anos de datas. Nunca reli a lista e não deixaria de mantê-la.",
+                    "As pessoas esperam que eu esteja endurecida. Não estou endurecida. Estou ocupada, e ocupada é como endurecida parece de fora."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.old_dog",
+      "subject": "work.shepherd.the_dog",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "sign": [
+          "she_a_stiff_hip",
+          "she_a_slower_turn"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "sign"
+          ],
+          "identity_values": [
+            "mercy",
+            "fairness",
+            "tradition"
+          ],
+          "prompt": {
+            "en": "The dog.",
+            "pt": "O cachorro."
+          },
+          "lines": {
+            "en": [
+              "She has %2$s and she still goes up the hill, because I ask her to and she has never once said no.",
+              "%2$s. Eleven years old. Every morning I decide whether today is the day I leave her at the gate, and every morning she is already at the gate ahead of me.",
+              "The flock is fine. It is the dog. %2$s means she has about a season of the top field left in her and she does not know it."
+            ],
+            "pt": [
+              "Ela tem %2$s e ainda sobe a encosta, porque eu peço e ela nunca disse não uma vez sequer.",
+              "%2$s. Onze anos. Toda manhã eu decido se hoje é o dia de deixá-la no portão, e toda manhã ela já está no portão antes de mim.",
+              "O rebanho está bem. É a cadela. %2$s quer dizer que resta a ela uma estação de campo alto, e ela não sabe."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_will_do",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What will you do about it?",
+                "pt": "O que você vai fazer?"
+              },
+              "phrases": [
+                "what will you do about it",
+                "how will you handle that"
+              ],
+              "requires_any": [
+                "handle",
+                "about"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Take a young one up and leave her the low field. She will hate it and she will be alive in three years, and I have to be the one who chooses.",
+                    "Shorter days first. Then the low field. Then the doorstep. It is a staircase and I know every step of it because I have been down it before.",
+                    "Nothing yet, which is the wrong answer and the true one. I am waiting for a morning when she does not get up first."
+                  ],
+                  "pt": [
+                    "Levar uma jovem para cima e deixar a ela o campo baixo. Ela vai odiar e vai estar viva daqui a três anos, e sou eu que tenho que escolher.",
+                    "Dias mais curtos primeiro. Depois o campo baixo. Depois a soleira. É uma escada e eu conheço cada degrau porque já desci antes.",
+                    "Nada ainda, que é a resposta errada e a verdadeira. Estou esperando uma manhã em que ela não se levante primeiro."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_she_knows_best",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "She's had a good working life.",
+                "pt": "Ela teve uma boa vida de trabalho."
+              },
+              "phrases": [
+                "she has had a good working life",
+                "eleven years of good work is a lot"
+              ],
+              "requires_any": [
+                "working",
+                "life",
+                "eleven"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "She has had the best working life a dog can have, and that is exactly why the ending has to be done properly.",
+                    "Thank you. Nobody who keeps a dog in a house understands what she is. She is not a pet and she is not a tool, and there is no third word.",
+                    "She would have been miserable anywhere else. That is the thing I hold on to on the mornings I feel like a monster for asking her up the hill."
+                  ],
+                  "pt": [
+                    "Teve a melhor vida de trabalho que uma cadela pode ter, e é exatamente por isso que o fim precisa ser bem feito.",
+                    "Obrigada. Ninguém que tem cachorro dentro de casa entende o que ela é. Não é bicho de estimação e não é ferramenta, e não existe uma terceira palavra.",
+                    "Ela teria sido infeliz em qualquer outro lugar. É nisso que eu me seguro nas manhãs em que me sinto um monstro por pedir que ela suba."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_the_young_one",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Start training the young one now.",
+                "pt": "Comece a treinar a jovem agora."
+              },
+              "phrases": [
+                "start training the young one now",
+                "bring on a younger dog this season"
+              ],
+              "requires_any": [
+                "training",
+                "younger",
+                "young"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "While she can still teach. That is the argument I have been avoiding, because it is the good one.",
+                    "Yes. And she will train it better than I can, and she will know exactly what she is doing, and that is the part I cannot think about for long.",
+                    "This season, then. It gives her a job that is not the hill, and a dog with a job is a different animal from a dog on a doorstep."
+                  ],
+                  "pt": [
+                    "Enquanto ela ainda pode ensinar. É o argumento que eu venho evitando, porque é o bom.",
+                    "Sim. E ela vai treinar melhor do que eu, e vai saber exatamente o que está fazendo, e essa é a parte em que eu não consigo pensar por muito tempo.",
+                    "Nesta estação, então. Dá a ela um trabalho que não é a encosta, e uma cadela com trabalho é outro animal, diferente de uma cadela na soleira."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "Your dog.",
+            "pt": "Sua cadela."
+          },
+          "lines": {
+            "en": [
+              "She has a pup to teach and she has taken to it like she was waiting to be asked.",
+              "Low field and a student. She is louder than she has been in two years, mostly at the pup, mostly about nothing.",
+              "It worked. She still comes to the gate every morning and she goes back to the fold on her own, and I did not have to be the one who told her."
+            ],
+            "pt": [
+              "Ela tem um filhote para ensinar e assumiu isso como se estivesse esperando ser convidada.",
+              "Campo baixo e uma aluna. Está mais barulhenta do que esteve em dois anos, quase toda com a filhote, quase toda por nada.",
+              "Deu certo. Ela ainda vem ao portão toda manhã e volta ao aprisco sozinha, e eu não precisei ser quem contou a ela."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_kindness",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You gave her a way to keep working.",
+                "pt": "Você deu a ela um jeito de continuar trabalhando."
+              },
+              "phrases": [
+                "you gave her a way to keep working",
+                "she still has work to do"
+              ],
+              "requires_any": [
+                "working",
+                "work"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "That was the whole trick and I did not think of it. Somebody outside the hill did, which is the argument for talking to people.",
+                    "She needed a job more than she needed rest. I would have got that wrong by a year if I had worked it out alone.",
+                    "Thank you. It buys her two summers, probably. Two summers is a great deal when you are counting them."
+                  ],
+                  "pt": [
+                    "Era esse o truque inteiro e eu não pensei nele. Alguém de fora da encosta pensou, que é o argumento a favor de conversar com as pessoas.",
+                    "Ela precisava mais de um trabalho do que de descanso. Eu teria errado isso por um ano se tivesse resolvido sozinha.",
+                    "Obrigada. Compra dois verões para ela, provavelmente. Dois verões é muita coisa quando se está contando."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.broken_fence",
+      "subject": "work.shepherd.high_pasture",
+      "initial_state": "blocked",
+      "salience": 50,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "slots": {
+        "place": [
+          "she_the_top_fence",
+          "she_the_beck_crossing",
+          "she_the_old_wall"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "identity_values": [
+            "independence",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The fence.",
+            "pt": "A cerca."
+          },
+          "lines": {
+            "en": [
+              "%2$s is down in three places and it is a two-person job, and there is one of me.",
+              "I have asked twice about %2$s. Everybody agrees it needs doing and everybody is busy on the day.",
+              "%2$s keeps my sheep off somebody else's corn, so it is not only my fence, and I appear to be the only person who thinks that follows."
+            ],
+            "pt": [
+              "%2$s está caída em três pontos e é serviço para duas pessoas, e existe uma de mim.",
+              "Já perguntei duas vezes sobre %2$s. Todo mundo concorda que precisa ser feito e todo mundo está ocupado no dia.",
+              "%2$s mantém minhas ovelhas longe do milho dos outros, então não é só a minha cerca, e parece que sou a única que acha que isso decorre."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_hands",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "label": {
+                "en": "I'll come up and hold the other end.",
+                "pt": "Eu subo e seguro a outra ponta."
+              },
+              "phrases": [
+                "i will come up and hold the other end",
+                "let me be the second pair of hands"
+              ],
+              "requires_any": [
+                "hold",
+                "hands",
+                "end"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.shepherd.fence.helped",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s is finished in a morning. Bring gloves and expect to be cold and to be fed afterwards.",
+                    "You are the first person who has said a day rather than a maybe. I will hold you to it and I will not be gracious about it.",
+                    "Yes. Come at first light. It is a long walk up and the light on the top field at that hour is the one thing about this job I would recommend to anybody."
+                  ],
+                  "pt": [
+                    "Então %2$s fica pronta numa manhã. Traga luvas e espere passar frio e ser alimentada depois.",
+                    "Você é a primeira pessoa a dizer um dia em vez de um talvez. Vou cobrar e não vou ser delicada.",
+                    "Sim. Venha ao amanhecer. A subida é longa e a luz no campo alto àquela hora é a única coisa deste trabalho que eu recomendaria a qualquer um."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_why_no_help",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What keeps people off the hill?",
+                "pt": "O que afasta as pessoas da encosta?"
+              },
+              "phrases": [
+                "what keeps people from coming up",
+                "the hill keeps people away"
+              ],
+              "requires_any": [
+                "keeps",
+                "hill",
+                "up"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "It is an hour's walk before the work starts. That is the whole reason and it is a perfectly good one, and it still leaves the fence down.",
+                    "Out of sight. If the fence were on the green it would have been mended in a day by four people arguing about how.",
+                    "I have not been down to help anybody either, in fairness. You cannot spend nine years on a hill and then be surprised that nobody climbs it."
+                  ],
+                  "pt": [
+                    "É uma hora de caminhada antes de o trabalho começar. É o motivo inteiro e é perfeitamente bom, e ainda assim a cerca continua caída.",
+                    "Fora de vista. Se a cerca ficasse no gramado, teria sido consertada num dia por quatro pessoas discutindo como.",
+                    "Eu também não desci para ajudar ninguém, para ser justa. Não dá para passar nove anos numa encosta e depois se surpreender que ninguém suba."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "prompt": {
+            "en": "The fence, mended.",
+            "pt": "A cerca, consertada."
+          },
+          "lines": {
+            "en": [
+              "%2$s is up and straight. Two of us, one morning, and nine months of me putting it off.",
+              "It is done, and whoever helped got fed, and they have been back twice since without being asked.",
+              "%2$s will hold five years. I would like to have been less proud about the nine months beforehand."
+            ],
+            "pt": [
+              "%2$s está de pé e reta. Duas pessoas, uma manhã, e nove meses de eu adiando.",
+              "Está feito, e quem ajudou comeu, e voltou duas vezes desde então sem ser chamado.",
+              "%2$s aguenta cinco anos. Eu gostaria de ter sido menos orgulhosa nos nove meses anteriores."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_asking_worked",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Asking worked, then.",
+                "pt": "Então pedir funcionou."
+              },
+              "phrases": [
+                "asking worked then",
+                "so asking for help worked"
+              ],
+              "requires_any": [
+                "asking",
+                "worked"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Asking with a date attached worked. Asking in general had failed twice, and I had drawn the wrong lesson from that.",
+                    "It did. I have lived alone on a hill long enough to have decided that asking is a kind of losing, which is nonsense and took nine months to notice.",
+                    "Thank you. I will do it sooner next time. That is the actual promise, and it is a harder one than the fence."
+                  ],
+                  "pt": [
+                    "Pedir com data marcada funcionou. Pedir em geral tinha falhado duas vezes, e eu tinha tirado a lição errada disso.",
+                    "Funcionou. Vivi sozinha numa encosta tempo suficiente para decidir que pedir é uma forma de perder, o que é bobagem e levou nove meses para eu notar.",
+                    "Obrigada. Vou fazer mais cedo da próxima vez. Essa é a promessa de verdade, e é mais difícil que a cerca."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else on your list?",
+      "pt": "Mais alguma coisa na sua lista?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a lambing night?",
+        "pt": "Qual é a parte mais difícil de uma noite de parição?"
+      },
+      "requires_any": [
+        "hardest",
+        "lambing"
+      ],
+      "phrases": [
+        "what is the hardest part of a lambing night",
+        "hardest thing about lambing"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the flock.",
+      "pt": "Vou deixar você com o rebanho."
+    }
+  }
+}

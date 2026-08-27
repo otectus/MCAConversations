@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_hurts",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.burn.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.heat",
+              "deltas": {
+                "warmth": 3,
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.armorer.burn"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.burn.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.armorer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

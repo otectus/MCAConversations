@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_the_spread",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.bruised_deliveries.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.stores",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.delightcook.bruised_deliveries"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.bruised_deliveries.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.delightcook.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

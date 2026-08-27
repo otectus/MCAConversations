@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_wait",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.exhausted_seam.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.the_seam",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.miner.exhausted_seam"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.exhausted_seam.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.miner.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

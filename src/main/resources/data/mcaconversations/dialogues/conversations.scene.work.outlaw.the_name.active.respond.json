@@ -1,0 +1,110 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_can_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.the_name.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.the_name",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.outlaw.the_name"
+            },
+            "next": "conversations.scene.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.outlaw.the_name.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_judge_by_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.the_name.active.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.outlaw.name.trusted",
+              "delta": 3,
+              "budget": "generous",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.the_name",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.outlaw.the_name"
+            },
+            "next": "conversations.scene.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.outlaw.the_name.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_patience",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.the_name.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.the_name",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.outlaw.the_name"
+            },
+            "next": "conversations.scene.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.outlaw.the_name.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.outlaw.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

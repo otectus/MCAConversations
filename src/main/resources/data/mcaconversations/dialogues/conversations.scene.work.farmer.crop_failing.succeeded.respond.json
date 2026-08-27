@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "credit_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.crop_failing.succeeded.credited"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.farmer.crop_failing.credit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.crop_health",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.farmer.crop_failing"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.crop_failing.succeeded.credited",
+              "slots": [
+                "worksite"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_next_year",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.crop_failing.succeeded.planned"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.crop_health",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.farmer.crop_failing"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.crop_failing.succeeded.planned",
+              "slots": [
+                "worksite"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.farmer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

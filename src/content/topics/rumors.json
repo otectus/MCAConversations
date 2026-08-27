@@ -1,0 +1,319 @@
+{
+  "_comment": [
+    "Rumours, gated on how far the village has spread one and on whether she trades in them.",
+    "",
+    "One scene is a rumour she has decided not to pass on, which is the more interesting half of the",
+    "subject; the other is the correction nobody wants, which is the half nobody writes."
+  ],
+  "topic": "rumors",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "rumors"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "You did not hear it from me.",
+      "Right. That is as far as it goes.",
+      "Let it die where it is."
+    ],
+    "pt": [
+      "Você não ouviu de mim.",
+      "Certo. É até aí que vai.",
+      "Deixe morrer onde está."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Understood.",
+    "pt": "Entendido."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else going round?",
+      "pt": "Mais alguma coisa circulando?"
+    },
+    "leave": {
+      "en": "That's the talk, then.",
+      "pt": "É essa a conversa, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "one_i_will_not_pass_on",
+      "subject": "rumors.withheld",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "epistemic": "rumoured",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "social.village_population",
+          "min": 6,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "privacy"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "What's going round.",
+        "pt": "O que está circulando."
+      },
+      "lines": {
+        "en": [
+          "There is one doing the rounds that I have heard four times and have not repeated once, and I intend to keep that record.",
+          "Somebody is being talked about and the talk is thinner than the confidence people say it with.",
+          "I know the rumour and I know who started it, and the second of those is the part that would actually interest you."
+        ],
+        "pt": [
+          "Tem um circulando que eu ouvi quatro vezes e não repeti nenhuma, e pretendo manter esse retrospecto.",
+          "Estão falando de alguém, e a conversa é mais fina do que a confiança com que dizem.",
+          "Eu conheço o boato e sei quem começou, e a segunda coisa é a parte que de fato te interessaria."
+        ]
+      },
+      "replies": [
+        {
+          "name": "back_the_silence",
+          "stance": "candor",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Then let it end with you.",
+            "pt": "Então deixe acabar com você."
+          },
+          "phrases": [
+            "then let it end with you",
+            "let it end there rather than spread"
+          ],
+          "requires_any": [
+            "end",
+            "spread"
+          ],
+          "disposition": {
+            "respect": 4,
+            "trust": 2
+          },
+          "affection": {
+            "decision": "topic.rumors.stopped",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is the plan and it is harder than it sounds, because holding one makes you look as though you are hiding something.",
+                "Four people have tried to get it out of me this week by pretending they already knew. That trick works about a third of the time.",
+                "Yes. A rumour that reaches nine people is a fact by Thursday, and it does not need to be true to get there."
+              ],
+              "pt": [
+                "É o plano e é mais difícil do que parece, porque segurar um faz você parecer que está escondendo algo.",
+                "Quatro pessoas tentaram arrancar de mim esta semana fingindo que já sabiam. Esse truque funciona em um terço das vezes.",
+                "Sim. Um boato que chega a nove pessoas vira fato até quinta, e não precisa ser verdade para chegar lá."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_if_it_matters",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would it hurt anybody?",
+            "pt": "Isso machucaria alguém?"
+          },
+          "phrases": [
+            "would it hurt anybody",
+            "does it do any harm"
+          ],
+          "requires_any": [
+            "hurt",
+            "harm"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "One household, badly, and for about two years, and the person telling it does not think of it as harm at all.",
+                "It would end a thing that took four years to build. That is what a rumour costs and the cost is always somebody else's.",
+                "That is the only question worth asking about one, and almost nobody asks it before repeating."
+              ],
+              "pt": [
+                "Uma casa, muito, e por uns dois anos, e quem conta não pensa nisso como dano nenhum.",
+                "Encerraria uma coisa que levou quatro anos para construir. É isso que um boato custa, e o custo é sempre de outra pessoa.",
+                "É a única pergunta que vale a pena fazer sobre um boato, e quase ninguém faz antes de repetir."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_correction",
+      "subject": "rumors.corrected",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "past",
+      "epistemic": "reported",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Something that turned out wrong.",
+        "pt": "Algo que se mostrou errado."
+      },
+      "lines": {
+        "en": [
+          "A thing everybody believed last winter turned out to be nothing, and about four people have corrected themselves out loud.",
+          "The truth came out and it took an afternoon, and the rumour had taken three months to travel that far.",
+          "I repeated one once, years ago. It was untrue and I have been careful ever since, and the person it was about never knew I was one of the mouths."
+        ],
+        "pt": [
+          "Uma coisa em que todo mundo acreditou no inverno passado acabou não sendo nada, e umas quatro pessoas se corrigiram em voz alta.",
+          "A verdade apareceu e levou uma tarde, e o boato tinha levado três meses para chegar até ali.",
+          "Eu repeti um, anos atrás. Era falso e desde então eu sou cuidadosa, e a pessoa de quem falavam nunca soube que eu fui uma das bocas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_it_helped",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Did the correction reach everyone?",
+            "pt": "A correção chegou a todos?"
+          },
+          "phrases": [
+            "did the correction reach everyone",
+            "does a correction travel as far"
+          ],
+          "requires_any": [
+            "correction",
+            "travel"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "About a third as far and about four times as slowly. That is the arithmetic of it and it has never once been different.",
+                "The people who repeated it loudest were the quietest about the correction, which I have decided is human rather than wicked.",
+                "It reached the household concerned, which is the only part that counts, and it took a neighbour walking there to say it."
+              ],
+              "pt": [
+                "Cerca de um terço da distância e umas quatro vezes mais devagar. É essa a conta e nunca foi diferente.",
+                "Quem repetiu mais alto foi quem ficou mais calado na correção, o que eu decidi que é humano e não maldade.",
+                "Chegou à casa envolvida, que é a única parte que conta, e precisou de um vizinho caminhar até lá para dizer."
+              ]
+            }
+          }
+        },
+        {
+          "name": "respect_the_admission",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Admitting you repeated one is rare.",
+            "pt": "Admitir que repetiu um é raro."
+          },
+          "phrases": [
+            "admitting you repeated one is rare",
+            "few people admit their part in one"
+          ],
+          "requires_any": [
+            "admitting",
+            "admit",
+            "rare"
+          ],
+          "disposition": {
+            "respect": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "It is the only thing that has ever made me careful. Being told to be careful did nothing for twenty years.",
+                "Thank you. I have said it twice and both times to somebody I wanted to be honest in front of.",
+                "The person it was about is dead now, which means it can never be put right, and that is the part I keep."
+              ],
+              "pt": [
+                "É a única coisa que já me deixou cuidadosa. Me mandarem ser cuidadosa não fez nada por vinte anos.",
+                "Obrigada. Já disse isso duas vezes, e as duas para alguém diante de quem eu queria ser honesta.",
+                "A pessoa de quem falavam já morreu, o que significa que nunca poderá ser reparado, e é essa a parte que fica comigo."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

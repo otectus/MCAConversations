@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "share_the_pleasure",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.a_good_stretch.open.delighted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "happy.ordinary",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.happy.followup",
+            "say": "conversations.scene.happy.a_good_stretch.delighted"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_did_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.a_good_stretch.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "happy.ordinary",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.happy.followup",
+            "say": "conversations.scene.happy.a_good_stretch.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.scene.happy.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

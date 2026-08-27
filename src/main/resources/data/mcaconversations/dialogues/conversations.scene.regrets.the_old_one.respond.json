@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "sit_with_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "regrets.the_old_one.open.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.regrets.held",
+              "delta": 3,
+              "budget": "generous",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.long_carried",
+              "deltas": {
+                "trust": 4,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.scene.regrets.followup",
+            "say": "conversations.scene.regrets.the_old_one.steadied"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_they_would_do",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "regrets.the_old_one.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "regrets.long_carried",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.scene.regrets.followup",
+            "say": "conversations.scene.regrets.the_old_one.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.regrets.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

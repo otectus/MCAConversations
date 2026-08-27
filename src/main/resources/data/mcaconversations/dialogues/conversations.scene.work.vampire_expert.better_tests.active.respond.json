@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_she_would_know",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.better_tests.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.the_tests",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.vampire_expert.better_tests"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.better_tests.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_patience",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.better_tests.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.the_tests",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.vampire_expert.better_tests"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.better_tests.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.vampire_expert.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

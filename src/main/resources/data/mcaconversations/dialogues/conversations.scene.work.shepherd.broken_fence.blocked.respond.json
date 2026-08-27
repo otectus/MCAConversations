@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.broken_fence.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shepherd.fence.helped",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.high_pasture",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.broken_fence"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.broken_fence.blocked.accepted",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_why_no_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.broken_fence.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.high_pasture",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.broken_fence"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.broken_fence.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shepherd.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

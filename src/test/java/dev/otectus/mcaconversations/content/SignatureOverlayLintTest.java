@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.otectus.mcaconversations.conversation.BeatContract;
 import dev.otectus.mcaconversations.conversation.SignatureBeat;
+import dev.otectus.mcaconversations.conversation.VoiceWeight;
 import dev.otectus.mcaconversations.personality.Personalities;
 import dev.otectus.mcaconversations.personality.VoiceFamily;
 import org.junit.jupiter.api.BeforeAll;
@@ -54,6 +55,34 @@ class SignatureOverlayLintTest {
      * what the release has actually reached, and it may only be raised.
      */
     private static final double COVERAGE_FLOOR = 0.075;
+    /**
+     * Overlay coverage owed by the generated profession scenes, which is presently none.
+     *
+     * <p>The living-history scenes ship in 1.4.0 with one say pool each and no personality variants,
+     * so measuring them in the same ratio as the hand-authored corpus would report a fall in coverage
+     * that nobody caused — the hand-written overlays are exactly where they were. They are counted
+     * separately instead, with their own floor, so that the gap is a number on the record rather than
+     * a number quietly absorbed into a larger denominator. Raise this as the scenes get their voices.
+     */
+    private static final double SCENE_COVERAGE_FLOOR = 0.0;
+
+    /**
+     * Salience-weighted coverage that must not fall (spec §15.5).
+     *
+     * <p>The raw percentage is the one the plan says can be gamed: a corpus could reach its number by
+     * writing twenty-one voices for "see you later". The weighted measure prices a signature line at
+     * eight farewells, so it can only be moved by writing the lines that make a villager sound like
+     * somebody. Like the raw floor, this is a ratchet rather than a target — the plan's target is
+     * 90%, and where this release stands is on the record in {@code reports/coverage.md}.
+     *
+     * <p>The number here is a little lower than the report's, and deliberately so: this measures
+     * every pool the lang file carries, including the ones no beat references any more, while the
+     * report measures the pools the contracts actually speak. A floor should be the harsher of the
+     * two.
+     */
+    private static final double WEIGHTED_COVERAGE_FLOOR = 0.18;
+    /** Say pools generated from {@code src/content}, which have no overlays yet. */
+    private static final String SCENE_PREFIX = "conversations.scene.";
 
     /** pool key (without the "dialogue." prefix) -> number of variants in the base corpus. */
     private static Map<String, Integer> basePools;
@@ -233,11 +262,57 @@ class SignatureOverlayLintTest {
             covered.addAll(pools.keySet());
         }
         covered.retainAll(basePools.keySet());
-        double share = (double) covered.size() / basePools.size();
-        assertTrue(share >= COVERAGE_FLOOR, String.format(
-                "personality overlay coverage is %.1f%% of %d say pools and the floor is %.1f%%;"
-                        + " spec section 9.3 targets 25%%", share * 100, basePools.size(),
-                COVERAGE_FLOOR * 100));
+
+        Set<String> authored = new TreeSet<>(basePools.keySet());
+        authored.removeIf(pool -> pool.startsWith(SCENE_PREFIX));
+        Set<String> authoredCovered = new TreeSet<>(covered);
+        authoredCovered.removeIf(pool -> pool.startsWith(SCENE_PREFIX));
+        double authoredShare = (double) authoredCovered.size() / authored.size();
+        assertTrue(authoredShare >= COVERAGE_FLOOR, String.format(
+                "personality overlay coverage is %.1f%% of %d hand-authored say pools and the floor"
+                        + " is %.1f%%; spec section 9.3 targets 25%%", authoredShare * 100,
+                authored.size(), COVERAGE_FLOOR * 100));
+
+        Set<String> scenes = new TreeSet<>(basePools.keySet());
+        scenes.removeIf(pool -> !pool.startsWith(SCENE_PREFIX));
+        if (!scenes.isEmpty()) {
+            Set<String> sceneCovered = new TreeSet<>(covered);
+            sceneCovered.removeIf(pool -> !pool.startsWith(SCENE_PREFIX));
+            double sceneShare = (double) sceneCovered.size() / scenes.size();
+            assertTrue(sceneShare >= SCENE_COVERAGE_FLOOR, String.format(
+                    "generated scene overlay coverage is %.1f%% of %d say pools and the floor is"
+                            + " %.1f%%", sceneShare * 100, scenes.size(),
+                    SCENE_COVERAGE_FLOOR * 100));
+        }
+    }
+
+    @Test
+    @DisplayName("salience-weighted coverage does not go backwards either")
+    void weightedCoverageDoesNotRegress() {
+        Set<String> covered = new TreeSet<>();
+        for (Map<String, Integer> pools : overlays.values()) {
+            covered.addAll(pools.keySet());
+        }
+        covered.retainAll(basePools.keySet());
+
+        Map<String, VoiceWeight> tiers = new TreeMap<>();
+        for (BeatContract beat : ContentFixture.catalog().beats()) {
+            tiers.merge(beat.say(), VoiceWeight.of(beat), (a, b) -> a.weight() >= b.weight() ? a : b);
+        }
+
+        long total = 0;
+        long weighted = 0;
+        for (String pool : basePools.keySet()) {
+            int weight = tiers.getOrDefault(pool, VoiceWeight.FILLER).weight();
+            total += weight;
+            if (covered.contains(pool)) {
+                weighted += weight;
+            }
+        }
+        double share = total == 0 ? 0.0 : (double) weighted / total;
+        assertTrue(share >= WEIGHTED_COVERAGE_FLOOR, String.format(
+                "salience-weighted overlay coverage is %.1f%% and the floor is %.1f%%; spec"
+                        + " section 15.5 targets 90%%", share * 100, WEIGHTED_COVERAGE_FLOOR * 100));
     }
 
     @Test

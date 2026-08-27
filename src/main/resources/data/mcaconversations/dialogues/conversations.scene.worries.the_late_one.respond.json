@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "hold_it_with_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.the_late_one.open.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.worries.held",
+              "delta": 3,
+              "budget": "generous",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "worries.private",
+              "deltas": {
+                "trust": 4,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.scene.worries.followup",
+            "say": "conversations.scene.worries.the_late_one.steadied"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_if_saying_would_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.the_late_one.open.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "worries.private",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.worries.followup",
+            "say": "conversations.scene.worries.the_late_one.considered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "say": "conversations.scene.worries.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

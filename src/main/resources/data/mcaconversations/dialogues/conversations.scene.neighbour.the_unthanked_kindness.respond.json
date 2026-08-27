@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "ask_who",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.the_unthanked_kindness.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.small_good",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.neighbour.followup",
+            "say": "conversations.scene.neighbour.the_unthanked_kindness.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_is_the_village",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.the_unthanked_kindness.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.small_good",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.neighbour.followup",
+            "say": "conversations.scene.neighbour.the_unthanked_kindness.agreed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "say": "conversations.scene.neighbour.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

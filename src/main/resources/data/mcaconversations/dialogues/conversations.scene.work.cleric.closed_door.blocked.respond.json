@@ -1,0 +1,108 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_they_need",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.closed_door.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.small_kindnesses",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.closed_door"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.closed_door.blocked.explained",
+              "slots": [
+                "household"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_asking_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.closed_door.blocked.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.small_kindnesses",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.closed_door"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.closed_door.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_showing_up_counts",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.closed_door.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.small_kindnesses",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.closed_door"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.closed_door.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.cleric.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

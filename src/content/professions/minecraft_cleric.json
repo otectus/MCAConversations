@@ -1,0 +1,872 @@
+{
+  "_comment": [
+    "Cleric. The person people come to when they have run out of other people.",
+    "",
+    "The §12.4 anchors are the rites, the sick, comfort asked for, the ledger of small kindnesses,",
+    "doubt and the hours nobody sees. These three take a family she cannot reach, a promise of comfort",
+    "she is not sure she can keep, and a night she spent sitting up.",
+    "",
+    "The care here is to keep her a neighbour rather than a symbol. She has no supernatural knowledge",
+    "and claims none; what she has is time, patience, and a habit of turning up. Her hardest lines are",
+    "about being expected to have answers she does not have."
+  ],
+  "profession": "minecraft:cleric",
+  "id": "cleric",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "rites",
+    "the_sick",
+    "comfort",
+    "small_kindnesses",
+    "doubt",
+    "unseen_hours"
+  ],
+  "leave_label": {
+    "en": "I'll let you get on with your rounds.",
+    "pt": "Vou deixar você seguir suas visitas."
+  },
+  "slot_lang": {
+    "cle_the_family_by_the_mill": {
+      "en": "the family by the mill",
+      "pt": "a família perto do moinho"
+    },
+    "cle_the_house_at_the_end": {
+      "en": "the house at the end of the row",
+      "pt": "a casa no fim da fileira"
+    },
+    "cle_the_two_brothers": {
+      "en": "the two brothers",
+      "pt": "os dois irmãos"
+    },
+    "cle_a_closed_door": {
+      "en": "a door that stays closed",
+      "pt": "uma porta que fica fechada"
+    },
+    "cle_polite_refusals": {
+      "en": "very polite refusals",
+      "pt": "recusas muito educadas"
+    },
+    "cle_an_old_grievance": {
+      "en": "an old grievance with my predecessor",
+      "pt": "uma mágoa antiga com meu antecessor"
+    },
+    "cle_a_child_with_fever": {
+      "en": "a child with a fever",
+      "pt": "uma criança com febre"
+    },
+    "cle_an_old_man_failing": {
+      "en": "an old man who is failing",
+      "pt": "um velho que está definhando"
+    },
+    "cle_a_woman_who_will_not_eat": {
+      "en": "a woman who will not eat",
+      "pt": "uma mulher que não come"
+    },
+    "cle_the_long_night": {
+      "en": "the long night",
+      "pt": "a noite longa"
+    },
+    "cle_the_hour_before_dawn": {
+      "en": "the hour before dawn",
+      "pt": "a hora antes do amanhecer"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.closed_door",
+      "subject": "work.cleric.small_kindnesses",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "slots": {
+        "household": [
+          "cle_the_family_by_the_mill",
+          "cle_the_house_at_the_end",
+          "cle_the_two_brothers"
+        ],
+        "obstacle": [
+          "cle_a_closed_door",
+          "cle_polite_refusals",
+          "cle_an_old_grievance"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "household",
+            "obstacle"
+          ],
+          "identity_values": [
+            "mercy",
+            "precision",
+            "duty"
+          ],
+          "prompt": {
+            "en": "Your rounds.",
+            "pt": "Suas visitas."
+          },
+          "lines": {
+            "en": [
+              "%2$s needs somebody and I get %3$s every time, and I have started to wonder whether I am the wrong somebody.",
+              "There is %3$s at %2$s. I keep going anyway, on the theory that turning up is most of it, and some weeks the theory is thin.",
+              "%3$s. It is not rudeness. It is a household that has decided help is a debt, and I have not found the sentence that undoes that."
+            ],
+            "pt": [
+              "%2$s precisa de alguém e eu recebo %3$s toda vez, e comecei a me perguntar se eu sou o alguém errado.",
+              "Tem %3$s em %2$s. Continuo indo mesmo assim, pela teoria de que aparecer já é quase tudo, e em algumas semanas a teoria fica fina.",
+              "%3$s. Não é grosseria. É uma casa que decidiu que ajuda é dívida, e eu ainda não achei a frase que desfaz isso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_they_need",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do they actually need?",
+                "pt": "Do que eles realmente precisam?"
+              },
+              "phrases": [
+                "what do they actually need",
+                "what would help that household"
+              ],
+              "requires_any": [
+                "need",
+                "household",
+                "help"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "household"
+                ],
+                "lines": {
+                  "en": [
+                    "Firewood and somebody to sit with the youngest for two hours. Nothing spiritual whatsoever, which is usually the case.",
+                    "To be asked about something other than their trouble. %2$s has been the object of concern for a year and it is wearing.",
+                    "Honestly? For me to stop coming for a month and then come back. I have not decided whether that is wisdom or giving up."
+                  ],
+                  "pt": [
+                    "Lenha e alguém para ficar com o caçula por duas horas. Nada espiritual, o que costuma ser o caso.",
+                    "Ser perguntada sobre outra coisa que não a própria desgraça. %2$s é objeto de preocupação há um ano, e isso cansa.",
+                    "Sinceramente? Que eu pare de ir por um mês e depois volte. Ainda não decidi se isso é sabedoria ou desistência."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_asking_them",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Ask them what they want instead.",
+                "pt": "Pergunte a eles o que querem."
+              },
+              "phrases": [
+                "ask them what they want instead",
+                "let them say what they want"
+              ],
+              "requires_any": [
+                "want",
+                "ask"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "I have been arriving with an answer instead of a question for about eleven years. You are the first person to name it.",
+                    "Yes. And I will ask from the doorway rather than from a chair, because sitting down turns a question into a visit.",
+                    "That is right and it frightens me slightly, because they may say nothing, and then I will have to accept nothing."
+                  ],
+                  "pt": [
+                    "Faz uns onze anos que eu chego com uma resposta em vez de uma pergunta. Você é a primeira pessoa a nomear isso.",
+                    "Sim. E vou perguntar da porta, não da cadeira, porque sentar transforma uma pergunta em visita.",
+                    "É o certo e me assusta um pouco, porque podem não dizer nada, e aí eu vou ter que aceitar nada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_showing_up_counts",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Turning up counts for something.",
+                "pt": "Aparecer já conta."
+              },
+              "phrases": [
+                "turning up counts for something",
+                "just showing up matters"
+              ],
+              "requires_any": [
+                "turning",
+                "showing",
+                "counts"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is most of what I have. Some weeks I would like it to be more, and then I remember who taught me the trade and what she actually did.",
+                    "Thank you. It is a small claim and it is one I can keep, which is more than can be said for the large ones.",
+                    "I hope so. Nobody ever writes down the visits where nothing happened, and those are almost all of them."
+                  ],
+                  "pt": [
+                    "É quase tudo o que eu tenho. Em algumas semanas eu queria que fosse mais, e aí lembro de quem me ensinou o ofício e do que ela de fato fazia.",
+                    "Obrigada. É uma promessa pequena e é uma que eu consigo cumprir, o que já é mais do que se pode dizer das grandes.",
+                    "Espero que sim. Ninguém anota as visitas em que nada aconteceu, e são quase todas."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "household"
+          ],
+          "prompt": {
+            "en": "That household.",
+            "pt": "Aquela casa."
+          },
+          "lines": {
+            "en": [
+              "%2$s asked me in. Not for anything. They wanted somebody to eat with, and I have thought about it all week.",
+              "I asked instead of offering and they told me, and what they wanted took an afternoon and a borrowed cart.",
+              "The door at %2$s is open now, in the ordinary sense of the phrase, which is the only sense that matters."
+            ],
+            "pt": [
+              "%2$s me convidou para entrar. Sem motivo. Queriam alguém para comer junto, e eu pensei nisso a semana inteira.",
+              "Perguntei em vez de oferecer e me disseram, e o que queriam levou uma tarde e uma carroça emprestada.",
+              "A porta de %2$s está aberta agora, no sentido comum da expressão, que é o único sentido que importa."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_worked",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What made the difference?",
+                "pt": "O que fez diferença?"
+              },
+              "phrases": [
+                "what made the difference in the end",
+                "which part actually worked"
+              ],
+              "requires_any": [
+                "difference",
+                "worked"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Asking from the doorway. It let them refuse cheaply, and once refusing was cheap they stopped needing to.",
+                    "I brought nothing. Eleven years of arriving with bread, and the week I arrive empty-handed is the week I get let in.",
+                    "Time, mostly. I would love to claim a clever sentence. It was ninety visits and one of them happened to land."
+                  ],
+                  "pt": [
+                    "Perguntar da porta. Isso deixou a recusa barata, e quando recusar ficou barato eles pararam de precisar recusar.",
+                    "Não levei nada. Onze anos chegando com pão, e a semana em que chego de mãos vazias é a semana em que me deixam entrar.",
+                    "Tempo, principalmente. Eu adoraria alegar uma frase inteligente. Foram noventa visitas e uma delas por acaso acertou."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.sitting_up",
+      "subject": "work.cleric.unseen_hours",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "person": [
+          "cle_a_child_with_fever",
+          "cle_an_old_man_failing",
+          "cle_a_woman_who_will_not_eat"
+        ],
+        "hour": [
+          "cle_the_long_night",
+          "cle_the_hour_before_dawn"
+        ]
+      },
+      "commitment": {
+        "id": "work.cleric.bring_food",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:bread",
+        "due_after_days": 2
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "person",
+            "hour"
+          ],
+          "identity_values": [
+            "duty",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "Last night.",
+            "pt": "Ontem à noite."
+          },
+          "lines": {
+            "en": [
+              "I sat up with %2$s through %3$s. There is nothing to report. That is what sitting up is.",
+              "%3$s is the difficult stretch. %2$s is calmer by then and I am not, and there is nobody to sit up with me.",
+              "I have been at %2$s three nights. The family sleep in shifts and I take %3$s, because I am the one who can sleep in the day."
+            ],
+            "pt": [
+              "Fiquei acordada com %2$s durante %3$s. Não há nada a relatar. É isso que velar significa.",
+              "%3$s é o trecho difícil. %2$s já está mais calmo então, e eu não estou, e não há ninguém para velar comigo.",
+              "Estou com %2$s há três noites. A família dorme em turnos e eu fico com %3$s, porque sou quem pode dormir de dia."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_it_is_like",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you do through those hours?",
+                "pt": "O que você faz nessas horas?"
+              },
+              "phrases": [
+                "what do you do through those hours",
+                "how do the hours pass for you"
+              ],
+              "requires_any": [
+                "hours",
+                "pass"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Very little. I keep the fire going and I do not fill the silence, because filling it is for me and not for them.",
+                    "I count breaths, which sounds grim and is actually the calmest thing I know how to do.",
+                    "I let them talk if they want to and I do not answer the large questions, because I have no answers and a made-up one would be theft."
+                  ],
+                  "pt": [
+                    "Muito pouco. Mantenho o fogo e não preencho o silêncio, porque preencher é para mim e não para eles.",
+                    "Conto respirações, o que soa sombrio e é, na verdade, a coisa mais calma que eu sei fazer.",
+                    "Deixo falarem se quiserem e não respondo às perguntas grandes, porque não tenho respostas e uma inventada seria roubo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_food",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring bread for the house.",
+                "pt": "Vou levar pão para a casa."
+              },
+              "phrases": [
+                "i can bring bread for the house",
+                "let me bring the household some bread"
+              ],
+              "requires_any": [
+                "bread"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.cleric.vigil.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Yes, and leave it at the door rather than handing it over. A family in that state cannot manage being thanked at.",
+                    "That is exactly the right size of help. Nobody in that house has cooked in four days and nobody will say so.",
+                    "Thank you. I will tell them it came from you, because being helped by a neighbour is easier to carry than being helped by the church."
+                  ],
+                  "pt": [
+                    "Sim, e deixe na porta em vez de entregar na mão. Uma família nesse estado não dá conta de ser agradecida.",
+                    "É exatamente o tamanho certo de ajuda. Ninguém naquela casa cozinhou em quatro dias e ninguém vai dizer isso.",
+                    "Obrigada. Vou dizer que veio de você, porque ser ajudado por um vizinho é mais fácil de carregar do que ser ajudado pela igreja."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_rest_matters",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You need sleep as well.",
+                "pt": "Você também precisa dormir."
+              },
+              "phrases": [
+                "you need sleep as well",
+                "you should rest too"
+              ],
+              "requires_any": [
+                "sleep",
+                "rest"
+              ],
+              "disposition": {
+                "warmth": 4
+              },
+              "reaction": {
+                "id": "qualified",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I do, and I will, and not this week. I have said that sentence to other people and been unconvinced by it then as well.",
+                    "You are right. There is a version of this work that eats the person doing it and I have watched it happen twice.",
+                    "I sleep in the afternoons. It is not the same and it is enough for a fortnight, and this will be over inside a fortnight."
+                  ],
+                  "pt": [
+                    "Preciso, e vou, e não esta semana. Já disse essa frase a outras pessoas e também não me convenci na época.",
+                    "Você tem razão. Existe uma versão deste trabalho que devora quem o faz, e eu já vi acontecer duas vezes.",
+                    "Durmo à tarde. Não é a mesma coisa e dá para duas semanas, e isso vai acabar dentro de duas semanas."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "person"
+          ],
+          "prompt": {
+            "en": "Those nights.",
+            "pt": "Aquelas noites."
+          },
+          "lines": {
+            "en": [
+              "%2$s is through it. Sitting up did not cure anything. It meant nobody was alone at four in the morning.",
+              "It ended well, and I want to be careful about that, because I did not make it end well. I was only there.",
+              "The family slept a whole night. That is the thing I did, and it is smaller than people assume and larger than it sounds."
+            ],
+            "pt": [
+              "%2$s superou. Velar não curou nada. Significou que ninguém ficou sozinho às quatro da manhã.",
+              "Terminou bem, e quero ser cuidadosa com isso, porque não fui eu que fiz terminar bem. Eu só estava lá.",
+              "A família dormiu uma noite inteira. Foi isso que eu fiz, e é menor do que as pessoas imaginam e maior do que soa."
+            ]
+          },
+          "replies": [
+            {
+              "name": "honour_the_hours",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Nobody sees those hours but they count.",
+                "pt": "Ninguém vê essas horas, mas elas contam."
+              },
+              "phrases": [
+                "nobody sees those hours but they count",
+                "those unseen hours count"
+              ],
+              "requires_any": [
+                "hours",
+                "count"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "They count to four people and that is the correct number. This is not work that scales, and I have made my peace with that.",
+                    "Thank you. I have never once been asked about a night, only ever about the day after, and the night is the whole job.",
+                    "I keep no record of them, deliberately. The moment I start counting I will start wanting credit, and then I will be worse at it."
+                  ],
+                  "pt": [
+                    "Contam para quatro pessoas, e esse é o número correto. Este trabalho não cresce em escala, e eu fiz as pazes com isso.",
+                    "Obrigada. Nunca me perguntaram sobre uma noite, só sobre o dia seguinte, e a noite é o trabalho inteiro.",
+                    "Não guardo registro delas, de propósito. No instante em que eu começar a contar, vou começar a querer crédito, e aí vou fazer pior."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.no_answer",
+      "subject": "work.cleric.doubt",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "asker": [
+          "cle_a_child_with_fever",
+          "cle_an_old_man_failing"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "asker"
+          ],
+          "identity_values": [
+            "fairness",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The question you get asked.",
+            "pt": "A pergunta que te fazem."
+          },
+          "lines": {
+            "en": [
+              "The family of %2$s asked me why, and I said I did not know, and I watched that land badly.",
+              "People want me to have an answer. I have a chair, a fire and a long attention span, and none of those sound like enough at the time.",
+              "I could say something comforting to the family of %2$s. It would work for a fortnight and fail them for the rest of their lives."
+            ],
+            "pt": [
+              "A família de %2$s me perguntou por quê, e eu disse que não sabia, e vi aquilo cair mal.",
+              "As pessoas querem que eu tenha uma resposta. Eu tenho uma cadeira, um fogo e paciência longa, e nada disso parece bastar na hora.",
+              "Eu poderia dizer algo reconfortante à família de %2$s. Funcionaria por duas semanas e falharia com eles pelo resto da vida."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_says",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "So what do you say to them?",
+                "pt": "Então o que você diz a eles?"
+              },
+              "phrases": [
+                "so what do you say to them",
+                "what words do you use then"
+              ],
+              "requires_any": [
+                "say",
+                "words"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "That I do not know, and that I will come back on Thursday. The second half is the part that does the work.",
+                    "I say their person's name and something true about them. It is not an answer. It is the nearest honest thing.",
+                    "Nothing, sometimes. I have learned that a silence held steadily is heard as company, and a filled silence is heard as a lecture."
+                  ],
+                  "pt": [
+                    "Que eu não sei, e que volto na quinta. A segunda metade é a parte que faz o trabalho.",
+                    "Digo o nome da pessoa deles e algo verdadeiro sobre ela. Não é resposta. É a coisa honesta mais próxima.",
+                    "Nada, às vezes. Aprendi que um silêncio sustentado com firmeza é ouvido como companhia, e um silêncio preenchido é ouvido como sermão."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_honesty",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Stay honest about the limits.",
+                "pt": "Seja honesta sobre os limites."
+              },
+              "phrases": [
+                "keep telling them the truth",
+                "stay honest about the limits"
+              ],
+              "requires_any": [
+                "truth",
+                "honest",
+                "limits"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.cleric.doubt.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I will. It costs me something every time and I have never regretted it a year later, which is the only test I trust.",
+                    "Thank you. There are people in this trade who found the comfortable sentence, and I have watched what it does to them by fifty.",
+                    "The strange part is that families remember the honesty warmly. Not at the time. Years later, when they are checking whether they were lied to."
+                  ],
+                  "pt": [
+                    "Vou. Custa algo toda vez e eu nunca me arrependi um ano depois, que é o único teste em que confio.",
+                    "Obrigada. Existem pessoas neste ofício que acharam a frase confortável, e eu vi o que isso faz com elas até os cinquenta.",
+                    "O curioso é que as famílias lembram da honestidade com carinho. Não na hora. Anos depois, quando estão conferindo se mentiram para elas."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "That family.",
+            "pt": "Aquela família."
+          },
+          "lines": {
+            "en": [
+              "They came to find me last week. Not for comfort. To tell me that not being lied to had mattered.",
+              "It took a year. The mother said she had been angry with me for months and had come round, and told me so in the middle of the market.",
+              "I said I did not know and I kept turning up, and it turns out those two together are a kind of answer after all."
+            ],
+            "pt": [
+              "Vieram me procurar semana passada. Não por consolo. Para dizer que não terem sido enganados fez diferença.",
+              "Levou um ano. A mãe disse que ficou com raiva de mim por meses e que mudou de ideia, e disse isso no meio da feira.",
+              "Eu disse que não sabia e continuei aparecendo, e acontece que essas duas coisas juntas são um tipo de resposta afinal."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_it_held",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "The honesty held up.",
+                "pt": "A honestidade se sustentou."
+              },
+              "phrases": [
+                "the honesty held up in the end",
+                "being truthful held up"
+              ],
+              "requires_any": [
+                "honesty",
+                "truthful",
+                "held"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It held. I want to be clear that for eight months it looked exactly like failure, and I had no way of knowing which it was.",
+                    "Thank you. I will remember this the next time somebody asks me why, which will probably be this week.",
+                    "It held because I kept coming back. Honesty on its own is just a cold thing said once."
+                  ],
+                  "pt": [
+                    "Se sustentou. Quero deixar claro que por oito meses aquilo parecia exatamente fracasso, e eu não tinha como saber qual era.",
+                    "Obrigada. Vou lembrar disso na próxima vez em que alguém me perguntar por quê, o que provavelmente será esta semana.",
+                    "Se sustentou porque eu continuei voltando. Honestidade sozinha é só uma coisa fria dita uma vez."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything further?",
+      "pt": "Mais alguma coisa além disso?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of being asked for comfort?",
+        "pt": "Qual é a parte mais difícil de ser procurada por consolo?"
+      },
+      "requires_any": [
+        "hardest",
+        "comfort"
+      ],
+      "phrases": [
+        "what is the hardest part of being asked for comfort",
+        "hardest thing about giving comfort"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to your rounds.",
+      "pt": "Vou deixar você com suas visitas."
+    }
+  }
+}

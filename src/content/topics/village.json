@@ -1,0 +1,311 @@
+{
+  "_comment": [
+    "The village, gated on its size and on whether something has recently happened in it.",
+    "",
+    "A small village and a large one are different places to live, and a villager who has watched it",
+    "grow says different things from one who has watched it thin out."
+  ],
+  "topic": "village",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "village"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "It goes on either way.",
+      "Right. That is the place.",
+      "It will still be here tomorrow."
+    ],
+    "pt": [
+      "Segue de qualquer jeito.",
+      "Certo. É o lugar.",
+      "Ainda vai estar aqui amanhã."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the village?",
+      "pt": "Mais alguma coisa sobre a vila?"
+    },
+    "leave": {
+      "en": "That's the place, then.",
+      "pt": "É o lugar, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "getting_bigger",
+      "subject": "village.growth",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "social.village_population",
+          "min": 12,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_values": [
+        "hospitality"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "This place lately.",
+        "pt": "Este lugar ultimamente."
+      },
+      "lines": {
+        "en": [
+          "It has got large enough that I do not know every face, and I am still deciding how I feel about that.",
+          "There are people here now who arrived after me. That happened at some point and nobody announced it.",
+          "Bigger means the well is busier and the winter is safer, and those two things arrive together whether you want both or not."
+        ],
+        "pt": [
+          "Ficou grande o bastante para eu não conhecer todos os rostos, e ainda estou decidindo como me sinto sobre isso.",
+          "Tem gente aqui agora que chegou depois de mim. Isso aconteceu em algum momento e ninguém anunciou.",
+          "Maior significa poço mais cheio e inverno mais seguro, e essas duas coisas chegam juntas, queira você as duas ou não."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_its_better",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is bigger better?",
+            "pt": "Maior é melhor?"
+          },
+          "phrases": [
+            "is bigger better",
+            "has growing helped the place"
+          ],
+          "requires_any": [
+            "bigger",
+            "growing"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "debate",
+            "lines": {
+              "en": [
+                "Safer, and less kind. In a village of nine everybody is your problem. In a village of thirty, somebody else's.",
+                "For the young ones, yes. For me it is the same place with more strangers in it, and I am aware that is my failing.",
+                "Ask the person who mends the well. They will tell you the honest answer and it will be about buckets."
+              ],
+              "pt": [
+                "Mais seguro, e menos gentil. Numa vila de nove, todo mundo é problema seu. Numa de trinta, é de outro.",
+                "Para os jovens, sim. Para mim é o mesmo lugar com mais estranhos dentro, e eu sei que a falha é minha.",
+                "Pergunte a quem conserta o poço. Vão te dar a resposta honesta e ela vai ser sobre baldes."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_like_it",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It's a good place to arrive in.",
+            "pt": "É um bom lugar para se chegar."
+          },
+          "phrases": [
+            "it is a good place to arrive in",
+            "this is a welcoming place"
+          ],
+          "requires_any": [
+            "arrive",
+            "welcoming",
+            "place"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "pleased",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and that is not an accident. Four people work quite hard at it and none of them would say so.",
+                "Thank you. Somebody arriving and saying that is worth more than anybody who was born here saying it.",
+                "I hope so. I have been on the other side of that door and I remember exactly how long the first month is."
+              ],
+              "pt": [
+                "É, e não é por acaso. Quatro pessoas trabalham bastante nisso e nenhuma delas diria.",
+                "Obrigada. Alguém que chegou dizer isso vale mais do que qualquer nascido aqui dizer.",
+                "Espero que sim. Já estive do outro lado dessa porta e lembro exatamente o quanto o primeiro mês é longo."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "after_something_happened",
+      "subject": "village.recent_event",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "village.recent_event",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_styles": [
+        "mediator"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "How the village is taking it.",
+        "pt": "Como a vila está levando."
+      },
+      "lines": {
+        "en": [
+          "Quietly, and quietly is not the same as well. Ask again in a fortnight and you will get the real answer.",
+          "Everybody has been very decent to each other for about six days, which is roughly how long that lasts.",
+          "The lane has closed up. That is what it does. It will open again and it will take exactly as long as it takes."
+        ],
+        "pt": [
+          "Em silêncio, e em silêncio não é o mesmo que bem. Pergunte de novo em duas semanas e você tem a resposta real.",
+          "Todo mundo tem sido muito decente uns com os outros por uns seis dias, que é mais ou menos quanto isso dura.",
+          "A viela se fechou. É o que ela faz. Vai abrir de novo e vai levar exatamente o tempo que levar."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_who_needs_help",
+          "stance": "practical_help",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Who needs a hand?",
+            "pt": "Quem precisa de ajuda?"
+          },
+          "phrases": [
+            "who needs a hand",
+            "which household needs help"
+          ],
+          "requires_any": [
+            "hand",
+            "household",
+            "help"
+          ],
+          "disposition": {
+            "trust": 3,
+            "warmth": 2
+          },
+          "affection": {
+            "decision": "topic.village.offered_help",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "report",
+            "polarity": "positive",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "Two houses, and one of them will say no, and the trick is to leave the thing on the step rather than offer it.",
+                "That is the first useful question anybody has asked me all week. Come by in the morning and I will walk you round.",
+                "Nobody is asking, which is exactly when help is needed. Asking starts about three weeks after it would have helped most."
+              ],
+              "pt": [
+                "Duas casas, e uma delas vai dizer não, e o truque é deixar a coisa no degrau em vez de oferecer.",
+                "É a primeira pergunta útil que alguém me fez a semana inteira. Passe de manhã e eu te levo nas casas.",
+                "Ninguém está pedindo, que é exatamente quando a ajuda é necessária. As pessoas pedem umas três semanas depois de quando teria ajudado mais."
+              ]
+            }
+          }
+        },
+        {
+          "name": "acknowledge_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It's been a hard stretch here.",
+            "pt": "Tem sido um período difícil aqui."
+          },
+          "phrases": [
+            "it has been a hard stretch here",
+            "this has been difficult for everyone"
+          ],
+          "requires_any": [
+            "hard",
+            "difficult",
+            "stretch"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It has, and thank you for saying so out loud. Everybody has been being brave at each other and it is exhausting.",
+                "Yes. And it will be over, and the being over will happen without anybody noticing the day.",
+                "The hardest part is that nothing is anybody's fault, so there is nowhere for it to go."
+              ],
+              "pt": [
+                "Tem, e obrigada por dizer em voz alta. Todo mundo tem sido corajoso um para o outro e isso cansa.",
+                "Sim. E vai passar, e o passar vai acontecer sem ninguém notar o dia.",
+                "A parte mais difícil é que a culpa não é de ninguém, então não tem para onde isso ir."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

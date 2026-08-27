@@ -1,0 +1,334 @@
+{
+  "_comment": [
+    "Fears, gated on trust and on the hour.",
+    "",
+    "What somebody will admit to being afraid of depends on who is asking and on whether it is dark.",
+    "The night scene is the honest one; the daytime scene is the one that can be said in a doorway."
+  ],
+  "topic": "fears",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "fears"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "That is enough of that for one evening.",
+      "Right. It looks smaller now it is said.",
+      "I will leave it there."
+    ],
+    "pt": [
+      "Já basta disso por uma noite.",
+      "Certo. Parece menor agora que foi dito.",
+      "Vou parar por aqui."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for trusting me.",
+    "pt": "Obrigado por confiar em mim."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else on that?",
+      "pt": "Mais alguma coisa sobre isso?"
+    },
+    "leave": {
+      "en": "We'll leave it there.",
+      "pt": "Vamos deixar assim."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_night_one",
+      "subject": "fears.the_real_one",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "night"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 38,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What keeps you up.",
+        "pt": "O que te tira o sono."
+      },
+      "lines": {
+        "en": [
+          "It is not a thing that could happen. It is a thing that already has, somewhere else, to somebody like me.",
+          "Being the last one who knows how to do something. Everybody else finds that flattering and it frightens me at four in the morning.",
+          "That I will be exactly like this in twenty years and will have decided by then that I chose it."
+        ],
+        "pt": [
+          "Não é uma coisa que possa acontecer. É uma coisa que já aconteceu, em outro lugar, com alguém como eu.",
+          "Ser a última que sabe fazer alguma coisa. Todo mundo acha isso lisonjeiro e me assusta às quatro da manhã.",
+          "Que eu esteja exatamente assim daqui a vinte anos e já tenha decidido, até lá, que foi escolha minha."
+        ]
+      },
+      "replies": [
+        {
+          "name": "stay_with_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That's a real thing to be afraid of.",
+            "pt": "É uma coisa real de se temer."
+          },
+          "phrases": [
+            "that is a real thing to be afraid of",
+            "that fear makes sense to me"
+          ],
+          "requires_any": [
+            "afraid",
+            "fear",
+            "real"
+          ],
+          "disposition": {
+            "trust": 4,
+            "warmth": 4
+          },
+          "affection": {
+            "decision": "topic.fears.held",
+            "delta": 3,
+            "budget": "generous",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Thank you for not solving it. Everybody solves it, and being solved at makes a thing lonelier rather than smaller.",
+                "It is, and saying it to somebody who did not flinch has taken about a third of it away.",
+                "I have carried that for two years and said it once. Twice, now. It gets lighter by roughly the same amount each time."
+              ],
+              "pt": [
+                "Obrigada por não resolver. Todo mundo resolve, e ser resolvida deixa uma coisa mais solitária em vez de menor.",
+                "É, e dizer isso a alguém que não se encolheu tirou uns dois terços... um terço do peso.",
+                "Carreguei isso por dois anos e disse uma vez. Duas, agora. Fica mais leve mais ou menos na mesma medida a cada vez."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_how_long",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "How long have you carried that?",
+            "pt": "Há quanto tempo você carrega isso?"
+          },
+          "phrases": [
+            "how long have you carried that",
+            "how long has that been with you"
+          ],
+          "requires_any": [
+            "carried",
+            "long"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Since a particular winter. I could give you the month. That is how you know it is not a mood.",
+                "Long enough that it has furniture. It has a chair it sits in and a time of night it prefers.",
+                "It arrived all at once when I was about twenty-six, and it has never once been louder than it was that first week."
+              ],
+              "pt": [
+                "Desde um inverno específico. Eu saberia dizer o mês. É assim que se sabe que não é humor.",
+                "Tempo suficiente para ter mobília. Tem uma cadeira em que senta e uma hora da noite que prefere.",
+                "Chegou de uma vez quando eu tinha uns vinte e seis, e nunca mais foi tão alto quanto naquela primeira semana."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_doorway_one",
+      "subject": "fears.ordinary",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "acquaintance",
+            "friend"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 20,
+      "identity_styles": [
+        "humorous"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Anything frighten you?",
+        "pt": "Alguma coisa te assusta?"
+      },
+      "lines": {
+        "en": [
+          "Deep water and public speaking, in that order, and I have arranged my entire life around avoiding both.",
+          "Ladders. Genuinely. I will carry a thing twice as far to avoid going up one.",
+          "The usual. Debt, weather, and being asked a question in front of everybody. Two of those I can plan for."
+        ],
+        "pt": [
+          "Água funda e falar em público, nessa ordem, e organizei minha vida inteira para evitar as duas.",
+          "Escadas. Sério. Eu carrego uma coisa o dobro da distância para não subir numa.",
+          "O de sempre. Dívida, tempo, e ser perguntada na frente de todo mundo. Duas dessas dá para planejar."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_why_that_one",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "playful",
+          "outcome": "engaged",
+          "label": {
+            "en": "Where did that one come from?",
+            "pt": "De onde veio essa?"
+          },
+          "phrases": [
+            "where did that one come from",
+            "what is behind that one"
+          ],
+          "requires_any": [
+            "came",
+            "behind",
+            "come"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "A cousin, a pond and a summer afternoon that everybody else remembers as funny.",
+                "No story at all, which people find unsatisfying. Some of them just arrive with you and stay.",
+                "I fell off one at eleven. Six feet. Nothing broke and I have never been the same about ladders since."
+              ],
+              "pt": [
+                "Um primo, um açude e uma tarde de verão que todo mundo lembra como engraçada.",
+                "Nenhuma história, o que as pessoas acham insatisfatório. Algumas simplesmente chegam com você e ficam.",
+                "Caí de uma aos onze anos. Dois metros. Nada quebrou e eu nunca mais fui a mesma com escadas."
+              ]
+            }
+          }
+        },
+        {
+          "name": "share_your_own",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "playful",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I've got one just as daft.",
+            "pt": "Eu tenho um tão bobo quanto."
+          },
+          "phrases": [
+            "i have one just as daft",
+            "mine is just as silly"
+          ],
+          "requires_any": [
+            "daft",
+            "silly",
+            "mine"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "delighted",
+            "act": "celebrate",
+            "polarity": "positive",
+            "shape": "celebrate",
+            "lines": {
+              "en": [
+                "Good. Everybody has one and pretending otherwise is how the whole village ends up standing on ladders it hates.",
+                "Then we shall both go the long way round and say nothing about it to anybody.",
+                "That is the correct response and almost nobody gives it. Nearly everybody gives advice about the pond."
+              ],
+              "pt": [
+                "Ótimo. Todo mundo tem um, e fingir o contrário é como a vila inteira acaba em cima de escadas que detesta.",
+                "Então nós dois damos a volta maior e não contamos nada a ninguém.",
+                "É a resposta certa e quase ninguém dá. Quase todos dão conselho sobre o açude."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

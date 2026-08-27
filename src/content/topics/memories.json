@@ -1,0 +1,325 @@
+{
+  "_comment": [
+    "Family, gated on whether she has one nearby and on how long the player has known her.",
+    "",
+    "One scene is about the people in the house; the other is about the one who is not here, which is",
+    "the harder half and needs some standing before it will be raised at all."
+  ],
+  "topic": "memories",
+  "entry": {
+    "question": "conversations.family",
+    "answer": "memories"
+  },
+  "return_question": "conversations.family",
+  "leave_lines": {
+    "en": [
+      "That is the household.",
+      "Right. They will keep.",
+      "Enough about them."
+    ],
+    "pt": [
+      "É a casa.",
+      "Certo. Eles ficam para depois.",
+      "Chega de falar deles."
+    ]
+  },
+  "ages": [
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thanks for telling me.",
+    "pt": "Obrigado por contar."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about them?",
+      "pt": "Mais alguma coisa sobre eles?"
+    },
+    "leave": {
+      "en": "We'll leave them be.",
+      "pt": "Vamos deixar eles em paz."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_house_as_it_was",
+      "subject": "memories.household",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "social.family_names",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "hospitality"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "The household, as it was.",
+        "pt": "A casa, como era."
+      },
+      "lines": {
+        "en": [
+          "It was loud in the morning and asleep by nine, and I complained about both and would take either back tomorrow.",
+          "We were all in each other's way, and I did not know at the time that it was the arrangement I would miss.",
+          "Everybody was well and nobody was easy, which is the ordinary state of a house and nobody puts it in songs."
+        ],
+        "pt": [
+          "Era barulhenta de manhã e dormia às nove, e eu reclamava das duas coisas e aceitaria qualquer uma de volta amanhã.",
+          "Estávamos todos no caminho uns dos outros, e eu não sabia na época que era o arranjo de que eu sentiria falta.",
+          "Todo mundo estava bem e ninguém era fácil, que é o estado comum de uma casa e ninguém põe isso em canção."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_mornings",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "playful",
+          "outcome": "engaged",
+          "label": {
+            "en": "What are the mornings like?",
+            "pt": "Como são as manhãs?"
+          },
+          "phrases": [
+            "what are the mornings like",
+            "describe a morning in that house"
+          ],
+          "requires_any": [
+            "mornings",
+            "morning"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Four people and one kettle. Everything else about our household follows from that single fact.",
+                "Somebody is always looking for a thing that is exactly where they left it, and it is never the same somebody twice.",
+                "Very fast and then very empty. The house at half past seven is the best room I know and I get about four minutes of it."
+              ],
+              "pt": [
+                "Quatro pessoas e uma chaleira. Todo o resto da nossa casa decorre desse único fato.",
+                "Sempre tem alguém procurando uma coisa que está exatamente onde deixou, e nunca é a mesma pessoa duas vezes.",
+                "Muito rápida e depois muito vazia. A casa às sete e meia é o melhor cômodo que eu conheço e eu tenho uns quatro minutos disso."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_full",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Sounds like a full house.",
+            "pt": "Parece uma casa cheia."
+          },
+          "phrases": [
+            "sounds like a full house",
+            "that is a full household"
+          ],
+          "requires_any": [
+            "full",
+            "house",
+            "household"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "pleased",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and I lived alone for four years before it and I remember exactly how quiet a kettle can be.",
+                "Full and small, which is the combination people warn you about and then never explain the good half of.",
+                "Come by some evening. There is always a chair and you will be handed something to hold within a minute."
+              ],
+              "pt": [
+                "É, e eu morei sozinha por quatro anos antes disso e lembro exatamente o quanto uma chaleira pode ser silenciosa.",
+                "Cheia e pequena, que é a combinação sobre a qual as pessoas avisam e depois nunca explicam a metade boa.",
+                "Apareça uma noite dessas. Sempre tem cadeira e você vai receber alguma coisa para segurar em menos de um minuto."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_one_who_is_not_here",
+      "subject": "memories.absent",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 21,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 7,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Somebody who isn't here.",
+        "pt": "Alguém que não está aqui."
+      },
+      "lines": {
+        "en": [
+          "There is a chair at our table that has been nobody's for six years and is still that chair.",
+          "One of us left and the leaving was reasonable, and I have spent six years being reasonable about it in public.",
+          "We do not talk about them at the table. We talk about them one at a time, outside, to different people."
+        ],
+        "pt": [
+          "Existe uma cadeira na nossa mesa que não é de ninguém há seis anos e continua sendo aquela cadeira.",
+          "Um de nós foi embora e a partida foi razoável, e eu passei seis anos sendo razoável a respeito em público.",
+          "A gente não fala deles à mesa. A gente fala deles um por vez, do lado de fora, para pessoas diferentes."
+        ]
+      },
+      "replies": [
+        {
+          "name": "just_be_there",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Six years is a long chair.",
+            "pt": "Seis anos é uma cadeira longa."
+          },
+          "phrases": [
+            "six years is a long time for that",
+            "that chair has been empty a long while"
+          ],
+          "requires_any": [
+            "years",
+            "chair",
+            "empty"
+          ],
+          "disposition": {
+            "trust": 4,
+            "warmth": 4
+          },
+          "affection": {
+            "decision": "topic.family.absent.held",
+            "delta": 3,
+            "budget": "generous",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It is, and nobody has said the number back to me before, and hearing it out loud is oddly steadying.",
+                "Thank you for not asking why they went. Everybody asks why and the why has never once helped.",
+                "We could move the chair. We have discussed moving the chair four times and the chair is still there."
+              ],
+              "pt": [
+                "É, e ninguém tinha me devolvido o número antes, e ouvir em voz alta é estranhamente firmador.",
+                "Obrigada por não perguntar por que foram embora. Todo mundo pergunta o porquê e o porquê nunca ajudou uma vez.",
+                "A gente podia tirar a cadeira. Já discutimos tirar a cadeira quatro vezes e a cadeira continua lá."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_if_they_write",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Do you hear from them?",
+            "pt": "Você tem notícias deles?"
+          },
+          "phrases": [
+            "do you hear from them",
+            "is there any word from them"
+          ],
+          "requires_any": [
+            "hear",
+            "word"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "current",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Twice a year, and the letters are about weather, and I read them about nine times each.",
+                "Through somebody else, which is worse than nothing and better than nothing, and I could not tell you which more often.",
+                "No. And I check anyway, every time a carter comes through, and I have stopped pretending that I do not."
+              ],
+              "pt": [
+                "Duas vezes por ano, e as cartas são sobre o tempo, e eu leio cada uma umas nove vezes.",
+                "Por intermédio de outra pessoa, o que é pior que nada e melhor que nada, e eu não saberia dizer qual com mais frequência.",
+                "Não. E eu confiro mesmo assim, toda vez que passa um carroceiro, e parei de fingir que não confiro."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

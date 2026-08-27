@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "tease",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.pest_pressure.succeeded.wry"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.pests",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.farmer.pest_pressure"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.pest_pressure.succeeded.wry"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_cost",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.pest_pressure.succeeded.counted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.pests",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.farmer.pest_pressure"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.pest_pressure.succeeded.counted",
+              "slots": [
+                "worksite"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.farmer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "answers": [
+    {
+      "name": "ask_when",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.unfinished_delve.active.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.ruin_found",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.adventurer.unfinished_delve"
+            },
+            "next": "conversations.scene.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.adventurer.unfinished_delve.active.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_well",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.unfinished_delve.active.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.ruin_found",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.adventurer.unfinished_delve"
+            },
+            "next": "conversations.scene.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.adventurer.unfinished_delve.active.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.adventurer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

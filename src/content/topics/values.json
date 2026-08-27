@@ -1,0 +1,675 @@
+{
+  "_comment": [
+    "Values — what she will not do, and why.",
+    "",
+    "The funnel is the plain version: a thing she holds to, and where she got it. The scenes are the",
+    "harder halves — the value that has cost her something recently, and the one she was taught and",
+    "has since put down."
+  ],
+  "topic": "values",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "values"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "That is where I stand, anyway.",
+      "Right. Enough sermonising.",
+      "You will make your own rules."
+    ],
+    "pt": [
+      "É onde eu me firmo, pelo menos.",
+      "Certo. Chega de sermão.",
+      "Você vai fazer suas próprias regras."
+    ]
+  },
+  "ages": [
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Understood.",
+    "pt": "Entendido."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Press me further?",
+      "pt": "Quer insistir mais?"
+    },
+    "leave": {
+      "en": "We shall leave the sermon there.",
+      "pt": "Paramos o sermão por aqui."
+    }
+  },
+  "funnel": {
+    "legacy_lines": {
+      "en": [
+        "I try to be straight with people. It is not much of a creed and it has held up.",
+        "Do the work properly and say what you actually think. The rest sorts itself out.",
+        "Nothing grand. A short list, and I have kept to most of it most of the time."
+      ],
+      "pt": [
+        "Procuro ser franca com as pessoas. Não é grande credo e tem se sustentado.",
+        "Fazer o trabalho direito e dizer o que se pensa de verdade. O resto se resolve.",
+        "Nada grandioso. Uma lista curta, e eu cumpri quase toda ela quase sempre."
+      ]
+    },
+    "open": {
+      "subject": "values.what_i_hold",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "habitual",
+      "shape": "observe",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "What you hold to.",
+        "pt": "Ao que você se apega."
+      },
+      "lines": {
+        "en": [
+          "One rule, really. Everything else I do is that rule with different clothes on.",
+          "I have a short list and I could recite it, and I would rather show you the list by how I behave for a year.",
+          "There is a thing I will not do for money and I have been offered money for it twice."
+        ],
+        "pt": [
+          "Uma regra, na verdade. Todo o resto que eu faço é essa regra com outra roupa.",
+          "Tenho uma lista curta e poderia recitar, e prefiro mostrar a lista pelo meu comportamento por um ano.",
+          "Existe uma coisa que eu não faço por dinheiro, e já me ofereceram dinheiro por ela duas vezes."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_rule",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Name the rule.",
+            "pt": "Diga qual é a regra."
+          },
+          "phrases": [
+            "name the rule",
+            "what is the rule you keep"
+          ],
+          "requires_any": [
+            "rule"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Never make somebody else carry a thing I could have carried. It sounds simple and it costs about a day a week.",
+                "Say the difficult sentence on the day, not the week after. I have broken that one four times and regretted all four.",
+                "Do the part nobody checks as well as the part they do. That is the whole of it and it took a long time to learn."
+              ],
+              "pt": [
+                "Nunca fazer outra pessoa carregar o que eu poderia carregar. Parece simples e custa uns um dia por semana.",
+                "Dizer a frase difícil no dia, não na semana seguinte. Já quebrei essa quatro vezes e me arrependi das quatro.",
+                "Fazer a parte que ninguém confere tão bem quanto a que conferem. É tudo, e levou muito tempo para aprender."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_holds_up",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "A short list is the honest kind.",
+            "pt": "Uma lista curta é a honesta."
+          },
+          "phrases": [
+            "a short list is the honest kind",
+            "short lists are the ones people keep"
+          ],
+          "requires_any": [
+            "short",
+            "list"
+          ],
+          "disposition": {
+            "respect": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is. A long list is a thing people recite and a short one is a thing they have to live in front of witnesses.",
+                "Mine got shorter every decade, which I used to think was surrender and now think was aim.",
+                "Anybody with eleven principles has never been asked to choose between two of them."
+              ],
+              "pt": [
+                "É. Lista longa é coisa que se recita e lista curta é coisa que se vive diante de testemunhas.",
+                "A minha encurtou a cada década, o que eu achava que era rendição e agora acho que era pontaria.",
+                "Quem tem onze princípios nunca precisou escolher entre dois deles."
+              ]
+            }
+          }
+        },
+        {
+          "name": "call_it_posturing",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "Everybody says that until it costs them.",
+            "pt": "Todo mundo diz isso até custar caro."
+          },
+          "phrases": [
+            "everybody says that until it costs them",
+            "talk is cheap until it costs something"
+          ],
+          "requires_any": [
+            "costs",
+            "cheap"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.values.dismissed",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "qualify",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It has cost me, twice, and I am not going to list the occasions to somebody who opened with that.",
+                "Fair. You will find out which sort I am by watching, and that is the only way anybody finds out.",
+                "You may be right about most people. I would rather be judged in four years than argued with now."
+              ],
+              "pt": [
+                "Já me custou, duas vezes, e eu não vou listar as ocasiões para quem começou assim.",
+                "Justo. Você vai descobrir de que tipo eu sou observando, e é o único jeito de alguém descobrir.",
+                "Talvez você tenha razão sobre a maioria. Prefiro ser julgada em quatro anos a discutir agora."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "more": {
+      "subject": "values.where_it_came_from",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "shape": "reminisce",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "Where it came from.",
+        "pt": "De onde veio."
+      },
+      "lines": {
+        "en": [
+          "I got it from watching somebody do the opposite, which is how about half of anybody's rules arrive.",
+          "Somebody held to it in front of me once when it was expensive, and I have been copying them for twenty years.",
+          "I decided it at about twenty-six after a bad month, and I have never once revisited the decision."
+        ],
+        "pt": [
+          "Peguei isso vendo alguém fazer o contrário, que é como chega metade das regras de qualquer um.",
+          "Alguém sustentou isso na minha frente uma vez, quando era caro, e faz vinte anos que eu copio essa pessoa.",
+          "Decidi isso lá pelos vinte e seis depois de um mês ruim, e nunca revisitei a decisão."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_person",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Who was it you watched?",
+            "pt": "Quem foi que você observou?"
+          },
+          "phrases": [
+            "who was it you watched",
+            "tell me about that person"
+          ],
+          "requires_any": [
+            "watched",
+            "person"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "warmth": 2
+          },
+          "affection": {
+            "decision": "topic.values.asked_after",
+            "delta": 1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "told",
+            "act": "reminisce",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "A woman who taught me the trade and never once said a word about principles, which is why it took.",
+                "My father's neighbour, of all people. Four minutes on a Tuesday and I have been carrying it ever since.",
+                "Somebody who is dead now and who never knew, and I have thought about writing that down for their family."
+              ],
+              "pt": [
+                "Uma mulher que me ensinou o ofício e nunca disse uma palavra sobre princípios, e é por isso que pegou.",
+                "O vizinho do meu pai, de todas as pessoas. Quatro minutos numa terça e eu carrego isso desde então.",
+                "Alguém que já morreu e nunca soube, e eu já pensei em escrever isso para a família dela."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_shows",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It shows in how you work.",
+            "pt": "Dá para ver no seu trabalho."
+          },
+          "phrases": [
+            "it shows in how you work",
+            "that shows in what you do"
+          ],
+          "requires_any": [
+            "shows",
+            "work"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is the only place it is allowed to show. A value you have to announce is a costume.",
+                "Thank you. It is the sort of thing you never hear about, because when it works nothing happens.",
+                "I hope so. There are four days a year where I am fairly sure it did not, and I remember all four."
+              ],
+              "pt": [
+                "É o único lugar em que isso tem permissão de aparecer. Um valor que precisa ser anunciado é fantasia.",
+                "Obrigada. É o tipo de coisa sobre a qual nunca se ouve nada, porque quando funciona não acontece nada.",
+                "Espero que sim. Existem quatro dias por ano em que eu tenho quase certeza de que não apareceu, e lembro dos quatro."
+              ]
+            }
+          }
+        },
+        {
+          "name": "brush_it_off",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "That is a long story about a small rule.",
+            "pt": "É uma história longa para uma regra pequena."
+          },
+          "phrases": [
+            "that is a long story about a small rule",
+            "a great deal of story for one rule"
+          ],
+          "requires_any": [
+            "story",
+            "rule"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.values.cut_short",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is. Small rules take the longest to explain because the reasons are all in the years.",
+                "Right. I shall keep the rest of it for somebody who asked twice.",
+                "Fair enough. It is a small rule. It is also the one I have been most consistent about, so it earns the story."
+              ],
+              "pt": [
+                "É. Regras pequenas levam mais tempo para explicar porque os motivos estão todos nos anos.",
+                "Certo. Guardo o resto para quem perguntar duas vezes.",
+                "Tudo bem. É uma regra pequena. Também é aquela em que eu fui mais constante, então merece a história."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "name": "what_it_cost_lately",
+      "subject": "values.recent_cost",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "fairness",
+        "duty",
+        "precision"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What it cost you.",
+        "pt": "O que isso te custou."
+      },
+      "lines": {
+        "en": [
+          "It cost me a customer this season, and I would do it again, and I have been quietly cross about it for a month.",
+          "I lost an afternoon and a friendship's worth of goodwill over four sentences I could have left unsaid.",
+          "Holding to it was the easy part. Watching somebody else profit from not holding to it is the part nobody warns you about."
+        ],
+        "pt": [
+          "Me custou um cliente nesta estação, e eu faria de novo, e ando discretamente irritada com isso faz um mês.",
+          "Perdi uma tarde e o equivalente a uma amizade em boa vontade por quatro frases que eu podia ter engolido.",
+          "Sustentar foi a parte fácil. Ver outra pessoa lucrar por não sustentar é a parte sobre a qual ninguém avisa."
+        ]
+      },
+      "replies": [
+        {
+          "name": "say_it_was_worth_it",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "A rule that costs nothing isn't one.",
+            "pt": "Uma regra que não custa nada não é regra."
+          },
+          "phrases": [
+            "a rule that costs nothing is worth nothing",
+            "the cost is what makes it real"
+          ],
+          "requires_any": [
+            "costs",
+            "cost",
+            "real"
+          ],
+          "disposition": {
+            "respect": 4,
+            "warmth": 2
+          },
+          "affection": {
+            "decision": "topic.values.cost.backed",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "That is the sentence I have been saying to myself all month and it lands differently from somebody else.",
+                "Thank you. I did not want to be told I was right. I wanted somebody to know it had a price on it.",
+                "It helps. Not enough to get the customer back, and enough to stop me arguing with myself at four in the morning."
+              ],
+              "pt": [
+                "É a frase que eu venho dizendo a mim mesma o mês inteiro e ela cai diferente vinda de outra pessoa.",
+                "Obrigada. Eu não queria ouvir que estava certa. Queria que alguém soubesse que teve preço.",
+                "Ajuda. Não o bastante para trazer o cliente de volta, e o bastante para eu parar de discutir comigo às quatro da manhã."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_if_they_would_again",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would you do it again?",
+            "pt": "Você faria de novo?"
+          },
+          "phrases": [
+            "would you do it again",
+            "would you make the same choice"
+          ],
+          "requires_any": [
+            "again",
+            "choice"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Yes, and more quietly. The rule was right and the volume was me enjoying being right.",
+                "Yes. I have asked myself that about ninety times this month and the answer has not moved.",
+                "Ask me in the winter when the money is short. I would like to say yes and I would rather be honest about the question."
+              ],
+              "pt": [
+                "Sim, e mais em silêncio. A regra estava certa e o volume era eu gostando de estar certa.",
+                "Sim. Já me perguntei isso umas noventa vezes neste mês e a resposta não mudou.",
+                "Me pergunte no inverno, quando o dinheiro estiver curto. Eu gostaria de dizer sim e prefiro ser honesta sobre a pergunta."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_one_i_put_down",
+      "subject": "values.abandoned",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 30,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "One you stopped keeping.",
+        "pt": "Uma que você deixou de seguir."
+      },
+      "lines": {
+        "en": [
+          "I was raised on a rule I no longer keep, and putting it down took longer than learning it did.",
+          "There is one I held for twenty years and dropped in an afternoon, and I have never told the person who taught it to me.",
+          "I still catch myself following it. Twenty years of a habit outlives the reason by a long way."
+        ],
+        "pt": [
+          "Fui criada com uma regra que eu não sigo mais, e largar levou mais tempo do que aprender.",
+          "Existe uma que eu segui por vinte anos e larguei numa tarde, e nunca contei a quem me ensinou.",
+          "Ainda me pego seguindo. Vinte anos de hábito sobrevivem ao motivo por muito tempo."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_changed",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What changed your reckoning?",
+            "pt": "O que mudou sua conta?"
+          },
+          "phrases": [
+            "what changed your reckoning",
+            "what made you put it down"
+          ],
+          "requires_any": [
+            "reckoning",
+            "changed",
+            "down"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "privacy": "discreet",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "I watched it hurt somebody who had done nothing, and the rule had no answer for that, so the rule went.",
+                "I met somebody the rule said I should not trust. I trusted them for four years and was never once wrong to.",
+                "Nothing dramatic. I simply noticed I had been following it out of habit for a decade and could not say why."
+              ],
+              "pt": [
+                "Vi aquilo machucar alguém que não tinha feito nada, e a regra não tinha resposta para isso, então a regra foi embora.",
+                "Conheci alguém em quem a regra dizia para não confiar. Confiei por quatro anos e nunca estive errada.",
+                "Nada dramático. Só percebi que vinha seguindo por hábito havia uma década e não sabia dizer por quê."
+              ]
+            }
+          }
+        },
+        {
+          "name": "respect_the_change",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Putting one down takes more than keeping it.",
+            "pt": "Largar uma exige mais que mantê-la."
+          },
+          "phrases": [
+            "putting one down takes more than keeping it",
+            "letting go of one is harder"
+          ],
+          "requires_any": [
+            "putting",
+            "letting",
+            "keeping"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It does, and nobody praises it, because from outside it looks exactly like having no principles at all.",
+                "Thank you. The people who taught me would call it drift and I have decided to be able to live with that.",
+                "I keep a note of why I dropped it, so that in ten years I can check whether it was reasoning or convenience."
+              ],
+              "pt": [
+                "Exige, e ninguém elogia, porque de fora parece exatamente não ter princípio nenhum.",
+                "Obrigada. Quem me ensinou chamaria isso de relaxamento e eu decidi conseguir conviver com isso.",
+                "Guardo uma anotação do motivo, para que em dez anos eu possa conferir se foi raciocínio ou conveniência."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

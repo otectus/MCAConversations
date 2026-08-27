@@ -1,0 +1,126 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_mending",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.torn_gear.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.nets",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fisherman.torn_gear"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.torn_gear.blocked.explained",
+              "slots": [
+                "damage"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_string",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.torn_gear.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fisherman.gear.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.nets",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.torn_gear",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fisherman.torn_gear",
+              "obligation": "commitment:work.fisherman.bring_string"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.fisherman.bring_string"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.torn_gear.blocked.accepted",
+              "slots": [
+                "water"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "suggest_borrowing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.torn_gear.blocked.resisted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.nets",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fisherman.torn_gear"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.torn_gear.blocked.resisted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.fisherman.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

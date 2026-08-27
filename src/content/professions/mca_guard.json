@@ -1,0 +1,1175 @@
+{
+  "_comment": [
+    "Guard. Watch, wall and the person behind them.",
+    "",
+    "The §12.4 anchors are patrol, shift fatigue, a sighting, equipment, weak points and protecting a",
+    "named person. These three take the weak point in the defences, the thing seen on the night watch,",
+    "and the kit that is quietly failing. All three are about a specific place and a specific hour.",
+    "",
+    "Note the sighting episode: she is careful about what she actually saw. A guard who reports",
+    "certainty she does not have is how a village ends up afraid of nothing."
+  ],
+  "profession": "mca:guard",
+  "id": "guard",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "patrol",
+    "shift_fatigue",
+    "recent_threat",
+    "equipment",
+    "weak_points",
+    "protecting_named"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the wall.",
+    "pt": "Vou deixar você voltar para a muralha."
+  },
+  "slot_lang": {
+    "north_gate": {
+      "en": "the north gate",
+      "pt": "o portão norte"
+    },
+    "river_side": {
+      "en": "the river side",
+      "pt": "o lado do rio"
+    },
+    "orchard_wall": {
+      "en": "the orchard wall",
+      "pt": "o muro do pomar"
+    },
+    "granary_corner": {
+      "en": "the granary corner",
+      "pt": "a esquina do celeiro"
+    },
+    "a_gap_in_the_torches": {
+      "en": "a gap in the torches",
+      "pt": "uma brecha nas tochas"
+    },
+    "a_rotten_post": {
+      "en": "a rotten post",
+      "pt": "um mourão apodrecido"
+    },
+    "a_gate_that_sticks": {
+      "en": "a gate that sticks",
+      "pt": "um portão que emperra"
+    },
+    "no_line_of_sight": {
+      "en": "a blind corner",
+      "pt": "um canto cego"
+    },
+    "something_at_the_treeline": {
+      "en": "something at the treeline",
+      "pt": "algo na linha das árvores"
+    },
+    "tracks_in_the_mud": {
+      "en": "tracks in the mud",
+      "pt": "pegadas na lama"
+    },
+    "a_light_that_moved": {
+      "en": "a light that moved",
+      "pt": "uma luz que se mexeu"
+    },
+    "a_sound_twice": {
+      "en": "a sound, twice",
+      "pt": "um barulho, duas vezes"
+    },
+    "the_helm_strap": {
+      "en": "the helm strap",
+      "pt": "a correia do elmo"
+    },
+    "the_spear_haft": {
+      "en": "the spear haft",
+      "pt": "o cabo da lança"
+    },
+    "the_shield_boss": {
+      "en": "the shield boss",
+      "pt": "o umbo do escudo"
+    },
+    "the_night_boots": {
+      "en": "the night boots",
+      "pt": "as botas de ronda"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.weak_point",
+      "subject": "work.guard.weak_points",
+      "initial_state": "blocked",
+      "salience": 60,
+      "due_after_days": 5,
+      "expires_after_days": 24,
+      "slots": {
+        "place": [
+          "north_gate",
+          "river_side",
+          "orchard_wall",
+          "granary_corner"
+        ],
+        "fault": [
+          "a_gap_in_the_torches",
+          "a_rotten_post",
+          "a_gate_that_sticks",
+          "no_line_of_sight"
+        ]
+      },
+      "commitment": {
+        "id": "work.guard.bring_timber",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:oak_planks",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "place",
+            "fault"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The wall.",
+            "pt": "A muralha."
+          },
+          "lines": {
+            "en": [
+              "There is %3$s at %2$s. I have reported it twice and been told twice that it is on the list.",
+              "Walk %2$s with me some evening and you will see %3$s before I have to point at it. That is how obvious it is.",
+              "%2$s has %3$s and I have run out of ways to say so that sound patient."
+            ],
+            "pt": [
+              "Tem %3$s em %2$s. Já relatei duas vezes e me disseram duas vezes que está na lista.",
+              "Ande comigo por %2$s alguma noite e você vai ver %3$s antes de eu precisar apontar. É assim de óbvio.",
+              "%2$s tem %3$s, e eu já esgotei os jeitos de dizer isso que ainda soam pacientes."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_consequence",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What happens if nobody fixes it?",
+                "pt": "O que acontece se ninguém consertar?"
+              },
+              "phrases": [
+                "what is the worst case there",
+                "what could get through"
+              ],
+              "requires_any": [
+                "happens",
+                "worst",
+                "through"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Nothing, most nights. That is the difficulty. It costs nothing for a hundred nights and everything on the hundred and first, and I cannot show anybody the hundred and first.",
+                    "Somebody comes through %2$s and nobody knows until they are inside. Not a battle. A theft, a fright, a child who will not sleep for a month.",
+                    "I stand where I can see it instead of where I should be. So the answer is that the whole watch is worse, quietly, every night, and nobody can point at why."
+                  ],
+                  "pt": [
+                    "Nada, na maioria das noites. É essa a dificuldade. Não custa nada por cem noites e custa tudo na centésima primeira, e eu não consigo mostrar a centésima primeira a ninguém.",
+                    "Alguém entra por %2$s e ninguém percebe até já estar dentro. Não uma batalha. Um furto, um susto, uma criança que não dorme por um mês.",
+                    "Fico onde consigo ver isso em vez de onde deveria estar. Então a resposta é que a ronda inteira piora, em silêncio, toda noite, e ninguém consegue apontar por quê."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_timber",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "Bring me the planks and I'll help you fix it.",
+                "pt": "Traga as tábuas e eu ajudo a consertar."
+              },
+              "phrases": [
+                "i can bring planks for that",
+                "let me fetch timber"
+              ],
+              "requires_any": [
+                "planks",
+                "timber"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.guard.weak_point.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Then it gets done, and it gets done this week, and I will stop being the person who mentions %2$s at every meeting.",
+                    "You are offering to solve in an afternoon a thing I have been carrying for a month. I will take it and I will not make a speech about it.",
+                    "Right. Bring them to %2$s at dusk and I will have the tools laid out. I have had the tools laid out for a fortnight, if I am honest."
+                  ],
+                  "pt": [
+                    "Então fica feito, e fica feito esta semana, e eu paro de ser a pessoa que menciona %2$s em toda reunião.",
+                    "Você está se oferecendo para resolver numa tarde uma coisa que eu carrego há um mês. Aceito, e não vou fazer discurso.",
+                    "Certo. Traga até %2$s ao anoitecer e eu deixo as ferramentas prontas. Deixo as ferramentas prontas há quinze dias, para ser honesta."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_escalate",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Stop asking. Call it a danger and make them hear it.",
+                "pt": "Pare de pedir. Chame de perigo e faça ouvirem."
+              },
+              "phrases": [
+                "call it a danger and make them hear it",
+                "say danger and make them listen"
+              ],
+              "requires_any": [
+                "danger",
+                "hear",
+                "listen"
+              ],
+              "disposition": {
+                "respect": 2,
+                "tension": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "And be the guard who cries wolf about %2$s. I get one of those in a career and I would rather spend it on something worse than this.",
+                    "If I say unsafe they will post two people there and take them off the river, and then the river is what I am standing here worrying about.",
+                    "That is what you say when you have not had to be believed for a living. I would rather be dull and heard than urgent and discounted."
+                  ],
+                  "pt": [
+                    "E virar a guarda que grita lobo por causa de %2$s. Tenho direito a uma dessas numa carreira, e prefiro gastar com algo pior que isto.",
+                    "Se eu disser inseguro, vão pôr duas pessoas ali e tirar do rio, e aí o rio passa a ser o que eu fico aqui temendo.",
+                    "Isso é o que se diz quando nunca se precisou ser acreditada para viver. Prefiro ser monótona e ouvida a ser urgente e descontada."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "prompt": {
+            "en": "It's mended.",
+            "pt": "Está consertado."
+          },
+          "lines": {
+            "en": [
+              "%2$s is sound. I walked it twice last night for no reason except that I could walk past it without thinking.",
+              "Mended. Four hours and a dozen planks, after a month of asking. I am trying not to be bitter about the arithmetic.",
+              "It is done, and the watch feels different. Not safer, exactly. Lighter."
+            ],
+            "pt": [
+              "%2$s está firme. Passei por lá duas vezes ontem à noite sem motivo, só porque dava para passar sem pensar.",
+              "Consertado. Quatro horas e uma dúzia de tábuas, depois de um mês pedindo. Estou tentando não ficar amarga com a conta.",
+              "Está feito, e a ronda parece outra. Não mais segura, exatamente. Mais leve."
+            ]
+          },
+          "replies": [
+            {
+              "name": "credit_her",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You kept asking. That's why it got done.",
+                "pt": "Você insistiu. Foi por isso que foi feito."
+              },
+              "phrases": [
+                "you are the reason it got done",
+                "you kept on about it"
+              ],
+              "requires_any": [
+                "asking",
+                "reason",
+                "kept"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.guard.weak_point.credit",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "credited",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "I kept asking and I was very close to stopping. A fortnight more and %2$s would still be open, and I would have called that patience.",
+                    "Being a nuisance is most of this job and nobody ever puts it that way kindly. Thank you.",
+                    "That is the part nobody sees, so I will take having it said. Once. Do not make a habit of it."
+                  ],
+                  "pt": [
+                    "Insisti e estive muito perto de desistir. Mais quinze dias e %2$s ainda estaria aberto, e eu teria chamado isso de paciência.",
+                    "Ser inconveniente é metade deste trabalho, e ninguém nunca coloca isso com gentileza. Obrigada.",
+                    "Essa é a parte que ninguém vê, então aceito ouvir. Uma vez. Não vire hábito."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_next_weak",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Where's the next weak spot?",
+                "pt": "Onde fica o próximo ponto fraco?"
+              },
+              "phrases": [
+                "what is the next problem",
+                "where else is thin"
+              ],
+              "requires_any": [
+                "next",
+                "else",
+                "weak"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "listed",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "There is always a next one. That is not gloom, it is the job — you fix %2$s and the next thinnest place becomes the thinnest place.",
+                    "The river stair, and I am not going to start on it today because I have had one good week and I would like to finish it.",
+                    "Ask me tomorrow. Tonight I am going to walk a wall with nothing wrong with it, which happens about twice a year."
+                  ],
+                  "pt": [
+                    "Sempre tem um próximo. Isso não é pessimismo, é o ofício — você conserta %2$s e o próximo ponto mais fino vira o mais fino.",
+                    "A escada do rio, e não vou começar com isso hoje porque tive uma boa semana e gostaria de terminá-la.",
+                    "Me pergunte amanhã. Hoje vou percorrer uma muralha sem nada de errado, o que acontece umas duas vezes por ano."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "act": "complain",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place",
+            "fault"
+          ],
+          "prompt": {
+            "en": "Nothing happened, then.",
+            "pt": "Então nada foi feito."
+          },
+          "lines": {
+            "en": [
+              "I have stopped raising %2$s. %3$s is still there and I have moved my patrol so that I do not have to look at it.",
+              "It did not get fixed and it is not going to. I have written it in the book so that when it matters, it will at least have been written down.",
+              "%3$s at %2$s, still. I am not angry any more, which I think is worse."
+            ],
+            "pt": [
+              "Parei de falar de %2$s. %3$s continua lá e eu mudei minha ronda para não ter de olhar.",
+              "Não foi consertado e não vai ser. Registrei no livro para que, quando importar, ao menos tenha ficado escrito.",
+              "%3$s em %2$s, ainda. Já não estou brava, o que acho que é pior."
+            ]
+          },
+          "replies": [
+            {
+              "name": "sit_with_it",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You did your part. They didn't do theirs.",
+                "pt": "Você fez a sua parte. Eles não fizeram a deles."
+              },
+              "phrases": [
+                "you did what you could",
+                "that is on them not you"
+              ],
+              "requires_any": [
+                "part",
+                "them",
+                "could"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.guard.weak_point.mourn",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "received",
+                "act": "qualify",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "That is true and it will not help me at all on the night it matters, but say it again anyway. It helps now.",
+                    "I know. I would still rather have been wrong about %2$s than right and ignored.",
+                    "Not one person has put it that way. They have all said 'you tried', which is the same sentence with the blame quietly moved."
+                  ],
+                  "pt": [
+                    "É verdade, e não vai me ajudar em nada na noite em que importar — mas repita mesmo assim. Ajuda agora.",
+                    "Eu sei. Ainda assim, preferia ter estado errada sobre %2$s a estar certa e ignorada.",
+                    "Nem uma pessoa colocou assim. Todos disseram 'você tentou', que é a mesma frase com a culpa discretamente deslocada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_workaround",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How are you covering it in the meantime?",
+                "pt": "Como você está cobrindo isso enquanto isso?"
+              },
+              "phrases": [
+                "how do you cover it now",
+                "what are you doing instead"
+              ],
+              "requires_any": [
+                "covering",
+                "cover",
+                "instead"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "coping",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Badly. I loop back past %2$s twice a night, which means the far side gets less of me. You cannot cover a hole; you can only choose which hole.",
+                    "A lamp I pay for myself and a habit of listening at the turn. Neither is a repair and both are better than nothing.",
+                    "By being there. That is the whole answer and it is why I am tired all the time, and why I will not be able to keep it up through winter."
+                  ],
+                  "pt": [
+                    "Mal. Volto por %2$s duas vezes por noite, o que significa que o outro lado fica com menos de mim. Não se cobre um buraco; só se escolhe qual buraco.",
+                    "Uma lamparina que pago do meu bolso e o hábito de escutar na curva. Nenhum dos dois é conserto, e ambos são melhores que nada.",
+                    "Estando lá. É a resposta inteira, e é por isso que vivo cansada, e por isso que não vou aguentar isso o inverno todo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.night_sighting",
+      "subject": "work.guard.recent_threat",
+      "initial_state": "blocked",
+      "salience": 52,
+      "due_after_days": 4,
+      "expires_after_days": 18,
+      "slots": {
+        "sighting": [
+          "something_at_the_treeline",
+          "tracks_in_the_mud",
+          "a_light_that_moved",
+          "a_sound_twice"
+        ],
+        "place": [
+          "north_gate",
+          "river_side",
+          "orchard_wall",
+          "granary_corner"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "act": "report",
+          "polarity": "negative",
+          "epistemic": "observed",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "sighting",
+            "place"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The night watch.",
+            "pt": "A ronda noturna."
+          },
+          "lines": {
+            "en": [
+              "%2$s, past %3$s, two nights running. I am not going to tell you what it was, because I do not know what it was.",
+              "I saw %2$s near %3$s. I have written down exactly that and nothing more, and half the village has already improved on it.",
+              "There was %2$s at %3$s and I have spent the day refusing to guess out loud, which is harder than the watch was."
+            ],
+            "pt": [
+              "%2$s, depois de %3$s, duas noites seguidas. Não vou dizer o que era, porque eu não sei o que era.",
+              "Vi %2$s perto de %3$s. Anotei exatamente isso e nada mais, e metade da vila já melhorou a história.",
+              "Havia %2$s em %3$s, e passei o dia recusando adivinhar em voz alta, o que foi mais difícil que a ronda."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_certainty",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How sure are you about what you saw?",
+                "pt": "Quão certa você está do que viu?"
+              },
+              "phrases": [
+                "how certain are you",
+                "could you have been mistaken"
+              ],
+              "requires_any": [
+                "sure",
+                "certain",
+                "mistaken"
+              ],
+              "disposition": {
+                "respect": 3,
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "hedged",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "sighting"
+                ],
+                "lines": {
+                  "en": [
+                    "Sure that I saw %2$s. Not sure what it means, and the two get run together the moment I stop saying them separately.",
+                    "Certain of the fact, uncertain of everything past it. That is an uncomfortable place to stand and it is the only honest one.",
+                    "I have been wrong before at that hour. I have also been right before at that hour, and only one of those gets remembered."
+                  ],
+                  "pt": [
+                    "Certa de que vi %2$s. Nada certa do que significa, e as duas coisas se misturam no instante em que eu paro de dizê-las separadas.",
+                    "Certa do fato, incerta de tudo depois dele. É um lugar desconfortável de se ficar e é o único honesto.",
+                    "Já errei nessa hora antes. Também já acertei nessa hora antes, e só uma dessas fica na memória."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_to_watch",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "advance": "succeeded",
+              "label": {
+                "en": "I'll walk it with you tonight.",
+                "pt": "Faço a ronda com você hoje à noite."
+              },
+              "phrases": [
+                "let me walk the watch with you",
+                "ill come out with you tonight"
+              ],
+              "requires_any": [
+                "walk",
+                "watch",
+                "tonight"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.guard.night_sighting.company",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Then we will both look and there will be two accounts instead of one, which is worth more than anything I could add alone.",
+                    "Come at full dark and stand where I put you, and do not talk. If %2$s has anything to show us it shows it to quiet people.",
+                    "Yes. And if we see nothing, I will say we saw nothing, and I will be glad rather than disappointed. I want you to know that in advance."
+                  ],
+                  "pt": [
+                    "Então nós dois olhamos e haverá dois relatos em vez de um, o que vale mais do que qualquer coisa que eu acrescentasse sozinha.",
+                    "Venha na escuridão total, fique onde eu colocar e não fale. Se %2$s tiver algo a mostrar, mostra a gente calada.",
+                    "Sim. E se não virmos nada, direi que não vimos nada, e ficarei contente em vez de decepcionada. Quero que você saiba disso desde já."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "sighting"
+          ],
+          "prompt": {
+            "en": "So it was nothing.",
+            "pt": "Então não era nada."
+          },
+          "lines": {
+            "en": [
+              "%2$s was a stray dog and a badly hung shutter, in that order. I have never been so pleased to have wasted three nights.",
+              "It resolved. Not dramatically — most things do not — and the village will never hear about it, which is exactly how a watch should end.",
+              "Nothing came of %2$s. I have said so at the well twice, because a rumour left alone grows and a rumour answered dies."
+            ],
+            "pt": [
+              "%2$s era um cão perdido e uma janela mal pendurada, nessa ordem. Nunca fiquei tão contente por ter perdido três noites.",
+              "Se resolveu. Sem drama — quase nada tem — e a vila nunca vai saber, que é exatamente como uma vigília deve terminar.",
+              "Não deu em nada, %2$s. Já disse isso no poço duas vezes, porque boato deixado em paz cresce e boato respondido morre."
+            ]
+          },
+          "replies": [
+            {
+              "name": "praise_care",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You were careful about it the whole way through.",
+                "pt": "Você teve cuidado com isso do começo ao fim."
+              },
+              "phrases": [
+                "you were careful with that",
+                "you stayed measured about it"
+              ],
+              "requires_any": [
+                "careful",
+                "measured"
+              ],
+              "disposition": {
+                "respect": 4
+              },
+              "affection": {
+                "decision": "work.guard.night_sighting.praise",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "It is the only part of this I am actually proud of. Anyone can raise an alarm. Not raising one badly takes some doing.",
+                    "I nearly was not. Second night I very nearly said the word everyone was waiting for, and then I went home instead.",
+                    "Thank you. That is the thing I would want written down, and it is never the thing that gets written down."
+                  ],
+                  "pt": [
+                    "É a única parte disso de que eu realmente me orgulho. Qualquer um dá um alarme. Não dar um alarme malfeito custa trabalho.",
+                    "Quase não tive. Na segunda noite quase disse a palavra que todo mundo esperava, e então fui para casa em vez disso.",
+                    "Obrigada. É o que eu gostaria que ficasse escrito, e nunca é o que fica escrito."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_rumour",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Did the story get away from you?",
+                "pt": "A história fugiu do seu controle?"
+              },
+              "phrases": [
+                "did the rumour spread",
+                "what were people saying"
+              ],
+              "requires_any": [
+                "story",
+                "rumour",
+                "saying"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "recounted",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "temporal": "past",
+                "slots_used": [
+                  "sighting"
+                ],
+                "lines": {
+                  "en": [
+                    "By the second morning %2$s had become three of something with eyes. By the third it had a direction and a purpose. Nobody lied. It just travelled.",
+                    "A little. The trick is to say the boring version loudly and often, and to say it to the people who talk most.",
+                    "It did, and I let it for half a day because I wanted to see where it went. That was not the responsible choice and it was very instructive."
+                  ],
+                  "pt": [
+                    "Na segunda manhã, %2$s já eram três de alguma coisa com olhos. Na terceira, tinha direção e propósito. Ninguém mentiu. Só viajou.",
+                    "Um pouco. O truque é dizer a versão sem graça bem alto e muitas vezes, e dizer para quem mais fala.",
+                    "Fugiu, e eu deixei por meio dia porque quis ver onde ia parar. Não foi a escolha responsável e foi muito instrutivo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.failing_kit",
+      "subject": "work.guard.equipment",
+      "initial_state": "active",
+      "salience": 34,
+      "expires_after_days": 20,
+      "slots": {
+        "kit": [
+          "the_helm_strap",
+          "the_spear_haft",
+          "the_shield_boss",
+          "the_night_boots"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "kit"
+          ],
+          "identity_styles": [
+            "methodical",
+            "pragmatic"
+          ],
+          "prompt": {
+            "en": "About the kit.",
+            "pt": "Sobre o equipamento."
+          },
+          "lines": {
+            "en": [
+              "%2$s is going. Not gone. Going, in the way that means I will find out exactly when at the least convenient possible moment.",
+              "I have been nursing %2$s along for six weeks with a bit of cord and some optimism.",
+              "Do not look at %2$s too closely. I know. I have known for a while."
+            ],
+            "pt": [
+              "%2$s está indo. Não foi. Está indo, do jeito que significa que vou descobrir exatamente quando no pior momento possível.",
+              "Venho remendando %2$s há seis semanas com um pedaço de corda e otimismo.",
+              "Não olhe %2$s de muito perto. Eu sei. Sei faz um tempo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "urge_replace",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "advance": "succeeded",
+              "label": {
+                "en": "Replace it. Don't wait for it to fail.",
+                "pt": "Troque. Não espere falhar."
+              },
+              "phrases": [
+                "get a new one now",
+                "replace it before it breaks"
+              ],
+              "requires_any": [
+                "replace",
+                "new"
+              ],
+              "disposition": {
+                "respect": 2,
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "problem_solve",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "kit"
+                ],
+                "lines": {
+                  "en": [
+                    "You are right and I have been treating %2$s as a test of character instead of a piece of equipment. I will see the smith.",
+                    "The reason I have not is that asking means admitting I let it get this far. Said out loud that is a stupid reason.",
+                    "Fine. Tomorrow. And I will ask for the good one rather than the cheap one, which is the harder half of what you just said."
+                  ],
+                  "pt": [
+                    "Você tem razão, e eu venho tratando %2$s como teste de caráter em vez de peça de equipamento. Vou procurar o ferreiro.",
+                    "O motivo de eu não ter feito é que pedir significa admitir que deixei chegar a esse ponto. Dito em voz alta, é um motivo idiota.",
+                    "Está bem. Amanhã. E vou pedir a boa em vez da barata, que é a metade mais difícil do que você acabou de dizer."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_why_wait",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What's stopping you asking for a new one?",
+                "pt": "O que impede você de pedir uma nova?"
+              },
+              "phrases": [
+                "what is stopping you asking for another",
+                "what holds you back from asking"
+              ],
+              "requires_any": [
+                "stopping",
+                "holds",
+                "asking"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "admitted",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "confide",
+                "slots_used": [
+                  "kit"
+                ],
+                "lines": {
+                  "en": [
+                    "Because the last three things I asked for took a month each, and I have decided to spend my asking on the wall rather than on %2$s.",
+                    "Pride, mostly, dressed up as thrift. It is somebody else's coin and I keep behaving as though it were a favour.",
+                    "%2$s was my father's. That is the whole reason and it is not a good one, and I would rather you had it than a better-sounding answer."
+                  ],
+                  "pt": [
+                    "Porque as três últimas coisas que pedi levaram um mês cada, e resolvi gastar os meus pedidos com a muralha em vez de com %2$s.",
+                    "Orgulho, principalmente, vestido de economia. É dinheiro dos outros e eu insisto em agir como se fosse favor.",
+                    "%2$s era do meu pai. É o motivo inteiro e não é um bom motivo, e prefiro que você tenha ele a ter uma resposta mais bonita."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "kit"
+          ],
+          "prompt": {
+            "en": "You got it seen to.",
+            "pt": "Você resolveu."
+          },
+          "lines": {
+            "en": [
+              "%2$s is replaced. It does not fit right yet and it is already better than the thing it replaced, which tells you something.",
+              "Done. Took an hour and a conversation I had been dreading for six weeks, and the conversation was four sentences long.",
+              "Sorted. I kept the old one, which I am aware is exactly the behaviour that got me here."
+            ],
+            "pt": [
+              "%2$s foi trocada. Ainda não assentou direito e já é melhor que a que substituiu, o que diz alguma coisa.",
+              "Feito. Levou uma hora e uma conversa que eu temia há seis semanas, e a conversa teve quatro frases.",
+              "Resolvido. Guardei a antiga, o que eu sei ser exatamente o comportamento que me trouxe até aqui."
+            ]
+          },
+          "replies": [
+            {
+              "name": "tease",
+              "stance": "humor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "playful",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Six weeks, and it took four sentences.",
+                "pt": "Seis semanas, e bastaram quatro frases."
+              },
+              "phrases": [
+                "six weeks for four sentences",
+                "all that for one short conversation"
+              ],
+              "requires_any": [
+                "weeks",
+                "sentences",
+                "conversation"
+              ],
+              "disposition": {
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "wry",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "Do not. I have already had this conversation with myself on the walk back and I lost it.",
+                    "Four sentences and one of them was 'yes'. I am going to be thinking about that at odd hours for a while.",
+                    "I know. Put it in the book. 'Guard delays six weeks, is fine, feels foolish.' It will be good for whoever reads it next."
+                  ],
+                  "pt": [
+                    "Não. Já tive essa conversa comigo mesma na volta e perdi.",
+                    "Quatro frases, e uma delas foi 'sim'. Vou ficar pensando nisso em horas estranhas por um tempo.",
+                    "Eu sei. Anote no livro. 'Guarda adia seis semanas, dá tudo certo, sente-se boba.' Vai ser útil para quem ler depois."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_fit",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Does the new one suit you?",
+                "pt": "A nova serve bem em você?"
+              },
+              "phrases": [
+                "how does the new one feel",
+                "does it fit properly"
+              ],
+              "requires_any": [
+                "suit",
+                "fit",
+                "feel"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "assessed",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "observe",
+                "slots_used": [
+                  "kit"
+                ],
+                "lines": {
+                  "en": [
+                    "Not yet. Everything new sits wrong for a fortnight and then one morning you stop noticing it. %2$s will get there.",
+                    "It is heavier and I am glad of it. I had got used to something too light to do its job and started calling that comfortable.",
+                    "Well enough that I stopped adjusting it halfway through the watch, which is the only test that means anything."
+                  ],
+                  "pt": [
+                    "Ainda não. Tudo novo assenta errado por quinze dias e aí, numa manhã, você para de reparar. %2$s vai chegar lá.",
+                    "É mais pesada e ainda bem. Eu tinha me acostumado com algo leve demais para o serviço e comecei a chamar isso de confortável.",
+                    "Bem o bastante para eu parar de ajustar no meio da ronda, que é o único teste que significa alguma coisa."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of the watch?",
+        "pt": "Qual é a parte mais difícil da ronda?"
+      },
+      "requires_any": [
+        "hardest",
+        "watch"
+      ],
+      "phrases": [
+        "what is the worst part of standing watch",
+        "hardest thing about the job"
+      ]
+    },
+    "leave": {
+      "en": "I'll let you get on with it.",
+      "pt": "Vou deixar você seguir."
+    }
+  }
+}

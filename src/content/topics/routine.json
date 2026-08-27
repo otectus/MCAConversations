@@ -1,0 +1,669 @@
+{
+  "_comment": [
+    "Routine — the shape of a villager's day.",
+    "",
+    "Chitchat, so the funnel stays light: what the day looks like, and the part of it she guards. The",
+    "scenes take the two ends nobody sees — the first hour, and the hour after the work is done."
+  ],
+  "topic": "routine",
+  "entry": {
+    "question": "conversations.cat.chitchat",
+    "answer": "routine"
+  },
+  "return_question": "conversations.cat.chitchat",
+  "leave_lines": {
+    "en": [
+      "Same again tomorrow, near enough.",
+      "That is the shape of it.",
+      "Back to it, then."
+    ],
+    "pt": [
+      "Amanhã quase igual.",
+      "É esse o formato da coisa.",
+      "De volta ao trabalho, então."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Sounds a full day.",
+    "pt": "Parece um dia cheio."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Still curious about the day?",
+      "pt": "Ainda curioso sobre o dia?"
+    },
+    "leave": {
+      "en": "Back to it, then.",
+      "pt": "De volta ao trabalho, então."
+    }
+  },
+  "funnel": {
+    "legacy_lines": {
+      "en": [
+        "Up early, work, eat, sleep. It is not a thrilling account and it suits me.",
+        "Much the same every day, which people say as a complaint and I say as a comfort.",
+        "The morning is busy and the afternoon is fiddly. That is about the whole of it."
+      ],
+      "pt": [
+        "Levantar cedo, trabalhar, comer, dormir. Não é um relato empolgante e me serve.",
+        "Quase igual todo dia, o que as pessoas dizem como reclamação e eu digo como conforto.",
+        "A manhã é corrida e a tarde é minuciosa. É basicamente tudo."
+      ]
+    },
+    "open": {
+      "subject": "routine.shape_of_the_day",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "observation",
+      "temporal": "habitual",
+      "shape": "observe",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "How the day runs.",
+        "pt": "Como o dia corre."
+      },
+      "lines": {
+        "en": [
+          "Three parts. The part that has to happen at dawn, the part that can slide, and the part I keep putting off.",
+          "It runs itself by now. I could do the first two hours asleep and some mornings I suspect I have.",
+          "Busy until the middle of the day, then it goes quiet, and the quiet half is where the actual work gets done."
+        ],
+        "pt": [
+          "Três partes. A que precisa ser ao amanhecer, a que pode escorregar e a que eu vivo adiando.",
+          "Já corre sozinho. Eu faria as duas primeiras horas dormindo e em algumas manhãs desconfio que fiz.",
+          "Corrido até o meio do dia, depois fica calmo, e a metade calma é onde o trabalho de verdade acontece."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_hardest_part",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which part is hardest?",
+            "pt": "Qual parte é a mais difícil?"
+          },
+          "phrases": [
+            "which part is hardest",
+            "what is the hardest part of it"
+          ],
+          "requires_any": [
+            "hardest",
+            "part"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The starting. Once I am moving the day carries me, and getting moving takes about an hour of arguing.",
+                "The middle, where it is too late to change the plan and too early to see whether the plan was any good.",
+                "The tidying. It is fifteen minutes and I have been losing that fifteen-minute argument for years."
+              ],
+              "pt": [
+                "Começar. Assim que estou em movimento o dia me carrega, e entrar em movimento leva uma hora de discussão.",
+                "O meio, quando já é tarde para mudar o plano e cedo demais para ver se o plano prestava.",
+                "A arrumação. São quinze minutos e eu venho perdendo essa discussão de quinze minutos há anos."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_steady",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "A steady day is worth having.",
+            "pt": "Um dia estável vale muito."
+          },
+          "phrases": [
+            "a steady day is worth having",
+            "steady days are the good ones"
+          ],
+          "requires_any": [
+            "steady"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is. I spent some years without one and I have stopped calling routine a dull word.",
+                "That is the argument I make to anybody who calls it dull, and you got there without me making it.",
+                "Nearly everybody wants an interesting day until they get four in a row."
+              ],
+              "pt": [
+                "Vale. Passei alguns anos sem um e parei de chamar rotina de palavra chata.",
+                "É o argumento que eu faço a quem chama isso de chato, e você chegou lá sem eu precisar fazer.",
+                "Quase todo mundo quer um dia interessante até ter quatro seguidos."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wave_it_away",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "Sounds the same as everyone's.",
+            "pt": "Parece igual ao de todo mundo."
+          },
+          "phrases": [
+            "sounds the same as everyone else's",
+            "that sounds much the same"
+          ],
+          "requires_any": [
+            "same",
+            "sounds"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 1
+          },
+          "affection": {
+            "decision": "topic.routine.dismissed",
+            "delta": -1,
+            "budget": "quick",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "qualify",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Very likely. The differences are all in the small hours and those take longer to describe than you want.",
+                "It is, mostly. That is rather the point of a village.",
+                "Right. I shall spare you the rest of it, then."
+              ],
+              "pt": [
+                "Muito provável. As diferenças estão todas nas horas pequenas e demoram mais para descrever do que você quer.",
+                "É, quase todo. Esse é meio que o objetivo de uma vila.",
+                "Certo. Poupo você do resto, então."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "more": {
+      "subject": "routine.the_part_i_guard",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "disclosure",
+      "temporal": "habitual",
+      "privacy": "discreet",
+      "shape": "confide",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "The part you guard.",
+        "pt": "A parte que você protege."
+      },
+      "lines": {
+        "en": [
+          "There is a quarter of an hour in it that I will move anything else to protect.",
+          "One piece of the day is mine, and everybody here has learned to knock during it rather than walk in.",
+          "I give up any part of it you like except one, and I have given up the others often enough to know."
+        ],
+        "pt": [
+          "Existe um quarto de hora nele que eu movo qualquer outra coisa para proteger.",
+          "Um pedaço do dia é meu, e todo mundo aqui aprendeu a bater em vez de entrar nessa hora.",
+          "Abro mão de qualquer parte que você quiser, menos de uma, e já abri mão das outras o bastante para saber."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_which_quarter",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which piece is yours?",
+            "pt": "Qual pedaço é seu?"
+          },
+          "phrases": [
+            "which piece is yours",
+            "what part do you protect"
+          ],
+          "requires_any": [
+            "piece",
+            "protect"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 1
+          },
+          "affection": {
+            "decision": "topic.routine.asked_after",
+            "delta": 1,
+            "budget": "quick",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "told",
+            "act": "explain",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "The first light, before anybody is up. I have not missed it four times in a decade.",
+                "The walk back. It is nine minutes long and it is where I decide what sort of mood the evening gets.",
+                "The bit right after the work and right before the eating, when nothing is owed to anybody."
+              ],
+              "pt": [
+                "A primeira luz, antes de qualquer um acordar. Não perdi isso quatro vezes numa década.",
+                "A caminhada de volta. Dura nove minutos e é onde eu decido o humor que a noite vai ter.",
+                "O trecho logo depois do trabalho e logo antes de comer, quando nada é devido a ninguém."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_keep_it",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Hold on to that piece.",
+            "pt": "Segure firme esse pedaço."
+          },
+          "phrases": [
+            "hold on to that piece",
+            "keep that part for yourself"
+          ],
+          "requires_any": [
+            "hold",
+            "keep"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I intend to. The years I lost it were the years I was worst company.",
+                "Thank you. Nearly everybody hears that and starts explaining why I could spare it.",
+                "I shall. It is the cheapest thing I own and it holds up the rest of the day."
+              ],
+              "pt": [
+                "Pretendo. Os anos em que eu perdi isso foram os anos em que fui a pior companhia.",
+                "Obrigada. Quase todo mundo ouve isso e começa a explicar por que eu poderia abrir mão.",
+                "Vou segurar. É a coisa mais barata que eu tenho e sustenta o resto do dia."
+              ]
+            }
+          }
+        },
+        {
+          "name": "cut_it_off",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "A quarter hour is a luxury.",
+            "pt": "Um quarto de hora é luxo."
+          },
+          "phrases": [
+            "a quarter hour is a luxury",
+            "that sounds like a luxury"
+          ],
+          "requires_any": [
+            "luxury"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 1
+          },
+          "affection": {
+            "decision": "topic.routine.cut_short",
+            "delta": -1,
+            "budget": "quick",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is the one luxury I have, and it is fifteen minutes, so I am fairly comfortable defending it.",
+                "Perhaps. I have tried the version without it and the version without it is worse for everybody.",
+                "Right. We shall talk about something with more in it, then."
+              ],
+              "pt": [
+                "É o único luxo que eu tenho, e são quinze minutos, então me sinto bem confortável defendendo.",
+                "Talvez. Já testei a versão sem isso e a versão sem isso é pior para todo mundo.",
+                "Certo. Falamos de algo com mais substância, então."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_first_hour",
+      "subject": "routine.first_hour",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "dawn",
+            "morning"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_styles": [
+        "methodical"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "This hour of it.",
+        "pt": "Esta hora dele."
+      },
+      "lines": {
+        "en": [
+          "You have caught the good hour. Everything I decide before the sun is properly up turns out better.",
+          "This is the hour where the day is still theoretical and I am briefly an optimist about it.",
+          "I do the thinking now and the doing later. Reverse that and the day goes sideways by noon."
+        ],
+        "pt": [
+          "Você pegou a hora boa. Tudo que eu decido antes de o sol subir direito sai melhor.",
+          "Esta é a hora em que o dia ainda é teórico e eu sou brevemente otimista sobre ele.",
+          "Penso agora e faço depois. Inverta isso e o dia desanda até o meio-dia."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_is_planned",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's the plan for today?",
+            "pt": "Qual é o plano para hoje?"
+          },
+          "phrases": [
+            "what is the plan for today",
+            "what are you doing today"
+          ],
+          "requires_any": [
+            "plan",
+            "today"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "listed",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Three things I promised and one I want to. I shall get through the three and resent it politely.",
+                "Nothing clever. The same order as yesterday, which is why it works.",
+                "One awkward errand at the far end of it, and the whole morning is me not thinking about that errand."
+              ],
+              "pt": [
+                "Três coisas que prometi e uma que eu quero. Vou dar conta das três e me irritar educadamente.",
+                "Nada esperto. A mesma ordem de ontem, e é por isso que funciona.",
+                "Uma tarefa incômoda lá no fim, e a manhã inteira é eu evitando pensar nessa tarefa."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_them_a_good_one",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "May it go easily.",
+            "pt": "Que corra tranquilo."
+          },
+          "phrases": [
+            "may it go easily",
+            "hope the day goes well for you"
+          ],
+          "requires_any": [
+            "easily",
+            "hope"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "affection": {
+            "decision": "topic.routine.first_hour.wished",
+            "delta": 1,
+            "budget": "quick",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is a decent thing to hear at this hour. It usually goes better when somebody has said it.",
+                "Thank you. I shall hold you to it about four in the afternoon.",
+                "Kind of you. On most mornings the first voice I hear is my own, complaining."
+              ],
+              "pt": [
+                "É uma coisa boa de se ouvir a esta hora. Costuma correr melhor quando alguém diz isso.",
+                "Obrigada. Vou cobrar de você lá pelas quatro da tarde.",
+                "Gentileza sua. Na maioria das manhãs a primeira voz que eu ouço é a minha, reclamando."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "after_the_work",
+      "subject": "routine.evening_remainder",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "evening",
+            "night"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "The end of it.",
+        "pt": "O fim dele."
+      },
+      "lines": {
+        "en": [
+          "The work is finished and I have not yet decided whether the day counts as a good one.",
+          "This is the hour where I go over everything I said and find two sentences I would take back.",
+          "The useful part is done. What is left is the part where I pretend I am going to tidy."
+        ],
+        "pt": [
+          "O trabalho acabou e eu ainda não decidi se o dia conta como bom.",
+          "Esta é a hora em que eu repasso tudo que disse e encontro duas frases que eu retiraria.",
+          "A parte útil acabou. O que sobra é a parte em que finjo que vou arrumar."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_verdict",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Was it a good one?",
+            "pt": "Foi um dia bom?"
+          },
+          "phrases": [
+            "was it a good one",
+            "how did the day turn out"
+          ],
+          "requires_any": [
+            "good",
+            "turn"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "judged",
+            "act": "report",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Middling, and middling is most of them, and I have made peace with that in the last few years.",
+                "Better than I expected at noon, which is the only comparison that ever means anything.",
+                "It was. Nothing happened, everything got done, and nobody needed anything from me twice."
+              ],
+              "pt": [
+                "Mediano, e mediano é a maioria deles, e eu fiz as pazes com isso nos últimos anos.",
+                "Melhor do que eu esperava ao meio-dia, que é a única comparação que significa alguma coisa.",
+                "Foi. Nada aconteceu, tudo ficou pronto e ninguém precisou de mim duas vezes."
+              ]
+            }
+          }
+        },
+        {
+          "name": "tell_them_to_leave_the_tidying",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "The tidying will keep.",
+            "pt": "A arrumação pode esperar."
+          },
+          "phrases": [
+            "the tidying will keep",
+            "leave the rest for the morning"
+          ],
+          "requires_any": [
+            "tidying",
+            "morning"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.routine.evening.eased",
+            "delta": 1,
+            "budget": "quick",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "eased",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It will. It has kept since spring and shows every sign of keeping until autumn.",
+                "Permission accepted. I was going to leave it anyway and now I can do so without the guilt.",
+                "You are the second person to say that and the first one was right as well."
+              ],
+              "pt": [
+                "Pode. Vem esperando desde a primavera e dá todos os sinais de esperar até o outono.",
+                "Permissão aceita. Eu ia deixar de qualquer jeito e agora posso fazer isso sem a culpa.",
+                "Você é a segunda pessoa a dizer isso e a primeira também tinha razão."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

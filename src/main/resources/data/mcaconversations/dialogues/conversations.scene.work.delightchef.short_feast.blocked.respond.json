@@ -1,0 +1,124 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_stretching",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.short_feast.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.ingredients",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightchef.short_feast"
+            },
+            "next": "conversations.scene.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightchef.short_feast.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_vegetables",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.short_feast.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightchef.feast.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.ingredients",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.short_feast",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightchef.short_feast",
+              "obligation": "commitment:work.delightchef.bring_carrots"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.delightchef.bring_carrots"
+            },
+            "next": "conversations.scene.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightchef.short_feast.blocked.accepted",
+              "slots": [
+                "occasion"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_saying_so",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.short_feast.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.ingredients",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightchef.short_feast"
+            },
+            "next": "conversations.scene.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightchef.short_feast.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.delightchef.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

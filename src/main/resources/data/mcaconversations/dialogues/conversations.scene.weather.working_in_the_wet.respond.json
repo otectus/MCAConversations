@@ -1,0 +1,63 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_stops",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "weather.working_in_the_wet.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.working_in_it",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.weather.followup",
+            "say": "conversations.scene.weather.working_in_the_wet.explained"
+          }
+        }
+      ]
+    },
+    {
+      "name": "commiserate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "weather.working_in_the_wet.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "weather.working_in_it",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.weather.followup",
+            "say": "conversations.scene.weather.working_in_the_wet.agreed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "say": "conversations.scene.weather.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "acknowledge_the_cost",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.old_associate.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.old_business",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.outlaw.old_associate"
+            },
+            "next": "conversations.scene.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.outlaw.old_associate.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.outlaw.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

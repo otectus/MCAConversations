@@ -1,0 +1,308 @@
+{
+  "_comment": [
+    "News, gated on how long the player has been away and on how well the two of them know each other.",
+    "",
+    "The point of the gate is that news is relative: somebody who was here yesterday gets a different",
+    "answer from somebody who has been gone a month, and both of those are different from the version",
+    "you give a stranger."
+  ],
+  "topic": "news",
+  "entry": {
+    "question": "conversations.cat.events",
+    "answer": "news"
+  },
+  "return_question": "conversations.cat.events",
+  "leave_lines": {
+    "en": [
+      "That is all I have.",
+      "You will hear the rest at the well.",
+      "Right. That is the week."
+    ],
+    "pt": [
+      "É tudo o que eu tenho.",
+      "Você ouve o resto no poço.",
+      "Certo. É a semana."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thanks for telling me.",
+    "pt": "Obrigado por contar."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else happening?",
+      "pt": "Mais alguma coisa acontecendo?"
+    },
+    "leave": {
+      "en": "That is the news, then.",
+      "pt": "São essas as novidades, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "while_you_were_away",
+      "subject": "news.absence",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_last_talk",
+          "min": 7,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_styles": [
+        "storyteller"
+      ],
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "What I've missed.",
+        "pt": "O que eu perdi."
+      },
+      "lines": {
+        "en": [
+          "A fair bit, and none of it enormous, which is the best kind of week to have missed.",
+          "You have been gone long enough that I have to think about where to start, and that is itself a piece of news.",
+          "Two things worth telling and about nine that are only worth telling if you were here for the beginning."
+        ],
+        "pt": [
+          "Bastante coisa, e nada enorme, que é o melhor tipo de semana para se ter perdido.",
+          "Você ficou fora tempo suficiente para eu ter que pensar por onde começar, e isso já é uma notícia.",
+          "Duas coisas que valem contar e umas nove que só valem se você estava aqui no começo."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_two_things",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Start with the two worth telling.",
+            "pt": "Comece pelas duas que valem."
+          },
+          "phrases": [
+            "start with the two worth telling",
+            "tell me the important ones"
+          ],
+          "requires_any": [
+            "worth",
+            "important",
+            "two"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "told",
+            "act": "report",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The bridge footing got dug properly after an argument, and a house at the top of the lane has a new roof and a new debt.",
+                "Somebody left and somebody came back, and it is the same family, and I will let them tell you which way round.",
+                "One good thing and one that will be a problem in the spring. I will give you the good one first because I am not cruel."
+              ],
+              "pt": [
+                "A fundação da ponte foi cavada direito depois de uma discussão, e uma casa no fim da viela tem telhado novo e dívida nova.",
+                "Alguém foi embora e alguém voltou, e é a mesma família, e vou deixar que eles contem a você qual foi qual.",
+                "Uma coisa boa e uma que vai virar problema na primavera. Vou te dar a boa primeiro porque eu não sou cruel."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_missed_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I've been away too long.",
+            "pt": "Fiquei fora tempo demais."
+          },
+          "phrases": [
+            "i have been away too long",
+            "it has been too long since i was here"
+          ],
+          "requires_any": [
+            "away",
+            "long"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "softened",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "You have, and I am not going to make you feel worse about it, because you came back and that is the part that counts.",
+                "A village keeps things for people who come back. That is most of what a village is for.",
+                "It is easier to say than I expected. Two people asked after you, and I told them I did not know, and now I do."
+              ],
+              "pt": [
+                "Ficou, e eu não vou fazer você se sentir pior, porque você voltou e é essa a parte que conta.",
+                "Uma vila guarda coisas para quem volta. É quase tudo o que uma vila serve para fazer.",
+                "É mais fácil dizer do que eu esperava. Duas pessoas perguntaram por você, e eu disse que não sabia, e agora sei."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "quiet_week",
+      "subject": "news.nothing_much",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "neutral",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_last_talk",
+          "max": 2,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 18,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "prompt": {
+        "en": "Anything new?",
+        "pt": "Alguma novidade?"
+      },
+      "lines": {
+        "en": [
+          "Since yesterday? A cat got into the granary and lost the argument. That is the whole of it.",
+          "Nothing, and I want to be clear that nothing is a good report and I am delivering it cheerfully.",
+          "You were here. You know as much as I do, which is a strange and pleasant thing to be able to say."
+        ],
+        "pt": [
+          "Desde ontem? Um gato entrou no celeiro e perdeu a discussão. É isso.",
+          "Nada, e quero deixar claro que nada é um bom relatório e eu estou entregando com alegria.",
+          "Você estava aqui. Sabe tanto quanto eu, o que é uma coisa estranha e agradável de se poder dizer."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_small_things",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "playful",
+          "outcome": "engaged",
+          "label": {
+            "en": "Tell me a small thing, then.",
+            "pt": "Então me conte uma coisinha."
+          },
+          "phrases": [
+            "tell me a small thing then",
+            "give me something small"
+          ],
+          "requires_any": [
+            "small",
+            "something"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "obliged",
+            "act": "report",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The baker has moved his table nine inches to the left and is pretending nobody has noticed. Four people have noticed.",
+                "There is a bird nesting in the bell housing. Nobody will ring it now until the chicks are out, which is a policy decided by nobody.",
+                "Somebody left an apple on the step of the house at the end. Third time this month. I have theories and no evidence."
+              ],
+              "pt": [
+                "O padeiro moveu a mesa vinte centímetros para a esquerda e finge que ninguém reparou. Quatro pessoas repararam.",
+                "Tem um pássaro fazendo ninho no sino. Ninguém vai tocar até os filhotes saírem, uma política decidida por ninguém.",
+                "Alguém deixou uma maçã no degrau da casa do fim. Terceira vez este mês. Tenho teorias e nenhuma prova."
+              ]
+            }
+          }
+        },
+        {
+          "name": "appreciate_the_quiet",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "A dull week is a good week.",
+            "pt": "Uma semana sem graça é uma boa semana."
+          },
+          "phrases": [
+            "a dull week is a good week",
+            "an uneventful week is worth having"
+          ],
+          "requires_any": [
+            "dull",
+            "uneventful",
+            "week"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and it takes about thirty years to believe that. Ask anybody under twenty and they will tell you it is a tragedy.",
+                "The years people talk about are the bad ones. Nobody sings about a decade where the roofs held.",
+                "I shall write it in the register as ordinary, which is the entry I most like making."
+              ],
+              "pt": [
+                "É, e leva uns trinta anos para acreditar nisso. Pergunte a qualquer um com menos de vinte e vão dizer que é uma tragédia.",
+                "Os anos de que as pessoas falam são os ruins. Ninguém canta sobre uma década em que os telhados aguentaram.",
+                "Vou anotar no registro como comum, que é a entrada que eu mais gosto de fazer."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

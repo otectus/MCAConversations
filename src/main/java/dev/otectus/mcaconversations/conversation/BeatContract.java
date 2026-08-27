@@ -27,6 +27,11 @@ import java.util.regex.Pattern;
  * <p>{@link #outcome} is present when the beat is the villager <em>reacting</em> to a player line
  * rather than opening a subject. That is what lets the routing lint prove a rebuff never opens a warm
  * page.
+ *
+ * <p>{@link #frame} is the optional v2 half (spec §10.1): the typed predicate, tense, footing, privacy
+ * and obligations a dynamic scene needs in order to prove that a reply page answers the exact line
+ * above it. Every beat authored before this release has {@link DiscourseSpec#V1_DEFAULT} and behaves
+ * identically to before, which is what makes the upgrade non-breaking for existing datapacks.
  */
 public record BeatContract(String id,
                            String topic,
@@ -41,7 +46,8 @@ public record BeatContract(String id,
                            Set<StanceFamily> forbiddenStances,
                            Optional<OutcomeFamily> outcome,
                            BeatContext context,
-                           Optional<Callback> callback) {
+                           Optional<Callback> callback,
+                           DiscourseSpec frame) {
 
     /** Beat and subject ids: dotted lowercase, same shape the catalog already uses for everything else. */
     public static final Pattern ID = Pattern.compile("[a-z0-9_]+(\\.[a-z0-9_]+)*");
@@ -134,6 +140,7 @@ public record BeatContract(String id,
     }
 
     public BeatContract {
+        frame = frame == null ? DiscourseSpec.V1_DEFAULT : frame;
         facts = Set.copyOf(new TreeSet<>(facts));
         allowedStances = Set.copyOf(allowedStances);
         forbiddenStances = Set.copyOf(forbiddenStances);
@@ -147,6 +154,16 @@ public record BeatContract(String id,
     /** True when nothing more may be asked about this subject without repairing something first. */
     public boolean isClosed() {
         return openness.isClosed() || npcAct.isRupture() || outcome.map(OutcomeFamily::isRupture).orElse(false);
+    }
+
+    /** True when this beat carries a declared v2 discourse frame rather than the v1 default. */
+    public boolean hasFrame() {
+        return frame.isDeclared();
+    }
+
+    /** The rhetorical shape used by repetition suppression, when the beat declares one. */
+    public Optional<SceneShape> shape() {
+        return frame.shape();
     }
 
     /** True when {@code stance} is a sensible thing for the player to say straight after this line. */
@@ -244,8 +261,12 @@ public record BeatContract(String id,
             callback = Optional.of(new Callback(fact, expiry, Set.copyOf(resumes)));
         }
 
+        DiscourseSpec frame = json.has("frame") && json.get("frame").isJsonObject()
+                ? DiscourseSpec.fromJson(json.getAsJsonObject("frame"), id)
+                : DiscourseSpec.V1_DEFAULT;
+
         return new BeatContract(id, topic, say, responseQuestion, act, subject, polarity, openness,
-                facts, allowed, forbidden, outcome, context, callback);
+                facts, allowed, forbidden, outcome, context, callback, frame);
     }
 
     // --- Parsing helpers ---------------------------------------------------------

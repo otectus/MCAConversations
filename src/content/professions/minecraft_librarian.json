@@ -1,0 +1,1508 @@
+{
+  "_comment": [
+    "Librarian. The pilot pack, migrated from hand-written JSON into an authoring source so it is",
+    "uniform with the other thirty-six.",
+    "",
+    "The damaged volume keeps its deeper turn: she explains what pressing the pages would cost, and",
+    "the decision is still in front of you. That branch is why the compiler supports a reaction with",
+    "its own page - and the two second-turn pages are separate on purpose, because arriving with an",
+    "offer in the middle of a disagreement changes the subject rather than answering it."
+  ],
+  "profession": "minecraft:librarian",
+  "id": "librarian",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "damaged_volume",
+    "acquisition",
+    "catalogue",
+    "local_history",
+    "literacy",
+    "quiet"
+  ],
+  "leave_label": {
+    "en": "I'll leave you to the shelves.",
+    "pt": "Vou deixar você com as prateleiras."
+  },
+  "slot_lang": {
+    "ledger": {
+      "en": "the village ledger",
+      "pt": "o livro de registros da vila"
+    },
+    "atlas": {
+      "en": "the old atlas",
+      "pt": "o atlas antigo"
+    },
+    "herbal": {
+      "en": "the herbal",
+      "pt": "o herbário"
+    },
+    "psalter": {
+      "en": "the psalter",
+      "pt": "o saltério"
+    },
+    "songbook": {
+      "en": "the songbook",
+      "pt": "o cancioneiro"
+    },
+    "field_notes": {
+      "en": "a bundle of field notes",
+      "pt": "um maço de anotações de campo"
+    },
+    "damp": {
+      "en": "the damp",
+      "pt": "a umidade"
+    },
+    "mould": {
+      "en": "the mould",
+      "pt": "o mofo"
+    },
+    "torn_gathering": {
+      "en": "a torn gathering",
+      "pt": "um caderno rasgado"
+    },
+    "faded_ink": {
+      "en": "ink that has run",
+      "pt": "a tinta que escorreu"
+    },
+    "a_travelling_pedlar": {
+      "en": "a travelling pedlar",
+      "pt": "um mascate de passagem"
+    },
+    "a_dead_mans_estate": {
+      "en": "a dead man's estate",
+      "pt": "o espólio de um falecido"
+    },
+    "the_next_village": {
+      "en": "the next village over",
+      "pt": "a vila vizinha"
+    },
+    "a_child_who_asks": {
+      "en": "a child who keeps asking",
+      "pt": "uma criança que não para de perguntar"
+    },
+    "an_old_shepherd": {
+      "en": "an old shepherd",
+      "pt": "um pastor idoso"
+    },
+    "a_new_family": {
+      "en": "a family new to the village",
+      "pt": "uma família nova na vila"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.damaged_volume",
+      "subject": "work.librarian.damaged_volume",
+      "initial_state": "blocked",
+      "salience": 55,
+      "due_after_days": 6,
+      "expires_after_days": 24,
+      "slots": {
+        "volume": [
+          "ledger",
+          "atlas",
+          "herbal",
+          "psalter",
+          "songbook",
+          "field_notes"
+        ],
+        "damage": [
+          "damp",
+          "mould",
+          "torn_gathering",
+          "faded_ink"
+        ]
+      },
+      "commitment": {
+        "id": "work.librarian.bring_absorbent",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:wool",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "volume",
+            "damage"
+          ],
+          "identity_values": [
+            "precision",
+            "duty",
+            "tradition"
+          ],
+          "prompt": {
+            "en": "The back table.",
+            "pt": "A mesa do fundo."
+          },
+          "lines": {
+            "en": [
+              "I took %2$s out of the flood cupboard this morning and %3$s had got right through the gathering. I can press the pages flat or I can save the ink. Not both, not with what I have here.",
+              "I have %2$s open on the back table and I have been standing over it for an hour. %3$s is winning. I need something that draws water and I have nothing that does.",
+              "Do not touch the back table. %2$s is on it, and %3$s reached it before I did."
+            ],
+            "pt": [
+              "Tirei %2$s do armário alagado hoje de manhã, e %3$s tinha atravessado o caderno inteiro. Posso prensar as páginas ou posso salvar a tinta. Não os dois, não com o que tenho aqui.",
+              "Deixei %2$s aberto na mesa do fundo e passei uma hora parada em frente a ele. %3$s está ganhando. Preciso de algo que puxe a água e não tenho nada que sirva.",
+              "Não encoste na mesa do fundo. %2$s está lá em cima, e %3$s chegou antes de mim."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_which",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you lose if you press it flat?",
+                "pt": "O que você perde se prensar as páginas?"
+              },
+              "phrases": [
+                "what would pressing it cost",
+                "what happens if you flatten it"
+              ],
+              "requires_any": [
+                "lose",
+                "press",
+                "flat",
+                "pressing",
+                "flatten"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "clarified",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "damage"
+                ],
+                "obligations": [
+                  "decide",
+                  "promise"
+                ],
+                "prompt": {
+                  "en": "So: which?",
+                  "pt": "Então: qual dos dois?"
+                },
+                "lines": {
+                  "en": [
+                    "The names. A warped page can be pressed back over a winter; %2$s cannot be un-run. Whoever wrote them down is gone, and so is anyone who could tell me what they said.",
+                    "Everything and nothing. The paper survives either way. %2$s takes the part that mattered.",
+                    "The names, and the dates beside them. Paper I can flatten. %2$s is simply gone, and everyone who could have told me what it said is gone with it."
+                  ],
+                  "pt": [
+                    "Os nomes. Uma página empenada volta ao lugar depois de um inverno; %2$s não tem volta. Quem os escreveu já se foi, e também quem poderia me dizer o que diziam.",
+                    "Tudo e nada. O papel sobrevive de qualquer jeito. %2$s leva justamente a parte que importava.",
+                    "Os nomes, e as datas ao lado deles. Papel eu consigo aplainar. %2$s simplesmente se foi, e todos que poderiam me dizer o que estava escrito se foram junto."
+                  ]
+                },
+                "replies": [
+                  {
+                    "name": "offer_wool",
+                    "stance": "practical_help",
+                    "answers": [
+                      "promise"
+                    ],
+                    "tone": "gentle",
+                    "outcome": "accepted",
+                    "commitment": true,
+                    "advance": "active",
+                    "label": {
+                      "en": "Then let me bring you wool before you start.",
+                      "pt": "Então deixe eu trazer lã antes de você começar."
+                    },
+                    "phrases": [
+                      "let me bring wool first",
+                      "wait, bring wool before you begin"
+                    ],
+                    "requires_any": [
+                      "wool"
+                    ],
+                    "disposition": {
+                      "trust": 3,
+                      "warmth": 2
+                    },
+                    "affection": {
+                      "decision": "work.librarian.damaged_volume.offer_informed",
+                      "delta": 2,
+                      "budget": "standard",
+                      "policy": "once"
+                    },
+                    "reaction": {
+                      "id": "accepted",
+                      "act": "accept",
+                      "polarity": "positive",
+                      "predicate": "status_change",
+                      "temporal": "future",
+                      "shape": "plan",
+                      "episode_states": [
+                        "blocked",
+                        "active"
+                      ],
+                      "slots_used": [
+                        "volume"
+                      ],
+                      "lines": {
+                        "en": [
+                          "Then I will leave %2$s where it is until you come. Thank you — I mean that, and I am not always good at saying it.",
+                          "Wool. Of course it is wool. I will not start on %2$s until you are back.",
+                          "Wool. Yes. Then nothing happens to %2$s until you are standing here again, and I will find something else to fret about in the meantime."
+                        ],
+                        "pt": [
+                          "Então vou deixar %2$s onde está até você voltar. Obrigada — falo sério, e nem sempre sei dizer isso direito.",
+                          "Lã. Claro que era lã. Não vou mexer em %2$s até você voltar.",
+                          "Lã. Isso. Então nada acontece com %2$s até você estar aqui de novo, e enquanto isso eu arranjo outra coisa para me preocupar."
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "defer_to_her",
+                    "stance": "restraint",
+                    "answers": [
+                      "decide"
+                    ],
+                    "tone": "plain",
+                    "outcome": "qualified",
+                    "label": {
+                      "en": "It's your book and your hands. You'll know.",
+                      "pt": "O livro é seu e as mãos são suas. Você vai saber."
+                    },
+                    "phrases": [
+                      "your book your call",
+                      "your hands, your judgement"
+                    ],
+                    "requires_any": [
+                      "book",
+                      "hands"
+                    ],
+                    "disposition": {
+                      "respect": 3,
+                      "familiarity": 1
+                    },
+                    "reaction": {
+                      "id": "deferred",
+                      "act": "accept",
+                      "polarity": "mixed",
+                      "predicate": "status_change",
+                      "shape": "problem_solve",
+                      "episode_states": [
+                        "blocked",
+                        "active"
+                      ],
+                      "slots_used": [
+                        "volume"
+                      ],
+                      "lines": {
+                        "en": [
+                          "That is either great faith or great convenience. I will take it as faith. %2$s gets the blotting cloth, then, and I will live with the crooked pages.",
+                          "You are the first this week to hand it back to me instead of settling it for me. Everyone has an opinion about %2$s and none of them wants to be the one who was wrong.",
+                          "Then I will decide, and I will be the one who decided. That is worse and better at once. Come back and I will tell you what %2$s looks like afterwards."
+                        ],
+                        "pt": [
+                          "Isso é ou muita fé ou muita conveniência. Vou tomar como fé. %2$s fica com o pano absorvente, então, e eu convivo com as páginas tortas.",
+                          "Você é a primeira pessoa esta semana a devolver a decisão em vez de resolvê-la por mim. Todo mundo tem opinião sobre %2$s e nenhuma delas quer ser a que errou.",
+                          "Então eu decido, e eu serei quem decidiu. Isso é pior e melhor ao mesmo tempo. Volte e eu conto como %2$s ficou depois."
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "advise_ink",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Save the ink. A book nobody can read is only paper.",
+                "pt": "Salve a tinta. Um livro que ninguém consegue ler é só papel."
+              },
+              "phrases": [
+                "the ink matters more than the pages",
+                "a book nobody can read is only paper"
+              ],
+              "requires_any": [
+                "ink",
+                "book"
+              ],
+              "disposition": {
+                "respect": 1,
+                "tension": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "volume"
+                ],
+                "obligations": [
+                  "decide",
+                  "acknowledge"
+                ],
+                "prompt": {
+                  "en": "So we disagree.",
+                  "pt": "Então discordamos."
+                },
+                "lines": {
+                  "en": [
+                    "That is easy to say about a book you have not held. Press %2$s wrong once and the binding goes, and then there is nothing to save the ink onto.",
+                    "No. The shape is the record too. If %2$s comes apart in my hands nobody will care how sharp the letters were.",
+                    "You would not say that holding it. Take %2$s apart to save the ink and you have a box of loose sheets nobody will ever put back in order."
+                  ],
+                  "pt": [
+                    "É fácil dizer isso de um livro que você nunca segurou. Prense %2$s errado uma vez e a costura se rompe, e aí não sobra onde a tinta possa ficar.",
+                    "Não. A forma também é o registro. Se %2$s desmanchar nas minhas mãos, ninguém vai se importar com o quanto as letras estavam nítidas.",
+                    "Você não diria isso se estivesse segurando. Desmonte %2$s para salvar a tinta e você fica com uma caixa de folhas soltas que ninguém vai reordenar."
+                  ]
+                },
+                "replies": [
+                  {
+                    "name": "hold_position",
+                    "stance": "challenge",
+                    "answers": [
+                      "decide",
+                      "acknowledge"
+                    ],
+                    "tone": "plain",
+                    "outcome": "qualified",
+                    "label": {
+                      "en": "I still think the words matter more than the shape.",
+                      "pt": "Continuo achando que as palavras importam mais do que a forma."
+                    },
+                    "phrases": [
+                      "the words matter more than the shape",
+                      "i stand by that, words over shape"
+                    ],
+                    "requires_any": [
+                      "words",
+                      "shape"
+                    ],
+                    "disposition": {
+                      "respect": 2,
+                      "tension": 1
+                    },
+                    "reaction": {
+                      "id": "held",
+                      "act": "qualify",
+                      "polarity": "mixed",
+                      "predicate": "opinion",
+                      "shape": "debate",
+                      "slots_used": [
+                        "volume"
+                      ],
+                      "lines": {
+                        "en": [
+                          "We can disagree. I would rather that than have you agree with me to be pleasant. I am still not taking %2$s apart on a stranger's opinion of ink.",
+                          "Say it again in a month and I may have come round. Not today. Today %2$s stays sewn.",
+                          "Noted, and refused, and I am glad you said it. Half the village would have nodded and let me ruin %2$s in peace."
+                        ],
+                        "pt": [
+                          "Podemos discordar. Prefiro isso a você concordar comigo só para ser gentil. Mas continuo não desmontando %2$s por causa da opinião de um estranho sobre tinta.",
+                          "Repita isso daqui a um mês e talvez eu tenha mudado de ideia. Hoje não. Hoje %2$s continua costurado.",
+                          "Anotado, recusado, e fico feliz que você tenha falado. Metade da vila teria concordado com a cabeça e me deixado estragar %2$s em paz."
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "concede",
+                    "stance": "restraint",
+                    "answers": [
+                      "decide"
+                    ],
+                    "tone": "plain",
+                    "outcome": "qualified",
+                    "label": {
+                      "en": "Fair enough. Your hands, your call.",
+                      "pt": "Justo. Suas mãos, sua decisão."
+                    },
+                    "phrases": [
+                      "fair enough your call",
+                      "you know it better than i do"
+                    ],
+                    "requires_any": [
+                      "fair",
+                      "call",
+                      "better"
+                    ],
+                    "disposition": {
+                      "respect": 3
+                    },
+                    "reaction": {
+                      "id": "settled",
+                      "act": "accept",
+                      "polarity": "mixed",
+                      "predicate": "status_change",
+                      "shape": "problem_solve",
+                      "slots_used": [
+                        "volume"
+                      ],
+                      "lines": {
+                        "en": [
+                          "Thank you. And for what it is worth you were half right — I will lift the worst page out and copy it before I press the rest of %2$s.",
+                          "Then I will do the slow thing and be quietly sure it was correct. %2$s stays whole.",
+                          "Good. I argue better when somebody lets me finish. The compromise is the one you suggested, mostly, and I will not be admitting that twice."
+                        ],
+                        "pt": [
+                          "Obrigada. E, para constar, você tinha meia razão — vou tirar a pior página e copiá-la antes de prensar o resto de %2$s.",
+                          "Então faço do jeito lento e fico discretamente convencida de que estava certo. %2$s continua inteiro.",
+                          "Ótimo. Eu discuto melhor quando me deixam terminar. O meio-termo é o que você sugeriu, quase todo, e não vou admitir isso duas vezes."
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "no_advice",
+              "stance": "restraint",
+              "move": "boundary",
+              "tone": "plain",
+              "outcome": "qualified",
+              "label": {
+                "en": "That's beyond me. I'd only be guessing.",
+                "pt": "Isso está além de mim. Eu só estaria chutando."
+              },
+              "phrases": [
+                "that is beyond me id only be guessing",
+                "im guessing if i answer that"
+              ],
+              "requires_any": [
+                "beyond",
+                "guessing"
+              ],
+              "disposition": {
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "excused",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "observation",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "That's fair. Hardly anyone does, and they answer anyway. I think I only wanted to hear myself say it out loud.",
+                    "Nobody has to. I have been arguing with myself all morning and I wanted a second voice in the room, that's all.",
+                    "That's fair, and I'd rather you said so. I think I only wanted the sentence out of my head and into the room."
+                  ],
+                  "pt": [
+                    "É justo. Quase ninguém entende, e respondem mesmo assim. Acho que eu só queria me ouvir dizendo isso em voz alta.",
+                    "Ninguém precisa entender. Passei a manhã discutindo comigo mesma e queria outra voz na sala, só isso.",
+                    "É justo, e prefiro que você diga. Acho que eu só queria tirar a frase da minha cabeça e colocá-la na sala."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "active",
+          "shape": "plan",
+          "predicate": "status_change",
+          "temporal": "current",
+          "obligations": [
+            "acknowledge",
+            "clarify"
+          ],
+          "slots_used": [
+            "volume"
+          ],
+          "prompt": {
+            "en": "Under cloth.",
+            "pt": "Sob panos."
+          },
+          "lines": {
+            "en": [
+              "%2$s is under cloth and weights. I change them twice a day and I look at it more often than that, which helps nobody.",
+              "Slow. %2$s is drying the way everything dries: from the outside, and not where I need it to.",
+              "Better than yesterday, worse than I would like. %2$s sits under two cloths and a stone, and I have been told off twice for lifting them early."
+            ],
+            "pt": [
+              "Deixei %2$s sob panos e pesos. Troco duas vezes por dia e olho muito mais do que isso, o que não ajuda ninguém.",
+              "Devagar. %2$s está secando como tudo seca: pelas bordas, e não onde eu precisava.",
+              "Melhor que ontem, pior do que eu queria. %2$s está sob dois panos e uma pedra, e já me repreenderam duas vezes por levantá-los cedo demais."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_progress",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How much of it has come back?",
+                "pt": "Quanto dele já voltou ao normal?"
+              },
+              "phrases": [
+                "how much has recovered",
+                "how far along is it"
+              ],
+              "requires_any": [
+                "much",
+                "recovered",
+                "along"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "plan",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "The outer sheets, mostly. The middle of %2$s is still the middle of a wet book, and there is no hurrying that part.",
+                    "Enough that I have stopped expecting the worst. Ask me again in three days and I will either be smug about %2$s or very quiet.",
+                    "About two thirds. The trouble with %2$s is that the last third is always the part somebody actually wants."
+                  ],
+                  "pt": [
+                    "As folhas de fora, quase todas. O miolo de %2$s ainda é o miolo de um livro molhado, e essa parte não se apressa.",
+                    "O bastante para eu ter parado de esperar o pior. Pergunte de novo em três dias: ou vou estar convencida por causa de %2$s, ou muito calada.",
+                    "Uns dois terços. O problema de %2$s é que o último terço é sempre justamente a parte que alguém quer."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "glad",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "I'm glad it's out of the water, at least.",
+                "pt": "Fico feliz que pelo menos esteja fora da água."
+              },
+              "phrases": [
+                "glad its drying at least",
+                "im glad you got to it"
+              ],
+              "requires_any": [
+                "glad"
+              ],
+              "disposition": {
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.librarian.damaged_volume.glad",
+                "delta": 1,
+                "budget": "standard",
+                "policy": "daily_repeat"
+              },
+              "reaction": {
+                "id": "shared",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "plan",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "So am I. I carried %2$s out of that cupboard at arm's length like something that might bite.",
+                    "It is out of the water and I am not out of the woods, but yes. Thank you for saying so.",
+                    "I keep telling myself the same thing at the end of every hour. It helps more when somebody else says it about %2$s."
+                  ],
+                  "pt": [
+                    "Eu também. Carreguei %2$s para fora daquele armário com o braço estendido, como algo que pudesse morder.",
+                    "Está fora da água e eu não estou fora do perigo, mas sim. Obrigada por dizer.",
+                    "Fico repetindo isso para mim a cada hora. Ajuda mais quando outra pessoa diz sobre %2$s."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "act": "celebrate",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "volume"
+          ],
+          "prompt": {
+            "en": "Back on the shelf.",
+            "pt": "De volta à prateleira."
+          },
+          "lines": {
+            "en": [
+              "%2$s held. Not prettily — it will never sit flat again — but every name in it can be read, and that was the whole argument.",
+              "I have put %2$s back on the shelf. I stood there a while afterwards. It is only a book. I stood there a while.",
+              "It is done. %2$s will never close properly again, and every word in it can be read. I will take that trade every time."
+            ],
+            "pt": [
+              "%2$s resistiu. Não ficou bonito — nunca mais vai assentar direito — mas dá para ler cada nome ali dentro, e a discussão toda era essa.",
+              "Recoloquei %2$s na prateleira. Fiquei parada ali um tempo depois. É só um livro. Fiquei parada ali um tempo.",
+              "Está pronto. %2$s nunca mais vai fechar direito, e cada palavra dentro dele pode ser lida. Eu faço essa troca todas as vezes."
+            ]
+          },
+          "replies": [
+            {
+              "name": "credit_her",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You saved it. I only carried something heavy.",
+                "pt": "Você salvou. Eu só carreguei uma coisa pesada."
+              },
+              "phrases": [
+                "that was your work not mine",
+                "you saved it"
+              ],
+              "requires_any": [
+                "saved",
+                "carried",
+                "work"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.librarian.damaged_volume.credit",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "credited",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "Carrying something heavy at the right hour is most of it. I would still be arguing with myself over %2$s otherwise.",
+                    "Take the credit. I am going to be insufferable about %2$s for a week and you may as well have earned some of it.",
+                    "I will allow you a share of it. Not the whole thing — I did the sewing — but a share. %2$s would not be on that shelf otherwise."
+                  ],
+                  "pt": [
+                    "Carregar algo pesado na hora certa é quase tudo. Sem isso, eu ainda estaria discutindo comigo mesma por causa de %2$s.",
+                    "Aceite o crédito. Vou ser insuportável por causa de %2$s durante uma semana, e é melhor que parte disso tenha sido merecida por você.",
+                    "Vou permitir que você fique com uma parte. Não com tudo — a costura foi minha — mas uma parte. %2$s não estaria naquela prateleira sem isso."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_readable",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Can the whole of it be read now?",
+                "pt": "Dá para ler ele inteiro agora?"
+              },
+              "phrases": [
+                "is all of it readable",
+                "can you read it all again"
+              ],
+              "requires_any": [
+                "read",
+                "readable"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "assessed",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "observe",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "All but four lines, and I know what three of them said from another copy. The fourth I will have to ask somebody old about.",
+                    "Every page of %2$s, if you hold it to a window. That counts. I have decided it counts.",
+                    "Yes, and the margins are legible too, which I had written off entirely. Somebody's grandmother left notes in %2$s and they came back."
+                  ],
+                  "pt": [
+                    "Tudo menos quatro linhas, e sei o que três delas diziam por outra cópia. A quarta vou ter de perguntar a alguém idoso.",
+                    "Toda página de %2$s, se você segurar contra a janela. Isso conta. Decidi que conta.",
+                    "Sim, e as margens também estão legíveis, o que eu tinha dado por perdido. A avó de alguém deixou notas em %2$s e elas voltaram."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "act": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "volume",
+            "damage"
+          ],
+          "prompt": {
+            "en": "It didn't come back.",
+            "pt": "Não voltou."
+          },
+          "lines": {
+            "en": [
+              "%2$s did not come back. %3$s took the middle of it, and the middle was the part anyone would have wanted.",
+              "I stopped working on %2$s three days ago. %3$s had already won and I was only keeping myself company.",
+              "I have stopped. %2$s is past helping — %3$s went straight through the middle of it, and the middle was the whole reason anyone kept it."
+            ],
+            "pt": [
+              "%2$s não voltou. %3$s levou o miolo, e o miolo era justamente a parte que alguém iria querer.",
+              "Parei de trabalhar em %2$s há três dias. %3$s já tinha vencido, e eu só estava me fazendo companhia.",
+              "Eu parei. %2$s já não tem salvação — %3$s passou direto pelo miolo, e o miolo era todo o motivo de alguém ter guardado."
+            ]
+          },
+          "replies": [
+            {
+              "name": "sit_with_it",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's a real loss. I'm sorry.",
+                "pt": "É uma perda de verdade. Sinto muito."
+              },
+              "phrases": [
+                "im sorry thats a genuine loss",
+                "thats a loss and im sorry for it"
+              ],
+              "requires_any": [
+                "loss",
+                "sorry"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.librarian.damaged_volume.mourn",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "received",
+                "act": "qualify",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "It is. Thank you for calling it that instead of telling me it was only a book. The covers are on my desk. I have not decided what to do with them.",
+                    "Four sheets and the index. I copied the index out twice in case my hand is the next thing that fails.",
+                    "The index and four sheets of %2$s. I have copied the index twice over, which changes nothing and made me feel better for an hour."
+                  ],
+                  "pt": [
+                    "É mesmo. Obrigada por chamar assim, em vez de me dizer que era só um livro. As capas estão na minha mesa. Ainda não decidi o que fazer com elas.",
+                    "Quatro folhas e o índice. Copiei o índice duas vezes, caso minha mão seja a próxima coisa a falhar.",
+                    "O índice e quatro folhas de %2$s. Copiei o índice duas vezes, o que não muda nada e me fez sentir melhor por uma hora."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_what_survived",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Did any of it survive?",
+                "pt": "Sobrou alguma coisa dele?"
+              },
+              "phrases": [
+                "was anything left of it",
+                "did anything come through"
+              ],
+              "requires_any": [
+                "survive",
+                "survived",
+                "left",
+                "anything"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "counted",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "The binding, which is worth nothing, and the first quire, which is worth everything and is four pages long.",
+                    "Enough to prove %2$s existed. Not enough to be it. I will keep the covers on the shelf where it stood.",
+                    "Two names and a date. I have written them into the new ledger with a note saying where they came from, which is the only kind of rescue left."
+                  ],
+                  "pt": [
+                    "A costura, que não vale nada, e o primeiro caderno, que vale tudo e tem quatro páginas.",
+                    "O bastante para provar que %2$s existiu. Não o bastante para ser ele. Vou guardar as capas na prateleira onde ele ficava.",
+                    "Dois nomes e uma data. Passei para o livro novo com uma nota dizendo de onde vieram, que é o único tipo de resgate que restou."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.acquisition",
+      "subject": "work.librarian.acquisition",
+      "initial_state": "blocked",
+      "salience": 40,
+      "due_after_days": 7,
+      "expires_after_days": 22,
+      "slots": {
+        "source": [
+          "a_travelling_pedlar",
+          "a_dead_mans_estate",
+          "the_next_village"
+        ],
+        "volume": [
+          "ledger",
+          "atlas",
+          "herbal",
+          "psalter",
+          "songbook"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "plan",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "act": "complain",
+          "polarity": "negative",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "source",
+            "volume"
+          ],
+          "identity_values": [
+            "curiosity",
+            "ambition",
+            "precision"
+          ],
+          "prompt": {
+            "en": "About the book.",
+            "pt": "Sobre o livro."
+          },
+          "lines": {
+            "en": [
+              "%2$s has %3$s and wants more for it than the library has had in a year. I have been doing sums that do not work since Tuesday.",
+              "There is %3$s to be had from %2$s and I cannot make the money exist. I have counted it four ways and it is the same money each time.",
+              "%2$s will not hold %3$s past the market. If it goes, it goes to somebody who wants it for the binding."
+            ],
+            "pt": [
+              "%2$s tem %3$s e quer mais por ele do que a biblioteca teve o ano inteiro. Desde terça faço contas que não fecham.",
+              "Dá para conseguir %3$s com %2$s, e eu não consigo fazer o dinheiro existir. Contei de quatro jeitos e é o mesmo dinheiro em todos.",
+              "%2$s não vai segurar %3$s depois da feira. Se for embora, vai para alguém que o quer pela encadernação."
+            ]
+          },
+          "replies": [
+            {
+              "name": "urge_ask_village",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "advance": "succeeded",
+              "label": {
+                "en": "Ask the village to go in on it together.",
+                "pt": "Peça à vila para comprarem juntos."
+              },
+              "phrases": [
+                "ask the village to help buy it",
+                "get everyone to chip in"
+              ],
+              "requires_any": [
+                "village",
+                "together",
+                "chip"
+              ],
+              "disposition": {
+                "respect": 3,
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "agreed",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "plan",
+                "temporal": "future",
+                "episode_states": [
+                  "blocked",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "I had not thought of it as theirs to buy. That is my whole problem in one sentence, isn't it. Right. I will ask at the well.",
+                    "They will say no and then they will say how much, which is how this village says yes. %2$s might actually come home.",
+                    "Together. Yes. I have been treating %2$s as my private embarrassment when it is the village's book and always was."
+                  ],
+                  "pt": [
+                    "Não tinha pensado nele como algo que eles pudessem comprar. Meu problema inteiro numa frase, não é. Certo. Vou perguntar no poço.",
+                    "Vão dizer não e depois vão perguntar quanto, que é como esta vila diz sim. %2$s pode acabar vindo para casa.",
+                    "Juntos. Sim. Venho tratando %2$s como um constrangimento meu quando é o livro da vila, e sempre foi."
+                  ]
+                },
+                "predicate": "plan"
+              }
+            },
+            {
+              "name": "ask_why_it_matters",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why does that one matter so much?",
+                "pt": "Por que justamente esse importa tanto?"
+              },
+              "phrases": [
+                "why does it matter to you",
+                "what makes that book worth it"
+              ],
+              "requires_any": [
+                "matter",
+                "worth"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "confide",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "Because there is one copy and I have seen it. Most of what I want does not exist any more; %2$s exists and is thirty miles away.",
+                    "It is not the book. It is that somebody a hundred years from now will want it and I will be the reason it is not here.",
+                    "%2$s has the years nobody wrote down anywhere else. Lose it and the village simply has no fifty years, and nobody will notice until they need them."
+                  ],
+                  "pt": [
+                    "Porque existe uma cópia e eu a vi. Quase tudo que eu quero não existe mais; %2$s existe e está a cinquenta quilômetros.",
+                    "Não é o livro. É que alguém daqui a cem anos vai querer, e eu serei o motivo de não estar aqui.",
+                    "%2$s tem os anos que ninguém anotou em outro lugar. Perca isso e a vila simplesmente não tem cinquenta anos, e ninguém vai notar até precisar deles."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "volume"
+          ],
+          "prompt": {
+            "en": "You got it, then.",
+            "pt": "Então conseguiu."
+          },
+          "lines": {
+            "en": [
+              "%2$s is here. Eleven households and the innkeeper, and the innkeeper gave twice what he could spare, which I am not going to forget.",
+              "It came. I have had %2$s on the desk for two days and I have not shelved it because shelving it means I stop looking at it.",
+              "We bought %2$s. We — I keep saying we and I keep meaning it, which is new."
+            ],
+            "pt": [
+              "%2$s está aqui. Onze famílias e o estalajadeiro, e o estalajadeiro deu o dobro do que podia, o que eu não vou esquecer.",
+              "Chegou. Faz dois dias que %2$s está na mesa e eu não guardei, porque guardar significa parar de olhar.",
+              "Compramos %2$s. Nós — vivo dizendo nós e vivo querendo dizer isso mesmo, o que é novo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_to_see",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Can I see it?",
+                "pt": "Posso ver?"
+              },
+              "phrases": [
+                "may i look at it",
+                "let me see it"
+              ],
+              "requires_any": [
+                "see",
+                "look"
+              ],
+              "disposition": {
+                "warmth": 2,
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "shown",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "slots_used": [
+                  "volume"
+                ],
+                "lines": {
+                  "en": [
+                    "Hands, first. Then yes. I have been waiting three days for somebody to ask instead of nodding politely at %2$s.",
+                    "You may. Turn the leaves from the top corner, not the edge — and look at the third gathering, that is the part I have been going on about.",
+                    "Yes. Sit down. I will tell you what %2$s is while you look, and you may stop me at any point, and nobody ever does."
+                  ],
+                  "pt": [
+                    "Mãos primeiro. Depois sim. Faz três dias que espero alguém pedir em vez de acenar educadamente para %2$s.",
+                    "Pode. Vire as folhas pelo canto de cima, não pela borda — e olhe o terceiro caderno, é dessa parte que eu não paro de falar.",
+                    "Sim. Sente-se. Conto o que é %2$s enquanto você olha, e pode me interromper a qualquer momento, e ninguém nunca interrompe."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "credit_village",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "They gave because you asked properly.",
+                "pt": "Eles deram porque você pediu direito."
+              },
+              "phrases": [
+                "they gave because of how you asked",
+                "that was you asking well"
+              ],
+              "requires_any": [
+                "asked",
+                "gave",
+                "asking"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.librarian.acquisition.credit",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "deflected",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "I asked badly, in fact. I stumbled over the number twice. They gave anyway, which says more about them than my asking.",
+                    "Perhaps. I had rehearsed a speech about posterity and what came out was 'it has our names in it', and that was what did it.",
+                    "You are trying to give me the credit for other people's generosity, and I am going to let you, once, because it has been a good week."
+                  ],
+                  "pt": [
+                    "Pedi mal, na verdade. Tropecei no número duas vezes. Deram mesmo assim, o que diz mais sobre eles do que sobre o meu pedido.",
+                    "Talvez. Eu tinha ensaiado um discurso sobre a posteridade e o que saiu foi 'tem os nossos nomes dentro', e foi isso que funcionou.",
+                    "Você está tentando me dar o crédito pela generosidade dos outros, e eu vou deixar, uma vez, porque foi uma boa semana."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.reader_need",
+      "subject": "work.librarian.literacy",
+      "initial_state": "active",
+      "salience": 36,
+      "expires_after_days": 20,
+      "slots": {
+        "reader": [
+          "a_child_who_asks",
+          "an_old_shepherd",
+          "a_new_family"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "teach_back",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "reader"
+          ],
+          "identity_styles": [
+            "teaching",
+            "collaborative"
+          ],
+          "prompt": {
+            "en": "About the lessons.",
+            "pt": "Sobre as aulas."
+          },
+          "lines": {
+            "en": [
+              "I have been teaching %2$s their letters at the end of the day. It is going slowly and I do not know whether the slowness is theirs or mine.",
+              "%2$s comes on the days I am busiest and I have never once said so. I am not sure whether that is kindness or cowardice.",
+              "Three weeks with %2$s and we are at the point where they can read a word and not the sentence around it, which everybody warned me about and nobody explained."
+            ],
+            "pt": [
+              "Venho ensinando as letras a %2$s no fim do dia. Vai devagar, e não sei se a lentidão é deles ou minha.",
+              "%2$s aparece nos dias em que estou mais ocupada, e eu nunca disse nada. Não sei se isso é bondade ou covardia.",
+              "Três semanas com %2$s e chegamos ao ponto em que se lê uma palavra e não a frase em volta, o que todo mundo avisou e ninguém explicou."
+            ]
+          },
+          "replies": [
+            {
+              "name": "urge_patience",
+              "stance": "encouragement",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "advance": "succeeded",
+              "label": {
+                "en": "Keep going. Three weeks is early days.",
+                "pt": "Continue. Três semanas ainda é começo."
+              },
+              "phrases": [
+                "keep going three weeks is early days",
+                "give it more weeks it is early yet"
+              ],
+              "requires_any": [
+                "keep",
+                "early",
+                "weeks"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "teach_back",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "reader"
+                ],
+                "lines": {
+                  "en": [
+                    "It took me two years and a patient uncle. I keep forgetting that when I am sitting across from %2$s wanting it to be Tuesday already.",
+                    "You are right and I needed to hear it from outside my own head. I will stop counting the weeks.",
+                    "Then I will keep going, and I will stop letting %2$s see me checking the light to know when we can stop."
+                  ],
+                  "pt": [
+                    "Comigo levou dois anos e um tio paciente. Vivo esquecendo disso quando estou sentada em frente a %2$s querendo que já seja terça.",
+                    "Você tem razão e eu precisava ouvir isso de fora da minha cabeça. Vou parar de contar as semanas.",
+                    "Então continuo, e paro de deixar %2$s me ver olhando a luz para saber quando podemos parar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_method",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How are you teaching it?",
+                "pt": "Como você está ensinando?"
+              },
+              "phrases": [
+                "what method are you using",
+                "how do you teach reading"
+              ],
+              "requires_any": [
+                "teaching",
+                "method",
+                "teach"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "described",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "teach_back",
+                "slots_used": [
+                  "reader"
+                ],
+                "lines": {
+                  "en": [
+                    "Badly, from memory of how I was taught, which was also badly. We start with the names of people %2$s already knows, because a name you know is a word you can guess.",
+                    "Out of the ledger, of all things. Real sentences about real fields. %2$s learned 'flood' in one afternoon and has never once forgotten it.",
+                    "Letters first, then their own name, then anything they ask for. The asking is the part that matters and I try not to steer it."
+                  ],
+                  "pt": [
+                    "Mal, pela lembrança de como me ensinaram, que também foi mal. Começamos pelos nomes de pessoas que %2$s já conhece, porque um nome conhecido é uma palavra que se pode adivinhar.",
+                    "Pelo livro de registros, veja você. Frases de verdade sobre campos de verdade. %2$s aprendeu 'enchente' numa tarde e nunca mais esqueceu.",
+                    "Letras primeiro, depois o próprio nome, depois o que pedirem. O pedir é a parte que importa e eu tento não conduzir."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "reader"
+          ],
+          "prompt": {
+            "en": "They can read.",
+            "pt": "Já conseguem ler."
+          },
+          "lines": {
+            "en": [
+              "%2$s read a whole page to me on Thursday without stopping. I had to go and reshelve something that did not need reshelving.",
+              "It happened the way everyone said it would — nothing, nothing, nothing, and then %2$s was reading and had been for a minute before either of us noticed.",
+              "%2$s has started reading things I did not give them. That is the end of my part of it, and it is the best possible way for my part to end."
+            ],
+            "pt": [
+              "%2$s me leu uma página inteira na quinta sem parar. Tive de ir guardar uma coisa que não precisava ser guardada.",
+              "Aconteceu como todo mundo dizia — nada, nada, nada, e de repente %2$s estava lendo, e já fazia um minuto quando percebemos.",
+              "%2$s começou a ler coisas que eu não dei. É o fim da minha parte nisso, e é o melhor jeito possível de a minha parte acabar."
+            ]
+          },
+          "replies": [
+            {
+              "name": "congratulate",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's the best thing I've heard this week.",
+                "pt": "É a melhor coisa que ouvi esta semana."
+              },
+              "phrases": [
+                "that is wonderful news",
+                "best thing ive heard all week"
+              ],
+              "requires_any": [
+                "best",
+                "wonderful",
+                "week"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "affection": {
+                "decision": "work.librarian.reader_need.praise",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "glowed",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "slots_used": [
+                  "reader"
+                ],
+                "lines": {
+                  "en": [
+                    "Mine too, and I have been looking for somebody to tell since Thursday without seeming as though I were boasting about %2$s.",
+                    "I have said it four times today. Nobody has minded yet. I am going to keep saying it.",
+                    "It is, isn't it. I have done a great deal of careful work in this room and none of it comes close."
+                  ],
+                  "pt": [
+                    "A minha também, e desde quinta procuro alguém para contar sem parecer que estou me gabando de %2$s.",
+                    "Já disse isso quatro vezes hoje. Ninguém reclamou ainda. Vou continuar dizendo.",
+                    "É mesmo, não é. Já fiz muito trabalho cuidadoso nesta sala e nada disso chega perto."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_what_next",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What will they read next?",
+                "pt": "O que vão ler agora?"
+              },
+              "phrases": [
+                "what comes next for them",
+                "what will they read now"
+              ],
+              "requires_any": [
+                "next",
+                "now"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "wondered",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "plan",
+                "temporal": "future",
+                "slots_used": [
+                  "reader"
+                ],
+                "lines": {
+                  "en": [
+                    "Whatever they like, and I have had to physically stop myself making a list. %2$s does not need a curriculum. %2$s needs a shelf and no supervision.",
+                    "The atlas, I think, because it has pictures and no obligation. After that it stops being any of my business, which took some getting used to.",
+                    "They asked for something with a ship in it and I do not have one. So my next job is finding a book about ships, which is a very good job to have."
+                  ],
+                  "pt": [
+                    "O que quiserem, e eu tive de me segurar fisicamente para não fazer uma lista. %2$s não precisa de currículo. %2$s precisa de uma prateleira e de nenhuma supervisão.",
+                    "O atlas, eu acho, porque tem figuras e nenhuma obrigação. Depois disso deixa de ser assunto meu, o que me custou um pouco aceitar.",
+                    "Pediram algo com um navio, e eu não tenho. Então meu próximo trabalho é achar um livro sobre navios, que é um trabalho muito bom de se ter."
+                  ]
+                },
+                "predicate": "plan"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest thing you've had to mend?",
+        "pt": "Qual foi a coisa mais difícil que você já teve de restaurar?"
+      },
+      "requires_any": [
+        "hardest",
+        "mend",
+        "thing"
+      ],
+      "phrases": [
+        "what was the hardest repair youve done",
+        "whats the worst thing youve had to fix"
+      ]
+    },
+    "leave": {
+      "en": "I'll let you get back to it.",
+      "pt": "Vou deixar você voltar ao trabalho."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "answers": [
+    {
+      "name": "note_the_two_pages",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.the_apprentice_trader.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.the_crossing",
+              "deltas": {
+                "warmth": 3,
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.netherian.the_apprentice_trader"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.the_apprentice_trader.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.netherian.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

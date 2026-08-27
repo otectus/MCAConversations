@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_long_view",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.rushed_foundation.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.foundations",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.mason.rushed_foundation"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.rushed_foundation.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.mason.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

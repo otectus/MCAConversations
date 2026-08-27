@@ -1,0 +1,118 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_she_counts",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.emptied_wood.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.what_the_wood_can_spare",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter.emptied_wood"
+            },
+            "next": "conversations.scene.work.hunter.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter.emptied_wood.blocked.explained",
+              "slots": [
+                "wood"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_resting_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.emptied_wood.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter.wood.rested",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.what_the_wood_can_spare",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter.emptied_wood"
+            },
+            "next": "conversations.scene.work.hunter.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter.emptied_wood.blocked.accepted",
+              "slots": [
+                "wood"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_admission",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter.emptied_wood.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter.what_the_wood_can_spare",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter.emptied_wood"
+            },
+            "next": "conversations.scene.work.hunter.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter.emptied_wood.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.hunter.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

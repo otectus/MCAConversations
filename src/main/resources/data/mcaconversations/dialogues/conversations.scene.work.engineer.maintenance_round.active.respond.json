@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "urge_schedule",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.maintenance_round.active.adopted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.maintenance",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.maintenance_round",
+              "state": "succeeded"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.maintenance_round"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.maintenance_round.active.adopted",
+              "slots": [
+                "fixture"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_breaks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.maintenance_round.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.maintenance",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.maintenance_round"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.maintenance_round.active.explained",
+              "slots": [
+                "fixture"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.engineer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

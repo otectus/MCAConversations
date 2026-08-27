@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "tease",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.failing_kit.succeeded.wry"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.equipment",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.guard.failing_kit"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.failing_kit.succeeded.wry"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_fit",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.failing_kit.succeeded.assessed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.equipment",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.guard.failing_kit"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.failing_kit.succeeded.assessed",
+              "slots": [
+                "kit"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.guard.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

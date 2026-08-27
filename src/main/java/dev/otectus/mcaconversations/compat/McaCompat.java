@@ -416,4 +416,108 @@ public final class McaCompat {
     public static Optional<UUID> isInteractingWith(Entity villager) {
         return McaHandles.interactingPlayer(villager);
     }
+
+    // ------------------------------------------------------------------
+    // Living-histories context capabilities (spec §7.3)
+    //
+    // Added as one group because they answer one question the mod could not previously ask: what does
+    // this villager's working and family life actually look like right now. Every one returns an
+    // Optional or an empty collection on a miss, so ConversationContextSnapshot can record the field
+    // as UNKNOWN rather than as a default that later reads like an observation.
+    // ------------------------------------------------------------------
+
+    /**
+     * The villager's exact profession registry id, {@code "minecraft:farmer"}.
+     *
+     * <p>The single most valuable of the new reads. Until now the mod inferred a profession from
+     * {@code getProfessionText}, which is a localized display string — so it could tell farmers from
+     * librarians only by matching translated prose, and never noticed a profession <em>change</em>.
+     * Safe default: empty.
+     */
+    public static Optional<String> getProfessionId(Entity villager) {
+        return McaHandles.professionId(villager);
+    }
+
+    /** The MCA chore the player assigned, lowercased ({@code none}, {@code harvest}…). Empty on a miss. */
+    public static Optional<String> getCurrentChore(Entity villager) {
+        return McaHandles.currentChore(villager);
+    }
+
+    /** True while MCA's brain reports panic — the strongest suppressor of ordinary initiative. */
+    public static boolean isPanicking(Entity villager) {
+        return McaHandles.isPanicking(villager);
+    }
+
+    /** True while MCA's brain reports grief. */
+    public static boolean isGrieving(Entity villager) {
+        return McaHandles.isGrieving(villager);
+    }
+
+    /** The villager's assigned workplace block. Safe default: empty. */
+    public static Optional<BlockPos> getWorkplace(Entity villager) {
+        return McaHandles.workplace(villager);
+    }
+
+    /** The villager's assigned home block, dimension dropped. Safe default: empty. */
+    public static Optional<BlockPos> getHomePos(Entity villager) {
+        return McaHandles.homePos(villager);
+    }
+
+    /** Registry ids of the villager's MCA traits, lowercased. Safe default: empty set. */
+    public static Set<String> getTraitIds(Entity villager) {
+        return McaHandles.traitIds(villager);
+    }
+
+    /**
+     * Which of {@code itemTags} the villager is carrying at least one of.
+     *
+     * <p>Presence only, never a count: "I have the iron" is an observation a villager can make, and
+     * "we are down to nine iron" is an economy claim this mod does not get to invent (spec §12.2).
+     */
+    public static Set<String> getCarriedTags(Entity villager, java.util.Collection<String> itemTags) {
+        return McaHandles.inventoryTags(villager, itemTags);
+    }
+
+    /** True when MCA's family tree records this UUID as deceased. Safe default: false. */
+    public static boolean isDeceased(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.isDeceased(level, villagerUuid);
+    }
+
+    /** A villager's partner from the family tree, whether or not they are loaded. */
+    public static Optional<UUID> getPartnerFromTree(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.partnerOf(level, villagerUuid);
+    }
+
+    /** Father then mother, absent relations skipped. Safe default: empty list. */
+    public static List<UUID> getParents(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.parentsOf(level, villagerUuid);
+    }
+
+    public static Set<UUID> getSiblings(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.siblingsOf(level, villagerUuid);
+    }
+
+    public static Set<UUID> getChildren(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.childrenOf(level, villagerUuid);
+    }
+
+    /** A family member's profession id, so "my sister the mason" is read rather than guessed. */
+    public static Optional<String> getFamilyTreeProfessionId(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.familyTreeProfessionId(level, villagerUuid);
+    }
+
+    /** The village's current population. Safe default: empty. */
+    public static OptionalInt getVillagePopulation(ServerLevel level, int villageId) {
+        return McaHandles.villagePopulation(level, villageId);
+    }
+
+    /**
+     * MCA's building type token at a position ({@code library}, {@code smithy}, {@code house}…).
+     *
+     * <p>This is how a scene learns it is being told inside a library without any block-by-block
+     * simulation of its own (spec §7.3). Safe default: empty.
+     */
+    public static Optional<String> getBuildingTypeAt(ServerLevel level, int villageId, BlockPos pos) {
+        return McaHandles.buildingTypeAt(level, villageId, pos);
+    }
 }

@@ -1,0 +1,75 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.spoiling_store.failed.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.winter_store",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.butcher.spoiling_store"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.spoiling_store.failed.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_happens",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.spoiling_store.failed.qualified"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.winter_store",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.butcher.spoiling_store"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.spoiling_store.failed.qualified"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.butcher.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

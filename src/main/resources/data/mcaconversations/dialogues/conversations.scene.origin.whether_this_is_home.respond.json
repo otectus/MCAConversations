@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_answer",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "origin.whether_this_is_home.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.is_this_home",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.origin.followup",
+            "say": "conversations.scene.origin.whether_this_is_home.answered"
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_can_be_both",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "origin.whether_this_is_home.open.settled"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.origin.home.met",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.is_this_home",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.origin.followup",
+            "say": "conversations.scene.origin.whether_this_is_home.settled"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "say": "conversations.scene.origin.leaving"
+          }
+        }
+      ]
+    }
+  ]
+}

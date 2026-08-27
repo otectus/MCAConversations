@@ -1,0 +1,855 @@
+{
+  "_comment": [
+    "Hunter (MoreVillagers). Reading ground, and the arithmetic of how much a wood can give.",
+    "",
+    "The §12.4 anchors are the track, the season, the kill, what the wood can spare, the long walk and",
+    "the one that got away. These three take a wood that has been over-hunted, a track she followed for",
+    "two days and lost, and a snare line somebody else has been robbing.",
+    "",
+    "The hunter is not a sportsman. She counts, she rests ground, and she is contemptuous of people who",
+    "take everything in a good year and are surprised by the bad one. Her lines are full of specific",
+    "detail about mud, wind and hours.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when MoreVillagers",
+    "is installed."
+  ],
+  "profession": "morevillagers:hunter",
+  "id": "hunter",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_track",
+    "the_season",
+    "the_kill",
+    "what_the_wood_can_spare",
+    "the_long_walk",
+    "the_one_that_got_away"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the wood.",
+    "pt": "Vou deixar você voltar ao bosque."
+  },
+  "slot_lang": {
+    "hun_the_beech_wood": {
+      "en": "the beech wood",
+      "pt": "o bosque de faias"
+    },
+    "hun_the_river_scrub": {
+      "en": "the river scrub",
+      "pt": "o matagal do rio"
+    },
+    "hun_the_north_ridge": {
+      "en": "the north ridge",
+      "pt": "a crista norte"
+    },
+    "hun_too_many_snares": {
+      "en": "too many snares in one season",
+      "pt": "armadilhas demais numa estação"
+    },
+    "hun_no_young_left": {
+      "en": "hardly any young left",
+      "pt": "quase nenhum filhote restante"
+    },
+    "hun_a_second_hunter": {
+      "en": "a second hunter working it",
+      "pt": "um segundo caçador trabalhando ali"
+    },
+    "hun_two_days_of_prints": {
+      "en": "two days of prints",
+      "pt": "dois dias de pegadas"
+    },
+    "hun_a_blood_trail_that_stopped": {
+      "en": "a blood trail that stopped",
+      "pt": "um rastro de sangue que parou"
+    },
+    "hun_a_crossing_i_misread": {
+      "en": "a crossing I misread",
+      "pt": "uma travessia que eu li errado"
+    },
+    "hun_the_upper_line": {
+      "en": "the upper snare line",
+      "pt": "a linha alta de armadilhas"
+    },
+    "hun_the_line_by_the_beck": {
+      "en": "the line by the beck",
+      "pt": "a linha junto ao riacho"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.emptied_wood",
+      "subject": "work.hunter.what_the_wood_can_spare",
+      "initial_state": "blocked",
+      "salience": 60,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "wood": [
+          "hun_the_beech_wood",
+          "hun_the_river_scrub",
+          "hun_the_north_ridge"
+        ],
+        "cause": [
+          "hun_too_many_snares",
+          "hun_no_young_left",
+          "hun_a_second_hunter"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "wood",
+            "cause"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The wood.",
+            "pt": "O bosque."
+          },
+          "lines": {
+            "en": [
+              "%2$s has %3$s and I can see it in the tracks — half what there was two years ago, in the same mud, at the same hour.",
+              "%3$s. That is the whole story of %2$s and I am part of the story, which is the part I would rather skip over.",
+              "I have taken eleven out of %2$s this year and I should have taken four. I knew it at seven and kept going."
+            ],
+            "pt": [
+              "%2$s tem %3$s e dá para ver nas pegadas — metade do que havia dois anos atrás, na mesma lama, na mesma hora.",
+              "%3$s. É essa a história inteira de %2$s, e eu faço parte da história, que é a parte que eu preferiria pular.",
+              "Tirei onze de %2$s este ano e deveria ter tirado quatro. Eu sabia no sétimo e continuei."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_she_counts",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you count what's left?",
+                "pt": "Como você conta o que restou?"
+              },
+              "phrases": [
+                "how do you count what is left",
+                "how do you know the numbers"
+              ],
+              "requires_any": [
+                "count",
+                "numbers"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "wood"
+                ],
+                "lines": {
+                  "en": [
+                    "The same four crossings on %2$s, the morning after rain, once a fortnight. Prints in fresh mud are the only honest census there is.",
+                    "By what I stop seeing. Young ones first, then the big males, then nothing but the wary old females who will not breed well.",
+                    "I write it down. Eleven years of numbers in a book, and the book is why I know this is not simply a bad season."
+                  ],
+                  "pt": [
+                    "As mesmas quatro travessias em %2$s, na manhã seguinte à chuva, a cada duas semanas. Pegada em lama fresca é o único censo honesto que existe.",
+                    "Pelo que eu paro de ver. Os filhotes primeiro, depois os machos grandes, depois nada além das fêmeas velhas e arredias que não vão parir bem.",
+                    "Eu anoto. Onze anos de números num caderno, e é o caderno que me diz que isto não é simplesmente uma estação ruim."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_resting_it",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Rest the wood for a year.",
+                "pt": "Deixe o bosque descansar um ano."
+              },
+              "phrases": [
+                "rest the wood for a year",
+                "leave that ground alone a season"
+              ],
+              "requires_any": [
+                "rest",
+                "ground",
+                "leave"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 1
+              },
+              "affection": {
+                "decision": "work.hunter.wood.rested",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "wood"
+                ],
+                "lines": {
+                  "en": [
+                    "A year off %2$s means a year of walking twice as far for half as much, and it is still obviously the right thing.",
+                    "Yes. And I will have to tell the village why there is less meat, which is a conversation about arithmetic that nobody wants to have.",
+                    "I have been waiting for somebody to say it so that I could stop arguing with myself. That is a poor reason and it worked."
+                  ],
+                  "pt": [
+                    "Um ano longe de %2$s significa um ano andando o dobro por metade, e ainda assim é obviamente o certo.",
+                    "Sim. E vou ter que explicar à vila por que tem menos carne, uma conversa sobre aritmética que ninguém quer ter.",
+                    "Eu estava esperando alguém dizer para eu poder parar de discutir comigo mesma. É um motivo ruim e funcionou."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "acknowledge_the_admission",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Admitting your share is hard.",
+                "pt": "Admitir a sua parte é difícil."
+              },
+              "phrases": [
+                "admitting your share of it is hard",
+                "owning your part in it took something"
+              ],
+              "requires_any": [
+                "admitting",
+                "share",
+                "owning"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is easier than the alternative, which is a wood with nothing in it and a story about why that was somebody else's doing.",
+                    "Thank you. Every hunter I have known who blamed the weather ended up with no ground left to blame it on.",
+                    "I would rather be the person who took four too many than the person who cannot count. The first is a mistake and the second is a habit."
+                  ],
+                  "pt": [
+                    "É mais fácil que a alternativa, que é um bosque vazio e uma história sobre isso ter sido obra de outra pessoa.",
+                    "Obrigada. Todo caçador que conheci que culpou o tempo acabou sem terreno nenhum para culpar.",
+                    "Prefiro ser a pessoa que tirou quatro a mais do que a pessoa que não sabe contar. A primeira é um erro e a segunda é um hábito."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "wood"
+          ],
+          "prompt": {
+            "en": "The wood, since.",
+            "pt": "O bosque, depois disso."
+          },
+          "lines": {
+            "en": [
+              "I rested %2$s for a full year. There were young at three of the four crossings this spring.",
+              "The village ate less and complained more and then stopped complaining, and %2$s is coming back.",
+              "%2$s has doubled at the crossings. It took one year of doing nothing, which is the hardest work I have ever done."
+            ],
+            "pt": [
+              "Deixei %2$s descansar um ano inteiro. Nesta primavera havia filhotes em três das quatro travessias.",
+              "A vila comeu menos e reclamou mais e depois parou de reclamar, e %2$s está voltando.",
+              "%2$s dobrou nas travessias. Levou um ano fazendo nada, que é o trabalho mais difícil que eu já fiz."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_village",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How did the village take it?",
+                "pt": "Como a vila reagiu?"
+              },
+              "phrases": [
+                "how did the village take it",
+                "what did people say about less meat"
+              ],
+              "requires_any": [
+                "village",
+                "people",
+                "meat"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Badly for a season and then they forgot they had ever objected, which is the ordinary shape of these things.",
+                    "I showed two of them the book. One of them argued with the numbers and then came back a month later having counted for himself.",
+                    "The butcher backed me, which mattered more than anything I said. People believe a second trade before they believe your own."
+                  ],
+                  "pt": [
+                    "Mal por uma estação e depois esqueceram que tinham reclamado, que é o formato comum dessas coisas.",
+                    "Mostrei o caderno a dois deles. Um discutiu com os números e depois voltou um mês depois tendo contado ele mesmo.",
+                    "A açougueira me apoiou, o que pesou mais do que qualquer coisa que eu disse. As pessoas acreditam em um segundo ofício antes de acreditar no seu."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.lost_track",
+      "subject": "work.hunter.the_track",
+      "initial_state": "failed",
+      "salience": 52,
+      "due_after_days": 3,
+      "expires_after_days": 24,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "trail": [
+          "hun_two_days_of_prints",
+          "hun_a_blood_trail_that_stopped",
+          "hun_a_crossing_i_misread"
+        ]
+      },
+      "states": [
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trail"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The track you lost.",
+            "pt": "O rastro que você perdeu."
+          },
+          "lines": {
+            "en": [
+              "I followed %2$s and lost it on the second afternoon, and I walked home in the dark thinking about the crossing.",
+              "%2$s. Two days of my life and a deer that is somewhere out there carrying an injury because I was not good enough.",
+              "Losing a trail is one thing. Losing %2$s after wounding is another, and I do not intend to make peace with the second one."
+            ],
+            "pt": [
+              "Segui %2$s e perdi na segunda tarde, e voltei para casa no escuro pensando na travessia.",
+              "%2$s. Dois dias da minha vida e um cervo que está por aí com um ferimento porque eu não fui boa o bastante.",
+              "Perder um rastro é uma coisa. Perder %2$s depois de ferir é outra, e não pretendo fazer as pazes com a segunda."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_went_wrong",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Where did you lose it?",
+                "pt": "Onde você perdeu?"
+              },
+              "phrases": [
+                "where did you lose it",
+                "which part of the trail beat you"
+              ],
+              "requires_any": [
+                "lose",
+                "trail"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "At the water. They go along the bed and come out anywhere, and I chose the wrong bank by about forty paces.",
+                    "I hurried the last mile because the light was going. Everything I got wrong that day, I got wrong in the last hour.",
+                    "Stone. There is a run of bare rock up there and a deer crosses it in six strides and leaves you nothing at all to read."
+                  ],
+                  "pt": [
+                    "Na água. Eles andam pelo leito e saem em qualquer ponto, e eu escolhi a margem errada por uns quarenta passos.",
+                    "Apressei o último quilômetro porque a luz estava indo. Tudo o que errei naquele dia, errei na última hora.",
+                    "Pedra. Tem um trecho de rocha nua lá em cima, e um cervo atravessa em seis passadas e não deixa nada para você ler."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_happens",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Even a good tracker loses one.",
+                "pt": "Até um bom rastreador perde um."
+              },
+              "phrases": [
+                "even a good tracker loses one",
+                "the best trackers lose trails too"
+              ],
+              "requires_any": [
+                "tracker",
+                "trackers"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "qualified",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "They do. And the ones who say so too easily are the ones who lose four a year, so I am going to keep taking it badly.",
+                    "Thank you. I will accept the comfort about the trail and not about the wound, and those are genuinely separate things.",
+                    "It is a fair thing to say. It is also how a hunter starts down the road of taking shots she should not take."
+                  ],
+                  "pt": [
+                    "Perdem. E quem diz isso com facilidade demais é quem perde quatro por ano, então vou continuar levando a mal.",
+                    "Obrigada. Aceito o consolo sobre o rastro e não sobre o ferimento, e são coisas genuinamente separadas.",
+                    "É uma coisa justa de se dizer. Também é como uma caçadora começa a pegar o caminho dos tiros que não deveria dar."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "remembered",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "prompt": {
+            "en": "That track, since.",
+            "pt": "Aquele rastro, depois."
+          },
+          "lines": {
+            "en": [
+              "I went back to the crossing four times with no bow, just to learn it, and now I could work it in the dark.",
+              "I changed my rule. No shot after the light starts to go, whatever the day has been. It has cost me two deer and no more nights like that one.",
+              "The wound healed, I think. I found the same animal in the autumn, moving well, and I let it go and walked home pleased."
+            ],
+            "pt": [
+              "Voltei à travessia quatro vezes sem arco, só para aprender, e agora eu resolveria aquilo no escuro.",
+              "Mudei minha regra. Nenhum tiro depois que a luz começa a cair, seja qual for o dia. Custou-me dois cervos e nenhuma outra noite como aquela.",
+              "O ferimento sarou, eu acho. Encontrei o mesmo animal no outono, andando bem, e deixei passar e voltei para casa contente."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_rule",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That rule cost you something.",
+                "pt": "Essa regra te custou algo."
+              },
+              "phrases": [
+                "that rule cost you something real",
+                "the new rule has a price"
+              ],
+              "requires_any": [
+                "rule",
+                "cost",
+                "price"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Two deer a year, near enough. It is the cheapest rule I own and I would not have written it without the bad night.",
+                    "Thank you. Rules that cost nothing are the ones people keep and then break quietly. This one I notice keeping.",
+                    "I have told two younger hunters and both of them nodded and neither of them will do it until they have their own bad night."
+                  ],
+                  "pt": [
+                    "Dois cervos por ano, mais ou menos. É a regra mais barata que eu tenho e eu não a teria escrito sem a noite ruim.",
+                    "Obrigada. Regras que não custam nada são as que se cumprem e depois se quebram em silêncio. Esta eu percebo cumprindo.",
+                    "Contei a duas caçadoras mais novas e as duas assentiram e nenhuma vai cumprir até ter a própria noite ruim."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.robbed_line",
+      "subject": "work.hunter.the_long_walk",
+      "initial_state": "blocked",
+      "salience": 50,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "line": [
+          "hun_the_upper_line",
+          "hun_the_line_by_the_beck"
+        ]
+      },
+      "commitment": {
+        "id": "work.hunter.bring_string",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:string",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise",
+            "decide"
+          ],
+          "slots_used": [
+            "line"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The snare line.",
+            "pt": "A linha de armadilhas."
+          },
+          "lines": {
+            "en": [
+              "Somebody has been working %2$s ahead of me. Three snares empty and sprung, and the sets put back badly.",
+              "%2$s has been robbed four mornings running. Whoever it is knows my round, which narrows it to about six people.",
+              "I have lost the snares as well as the catch on %2$s, and snares are string and string is the one thing I cannot make."
+            ],
+            "pt": [
+              "Alguém vem trabalhando %2$s antes de mim. Três armadilhas vazias e disparadas, e as montagens recolocadas mal.",
+              "%2$s foi roubada quatro manhãs seguidas. Quem quer que seja conhece minha ronda, o que reduz a umas seis pessoas.",
+              "Perdi as armadilhas junto com a caça em %2$s, e armadilha é barbante, e barbante é a única coisa que eu não sei fazer."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_string",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you string for new snares.",
+                "pt": "Vou trazer barbante para armadilhas novas."
+              },
+              "phrases": [
+                "i can bring you string for snares",
+                "let me fetch string for that"
+              ],
+              "requires_any": [
+                "string",
+                "snares"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.hunter.line.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "line"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s is running again by Thursday and I can go back to the actual problem, which is who.",
+                    "Bring it and I will set a fresh line further up where nobody knows to look, and I will keep the old one going as a decoy.",
+                    "Yes. And I will owe you a hare, and I will not accept being told otherwise, so save us both the argument."
+                  ],
+                  "pt": [
+                    "Então %2$s volta a funcionar até quinta e eu posso voltar ao problema de verdade, que é quem.",
+                    "Traga e eu monto uma linha nova mais acima, onde ninguém pensa em procurar, e mantenho a antiga como isca.",
+                    "Sim. E vou te dever uma lebre, e não vou aceitar recusa, então poupe nós dois da discussão."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_watching",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Sit up one morning and see who it is.",
+                "pt": "Espere uma manhã e veja quem é."
+              },
+              "phrases": [
+                "sit up one morning and see who it is",
+                "wait out one morning and watch the line"
+              ],
+              "requires_any": [
+                "morning",
+                "watch",
+                "wait"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "considered",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "I have thought about it and been avoiding it, because once I have seen them I have to do something, and I would rather it were a stranger.",
+                    "Two hours before light, in the frost, on the chance of catching a neighbour. It is the correct plan and it is a miserable one.",
+                    "Yes. And if it is who I think it is, it is a household with four children and a bad year, and then this stops being about snares."
+                  ],
+                  "pt": [
+                    "Já pensei e venho evitando, porque depois de ver eu vou ter que fazer algo, e eu preferia que fosse um estranho.",
+                    "Duas horas antes de clarear, na geada, na esperança de flagrar um vizinho. É o plano certo e é um plano miserável.",
+                    "Sim. E se for quem eu acho, é uma casa com quatro crianças e um ano ruim, e aí isso deixa de ser sobre armadilhas."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "prompt": {
+            "en": "That line.",
+            "pt": "Aquela linha."
+          },
+          "lines": {
+            "en": [
+              "I sat up and it was who I thought. I said nothing, and I have been leaving one snare set for them since.",
+              "It was a bad year in one house. We have an arrangement now that neither of us has ever said out loud.",
+              "The line runs clean. I moved it, told one person where, and taught the eldest of that household to set their own."
+            ],
+            "pt": [
+              "Esperei e era quem eu achava. Não disse nada, e desde então venho deixando uma armadilha montada para eles.",
+              "Era um ano ruim numa casa. Temos um arranjo agora que nenhum de nós dois jamais disse em voz alta.",
+              "A linha está limpa. Mudei de lugar, contei a uma pessoa onde, e ensinei o mais velho daquela casa a montar as próprias."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_choice",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Teaching them was the better answer.",
+                "pt": "Ensinar foi a melhor resposta."
+              },
+              "phrases": [
+                "teaching them was the better answer",
+                "showing them how was the right move"
+              ],
+              "requires_any": [
+                "teaching",
+                "showing",
+                "better"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It was also the selfish answer. A neighbour who can feed themselves stops robbing my line, and I get to feel generous about it.",
+                    "Thank you. The alternative was the headman and a public shaming and a family that would never look at me again.",
+                    "I have thought about what my grandmother would have done. She would have set the dogs on them. I am not sure she would have been wrong, and I did it my way."
+                  ],
+                  "pt": [
+                    "Também foi a resposta egoísta. Um vizinho que se alimenta sozinho para de roubar minha linha, e eu ainda me sinto generosa.",
+                    "Obrigada. A alternativa era o chefe da vila, uma humilhação pública e uma família que nunca mais olharia para mim.",
+                    "Já pensei no que minha avó teria feito. Teria soltado os cães. Não tenho certeza de que ela estaria errada, e eu fiz do meu jeito."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else to say?",
+      "pt": "Mais alguma coisa a dizer?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a long track?",
+        "pt": "Qual é a parte mais difícil de um rastro longo?"
+      },
+      "requires_any": [
+        "hardest",
+        "track"
+      ],
+      "phrases": [
+        "what is the hardest part of a long track",
+        "hardest thing about following a track"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the track.",
+      "pt": "Vou deixar você com o rastro."
+    }
+  }
+}

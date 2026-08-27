@@ -1,0 +1,317 @@
+{
+  "_comment": [
+    "Food, gated on the hour and on the season rather than on a fixed opinion.",
+    "",
+    "One scene is the midday question — what is actually on today — and the other is the winter one,",
+    "which is about eating the same thing for the fourteenth time and how a cook makes that bearable."
+  ],
+  "topic": "food",
+  "entry": {
+    "question": "conversations.cat.chitchat",
+    "answer": "food"
+  },
+  "return_question": "conversations.cat.chitchat",
+  "leave_lines": {
+    "en": [
+      "Go and eat something, then.",
+      "Right. Do not let it go cold on my account.",
+      "Off you go."
+    ],
+    "pt": [
+      "Então vá comer alguma coisa.",
+      "Certo. Não deixe esfriar por minha causa.",
+      "Pode ir."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "I'll leave you to it.",
+    "pt": "Vou deixar você nisso."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about that?",
+      "pt": "Mais alguma coisa sobre isso?"
+    },
+    "leave": {
+      "en": "Enough about food.",
+      "pt": "Chega de falar de comida."
+    }
+  },
+  "scenes": [
+    {
+      "name": "whats_on_today",
+      "subject": "food.today",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "midday",
+            "afternoon"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_interests": [
+        "cooking"
+      ],
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "prompt": {
+        "en": "Today's food.",
+        "pt": "A comida de hoje."
+      },
+      "lines": {
+        "en": [
+          "Something with the last of the roots in it, which is a polite way of describing what it is.",
+          "Bread and whatever was nearest. I have made peace with the middle of the week.",
+          "Good, actually. I got the timing right for once and nobody was waiting, which is half of a meal."
+        ],
+        "pt": [
+          "Alguma coisa com o resto das raízes, que é um jeito educado de descrever o que é.",
+          "Pão e o que estava mais perto. Já fiz as pazes com o meio da semana.",
+          "Boa, na verdade. Acertei o tempo pela primeira vez e ninguém ficou esperando, e isso já é metade de uma refeição."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_they_make_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How do you make that?",
+            "pt": "Como você faz isso?"
+          },
+          "phrases": [
+            "how do you make that",
+            "what goes into it"
+          ],
+          "requires_any": [
+            "make",
+            "goes"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "Slowly, and with less in it than people expect. Four things done properly beats eleven things thrown in.",
+                "The trick is salting it at the start and again at the end, and nobody believes me until they have eaten both versions.",
+                "Badly, by anybody's standard but mine. It tastes like my mother's, which is the only measure I actually use."
+              ],
+              "pt": [
+                "Devagar, e com menos coisas do que as pessoas imaginam. Quatro ingredientes bem feitos vencem onze jogados dentro.",
+                "O truque é salgar no começo e de novo no fim, e ninguém acredita em mim até ter comido as duas versões.",
+                "Mal, pelo padrão de qualquer um menos o meu. Tem o gosto da comida da minha mãe, e é a única medida que eu de fato uso."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_good",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That sounds good.",
+            "pt": "Isso parece bom."
+          },
+          "phrases": [
+            "that sounds good",
+            "sounds like a decent meal"
+          ],
+          "requires_any": [
+            "sounds",
+            "meal"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "pleased",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is better than it sounds, which is the correct direction for a meal to surprise you in.",
+                "Come by at the hour and there is always more than one person's worth. There always is, whatever I intend.",
+                "Thank you. Nobody says anything about food unless it is wrong, so that is genuinely unusual."
+              ],
+              "pt": [
+                "É melhor do que parece, que é a direção certa para uma refeição surpreender.",
+                "Passe na hora e sempre tem mais do que dá para uma pessoa. Sempre tem, por mais que eu planeje.",
+                "Obrigada. Ninguém comenta comida a não ser que esteja errada, então isso é genuinamente incomum."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_fourteenth_time",
+      "subject": "food.winter_store",
+      "shape": "observe",
+      "act": "complain",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.season",
+          "any_of": [
+            "winter"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "precision"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Winter eating.",
+        "pt": "A comida de inverno."
+      },
+      "lines": {
+        "en": [
+          "The same four things in a different order, which after a while stops being a different order.",
+          "I could tell you exactly what is left in the store and exactly which week it runs out. That is winter.",
+          "It is enough and it is dull, and I have started to think the dullness is the harder half."
+        ],
+        "pt": [
+          "As mesmas quatro coisas em outra ordem, o que depois de um tempo deixa de ser outra ordem.",
+          "Eu poderia dizer exatamente o que resta na despensa e exatamente em que semana acaba. É isso o inverno.",
+          "É suficiente e é monótono, e comecei a achar que a monotonia é a metade mais difícil."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_they_vary_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How do you keep it interesting?",
+            "pt": "Como você mantém isso interessante?"
+          },
+          "phrases": [
+            "how do you keep it interesting",
+            "what do you do to vary it"
+          ],
+          "requires_any": [
+            "interesting",
+            "vary"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "One new thing a week, however small. A different herb, a different shape of the same bread. It is a trick and it works.",
+                "I stopped trying. Instead I made one day a week better than the others, and the other six became a wait rather than a slog.",
+                "Company. The same food eaten with somebody is not the same food, and I would not have believed that at twenty."
+              ],
+              "pt": [
+                "Uma coisa nova por semana, por menor que seja. Outra erva, outro formato do mesmo pão. É um truque e funciona.",
+                "Parei de tentar. Em vez disso, fiz um dia da semana melhor que os outros, e os outros seis viraram espera em vez de arrasto.",
+                "Companhia. A mesma comida comida com alguém não é a mesma comida, e eu não acreditaria nisso aos vinte."
+              ]
+            }
+          }
+        },
+        {
+          "name": "offer_to_eat_together",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I'll eat with you one evening.",
+            "pt": "Eu janto com você uma noite dessas."
+          },
+          "phrases": [
+            "i will eat with you one evening",
+            "let me join you for a meal"
+          ],
+          "requires_any": [
+            "eat",
+            "join",
+            "meal"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "familiarity": 2
+          },
+          "affection": {
+            "decision": "topic.food.winter.shared",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "accepted",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "Then I shall make the better version, and you will have to pretend the ordinary one is what I usually manage.",
+                "Yes. Bring nothing. People always bring something and then the evening is about the something.",
+                "That is the best offer I have had this month, and I want you to know that says more about the month than about the offer."
+              ],
+              "pt": [
+                "Então eu faço a versão melhor, e você vai ter que fingir que a comum é o que eu costumo conseguir.",
+                "Sim. Não traga nada. As pessoas sempre trazem algo e aí a noite fica sendo sobre esse algo.",
+                "É a melhor oferta que eu recebi este mês, e quero que você saiba que isso diz mais do mês do que da oferta."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

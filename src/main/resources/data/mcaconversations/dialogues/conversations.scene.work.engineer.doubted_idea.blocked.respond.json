@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "offer_to_try_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.doubted_idea.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.engineer.doubted_idea.trial",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.skepticism",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.doubted_idea",
+              "state": "succeeded"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.doubted_idea"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.doubted_idea.blocked.accepted",
+              "slots": [
+                "device"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_convinces",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.doubted_idea.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.skepticism",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.engineer.doubted_idea"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.doubted_idea.blocked.explained",
+              "slots": [
+                "device"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.engineer.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

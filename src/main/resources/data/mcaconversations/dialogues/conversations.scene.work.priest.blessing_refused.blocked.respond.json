@@ -1,0 +1,115 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_harm",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.blessing_refused.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_accused",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.priest.blessing_refused"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.blessing_refused.blocked.explained",
+              "slots": [
+                "household"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_refusal",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.blessing_refused.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.priest.blessing.backed",
+              "delta": 3,
+              "budget": "generous",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_accused",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.priest.blessing_refused"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.blessing_refused.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_else",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.blessing_refused.blocked.considered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.the_accused",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.priest.blessing_refused"
+            },
+            "next": "conversations.scene.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.priest.blessing_refused.blocked.considered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.priest.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

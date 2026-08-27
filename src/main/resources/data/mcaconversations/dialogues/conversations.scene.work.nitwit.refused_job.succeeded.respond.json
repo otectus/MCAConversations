@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_it_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.refused_job.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.small_usefulness",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.nitwit.refused_job"
+            },
+            "next": "conversations.scene.work.nitwit.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.nitwit.refused_job.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.nitwit.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

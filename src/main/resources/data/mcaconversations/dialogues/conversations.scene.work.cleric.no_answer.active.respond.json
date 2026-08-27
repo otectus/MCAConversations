@@ -1,0 +1,83 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_says",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.no_answer.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.doubt",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.no_answer"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.no_answer.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_honesty",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.no_answer.active.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cleric.doubt.backed",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.doubt",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.no_answer"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.no_answer.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.cleric.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

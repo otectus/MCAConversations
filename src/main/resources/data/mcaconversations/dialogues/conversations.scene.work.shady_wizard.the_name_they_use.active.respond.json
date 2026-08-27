@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_the_word",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.the_name_they_use.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.customers",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.the_name_they_use"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.the_name_they_use.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_showing_the_notes",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.the_name_they_use.active.considered"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shady_wizard.name.backed",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.customers",
+              "deltas": {
+                "respect": 3,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.the_name_they_use"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.the_name_they_use.active.considered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shady_wizard.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

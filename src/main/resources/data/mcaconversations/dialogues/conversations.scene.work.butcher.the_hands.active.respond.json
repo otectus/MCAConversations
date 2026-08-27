@@ -1,0 +1,79 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_wears",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.the_hands.active.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.squeamish_customers",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.the_hands"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.the_hands.active.answered",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_honest_work",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.the_hands.active.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.squeamish_customers",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.the_hands"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.the_hands.active.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.butcher.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,738 @@
+{
+  "_comment": [
+    "Cultist. A private conviction in a village that would rather it were not there.",
+    "",
+    "The §12.4 anchors are study, the circle, suspicion, vigils, doubt and the old signs. These three",
+    "take the way people cross the road to avoid her, a vigil she kept that produced nothing, and a",
+    "question in the text that none of her own people will answer.",
+    "",
+    "She is written as a scholar of something unpopular, not as a threat. She keeps her practice to",
+    "herself, she is tired of being asked whether she is dangerous, and her sharpest lines are about",
+    "being misread rather than about anything she believes. Nothing she says invites the player in."
+  ],
+  "profession": "mca:cultist",
+  "id": "cultist",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "study",
+    "the_circle",
+    "suspicion",
+    "vigil",
+    "doubt",
+    "old_signs"
+  ],
+  "leave_label": {
+    "en": "I'll leave you to your reading.",
+    "pt": "Vou deixar você com sua leitura."
+  },
+  "slot_lang": {
+    "cul_the_well": {
+      "en": "the well",
+      "pt": "o poço"
+    },
+    "cul_the_market_row": {
+      "en": "the market row",
+      "pt": "a fileira do mercado"
+    },
+    "cul_the_bridge": {
+      "en": "the bridge",
+      "pt": "a ponte"
+    },
+    "cul_chalk_on_my_door": {
+      "en": "chalk on my door",
+      "pt": "giz na minha porta"
+    },
+    "cul_a_look_and_a_turn": {
+      "en": "a look and then a turn",
+      "pt": "um olhar e então uma virada de rosto"
+    },
+    "cul_children_pulled_aside": {
+      "en": "children pulled aside",
+      "pt": "crianças puxadas para o lado"
+    },
+    "cul_a_long_night": {
+      "en": "a long night in the cold",
+      "pt": "uma noite longa no frio"
+    },
+    "cul_the_new_moon": {
+      "en": "the new moon",
+      "pt": "a lua nova"
+    },
+    "cul_the_first_frost": {
+      "en": "the first frost",
+      "pt": "a primeira geada"
+    },
+    "cul_a_word_with_two_readings": {
+      "en": "a word with two readings",
+      "pt": "uma palavra com duas leituras"
+    },
+    "cul_a_missing_page": {
+      "en": "a missing page",
+      "pt": "uma página faltando"
+    },
+    "cul_a_line_nobody_repeats": {
+      "en": "a line nobody will repeat",
+      "pt": "uma linha que ninguém repete"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.village_suspicion",
+      "subject": "work.cultist.suspicion",
+      "initial_state": "blocked",
+      "salience": 60,
+      "due_after_days": 4,
+      "expires_after_days": 28,
+      "slots": {
+        "place": [
+          "cul_the_well",
+          "cul_the_market_row",
+          "cul_the_bridge"
+        ],
+        "sign": [
+          "cul_chalk_on_my_door",
+          "cul_a_look_and_a_turn",
+          "cul_children_pulled_aside"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place",
+            "sign"
+          ],
+          "identity_values": [
+            "fairness",
+            "privacy",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The village.",
+            "pt": "A vila."
+          },
+          "lines": {
+            "en": [
+              "There was %3$s again. At %2$s, in daylight, where everybody could watch it happen.",
+              "%2$s is the worst of it. I go for water like anyone and I get %3$s, and then I carry the bucket home slowly so nobody thinks I hurried.",
+              "%3$s. Four times this month. I have counted, which is itself a sign of how it is going."
+            ],
+            "pt": [
+              "Teve %3$s de novo. Em %2$s, em plena luz, onde todo mundo pôde ver.",
+              "%2$s é o pior. Vou buscar água como qualquer um e recebo %3$s, e aí levo o balde para casa devagar para ninguém achar que corri.",
+              "%3$s. Quatro vezes este mês. Eu contei, o que já diz bastante sobre como as coisas vão."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_they_fear",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do they think you're doing?",
+                "pt": "O que acham que você faz?"
+              },
+              "phrases": [
+                "what do they think you are doing",
+                "what are people afraid of exactly"
+              ],
+              "requires_any": [
+                "think",
+                "afraid",
+                "people"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Something enormous. That is the trouble with a rumour — it never says what, so it can never be answered.",
+                    "Reading, mostly. I read old things in a language they cannot check, and everything unverifiable becomes whatever the reader feared already.",
+                    "If one of them asked me plainly, I would tell them plainly, and the conversation would take four minutes. Nobody asks."
+                  ],
+                  "pt": [
+                    "Algo enorme. É esse o problema de um boato — ele nunca diz o quê, então nunca pode ser respondido.",
+                    "Leitura, na maior parte. Leio coisas antigas numa língua que eles não podem conferir, e tudo que não se verifica vira o que o ouvinte já temia.",
+                    "Se um deles perguntasse com todas as letras, eu responderia com todas as letras, e a conversa levaria quatro minutos. Ninguém pergunta."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_is_unfair",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's unfair to you.",
+                "pt": "Isso é injusto com você."
+              },
+              "phrases": [
+                "that is unfair to you",
+                "you deserve better than that treatment"
+              ],
+              "requires_any": [
+                "unfair",
+                "deserve",
+                "treatment"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.cultist.suspicion.stood_up",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is, and you are the first person in a season to say so where somebody might hear you.",
+                    "Thank you. I had decided that being fair about it myself was the whole job, and it turns out it is easier when it is not.",
+                    "I am careful with that word. Unfair means somebody chose. I would rather believe they are only frightened, because frightened can end."
+                  ],
+                  "pt": [
+                    "É, e você é a primeira pessoa em uma estação a dizer isso onde alguém podia ouvir.",
+                    "Obrigada. Eu tinha decidido que ser justa sozinha era o trabalho inteiro, e acontece que é mais fácil quando não é.",
+                    "Sou cuidadosa com essa palavra. Injusto quer dizer que alguém escolheu. Prefiro acreditar que só estão com medo, porque medo pode acabar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "suggest_explaining",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Explain it to them openly.",
+                "pt": "Explique abertamente a eles."
+              },
+              "phrases": [
+                "explain it to them openly",
+                "tell the village what you actually study"
+              ],
+              "requires_any": [
+                "explain",
+                "openly",
+                "study"
+              ],
+              "disposition": {
+                "respect": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I tried that. An explanation given to a frightened room becomes a confession by the time it reaches the next room.",
+                    "The difficulty is that half of it is genuinely private. I will not trade my privacy for their comfort and call that fairness.",
+                    "Openly to whom? There is no meeting. There is only forty separate people, each of whom would need it said to them alone."
+                  ],
+                  "pt": [
+                    "Já tentei. Uma explicação dada a uma sala assustada vira confissão até chegar à sala seguinte.",
+                    "A dificuldade é que metade disso é genuinamente privado. Não vou trocar minha privacidade pelo conforto deles e chamar isso de justiça.",
+                    "Abertamente para quem? Não existe reunião. Existem quarenta pessoas separadas, e para cada uma seria preciso dizer a sós."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge",
+            "clarify"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "prompt": {
+            "en": "Things at the well.",
+            "pt": "As coisas no poço."
+          },
+          "lines": {
+            "en": [
+              "Somebody spoke to me at %2$s last week. About the weather. It was the best conversation I have had in a year.",
+              "It has eased. Not solved. Two households have decided I am dull rather than dangerous, and dull is an enormous promotion.",
+              "%2$s is bearable now. I still go early out of habit, and I have started staying a little longer each time."
+            ],
+            "pt": [
+              "Alguém falou comigo em %2$s semana passada. Sobre o tempo. Foi a melhor conversa que tive em um ano.",
+              "Melhorou. Não resolveu. Duas casas decidiram que sou chata em vez de perigosa, e chata é uma promoção enorme.",
+              "%2$s está suportável agora. Ainda vou cedo por hábito, e comecei a ficar um pouco mais a cada vez."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_changed",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What changed their minds?",
+                "pt": "O que mudou a cabeça deles?"
+              },
+              "phrases": [
+                "what changed their minds",
+                "why did people ease off"
+              ],
+              "requires_any": [
+                "changed",
+                "eased",
+                "why"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Time, and me being boring in public on purpose for eleven months. Nothing noble. Just attendance.",
+                    "One woman's roof leaked and I was the person standing there with a ladder. That was the whole reversal.",
+                    "I stopped trying to be understood and started being reliably present, and it turns out those are not the same errand at all."
+                  ],
+                  "pt": [
+                    "Tempo, e eu sendo chata em público de propósito por onze meses. Nada nobre. Só presença.",
+                    "O telhado de uma mulher vazou e eu era a pessoa ali com uma escada. Foi essa a virada inteira.",
+                    "Parei de tentar ser compreendida e passei a estar confiavelmente presente, e acontece que não são a mesma tarefa."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.empty_vigil",
+      "subject": "work.cultist.vigil",
+      "initial_state": "failed",
+      "salience": 48,
+      "due_after_days": 3,
+      "expires_after_days": 26,
+      "slots": {
+        "night": [
+          "cul_a_long_night",
+          "cul_the_new_moon",
+          "cul_the_first_frost"
+        ]
+      },
+      "states": [
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "night"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The vigil.",
+            "pt": "A vigília."
+          },
+          "lines": {
+            "en": [
+              "I kept %2$s and nothing came of it, and I have told exactly one person that, and now two.",
+              "%2$s, from dark to dark, and at the end of it I was cold and I was still myself and that was all.",
+              "I sat out %2$s expecting something to be different by morning. It was not. I have been sitting with that ever since."
+            ],
+            "pt": [
+              "Guardei %2$s e não deu em nada, e contei isso a exatamente uma pessoa, e agora a duas.",
+              "%2$s, do escuro ao escuro, e no fim eu estava com frio e continuava eu mesma, e era só isso.",
+              "Passei %2$s esperando que algo estivesse diferente de manhã. Não estava. Desde então eu sento com isso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_it_means",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you make of that?",
+                "pt": "O que você conclui disso?"
+              },
+              "phrases": [
+                "what do you make of that",
+                "how do you read that outcome"
+              ],
+              "requires_any": [
+                "make",
+                "read",
+                "outcome"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Three things, and they contradict each other, and I am refusing to pick one until the winter is over.",
+                    "That I was owed nothing. Which I already knew and had apparently been quietly assuming was a formality.",
+                    "The honest answer is that a night can be spent well and still produce nothing, and I would rather hold that than invent a meaning."
+                  ],
+                  "pt": [
+                    "Três coisas, e elas se contradizem, e me recuso a escolher uma antes do inverno acabar.",
+                    "Que eu não tinha nada a receber. O que eu já sabia e, aparentemente, vinha assumindo em silêncio como formalidade.",
+                    "A resposta honesta é que uma noite pode ser bem gasta e ainda assim não produzir nada, e prefiro segurar isso a inventar um sentido."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "sit_with_her",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That sounds lonely.",
+                "pt": "Isso parece solitário."
+              },
+              "phrases": [
+                "that sounds lonely",
+                "it sounds like a lonely night"
+              ],
+              "requires_any": [
+                "lonely",
+                "sounds"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 2
+              },
+              "reaction": {
+                "id": "softened",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It was. I had prepared for frightening and got lonely instead, and I was not ready for the swap.",
+                    "Yes. And I would do it again, which is the part I find hardest to explain to anybody, including myself.",
+                    "Thank you for saying so rather than asking what I was waiting for. Everybody else asks that first."
+                  ],
+                  "pt": [
+                    "Foi. Eu tinha me preparado para assustador e recebi solitário no lugar, e não estava pronta para a troca.",
+                    "Sim. E eu faria de novo, que é a parte mais difícil de explicar a qualquer um, inclusive a mim.",
+                    "Obrigada por dizer isso em vez de perguntar o que eu esperava. Todo mundo pergunta isso primeiro."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.unanswered_question",
+      "subject": "work.cultist.doubt",
+      "initial_state": "active",
+      "salience": 44,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "question": [
+          "cul_a_word_with_two_readings",
+          "cul_a_missing_page",
+          "cul_a_line_nobody_repeats"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "question"
+          ],
+          "identity_values": [
+            "curiosity",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "Your reading.",
+            "pt": "Sua leitura."
+          },
+          "lines": {
+            "en": [
+              "There is %2$s in the text and when I raise it, the room changes subject. Every time.",
+              "%2$s. I have asked three people who should know and been given three different kinds of silence.",
+              "I keep coming back to %2$s. Either it is nothing and I look foolish, or it is the only honest question in the book."
+            ],
+            "pt": [
+              "Existe %2$s no texto, e quando eu levanto isso a sala muda de assunto. Toda vez.",
+              "%2$s. Perguntei a três pessoas que deveriam saber e recebi três tipos diferentes de silêncio.",
+              "Eu volto sempre a %2$s. Ou não é nada e eu pareço tola, ou é a única pergunta honesta do livro."
+            ]
+          },
+          "replies": [
+            {
+              "name": "encourage_asking",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Keep asking it anyway.",
+                "pt": "Continue perguntando mesmo assim."
+              },
+              "phrases": [
+                "keep asking it anyway",
+                "ask the question again next time"
+              ],
+              "requires_any": [
+                "asking",
+                "question",
+                "again"
+              ],
+              "disposition": {
+                "respect": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "resolved",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "I will. Quietly, and to one person at a time, which is slower and much harder to refuse.",
+                    "Yes. A question that is only asked once is a mood. A question asked eleven times is a problem, and problems eventually get answered.",
+                    "You are giving me permission I should not have needed, and I am taking it anyway. Thank you."
+                  ],
+                  "pt": [
+                    "Vou. Em voz baixa, e a uma pessoa por vez, o que é mais lento e muito mais difícil de recusar.",
+                    "Sim. Uma pergunta feita só uma vez é um humor. Uma pergunta feita onze vezes é um problema, e problemas acabam sendo respondidos.",
+                    "Você está me dando uma permissão de que eu não deveria precisar, e eu vou aceitar mesmo assim. Obrigada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_the_question",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What's the question itself?",
+                "pt": "Qual é a pergunta em si?"
+              },
+              "phrases": [
+                "what is the question itself",
+                "tell me the actual question"
+              ],
+              "requires_any": [
+                "itself",
+                "actual",
+                "question"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "declined_politely",
+                "act": "deflect",
+                "polarity": "neutral",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I would rather not put it in your head. It is the sort of question that stays, and you did not come here for that.",
+                    "Ask me in a year. If I still have it by then it will have earned the right to be repeated.",
+                    "It is four words long and it is not interesting out of context, which is the safest true thing I can say about it."
+                  ],
+                  "pt": [
+                    "Prefiro não colocar isso na sua cabeça. É o tipo de pergunta que fica, e você não veio aqui para isso.",
+                    "Me pergunte daqui a um ano. Se eu ainda tiver essa pergunta, ela terá ganhado o direito de ser repetida.",
+                    "Tem quatro palavras e não é interessante fora de contexto, que é a coisa verdadeira mais segura que eu sei dizer."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "That question.",
+            "pt": "Aquela pergunta."
+          },
+          "lines": {
+            "en": [
+              "Somebody finally answered it. Badly, and out of irritation, and it was still the most useful hour of my year.",
+              "I asked it eleven times. On the eleventh, an old man told me the page had been removed on purpose, and by whom.",
+              "It is answered. I am not going to pretend the answer was comfortable, but I would take an uncomfortable answer over a polite silence any day."
+            ],
+            "pt": [
+              "Alguém finalmente respondeu. Mal, e por irritação, e ainda assim foi a hora mais útil do meu ano.",
+              "Perguntei onze vezes. Na décima primeira, um senhor me disse que a página tinha sido retirada de propósito, e por quem.",
+              "Está respondida. Não vou fingir que a resposta foi confortável, mas prefiro uma resposta incômoda a um silêncio educado qualquer dia."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_persistence",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Eleven times is persistence.",
+                "pt": "Onze vezes é persistência."
+              },
+              "phrases": [
+                "eleven times is real persistence",
+                "that is persistence"
+              ],
+              "requires_any": [
+                "persistence",
+                "eleven"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Or stubbornness. The two look identical from outside and I have given up trying to tell which one I have.",
+                    "Thank you. It is the only virtue I am confident of, and it is the cheap one, because it costs nothing but time.",
+                    "I nearly stopped at eight. I want that in the record, because the version where I never wavered is not the true one."
+                  ],
+                  "pt": [
+                    "Ou teimosia. As duas parecem idênticas de fora e eu desisti de tentar saber qual das duas eu tenho.",
+                    "Obrigada. É a única virtude de que tenho certeza, e é a barata, porque só custa tempo.",
+                    "Quase parei na oitava. Quero isso registrado, porque a versão em que eu nunca vacilei não é a verdadeira."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Is there more?",
+      "pt": "Tem mais?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of being misread?",
+        "pt": "Qual é a parte mais difícil de ser mal interpretada?"
+      },
+      "requires_any": [
+        "hardest",
+        "misread"
+      ],
+      "phrases": [
+        "what is the hardest part of being misread",
+        "hardest thing about people misreading you"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to it.",
+      "pt": "Vou deixar você nisso."
+    }
+  }
+}

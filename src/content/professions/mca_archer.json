@@ -1,0 +1,876 @@
+{
+  "_comment": [
+    "Archer. Distance, patience, and a craft that is mostly maintenance.",
+    "",
+    "The §12.4 anchors are practice, supply, a shot that mattered, the watch, teaching, and hands in",
+    "cold weather. These three take the arrows she has run out of, the shot she missed, and the child",
+    "she is trying to teach without breaking their nerve.",
+    "",
+    "She is not the guard. The guard is about the wall; the archer is about the moment before, when",
+    "there is still time to be careful. Her lines are quieter and more technical, and she is happier",
+    "talking about fletching than about anything she has hit."
+  ],
+  "profession": "mca:archer",
+  "id": "archer",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "practice",
+    "supply",
+    "missed_shot",
+    "watch",
+    "teaching",
+    "cold_hands"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the butts.",
+    "pt": "Vou deixar você voltar ao alvo."
+  },
+  "slot_lang": {
+    "arc_no_feathers": {
+      "en": "no fletching worth the name",
+      "pt": "nenhuma empenagem que se possa chamar assim"
+    },
+    "arc_green_shafts": {
+      "en": "shafts still green enough to warp",
+      "pt": "hastes ainda verdes o bastante para empenar"
+    },
+    "arc_soft_points": {
+      "en": "points soft enough to fold",
+      "pt": "pontas moles o bastante para dobrar"
+    },
+    "arc_a_split_nock": {
+      "en": "a split nock",
+      "pt": "uma nocha rachada"
+    },
+    "arc_the_long_butts": {
+      "en": "the long butts",
+      "pt": "o alvo longo"
+    },
+    "arc_the_orchard_range": {
+      "en": "the orchard range",
+      "pt": "o campo de tiro do pomar"
+    },
+    "arc_the_river_bank": {
+      "en": "the river bank",
+      "pt": "a margem do rio"
+    },
+    "arc_a_deer_at_dusk": {
+      "en": "a deer at dusk",
+      "pt": "um cervo ao anoitecer"
+    },
+    "arc_something_in_the_barley": {
+      "en": "something moving in the barley",
+      "pt": "algo se mexendo na cevada"
+    },
+    "arc_a_bird_over_the_roofs": {
+      "en": "a bird over the roofs",
+      "pt": "um pássaro sobre os telhados"
+    },
+    "arc_a_stiff_draw": {
+      "en": "a draw that is too heavy for them",
+      "pt": "um arco pesado demais para eles"
+    },
+    "arc_a_flinch": {
+      "en": "a flinch at the loose",
+      "pt": "um tremor na hora de soltar"
+    },
+    "arc_a_wandering_eye": {
+      "en": "an eye that will not stay on one thing",
+      "pt": "um olho que não fica em uma coisa só"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.arrow_shortage",
+      "subject": "work.archer.supply",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 22,
+      "slots": {
+        "lack": [
+          "arc_no_feathers",
+          "arc_green_shafts",
+          "arc_soft_points",
+          "arc_a_split_nock"
+        ],
+        "range": [
+          "arc_the_long_butts",
+          "arc_the_orchard_range",
+          "arc_the_river_bank"
+        ]
+      },
+      "commitment": {
+        "id": "work.archer.bring_feathers",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:feather",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "lack",
+            "range"
+          ],
+          "identity_values": [
+            "precision",
+            "independence"
+          ],
+          "prompt": {
+            "en": "The quiver.",
+            "pt": "A aljava."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s, so I have been shooting at %3$s with arrows I would be ashamed to hand anyone.",
+              "%2$s is the whole problem. A bow is simple. It is the twenty small things behind the bow that fail.",
+              "Every arrow I loose at %3$s this week has %2$s, and I can see it in the flight, and I cannot fix it by aiming better."
+            ],
+            "pt": [
+              "Tenho %2$s, então venho atirando em %3$s com flechas que eu teria vergonha de entregar a alguém.",
+              "%2$s é o problema inteiro. Um arco é simples. São as vinte coisinhas atrás do arco que falham.",
+              "Toda flecha que eu solto em %3$s esta semana tem %2$s, e dá para ver no voo, e eu não conserto isso mirando melhor."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_bad",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How much difference does that make?",
+                "pt": "Quanta diferença isso faz?"
+              },
+              "phrases": [
+                "how much difference does that make",
+                "does the fletching change the flight much"
+              ],
+              "requires_any": [
+                "difference",
+                "fletching",
+                "flight"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "range"
+                ],
+                "lines": {
+                  "en": [
+                    "At ten paces, none. At the far mark on %2$s, the width of a person. That is the entire difference between a story and an accident.",
+                    "It moves the group. Six arrows that would sit in a hand's width sit in a hat's width instead, and one of the six goes wherever it likes.",
+                    "Enough that I have started calling my misses honestly. If I blamed the wind every time, I would learn nothing all year."
+                  ],
+                  "pt": [
+                    "A dez passos, nenhuma. Na marca longe de %2$s, a largura de uma pessoa. É essa a diferença inteira entre uma história e um acidente.",
+                    "Espalha o agrupamento. Seis flechas que caberiam num palmo passam a caber num chapéu, e uma das seis vai para onde bem entender.",
+                    "O bastante para eu ter passado a admitir meus erros com honestidade. Se eu culpasse o vento toda vez, não aprenderia nada o ano inteiro."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_feathers",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you feathers.",
+                "pt": "Vou te trazer penas."
+              },
+              "phrases": [
+                "i can bring you feathers",
+                "let me find some feathers for that"
+              ],
+              "requires_any": [
+                "feathers",
+                "feather"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.archer.shortage.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I spend an evening cutting and binding and by morning I am an archer again instead of a person holding a bow.",
+                    "Yes, and bring the grey ones if you have a choice. They are stiffer and they forgive a bad glue line.",
+                    "That is four days of work you have just handed me back. I will not pretend it is a small thing."
+                  ],
+                  "pt": [
+                    "Então passo uma noite cortando e amarrando e de manhã volto a ser arqueira, em vez de uma pessoa segurando um arco.",
+                    "Sim, e traga as cinzentas se puder escolher. São mais firmes e perdoam uma linha de cola mal feita.",
+                    "São quatro dias de trabalho que você acabou de me devolver. Não vou fingir que é pouca coisa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "suggest_make_do",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Shoot closer until you're resupplied.",
+                "pt": "Atire mais perto até se reabastecer."
+              },
+              "phrases": [
+                "shoot closer until you are resupplied",
+                "practise at short range for now"
+              ],
+              "requires_any": [
+                "closer",
+                "short",
+                "resupplied"
+              ],
+              "disposition": {
+                "respect": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "That is sensible and I hate it. Short practice teaches short habits, and the habits are the only thing I actually own.",
+                    "I could. Then in a month I would be very good at a distance nobody ever needs me at.",
+                    "Half right. I will shoot close for form and stay off the long mark, and I will still be sour about it on the walk home."
+                  ],
+                  "pt": [
+                    "É sensato e eu detesto. Prática curta ensina hábitos curtos, e os hábitos são a única coisa que eu de fato tenho.",
+                    "Poderia. Aí, em um mês, eu seria ótima numa distância em que ninguém nunca precisa de mim.",
+                    "Meio certo. Vou atirar perto para cuidar da forma e ficar longe da marca longa, e ainda vou voltar para casa emburrada."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "range"
+          ],
+          "prompt": {
+            "en": "The quiver, since.",
+            "pt": "A aljava, depois disso."
+          },
+          "lines": {
+            "en": [
+              "Forty new arrows, all matched, and the group at %2$s tightened the first afternoon.",
+              "I fletched until my thumbs were raw and it was the best evening I have had in a month.",
+              "%2$s does not lie. Same bow, same arm, better arrows, and suddenly I am not the problem."
+            ],
+            "pt": [
+              "Quarenta flechas novas, todas iguais, e o agrupamento em %2$s fechou já na primeira tarde.",
+              "Empenei flechas até meus polegares descascarem, e foi a melhor noite que tive em um mês.",
+              "%2$s não mente. Mesmo arco, mesmo braço, flechas melhores, e de repente o problema não sou eu."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_the_feeling",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What does a good group feel like?",
+                "pt": "Como é a sensação de um bom agrupamento?"
+              },
+              "phrases": [
+                "what does a good group feel like",
+                "describe a tight group to me"
+              ],
+              "requires_any": [
+                "group",
+                "tight",
+                "feel"
+              ],
+              "disposition": {
+                "familiarity": 3
+              },
+              "reaction": {
+                "id": "described",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Boring. That is the honest word. Nothing surprises you. Six times in a row nothing surprises you, and that is the whole joy of it.",
+                    "You stop hearing yourself think about it. The arm does it and you are just standing there watching, like a spectator at your own hands.",
+                    "It feels like the third arrow already knows where the first two went, which is nonsense, and is also exactly what it feels like."
+                  ],
+                  "pt": [
+                    "Entediante. Essa é a palavra honesta. Nada te surpreende. Seis vezes seguidas nada te surpreende, e a alegria toda é essa.",
+                    "Você para de se ouvir pensando nisso. O braço faz e você só assiste, como plateia das próprias mãos.",
+                    "É como se a terceira flecha já soubesse onde as duas primeiras foram, o que é absurdo, e é exatamente a sensação."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.missed_shot",
+      "subject": "work.archer.missed_shot",
+      "initial_state": "active",
+      "salience": 54,
+      "due_after_days": 3,
+      "expires_after_days": 24,
+      "slots": {
+        "quarry": [
+          "arc_a_deer_at_dusk",
+          "arc_something_in_the_barley",
+          "arc_a_bird_over_the_roofs"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "acknowledge",
+            "decide"
+          ],
+          "slots_used": [
+            "quarry"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The miss.",
+            "pt": "O erro."
+          },
+          "lines": {
+            "en": [
+              "I missed %2$s at forty paces and I have replayed it about nine hundred times since.",
+              "%2$s, clean shot, good light, and I pulled it left. There is no wind to blame and I have checked.",
+              "The frustrating part about %2$s is that I knew it was wrong while the string was still moving."
+            ],
+            "pt": [
+              "Errei %2$s a quarenta passos e desde então já repassei isso umas novecentas vezes.",
+              "%2$s, tiro limpo, boa luz, e eu puxei para a esquerda. Não tem vento para culpar, e eu conferi.",
+              "O irritante de %2$s é que eu soube que estava errado enquanto a corda ainda se movia."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Do you know what went wrong?",
+                "pt": "Você sabe o que deu errado?"
+              },
+              "phrases": [
+                "do you know what went wrong",
+                "have you worked out the cause"
+              ],
+              "requires_any": [
+                "wrong",
+                "cause",
+                "worked"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "diagnosed",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "I hurried the loose. That is all it ever is. Everything else is decoration on hurrying the loose.",
+                    "My back hand crept forward a finger's width. One finger, forty paces, and it becomes a hand's width of miss.",
+                    "I have three explanations and I trust the least flattering one, which is that I wanted it too much and rushed."
+                  ],
+                  "pt": [
+                    "Apressei a soltura. É sempre só isso. Todo o resto é enfeite em cima de apressar a soltura.",
+                    "Minha mão de trás avançou a largura de um dedo. Um dedo, quarenta passos, e vira um palmo de erro.",
+                    "Tenho três explicações e confio na menos lisonjeira, que é a de que eu quis demais e me apressei."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "let_it_go",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "One arrow isn't your whole record.",
+                "pt": "Uma flecha não é todo o seu histórico."
+              },
+              "phrases": [
+                "one arrow is not your whole record",
+                "your record is more than a single shot"
+              ],
+              "requires_any": [
+                "record",
+                "arrow",
+                "single"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "softened",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I know. I am better at saying that to other people than at hearing it, which most archers would admit if you asked kindly.",
+                    "True, and I will believe it by the weekend. The first two days after a miss are simply not available for reason.",
+                    "Thank you. I keep a tally, and the tally says you are right, and the tally has never once made me feel better on the night."
+                  ],
+                  "pt": [
+                    "Eu sei. Sou melhor em dizer isso aos outros do que em ouvir, coisa que quase toda arqueira admitiria se você perguntasse com jeito.",
+                    "Verdade, e vou acreditar até o fim de semana. Os dois primeiros dias depois de um erro simplesmente não aceitam razão.",
+                    "Obrigada. Eu faço a conta, e a conta diz que você tem razão, e a conta nunca me fez sentir melhor na mesma noite."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "urge_practice",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Then go and shoot it again tomorrow.",
+                "pt": "Então vá atirar de novo amanhã."
+              },
+              "phrases": [
+                "go and shoot it again tomorrow",
+                "put another six arrows through it"
+              ],
+              "requires_any": [
+                "again",
+                "another",
+                "tomorrow"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "agreed",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "That is the only cure and I resent how simple it is. Six arrows tomorrow, same distance, no audience.",
+                    "Yes. The longer I leave it the larger it gets, and by next week it would be a thing I am afraid of rather than a thing I did.",
+                    "Right. And I will do it badly first, which is the part people skip when they give that advice."
+                  ],
+                  "pt": [
+                    "É a única cura e me irrita como é simples. Seis flechas amanhã, mesma distância, sem plateia.",
+                    "Sim. Quanto mais eu deixar, maior fica, e na semana que vem viraria uma coisa de que tenho medo em vez de uma coisa que fiz.",
+                    "Certo. E vou fazer mal na primeira vez, que é a parte que as pessoas pulam quando dão esse conselho."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "quarry"
+          ],
+          "prompt": {
+            "en": "That shot.",
+            "pt": "Aquele tiro."
+          },
+          "lines": {
+            "en": [
+              "I went back out and put six through the same mark. %2$s is no longer a thing that lives in my head.",
+              "It is finished. Not avenged — finished. I shot until it was boring and then I stopped thinking about %2$s.",
+              "The miss is still in the tally. It just is not in the front of my mind any more, which is all I was asking for."
+            ],
+            "pt": [
+              "Voltei ao campo e acertei seis na mesma marca. %2$s deixou de ser uma coisa que mora na minha cabeça.",
+              "Acabou. Não vingado — acabado. Atirei até virar chato e aí parei de pensar em %2$s.",
+              "O erro continua na conta. Só não fica mais na frente da minha cabeça, que era tudo o que eu pedia."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_discipline",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That took discipline.",
+                "pt": "Isso exigiu disciplina."
+              },
+              "phrases": [
+                "that took real discipline",
+                "going back out took discipline"
+              ],
+              "requires_any": [
+                "discipline",
+                "took"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It took about an hour, which is less than it took to feel bad about it, and I would like somebody to explain that to me.",
+                    "Thank you. Discipline is a grand word for walking to a field while still cross.",
+                    "It is the only skill I am sure I have. Everything else about the bow could be luck and good eyes."
+                  ],
+                  "pt": [
+                    "Exigiu cerca de uma hora, menos do que levou para me sentir mal, e eu gostaria que alguém me explicasse isso.",
+                    "Obrigada. Disciplina é uma palavra grandiosa para caminhar até um campo ainda irritada.",
+                    "É a única habilidade que tenho certeza de ter. Todo o resto do arco pode ser sorte e boa vista."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.teaching_a_child",
+      "subject": "work.archer.teaching",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "trouble": [
+          "arc_a_stiff_draw",
+          "arc_a_flinch",
+          "arc_a_wandering_eye"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "trouble"
+          ],
+          "identity_values": [
+            "precision",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The lessons.",
+            "pt": "As aulas."
+          },
+          "lines": {
+            "en": [
+              "One of the children wants to learn and has %2$s, and correcting it wrong will put them off for life.",
+              "%2$s. That is the whole lesson at the moment, and the difficulty is saying it forty times without sounding tired of them.",
+              "I am teaching, badly, because %2$s is easy to see and very hard to describe to somebody standing inside it."
+            ],
+            "pt": [
+              "Uma das crianças quer aprender e tem %2$s, e corrigir do jeito errado afasta a pessoa para sempre.",
+              "%2$s. É a aula inteira no momento, e a dificuldade é dizer isso quarenta vezes sem soar cansada dela.",
+              "Estou ensinando, mal, porque %2$s é fácil de ver e muito difícil de descrever para quem está dentro disso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_approach",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How are you teaching it?",
+                "pt": "Como você está ensinando?"
+              },
+              "phrases": [
+                "how are you teaching that",
+                "what is your method with them"
+              ],
+              "requires_any": [
+                "teaching",
+                "method"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Lighter bow, closer mark, and I say one thing per session. One. It is the hardest rule I have ever kept.",
+                    "I let them shoot badly for a while first, so that the correction arrives after they already want it.",
+                    "Mostly I stand where they can see my hands and shut up. Children copy what you do and argue with what you say."
+                  ],
+                  "pt": [
+                    "Arco mais leve, alvo mais perto, e eu digo uma coisa por sessão. Uma. É a regra mais difícil que já cumpri.",
+                    "Deixo atirarem mal por um tempo primeiro, para que a correção chegue depois de já quererem ela.",
+                    "Basicamente fico onde possam ver minhas mãos e me calo. Criança copia o que você faz e discute o que você fala."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_patience",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Give them a whole season before you judge it.",
+                "pt": "Dê uma estação inteira antes de julgar."
+              },
+              "phrases": [
+                "give them a whole season first",
+                "let a season pass before judging"
+              ],
+              "requires_any": [
+                "season",
+                "whole"
+              ],
+              "disposition": {
+                "respect": 2,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "A season. Yes. I took three, and somebody was patient with me, and I have been forgetting to pass that on.",
+                    "You are right. I am measuring a child in weeks against an adult in years, which is not measuring at all.",
+                    "Agreed. And I will say that to them out loud, because the waiting is easier when you know it is the plan."
+                  ],
+                  "pt": [
+                    "Uma estação. Sim. Eu levei três, e alguém teve paciência comigo, e ando esquecendo de repassar isso.",
+                    "Você tem razão. Estou medindo uma criança em semanas contra uma adulta em anos, o que não é medir nada.",
+                    "De acordo. E vou dizer isso a ela em voz alta, porque esperar é mais fácil quando se sabe que esperar é o plano."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "Your student.",
+            "pt": "Sua aluna."
+          },
+          "lines": {
+            "en": [
+              "They hit the mark three times running last week and looked at me as if I had done it.",
+              "The flinch went. I did not see it go. One afternoon it was simply not there any more.",
+              "They have started correcting themselves out loud before I say anything, which is the whole point and I did not expect it this year."
+            ],
+            "pt": [
+              "Ela acertou o alvo três vezes seguidas semana passada e olhou para mim como se eu tivesse feito aquilo.",
+              "O tremor sumiu. Eu não vi sumir. Numa tarde simplesmente não estava mais lá.",
+              "Ela passou a se corrigir em voz alta antes de eu falar, que é o objetivo inteiro, e eu não esperava isso este ano."
+            ]
+          },
+          "replies": [
+            {
+              "name": "praise_teaching",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You taught them well.",
+                "pt": "Você ensinou bem."
+              },
+              "phrases": [
+                "you taught them well",
+                "that is good teaching"
+              ],
+              "requires_any": [
+                "taught",
+                "teaching"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "deflected",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "They taught them. I stood nearby and said one useful sentence a week. I have made peace with that being the job.",
+                    "Thank you. I will take the credit in private and give it to them in public, which is the correct division.",
+                    "If I did, it was by keeping my mouth shut at the right times, and I would like that written on something."
+                  ],
+                  "pt": [
+                    "Ela ensinou a si mesma. Eu fiquei por perto e disse uma frase útil por semana. Já fiz as pazes com esse ser o trabalho.",
+                    "Obrigada. Vou aceitar o crédito em particular e dar a ela em público, que é a divisão correta.",
+                    "Se ensinei, foi ficando calada nas horas certas, e eu gostaria que isso ficasse escrito em algum lugar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything more?",
+      "pt": "Mais alguma?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a long shot?",
+        "pt": "Qual é a parte mais difícil de um tiro longo?"
+      },
+      "requires_any": [
+        "hardest",
+        "shot"
+      ],
+      "phrases": [
+        "what is the hardest part of a long shot",
+        "hardest thing about a long shot"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the butts.",
+      "pt": "Vou deixar você com o alvo."
+    }
+  }
+}

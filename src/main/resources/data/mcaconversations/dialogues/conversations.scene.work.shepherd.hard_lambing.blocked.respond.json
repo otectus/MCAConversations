@@ -1,0 +1,123 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_goes_wrong",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.hard_lambing.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.lambing",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.hard_lambing"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.hard_lambing.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_wool",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.hard_lambing.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.shepherd.lambing.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.lambing",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.hard_lambing",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.hard_lambing",
+              "obligation": "commitment:work.shepherd.bring_wool"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.shepherd.bring_wool"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.hard_lambing.blocked.accepted",
+              "slots": [
+                "ewe"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_asking_for_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.hard_lambing.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.lambing",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.hard_lambing"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.hard_lambing.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "say": "conversations.work.prof.shepherd.leave"
+          }
+        }
+      ]
+    }
+  ]
+}

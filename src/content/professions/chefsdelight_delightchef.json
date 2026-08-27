@@ -1,0 +1,853 @@
+{
+  "_comment": [
+    "Delight chef (Farmer's Delight). Cooking for a crowd, which is arithmetic before it is cookery.",
+    "",
+    "The §12.4 anchors are the pot, the crowd, ingredients, the feast day, waste and a dish that failed.",
+    "These three take a feast she is short of ingredients for, a dish that failed in front of everybody,",
+    "and the question of who eats last.",
+    "",
+    "The chef's difficulty is scale: she is judged on one afternoon a season and spends the rest of the",
+    "year preparing for it. She is warm, exact about quantities, and quietly furious about waste.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when Farmer's",
+    "Delight is installed."
+  ],
+  "profession": "chefsdelight:delightchef",
+  "id": "delightchef",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_pot",
+    "the_crowd",
+    "ingredients",
+    "the_feast_day",
+    "waste",
+    "a_dish_that_failed"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the pot.",
+    "pt": "Vou deixar você voltar à panela."
+  },
+  "slot_lang": {
+    "chef_the_harvest_feast": {
+      "en": "the harvest feast",
+      "pt": "a festa da colheita"
+    },
+    "chef_a_wedding_table": {
+      "en": "a wedding table",
+      "pt": "uma mesa de casamento"
+    },
+    "chef_the_winter_gathering": {
+      "en": "the winter gathering",
+      "pt": "a reunião de inverno"
+    },
+    "chef_no_root_vegetables": {
+      "en": "no root vegetables at all",
+      "pt": "nenhuma raiz sequer"
+    },
+    "chef_a_short_grain_harvest": {
+      "en": "a short grain harvest",
+      "pt": "uma colheita curta de grãos"
+    },
+    "chef_nothing_to_make_it_rich": {
+      "en": "nothing to make it rich with",
+      "pt": "nada para dar sustância"
+    },
+    "chef_a_stew_that_split": {
+      "en": "a stew that split",
+      "pt": "um ensopado que talhou"
+    },
+    "chef_a_pie_that_would_not_set": {
+      "en": "a pie that would not set",
+      "pt": "uma torta que não firmou"
+    },
+    "chef_bread_that_came_out_flat": {
+      "en": "bread that came out flat",
+      "pt": "um pão que saiu chato"
+    },
+    "chef_the_children": {
+      "en": "the children",
+      "pt": "as crianças"
+    },
+    "chef_the_field_hands": {
+      "en": "the field hands",
+      "pt": "os trabalhadores do campo"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.short_feast",
+      "subject": "work.delightchef.ingredients",
+      "initial_state": "blocked",
+      "salience": 62,
+      "due_after_days": 3,
+      "expires_after_days": 20,
+      "integrations": [
+        "chefsdelight"
+      ],
+      "slots": {
+        "occasion": [
+          "chef_the_harvest_feast",
+          "chef_a_wedding_table",
+          "chef_the_winter_gathering"
+        ],
+        "lack": [
+          "chef_no_root_vegetables",
+          "chef_a_short_grain_harvest",
+          "chef_nothing_to_make_it_rich"
+        ]
+      },
+      "commitment": {
+        "id": "work.delightchef.bring_carrots",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:carrot",
+        "due_after_days": 2
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "occasion",
+            "lack"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The feast.",
+            "pt": "A festa."
+          },
+          "lines": {
+            "en": [
+              "%2$s is on Sunday and I have %3$s, and forty people are expecting to be fed properly.",
+              "%3$s. I can stretch it, and stretched food tastes like being apologised to, and everybody knows it.",
+              "I have counted four times. %2$s needs eleven more portions than I can make, and eleven is exactly the number that cannot be hidden."
+            ],
+            "pt": [
+              "%2$s é domingo e eu tenho %3$s, e quarenta pessoas esperam comer direito.",
+              "%3$s. Dá para esticar, e comida esticada tem gosto de pedido de desculpa, e todo mundo percebe.",
+              "Contei quatro vezes. %2$s precisa de onze porções a mais do que eu consigo fazer, e onze é exatamente o número que não dá para esconder."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_stretching",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you stretch a pot?",
+                "pt": "Como se estica uma panela?"
+              },
+              "phrases": [
+                "how do you stretch a pot",
+                "what do you do to make it go further"
+              ],
+              "requires_any": [
+                "stretch",
+                "further"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Barley and time. Both are free and both taste like they cost nothing, which is the whole difficulty with the trick.",
+                    "You make one thing brilliant and everything else plain, so that people remember the brilliant one and forget how little there was.",
+                    "Smaller bowls. It is honest and it is humiliating and it works, and I will do it before I water anything down."
+                  ],
+                  "pt": [
+                    "Cevada e tempo. Os dois são de graça e os dois têm gosto de não terem custado nada, e é essa a dificuldade do truque.",
+                    "Você faz uma coisa brilhante e todo o resto simples, para as pessoas lembrarem da brilhante e esquecerem o quão pouco havia.",
+                    "Tigelas menores. É honesto, é humilhante e funciona, e eu faço isso antes de aguar qualquer coisa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_vegetables",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring carrots for the pot.",
+                "pt": "Vou trazer cenouras para a panela."
+              },
+              "phrases": [
+                "i can bring carrots for the pot",
+                "let me fetch carrots for that"
+              ],
+              "requires_any": [
+                "carrots",
+                "carrot"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.delightchef.feast.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "occasion"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s is fed properly and nobody at that table has to notice anything at all, which is the entire objective.",
+                    "Bring them Saturday and I will have you at the top of the table, and I will refuse to discuss the seating with you.",
+                    "Yes. Eleven portions. I will tell nobody where they came from, because a feast where people are counting favours is not a feast."
+                  ],
+                  "pt": [
+                    "Então %2$s come direito e ninguém naquela mesa precisa notar nada, que é o objetivo inteiro.",
+                    "Traga no sábado e eu te ponho na cabeceira, e não vou discutir os lugares com você.",
+                    "Sim. Onze porções. Não vou contar a ninguém de onde vieram, porque uma festa em que as pessoas contam favores não é festa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_saying_so",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Tell them it's a lean year.",
+                "pt": "Diga que é um ano magro."
+              },
+              "phrases": [
+                "tell them it is a lean year",
+                "say plainly that the harvest was short"
+              ],
+              "requires_any": [
+                "lean",
+                "harvest",
+                "plainly"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Out loud, at the start, before anybody has picked up a bowl. Said then it is a fact; said after, it is an excuse.",
+                    "You are right and I hate it, because a feast is the one afternoon a year when this village gets to pretend, and I would be the one who stopped it.",
+                    "I will say it and then I will make the barley extraordinary, and those two together are the honest version of a good year."
+                  ],
+                  "pt": [
+                    "Em voz alta, no começo, antes de alguém pegar a tigela. Dito ali é um fato; dito depois, é desculpa.",
+                    "Você tem razão e eu detesto, porque a festa é a única tarde do ano em que esta vila pode fingir, e eu seria quem acabou com isso.",
+                    "Vou dizer e depois vou deixar a cevada extraordinária, e essas duas coisas juntas são a versão honesta de um ano bom."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "chefsdelight"
+          ],
+          "slots_used": [
+            "occasion"
+          ],
+          "prompt": {
+            "en": "The feast, after.",
+            "pt": "A festa, depois."
+          },
+          "lines": {
+            "en": [
+              "%2$s went well. Forty-one fed, one spare portion, and I have not slept that well since the spring.",
+              "I said it was a lean year at the start and then nobody thought about it again, which is exactly what I was told would happen.",
+              "There was nothing left. Not a scrap wasted and nobody hungry, and that is the only two-part test this trade has."
+            ],
+            "pt": [
+              "%2$s correu bem. Quarenta e uma pessoas alimentadas, uma porção sobrando, e eu não dormia tão bem desde a primavera.",
+              "Eu disse que era um ano magro no começo e depois ninguém pensou mais nisso, que é exatamente o que me disseram que aconteceria.",
+              "Não sobrou nada. Nem uma migalha desperdiçada e ninguém com fome, e é esse o único teste de duas partes que este ofício tem."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_spare",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "Who got the spare portion?",
+                "pt": "Quem ficou com a porção que sobrou?"
+              },
+              "phrases": [
+                "who got the spare portion",
+                "what happened to the extra bowl"
+              ],
+              "requires_any": [
+                "spare",
+                "extra",
+                "portion"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It went to a house that had not come, quietly, in a covered bowl, and I have never mentioned it to anybody until now.",
+                    "I ate it. I always cook one spare for myself and I always pretend it is a margin of error, and it is both.",
+                    "The youngest field hand, who had already eaten and was too shy to ask twice. He is nineteen and he works like a man of thirty."
+                  ],
+                  "pt": [
+                    "Foi para uma casa que não veio, em silêncio, numa tigela tampada, e eu nunca contei isso a ninguém até agora.",
+                    "Eu comi. Sempre faço uma porção extra para mim e sempre finjo que é margem de erro, e é as duas coisas.",
+                    "O trabalhador mais novo, que já tinha comido e era tímido demais para pedir de novo. Tem dezenove anos e trabalha como um de trinta."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.public_failure",
+      "subject": "work.delightchef.a_dish_that_failed",
+      "initial_state": "failed",
+      "salience": 54,
+      "due_after_days": 3,
+      "expires_after_days": 24,
+      "integrations": [
+        "chefsdelight"
+      ],
+      "slots": {
+        "dish": [
+          "chef_a_stew_that_split",
+          "chef_a_pie_that_would_not_set",
+          "chef_bread_that_came_out_flat"
+        ]
+      },
+      "states": [
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "dish"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "That dish.",
+            "pt": "Aquele prato."
+          },
+          "lines": {
+            "en": [
+              "I served %2$s in front of thirty people and there is no version of that afternoon where I get to explain the chemistry.",
+              "%2$s. Everybody was very kind about it, which is the worst possible response and the only one available.",
+              "It was %2$s and it was my fault and I knew why before it reached the table, and I served it anyway because there was nothing else."
+            ],
+            "pt": [
+              "Servi %2$s diante de trinta pessoas e não existe versão daquela tarde em que eu possa explicar a química.",
+              "%2$s. Todo mundo foi muito gentil a respeito, que é a pior resposta possível e a única disponível.",
+              "Era %2$s e a culpa era minha e eu sabia por quê antes de chegar à mesa, e servi assim mesmo porque não havia outra coisa."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_went_wrong",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What actually went wrong?",
+                "pt": "O que de fato deu errado?"
+              },
+              "phrases": [
+                "what actually went wrong with it",
+                "what was the cause of that"
+              ],
+              "requires_any": [
+                "wrong",
+                "cause"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Too hot, too fast, because I was behind and I made the one decision every cook makes when they are behind.",
+                    "The milk was on the turn and I could smell it and I told myself I could not. That is the honest sentence and I have said it twice now.",
+                    "A cold pot in a cold room. It is a beginner's failure and I have been cooking for twenty years, and both of those are true at once."
+                  ],
+                  "pt": [
+                    "Quente demais, rápido demais, porque eu estava atrasada e tomei a única decisão que todo cozinheiro toma quando está atrasado.",
+                    "O leite estava virando e eu senti o cheiro e me convenci de que não. É a frase honesta e agora eu já disse duas vezes.",
+                    "Panela fria numa sala fria. É um erro de iniciante e eu cozinho há vinte anos, e as duas coisas são verdade ao mesmo tempo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_one_dish",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "One dish isn't your record.",
+                "pt": "Um prato não é o seu histórico."
+              },
+              "phrases": [
+                "one dish is not your whole record",
+                "your record is twenty years long"
+              ],
+              "requires_any": [
+                "record",
+                "dish",
+                "years"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "qualified",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Thirty people saw the one and about four thousand meals happened where nobody was looking. I do know that. It does not help on the night.",
+                    "Thank you. What stays is not the dish. It is thirty faces deciding to be nice to me at the same moment.",
+                    "In a year it will be a story I tell about myself. It is four days old and it is still just a thing that happened."
+                  ],
+                  "pt": [
+                    "Trinta pessoas viram um e umas quatro mil refeições aconteceram sem ninguém olhando. Eu sei disso. Não ajuda na mesma noite.",
+                    "Obrigada. O que fica não é o prato. São trinta rostos decidindo ser gentis comigo no mesmo instante.",
+                    "Em um ano vai ser uma história que eu conto sobre mim. Tem quatro dias e ainda é só uma coisa que aconteceu."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "remembered",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "chefsdelight"
+          ],
+          "prompt": {
+            "en": "That afternoon, looking back.",
+            "pt": "Aquela tarde, olhando para trás."
+          },
+          "lines": {
+            "en": [
+              "I cook that dish once a season now, deliberately, on an ordinary Tuesday with nobody watching.",
+              "Somebody asked me about it last month and I told the whole story and laughed, and that was the moment it finished being a wound.",
+              "Two younger cooks have had me tell them about it. It is more useful to them than any of the afternoons that went well."
+            ],
+            "pt": [
+              "Faço aquele prato uma vez por estação agora, de propósito, numa terça comum sem ninguém olhando.",
+              "Alguém me perguntou sobre aquilo mês passado e eu contei a história inteira e ri, e foi nesse momento que deixou de ser ferida.",
+              "Duas cozinheiras mais novas já me pediram para contar. É mais útil para elas do que qualquer uma das tardes que deram certo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_telling",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Telling it makes it useful.",
+                "pt": "Contar torna aquilo útil."
+              },
+              "phrases": [
+                "telling it makes it useful",
+                "passing the story on helps them"
+              ],
+              "requires_any": [
+                "telling",
+                "story",
+                "useful"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is the only thing that makes a bad afternoon worth anything, and it took me a year to be able to do it without my voice going odd.",
+                    "Thank you. Every cook in this valley has one and none of them will say so, and so every young cook thinks they are uniquely bad.",
+                    "I tell them the smell of the milk. That is the useful detail. Everything else is just me being embarrassed in public."
+                  ],
+                  "pt": [
+                    "É a única coisa que faz uma tarde ruim valer alguma coisa, e levei um ano para conseguir contar sem a voz sair estranha.",
+                    "Obrigada. Todo cozinheiro deste vale tem uma e nenhum admite, e por isso toda cozinheira jovem acha que é excepcionalmente ruim.",
+                    "Eu conto sobre o cheiro do leite. É o detalhe útil. Todo o resto é só eu passando vergonha em público."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.who_eats_last",
+      "subject": "work.delightchef.the_crowd",
+      "initial_state": "active",
+      "salience": 48,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "integrations": [
+        "chefsdelight"
+      ],
+      "slots": {
+        "group": [
+          "chef_the_children",
+          "chef_the_field_hands"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "group"
+          ],
+          "identity_values": [
+            "fairness",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The order of the table.",
+            "pt": "A ordem da mesa."
+          },
+          "lines": {
+            "en": [
+              "%2$s eat last at every gathering and nobody decided that, which is exactly why nobody will change it.",
+              "It is not written anywhere. %2$s simply arrive last, and by the time they arrive the good part of the pot is gone.",
+              "I have started holding a covered bowl back for %2$s. Somebody noticed and asked whether that was fair to the rest."
+            ],
+            "pt": [
+              "%2$s comem por último em toda reunião e ninguém decidiu isso, e é exatamente por isso que ninguém vai mudar.",
+              "Não está escrito em lugar nenhum. %2$s simplesmente chegam por último, e quando chegam a parte boa da panela já foi.",
+              "Passei a guardar uma tigela tampada para %2$s. Alguém reparou e perguntou se aquilo era justo com o resto."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_thinks",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Is it fair?",
+                "pt": "É justo?"
+              },
+              "phrases": [
+                "is holding a bowl back fair",
+                "what is fair about the order"
+              ],
+              "requires_any": [
+                "fair",
+                "order"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "group"
+                ],
+                "lines": {
+                  "en": [
+                    "Fair is everybody eating the same food. %2$s arriving last is not a rule, so working around it is not breaking one.",
+                    "It is a small correction to an accident. If somebody wants to argue that the accident is fairer, I will listen and I will keep the bowl back.",
+                    "The person who asked eats first every time and has done for eleven years, and has never once thought of that as an arrangement."
+                  ],
+                  "pt": [
+                    "Justo é todo mundo comer a mesma comida. %2$s chegarem por último não é regra, então contornar isso não é quebrar nenhuma.",
+                    "É uma correção pequena de um acaso. Se alguém quiser argumentar que o acaso é mais justo, eu escuto e continuo guardando a tigela.",
+                    "Quem perguntou come primeiro toda vez e faz isso há onze anos, e nunca pensou nisso como um arranjo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_bowl",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Keep holding the bowl back.",
+                "pt": "Continue guardando a tigela."
+              },
+              "phrases": [
+                "keep holding the bowl back",
+                "carry on saving a portion for them"
+              ],
+              "requires_any": [
+                "bowl",
+                "saving",
+                "portion"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.delightchef.table.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "I will, and I will stop covering it, because covering it made it look like a secret and it is not a secret.",
+                    "Yes. And next time somebody asks whether it is fair I am going to ask them what time they arrived.",
+                    "Thank you. I have been doing it for a season and quietly wondering whether I was the one being unfair, which is what happens when you act alone."
+                  ],
+                  "pt": [
+                    "Vou, e vou parar de tampar, porque tampar fazia aquilo parecer segredo, e não é segredo.",
+                    "Sim. E da próxima vez que alguém perguntar se é justo, eu vou perguntar a que horas essa pessoa chegou.",
+                    "Obrigada. Faço isso há uma estação e ando em silêncio me perguntando se a injusta era eu, que é o que acontece quando se age sozinha."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "chefsdelight"
+          ],
+          "slots_used": [
+            "group"
+          ],
+          "prompt": {
+            "en": "The table, since.",
+            "pt": "A mesa, depois disso."
+          },
+          "lines": {
+            "en": [
+              "The bowl sits on the end of the table now, uncovered, with %2$s written on a card, and nobody has said a word about it.",
+              "Two households have started arriving later on purpose so that they eat with %2$s, which was not any part of my plan.",
+              "It stopped being a favour the day it stopped being hidden. I would have got there four years sooner if I had told somebody."
+            ],
+            "pt": [
+              "A tigela fica na ponta da mesa agora, destampada, com %2$s escrito num cartão, e ninguém disse uma palavra.",
+              "Duas casas passaram a chegar mais tarde de propósito para comer com %2$s, o que não fazia parte nenhuma do meu plano.",
+              "Deixou de ser favor no dia em que deixou de ser escondido. Eu teria chegado lá quatro anos antes se tivesse contado a alguém."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_uncovering",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Doing it openly changed it.",
+                "pt": "Fazer abertamente mudou tudo."
+              },
+              "phrases": [
+                "doing it openly changed it",
+                "the open bowl changed things"
+              ],
+              "requires_any": [
+                "openly",
+                "open",
+                "changed"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "A hidden kindness makes the person receiving it into a problem. An open one makes it a place at the table.",
+                    "Thank you. I had thought discretion was the kind part. Discretion was me being uncomfortable and calling it manners.",
+                    "The card was the whole thing. Four words on a card, and a season of quiet worrying was over in an afternoon."
+                  ],
+                  "pt": [
+                    "Uma gentileza escondida transforma quem recebe em problema. Uma aberta transforma em lugar à mesa.",
+                    "Obrigada. Eu achava que discrição era a parte gentil. Discrição era eu desconfortável chamando isso de boas maneiras.",
+                    "O cartão era a coisa toda. Quatro palavras num cartão, e uma estação de preocupação silenciosa acabou numa tarde."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything more you need?",
+      "pt": "Precisa de mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a dish for a crowd?",
+        "pt": "Qual é a parte mais difícil de um prato para muita gente?"
+      },
+      "requires_any": [
+        "hardest",
+        "dish"
+      ],
+      "phrases": [
+        "what is the hardest part of a dish for a crowd",
+        "hardest thing about cooking for a crowd"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the pot.",
+      "pt": "Vou deixar você com a panela."
+    }
+  }
+}
