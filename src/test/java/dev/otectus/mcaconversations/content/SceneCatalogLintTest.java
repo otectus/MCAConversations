@@ -12,6 +12,7 @@ import dev.otectus.mcaconversations.history.CommitmentTemplate;
 import dev.otectus.mcaconversations.history.EpisodeTemplate;
 import dev.otectus.mcaconversations.history.NarrativeCatalog;
 import dev.otectus.mcaconversations.history.ThreadTemplate;
+import dev.otectus.mcaconversations.scene.FallbackChain;
 import dev.otectus.mcaconversations.scene.SceneCatalog;
 import dev.otectus.mcaconversations.scene.SceneDefinition;
 import dev.otectus.mcaconversations.scene.SlotType;
@@ -301,18 +302,90 @@ class SceneCatalogLintTest {
     }
 
     @Test
-    void theSceneIndexStaysInsideItsCandidateBounds() {
-        // §21.6: an index lookup may return at most 128 candidates. A datapack filing hundreds of
-        // scenes under one topic must be truncated deterministically, not allowed to cost frame time.
+    void noBundledSceneIsDroppedByTheIndexBound() {
+        // §21.6 bounds an index lookup at 128 candidates, and through 1.4.0 that bound was applied to
+        // a purpose/topic bucket holding 256 work scenes: half the shipped corpus was discarded before
+        // eligibility ran. This asserts the *raw* leaf sizes, because the live index is exactly the
+        // evidence a truncation destroys — the old assertion read the truncated buckets and passed.
+        assertFalse(scenes.isEmpty(), "no scenes were loaded, so none of the above proved anything");
+        assertTrue(scenes.truncations().isEmpty(), String.join("\n", scenes.truncations()));
+
         List<String> problems = new ArrayList<>();
-        scenes.bucketSizes().forEach((key, size) -> {
+        scenes.rawBucketSizes().forEach((key, size) -> {
             if (size > SceneCatalog.MAX_INDEXED) {
                 problems.add(key + " holds " + size + " scenes, over the " + SceneCatalog.MAX_INDEXED
                         + " indexed bound");
             }
         });
         assertTrue(problems.isEmpty(), String.join("\n", problems));
-        assertFalse(scenes.isEmpty(), "no scenes were loaded, so none of the above proved anything");
+    }
+
+    @Test
+    void everyBundledSceneSurvivesTheIndexLeafItIsFiledUnder() {
+        // The reachability half of the same fix: a scene the index cannot return is content that
+        // reads as shipped and can never be selected, whatever the bucket sizes say.
+        List<String> problems = new ArrayList<>();
+        for (SceneDefinition scene : scenes.all()) {
+            for (String profession : scene.professions().isEmpty()
+                    ? Set.of(SceneCatalog.ANY_PROFESSION) : scene.professions()) {
+                List<SceneDefinition> candidates =
+                        scenes.candidates(scene.purpose(), scene.topic(), profession);
+                if (candidates.stream().noneMatch(other -> other.id().equals(scene.id()))) {
+                    problems.add(scene.id() + " is unreachable: a lookup for " + scene.indexKey()
+                            + " as '" + profession + "' returns " + candidates.size()
+                            + " scene(s), and none of them is this one");
+                }
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    @Test
+    void everyProfessionThatOwnsScenesCanReachThem() {
+        // The failure this is named for: eighteen professions owned work scenes and could select none
+        // of them, because every one of theirs sat past the truncation boundary.
+        Map<String, List<String>> owned = new TreeMap<>();
+        for (SceneDefinition scene : scenes.all()) {
+            for (String profession : scene.professions()) {
+                owned.computeIfAbsent(profession, key -> new ArrayList<>()).add(scene.id());
+            }
+        }
+        assertFalse(owned.isEmpty(), "no scene names a profession, so this proved nothing");
+
+        List<String> problems = new ArrayList<>();
+        owned.forEach((profession, ids) -> {
+            Set<String> reachable = new java.util.TreeSet<>();
+            for (SceneDefinition scene : scenes.all()) {
+                scenes.candidates(scene.purpose(), scene.topic(), profession)
+                        .forEach(candidate -> reachable.add(candidate.id()));
+            }
+            List<String> lost = ids.stream().filter(id -> !reachable.contains(id)).toList();
+            if (!lost.isEmpty()) {
+                problems.add(profession + " owns " + ids.size() + " scene(s) and cannot reach "
+                        + lost.size() + " of them: " + lost);
+            }
+        });
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
+    }
+
+    @Test
+    void everyFallbackDegradesToARouteTheSameConversationCouldTake() {
+        // 1.4.1 makes `fallback` live: the director follows it when the preferred scene cannot bind.
+        // That turns a previously cosmetic property into runtime correctness. The target existing,
+        // matching purpose/topic and not closing a loop is checked by danglingReferences above; what
+        // is checked here is that the chain the director will actually walk is not empty.
+        List<String> problems = new ArrayList<>();
+        for (SceneDefinition scene : scenes.all()) {
+            if (!scene.hasFallback()) {
+                continue;
+            }
+            List<SceneDefinition> chain = FallbackChain.from(scenes, scene);
+            if (chain.isEmpty()) {
+                problems.add(scene.id() + " declares fallback '" + scene.fallbackScene()
+                        + "' but resolves to no chain at all");
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join("\n", problems));
     }
 
     // --- helpers ----------------------------------------------------------------------------------

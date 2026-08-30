@@ -58,8 +58,23 @@ public final class ConversationSessions {
      * both frontends from the outgoing-packet mixin, which is the only place that sees the real
      * offered set.
      */
-    public static void recordOffer(UUID playerId, String question, List<String> answers, long now) {
-        get(playerId, now).setOffer(question, answers);
+    public static ConversationSession.ChoiceOffer recordOffer(UUID playerId, String question,
+                                                               List<String> answers, long now) {
+        return recordOffer(playerId, null, question, answers, ConversationSession.Frontend.GUI, now);
+    }
+
+    /** Records a frontend-aware offer and returns the revision the client must echo when selecting. */
+    public static ConversationSession.ChoiceOffer recordOffer(UUID playerId, UUID villagerId,
+                                                               String question, List<String> answers,
+                                                               ConversationSession.Frontend frontend,
+                                                               long now) {
+        ConversationSession session = get(playerId, now);
+        session.setFrontend(frontend);
+        return session.setOffer(question, answers, frontend, villagerId, now);
+    }
+
+    public static Optional<String> consumeOffer(UUID playerId, long revision, int index, long now) {
+        return peek(playerId, now).flatMap(session -> session.consumeOffer(revision, index));
     }
 
     /** Starts a topic for this player and villager. */

@@ -4,6 +4,10 @@ import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
 import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.network.ChoiceClearS2C;
+import dev.otectus.mcaconversations.network.ChoiceOfferS2C;
+import dev.otectus.mcaconversations.network.ConversationsNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -59,9 +63,22 @@ public abstract class NetworkHandlerMixin {
                 // Record what the player was actually offered for BOTH frontends. This packet is the
                 // only place the constraint-filtered answer list exists, and knowing it is what lets
                 // the submission validator reject an answer that was never on screen.
-                ConversationSessions.recordOffer(player.getUUID(), McaHandles.responseQuestion(message),
-                        McaHandles.responseAnswers(message), player.level().getGameTime());
-                if (ChatModeSession.swallowDialogue(player)) {
+                boolean chat = ChatModeSession.activeFor(player);
+                ConversationSession.ChoiceOffer offer = ConversationSessions.recordOffer(
+                        player.getUUID(), chat ? ChatModeSession.activeVillagerId(player) : null,
+                        McaHandles.responseQuestion(message), McaHandles.responseAnswers(message),
+                        chat ? ConversationSession.Frontend.CHAT : ConversationSession.Frontend.GUI,
+                        player.level().getGameTime());
+                if (offer.answerIds().size() <= ChoiceOfferS2C.MAX_CHOICES) {
+                    if (offer.answerIds().isEmpty()) {
+                        ConversationsNetwork.clearOffer(player, offer.revision(), ChoiceClearS2C.Reason.NONE);
+                    } else {
+                        ConversationsNetwork.sendOffer(player, ChoiceOfferS2C.from(offer));
+                    }
+                } else {
+                    ConversationsNetwork.warnOversizedOffer(offer.questionId(), offer.answerIds().size());
+                }
+                if (chat) {
                     ci.cancel();
                 }
             } else if (McaHandles.isAnalysisResults(message)) {

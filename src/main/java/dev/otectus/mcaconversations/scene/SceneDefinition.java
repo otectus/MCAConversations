@@ -119,9 +119,24 @@ public record SceneDefinition(String id,
         return !fallbackScene.isEmpty();
     }
 
-    /** The index key this scene is filed under: purpose plus topic. */
+    /** The editorial bucket this scene belongs to: purpose plus topic. */
     public String indexKey() {
         return purpose.key() + "/" + (topic.isEmpty() ? "*" : topic);
+    }
+
+    /**
+     * The index leaves this scene is filed under: {@link #indexKey()} plus one profession each.
+     *
+     * <p>A scene naming professions is filed once per profession, because profession is a hard gate —
+     * naming three professions is three separate audiences, not one bucket of three. A scene naming
+     * none is filed under {@link SceneCatalog#ANY_PROFESSION}, which every lookup merges in.
+     */
+    public List<String> indexKeys() {
+        String base = indexKey();
+        if (professions.isEmpty()) {
+            return List.of(base + "#" + SceneCatalog.ANY_PROFESSION);
+        }
+        return professions.stream().sorted().map(profession -> base + "#" + profession).toList();
     }
 
     /** True when this scene is one a specific profession owns rather than a shared affordance. */

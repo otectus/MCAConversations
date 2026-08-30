@@ -86,6 +86,11 @@ public final class SceneCatalogLoader extends SimpleJsonResourceReloadListener {
             active = built;
             built.danglingReferences().forEach(problem ->
                     McaConversations.LOGGER.warn("scene reference unresolved: {}", problem));
+            // Logged at error, and named precisely, because this is shipped content becoming
+            // unreachable rather than a line reading oddly. The bundled corpus fails its lint if it
+            // ever overflows; a datapack that does gets told which scenes it just lost.
+            built.truncations().forEach(problem ->
+                    McaConversations.LOGGER.error("scene index overflow: {}", problem));
             McaConversations.LOGGER.info("Loaded {} conversation scene(s) from {} file(s).",
                     built.size(), files.size());
         } catch (Throwable t) {

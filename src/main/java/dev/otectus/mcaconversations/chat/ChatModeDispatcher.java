@@ -10,6 +10,8 @@ import dev.otectus.mcaconversations.chat.Normalizer.NormalizedMessage;
 import dev.otectus.mcaconversations.chat.VillagerFinder.VillagerCandidate;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.Dispositions;
@@ -266,8 +268,13 @@ public final class ChatModeDispatcher {
                 java.util.Optional<String> picked = QuickReplies.answerFor(offered, choice.getAsInt());
                 if (picked.isPresent()
                         && McaCompat.checkConstraints(target.entity(), player, currentQuestion, picked.get())) {
-                    drive(target, player, currentQuestion, picked.get(), now);
-                    return;
+                    ConversationSession.ChoiceOffer offer = ConversationSessions.raw(player.getUUID())
+                            .flatMap(ConversationSession::currentOffer).orElse(null);
+                    if (offer != null && ConversationSessions.consumeOffer(player.getUUID(),
+                            offer.revision(), choice.getAsInt() - 1, now).isPresent()) {
+                        drive(target, player, currentQuestion, picked.get(), now);
+                        return;
+                    }
                 }
             }
         }
@@ -596,6 +603,15 @@ public final class ChatModeDispatcher {
         driveStaggered(target, player, question, answer, now, 0, true);
     }
 
+    /** Entry used after the numbered packet service has atomically consumed a CHAT offer. */
+    public static void selectOfferedChoice(Entity villager, ServerPlayer player,
+                                           String question, String answer, long now) {
+        VillagerCandidate target = new VillagerCandidate(villager,
+                McaCompat.getVillagerName(villager).orElse(""),
+                villager.distanceToSqr(player), 1.0D);
+        drive(target, player, question, answer, now);
+    }
+
     /**
      * Drives one exchange with an optional delivery {@code stagger} and, when {@code makeSticky}, marks
      * the villager as the sticky target. Ambient non-first responders drive normally but do not steal
@@ -623,7 +639,7 @@ public final class ChatModeDispatcher {
                 // offered, so the reply can carry the choices the GUI would have drawn as buttons.
                 String nextQuestion = ChatModeSession.currentQuestion(player.getUUID());
                 if (nextQuestion != null && !isHubQuestion(nextQuestion)) {
-                    QuickReplies.optionsLine(nextQuestion, ChatModeSession.currentAnswers(player.getUUID()))
+                    QuickReplies.optionsBlock(nextQuestion, ChatModeSession.currentAnswers(player.getUUID()))
                             .ifPresent(line -> scope.options = line);
                 }
             }

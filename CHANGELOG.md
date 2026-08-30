@@ -8,11 +8,91 @@ Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer de
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation,
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
-## [1.4.0] - August 26th, 2026
+## [1.4.3] - August 30th, 2026
+
+The conversation UI and input overhaul. The fixed MCA response popup could not hold the larger menus
+already shipped by Conversations, and chat's five-choice cap made later valid answers invisible.
+This release makes the exact server-owned offer readable and selectable across the base MCA screen,
+typed chat, and Townstead's optional RPG screen without changing answer order or dialogue outcomes.
+
+### Added
+
+- A responsive base-MCA choice card with a distinct question header, left-aligned wrapped answers,
+  content-sized full-row hitboxes, visible hover/keyboard focus, and an opaque-enough background for
+  readability over the world. Menus page at nine visible responses and show a page indicator.
+- Top-row and Numpad `1`–`9`, Up/Down, Home/End, Enter/Space, Page Up/Page Down, mouse, and wheel
+  controls. The wheel is consumed while choices own focus, preventing MCA's old hotbar-slot change.
+- Immediate selection locking so double-clicks and held keys cannot submit one offer twice.
+- An empty-ChatScreen digit shortcut. It closes chat and selects without broadcasting the digit;
+  non-empty input, modified digits, and in-world hotbar keys are never intercepted.
+- Optional Townstead number badges and digit selection that delegate to Townstead's visible entry,
+  submenu, Back, and native selection behavior. The adapter is `@Pseudo`, statically unlinked, and
+  verified against the supported 0.7.6 jar; Townstead remains optional.
+- Four client display controls: `numberedResponses`, `numericResponseShortcuts`,
+  `chatNumericShortcuts`, and `showResponseControlHints`.
+- English and Portuguese-Brazilian UI, control, expiry, hover, page, selection, and narration keys.
+
+### Changed
+
+- Chat quick replies are now a vertical block, retain translated components and MCA's offered order,
+  and show all choices up to the protocol safety ceiling. The old five-response truncation is gone;
+  strict typed multi-digit choices such as `10` work without treating sentences containing numbers
+  as selections.
+- The network protocol is now **2**. Multiplayer clients and servers must both use 1.4.3. Offers are
+  immutable, monotonically revisioned, capped at 64 synchronized answer ids, and never truncated.
+  The client selection packet contains only revision, absolute index, and optional villager UUID.
+- Numeric selections are revalidated server-side for offer revision, one-shot consumption, index,
+  expiry, frontend, villager identity, distance, active interaction, and current constraints before
+  the existing MCA `selectAnswer` path runs. Ordinary mouse packets for Conversations-owned questions
+  now consume that same offer revision and re-check constraints as well.
+- The dual-root MCA Mixin probe now covers the base interaction screen's constructor, production SRG
+  render/input/close methods, and dialogue fields. A separate optional probe covers Townstead's exact
+  decorated UI members.
+
+### Compatibility
+
+- No MCA or Townstead class is a compile-time dependency. Both known MCA Forge package roots remain
+  supported, the base UI falls back to MCA's original mouse screen if synchronization or a hook is
+  unavailable, and offers above 64 choices keep the original UI rather than showing misleading
+  partial numbering.
+
+## [1.4.2] - August 28th, 2026
+
+Two defects that made the mod quieter than it should have been on MCA 7.6.20. No content was added
+and no behaviour changed for anyone who was not already losing something.
+
+### Fixed
+
+- **Eighteen authored affection grants were being discarded at every world load.** They declared
+  `"budget": "generous"`, which is not one of the five `DepthClass` keys (`quick`, `standard`, `deep`,
+  `relationship`, `service`), so `AffectionApply` threw at parse and `SafeParse` contained each one
+  into a no-op — exactly as designed, but the design assumed the content was right. The affected
+  beats are the delta-3 `once` payoffs at the end of nine reflective topics (dreams, fears, future,
+  happy, hopes, memories, regrets, secret, worries) and nine profession arcs; every one of them now
+  declares `deep`. `standard` would have been wrong: those payoffs sit alongside delta-2 `standard`
+  beats that would clamp them inside a single session, and `relationship` carries age and romance
+  gates that a work conversation must not inherit.
+
+- **`VillagerEntityMCA#getInventory` was declared REQUIRED and does not exist on MCA 7.6.20.** That
+  build has no accessor at all, only a `private final UpdatableInventory inventory` field, so every
+  7.6.20 start logged an unresolved required member and the living-histories group ran without any
+  reading of what a villager is carrying. It is now an optional pair — the 7.7 method first, the
+  7.6.20 field second — matching how the `Trait#getId`/`Trait#id` drift is already handled. Two
+  supporting changes make that possible: `bindGetter` now finds declared fields anywhere in the
+  class hierarchy instead of only public ones, and the capability-group comment no longer claims
+  that every member below it was verified identical across all three probed MCA builds.
+
+## [1.4.1] - August 28th, 2026
 
 The conversation overhaul. Villagers have always had plenty to say; the problem was that the game
 kept letting you answer a sentence they never spoke. This release rebuilds the conversation around
 one rule — every reply answers the line before it — and then expands what there is to talk about.
+
+**This entry is the whole of the 1.4 line.** The coherence work and the living-histories layer built
+on top of it were briefly separated into a 1.4.0 heading and an unreleased successor, which produced
+a changelog that claimed both that the two were one release and that turning the second off
+"reproduces 1.4.0 exactly". They are one release, and this is it. Nothing was dropped in the merge;
+what follows is every change since 1.3.0, with the correctness fixes below applied on top.
 
 **What that comes to.** 3,339 beat contracts and 3,025 reply contracts across 917 question nodes and
 3,079 buttons; 12,961 lang keys in each of English and Portuguese; 37 profession profiles; 2,154 chat
@@ -20,9 +100,12 @@ intents. Forty-one topics carry contracted beats. No route in the corpus is unco
 meets the subject-family breadth its own depth class asks for, and all three debt ledgers are empty.
 The full numbers ship with the release in `reports/coverage.md`, generated by the build.
 
-**One target is short of the spec, and it is now measured properly.** Sections 9.3 and 15.5 ask for
-meaningful personality overlays on at least 25% of referenced say pools raw, and 90% weighted by how
-much each line matters. This release has **12.8% raw** (418 of 3,258) and **24.9% salience-weighted**.
+**One target is short of the spec, and it is now measured properly.** Two specs state it and they do
+not agree: the coherence spec asks in §9.3 and §15.5 for meaningful personality overlays on at least
+25% of referenced say pools raw, and the living-histories spec raises that to 30% while keeping the
+salience-weighted target at 90%. The later number governs, so the target this release is measured
+against is **30% raw and 90% weighted**. It has **12.8% raw** (418 of 3,258) and **24.9%
+salience-weighted**.
 
 The raw percentage fell during the release while the overlays themselves did not: the corpus grew by
 the living-history scenes and the new topic funnels, which ship with one say pool each and no
@@ -32,6 +115,122 @@ and its per-tier breakdown says exactly where the work is: the signature tier is
 pools in all twenty-one namespaces, and the 2,319 substantive pools are at 0.9%. Both numbers have a
 ratchet that fails the build if they fall, and the overlay ledger is empty rather than being used to
 excuse the difference.
+
+### Fixed — half of the generated work conversations could never be chosen
+
+**Eighteen professions had dynamic work scenes and could not reach a single one of them.** The scene
+index filed everything under `purpose/topic` and kept the first 128 entries of a bucket in id order.
+That bound is a real one — it is what stops a datapack costing frame time — but the shipped corpus
+files **256** scenes under `topic:work`, so exactly half of them were discarded before a single
+eligibility check ran. The boundary fell inside the leatherworker's pack, mid-arc: `stubborn_hide`
+kept its blocked state and lost its resolution. Everything alphabetically after it went with it —
+shady wizard, scribe, mercenary, outlaw, librarian, mason, nitwit, unemployed, shepherd, toolsmith,
+weaponsmith, miner, netherian, oceanographer, woodworker, priest, vampire expert, werewolf expert.
+The librarian's damaged-volume arc that the README uses as its worked example was among the
+unreachable.
+
+The index now files a scene under `purpose/topic#profession`, once per profession it names, and a
+lookup merges this villager's leaf with the profession-agnostic one. This is not a widened bound: a
+scene naming a profession was *already* rejected outright for every other one, so the leaf returns
+exactly what the old bucket returned after filtering — without the truncation. The largest leaf in
+the shipped corpus now holds seven scenes rather than 256.
+
+Three things make sure it stays fixed:
+
+- **Truncation is no longer silent.** The catalog records every leaf that lost scenes and the first
+  id it dropped, the loader logs it at error, and the reports print authored and indexed counts side
+  by side. The old lint read the *truncated* buckets — the one piece of evidence a truncation
+  destroys — and so could never have failed.
+- **Reachability is asserted directly.** Every shipped scene must come back from a lookup for the
+  leaf it is filed under, and every profession that owns scenes must be able to reach all of them.
+- **The scored cap stopped being an editorial decision.** Candidates now reach the 32-candidate
+  scoring bound in authored-priority order rather than alphabetically, so a scene can no longer be
+  dropped for its name while a less important one survives.
+
+### Fixed — weekly mention caps above one never fired
+
+`max_mentions_per_7_days` was derived from the scene's last-seen day alone, so the count it produced
+was 0 or 1 and nothing else. A cap is reached when the count is *at least* the cap, so a cap of 2 or
+3 was unreachable: **134 of the 316 shipped scenes** had no weekly cap at all, and only their
+separate cooldown held them back.
+
+Each scene now carries a small ring of seven daily bins beside its last-seen day — two bits per day,
+saturating at three, anchored on that day and shifted forward as days pass. Fourteen bits per scene;
+the record stays the handful of small numbers it was. The window is exactly the seven day labels
+`today-6 … today`, because "not more than seven days ago" spans eight. Saves written before this
+release load unchanged: a stored last-seen day with no ring counts as the one mention it is evidence
+of, and counting proceeds correctly from there. A server clock moved backwards under-counts for a few
+days rather than locking a scene out of its own cap.
+
+### Fixed — `fallback` was schema a pack author could rely on and runtime could not honour
+
+The 316 shipped scenes make **219** `fallback` declarations, each naming the less specific scene to
+degrade to when the preferred one cannot be told. The loader validated them and the director never
+followed one: a scene that failed late binding simply dropped out, and the conversation fell all the
+way back to the static route.
+
+The director now walks the chain — nearest hop first, at most four hops, cycle-guarded, and re-gated
+at every hop against the identical eligibility stack the preferred scene had to pass. A degrade is
+never a way around a gate: if the general work scene is inside its own cooldown, it is no more
+selectable than the specific one that led to it. Reached only after the preferred scene fails, so a
+fallback never competes with the scene that declared it, and named in the selection trace as
+`degraded to` so it is visible in `/conversations explain`.
+
+Load-time validation is stricter to match, because the field is now load-bearing: a fallback must
+exist, must not name itself, must not close a loop, and must share the purpose and topic of the scene
+that names it. A fallback that changed the subject would answer a question about work with a line
+about the weather and give the player no way to tell that is what happened.
+
+### Added — the committed generated content is verified against its authoring sources
+
+`build.gradle` has claimed since the content compiler landed that `ContentCompilerTest` regenerates
+and re-asserts the committed generated files on every test run. No such test existed. The generated
+corpus — scenes, episode/thread/commitment templates, beat and reply contracts, chat intents, both
+lang files — could drift from `src/content` in either direction and nothing would notice.
+
+It exists now, and it is non-mutating by construction: the whole output tree is copied to a scratch
+directory, the compiler runs against the copy, and the copy is compared back byte for byte. Stale,
+missing and left-over files are all reported by path. A failing check leaves the working tree exactly
+as it found it; regenerating stays an explicit author command.
+
+```
+./gradlew verifyGeneratedConversationContent   # check only, also part of `check`
+./gradlew generateConversationContent          # regenerate, for the author
+```
+
+### Added — continuous integration
+
+The project had no CI. Everything above is checked by `./gradlew check` rather than by compiling —
+unreachable scenes, replies that answer nothing, locale key parity, content drift — and none of it
+ran anywhere but on a maintainer's machine. `.github/workflows/build.yml` now runs the whole suite on
+JDK 17 for every push and pull request, builds the reobfuscated jar, and keeps the jar, the
+conversation reports and (on failure) the test report as artifacts.
+
+The suite is **807 tests**, up from 682.
+
+### Fixed — documentation that described a different mod
+
+Several claims had drifted from the code they describe, and a reader had no way to tell which was
+right:
+
+- the README said radius-local chat was **on** by default; `chatModeLocalChat` has defaulted to
+  `false` since 0.8.1, which is what `CONFIG.md` and the code both say;
+- the README listed two optional integrations. There are four: **MCA: Quests**, **MCA: Reputation**,
+  **Townstead** `[0.7.5,0.8)` and **Serene Seasons**, all of them already in the metadata and config;
+- the README counted **5,524** translated strings per locale. The shipped assets carry **36,255**
+  key/value entries per locale across the 23 namespaces, of which 12,961 are the base `mca_dialogue`
+  pool. Both numbers are now stated, so the metric is unambiguous;
+- the README promised "one unprompted conversation per villager per day". Greetings are the whole of
+  what a villager currently opens on its own; the budget and gate for fuller unsolicited
+  conversations exist and are idle, and the copy now says so rather than describing 1.5.0;
+- two specs disagree about the personality-overlay target — the coherence spec asks for 25% raw, the
+  living-histories spec for 30%. The later number governs and is now named as the one this release is
+  measured against;
+- `DATAPACK.md` documents `fallback`, `max_mentions_per_7_days` and profession-based scene indexing
+  as the load-bearing rules they became this release;
+- `gradle/` held a byte-identical copy of `docs/BRANCHING-CONVERSATIONS-IMPLEMENTATION-PLAN.md` and a
+  stale copy of `docs/PHASE-0-EVIDENCE.md`, both left behind by a move out of another repository.
+  Removed; `docs/` is the one canonical location.
 
 ### Added — conversations now declare what they mean
 
@@ -573,7 +772,7 @@ which is the menu that makes a player think the two buttons differ.
 This ships in chat mode, where the mod renders its own text and can both label and route freely.
 Saying one of the offers opens that topic's real conversation, exactly as pressing its button would;
 anything that merely resembles an offer falls through to ordinary matching rather than being swallowed.
-The GUI keeps its six fixed categories this release. `dynamicTopicSlots = 0` reproduces the 1.4.0 hub
+The GUI keeps its six fixed categories this release. `dynamicTopicSlots = 0` reproduces the fixed six-category hub
 exactly, and that knob is now actually read — it had been in the config and consulted by nothing.
 
 ### Added — a second villager can join in, on five terms and no others
@@ -982,14 +1181,14 @@ been contracted or deleted also fails, so the number cannot quietly stop meaning
 
 ### Added — villagers who accumulate a life
 
-The rest of 1.4.0 makes every reply answer the line before it. This half answers the question that
+The rest of this release makes every reply answer the line before it. This half answers the question that
 leaves behind: two farmers with the same personality still had much the same conversational life.
 They chose different variants, but neither had accumulated a specific working week, a stable
 preference, a remembered disagreement, or a reason to raise one subject instead of another.
 
 Five layers fix that, and the content that proves them runs across every trade in the mod. It adds
 capability as well as corpus: with `dynamic.enabled = false` the mod selects exactly what it selected
-before, and the 1.4.0 hand-written content is untouched underneath.
+before, and the hand-written conversation underneath it is untouched.
 
 **The rule the whole layer serves:** variation must come from who this villager is, what has
 happened, what is happening now, and what the two speakers remember — not from a larger random
@@ -1167,7 +1366,8 @@ episode kind or an unregistered promise from JSON.
 
 ### Added — configuration and operator commands
 
-`[dynamic]`, `[history]` and `[group]`. Every switch has an off state that reproduces 1.4.0 exactly,
+`[dynamic]`, `[history]` and `[group]`. Every switch has an off state that reproduces the static
+conversation exactly,
 and `dynamic.enabled = false` silences the whole layer without touching seven other flags.
 
 Eight new `/conversations` subcommands for inspecting generated state, which ordinary play
@@ -1201,7 +1401,7 @@ anything; and a `practical_help` reply offered after a line that does not allow 
 
 ### Compatibility
 
-Saves from 1.4.0 load unchanged. The new stores are separate files that simply do not exist yet; the
+Saves from 1.3.0 load unchanged. The new stores are separate files that simply do not exist yet; the
 existing progress ledger, disposition vectors, MCA memories, arcs, milestones and affection budgets
 are read and written exactly as before. A world opened once under a later build and rolled back is
 read with the current reader rather than discarded.
@@ -1298,7 +1498,7 @@ What this establishes is the part that has to be right before any of that is saf
   Townstead type, and nothing outside the guarded `compat/townstead` package may reference that
   package. Both scan the constant pool of every compiled class, and neither needs an exemption list.
 
-## [1.2.1] - unreleased
+## [1.2.1] - August 25th, 2026
 
 A content pass over every shipped conversation, in both locales, plus the one binding defect that was
 corrupting every value those conversations substitute. Apart from that defect nothing here changes a
@@ -1402,7 +1602,7 @@ declared template var no variant reads; a result that sets the speech slot twice
 twice; and a condition both boosted and sunk. `LangKeys.linesOf` gives them one shared rule for
 "every line MCA can actually draw for this key".
 
-## [1.2.0] - unreleased
+## [1.2.0] - August 19th, 2026
 
 ### Fixed — one line, two different sentences
 
@@ -1728,7 +1928,7 @@ Six small engine changes, each of which existed to make content possible that ha
   `enableQuests` makes quest conditions score 0 (`questScore` never consults it). Both rows now say
   what the code does; both flags are wired up later in this release.
 
-## [1.1.0] - unreleased
+## [1.1.0] - August 17th, 2026
 
 ### Added — MCA: Reputation integration (optional)
 

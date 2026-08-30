@@ -218,7 +218,10 @@ tasks.register('townsteadProbeTest', Test) {
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
     useJUnitPlatform()
-    filter { includeTestsMatching 'dev.otectus.mcaconversations.compat.TownsteadBindingProbeTest' }
+    filter {
+        includeTestsMatching 'dev.otectus.mcaconversations.compat.TownsteadBindingProbeTest'
+        includeTestsMatching 'dev.otectus.mcaconversations.compat.TownsteadUiMixinProbeTest'
+    }
     outputs.upToDateWhen { false }
     testLogging { showStandardStreams = true }
     doFirst {
@@ -239,11 +242,30 @@ tasks.register('townsteadProbeTest', Test) {
 // build tooling and has no business in the shipped jar - and compileTestJava already depends on
 // processResources through `classes`, so making processResources depend on it would be a cycle.
 //
-// Instead the generated files are committed, ContentCompilerTest regenerates and re-asserts them on
-// every `./gradlew test`, and this task exists for the edit-compile-look loop:
+// Instead the generated files are committed and ContentCompilerTest verifies them on every
+// `./gradlew check`: it compiles src/content into a scratch copy of the output tree and byte-compares
+// it back, failing on any file that is stale, missing or left over. That check never writes into the
+// repository. Regenerating is this task, and it is an explicit author command:
 //
 //     ./gradlew generateConversationContent
 //
+// The check alone, for the edit-compile-look loop:
+//
+//     ./gradlew verifyGeneratedConversationContent
+//
+tasks.register('verifyGeneratedConversationContent', Test) {
+    group = 'verification'
+    description = 'Fails if the committed generated content is not what src/content compiles to.'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter { includeTestsMatching 'dev.otectus.mcaconversations.authoring.ContentCompilerTest' }
+    // Content drift is a property of the working tree, not of the inputs Gradle can see: a hand edit
+    // to a generated file changes neither this task's classpath nor its sources.
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+}
+
 tasks.register('generateConversationContent', JavaExec) {
     group = 'documentation'
     description = 'Compiles src/content authoring sources into runtime data and lang resources.'

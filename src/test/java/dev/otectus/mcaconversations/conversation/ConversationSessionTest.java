@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** The shared conversation session and the guard that reads it (plan §7.1, §7.2, §13.5). */
@@ -35,6 +36,25 @@ class ConversationSessionTest {
                 "an answer that was never on screen was never offered");
         assertFalse(session.wasOffered("conversations.topic.day.good.respond", "empathize"),
                 "the right answer to a different question is still not offered");
+    }
+
+    @Test
+    @DisplayName("offer revisions advance, preserve order immutably, and consume exactly once")
+    void revisionedOfferIsAtomic() {
+        List<String> source = new java.util.ArrayList<>(List.of("first", "second"));
+        ConversationSession.ChoiceOffer first = ConversationSessions.recordOffer(
+                PLAYER, "conversations.q", source, 100);
+        source.set(0, "mutated");
+        ConversationSession.ChoiceOffer second = ConversationSessions.recordOffer(
+                PLAYER, "conversations.q", List.of("first", "second"), 101);
+
+        assertEquals(first.revision() + 1, second.revision());
+        assertEquals(List.of("first", "second"), first.answerIds());
+        assertThrows(UnsupportedOperationException.class, () -> second.answerIds().add("third"));
+        assertEquals("second", ConversationSessions.consumeOffer(
+                PLAYER, second.revision(), 1, 101).orElseThrow());
+        assertTrue(ConversationSessions.consumeOffer(PLAYER, second.revision(), 1, 101).isEmpty());
+        assertTrue(ConversationSessions.consumeOffer(PLAYER, first.revision(), 0, 101).isEmpty());
     }
 
     @Test

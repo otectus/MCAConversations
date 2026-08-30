@@ -8,9 +8,31 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (1.4.0)
+## Features (1.4.3)
 
-> **Since 1.4.0, a villager is somebody in particular.**
+- **Conversations finally have room to breathe** — the base MCA interaction screen now uses a
+  responsive choice card instead of the fixed 170-pixel popup. Questions and answers form a clear
+  vertical hierarchy, long responses wrap, each full row is clickable, and menus page at nine
+  responses rather than overlapping the villager or falling off the screen.
+- **Use the input that is comfortable** — click a response, press its top-row or Numpad number, move
+  with Up/Down and confirm with Enter or Space, or use Home/End and Page Up/Page Down on larger menus.
+  Focus has a visible border, scrolling belongs to the open conversation instead of changing the
+  hotbar, and the first input locks the offer so a double-click or held key cannot apply it twice.
+- **Chat choices are complete and readable** — quick replies are one per line and no longer stop at
+  five; the bundled six- and eight-response menus show every response. Bare multi-digit replies such
+  as `10` remain supported, while ordinary sentences containing numbers remain ordinary speech.
+  With an empty chat box open, `1`–`9` can select directly without broadcasting the digit.
+- **The number is presentation; the offer is authority** — protocol 2 synchronizes a revisioned,
+  bounded projection of MCA's exact constraint-filtered answer order. The client sends only a
+  revision and absolute index; the server re-resolves the answer, villager, distance, interaction,
+  expiry, and constraints, then consumes it before running MCA's existing answer path.
+- **Townstead keeps owning its RPG screen** — when Townstead is installed, its existing wrapped,
+  scrollable hub/submenu/Back model receives visible number badges and digit activation. Its camera,
+  typewriter, mouse, arrows, Enter behavior, and native selection routine remain intact.
+
+## Features (1.4.1)
+
+> **Since 1.4.1, a villager is somebody in particular.**
 
 - **Two farmers stop being one farmer (new)** — every villager now carries a small set of stable
   anchors: two things they are interested in, two things they value, a comfort, an aversion, and a
@@ -46,9 +68,12 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   does not become ordinary by being repeated, and what you said about yourself never travels unless
   you made it public. Because the event keeps its identity through the whole chain, setting the
   record straight later corrects the actual event rather than one villager's copy of it.
-- **Villagers who know when not to talk to you (new)** — one unprompted conversation per villager
-  per day, nothing at all from somebody asleep, fighting, panicking or busy with another player, and
-  a "stop talking" that is honoured before anything else is even considered.
+- **Villagers who know when not to talk to you (new)** — what a villager may start on its own is
+  budgeted and gated: at most one greeting per villager per day, nothing at all from somebody asleep,
+  fighting, panicking or busy with another player, and a "stop talking" that is honoured before
+  anything else is even considered. Greetings are the whole of what a villager currently opens
+  unprompted; the budget and the gate for fuller unsolicited conversations are built and idle, and
+  the content that would use them is 1.5.0 work.
 - **Somebody else can join in (new, off by default)** — in chat mode, a second villager may
   corroborate something public, differ about a preference, add a detail only their trade would know,
   remember a family event differently, or tell the first one that it is not theirs to tell. Three
@@ -91,7 +116,8 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   your conversation partner stays put, facing you, until a while after the conversation lapses —
   and still flees danger. Say *"bye"* or *"stop talking"* and they respect it, per villager.
   Shout a question in the square and the villagers it applies to answer, staggered. Optional
-  radius-local chat (on by default, EXPERIMENTAL) keeps conversations neighborhood-scale.
+  radius-local chat (`chatModeLocalChat`, off by default, EXPERIMENTAL) keeps conversations
+  neighborhood-scale.
 - **A relationship deeper than hearts** — every villager quietly tracks how much they *trust*
   and *respect* you, how *warm* they feel around you, recent *tension*, and how long you've known
   each other. Hearts stay MCA's one visible number — the vector never shows and never grants
@@ -141,12 +167,15 @@ Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run o
 
 **English (`en_us`)** and **Brazilian Portuguese (`pt_br`)** — both complete: UI strings, the full
 base dialogue pool, every personality overlay, the age voices and the whole chat-mode vocabulary
-(5,524 translated strings per locale, across 23 namespaces). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
+(36,255 key/value entries per locale across 23 namespaces, of which 12,961 are the base
+`mca_dialogue` pool). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
 client-only hook widens that gate to the locales this mod ships complete overlays for, while
 preserving MCA's voice-pack and online-TTS restrictions untouched.
 
-Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar fallback
-otherwise) — both soft dependencies; the mod works fully without them.
+Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public standing, and villagers
+telling each other what you have done), **Townstead** `[0.7.5,0.8)` (its schedules, buildings and
+village culture) and **Serene Seasons** (real seasons; calendar fallback otherwise) — all soft
+dependencies; the mod works fully without any of them.
 
 ## How it works
 

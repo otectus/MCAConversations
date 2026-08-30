@@ -64,6 +64,7 @@ public final class ContentCompiler {
 
     private final Path contentRoot;
     private final Path resourceRoot;
+    private final Path fixtureRoot;
 
     /** Everything staged during one compilation, so a failure writes nothing at all. */
     private final Map<String, JsonObject> dialogues = new TreeMap<>();
@@ -99,8 +100,17 @@ public final class ContentCompiler {
     private final Map<String, List<String>> answersOn = new TreeMap<>();
 
     public ContentCompiler(Path contentRoot, Path resourceRoot) {
+        this(contentRoot, resourceRoot, Path.of("src/test/resources"));
+    }
+
+    /**
+     * The form the drift check uses: every output root is a parameter, so a verification run can
+     * compile into a copy of the tree and compare, without writing a byte into the repository.
+     */
+    public ContentCompiler(Path contentRoot, Path resourceRoot, Path fixtureRoot) {
         this.contentRoot = contentRoot;
         this.resourceRoot = resourceRoot;
+        this.fixtureRoot = fixtureRoot;
     }
 
     public static void main(String[] args) throws IOException {
@@ -494,7 +504,7 @@ public final class ContentCompiler {
         mergeLang(resourceRoot.resolve("assets/mcaconversations/lang/pt_br.json"),
                 withoutPrefix(langPt, "dialogue."), List.of("mcaconversations.slot."));
         spliceEntryRoutes(data.resolve("dialogues"));
-        writeMatcherFixtures(Path.of("src/test/resources/generated_matcher_fixtures.tsv"));
+        writeMatcherFixtures(fixtureRoot.resolve("generated_matcher_fixtures.tsv"));
     }
 
     /**

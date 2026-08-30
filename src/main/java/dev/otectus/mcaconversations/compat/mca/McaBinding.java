@@ -167,6 +167,11 @@ public final class McaBinding {
         return new Member(Kind.GETTER, ownerRelative, field, Object.class, 0, null, true);
     }
 
+    /** As {@link #getter}, but a miss is recorded and tolerated instead of failing the probe test. */
+    private static Member optionalGetter(String ownerRelative, String field) {
+        return new Member(Kind.GETTER, ownerRelative, field, Object.class, 0, null, false);
+    }
+
     /**
      * A constructor, resolved by arity. Conversations is the only mod in the suite that has to
      * <em>build</em> an MCA object rather than only read from one: chat delivery hands MCA's own
@@ -355,16 +360,29 @@ public final class McaBinding {
     // Living-histories context capabilities (spec §7.3) ------------------------------------------------
     //
     // One capability group, added together because they answer one question the mod could not ask
-    // before: what is this villager's working life actually like right now. Every member below was
-    // verified present and identically named in 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2, so they are
-    // declared REQUIRED — a rename should fail McaBindingProbeTest rather than quietly turn every
-    // living-work scene into an evergreen one. At runtime an unbound member is still only a stub, and
-    // McaContextSource reports the group DEGRADED rather than asserting a fact it never read.
+    // before: what is this villager's working life actually like right now. Members verified present
+    // and identically named in 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2 are declared REQUIRED — a
+    // rename should fail McaBindingProbeTest rather than quietly turn every living-work scene into an
+    // evergreen one. The two members that genuinely differ across those builds (the trait id and the
+    // villager inventory) are declared OPTIONAL IN PAIRS and documented at their declaration; a
+    // required member that only exists on 7.7 fails the probe on 7.6.20 and strands the whole group.
+    // At runtime an unbound member is still only a stub, and McaContextSource reports the group
+    // DEGRADED rather than asserting a fact it never read.
 
     /** The exact profession registry id, which {@code getProfessionText} could only ever approximate. */
     public static final Member GET_PROFESSION_ID = virtual(C_VILLAGER, "getProfessionId", Object.class, 0);
-    /** {@code SimpleContainer} — read for coarse tag presence only, never for counts (spec §12.2). */
-    public static final Member GET_VILLAGER_INVENTORY = virtual(C_VILLAGER, "getInventory", Object.class, 0);
+    /**
+     * OPTIONAL PAIR, and a second real MCA drift rather than a defensive one. 7.7 exposes
+     * {@code getInventory()}; 7.6.20 has no accessor at all, only a {@code private final
+     * UpdatableInventory inventory} field. Both are declared optional and {@code McaHandles
+     * .inventoryTags} tries the method first, so one jar reads carried items on every supported
+     * build and a future third spelling degrades to "carrying nothing" rather than failing the probe.
+     *
+     * <p>{@code SimpleContainer} — read for coarse tag presence only, never for counts (spec §12.2).
+     */
+    public static final Member GET_VILLAGER_INVENTORY =
+            optionalVirtual(C_VILLAGER, "getInventory", Object.class, 0);
+    public static final Member VILLAGER_INVENTORY_FIELD = optionalGetter(C_VILLAGER, "inventory");
     public static final Member GET_TRAITS = virtual(C_VILLAGER, "getTraits", Object.class, 0);
     public static final Member TRAITS_GET_TRAITS = virtual(C_TRAITS, "getTraits", Object.class, 0);
     /**
@@ -427,7 +445,8 @@ public final class McaBinding {
             DIALOGUE_RESPONSE_QUESTION, DIALOGUE_RESPONSE_ANSWERS,
             CONFIG_GET_INSTANCE, CONFIG_ONLINE_TTS,
             ACTIONS_REGISTER, GIFT_REGISTER,
-            GET_PROFESSION_ID, GET_VILLAGER_INVENTORY, GET_TRAITS, TRAITS_GET_TRAITS, TRAIT_GET_ID,
+            GET_PROFESSION_ID, GET_VILLAGER_INVENTORY, VILLAGER_INVENTORY_FIELD,
+            GET_TRAITS, TRAITS_GET_TRAITS, TRAIT_GET_ID,
             TRAIT_ID_LEGACY,
             BRAIN_GET_CURRENT_JOB, BRAIN_IS_PANICKING, BRAIN_SHOULD_GRIEVE,
             RESIDENCY_GET_WORKPLACE, RESIDENCY_GET_HOME,
@@ -700,12 +719,39 @@ public final class McaBinding {
 
     private static MethodHandle bindGetter(MethodHandles.Lookup lookup, Class<?> owner, Member member) {
         try {
-            Field field = owner.getField(member.name);
+            Field field = findField(owner, member.name);
+            if (field == null) {
+                return null;
+            }
             field.setAccessible(true);
             return erase(lookup.unreflectGetter(field), member.erasedType());
         } catch (Throwable t) {
             return null;
         }
+    }
+
+    /**
+     * The named field, public or not, from {@code owner} or any superclass.
+     *
+     * <p>{@link Class#getField} alone only sees public fields, which is why MCA 7.6.20's
+     * {@code private final UpdatableInventory inventory} could not be reached by a getter member at
+     * all. Walking declared fields up the hierarchy means a field MCA never exposed is still a
+     * binding target, which is the difference between degrading a capability and losing it.
+     */
+    private static Field findField(Class<?> owner, String name) {
+        try {
+            return owner.getField(name);
+        } catch (NoSuchFieldException ignored) {
+            // Not public, or not present at all - fall through to the declared-field walk.
+        }
+        for (Class<?> c = owner; c != null && c != Object.class; c = c.getSuperclass()) {
+            try {
+                return c.getDeclaredField(name);
+            } catch (NoSuchFieldException ignored) {
+                // Keep walking; a miss at every level is a genuine absence.
+            }
+        }
+        return null;
     }
 
     // ---------------------------------------------------------------------------------------------

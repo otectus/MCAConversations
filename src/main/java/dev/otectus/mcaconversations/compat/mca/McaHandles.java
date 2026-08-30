@@ -150,6 +150,8 @@ public final class McaHandles {
     // Living-histories context capabilities (spec §7.3).
     private static final MethodHandle H_PROFESSION_ID = R.handle(McaBinding.GET_PROFESSION_ID);
     private static final MethodHandle H_VILLAGER_INVENTORY = R.handle(McaBinding.GET_VILLAGER_INVENTORY);
+    private static final MethodHandle H_VILLAGER_INVENTORY_FIELD =
+            R.handle(McaBinding.VILLAGER_INVENTORY_FIELD);
     private static final MethodHandle H_GET_TRAITS = R.handle(McaBinding.GET_TRAITS);
     private static final MethodHandle H_TRAITS_SET = R.handle(McaBinding.TRAITS_GET_TRAITS);
     private static final MethodHandle H_TRAIT_ID = R.handle(McaBinding.TRAIT_GET_ID);
@@ -904,7 +906,12 @@ public final class McaHandles {
         if (!isVillager(villager) || probes == null || probes.isEmpty()) {
             return Set.of();
         }
+        // 7.7's getInventory() first, then 7.6.20's private `inventory` field. An unbound member is a
+        // stub returning null, so the fallback costs one null check rather than a version test.
         Object inventory = ref(H_VILLAGER_INVENTORY, villager);
+        if (inventory == null) {
+            inventory = ref(H_VILLAGER_INVENTORY_FIELD, villager);
+        }
         if (!(inventory instanceof net.minecraft.world.Container container)) {
             return Set.of();
         }

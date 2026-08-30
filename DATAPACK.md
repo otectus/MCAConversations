@@ -1005,6 +1005,29 @@ Slot types: `localized_token`, `registry_id`, `person`, `location_token`, `numbe
 `flag`. A `person` slot is stored as a UUID and re-resolved at render time, so a neighbour who has
 died or moved renders as the neutral fallback rather than being named as though still present.
 
+**`fallback` is followed, as of 1.4.1.** It names the less specific scene to degrade to when this one
+cannot be told — its episode moved on, a slot has nothing to bind, its cap is spent. The director
+walks the chain nearest hop first, at most four hops, and re-checks the full eligibility stack at
+every hop: a degrade is never a way past a gate. Four rules the loader enforces, because the field is
+now load-bearing rather than advisory:
+
+- the target must exist, and must not be the scene itself;
+- the chain must not close a loop;
+- the target must share this scene's purpose **and** topic — a work scene degrades to a more general
+  work scene, never to one about the weather;
+- a chain longer than four hops is walked for four and then abandoned to the static route, which is
+  the honest answer once the scene has little to do with what the player asked.
+
+**`max_mentions_per_7_days` is enforced, as of 1.4.1.** It counts mentions across the seven day
+labels `today-6 … today`, so a cap of 2 or 3 now behaves as written; before 1.4.1 only a cap of 1
+could ever be reached. It is a hard gate, like `cooldown_days`, not a score.
+
+**Scenes are indexed by profession.** A scene naming professions is filed once per profession, and a
+lookup merges the villager's own leaf with the leaf of scenes naming none. A single leaf is bounded
+at 128 scenes; overflow is logged at error and named scene by scene, and the scenes past the bound
+are not selectable. If a pack files more than 128 scenes under one `purpose/topic` for one
+profession, split it — the log line names the first id that was dropped.
+
 ### Reaching a scene from a dialogue file
 
 The director freezes one plan when the player opens a topic. A route reads it, never re-selects:

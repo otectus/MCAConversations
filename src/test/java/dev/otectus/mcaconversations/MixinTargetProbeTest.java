@@ -97,6 +97,8 @@ class MixinTargetProbeTest {
         INJECTION_POINTS.put("BreedableRelationshipMixin", List.of("acceptGift"));
         INJECTION_POINTS.put("MCAClientMixin", List.of("useExpandedPersonalityTranslations"));
         INJECTION_POINTS.put("VillagerMessageMixin", List.of("<init>", "getMessage", "getContent"));
+        INJECTION_POINTS.put("InteractScreenChoiceMixin", List.of("<init>", "m_88315_", "m_7933_",
+                "m_6375_", "m_6050_", "m_7379_"));
     }
 
     @Test

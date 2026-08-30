@@ -22,9 +22,11 @@ import net.minecraftforge.fml.ModList;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -73,7 +75,7 @@ public final class ConversationDirector {
      * Chooses a scene for one purpose and topic.
      *
      * @return the frozen plan, or empty when nothing was eligible — in which case the caller keeps its
-     *         existing 1.4.0 static route, which is what makes this layer additive
+     *         existing static route, which is what makes this layer additive
      */
     public static Optional<ConversationPlan> select(Entity villager, ServerPlayer player,
                                                     ScenePurpose purpose, String topic,
@@ -86,7 +88,7 @@ public final class ConversationDirector {
             return selectUnguarded(villager, player, purpose, topic, snapshot);
         } catch (Throwable t) {
             // A director failure must cost the dynamic scene and nothing else: the caller falls back
-            // to the static route it would have taken in 1.4.0.
+            // to the static route it would have taken with the dynamic layer switched off.
             McaConversations.LOGGER.debug("scene selection failed for purpose {}; falling back to static",
                     purpose.key(), t);
             return Optional.empty();
@@ -101,52 +103,72 @@ public final class ConversationDirector {
                 purpose.key() + (topic == null || topic.isEmpty() ? "" : ":" + topic));
         explanation.context(snapshot.fingerprint().hex());
 
-        List<SceneDefinition> indexed = catalog.candidates(purpose, topic);
+        String professionId = snapshot.value(ContextKeys.WORK_PROFESSION_ID).orElse("");
+        List<SceneDefinition> indexed =
+                new ArrayList<>(catalog.candidates(purpose, topic, professionId));
         explanation.indexed(indexed.size());
         if (indexed.isEmpty()) {
             return Optional.empty();
         }
+        // Highest authored priority first, id second. The scored cap below is a bound on work, not an
+        // editorial decision, and taking the first thirty-two alphabetically made it into one: a scene
+        // could be dropped for its name while a less important one survived.
+        indexed.sort(Comparator.comparingInt((SceneDefinition scene) -> -scene.basePriority())
+                .thenComparing(SceneDefinition::id));
 
         long today = snapshot.capturedDay();
         ProfessionProfile profile = ProfessionProfileLoader.profile(
-                snapshot.value(ContextKeys.WORK_PROFESSION_ID).orElse(null),
+                professionId.isEmpty() ? null : professionId,
                 snapshot.value(ContextKeys.WORK_PROFESSION_NAME).orElse("villager"));
         Optional<VillagerIdentityRecord> identity = Identity.of(villager);
         Optional<PairHistory> pair = History.pair(villager, player);
         TopicRecencyRecord recency = pair.map(PairHistory::recency).orElse(TopicRecencyRecord.EMPTY);
         ServerLevel level = villager.level() instanceof ServerLevel serverLevel ? serverLevel : null;
+        Gate gate = new Gate(villager, snapshot, profile, identity, recency, level, today);
 
         // Stage 2-3: hard eligibility, then semantic eligibility through slot binding.
         List<Candidate> eligible = new ArrayList<>();
+        Set<String> considered = new LinkedHashSet<>();
+        Set<String> admitted = new LinkedHashSet<>();
+        List<SceneDefinition> degraded = new ArrayList<>();
         for (SceneDefinition scene : indexed) {
             if (eligible.size() >= SceneCatalog.MAX_SCORED) {
                 explanation.note("scored set capped at " + SceneCatalog.MAX_SCORED
                         + "; " + (indexed.size() - eligible.size()) + " candidate(s) not evaluated");
                 break;
             }
-            Optional<EpisodeRecord> episode = scene.needsEpisode()
-                    ? History.liveEpisode(villager, scene.episodeKind(), today)
-                    : Optional.empty();
+            considered.add(scene.id());
+            Candidate candidate = evaluate(scene, gate, explanation);
+            if (candidate != null) {
+                eligible.add(candidate);
+                admitted.add(scene.id());
+            } else if (scene.hasFallback()) {
+                degraded.add(scene);
+            }
+        }
 
-            String reason = SceneEligibility.check(scene, snapshot, profile, identity, episode,
-                    ConversationDirector::modPresent, today);
-            if (!reason.isEmpty()) {
-                explanation.reject(scene.id(), reason);
-                continue;
+        // Stage 3b: a scene that could not be told degrades to the route its author named for exactly
+        // this case — nearest hop first, every hop re-gated (spec §10.4). Reached only after the
+        // preferred scene failed, so a fallback never competes with the scene that declared it.
+        for (SceneDefinition scene : degraded) {
+            if (eligible.size() >= SceneCatalog.MAX_SCORED) {
+                break;
             }
-            long daysSinceScene = recency.daysSince(TopicRecencyRecord.Level.SCENE, scene.id(), today);
-            reason = SceneEligibility.checkRecency(scene, daysSinceScene,
-                    mentionsThisWeek(recency, scene, today));
-            if (!reason.isEmpty()) {
-                explanation.reject(scene.id(), reason);
-                continue;
+            for (SceneDefinition next : FallbackChain.from(catalog, scene)) {
+                if (admitted.contains(next.id())) {
+                    break;
+                }
+                if (!considered.add(next.id())) {
+                    continue;
+                }
+                Candidate candidate = evaluate(next, gate, explanation);
+                if (candidate != null) {
+                    explanation.note("scene '" + scene.id() + "' degraded to '" + next.id() + "'");
+                    eligible.add(candidate);
+                    admitted.add(next.id());
+                    break;
+                }
             }
-            SlotBinder.Result binding = SlotBinder.bind(scene, episode, snapshot, level);
-            if (!binding.bound()) {
-                explanation.reject(scene.id(), "slot '" + binding.failedSlot() + "' could not bind");
-                continue;
-            }
-            eligible.add(new Candidate(scene, episode, binding));
         }
         explanation.afterHardFilters(eligible.size());
         if (eligible.isEmpty()) {
@@ -309,12 +331,46 @@ public final class ConversationDirector {
         return scene.subjectsAny().isEmpty() ? scene.topic() : scene.subjectsAny().iterator().next();
     }
 
-    private static int mentionsThisWeek(TopicRecencyRecord recency, SceneDefinition scene, long today) {
-        // The store keeps last-seen days rather than a count, so "mentions this week" is 1 when the
-        // scene was seen inside the window and 0 otherwise. That is enough for a cap of 1 or 2 and
-        // avoids keeping a per-scene event list for a question nobody asks more precisely.
-        long daysSince = recency.daysSince(TopicRecencyRecord.Level.SCENE, scene.id(), today);
-        return daysSince <= 7 ? 1 : 0;
+    /** The inputs every gate needs, gathered so evaluating one scene is one call (spec §9.1). */
+    private record Gate(Entity villager, ConversationContextSnapshot snapshot, ProfessionProfile profile,
+                        Optional<VillagerIdentityRecord> identity, TopicRecencyRecord recency,
+                        ServerLevel level, long today) {
+    }
+
+    /**
+     * Stages two and three for one scene: the hard gates, the recency gate, then slot binding.
+     *
+     * <p>Extracted so the fallback pass runs the identical gate stack. A degrade that skipped a check
+     * the preferred scene had to pass would be a hole straight through eligibility.
+     *
+     * @return the bound candidate, or null after recording the first decisive reason it was rejected
+     */
+    private static Candidate evaluate(SceneDefinition scene, Gate gate,
+                                      SelectionExplanation explanation) {
+        Optional<EpisodeRecord> episode = scene.needsEpisode()
+                ? History.liveEpisode(gate.villager(), scene.episodeKind(), gate.today())
+                : Optional.empty();
+
+        String reason = SceneEligibility.check(scene, gate.snapshot(), gate.profile(), gate.identity(),
+                episode, ConversationDirector::modPresent, gate.today());
+        if (!reason.isEmpty()) {
+            explanation.reject(scene.id(), reason);
+            return null;
+        }
+        long daysSinceScene =
+                gate.recency().daysSince(TopicRecencyRecord.Level.SCENE, scene.id(), gate.today());
+        reason = SceneEligibility.checkRecency(scene, daysSinceScene,
+                gate.recency().mentionsInWindow(scene.id(), gate.today()));
+        if (!reason.isEmpty()) {
+            explanation.reject(scene.id(), reason);
+            return null;
+        }
+        SlotBinder.Result binding = SlotBinder.bind(scene, episode, gate.snapshot(), gate.level());
+        if (!binding.bound()) {
+            explanation.reject(scene.id(), "slot '" + binding.failedSlot() + "' could not bind");
+            return null;
+        }
+        return new Candidate(scene, episode, binding);
     }
 
     /**

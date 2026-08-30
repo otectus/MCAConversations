@@ -38,6 +38,15 @@ public final class ConversationSession {
     /** Which frontend last drove this session. Diagnostics only — behaviour never branches on it. */
     public enum Frontend { GUI, CHAT }
 
+    /** Immutable view of the exact ordered answer set MCA most recently offered this player. */
+    public record ChoiceOffer(long revision, UUID villagerId, String questionId,
+                              List<String> answerIds, Frontend frontend,
+                              long createdGameTime, boolean consumed) {
+        public ChoiceOffer {
+            answerIds = answerIds == null ? List.of() : List.copyOf(answerIds);
+        }
+    }
+
     private static final int MAX_TRANSACTIONS = 8;
 
     /** How many beats back anti-repetition and the debug trace can see. */
@@ -57,6 +66,10 @@ public final class ConversationSession {
     private String branch;
     private String currentQuestion;
     private List<String> currentAnswers = List.of();
+    private long offerRevision;
+    private long offerCreatedGameTime;
+    private boolean offerConsumed;
+    private Frontend offerFrontend = Frontend.GUI;
     private long startedGameTime;
     private long lastActivityGameTime;
     private int positiveApplied;
@@ -127,9 +140,49 @@ public final class ConversationSession {
         return question != null && question.equals(currentQuestion) && currentAnswers.contains(answer);
     }
 
-    public void setOffer(String question, List<String> answers) {
-        this.currentQuestion = question;
+    /** Records a new offer and returns its monotonically increasing immutable snapshot. */
+    public ChoiceOffer setOffer(String question, List<String> answers, Frontend frontend,
+                                UUID offeredVillagerId, long now) {
+        if (offeredVillagerId != null) {
+            setVillagerId(offeredVillagerId);
+        }
+        this.offerRevision++;
+        this.currentQuestion = question == null ? "" : question;
         this.currentAnswers = answers == null ? List.of() : List.copyOf(answers);
+        this.offerFrontend = frontend == null ? Frontend.GUI : frontend;
+        this.offerCreatedGameTime = now;
+        this.offerConsumed = false;
+        return currentOffer().orElseThrow();
+    }
+
+    public Optional<ChoiceOffer> currentOffer() {
+        if (currentQuestion == null) {
+            return Optional.empty();
+        }
+        return Optional.of(new ChoiceOffer(offerRevision, villagerId, currentQuestion,
+                currentAnswers, offerFrontend, offerCreatedGameTime, offerConsumed));
+    }
+
+    /**
+     * Claims one exact offered index before dialogue execution. The server thread is the normal
+     * caller, but synchronization makes the replay guarantee explicit and testable.
+     */
+    public synchronized Optional<String> consumeOffer(long revision, int absoluteIndex) {
+        if (currentQuestion == null || offerConsumed || revision != offerRevision
+                || absoluteIndex < 0 || absoluteIndex >= currentAnswers.size()) {
+            return Optional.empty();
+        }
+        offerConsumed = true;
+        return Optional.of(currentAnswers.get(absoluteIndex));
+    }
+
+    /** Claims the exact answer sent through MCA's ordinary mouse packet. */
+    public synchronized boolean consumeOfferedAnswer(String question, String answer) {
+        if (currentQuestion == null || offerConsumed || !currentQuestion.equals(question)) {
+            return false;
+        }
+        int index = currentAnswers.indexOf(answer);
+        return index >= 0 && consumeOffer(offerRevision, index).isPresent();
     }
 
     // --- Frozen plan and context snapshot (spec §9.3, §10.5) --------------------
@@ -177,6 +230,7 @@ public final class ConversationSession {
     public void clearOffer() {
         this.currentQuestion = null;
         this.currentAnswers = List.of();
+        this.offerConsumed = false;
     }
 
     public long startedGameTime() {

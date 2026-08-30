@@ -1,6 +1,23 @@
 # MCA: Conversations — Configuration
 
-File: `config/mcaconversations-common.toml` (generated on first run).
+Files: `config/mcaconversations-common.toml` and `config/mcaconversations-client.toml`
+(generated on first run).
+
+## `[display]` (client)
+
+These options affect only the local player's dialogue presentation. Defaults provide the complete
+1.4.3 experience without configuration.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `numberedResponses` | `true` | replace supported dialogue choice areas with the responsive numbered list; disabling it preserves MCA/Townstead's native mouse UI |
+| `numericResponseShortcuts` | `true` | enable top-row and Numpad digits while a supported dialogue screen owns focus; automatically inert when numbering is hidden |
+| `chatNumericShortcuts` | `true` | let an unmodified `1`–`9` select a pending chat response only while the vanilla chat box is open and empty |
+| `showResponseControlHints` | `true` | show the compact selection/navigation footer below the base MCA response card |
+
+Digits are never captured during ordinary gameplay, so hotbar selection is unchanged. A non-empty
+chat field also keeps normal numeric typing. Mouse, arrows, Enter, Space, and typed free text remain
+available when shortcuts are disabled.
 
 ## `[features]`
 
@@ -41,8 +58,9 @@ server-side early-outs — content degrades to fallback lines rather than disapp
 
 ## `[dynamic]` — living histories
 
-Every switch here has an off state that reproduces 1.4.0 exactly. The layer is additive: with
-`enabled = false` the complete 1.4.0 corpus is selected by the same static routers it always was, and
+Every switch here has an off state that reproduces the static conversation exactly. The layer is
+additive: with `enabled = false` the complete hand-authored corpus is selected by the same static
+routers it always was, and
 nothing new is read, written or generated.
 
 | Option | Default | Effect |
@@ -53,14 +71,14 @@ nothing new is read, written or generated.
 | `socialOpinionsEnabled` | `true` | Bounded, *caused* social knowledge: opinions of named neighbours and the observed roles they hold — coworker, mentor, customer, someone avoided. Never a resident-by-resident graph: an edge needs a family tie, shared work or an observed event. |
 | `villageCultureEnabled` | `true` | Shared village tokens residents can agree or disagree about. |
 | `maxInitiativesPerVillagerPlayerDay` | `1` | How often one villager may open a *decision page* unprompted, per player per day. A passing hello is not counted against it; an emergency and a genuine change in something you already know about are not rationed by it either, though both still wait out a fifteen-second cooldown. `0` disables villager initiative entirely. |
-| `dynamicTopicSlots` | `3` | Context-specific entries above the six fixed hub categories. `0` keeps the 1.4.0 hub exactly. |
+| `dynamicTopicSlots` | `3` | Context-specific entries above the six fixed hub categories. `0` keeps the six fixed categories alone. |
 | `debugDirector` | `false` | Log why each scene was chosen. Verbose; for authoring. |
 
 ## `[history]`
 
 | Option | Default | Effect |
 |---|---|---|
-| `enabled` | `true` | Persist episodes, threads, promises, claims and opinions to `data/mcaconversations_history.dat`. Off means nothing new is written and the 1.4.0 arcs, milestones, affection budgets and disposition vectors are untouched. |
+| `enabled` | `true` | Persist episodes, threads, promises, claims and opinions to `data/mcaconversations_history.dat`. Off means nothing new is written and the existing arcs, milestones, affection budgets and disposition vectors are untouched. |
 | `episodeRetentionDays` | `32` | Days a resolved episode stays callable before it is compressed and pruned. |
 | `activeEpisodeCap` | `6` | Simultaneous live episodes per villager. Over the cap the least salient is *abandoned* — a state a scene can speak from — never silently deleted. |
 | `resolvedEpisodeCap` | `24` | Resolved episodes kept as remembered history. |

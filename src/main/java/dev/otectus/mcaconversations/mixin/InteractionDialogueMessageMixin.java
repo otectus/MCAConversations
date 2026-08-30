@@ -72,6 +72,10 @@ public abstract class InteractionDialogueMessageMixin {
                         .filter(uuid -> !uuid.equals(player.getUUID()))
                         .isPresent();
             }
+            if (villager == null || !McaCompat.checkConstraints(villager, player, question, answer)) {
+                ci.cancel();
+                return;
+            }
             if (ConversationGuard.rejectSubmission(player.getUUID(), villagerUUID, question, answer,
                     otherPlayerInteracting, player.level().getGameTime())) {
                 ci.cancel();

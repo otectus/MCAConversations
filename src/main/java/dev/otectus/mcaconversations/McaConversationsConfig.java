@@ -572,9 +572,9 @@ public final class McaConversationsConfig {
 
             // --- Living histories -------------------------------------------------------------------
             //
-            // Every switch here has an OFF state that reproduces 1.4.0 behaviour exactly, because the
-            // whole layer is additive: with dynamic.enabled=false the complete 1.4.0 corpus is selected
-            // by the same static routers it always was, and nothing new is read, written or generated
+            // Every switch here has an OFF state that reproduces the static conversation exactly, because
+            // the whole layer is additive: with dynamic.enabled=false the complete hand-authored corpus is
+            // selected by the same static routers it always was, and nothing new is read, written or generated
             // (spec §22.5). The caps below may be lowered but never raised past the hard limits the
             // stores enforce for themselves.
             b.push("dynamic");
@@ -582,7 +582,7 @@ public final class McaConversationsConfig {
                     "Master switch for the living-histories layer: stable villager identity,",
                     "typed episodes and threads, and the conversation director that chooses which authored",
                     "scene fits this villager, on this day, after this history.",
-                    "When false, topics are selected exactly as in 1.4.0 and no new state is read or written.")
+                    "When false, topics are selected by the static routers alone and no new state is read or written.")
                     .define("enabled", true);
             identityEnabled = b.comment(
                     "Give each villager a small set of stable anchors - two interests, two values, a comfort,",
@@ -612,7 +612,7 @@ public final class McaConversationsConfig {
                     .defineInRange("maxInitiativesPerVillagerPlayerDay", 1, 0, 8);
             dynamicTopicSlots = b.comment(
                     "How many context-specific entries may appear above the six fixed hub categories",
-                    "(Continue..., What's on your mind?, Ask about...). 0 keeps the 1.4.0 hub exactly.")
+                    "(Continue..., What's on your mind?, Ask about...). 0 keeps the six fixed categories alone.")
                     .defineInRange("dynamicTopicSlots", 3, 0, 3);
             debugDirector = b.comment(
                     "Log why each scene was chosen: candidate counts, every non-zero score term, the",
@@ -624,7 +624,7 @@ public final class McaConversationsConfig {
             historyEnabled = b.comment(
                     "Persist typed episodes, shared threads, trackable commitments, player claims and social",
                     "opinions to data/mcaconversations_history.dat. When false, nothing new is written and the",
-                    "1.4.0 arcs, milestones, affection budgets and disposition vectors are untouched.")
+                    "existing arcs, milestones, affection budgets and disposition vectors are untouched.")
                     .define("enabled", true);
             episodeRetentionDays = b.comment(
                     "How many in-game days a resolved episode stays available for callbacks before it is",
@@ -672,9 +672,26 @@ public final class McaConversationsConfig {
     }
 
     public static final class Client {
+        public final ForgeConfigSpec.BooleanValue numberedResponses;
+        public final ForgeConfigSpec.BooleanValue numericResponseShortcuts;
+        public final ForgeConfigSpec.BooleanValue chatNumericShortcuts;
+        public final ForgeConfigSpec.BooleanValue showResponseControlHints;
+
         Client(ForgeConfigSpec.Builder b) {
-            // Reserved for forward-compat (siblings keep an always-registered client spec).
             b.push("display");
+            numberedResponses = b.comment(
+                    "Render supported dialogue choices as a responsive numbered list.")
+                    .define("numberedResponses", true);
+            numericResponseShortcuts = b.comment(
+                    "Allow number keys to select visible choices while a dialogue screen owns focus.",
+                    "Disabled automatically when numberedResponses is false so invisible mappings never exist.")
+                    .define("numericResponseShortcuts", true);
+            chatNumericShortcuts = b.comment(
+                    "Let an unmodified digit select a pending chat response when the chat input is empty.")
+                    .define("chatNumericShortcuts", true);
+            showResponseControlHints = b.comment(
+                    "Show the compact keyboard and paging hint below the response list.")
+                    .define("showResponseControlHints", true);
             b.pop();
         }
     }

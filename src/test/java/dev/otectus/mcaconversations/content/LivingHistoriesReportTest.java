@@ -77,12 +77,29 @@ class LivingHistoriesReportTest {
                     .append(scene.threadTemplate().isEmpty() ? "—" : "`" + scene.threadTemplate() + "`").append(" | ")
                     .append(scene.hasFallback() ? "`" + scene.fallbackScene() + "`" : "—").append(" |\n");
         }
-        out.append("\n## Index buckets\n\n")
-                .append("Stage one of the candidate pipeline is a lookup on `purpose/topic`. A bucket over ")
-                .append(SceneCatalog.MAX_INDEXED).append(" entries is truncated deterministically.\n\n")
-                .append("| Bucket | Scenes |\n|---|---:|\n");
-        catalog.bucketSizes().forEach((key, size) ->
+        out.append("\n## Topics\n\n")
+                .append("Scenes per `purpose/topic`, before the index divides them by profession. ")
+                .append("This is the editorial view: how much of the corpus is about what.\n\n")
+                .append("| Topic | Scenes |\n|---|---:|\n");
+        catalog.topicSizes().forEach((key, size) ->
                 out.append("| `").append(key).append("` | ").append(size).append(" |\n"));
+
+        out.append("\n## Index leaves\n\n")
+                .append("Stage one of the candidate pipeline is a lookup on `purpose/topic#profession`. ")
+                .append("A leaf over ").append(SceneCatalog.MAX_INDEXED)
+                .append(" entries is truncated deterministically, and **Authored** is printed before ")
+                .append("that truncation — a leaf whose two columns differ is shipping content no ")
+                .append("player can reach.\n\n")
+                .append("| Leaf | Authored | Indexed |\n|---|---:|---:|\n");
+        catalog.rawBucketSizes().forEach((key, size) ->
+                out.append("| `").append(key).append("` | ").append(size).append(" | ")
+                        .append(catalog.bucketSizes().getOrDefault(key, 0)).append(" |\n"));
+        if (catalog.truncations().isEmpty()) {
+            out.append("\nNo leaf is truncated: every authored scene is reachable.\n");
+        } else {
+            out.append("\n**Truncated:**\n\n");
+            catalog.truncations().forEach(problem -> out.append("- ").append(problem).append("\n"));
+        }
 
         assertDeterministic(REPORT_DIR.resolve("scenes.md"), out.toString());
     }
