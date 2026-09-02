@@ -85,7 +85,7 @@ public final class ChoiceSelectionService {
                 return null;
             }
             Entity villager = player.serverLevel().getEntity(authoritative);
-            double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+            double radius = McaConversationsConfig.chatModeAddressedRadius();
             return villager != null && player.distanceToSqr(villager) <= radius * radius ? villager : null;
         }
         if (candidateVillagerId == null) {
@@ -109,7 +109,7 @@ public final class ChoiceSelectionService {
 
     private static int timeoutTicks() {
         try {
-            return McaConversationsConfig.COMMON.conversationSessionTimeoutTicks.get();
+            return McaConversationsConfig.conversationSessionTimeoutTicks();
         } catch (Throwable ignored) {
             return 1200;
         }

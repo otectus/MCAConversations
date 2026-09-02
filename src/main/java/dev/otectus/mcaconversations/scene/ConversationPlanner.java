@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.context.ContextRequest;
 import dev.otectus.mcaconversations.context.ContextSources;
 import dev.otectus.mcaconversations.context.ConversationContextSnapshot;
+import dev.otectus.mcaconversations.conversation.BeatContractLoader;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
@@ -60,6 +61,21 @@ public final class ConversationPlanner {
             ConversationSession session = ConversationSessions.get(player.getUUID(),
                     player.level().getGameTime());
 
+            // The two of them are talking, which is the moment a promise between them is observed: a
+            // "come back and see me" promise is kept by this very visit, and one long past its day
+            // that nothing kept is finally read as broken. Cheap for the common case — a pair with no
+            // promises is one map lookup that finds nothing — and it writes only on an actual change.
+            dev.otectus.mcaconversations.history.CommitmentObserver.onMet(villager, player,
+                    player.level().getDayTime() / 24000L);
+
+            // What the button the player just pressed actually meant. This is the only place both
+            // frontends funnel through with the question and answer still in hand, and it has to
+            // happen before MCA scores the results: the villager's half of the exchange arrives
+            // moments later through the session's turn op, and the pair of them is what a later
+            // callback names.
+            BeatContractLoader.active().reply(question, answer).ifPresent(reply ->
+                    session.recordPlayerStance(reply.stance(), reply.introducesFacts()));
+
             Optional<TopicEntry> topic = ConversationCatalogLoader.active().byStarter(question, answer);
             if (topic.isEmpty()) {
                 // Not a topic opener: this is a reply inside an exchange that already has its plan.
@@ -86,6 +102,11 @@ public final class ConversationPlanner {
                         snapshot.value(dev.otectus.mcaconversations.context.ContextKeys.WORK_PROFESSION_ID)
                                 .orElse(null),
                         snapshot.capturedDay());
+            } else {
+                // The same bootstrap for the domains that are not somebody's trade. It opens nothing
+                // unless the world already supports it, so a villager with no family, no unhealed
+                // rupture and no village news simply has nothing going on.
+                LifeEpisodeGenerator.ensure(villager, player, topic.get().id(), snapshot.capturedDay());
             }
 
             ConversationDirector.select(villager, player, ScenePurpose.TOPIC, topic.get().id(), snapshot)

@@ -1072,7 +1072,30 @@ the volume at `%3$s`, in every language.
 | `conversations_role` | `{role, min_days?, not?}` | Does this villager hold an observed role towards anybody, and for how long |
 | `conversations_culture` | `{token?, family?, stance?, not?}` | What this village keeps, and what this resident makes of it |
 | `conversations_recent` | `{level, id, within_days, not?}` | Levels: `scene`, `subject`, `shape`, `topic` |
+| `conversations_exchange` | `{subject?, stance?, outcome?, within_days?, not?}` | What was *decided* about a subject, not merely when it came up. Defaults to a 30-day window. Naming none of the three discriminators is invalid, and a misspelt stance or outcome is invalid rather than ignored |
 | `conversations_scene` | `{is, not?}` | Reads the frozen plan; never selects |
+
+#### `conversations_exchange` — writing a callback that names the decision
+
+`conversations_recent` answers *how long since this came up*. `conversations_exchange` answers *and
+what did we settle on*, which is the difference between "as I was saying" and "you told me to save
+the ink".
+
+One decision is kept per subject, per villager, per player — up to 16 subjects. Re-deciding a subject
+overwrites it: the villager remembers the mind the player ended up with, not every mind they passed
+through. A decision records the `StanceFamily` behind the button the player pressed and the
+`OutcomeFamily` of the beat the villager moved to in response, so both halves are what actually
+happened rather than anything a result asserted about itself.
+
+```json
+{"chance": 40, "conversations_exchange": {
+  "subject": "work.ink", "stance": "practical_help", "outcome": "accepted", "within_days": 14}}
+```
+
+The three discriminators intersect, so the right subject with the wrong stance does not match. Ask
+broadly by naming one (`{"stance": "respectful_disagreement"}` — did they push back about anything
+lately) or exactly by naming all three. Naming none is refused at parse time: a condition matching
+any decision at all would fire for every player who has ever finished a conversation.
 
 ### New actions
 

@@ -9,8 +9,20 @@ import java.util.Locale;
 /** Forge common + client configuration. See CONFIG.md for the user-facing documentation. */
 public final class McaConversationsConfig {
 
+    /** Client-side motion profile. Kept in the common config holder so config loading is server-safe. */
+    public enum MotionMode {
+        FULL,
+        REDUCED,
+        OFF
+    }
+
+    /** How the villager's line is revealed. Opt-in: the base experience shows it at once. */
+    public enum QuestionReveal { OFF, FAST }
+
     public static final Common COMMON;
     public static final ForgeConfigSpec COMMON_SPEC;
+    public static final Server SERVER;
+    public static final ForgeConfigSpec SERVER_SPEC;
     public static final Client CLIENT;
     public static final ForgeConfigSpec CLIENT_SPEC;
 
@@ -18,6 +30,10 @@ public final class McaConversationsConfig {
         final Pair<Common, ForgeConfigSpec> common = new ForgeConfigSpec.Builder().configure(Common::new);
         COMMON = common.getLeft();
         COMMON_SPEC = common.getRight();
+
+        final Pair<Server, ForgeConfigSpec> server = new ForgeConfigSpec.Builder().configure(Server::new);
+        SERVER = server.getLeft();
+        SERVER_SPEC = server.getRight();
 
         final Pair<Client, ForgeConfigSpec> client = new ForgeConfigSpec.Builder().configure(Client::new);
         CLIENT = client.getLeft();
@@ -104,6 +120,176 @@ public final class McaConversationsConfig {
         }
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // Server values
+    //
+    // Everything the server decides and the client has to agree with lives in SERVER_SPEC: it is
+    // stored per world under serverconfig/ and Forge synchronises it to every connected client, so a
+    // radius or a budget means the same thing on both sides of a connection. COMMON keeps what is
+    // genuinely per-installation (feature switches, debug flags) and CLIENT keeps presentation.
+    //
+    // Every read goes through an accessor here rather than touching SERVER directly, for the same
+    // reason dynamicFeature exists: these are read from dialogue conditions and from entity ticks, and
+    // a server spec that has not loaded yet - world creation, a datapack reload before the world is
+    // up, or a value the spec cannot parse - throws out of get(). The accessor answers the documented
+    // default in that window instead of taking the caller with it.
+    // ---------------------------------------------------------------------------------------------
+
+    /** A server int, never throwing: an unloaded or unparsable spec reads as {@code fallback}. */
+    private static int serverInt(ForgeConfigSpec.IntValue value, int fallback) {
+        try {
+            Integer current = value.get();
+            return current == null ? fallback : current;
+        } catch (Throwable t) {
+            return fallback;
+        }
+    }
+
+    /** A server double, with the same never-throw contract. */
+    private static double serverDouble(ForgeConfigSpec.DoubleValue value, double fallback) {
+        try {
+            Double current = value.get();
+            return current == null ? fallback : current;
+        } catch (Throwable t) {
+            return fallback;
+        }
+    }
+
+    /** A server boolean, with the same never-throw contract. */
+    private static boolean serverBool(ForgeConfigSpec.BooleanValue value, boolean fallback) {
+        try {
+            Boolean current = value.get();
+            return current == null ? fallback : current;
+        } catch (Throwable t) {
+            return fallback;
+        }
+    }
+
+    /** chatModeRadius, or 12.0 while the server spec is unavailable. */
+    public static double chatModeRadius() {
+        return serverDouble(SERVER.chatModeRadius, 12.0);
+    }
+
+    /** chatModeAddressedRadius, or 24.0 while the server spec is unavailable. */
+    public static double chatModeAddressedRadius() {
+        return serverDouble(SERVER.chatModeAddressedRadius, 24.0);
+    }
+
+    /** chatModeGreetChance, or 0.35 while the server spec is unavailable. */
+    public static double chatModeGreetChance() {
+        return serverDouble(SERVER.chatModeGreetChance, 0.35);
+    }
+
+    /** chatModeAttentionTicks, or 600 while the server spec is unavailable. */
+    public static int chatModeAttentionTicks() {
+        return serverInt(SERVER.chatModeAttentionTicks, 600);
+    }
+
+    /** chatModeStickinessTicks, or 600 while the server spec is unavailable. */
+    public static int chatModeStickinessTicks() {
+        return serverInt(SERVER.chatModeStickinessTicks, 600);
+    }
+
+    /** maxInitiativesPerVillagerPlayerDay, or 1 while the server spec is unavailable. */
+    public static int maxInitiativesPerVillagerPlayerDay() {
+        return serverInt(SERVER.maxInitiativesPerVillagerPlayerDay, 1);
+    }
+
+    /** dynamicTopicSlots, or 3 while the server spec is unavailable. */
+    public static int dynamicTopicSlots() {
+        return serverInt(SERVER.dynamicTopicSlots, 3);
+    }
+
+    /** initiativeCooldownTicks, or 300 while the server spec is unavailable. */
+    public static int initiativeCooldownTicks() {
+        return serverInt(SERVER.initiativeCooldownTicks, 300);
+    }
+
+    /** conversationHeartMultiplier, or 1.0 while the server spec is unavailable. */
+    public static double conversationHeartMultiplier() {
+        return serverDouble(SERVER.conversationHeartMultiplier, 1.0);
+    }
+
+    /** conversationDailyPositiveCap, or 8 while the server spec is unavailable. */
+    public static int conversationDailyPositiveCap() {
+        return serverInt(SERVER.conversationDailyPositiveCap, 8);
+    }
+
+    /** conversationDailyNegativeCap, or 10 while the server spec is unavailable. */
+    public static int conversationDailyNegativeCap() {
+        return serverInt(SERVER.conversationDailyNegativeCap, 10);
+    }
+
+    /** strongerNegativeOutcomes, or false while the server spec is unavailable. */
+    public static boolean strongerNegativeOutcomes() {
+        return serverBool(SERVER.strongerNegativeOutcomes, false);
+    }
+
+    /** conversationSessionTimeoutTicks, or 1200 while the server spec is unavailable. */
+    public static int conversationSessionTimeoutTicks() {
+        return serverInt(SERVER.conversationSessionTimeoutTicks, 1200);
+    }
+
+    /** dispositionGainMultiplier, or 1.0 while the server spec is unavailable. */
+    public static double dispositionGainMultiplier() {
+        return serverDouble(SERVER.dispositionGainMultiplier, 1.0);
+    }
+
+    /** dispositionDecayMultiplier, or 1.0 while the server spec is unavailable. */
+    public static double dispositionDecayMultiplier() {
+        return serverDouble(SERVER.dispositionDecayMultiplier, 1.0);
+    }
+
+    /** dispositionDailyAxisCap, or 8 while the server spec is unavailable. */
+    public static int dispositionDailyAxisCap() {
+        return serverInt(SERVER.dispositionDailyAxisCap, 8);
+    }
+
+    /** dispositionStaleDays, or 0 while the server spec is unavailable. */
+    public static int dispositionStaleDays() {
+        return serverInt(SERVER.dispositionStaleDays, 0);
+    }
+
+    /** episodeRetentionDays, or 32 while the server spec is unavailable. */
+    public static int episodeRetentionDays() {
+        return serverInt(SERVER.episodeRetentionDays, 32);
+    }
+
+    /** activeEpisodeCap, or 6 while the server spec is unavailable. */
+    public static int activeEpisodeCap() {
+        return serverInt(SERVER.activeEpisodeCap, 6);
+    }
+
+    /** resolvedEpisodeCap, or 24 while the server spec is unavailable. */
+    public static int resolvedEpisodeCap() {
+        return serverInt(SERVER.resolvedEpisodeCap, 24);
+    }
+
+    /** openThreadCapPerPair, or 8 while the server spec is unavailable. */
+    public static int openThreadCapPerPair() {
+        return serverInt(SERVER.openThreadCapPerPair, 8);
+    }
+
+    /** commitmentCapPerPair, or 8 while the server spec is unavailable. */
+    public static int commitmentCapPerPair() {
+        return serverInt(SERVER.commitmentCapPerPair, 8);
+    }
+
+    /** playerClaimCapPerPair, or 16 while the server spec is unavailable. */
+    public static int playerClaimCapPerPair() {
+        return serverInt(SERVER.playerClaimCapPerPair, 16);
+    }
+
+    /** socialEdgeCapPerVillager, or 16 while the server spec is unavailable. */
+    public static int socialEdgeCapPerVillager() {
+        return serverInt(SERVER.socialEdgeCapPerVillager, 16);
+    }
+
+    /** topicRecencyCapPerPair, or 32 while the server spec is unavailable. */
+    public static int topicRecencyCapPerPair() {
+        return serverInt(SERVER.topicRecencyCapPerPair, 32);
+    }
+
     public static final class Common {
         public final ForgeConfigSpec.EnumValue<HubEntryMode> hubEntryMode;
         public final ForgeConfigSpec.BooleanValue enableTopics;
@@ -113,11 +299,6 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue enableQuests;
         public final ForgeConfigSpec.BooleanValue enableBranching;
 
-        public final ForgeConfigSpec.DoubleValue conversationHeartMultiplier;
-        public final ForgeConfigSpec.IntValue conversationDailyPositiveCap;
-        public final ForgeConfigSpec.IntValue conversationDailyNegativeCap;
-        public final ForgeConfigSpec.BooleanValue strongerNegativeOutcomes;
-        public final ForgeConfigSpec.IntValue conversationSessionTimeoutTicks;
         public final ForgeConfigSpec.BooleanValue debugBranching;
 
         public final ForgeConfigSpec.IntValue giftMemoryPerPlayerCap;
@@ -148,17 +329,10 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue enableDispositions;
         public final ForgeConfigSpec.BooleanValue enableChecks;
         public final ForgeConfigSpec.BooleanValue enableCheckTiers;
-        public final ForgeConfigSpec.DoubleValue dispositionGainMultiplier;
-        public final ForgeConfigSpec.DoubleValue dispositionDecayMultiplier;
-        public final ForgeConfigSpec.IntValue dispositionDailyAxisCap;
-        public final ForgeConfigSpec.IntValue dispositionStaleDays;
         public final ForgeConfigSpec.BooleanValue debugRpg;
 
         public final ForgeConfigSpec.BooleanValue enableChatMode;
         public final ForgeConfigSpec.BooleanValue chatModeDefaultOn;
-        public final ForgeConfigSpec.DoubleValue chatModeRadius;
-        public final ForgeConfigSpec.DoubleValue chatModeAddressedRadius;
-        public final ForgeConfigSpec.IntValue chatModeStickinessTicks;
         public final ForgeConfigSpec.DoubleValue chatModeLookConeDegrees;
         public final ForgeConfigSpec.IntValue chatModeMaxResponders;
         public final ForgeConfigSpec.DoubleValue chatModeMinScore;
@@ -172,9 +346,7 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue chatModeInsultDetection;
         public final ForgeConfigSpec.BooleanValue chatModeLocalChat;
         public final ForgeConfigSpec.BooleanValue chatModeGreetOnApproach;
-        public final ForgeConfigSpec.DoubleValue chatModeGreetChance;
         public final ForgeConfigSpec.BooleanValue chatModeTypingAttention;
-        public final ForgeConfigSpec.IntValue chatModeAttentionTicks;
 
         public final ForgeConfigSpec.BooleanValue townsteadEnabled;
         public final ForgeConfigSpec.BooleanValue townsteadContentEnabled;
@@ -201,19 +373,9 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue episodesEnabled;
         public final ForgeConfigSpec.BooleanValue socialOpinionsEnabled;
         public final ForgeConfigSpec.BooleanValue villageCultureEnabled;
-        public final ForgeConfigSpec.IntValue maxInitiativesPerVillagerPlayerDay;
-        public final ForgeConfigSpec.IntValue dynamicTopicSlots;
         public final ForgeConfigSpec.BooleanValue debugDirector;
 
         public final ForgeConfigSpec.BooleanValue historyEnabled;
-        public final ForgeConfigSpec.IntValue episodeRetentionDays;
-        public final ForgeConfigSpec.IntValue resolvedEpisodeCap;
-        public final ForgeConfigSpec.IntValue activeEpisodeCap;
-        public final ForgeConfigSpec.IntValue openThreadCapPerPair;
-        public final ForgeConfigSpec.IntValue commitmentCapPerPair;
-        public final ForgeConfigSpec.IntValue playerClaimCapPerPair;
-        public final ForgeConfigSpec.IntValue socialEdgeCapPerVillager;
-        public final ForgeConfigSpec.IntValue topicRecencyCapPerPair;
 
         public final ForgeConfigSpec.BooleanValue groupEnabled;
         public final ForgeConfigSpec.IntValue groupMaxSpeakers;
@@ -342,17 +504,6 @@ public final class McaConversationsConfig {
                     "Four-tier check outcomes (crit/success/partial/rebuff). When false, checks collapse to",
                     "binary success/rebuff at the same difficulty.")
                     .define("enableCheckTiers", true);
-            dispositionGainMultiplier = b.comment("Scale on all disposition gains and losses (0 freezes the vector).")
-                    .defineInRange("dispositionGainMultiplier", 1.0, 0.0, 4.0);
-            dispositionDecayMultiplier = b.comment(
-                    "Scale on disposition decay toward the personality baseline (0 = values never drift back).")
-                    .defineInRange("dispositionDecayMultiplier", 1.0, 0.0, 4.0);
-            dispositionDailyAxisCap = b.comment(
-                    "Per-axis, per-MC-day cap on total disposition movement from conversations (anti-farming).")
-                    .defineInRange("dispositionDailyAxisCap", 8, 1, 50);
-            dispositionStaleDays = b.comment(
-                    "Prune disposition records untouched for this many MC days (0 = only prune on villager death).")
-                    .defineInRange("dispositionStaleDays", 0, 0, 365);
             debugRpg = b.comment(
                     "Verbose logging for disposition reads/writes, check inputs, tier selection, seed derivation.")
                     .define("debugRpg", false);
@@ -366,28 +517,6 @@ public final class McaConversationsConfig {
                     "repeat (full -> half -> nothing for the same decision on the same day), and applied at most",
                     "once per transaction. Milestone outcomes fire once ever. These caps stay active even when",
                     "the disposition vector is switched off.");
-            conversationHeartMultiplier = b.comment(
-                    "Scale on every conversation-sourced heart change, positive and negative. 0 makes",
-                    "conversation heart-neutral (the trees still play, the vector and arcs still move).")
-                    .defineInRange("conversationHeartMultiplier", 1.0, 0.0, 4.0);
-            conversationDailyPositiveCap = b.comment(
-                    "Per-villager, per-player, per-MC-day ceiling on hearts GAINED from conversation.",
-                    "Counted separately from the negative budget, so antagonising a villager can never",
-                    "manufacture extra room to earn hearts back.")
-                    .defineInRange("conversationDailyPositiveCap", 8, 0, 100);
-            conversationDailyNegativeCap = b.comment(
-                    "Per-villager, per-player, per-MC-day floor on hearts LOST to conversation (as a positive",
-                    "number). Stops rage-baiting a villager to farm reconciliation content.")
-                    .defineInRange("conversationDailyNegativeCap", 10, 0, 100);
-            strongerNegativeOutcomes = b.comment(
-                    "Double the authored negative deltas (before the caps) for players who want dismissiveness",
-                    "and boundary-pushing to bite harder. Positive outcomes are unaffected.")
-                    .define("strongerNegativeOutcomes", false);
-            conversationSessionTimeoutTicks = b.comment(
-                    "How long (game ticks) a conversation session survives without activity before it expires",
-                    "and its per-conversation budget resets (1200 = 60 s). Sessions are transient and never",
-                    "persist across a restart; arcs, milestones and the daily budgets do.")
-                    .defineInRange("conversationSessionTimeoutTicks", 1200, 200, 24000);
             debugBranching = b.comment(
                     "Verbose logging for the branching layer: topic and node transitions, decision ids, check",
                     "inputs and tier, requested vs applied hearts, disposition deltas, and arc/milestone moves.")
@@ -406,17 +535,6 @@ public final class McaConversationsConfig {
             chatModeDefaultOn = b.comment(
                     "Whether players are opted in to chat mode before running '/conversations chat on'.")
                     .define("chatModeDefaultOn", true);
-            chatModeRadius = b.comment(
-                    "Ambient hearing radius (blocks) for unaddressed messages — villagers this close may",
-                    "answer a message that clearly matches a topic but names no one.")
-                    .defineInRange("chatModeRadius", 12.0, 1.0, 64.0);
-            chatModeAddressedRadius = b.comment(
-                    "Radius (blocks) when the villager is named or the sticky conversation partner",
-                    "('calling out' across the square). Larger than the ambient radius.")
-                    .defineInRange("chatModeAddressedRadius", 24.0, 1.0, 96.0);
-            chatModeStickinessTicks = b.comment(
-                    "How long (game ticks) the last conversation partner stays the default target (600 = 30s).")
-                    .defineInRange("chatModeStickinessTicks", 600, 0, 72000);
             chatModeLookConeDegrees = b.comment(
                     "Half-angle (degrees) of the look-at targeting cone. 0 disables look-at addressing.")
                     .defineInRange("chatModeLookConeDegrees", 25.0, 0.0, 90.0);
@@ -465,19 +583,10 @@ public final class McaConversationsConfig {
                     "Villagers may proactively greet an opted-in player entering the radius (once per",
                     "villager per player per day; see chatModeGreetChance).")
                     .define("chatModeGreetOnApproach", true);
-            chatModeGreetChance = b.comment(
-                    "Chance (0-1) that a given villager greets a given player on a given day. Scaled by",
-                    "personality (outgoing villagers greet more, reserved ones less); deterministic per day,",
-                    "so re-entering the radius never re-rolls. 1.0 = everyone always greets.")
-                    .defineInRange("chatModeGreetChance", 0.35, 0.0, 1.0);
             chatModeTypingAttention = b.comment(
                     "Nearby villagers stop and look at a player while their chat screen is open (requires the",
                     "client half of this mod, which MCA already requires anyway).")
                     .define("chatModeTypingAttention", true);
-            chatModeAttentionTicks = b.comment(
-                    "How long (game ticks) a villager keeps standing with its conversation partner after the",
-                    "last exchange before wandering off (600 = 30s; refreshed per exchange; 0 disables).")
-                    .defineInRange("chatModeAttentionTicks", 600, 0, 72000);
             b.pop();
 
             b.push("townstead");
@@ -605,15 +714,6 @@ public final class McaConversationsConfig {
                     "that its residents can agree or disagree about. When false, villages have no culture and",
                     "residents speak only for themselves.")
                     .define("villageCultureEnabled", true);
-            maxInitiativesPerVillagerPlayerDay = b.comment(
-                    "How many times a day one villager may open a conversation with one player unprompted.",
-                    "Urgent acute-state lines and genuine episode state changes may still bypass this, but",
-                    "never the short real-time cooldown. 0 disables villager initiative entirely.")
-                    .defineInRange("maxInitiativesPerVillagerPlayerDay", 1, 0, 8);
-            dynamicTopicSlots = b.comment(
-                    "How many context-specific entries may appear above the six fixed hub categories",
-                    "(Continue..., What's on your mind?, Ask about...). 0 keeps the six fixed categories alone.")
-                    .defineInRange("dynamicTopicSlots", 3, 0, 3);
             debugDirector = b.comment(
                     "Log why each scene was chosen: candidate counts, every non-zero score term, the",
                     "rejected finalists and the decisive reason each was dropped. Verbose; for authoring.")
@@ -626,6 +726,165 @@ public final class McaConversationsConfig {
                     "opinions to data/mcaconversations_history.dat. When false, nothing new is written and the",
                     "existing arcs, milestones, affection budgets and disposition vectors are untouched.")
                     .define("enabled", true);
+            b.pop();
+
+            b.push("group");
+            groupEnabled = b.comment(
+                    "Allow a second and third villager to join a conversation with a contracted interjection.",
+                    "Off by default: group scenes are chat-mode only for now and every interjection must",
+                    "answer the line before it and have a real reason to know what it says.")
+                    .define("enabled", false);
+            groupMaxSpeakers = b.comment("Hard cap on speakers in one group scene, including the lead villager.")
+                    .defineInRange("maxSpeakers", 3, 2, 3);
+            b.pop();
+
+            b.push("debug");
+            debugLogging = b.comment("Verbose logging for gossip detection and dialogue condition evaluation.")
+                    .define("debugLogging", false);
+            b.pop();
+        }
+    }
+
+    /**
+     * Gameplay values the server owns and Forge synchronises to every client.
+     *
+     * <p>Moved here in 1.5.0 from {@code mcaconversations-common.toml}. A COMMON spec is loaded on
+     * both sides and synchronised on neither, so a client and a server could disagree about how far a
+     * villager hears, how many hearts a day a conversation may pay, or how often a villager may speak
+     * first — all of which are decisions the server has to make alone. Read these through the
+     * accessors on {@link McaConversationsConfig}, never directly: this spec is unavailable until a
+     * world is loaded, and every one of these values is read from a dialogue condition or an entity
+     * tick where a throw would take the caller with it.
+     */
+    public static final class Server {
+        public final ForgeConfigSpec.DoubleValue chatModeRadius;
+        public final ForgeConfigSpec.DoubleValue chatModeAddressedRadius;
+        public final ForgeConfigSpec.IntValue chatModeStickinessTicks;
+        public final ForgeConfigSpec.DoubleValue chatModeGreetChance;
+        public final ForgeConfigSpec.IntValue chatModeAttentionTicks;
+
+        public final ForgeConfigSpec.DoubleValue conversationHeartMultiplier;
+        public final ForgeConfigSpec.IntValue conversationDailyPositiveCap;
+        public final ForgeConfigSpec.IntValue conversationDailyNegativeCap;
+        public final ForgeConfigSpec.BooleanValue strongerNegativeOutcomes;
+        public final ForgeConfigSpec.IntValue conversationSessionTimeoutTicks;
+
+        public final ForgeConfigSpec.DoubleValue dispositionGainMultiplier;
+        public final ForgeConfigSpec.DoubleValue dispositionDecayMultiplier;
+        public final ForgeConfigSpec.IntValue dispositionDailyAxisCap;
+        public final ForgeConfigSpec.IntValue dispositionStaleDays;
+
+        public final ForgeConfigSpec.IntValue maxInitiativesPerVillagerPlayerDay;
+        public final ForgeConfigSpec.IntValue initiativeCooldownTicks;
+        public final ForgeConfigSpec.IntValue dynamicTopicSlots;
+
+        public final ForgeConfigSpec.IntValue episodeRetentionDays;
+        public final ForgeConfigSpec.IntValue activeEpisodeCap;
+        public final ForgeConfigSpec.IntValue resolvedEpisodeCap;
+        public final ForgeConfigSpec.IntValue openThreadCapPerPair;
+        public final ForgeConfigSpec.IntValue commitmentCapPerPair;
+        public final ForgeConfigSpec.IntValue playerClaimCapPerPair;
+        public final ForgeConfigSpec.IntValue socialEdgeCapPerVillager;
+        public final ForgeConfigSpec.IntValue topicRecencyCapPerPair;
+
+        Server(ForgeConfigSpec.Builder b) {
+            b.comment("Values the server decides for everyone connected to it. Stored per world under",
+                    "serverconfig/ and synchronised to clients, so hearing distance, heart budgets and",
+                    "villager initiative mean the same thing on both sides of a connection.",
+                    "",
+                    "MIGRATING FROM 1.4.x: these keys used to live in mcaconversations-common.toml. Copy any",
+                    "value you had customised into this file; the old entries are ignored and can be deleted.");
+
+            b.push("chat");
+            b.comment("How far a villager hears and how long its attention lasts. These decide whether a",
+                    "villager answers at all, so the server owns them.");
+            chatModeRadius = b.comment(
+                    "Ambient hearing radius (blocks) for unaddressed messages - villagers this close may",
+                    "answer a message that clearly matches a topic but names no one.")
+                    .defineInRange("chatModeRadius", 12.0, 1.0, 64.0);
+            chatModeAddressedRadius = b.comment(
+                    "Radius (blocks) when the villager is named or the sticky conversation partner",
+                    "('calling out' across the square). Larger than the ambient radius.")
+                    .defineInRange("chatModeAddressedRadius", 24.0, 1.0, 96.0);
+            chatModeStickinessTicks = b.comment(
+                    "How long (game ticks) the last conversation partner stays the default target (600 = 30s).")
+                    .defineInRange("chatModeStickinessTicks", 600, 0, 72000);
+            chatModeGreetChance = b.comment(
+                    "Chance (0-1) that a given villager greets a given player on a given day. Scaled by",
+                    "personality (outgoing villagers greet more, reserved ones less); deterministic per day,",
+                    "so re-entering the radius never re-rolls. 1.0 = everyone always greets.")
+                    .defineInRange("chatModeGreetChance", 0.35, 0.0, 1.0);
+            chatModeAttentionTicks = b.comment(
+                    "How long (game ticks) a villager keeps standing with its conversation partner after the",
+                    "last exchange before wandering off (600 = 30s; refreshed per exchange; 0 disables).")
+                    .defineInRange("chatModeAttentionTicks", 600, 0, 72000);
+            b.pop();
+
+            b.push("conversation");
+            b.comment("The heart economy. Every conversation-sourced heart change passes through these caps,",
+                    "which stay active even when the disposition vector is switched off.");
+            conversationHeartMultiplier = b.comment(
+                    "Scale on every conversation-sourced heart change, positive and negative. 0 makes",
+                    "conversation heart-neutral (the trees still play, the vector and arcs still move).")
+                    .defineInRange("conversationHeartMultiplier", 1.0, 0.0, 4.0);
+            conversationDailyPositiveCap = b.comment(
+                    "Per-villager, per-player, per-MC-day ceiling on hearts GAINED from conversation.",
+                    "Counted separately from the negative budget, so antagonising a villager can never",
+                    "manufacture extra room to earn hearts back.")
+                    .defineInRange("conversationDailyPositiveCap", 8, 0, 100);
+            conversationDailyNegativeCap = b.comment(
+                    "Per-villager, per-player, per-MC-day floor on hearts LOST to conversation (as a positive",
+                    "number). Stops rage-baiting a villager to farm reconciliation content.")
+                    .defineInRange("conversationDailyNegativeCap", 10, 0, 100);
+            strongerNegativeOutcomes = b.comment(
+                    "Double the authored negative deltas (before the caps) for players who want dismissiveness",
+                    "and boundary-pushing to bite harder. Positive outcomes are unaffected.")
+                    .define("strongerNegativeOutcomes", false);
+            conversationSessionTimeoutTicks = b.comment(
+                    "How long (game ticks) a conversation session survives without activity before it expires",
+                    "and its per-conversation budget resets (1200 = 60 s). Sessions are transient and never",
+                    "persist across a restart; arcs, milestones and the daily budgets do.")
+                    .defineInRange("conversationSessionTimeoutTicks", 1200, 200, 24000);
+            b.pop();
+
+            b.push("rpg");
+            b.comment("Movement and decay of the hidden disposition vector. Whether the vector and the checks",
+                    "exist at all stays in the common file; only the numbers are here.");
+            dispositionGainMultiplier = b.comment("Scale on all disposition gains and losses (0 freezes the vector).")
+                    .defineInRange("dispositionGainMultiplier", 1.0, 0.0, 4.0);
+            dispositionDecayMultiplier = b.comment(
+                    "Scale on disposition decay toward the personality baseline (0 = values never drift back).")
+                    .defineInRange("dispositionDecayMultiplier", 1.0, 0.0, 4.0);
+            dispositionDailyAxisCap = b.comment(
+                    "Per-axis, per-MC-day cap on total disposition movement from conversations (anti-farming).")
+                    .defineInRange("dispositionDailyAxisCap", 8, 1, 50);
+            dispositionStaleDays = b.comment(
+                    "Prune disposition records untouched for this many MC days (0 = only prune on villager death).")
+                    .defineInRange("dispositionStaleDays", 0, 0, 365);
+            b.pop();
+
+            b.push("dynamic");
+            b.comment("How often a villager may speak first, and how much of the hub is contextual.");
+            maxInitiativesPerVillagerPlayerDay = b.comment(
+                    "How many times a day one villager may open a conversation with one player unprompted.",
+                    "Urgent acute-state lines and genuine episode state changes may still bypass this, but",
+                    "never the short real-time cooldown. 0 disables villager initiative entirely.")
+                    .defineInRange("maxInitiativesPerVillagerPlayerDay", 1, 0, 8);
+            initiativeCooldownTicks = b.comment(
+                    "Real-time floor (game ticks) between two unprompted lines from the same villager to the",
+                    "same player, whatever the daily budget still allows (300 = 15 s). This is the backstop",
+                    "that stops a villager talking at somebody standing next to them; the daily budget is",
+                    "what keeps the day quiet.")
+                    .defineInRange("initiativeCooldownTicks", 300, 20, 24000);
+            dynamicTopicSlots = b.comment(
+                    "How many context-specific entries may appear above the six fixed hub categories",
+                    "(Continue..., What's on your mind?, Ask about...). 0 keeps the six fixed categories alone.")
+                    .defineInRange("dynamicTopicSlots", 3, 0, 3);
+            b.pop();
+
+            b.push("history");
+            b.comment("Storage bounds for persistent narrative state. These may be lowered but never raised",
+                    "past the hard limits the stores enforce for themselves (see HistoryCaps).");
             episodeRetentionDays = b.comment(
                     "How many in-game days a resolved episode stays available for callbacks before it is",
                     "compressed to a milestone token and pruned.")
@@ -653,21 +912,6 @@ public final class McaConversationsConfig {
                     "repetition suppression.")
                     .defineInRange("topicRecencyCapPerPair", 32, 4, 128);
             b.pop();
-
-            b.push("group");
-            groupEnabled = b.comment(
-                    "Allow a second and third villager to join a conversation with a contracted interjection.",
-                    "Off by default: group scenes are chat-mode only for now and every interjection must",
-                    "answer the line before it and have a real reason to know what it says.")
-                    .define("enabled", false);
-            groupMaxSpeakers = b.comment("Hard cap on speakers in one group scene, including the lead villager.")
-                    .defineInRange("maxSpeakers", 3, 2, 3);
-            b.pop();
-
-            b.push("debug");
-            debugLogging = b.comment("Verbose logging for gossip detection and dialogue condition evaluation.")
-                    .define("debugLogging", false);
-            b.pop();
         }
     }
 
@@ -676,6 +920,11 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue numericResponseShortcuts;
         public final ForgeConfigSpec.BooleanValue chatNumericShortcuts;
         public final ForgeConfigSpec.BooleanValue showResponseControlHints;
+        public final ForgeConfigSpec.EnumValue<MotionMode> motionMode;
+        public final ForgeConfigSpec.DoubleValue uiSoundVolume;
+        public final ForgeConfigSpec.BooleanValue speakerNameAccent;
+        public final ForgeConfigSpec.BooleanValue showSpeakerPortrait;
+        public final ForgeConfigSpec.EnumValue<QuestionReveal> questionRevealMode;
 
         Client(ForgeConfigSpec.Builder b) {
             b.push("display");
@@ -692,6 +941,24 @@ public final class McaConversationsConfig {
             showResponseControlHints = b.comment(
                     "Show the compact keyboard and paging hint below the response list.")
                     .define("showResponseControlHints", true);
+            motionMode = b.comment(
+                    "Conversation motion: FULL uses short state-driven movement, REDUCED uses fades only,",
+                    "and OFF changes visual state immediately.")
+                    .defineEnum("motionMode", MotionMode.FULL);
+            uiSoundVolume = b.comment(
+                    "Volume multiplier for response focus, page and confirmation sounds. Zero disables them.")
+                    .defineInRange("uiSoundVolume", 0.65D, 0.0D, 1.0D);
+            speakerNameAccent = b.comment(
+                    "Render an unambiguous speaking villager name in the active accent color and bold weight.")
+                    .define("speakerNameAccent", true);
+            showSpeakerPortrait = b.comment(
+                    "Frame the speaking villager in the card header. Hidden automatically on panels",
+                    "too narrow to give up the reading width, and whenever the villager is unavailable.")
+                    .define("showSpeakerPortrait", true);
+            questionRevealMode = b.comment(
+                    "How the villager's line appears: OFF shows it at once, FAST reveals it over a",
+                    "few ticks. Ignored when motionMode is OFF, and any input completes it immediately.")
+                    .defineEnum("questionRevealMode", QuestionReveal.OFF);
             b.pop();
         }
     }

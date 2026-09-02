@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.compat;
 
 import dev.otectus.mcaconversations.McaConversations;
+import dev.otectus.mcaconversations.locale.LineVoice;
 import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.personality.Personalities;
 import net.minecraft.core.BlockPos;
@@ -189,10 +190,14 @@ public final class McaCompat {
      * MCA's network path fails: plain system chat message. <b>Server side only.</b>
      */
     public static void sayInDialogue(Entity villager, ServerPlayer player, String phrase, Object... args) {
-        Optional<MutableComponent> line = getDialogueLine(villager, player, phrase, args);
-        if (line.isEmpty()) {
+        Optional<MutableComponent> built = getDialogueLine(villager, player, phrase, args);
+        if (built.isEmpty()) {
             return;
         }
+        // Name the pooled variant here, on the server, before the packet leaves. MCA would otherwise
+        // resolve the pool on the client with a fresh random draw and no memory of the last sentence,
+        // which is what makes a pool of three read like a pool of one. See LineVoice.
+        Optional<Component> line = Optional.of(LineVoice.pinned(built.get(), villager, player));
         if (McaHandles.sendDialogueLine(player, line.get())) {
             return;
         }

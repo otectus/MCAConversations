@@ -31,6 +31,8 @@ public final class ContextSources {
         register(new VanillaContextSource());
         register(new McaContextSource());
         register(new VillageContextSource());
+        register(new HistoryContextSource());
+        register(new IdentityContextSource());
     }
 
     private ContextSources() {

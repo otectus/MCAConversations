@@ -34,14 +34,22 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class InitiativeGate {
 
     /**
-     * Real-time cooldown, in ticks, between one villager's initiatives towards one player.
+     * Default real-time cooldown, in ticks, between one villager's initiatives towards one player.
      *
      * <p>Fifteen seconds. It exists for the two purposes that may bypass the daily cap — an acute
      * state and a genuine episode change — because "may bypass the daily cap" must not mean "may
      * happen twice in the same breath". Held in memory rather than in the save: it is measured in
      * seconds, and a cooldown that survived a restart would be a schema field earning nothing.
+     *
+     * <p>Server owners tune the live value through {@code dynamic.initiativeCooldownTicks}; this is
+     * what {@link #cooldownTicks()} answers while the server config is unavailable.
      */
     public static final long COOLDOWN_TICKS = 300L;
+
+    /** The configured cooldown, falling back to {@link #COOLDOWN_TICKS} before the world is up. */
+    public static long cooldownTicks() {
+        return McaConversationsConfig.initiativeCooldownTicks();
+    }
 
     /** (villager, player) -> the game tick an initiative last landed. */
     private static final Map<String, Long> LAST_INITIATIVE = new ConcurrentHashMap<>();
@@ -171,8 +179,7 @@ public final class InitiativeGate {
     // --- The individual rules ---------------------------------------------------------------------
 
     private static int dailyCap() {
-        return McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.maxInitiativesPerVillagerPlayerDay, 1);
+        return McaConversationsConfig.maxInitiativesPerVillagerPlayerDay();
     }
 
     private static boolean isMuted(Entity villager, ServerPlayer player, long now) {
@@ -188,7 +195,7 @@ public final class InitiativeGate {
 
     private static boolean onCooldown(Entity villager, ServerPlayer player, long now) {
         Long last = LAST_INITIATIVE.get(key(villager, player));
-        return last != null && now - last < COOLDOWN_TICKS && now >= last;
+        return last != null && now - last < cooldownTicks() && now >= last;
     }
 
     private static int initiativesToday(Entity villager, ServerPlayer player, long today) {

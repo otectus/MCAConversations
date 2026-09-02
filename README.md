@@ -8,6 +8,37 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
+## Features (1.5.0)
+
+- **The speaker has a face.** The villager you are talking to is framed in the card header, so the
+  line you are reading has someone attached to it. MCA keeps ownership of the identity, profession
+  and mood it already displays; the card adds a face and nothing else.
+- **The card is a vanilla screen.** The panel and its recessed list body are Minecraft's own
+  `options_background.png` dirt, and the number badges and page buttons are nine-sliced out of the
+  button strip in `widgets.png`. A resource pack that reskins vanilla menus reskins the card with
+  them, and there is no separate palette to keep in step with the rest of the game.
+- **An optional reveal.** `questionRevealMode = FAST` lets the villager's line appear a few
+  characters at a time. It is off by default, skipped when motion is off, and any input finishes it.
+- The portrait is dropped rather than shrunk on narrow or short screens, so the reading width is
+  never traded for it. Network protocol remains 2.
+
+## Features (1.4.4)
+
+- **A conversation card with deliberate visual hierarchy** — villager names anchor the prompt in
+  bold yellow, the rows sit in a recessed list body, and the focused response takes vanilla's
+  selection frame with a highlighted number badge and a fixed hitbox.
+- **Motion that explains state and then stops** — new offers rise into place, rows enter in a short
+  cascade, focus eases, selection presses and locks, and page changes shift only a few pixels. Full,
+  reduced, and disabled motion profiles keep every focus and lock cue functional.
+- **Short screens and custom fonts are first-class** — every vertical measurement follows the active
+  font, pages contain at most nine shortcuts and only as many rows as fit, clickable page arrows
+  agree with wheel and keyboard paging, and an oversized response is clipped with a full-text hover.
+- **Keyboard and mouse no longer fight** — a stationary pointer cannot restore an old hover after an
+  arrow key moves focus; actual pointer movement or a click immediately returns pointer control.
+- **One visual language across frontends** — chat names and entire quick-reply lines share the same
+  speaker emphasis, while Townstead keeps its native RPG screen and receives only matching, five-tick-faded
+  number badges. Network protocol 2 and all server-owned dialogue outcomes are unchanged.
+
 ## Features (1.4.3)
 
 - **Conversations finally have room to breathe** — the base MCA interaction screen now uses a

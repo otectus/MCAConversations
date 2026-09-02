@@ -13,9 +13,80 @@ what you've talked about before.
 
 ---
 
+## New in 1.5.1
+
+### 🪟 The conversation card is painted with Minecraft's own menus
+
+The panel and its recessed list body are the options-screen dirt; the number badges and page buttons
+are cut from the vanilla button strip. Rows are drawn as vanilla list entries — shadowed white text
+at rest, vanilla's two-tone frame when focused — and an answer too long to fit gets a vanilla
+scrollbar. A resource pack that reskins vanilla menus reskins this card with it, so there is no
+second palette to keep in step with the rest of the game.
+
+This replaces 1.5.0's three appearance options (`enhancedConversationVisuals`, `visualStyle` and
+`panelOpacity`). Forge quietly drops those keys from an existing client config on first load; nothing
+is required of you. There is one look now, and it is the game's. The speaker portrait, the optional
+line reveal and the motion settings are untouched.
+
+---
+
+## New in 1.5.0
+
+### 👤 Talk to someone, not to a menu
+
+The villager you are speaking to sits framed in the conversation card, so the line you are reading
+has someone attached to it. If you like your dialogue to arrive as speech rather than all at once,
+there is an optional reveal for the villager's line. Both are client settings you own; the portrait
+steps aside by itself on narrow or short screens rather than eating the reading width.
+
+### 🫱 They bring things up themselves
+
+Walk past someone who is owed something and they say so. A promise that has come due — named, not
+hinted at — a rupture between you that was never acknowledged, a thread you left open and that is
+ready to pick up, or their own situation having changed since the last time *you* spoke to them.
+It replaces the hello rather than adding to it: one line, no screen opens, nothing waits on you. The
+player who was here yesterday and the one who has been away a season are each told what is news to
+them.
+
+It stays bounded — one unprompted opening per villager per player per day, nothing at all from
+somebody asleep, fighting, panicking or busy with another player, and *"stop talking"* honoured
+before anything else is considered. One config value switches it off entirely.
+
+### 🤞 Promises the running game watches
+
+Promise a villager some iron and the promise settles when the gift actually arrives, on MCA's own
+accepted-gift path. Everything else is judged the next time the two of you meet, not at midnight on
+a day you were logged out — and turning up a little late is late, not broken, for three days. A
+promise this install cannot observe is left outstanding rather than guessed at either way.
+
+### 🧠 They remember what you decided, not just that you spoke
+
+The stance behind the reply you chose is now recorded per subject, for up to sixteen subjects per
+villager. A later line can say *you told me to save the ink* instead of *as I was saying*. Change
+your mind and they remember the mind you ended up with.
+
+### 🔁 They stop repeating themselves
+
+Almost every villager line here is a small pool of alternatives, and the game used to draw from it at
+random with no memory — so three sentences did not read as three. The server now picks from the ones
+it has not used yet for this villager, this player and this line. Seeded, so closing and reopening
+the screen is not a reroll, and everyone who overhears a line hears the same one.
+
+### 🏘️ A village that happens to you
+
+A villager can be carrying the village itself — a wedding, a death, somebody arriving or leaving — as
+a running thing that starts, goes on across visits, and eventually settles. It opens only when the
+gossip log says this villager really has news you have not heard, and the line names the actual
+event. Ask what it changed for them and they answer; press for what they mean and they say the harder
+version, or tell them to take their time and they ease off.
+
+Conversations can also run a third turn now, so a repair does not end the moment you apologise.
+
+---
+
 ## What it does
 
-### 💬 It's a conversation, not a vending machine *(new in 1.1.0)*
+### 💬 It's a conversation, not a vending machine
 Asking a villager how their day went used to hand you hearts for the click. Not any more. Now they
 **answer** — and you choose what to say back, and *that* is what counts.
 
@@ -29,11 +100,11 @@ one asks you not to. Offer the busy farmer a faster way to do her job and she'll
 for being blunt or add it to the list of things she's apparently doing wrong — depending entirely on
 who she is.
 
-All 28 topics are converted — from the weather and what's for supper up through fears, regrets,
-secrets, and the topics you only get with a spouse or your own children. Nothing pays you hearts
-just for asking any more, and one config toggle puts it all back the old way.
+Every topic in the hub works this way, from the weather and what's for supper up through fears,
+regrets, secrets, and the topics you only get with a spouse or your own children. Nothing pays you
+hearts just for asking, and one config toggle puts it all back the old way.
 
-### 🕯️ They hold you to what you said *(new in 1.1.0)*
+### 🕯️ They hold you to what you said
 Get a villager to tell you what really frightens them and it isn't a one-off scene. Days later
 they'll bring it up themselves, ask you what you think would help, and later still tell you how it's
 going. Promise you'll stand with them and they remember the promise — by name, out loud, a week
@@ -71,15 +142,16 @@ hand-written.
 ### 💬 The Chat button, reimagined
 MCA's existing **"Chat"** button now opens a clean **Conversations hub** instead of a random
 one-liner. Pick a category and dig in — or click *"Never mind."* to step back out. (Prefer vanilla
-Chat? One config toggle restores it.)
+Chat? One config setting restores it, or keeps both side by side.)
 
 The hub is organized into six tidy categories instead of one endless list:
 
-- **Chit-Chat** — how their day went, the food, the weather, and the season
-- **Profession** — how they feel about their work
-- **Village** — the place, the people, and the rumors going around
-- **Events** — news and gossip going around
-- **Personal** — their life story, hopes, dreams, fears, feelings, regrets, and secrets
+- **Chit-Chat** — how their day went, the food, the weather, the season, and how their days run
+- **Profession** — how they feel about their work, and what they could use a hand with
+- **Village** — the place, the people, the rumors, your standing, and the neighbours
+- **Events** — news, what they've noticed, and what the two of you have been through
+- **Personal** — their life story, hopes, dreams, fears, feelings, regrets, secrets, interests,
+  values, where they came from, and what they make of you
 - **Relationships** — dedicated talk for spouses and family (hidden from strangers)
 
 Empty categories simply don't show up.
@@ -101,13 +173,13 @@ Not everyone spills their guts to a stranger.
 Below the bar, villagers deflect — in character, not with an error.
 
 ### 🤝 A relationship deeper than hearts
-Every villager now quietly keeps track of more than a number: how much they **trust** you, whether
+Every villager quietly keeps track of more than a number: how much they **trust** you, whether
 they **respect** you, how **warm** they feel around you, any recent **tension** between you, and how
 long you've simply **known** each other. None of it shows as a score — hearts stay MCA's one visible
 measure — but all of it shows in what they're willing to say. Push too hard too early and doors stay
 politely shut; be someone's rock for a week and watch what opens. Left alone, feelings drift back
-toward what that villager's personality resting state is — grudges soften, and banked goodwill from
-one great day doesn't last forever either. It's per-player, farming-proof, and persists with the world.
+toward that villager's personality resting state — grudges soften, and banked goodwill from one
+great day doesn't last forever either. It's per-player, farming-proof, and persists with the world.
 
 ### 🎲 Conversations with real stakes
 The deepest stances resolve like a tabletop check with four ways to land. A **crit** opens the
@@ -115,22 +187,29 @@ villager up further than you asked; a **success** lands as intended; a **partial
 **rebuff** misfires — in character, with a graceful way out, and sometimes a little lingering tension.
 The outcome comes from your relationship, your hearts, their mood — and a dash of luck that is
 **seeded**: closing and reopening the dialogue never re-rolls a bad answer. Come back tomorrow and
-try again. First stances to use it, on the fears topic: *"You could face it. I'd stand with you."*
-and *"Tell me the rest of it."*
+try again.
 
 ### 🧑‍🌾 Personalized to each villager
 Nobody sounds like a template:
 
-- **Profession-aware work talk** with hand-written lines for every vanilla trade *and* the
+- **Two farmers are not one farmer.** Every villager carries a handful of stable anchors — what they
+  are interested in, what they value, a comfort, an aversion, and how they work, socialise and open
+  up. They're drawn once from the world seed and the villager's own id and never rerolled, so two
+  players meet the same person.
+- **Situations that are actually going on.** A librarian has *a specific damaged book*: hers, with a
+  specific kind of damage, and it stays hers until it's dealt with. Come back and it has dried, or it
+  hasn't. Two librarians in one village worry about two different volumes.
+- **Profession-aware work talk** with hand-written packs for every vanilla trade *and* the
   professions added by popular mods — MCA's own roles, More Villagers, Ars Nouveau, Chef's Delight,
-  Ice and Fire, Vampirism, Werewolves. Any *other* mod's profession still gets a graceful
-  self-personalizing line.
+  Ice and Fire, Vampirism, Werewolves: 37 packs in all. Any *other* mod's profession still gets a
+  graceful self-personalizing line.
 - **Food talk that respects MCA traits** — vegetarians, the lactose intolerant, and more answer
   differently.
 - **Kids and teens answer in their own voice** — never with adult follow-ups.
-- **All 13 MCA personalities** now get flavored overlays across the **20 most-heard topics**, each
-  with two or three variants — the gloomy villager, the peppy one, and the greedy one answer the same
-  question in genuinely different voices, and asking twice rarely gives you the same words back.
+- **Every MCA personality has its own voice.** All 16 of MCA 7.7's, plus the 7.6 spellings kept as
+  aliases so a villager keeps its voice across an MCA upgrade — 21 personality overlays in all, each
+  with two or three variants of the lines you hear most. The gloomy villager, the peppy one and the
+  greedy one answer the same question in genuinely different words.
 
 ### 🎭 Passing moods
 Something just happened, and it shows. A villager turns **grateful** or **smitten** after a gift,
@@ -144,20 +223,16 @@ thunderstorm doesn't sound like a chat in the sun. They also speak to the **time
 **festival days** — the spring bloom, midsummer, the harvest festival, midwinter. Run **Serene Seasons**
 and the season tracks it exactly; without it, the season is read from the world calendar.
 
-### 🚪 They notice who comes and goes
-Beyond marriages and deaths, villagers now notice neighbours **moving into** the village and **leaving**
-it for good — fresh faces and empty doorways both become news worth passing on.
-
-### 🎁 Gifts they're grateful for
-Give a villager a gift they like and they'll stay grateful for about a day. Married partners will
-even thank you for the *specific item* — *"Still smiling about that poppy, if I'm honest."*
-
-### 🗣️ Village gossip
+### 🗣️ Village gossip that travels
 Villagers notice **marriages, divorces, births, deaths, arrivals, and departures** happening around
 them and share the news — with names — exactly once per player. Ask *"Anything happen around here
-lately?"* in Events, or *"Any rumors going around?"* in Village, and see what's going around. And now
-**every personality breaks the news in its own voice** — the gloomy one, the greedy one and the peppy
-one report the same wedding very differently.
+lately?"* in Events, or *"Any rumors going around?"* in Village, and see what's going around. Every
+personality breaks the news in its own voice.
+
+News also passes from one villager to the next. It loses confidence with every telling and never
+gains detail, and something you said about yourself doesn't travel unless you made it public. Because
+the event keeps its identity all the way down the chain, setting the record straight later corrects
+the actual event rather than one villager's copy of it.
 
 ### 💍 Spouse & family talk
 Married partners and family get their own branches — *Are you happy? Remember when we met? What
@@ -167,44 +242,49 @@ about our future? Is anything weighing on you?*
 
 ## Requirements
 
-**Languages:** English and Brazilian Portuguese, both complete — menus, dialogue, every personality voice and the whole chat-mode vocabulary (2,453 translated strings).
-
 | | |
 |---|---|
 | **Minecraft** | 1.20.1 |
 | **Mod loader** | Forge 47.x |
-| **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.6` – `7.7` (built against 7.7.0-beta.2; **not** 7.7.0-beta.1, which is broken upstream) |
+| **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `[7.6,8)` — built against 7.7.0-beta.2, verified on 7.6.20. **Not** 7.7.0-beta.1, which is broken upstream with or without this mod |
 | **Only if MCA needs it** | [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api) — required by MCA 7.6, dropped by MCA 7.7. This mod never asks for it |
-| **Optional** | MCA: Quests — unlocks quest-aware conversation lines when installed |
-| **Optional** | Serene Seasons — villagers track the real season when installed (calendar fallback otherwise) |
+| **Optional** | **MCA: Quests** `[0.8,)` — quest-aware conversation lines |
+| **Optional** | **MCA: Reputation** `[0.2,)` — public standing, and villagers telling each other what you've done |
+| **Optional** | **Townstead** `[0.7.5,0.8)` — its schedules, buildings and village culture, inside its own RPG screen |
+| **Optional** | **Serene Seasons** — villagers track the real season (calendar fallback otherwise) |
 
-> This is an **add-on** — MCA Reborn must be installed for it to do anything.
+**Languages:** English and Brazilian Portuguese, both complete — menus, dialogue, every personality
+voice and the whole chat-mode vocabulary. 36,397 key/value entries per locale, across 23 namespaces.
 
----
-
-## Optional: MCA: Quests integration
-
-If you also run **MCA: Quests**, villagers become quest-aware in conversation: they'll mention work
-that needs doing, react to quests you have active or ready to turn in, and the whole village hears
-about a finished quest as fresh gossip. Everything degrades cleanly if Quests isn't installed —
-*MCA: Conversations* works fully on its own.
+> This is an **add-on** — MCA Reborn must be installed for it to do anything. Every optional mod above
+> is a soft dependency: install any, all, or none of them.
 
 ---
 
 ## Configuration
 
-Everything is toggleable in `config/mcaconversations-common.toml` (generated on first run):
+Three files, generated on first run:
 
-- Turn the whole Chat replacement off and get vanilla MCA Chat back.
-- Enable/disable topics, conversation moods, templated lines, weather/season/holiday lines, and village gossip independently.
-- Toggle the relationship vector, dialogue checks, and four-tier outcomes separately — each falls
-  back to a simpler documented behavior, all the way down to the classic pre-RPG experience.
-- Turn branching conversations off entirely and converted topics go back to their old one-line
-  answers, payout and all. If you'd rather the new economy were gentler or harsher, there's a global
-  multiplier, separate daily caps for hearts gained and lost, and a stronger-negatives switch.
-- Tune gossip scan frequency, event retention, how long gratitude lasts, each mood's duration, the calendar year length, which village events (marriage, birth, arrival, departure, …) get noticed, and the relationship system's gain/decay rates and daily anti-farming caps.
+| File | Scope | Holds |
+|---|---|---|
+| `config/mcaconversations-common.toml` | per installation | feature switches and debug flags |
+| `<world>/serverconfig/mcaconversations-server.toml` | per world, synchronised to every client | gameplay values: hearing distance, the heart economy, disposition movement and decay, how often a villager may speak first, history caps |
+| `config/mcaconversations-client.toml` | per player, client only | presentation: the portrait, the line reveal, motion, sound, numbered responses |
 
-Disabled features degrade to graceful fallback lines rather than breaking mid-conversation.
+You can turn the whole Chat replacement off and get vanilla MCA Chat back, or keep both. Topics,
+moods, templated lines, weather and season lines, and village gossip switch on and off
+independently, as do the relationship vector, dialogue checks and four-tier outcomes — each falls
+back to a simpler documented behavior, all the way down to the classic pre-RPG experience. Turn
+branching off entirely and topics go back to their old one-line answers, payout and all. If you'd
+rather the heart economy were gentler or harsher, there's a global multiplier, separate daily caps
+for hearts gained and lost, and a stronger-negatives switch.
+
+Disabled features degrade to graceful fallback lines rather than breaking mid-conversation. Full
+details are in the project's `CONFIG.md`.
+
+> **Upgrading from before 1.5.0?** The gameplay values moved out of the common file into the new
+> per-world server file. Anything you customised needs copying across; anything you didn't keeps the
+> same default.
 
 ---
 

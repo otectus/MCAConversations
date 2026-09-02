@@ -33,6 +33,10 @@ public final class McaConversations {
 
     public McaConversations() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, McaConversationsConfig.COMMON_SPEC);
+        // SERVER: gameplay values the server decides and Forge synchronises to every client, stored
+        // per world under serverconfig/. COMMON is loaded on both sides and synchronised on neither,
+        // so anything a client must agree with the server about belongs here instead.
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, McaConversationsConfig.SERVER_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, McaConversationsConfig.CLIENT_SPEC);
 
         final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();

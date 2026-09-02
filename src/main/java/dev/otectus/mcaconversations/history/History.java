@@ -518,6 +518,39 @@ public final class History {
         }
     }
 
+    /**
+     * Remembers how one subject was left: what the player decided and how the villager took it.
+     *
+     * <p>Written once per contracted turn, from the moment all three values are simultaneously true —
+     * the player's stance has been read off the button they pressed, and the villager's beat has set
+     * the outcome and the subject. Read back by {@code conversations_exchange}, which is what lets a
+     * later line name the actual decision instead of vaguely gesturing at the last conversation.
+     */
+    public static void recordExchange(Entity villager, ServerPlayer player,
+                                      StanceEchoRecord exchange, long today) {
+        if (!enabled() || villager == null || player == null
+                || exchange == null || !exchange.isMeaningful()) {
+            return;
+        }
+        MinecraftServer server = villager.getServer();
+        if (server == null) {
+            return;
+        }
+        try {
+            UUID playerId = player.getUUID();
+            ConversationHistorySavedData.get(server).mutate(villager.getUUID(),
+                    history -> history.pair(playerId).recordExchange(exchange), true);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("exchange write failed; ignoring", t);
+        }
+    }
+
+    /** What was last decided between these two about {@code subject}. */
+    public static Optional<StanceEchoRecord> exchange(Entity villager, ServerPlayer player,
+                                                      String subject) {
+        return pair(villager, player).flatMap(history -> history.exchange(subject));
+    }
+
     /** Records that the villager opened a conversation unprompted, for the daily cap. */
     public static void recordInitiative(Entity villager, ServerPlayer player, long today) {
         if (!enabled() || villager == null || player == null) {

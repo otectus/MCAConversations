@@ -276,6 +276,36 @@ tasks.register('generateConversationContent', JavaExec) {
     outputs.upToDateWhen { false }
 }
 
+// The personality overlays are six voices, not twenty-one. Each voice is authored once in
+// src/content/voices and expanded into every namespace that speaks it, in both locales, by
+//
+//     ./gradlew generateVoiceOverlays
+//
+// Before this existed the expansion was done by hand, which is why 999 of every family's 1,084 keys
+// are byte-identical and why overlay coverage sat at 5.9%: adding one line cost forty-two edits.
+//
+tasks.register('verifyVoiceOverlays', Test) {
+    group = 'verification'
+    description = 'Fails if the committed personality overlays are not what src/content/voices compiles to.'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter { includeTestsMatching 'dev.otectus.mcaconversations.authoring.VoiceFamilyCompilerTest' }
+    // Overlay drift is a property of the working tree, not of any input Gradle can see.
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+}
+
+tasks.register('generateVoiceOverlays', JavaExec) {
+    group = 'documentation'
+    description = 'Expands the six authored voices into every personality overlay namespace.'
+    dependsOn tasks.named('compileTestJava'), tasks.named('processTestResources')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'dev.otectus.mcaconversations.authoring.VoiceFamilyCompiler'
+    args 'src/content/voices', 'src/main/resources/assets'
+    outputs.upToDateWhen { false }
+}
+
 // MixinGradle: generate the refmap for our mixin and register the config for reobfuscation.
 mixin {
     add sourceSets.main, 'mcaconversations.refmap.json'

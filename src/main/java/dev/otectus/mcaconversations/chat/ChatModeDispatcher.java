@@ -108,7 +108,7 @@ public final class ChatModeDispatcher {
         // A canceled chat event never reaches vanilla's broadcast OR its log — keep the server's
         // chat record (moderation history) intact.
         McaConversations.LOGGER.info("[local-chat] <{}> {}", sender.getGameProfile().getName(), raw);
-        double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double radius = McaConversationsConfig.chatModeAddressedRadius();
         double r2 = radius * radius;
         Component line = Component.literal("<").append(sender.getDisplayName())
                 .append(Component.literal("> " + raw));
@@ -189,7 +189,7 @@ public final class ChatModeDispatcher {
         }
 
         // Targeting (tiers 1–4): gather within the larger addressed radius, let Addressing resolve.
-        double addressedRadius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double addressedRadius = McaConversationsConfig.chatModeAddressedRadius();
         List<VillagerCandidate> candidates = VillagerFinder.candidates(player, addressedRadius);
         if (candidates.isEmpty()) {
             return;
@@ -215,7 +215,7 @@ public final class ChatModeDispatcher {
 
         // A tier-3/4 (look-at / ambient) target must be within the tighter ambient radius to overhear;
         // tier-1 (named) and tier-2 (sticky) reach across the full addressed radius.
-        double ambientRadius = McaConversationsConfig.COMMON.chatModeRadius.get();
+        double ambientRadius = McaConversationsConfig.chatModeRadius();
         boolean reachesAcross = address.named() || address.targetIndex() == stickyIndex;
         if (!reachesAcross && target.distSqr() > ambientRadius * ambientRadius) {
             return;
@@ -831,7 +831,7 @@ public final class ChatModeDispatcher {
         if (session == null || session.villagerId == null) {
             return -1;
         }
-        int stickinessTicks = McaConversationsConfig.COMMON.chatModeStickinessTicks.get();
+        int stickinessTicks = McaConversationsConfig.chatModeStickinessTicks();
         if (stickinessTicks > 0 && now - session.lastExchangeGameTime >= stickinessTicks) {
             return -1; // stickiness window lapsed
         }
@@ -879,7 +879,7 @@ public final class ChatModeDispatcher {
         if (!McaBridge.isAvailable()) {
             return "MCA is not available; chat mode is inert.";
         }
-        double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double radius = McaConversationsConfig.chatModeAddressedRadius();
         List<VillagerFinder.VillagerCandidate> candidates = VillagerFinder.candidates(player, radius);
         if (candidates.isEmpty()) {
             return "No MCA villager within " + (int) radius + " blocks.";
@@ -935,7 +935,7 @@ public final class ChatModeDispatcher {
 
     /** Conversation attention: the villager stays put facing the player until the timer lapses. */
     private static void attend(VillagerCandidate target, ServerPlayer player, long now) {
-        int ticks = McaConversationsConfig.COMMON.chatModeAttentionTicks.get();
+        int ticks = McaConversationsConfig.chatModeAttentionTicks();
         if (ticks > 0) {
             VillagerAttention.hold(target.entity(), player, now + ticks, AttentionLedger.Source.CONVERSATION);
         }
@@ -973,7 +973,7 @@ public final class ChatModeDispatcher {
             return List.of("No server.");
         }
         long now = server.overworld().getGameTime();
-        double addressedRadius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double addressedRadius = McaConversationsConfig.chatModeAddressedRadius();
         List<VillagerCandidate> candidates = VillagerFinder.candidates(player, addressedRadius);
         if (candidates.isEmpty()) {
             return List.of("No MCA villager within " + (int) addressedRadius + " blocks.");

@@ -34,8 +34,6 @@ public final class ContextKeys {
     public static final ContextKey<String> SPEAKER_HEALTH_BAND = ContextKey.volatileOf("speaker.health_band", String.class);
     /** MCA's mood name, lowercased. Acute, so volatile. */
     public static final ContextKey<String> SPEAKER_MOOD = ContextKey.volatileOf("speaker.mood", String.class);
-    /** The primary {@link AffectFrame} token, when a cause could be established (spec §15.3). */
-    public static final ContextKey<AffectFrame> SPEAKER_AFFECT = ContextKey.volatileOf("speaker.affect", AffectFrame.class);
     public static final ContextKey<Boolean> SPEAKER_MARRIED = ContextKey.of("speaker.married", Boolean.class);
 
     // --- Work ----------------------------------------------------------------------------------

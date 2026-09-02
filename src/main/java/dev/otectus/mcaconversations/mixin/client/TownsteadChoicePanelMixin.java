@@ -1,12 +1,16 @@
 package dev.otectus.mcaconversations.mixin.client;
 
 import dev.otectus.mcaconversations.client.dialogue.ClientChoiceController;
+import dev.otectus.mcaconversations.client.dialogue.ConversationPalette;
+import dev.otectus.mcaconversations.client.dialogue.DialogueCardSkin;
+import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceLayout;
 import dev.otectus.mcaconversations.client.townstead.NumberedChoicePanelBridge;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,24 +33,52 @@ public abstract class TownsteadChoicePanelMixin implements NumberedChoicePanelBr
     @Shadow private int width;
     @Shadow private int height;
 
+    @Unique private int mcaconversations$badgeFadeTicks;
+    @Unique private int mcaconversations$entryCount = -1;
+
+    @Inject(method = "setVisible", at = @At("TAIL"), require = 0, remap = false)
+    private void mcaconversations$badgeVisibility(boolean show, CallbackInfo ci) {
+        mcaconversations$badgeFadeTicks = show ? 0 : 5;
+        mcaconversations$entryCount = displayEntries.size();
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"), require = 0, remap = false)
+    private void mcaconversations$tickBadgeFade(CallbackInfo ci) {
+        if (visible && mcaconversations$badgeFadeTicks < 5) {
+            mcaconversations$badgeFadeTicks++;
+        }
+    }
+
     @Inject(method = "render", at = @At("TAIL"), require = 0, remap = false)
     private void mcaconversations$renderNumbers(GuiGraphics graphics, Font font, int mouseX, int mouseY,
                                                 CallbackInfo ci) {
         if (!ClientChoiceController.numberingEnabled() || !visible || displayEntries.isEmpty()) {
             return;
         }
-        int rowY = y + 8 - scrollOffset;
-        int visibleNumber = 1;
-        for (int i = 0; i < entryHeights.size() && visibleNumber <= 9; i++) {
-            int rowHeight = entryHeights.get(i);
-            if (rowY + rowHeight > y && rowY < y + height) {
-                int badgeY = Math.max(y + 1, rowY);
-                graphics.fill(x + 3, badgeY, x + 18, Math.min(y + height, badgeY + 11), 0xD0202020);
-                graphics.drawString(font, visibleNumber + ".", x + 5, badgeY + 1,
-                        i == selectedIndex ? 0xFFFFC34D : 0xFFB8B8B8, false);
-                visibleNumber++;
+        if (displayEntries.size() != mcaconversations$entryCount) {
+            mcaconversations$entryCount = displayEntries.size();
+            mcaconversations$badgeFadeTicks = 0;
+        }
+        float alpha = Math.max(0.0F, Math.min(1.0F, mcaconversations$badgeFadeTicks / 5.0F));
+        graphics.enableScissor(x, y, x + width, y + height);
+        try {
+            int rowY = y + 8 - scrollOffset;
+            int visibleNumber = 1;
+            for (int i = 0; i < entryHeights.size() && visibleNumber <= 9; i++) {
+                int rowHeight = entryHeights.get(i);
+                if (rowY + rowHeight > y && rowY < y + height) {
+                    int badgeY = Math.max(y + 1, rowY);
+                    boolean selected = i == selectedIndex;
+                    DialogueCardSkin.badge(graphics, new DialogueChoiceLayout.Rect(x + 3, badgeY, 15,
+                            Math.min(y + height, badgeY + 11) - badgeY), alpha, selected);
+                    graphics.drawString(font, visibleNumber + ".", x + 5, badgeY + 1,
+                            ConversationPalette.withAlpha(ConversationPalette.TEXT, alpha), false);
+                    visibleNumber++;
+                }
+                rowY += rowHeight + 6;
             }
-            rowY += rowHeight + 6;
+        } finally {
+            graphics.disableScissor();
         }
     }
 

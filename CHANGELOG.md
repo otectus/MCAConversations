@@ -8,6 +8,364 @@ Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer de
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation,
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
+## [1.5.1] - September 2nd, 2026
+
+One change: the conversation card stops carrying a look of its own and borrows the game's.
+
+### The card is painted with Minecraft's own GUI textures
+
+- The panel and its recessed list body are the options-screen dirt (`options_background.png`), and
+  the number badges and page buttons are nine-sliced out of the vanilla button strip in
+  `widgets.png`. A resource pack that reskins vanilla menus reskins this card with them.
+- Rows are drawn as vanilla list entries: shadowed white text on the list body at rest, and vanilla's
+  two-tone selection frame when focused or locked. A long answer that has to be clipped gets a
+  vanilla scrollbar instead of arrow glyphs. The speaker's name is bold and yellow, as vanilla
+  emphasises text.
+- **Removed: `enhancedConversationVisuals`, `visualStyle` and `panelOpacity`**, all introduced in
+  1.5.0. There is one look now, and it is the game's. Forge drops the three stale keys from an
+  existing `mcaconversations-client.toml` on first load and says so with a single `Correcting` line
+  in the log; nothing is required of you. The `gui.mcaconversations.responses.visual_style.*`
+  language keys are gone with them.
+- **Removed: the `generateUiTextures` and `verifyGeneratedUiTextures` Gradle tasks**, along with the
+  four generated sheets that used to live under `assets/mcaconversations/textures/gui/dialogue/`.
+  This mod no longer generates any GUI art. A resource pack that restyled those sheets has nothing
+  to target any more; restyle vanilla's menus instead and the card follows.
+- `DialogueCardSkin` still owns every surface and hitboxes still come from the layout; the portrait,
+  the line reveal, motion and narration are unchanged.
+
+### Compatibility
+
+- **Network protocol remains 2.** No packet changed. Saves and datapacks are untouched.
+- The card's textures are vanilla's own, so there is no sheet of ours left that can go missing. A
+  resource pack that resizes `widgets.png` breaks the badges and page buttons exactly as it breaks
+  vanilla's own buttons, and is not special-cased.
+
+## [1.5.0] - September 1st, 2026
+
+Two halves. The card's surfaces become resource-packable, and the conversation systems underneath
+start keeping the promises the prose already makes.
+
+The second half is the larger one. A great deal of this mod's machinery had been built and then left
+unwired. Villagers could be gated to speak first, and only ever said hello. Promises were recorded
+and nothing ever checked them. The stance behind every reply the player chose was read, and then
+dropped on the floor. And the line a villager picked out of a pool of three was picked at random,
+with no memory of the last one — so three sentences did not read as three.
+
+This release closes those joins. Villagers raise what they are actually owed, remember what you
+decided and not merely that you spoke, keep or break a promise the running game observed, and stop
+saying the same sentence twice running. None of it involves an LLM: selection stays deterministic,
+seeded and datapack-driven, as it has always been.
+
+### Seventeen scenes that could never happen
+
+- **A seventh of the dynamic corpus had been dark since it was written.** A scene can be gated on
+  what the world is doing — how long since you last spoke, what the village has been up to, who this
+  villager is underneath. Sixty-one such fields were declared and **twenty-one of them had no
+  provider at all**, so they answered "unavailable" on every install, forever. The default reading of
+  an unavailable field is "this scene does not apply", which means seventeen shipped scenes were not
+  rare, or hard to reach: they were impossible. Fourteen of them hung on how long you had known each
+  other; the rest on when you last spoke, and on whether the village had news.
+- **They work now.** Two new context providers answer those fields from records the mod already kept:
+  the day you two first spoke and last spoke, the villager's live episodes, ready threads, due
+  promises and unhealed ruptures, the village's newest untold event, and the nine stable anchors that
+  make one farmer a different person from another. Nothing new is computed or stored — this was
+  plumbing that had never been connected.
+- **A build check so it cannot happen again.** Every declared field must now have a source that
+  writes it, and no shipped scene may be gated on a field nothing writes. The reason this went
+  unnoticed for so long is that every existing lint checked a condition named a *declared* field, and
+  none checked the field could ever *answer*.
+- One field, `speaker.affect`, had no possible source — nothing in the mod produced the value it
+  described. It and its unused type were removed rather than left as a field that could only ever
+  fail.
+
+### Six voices instead of twenty-one copies
+
+- **The personality overlays are authored once now.** `VoiceFamily` has always said the build expands
+  a voice into every namespace that speaks it. The build did no such thing — the expander was never
+  written, so twenty-one overlay namespaces were kept in step by hand. The evidence was sitting in the
+  files: within every voice family, 999 of its 1,084 keys were byte-identical.
+- **That copying is why personality was only audible on 5.9% of lines.** Adding one line to the
+  conversational middle — an appraisal, a disagreement, a boundary — meant pasting it into
+  twenty-one files in two languages and keeping forty-two copies in step forever. The cost was per
+  line and never went down, so the rational move was always to not write the line.
+- A voice is now one file: what its members say identically, plus a small per-personality file for
+  the lines where one of them genuinely differs. `./gradlew generateVoiceOverlays` expands them;
+  `verifyVoiceOverlays` fails the build if the committed overlays drift. The extraction reproduces
+  every shipped overlay byte for byte, which is the proof it lost nothing.
+- **Immediately worth it.** The village-change opener wanted to be a disclosure — one of the lines
+  where a wrong voice is most obvious — and a disclosure owes all twenty-one personalities a variant.
+  At 126 hand-copied entries it was written as a flat report instead. It is now a disclosure, in six
+  registers, and cost six entries.
+
+### A village that happens to you
+
+- **The first situation in the game that is not somebody's job.** A villager can now be carrying the
+  village itself — a wedding, a death, somebody arriving or leaving — as a running thing that starts,
+  goes on across visits, and eventually settles. It opens only when the gossip log says this villager
+  actually has news you have not heard, and the line names the real event rather than one drawn from
+  a pool, so a villager never mentions a wedding that did not happen.
+- **It is a real conversation, not a line.** Ask what it changed for them and they answer; press for
+  what they actually mean and they say the harder version, or tell them to take their time and they
+  ease off. That is the new third turn in use.
+- **Nothing invents itself.** A villager with no village news, no family, no unhealed rupture between
+  you and nothing shared behind you simply has nothing going on — the bootstrapper checks the world
+  before it opens anything, and resumes what is already open rather than starting something new each
+  visit.
+
+### Groundwork for lives outside work
+
+- **A villager's persistent life is no longer only their job.** Every one of the 111 episode
+  families, 111 threads and 35 promises in the game belonged to a trade, because the content compiler
+  could only create one from a profession pack. The three template builders are now shared, and a
+  topic pack can own a family of its own — so a running situation can be about the village, a family,
+  or something the two of you did, rather than always about crops or an anvil. The 37 profession
+  packs compile byte-identically, which is what proves the extraction changed nothing.
+- **A conversation can run a third turn.** A topic exchange was capped at two — the villager opens,
+  you reply, they answer, and it ends — and any further replies an author wrote were silently
+  discarded. A reaction can now carry its own page, contracted against the line that actually opened
+  it rather than against the opener two turns back. A repair conversation that ends the moment you
+  apologise is not a repair.
+
+### Villagers who bring something up
+
+- **A villager you walk past can now raise something of its own.** All the machinery for this existed
+  and none of it was connected: a gate that knew whether a villager may speak first, a busy-state that
+  knew when not to, ten ranked reasons and a daily budget — with exactly one caller, the proximity
+  greeting, which says hello. Nine of the ten reasons had no runtime path at all, so a promise could
+  come due and a rupture could sit unacknowledged and neither would ever be mentioned unless the
+  player happened to ask.
+- **Four things, each read from a record rather than guessed at**: a promise that has come due (and it
+  names the thing you promised), a rupture between you that has not been acknowledged, a thread you
+  left open and that is ready to pick up, and the villager's own situation having changed since the
+  two of you last spoke. That last one is anchored on when *you* last talked to them rather than a
+  fixed number of days, so the player who was here yesterday and the one who has been away a season
+  are each told what is news to them.
+- **It replaces the hello rather than adding to it.** Same single line either way: a villager who is
+  owed torches leads with the torches instead of spending the moment on "morning" and leaving you to
+  remember the rest. Nothing opens a screen, nothing waits for an answer — they say the one thing and
+  stop, and the conversation is there if you want it. The contextual hub already offers to continue
+  the thread they just mentioned, because it reads the same records.
+- Bounded by what already bounded greetings, plus its own budget: one unprompted raising per villager
+  per player per day, a real-time cooldown, nothing at all from somebody asleep, fighting, panicking
+  or busy with another player, and "stop talking" honoured before anything else is considered.
+  `dynamic.maxInitiativesPerVillagerPlayerDay = 0` switches it off entirely, independently of
+  greetings.
+
+### Villagers who remember what you decided
+
+- **What the player's chosen reply meant was never recorded.** The session had a field for it and a
+  method to set it, and nothing in the mod ever called that method — so the stance behind every button
+  ever pressed was dropped on the floor. It is now read off the reply's own contract at the moment the
+  answer is submitted, which is the one place both the screen and chat mode pass through.
+- **Two more fields that could never hold a value.** A shared thread records the stance you took and
+  how it landed, but the code that wrote them copied the thread's own empty values back into itself,
+  so both were written blank when the thread opened and stayed blank for the life of the save. They
+  now take what actually happened.
+- **A decision is remembered per subject.** How you left a subject — what you argued for, and how the
+  villager took it — is kept for up to sixteen subjects per person, so a later line can say *you told
+  me to save the ink* instead of *as I was saying*. Re-deciding a subject overwrites: the villager
+  remembers the mind you ended up with, not every mind you passed through.
+- **New datapack condition `conversations_exchange`** — `{subject?, stance?, outcome?, within_days?,
+  not?}`. `conversations_recent` already answered "how long since this came up"; this answers "and
+  what did we settle on". Naming none of the three is refused rather than treated as "anything", and
+  a misspelt stance is refused rather than quietly dropped, because either would turn a callback into
+  a line that fires for everybody.
+
+### Promises the game actually checks
+
+- **A promise is now observed by the running game rather than by the honour system.** The six ways a
+  promise could be settled had been declared, and refusing to offer a promise nothing could watch was
+  already enforced — but nothing ever watched. The only thing that ever settled a promise was the
+  player walking back and pressing the button that said they had kept it.
+- **A promised delivery settles when the gift arrives.** It is a real event, so it is observed as one,
+  on the accepted-gift path that already runs for every gift MCA takes. Concrete items and item tags
+  both count, so a datapack can promise "some iron" rather than one specific ingot.
+- **Everything else is settled when the two of you next meet.** A "come back and see me" promise is
+  kept by that very visit, and a promise long past its day that nothing kept is finally read as
+  broken — but only then. A villager does not form a view about you at midnight on a day you were
+  logged out; they form it when they see you again. Turning up late but inside the forgiven window
+  keeps the promise rather than breaking it, because the visit is credited before the deadline is
+  judged.
+- **Lateness is forgiven for three days.** A promise that came due while you were asleep or halfway
+  down a mineshaft has not been broken, it has been slightly late.
+- Nothing is ever judged on a guess. A promise whose resolver this install cannot watch — a quest
+  promise on a server without MCA: Quests — stays outstanding rather than being marked either way, a
+  neutral promise is still never called kept or broken, and a target that does not name a real item
+  settles nothing.
+
+### Villagers stop repeating themselves
+
+- **A pooled line is never the same sentence twice running.** Almost every villager line in this mod
+  is a `/N` pool and the median pool holds three sentences, but MCA resolves a pool on the client with
+  a bare random draw that remembers nothing. Three sentences therefore did not read as three: across
+  ten exchanges the previous sentence came back about three times, and a villager who says the same
+  thing twice reads as a villager with one thing to say. The server now names the variant, keeping a
+  short memory per villager, per player, per line: a pick comes from the sentences that pass has not
+  used yet, and when they run out the pass restarts *minus the one just said*, so the seam between
+  passes is not where a repeat sneaks back in. A pool of three is now heard as three.
+- The choice is seeded, not random — world seed, both UUIDs, the line, and the pass so far. Closing
+  and reopening the screen is not a reroll, which is the same guarantee the conversation director
+  already made about which scene you get; and one utterance is one sentence for the speaker and for
+  every bystander who overhears it.
+- **All 3,583 villager lines now speak through `conversations_say`** instead of MCA's native `say`,
+  which is what puts them on that path; 629 came from the content compilers and 2,954 from the
+  hand-authored corpus. MCA's `say` remains a legal action for datapacks and every lint still reads
+  it. A new lint fails the build on a bare `say` in our own corpus, because a line that opts out of
+  the anti-repetition rule looks exactly like one that does not.
+
+### Fixed
+
+- **One villager line was never shown to anybody.** MCA runs a result's actions in JSON key order and
+  `next` replaces the line on screen, so a spoken line declared before `next` is overwritten before it
+  is read. The templated generic work line a confident villager in a good mood gives about their trade
+  was ordered that way and had been silently discarded. The rule was documented and enforced by
+  nothing; it is now a lint over the whole corpus, which found this one and will catch the next.
+
+### Configuration
+
+- **Gameplay values move to a server config.** Hearing distance, the heart economy, disposition
+  movement and decay, villager initiative and the history caps now live in
+  `<world>/serverconfig/mcaconversations-server.toml` instead of `mcaconversations-common.toml`.
+  A common file is loaded on both sides of a connection and synchronised on neither, so a client and
+  a server could disagree about how far a villager hears or how many hearts a day a conversation may
+  pay — none of which is a decision a client gets to make. Forge stores the new file per world and
+  sends it to every client on connect. Feature switches and debug flags stay common; presentation
+  stays client. **If you had customised any of the moved values, copy them across**; the old entries
+  are ignored and can be deleted, and anything you never touched keeps its old default. `CONFIG.md`
+  lists exactly what moved.
+- Every one of those values is now read through an accessor that answers its documented default
+  while the server config is unavailable. This is not a nicety: they are read from dialogue
+  conditions and from the server tick, a Forge config value throws until its file is loaded, and a
+  server config is not loaded until a world is. A throw there would have been taken by MCA's
+  selection loop during world creation.
+- **New: `dynamic.initiativeCooldownTicks`** (default `300`, 15 s). The real-time floor between two
+  unprompted lines from the same villager to the same player was a hard-coded constant; it is the
+  backstop that stops a villager talking at somebody standing next to them, and server owners who
+  want villagers quieter or chattier now have it.
+
+### Resource-packable card surfaces
+
+- The card's panel, rows, number badges and paging buttons are drawn from nine-sliced texture sheets
+  under `assets/mcaconversations/textures/gui/dialogue/` instead of flat fills, so corners are
+  notched, the header catches the light, and a resource pack can restyle any of it. The sheets are
+  grayscale and tinted at draw time, so one pack serves every style.
+- Three looks: `visualStyle = GOLD` (default), `HIGH_CONTRAST`, and `CLASSIC_1_4`, which reproduces
+  the flat pre-1.4.4 card. `enhancedConversationVisuals` switches the textured treatment off
+  entirely, and `panelOpacity` (0.65 to 1.0, default 0.93) sets how much of the world shows through.
+- The sheets are generated by `./gradlew generateUiTextures` and checked for drift by
+  `verifyGeneratedUiTextures`, the same convention as the conversation content and voice overlays.
+- `DialogueCardSkin` owns every surface, so the renderer cannot grow one the layout does not know
+  about. Hitboxes come from the layout, exactly as before.
+- The speaking villager is framed in the card header (`showSpeakerPortrait`, on by default). MCA
+  keeps ownership of the identity, profession and mood it already displays; the card adds a face and
+  nothing else.
+- An opt-in reveal for the villager's line (`questionRevealMode`, `OFF` by default). It works on the
+  already-wrapped line, so characters appear where they will stay rather than re-flowing as they
+  arrive, it is skipped when motion is off, and any input completes it at once.
+
+### Compatibility
+
+- **Network protocol remains 2.** No new packet, and no change to any existing one.
+- **Configuration moves, and needs one manual step if you had customised it.** The gameplay values
+  listed under *Configuration* above now live in `<world>/serverconfig/mcaconversations-server.toml`
+  instead of `mcaconversations-common.toml`, and Forge synchronises that file to connected clients.
+  Copy across anything you had changed; the old entries are ignored and can be deleted, and an
+  untouched install behaves exactly as before.
+- **Saves are forward and backward compatible.** Remembered decisions are a new optional key inside
+  the existing history data; a 1.4.x save loads as "nothing decided yet", and a 1.5.0 save with no
+  decisions in it writes the same bytes 1.4.x did. No store version was bumped and nothing is
+  migrated.
+- **A datapack written for 1.4.x still works.** MCA's native `say` remains a legal action and every
+  lint still reads it; this mod's own 3,583 lines moved to `conversations_say` so the server can name
+  the pooled variant, which is a change to our content, not to the vocabulary. `conversations_exchange`
+  is additive.
+- **Villager initiative is off in one setting.** `dynamic.maxInitiativesPerVillagerPlayerDay = 0`
+  silences unprompted raising entirely, independently of proximity greetings. It defaults to one per
+  villager per player per day, which is what it has always defaulted to.
+- If a resource pack removes one of the card's texture sheets, the affected surface falls back to
+  the flat 1.4 fill rather than rendering nothing, and a single warning names the missing sheet.
+- The portrait is dropped rather than shrunk when the panel is under 260 pixels wide or the screen
+  is too short to spare the height, and an entity that fails to render leaves an empty frame without
+  disturbing the layout.
+
+## [1.4.4] - August 30th, 2026
+
+The visual-polish, motion, and interaction-feedback update. This release keeps protocol **2** and the
+same server-authoritative answer path while making the client presentation tactile, font-aware, and
+accessible. The implementation follows the visual/animation UX specification under `docs/`, with
+its recommended 1.5.0 label intentionally released as 1.4.4.
+
+### Added
+
+- Central gold, high-contrast, and classic visual themes; configurable panel opacity, speaker-name
+  accent, UI sound volume, and Full/Reduced/Off motion profiles.
+- A pixel-beveled charcoal card with a local shadow, warm header surface, filled number badges,
+  focused-row pop-out, pressed/locked selection feedback, row entry, and short page transitions.
+- Height-aware page maps, stable typed page-control hit targets, clickable previous/next buttons,
+  exact active-font line metrics, resource-reload cache invalidation, and an oversized-row viewport.
+- Transition-only offer, focus, page, and selection narration with English and Portuguese parity.
+
+### Changed
+
+- The exact component passed by MCA to `Font.split` is captured through a soft-failing dual-root
+  Mixin hook. An unambiguous leading villager name is bold gold; the colon and utterance retain
+  separate styles, and silent/ambiguous prompts are never guessed.
+- Focused rows render after their neighbours and expand visually without moving layout or hitboxes.
+  A stationary pointer no longer steals focus after keyboard navigation; actual movement restores
+  pointer modality immediately. Up/Down now cross height-driven page boundaries continuously.
+- Chat speaker names and full clickable quick-reply lines use the same hierarchy. Townstead retains
+  ownership of its camera, typewriter, layout, and selection, with only clipped, matching badge fade.
+
+### Fixed
+
+- Custom fonts no longer overlap question or answer lines through hard-coded nine-pixel steps.
+- Long questions and multi-line answers no longer push the panel outside its vertical safe region.
+- Focus/boundary methods and UI sounds now report or play only when the absolute index actually moves.
+- Prepared text invalidates after font, language, resource, visual-config, size, or offer changes.
+- `Off` motion is now genuinely instantaneous and `Reduced` genuinely fades only. Row entry,
+  focus exit, the selection press, and the outgoing-card fade previously ran on durations
+  hard-coded in the animator, so rows still cascaded for three ticks under both profiles.
+  Every duration and travel distance now comes from the selected motion profile.
+- The number badge, page controls, and scroll affordances follow the active font. They still sized
+  themselves from vanilla's nine-pixel glyph box, so a resource-pack font mis-centred the numeral
+  and clipped the paging glyphs even though the surrounding card had already been made font-aware.
+- The badge numeral colour is a theme token rather than a literal, so the high-contrast and classic
+  presets control it like every other colour.
+- Card text now follows one stated shadow policy. The page counter and paging glyphs were shadowed
+  while the question, answers, and hint were not.
+- The panel-opacity slider can no longer wash out the high-contrast preset, which is the one preset
+  chosen specifically for legibility; it now holds a minimum opacity of its own.
+- Page controls keep a fixed place in the footer and grey out at the first and last page instead of
+  appearing and disappearing.
+- Scrolling a long answer and then moving focus no longer loses your place in it. Every focus change
+  invalidated the prepared page, which re-wrapped the card and reset the row's scroll position even
+  though focus never moves a row.
+- An offer whose answers do not fit one page is no longer wrapped twice when control hints are off.
+- A lapsed offer is now narrated as well as shown, so the existing expiry string reaches screen
+  readers rather than only the action bar.
+- A question too tall for the card no longer pushes the answer rows off the bottom of the panel. It
+  is clipped to the lines that fit, which a large accessibility font on a small window could reach.
+- The number gutter widens with the active font instead of being fixed at vanilla's width, so a wide
+  font no longer draws the badge underneath the first character of every answer.
+- Paging controls are no longer created for a card that has no footer strip. They were never drawn
+  there, but they were still hit-tested, leaving an invisible clickable region near the panel edge.
+
+### Development
+
+- A development-only preview screen, `/mcaconversations-preview`, drives the real renderer against a
+  set of synthetic conversations. `runClient` cannot show the card any other way -- MCA's Mixins ship
+  with no refmap and hard-coded SRG names, so MCA does not load in a development runtime and the
+  screen this card attaches to never appears. The command is absent from a shipped jar.
+- Render-plan tests assert panel bounds, row containment, badge placement, and page-control geometry
+  across thirteen scaled viewports and six font line heights. This is the only automated coverage of
+  GUI-scale behaviour, since neither `runClient` nor the Townstead probe runs in CI.
+
+### Compatibility
+
+- Network protocol remains **2**; 1.4.4 introduces no new server truth or packet. Both known MCA
+  package roots remain string-targeted and soft-failing, and client presentation classes remain
+  isolated from dedicated-server initialization.
+
 ## [1.4.3] - August 30th, 2026
 
 The conversation UI and input overhaul. The fixed MCA response popup could not hold the larger menus
@@ -48,6 +406,13 @@ typed chat, and Townstead's optional RPG screen without changing answer order or
 - The dual-root MCA Mixin probe now covers the base interaction screen's constructor, production SRG
   render/input/close methods, and dialogue fields. A separate optional probe covers Townstead's exact
   decorated UI members.
+
+### Fixed
+
+- GUI offers no longer inherit a villager UUID retained by an earlier conversation session, which
+  could reject a valid numbered response after changing conversation partners. Once submitted, the
+  corresponding legacy MCA answer list is also retired immediately so the consumed question cannot
+  reappear underneath the responsive card.
 
 ### Compatibility
 

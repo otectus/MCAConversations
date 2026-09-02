@@ -1,12 +1,31 @@
 # MCA: Conversations — Configuration
 
-Files: `config/mcaconversations-common.toml` and `config/mcaconversations-client.toml`
-(generated on first run).
+Three files, generated on first run:
+
+| File | Scope | Holds |
+|---|---|---|
+| `config/mcaconversations-common.toml` | per installation, not synchronised | feature switches and debug flags |
+| `<world>/serverconfig/mcaconversations-server.toml` | per world, **synchronised to every client** | gameplay values: hearing distance, the heart economy, disposition movement, villager initiative, history caps |
+| `config/mcaconversations-client.toml` | per player, client only | presentation |
+
+### Moved in 1.5.0
+
+The values in the third column used to live in `mcaconversations-common.toml`. A common file is
+loaded on both sides of a connection and synchronised on neither, so a client and a server could
+disagree about how far a villager hears, how many hearts a day a conversation may pay, or how often
+a villager may speak first — none of which is a decision a client gets to make. They now live in a
+server file, which Forge stores per world and sends to every client on connect.
+
+**If you had customised any of them**, copy your value into the new
+`<world>/serverconfig/mcaconversations-server.toml`. The old entries are ignored and can be deleted;
+nothing breaks if you leave them there. Everything you did not customise keeps the same default, so
+an untouched install behaves identically. Where a section below spans two files, a note under its
+heading says which of its options went where.
 
 ## `[display]` (client)
 
 These options affect only the local player's dialogue presentation. Defaults provide the complete
-1.4.3 experience without configuration.
+1.4.4 experience without configuration.
 
 | Option | Default | Meaning |
 |---|---|---|
@@ -14,10 +33,23 @@ These options affect only the local player's dialogue presentation. Defaults pro
 | `numericResponseShortcuts` | `true` | enable top-row and Numpad digits while a supported dialogue screen owns focus; automatically inert when numbering is hidden |
 | `chatNumericShortcuts` | `true` | let an unmodified `1`–`9` select a pending chat response only while the vanilla chat box is open and empty |
 | `showResponseControlHints` | `true` | show the compact selection/navigation footer below the base MCA response card |
+| `motionMode` | `FULL` | `FULL` adds short state-driven movement, `REDUCED` keeps fades but removes translation/pop-out/stagger, and `OFF` changes state immediately |
+| `uiSoundVolume` | `0.65` | scale focus, page, and confirmation cues from `0`–`1`; `0` disables them |
+| `speakerNameAccent` | `true` | style an unambiguous non-silent villager name in bold yellow; ambiguous and silent prompts retain their authored style |
+| `showSpeakerPortrait` | `true` | frame the speaking villager in the card header; dropped automatically on panels narrower than 260 pixels and on screens too short to spare the height |
+| `questionRevealMode` | `OFF` | `OFF` shows the villager's line at once; `FAST` reveals it over a few ticks. Ignored while `motionMode` is `OFF`, and any input completes it immediately |
 
 Digits are never captured during ordinary gameplay, so hotbar selection is unchanged. A non-empty
 chat field also keeps normal numeric typing. Mouse, arrows, Enter, Space, and typed free text remain
 available when shortcuts are disabled.
+
+The card responds to config and resource-pack changes while it is open without changing the current
+offer, absolute focus, or selection lock. Colour is never used to predict whether an answer is kind,
+hostile, successful, or worth hearts; it identifies only the speaker and the active control.
+
+There is no palette or opacity option, because the card has no palette of its own. It is painted with
+Minecraft's `options_background.png` and `widgets.png`, so a resource pack that reskins vanilla menus
+reskins the card with them.
 
 ## `[features]`
 
@@ -58,6 +90,8 @@ server-side early-outs — content degrades to fallback lines rather than disapp
 
 ## `[dynamic]` — living histories
 
+> `maxInitiativesPerVillagerPlayerDay`, `initiativeCooldownTicks` and `dynamicTopicSlots` live in the **server** file; the switches and `debugDirector` live in the **common** file.
+
 Every switch here has an off state that reproduces the static conversation exactly. The layer is
 additive: with `enabled = false` the complete hand-authored corpus is selected by the same static
 routers it always was, and
@@ -70,11 +104,14 @@ nothing new is read, written or generated.
 | `episodesEnabled` | `true` | Villagers carry concrete situations between conversations with states that change. Off means only evergreen scenes are selected and no promise is ever created. |
 | `socialOpinionsEnabled` | `true` | Bounded, *caused* social knowledge: opinions of named neighbours and the observed roles they hold — coworker, mentor, customer, someone avoided. Never a resident-by-resident graph: an edge needs a family tie, shared work or an observed event. |
 | `villageCultureEnabled` | `true` | Shared village tokens residents can agree or disagree about. |
-| `maxInitiativesPerVillagerPlayerDay` | `1` | How often one villager may open a *decision page* unprompted, per player per day. A passing hello is not counted against it; an emergency and a genuine change in something you already know about are not rationed by it either, though both still wait out a fifteen-second cooldown. `0` disables villager initiative entirely. |
+| `maxInitiativesPerVillagerPlayerDay` | `1` | How often one villager may open a *decision page* unprompted, per player per day. A passing hello is not counted against it; an emergency and a genuine change in something you already know about are not rationed by it either, though both still wait out `initiativeCooldownTicks`. `0` disables villager initiative entirely. |
+| `initiativeCooldownTicks` | `300` | Real-time floor between two unprompted lines from the same villager to the same player, whatever the daily budget still allows (300 = 15 s). This is the backstop that stops a villager talking at somebody standing next to them; the daily budget is what keeps the day quiet. Range 20–24000. |
 | `dynamicTopicSlots` | `3` | Context-specific entries above the six fixed hub categories. `0` keeps the six fixed categories alone. |
 | `debugDirector` | `false` | Log why each scene was chosen. Verbose; for authoring. |
 
 ## `[history]`
+
+> `enabled` lives in the **common** file; every cap below it lives in the **server** file.
 
 | Option | Default | Effect |
 |---|---|---|
@@ -146,6 +183,8 @@ diffs it against a persisted snapshot — both negligible on `/forge tps`.
 
 ## `[rpg]`
 
+> The three `enable*` toggles and `debugRpg` live in the **common** file; the four `disposition*` numbers live in the **server** file.
+
 The 0.7.0+ RPG layer: an internal per-(villager, player) **disposition vector** (trust, respect,
 warmth, attraction, tension, familiarity) that gates and voices dialogue, and **dialogue checks**
 with crit/success/partial/rebuff outcomes. Hearts remain MCA's only visible relationship number —
@@ -164,6 +203,8 @@ off is exactly the 0.6.0 experience. See DATAPACK.md → *The disposition vector
 | `debugRpg` | `false` | | INFO-level logs for disposition reads/writes, check inputs, tier selection |
 
 ## `[conversation]`
+
+> Everything here except `debugBranching` lives in the **server** file.
 
 The branching-conversation economy. Hearts move on what you **say back** — never on asking,
 navigating, or leaving. Every conversation-sourced heart change passes through a guarded ledger:
@@ -195,6 +236,8 @@ inside its own reward path and therefore after these caps. The budget bounds wha
 MCA's personality rule can still amplify a granted loss.
 
 ## `[chat]`
+
+> `chatModeRadius`, `chatModeAddressedRadius`, `chatModeStickinessTicks`, `chatModeGreetChance` and `chatModeAttentionTicks` live in the **server** file — they decide whether a villager answers at all. The rest lives in the **common** file.
 
 Chat mode (since 0.8.0): talk to villagers by typing in the vanilla chat box; they answer in chat through
 the same dialogue engine as the GUI. **On by default.** Per-player opt-out: `/conversations chat off`.

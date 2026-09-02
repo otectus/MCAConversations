@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.compat.mca;
 
+import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
@@ -633,6 +634,10 @@ public final class ConversationsMcaRegistrar {
                 // stamped here — when the beat actually plays — rather than when the plan was made.
                 dev.otectus.mcaconversations.scene.ConversationPlanner
                         .onScenePlayed(villager, player, beatId);
+                // The beat just set the outcome and the subject; the stance was read off the button
+                // before MCA started scoring. This is the one instant all three are true together,
+                // which is why the decision is written here and not at either end of the turn.
+                recordExchange(villager, player, now);
             });
         }
     }
@@ -657,6 +662,32 @@ public final class ConversationsMcaRegistrar {
             McaConversations.LOGGER.info("[branch] beat={} subject={} act={} openness={} outcome={}",
                     beat.id(), beat.subject(), beat.npcAct().key(), beat.openness().key(),
                     beat.outcome().map(OutcomeFamily::key).orElse("-"));
+        }
+    }
+
+    /**
+     * Remembers how this subject was left, so a later line can name the actual decision.
+     *
+     * <p>Reads the session rather than the JSON on purpose. What the player meant is whatever the
+     * button they pressed was contracted to mean, and how it landed is whatever beat the villager
+     * actually moved to — neither is something a result gets to assert about itself.
+     */
+    private static void recordExchange(net.minecraft.world.entity.Entity villager,
+                                       net.minecraft.server.level.ServerPlayer player, long now) {
+        try {
+            ConversationSession session = ConversationSessions.get(player.getUUID(), now);
+            String subject = session.currentSubject().orElse("");
+            if (subject.isBlank()) {
+                return;
+            }
+            long today = villager.level().getDayTime() / 24000L;
+            dev.otectus.mcaconversations.history.History.recordExchange(villager, player,
+                    new dev.otectus.mcaconversations.history.StanceEchoRecord(
+                            session.lastPlayerStance().orElse(null),
+                            session.lastOutcome().orElse(null), subject, today),
+                    today);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("exchange bookkeeping failed; ignoring", t);
         }
     }
 

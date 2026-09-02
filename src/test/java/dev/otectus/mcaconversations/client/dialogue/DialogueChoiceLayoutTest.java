@@ -32,4 +32,35 @@ class DialogueChoiceLayoutTest {
         assertTrue(DialogueChoiceLayout.questionTextWidth(180)
                 > DialogueChoiceLayout.answerTextWidth(180));
     }
+
+    @Test
+    void heightAwarePagesRespectFontAndSafeScreenBounds() {
+        List<Integer> normal = List.of(30, 30, 30, 30, 30, 30);
+        List<Integer> compact = List.of(24, 24, 24, 24, 24, 24);
+        DialogueChoiceLayout.PageMap pages = DialogueChoiceLayout.packPages(
+                180, 3, 16, normal, compact, true);
+        assertTrue(pages.pages().size() > 1);
+        assertEquals(0, pages.pages().get(0).firstInclusive());
+        assertEquals(6, pages.pages().get(pages.pages().size() - 1).lastExclusive());
+        assertTrue(pages.pages().stream().allMatch(page ->
+                page.size() <= DialogueChoiceLayout.MAX_VISIBLE_SHORTCUTS));
+
+        DialogueChoiceLayout.ChoicePage first = pages.pages().get(0);
+        DialogueChoiceLayout.Layout layout = DialogueChoiceLayout.create(
+                320, 180, 3, 16, normal.subList(first.firstInclusive(), first.lastExclusive()),
+                true, pages.compact(), false, true);
+        assertTrue(layout.panel().y() >= DialogueChoiceLayout.SAFE_TOP);
+        assertTrue(layout.panel().y() + layout.panel().height()
+                <= DialogueChoiceLayout.SAFE_TOP + DialogueChoiceLayout.maxPanelHeight(180));
+    }
+
+    @Test
+    void atMostNineShortcutsArePackedPerPage() {
+        List<Integer> heights = java.util.Collections.nCopies(18, 12);
+        DialogueChoiceLayout.PageMap pages = DialogueChoiceLayout.packPages(
+                800, 1, 9, heights, heights, false);
+        assertEquals(2, pages.pages().size());
+        assertEquals(9, pages.pages().get(0).size());
+        assertEquals(9, pages.pages().get(1).size());
+    }
 }

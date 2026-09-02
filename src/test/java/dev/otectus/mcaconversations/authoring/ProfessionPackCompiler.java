@@ -133,119 +133,29 @@ final class ProfessionPackCompiler {
                     + "' has no succeeded or failed state; every situation must be able to end");
         }
 
-        compileEpisodeTemplate(episode, kind, subject, stateNames);
-        compileThreadTemplate(episode, kind, subject, shortKind, stateNames);
-        compileCommitmentTemplate(episode, shortKind);
+        NarrativeTemplates.episode(out, episode, kind, subject, stateNames,
+                java.util.List.of(professionId));
+        NarrativeTemplates.thread(out, episode, threadId(shortKind), kind, "work", subject,
+                resumeScenes(shortKind, stateNames));
+        NarrativeTemplates.commitment(out, episode, threadId(shortKind), where);
 
         for (JsonElement element : states) {
             compileState(episode, element.getAsJsonObject(), kind, subject, shortKind);
         }
     }
 
-    private void compileEpisodeTemplate(JsonObject episode, String kind, String subject,
-                                        Set<String> stateNames) {
-        JsonObject template = new JsonObject();
-        template.addProperty("subject", subject);
-        template.add("professions", ContentCompiler.array(List.of(professionId)));
-        template.addProperty("initial_state",
-                episode.has("initial_state") ? episode.get("initial_state").getAsString() : "blocked");
-
-        Set<String> declared = new LinkedHashSet<>(stateNames);
-        declared.add("abandoned");
-        declared.add("remembered");
-        template.add("states", ContentCompiler.array(declared));
-
-        // Only the transitions the authored states can actually make. Narrowing rather than accepting
-        // the whole machine is what makes an undeclared move a no-op the player never sees.
-        List<String> transitions = new ArrayList<>();
-        if (stateNames.contains("blocked") && stateNames.contains("active")) {
-            transitions.add("blocked->active");
-            transitions.add("active->blocked");
-        }
-        for (String from : List.of("blocked", "active")) {
-            if (!stateNames.contains(from)) {
-                continue;
-            }
-            for (String to : List.of("succeeded", "failed")) {
-                if (stateNames.contains(to)) {
-                    transitions.add(from + "->" + to);
-                }
-            }
-            transitions.add(from + "->abandoned");
-        }
-        for (String terminal : List.of("succeeded", "failed", "abandoned")) {
-            if (declared.contains(terminal)) {
-                transitions.add(terminal + "->remembered");
-            }
-        }
-        template.add("transitions", ContentCompiler.array(transitions));
-
-        JsonObject slots = ContentCompiler.object(episode, "slots");
-        if (slots != null && slots.size() > 0) {
-            template.add("required_slots", ContentCompiler.array(slots.keySet()));
-            JsonObject options = new JsonObject();
-            slots.entrySet().forEach(entry -> options.add(entry.getKey(), entry.getValue()));
-            template.add("slot_options", options);
-        }
-        template.addProperty("privacy",
-                episode.has("privacy") ? episode.get("privacy").getAsString() : "ordinary");
-        template.addProperty("salience",
-                episode.has("salience") ? episode.get("salience").getAsInt() : 40);
-        if (episode.has("due_after_days")) {
-            template.addProperty("due_after_days", episode.get("due_after_days").getAsLong());
-        }
-        template.addProperty("expires_after_days",
-                episode.has("expires_after_days") ? episode.get("expires_after_days").getAsLong() : 28L);
-        if (episode.has("integrations")) {
-            template.add("integrations", episode.get("integrations"));
-        }
-        out.addEpisode(kind, template);
-    }
-
-    private void compileThreadTemplate(JsonObject episode, String kind, String subject,
-                                       String shortKind, Set<String> stateNames) {
-        JsonObject thread = ContentCompiler.object(episode, "thread");
-        JsonObject template = new JsonObject();
-        template.addProperty("topic", "work");
-        template.addProperty("subject", subject);
-        template.addProperty("episode_kind", kind);
-
-        // A thread must name somewhere authored to pick the subject up again. The terminal states are
-        // exactly those scenes: coming back to a finished thing is a different line from coming back
-        // to a live one.
+    /**
+     * Where a work thread is picked up again: the terminal states first, because coming back to a
+     * finished thing is a different line from coming back to a live one.
+     */
+    private List<String> resumeScenes(String shortKind, Set<String> stateNames) {
         List<String> resume = new ArrayList<>();
         for (String state : List.of("succeeded", "failed", "active", "blocked")) {
             if (stateNames.contains(state)) {
                 resume.add(sceneId(shortKind, state));
             }
         }
-        template.add("resume_scenes", ContentCompiler.array(resume));
-        template.addProperty("cooldown_days",
-                thread != null && thread.has("cooldown_days") ? thread.get("cooldown_days").getAsLong() : 1L);
-        template.addProperty("expires_after_days",
-                thread != null && thread.has("expires_after_days")
-                        ? thread.get("expires_after_days").getAsLong() : 20L);
-        template.addProperty("privacy",
-                episode.has("privacy") ? episode.get("privacy").getAsString() : "ordinary");
-        out.addThread(threadId(shortKind), template);
-    }
-
-    private void compileCommitmentTemplate(JsonObject episode, String shortKind) {
-        JsonObject commitment = ContentCompiler.object(episode, "commitment");
-        if (commitment == null) {
-            return;
-        }
-        JsonObject template = new JsonObject();
-        String resolver = ContentCompiler.require(commitment, "resolver", where);
-        template.addProperty("resolver", resolver);
-        if (commitment.has("target")) {
-            template.addProperty("target", commitment.get("target").getAsString());
-        }
-        template.addProperty("due_after_days",
-                commitment.has("due_after_days") ? commitment.get("due_after_days").getAsLong() : 3L);
-        template.addProperty("made_by", "player");
-        template.addProperty("thread", threadId(shortKind));
-        out.addCommitment(ContentCompiler.require(commitment, "id", where), template);
+        return resume;
     }
 
     // --- one state: a scene, an opener, a page, and a reaction per reply --------------------------
@@ -799,7 +709,8 @@ final class ProfessionPackCompiler {
         disposition.add("deltas", deltas);
         actions.add("conversations_disposition_apply", disposition);
         actions.addProperty("next", "conversations.topic.work." + shortId + ".followup");
-        actions.addProperty("say", "conversations.work.prof." + shortId + ".hard");
+        actions.add("conversations_say",
+                say("conversations.work.prof." + shortId + ".hard", List.of()));
 
         JsonObject result = new JsonObject();
         result.addProperty("baseChance", 1);
@@ -959,7 +870,8 @@ final class ProfessionPackCompiler {
         JsonObject actions = new JsonObject();
         actions.add("conversations_session", session);
         actions.addProperty("next", "conversations.cat.profession");
-        actions.addProperty("say", "conversations.work.prof." + shortId + ".leave");
+        actions.add("conversations_say",
+                say("conversations.work.prof." + shortId + ".leave", List.of()));
 
         JsonObject result = new JsonObject();
         result.addProperty("baseChance", 1);

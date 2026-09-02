@@ -7,6 +7,33 @@
     "day - so the thing somebody is worrying about is theirs and stays theirs."
   ],
   "episodes": {
+    "village.change": {
+      "subject": "village.change",
+      "initial_state": "active",
+      "states": [
+        "active",
+        "succeeded",
+        "abandoned",
+        "remembered"
+      ],
+      "transitions": [
+        "active->succeeded",
+        "active->abandoned",
+        "succeeded->remembered",
+        "abandoned->remembered"
+      ],
+      "required_slots": [
+        "change"
+      ],
+      "slot_options": {
+        "change": [
+          "village_change_marriage"
+        ]
+      },
+      "privacy": "ordinary",
+      "salience": 55,
+      "expires_after_days": 20
+    },
     "work.a_confidence": {
       "subject": "work.werewolf_expert.confidence",
       "professions": [

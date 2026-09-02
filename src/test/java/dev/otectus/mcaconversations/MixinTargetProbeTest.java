@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.jar.JarFile;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -98,7 +99,7 @@ class MixinTargetProbeTest {
         INJECTION_POINTS.put("MCAClientMixin", List.of("useExpandedPersonalityTranslations"));
         INJECTION_POINTS.put("VillagerMessageMixin", List.of("<init>", "getMessage", "getContent"));
         INJECTION_POINTS.put("InteractScreenChoiceMixin", List.of("<init>", "m_88315_", "m_7933_",
-                "m_6375_", "m_6050_", "m_7379_"));
+                "m_6375_", "m_6050_", "m_7379_", "m_86600_", "setLastPhrase"));
     }
 
     @Test
@@ -153,7 +154,37 @@ class MixinTargetProbeTest {
                         + " — require = 0 means this would fail silently in game");
             }
         }
+        if (mixin.equals("InteractScreenChoiceMixin")) {
+            checkQuestionCapture(jar, target, problems);
+        }
         checkShadows(jar, mixin, compiled.binaryName(), target, problems);
+    }
+
+    /** The new speaker hierarchy depends on one exact vanilla call inside MCA's soft-failing hook. */
+    private static void checkQuestionCapture(Path jar, Class<?> target, List<String> problems) {
+        try {
+            target.getDeclaredMethod("setLastPhrase",
+                    net.minecraft.network.chat.MutableComponent.class, boolean.class);
+        } catch (NoSuchMethodException e) {
+            problems.add(jar.getFileName() + ": " + target.getName()
+                    + ".setLastPhrase no longer has (MutableComponent, boolean)");
+            return;
+        }
+        String entryName = target.getName().replace('.', '/') + ".class";
+        try (JarFile opened = new JarFile(jar.toFile())) {
+            java.util.jar.JarEntry entry = opened.getJarEntry(entryName);
+            if (entry == null) {
+                problems.add(jar.getFileName() + ": missing bytecode entry " + entryName);
+                return;
+            }
+            byte[] bytes = opened.getInputStream(entry).readAllBytes();
+            if (!new String(bytes, StandardCharsets.ISO_8859_1).contains("m_92923_")) {
+                problems.add(jar.getFileName() + ": setLastPhrase no longer invokes production Font.split"
+                        + " (m_92923_); exact speaker capture would soft-fail");
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**

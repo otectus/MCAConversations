@@ -48,13 +48,12 @@ public final class Affection {
             session.setVillagerId(villager.getUUID());
 
             DepthClass budget = resolveBudget(directive, session);
-            McaConversationsConfig.Common config = McaConversationsConfig.COMMON;
             AffectionContext context = new AffectionContext(budget,
                     session.positiveApplied(), session.negativeApplied(),
-                    config.conversationDailyPositiveCap.get(),
-                    config.conversationDailyNegativeCap.get(),
-                    config.strongerNegativeOutcomes.get(),
-                    config.conversationHeartMultiplier.get(),
+                    McaConversationsConfig.conversationDailyPositiveCap(),
+                    McaConversationsConfig.conversationDailyNegativeCap(),
+                    McaConversationsConfig.strongerNegativeOutcomes(),
+                    McaConversationsConfig.conversationHeartMultiplier(),
                     directive.decision() + "@" + now,
                     now);
 
@@ -68,7 +67,7 @@ public final class Affection {
             }
             session.touch(now);
 
-            if (config.debugBranching.get()) {
+            if (McaConversationsConfig.COMMON.debugBranching.get()) {
                 McaConversations.LOGGER.info(
                         "[branch] affection decision={} authored={} scaled={} granted={} measured={} reason={} "
                                 + "budget={} conv(+{}/-{}) topic={} villager={} player={}",

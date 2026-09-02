@@ -75,7 +75,8 @@ class CallbackContractTest {
                             continue;
                         }
                         String arc = entry.getAsJsonObject().get("arc").getAsString();
-                        String route = (actions.has("say") ? actions.get("say").getAsString() : "")
+                        String spoken = ContentFixture.spokenPhrase(actions);
+                        String route = (spoken == null ? "" : spoken)
                                 + " -> " + (actions.has("next") ? actions.get("next").getAsString() : "");
                         String beat = byRoute.get(route);
                         if (beat != null) {

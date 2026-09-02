@@ -55,8 +55,7 @@ public final class DynamicHub {
 
     /** How many dynamic entries this server allows. Zero reproduces the 1.4.0 hub exactly. */
     public static int slotBudget() {
-        return Math.max(0, Math.min(HubPlan.MAX_SLOTS, McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.dynamicTopicSlots, HubPlan.MAX_SLOTS)));
+        return Math.max(0, Math.min(HubPlan.MAX_SLOTS, McaConversationsConfig.dynamicTopicSlots()));
     }
 
     /**

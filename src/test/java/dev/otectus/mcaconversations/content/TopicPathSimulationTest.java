@@ -669,7 +669,7 @@ class TopicPathSimulationTest {
         Run callback = new Run(later);
         JsonObject chosen = select("conversations.arc.fears.plan.respond", "ask_what_helps", callback);
         assertEquals("conversations.fears.plan.ask_what_helps.remembered",
-                chosen.getAsJsonObject("actions").get("say").getAsString(),
+                ContentFixture.spokenPhrase(chosen.getAsJsonObject("actions")),
                 "the villager must say something different because it remembers");
     }
 
@@ -745,7 +745,7 @@ class TopicPathSimulationTest {
             world.memories.add("mcaconversations.pledge.fears");
             JsonObject chosen = select("conversations.arc.fears.followthrough.respond",
                     "recall_promise", new Run(world));
-            assertTrue(chosen.getAsJsonObject("actions").get("say").getAsString().endsWith(side),
+            assertTrue(ContentFixture.spokenPhrase(chosen.getAsJsonObject("actions")).endsWith(side),
                     side + " must have its own callback line");
         }
 
@@ -754,7 +754,7 @@ class TopicPathSimulationTest {
         JsonObject shrug = select("conversations.arc.fears.followthrough.respond",
                 "recall_promise", new Run(stranger));
         assertEquals("conversations.fears.followthrough.recall.plain",
-                shrug.getAsJsonObject("actions").get("say").getAsString(),
+                ContentFixture.spokenPhrase(shrug.getAsJsonObject("actions")),
                 "never having been asked must not read back as having stepped back");
     }
 
@@ -769,7 +769,7 @@ class TopicPathSimulationTest {
 
         JsonObject chosen = select("conversations.arc.fears.followthrough.respond", "recall_promise", run);
         assertEquals("conversations.fears.followthrough.recall.lapsed",
-                chosen.getAsJsonObject("actions").get("say").getAsString(),
+                ContentFixture.spokenPhrase(chosen.getAsJsonObject("actions")),
                 "a promise that can only ever be kept is not a promise");
         apply(chosen, run);
         assertEquals(0, run.heartsMoved, "a first lapse costs trust and tension, never hearts");
@@ -863,7 +863,7 @@ class TopicPathSimulationTest {
                     Run run = new Run(world);
                     JsonObject opener = select(parts[0], parts[1], run);
                     JsonObject actions = opener.getAsJsonObject("actions");
-                    if (!actions.has("say")) {
+                    if (ContentFixture.spokenPhrase(actions) == null) {
                         problems.add(topic + " branching=" + branching + " checks=" + checks
                                 + ": opener has no line");
                     }
@@ -899,7 +899,7 @@ class TopicPathSimulationTest {
 
         JsonObject chosen = select(node, "comfort", run);
         assertEquals("conversations.fears.open.comfort.plain",
-                chosen.getAsJsonObject("actions").get("say").getAsString());
+                ContentFixture.spokenPhrase(chosen.getAsJsonObject("actions")));
         apply(chosen, run);
         assertEquals(1, run.heartsMoved);
         assertEquals(1, run.arcStage("fears"), "the arc still moves without the dice");
@@ -963,8 +963,8 @@ class TopicPathSimulationTest {
             JsonObject destination = next == null ? null : questions.get(next);
             boolean spokenByAuto = destination != null && destination.has("auto")
                     && destination.get("auto").getAsBoolean();
-            if (!actions.has("say") && !actions.has("conversations_gossip_say")
-                    && !actions.has("conversations_say") && !spokenByAuto) {
+            if (ContentFixture.spokenPhrase(actions) == null
+                    && !actions.has("conversations_gossip_say") && !spokenByAuto) {
                 problems.add(topic.id() + ": topics disabled left the villager with nothing to say");
             }
             apply(chosen, run);
@@ -997,15 +997,13 @@ class TopicPathSimulationTest {
             Run run = new Run(new World());
             run.sessionTopic = topic;
             assertEquals("conversations." + topic + ".again.press",
-                    select("conversations.topic.deep.again.respond", "press", run)
-                            .getAsJsonObject("actions").get("say").getAsString(),
+                    ContentFixture.spokenPhrase(select("conversations.topic.deep.again.respond", "press", run).getAsJsonObject("actions")),
                     topic + " must speak for itself even though the node is shared");
         }
 
         // And a session that has lapsed still gets a sensible line rather than a raw key.
         Run lapsed = new Run(new World());
-        assertNotNull(select("conversations.topic.deep.again.respond", "press", lapsed)
-                .getAsJsonObject("actions").get("say"));
+        assertNotNull(ContentFixture.spokenPhrase(select("conversations.topic.deep.again.respond", "press", lapsed).getAsJsonObject("actions")));
     }
 
     @Test
@@ -1014,24 +1012,25 @@ class TopicPathSimulationTest {
         // A stranger gets the ordinary line...
         Run stranger = new Run(new World().mood("sad"));
         assertEquals("conversations.day.rough.empathize",
-                select("conversations.topic.day.rough.respond", "empathize", stranger)
-                        .getAsJsonObject("actions").get("say").getAsString());
+                ContentFixture.spokenPhrase(select("conversations.topic.day.rough.respond", "empathize", stranger).getAsJsonObject("actions")));
 
         // ...and somebody the villager is still cross with gets a cooler one. This is the missing
         // half of the apology mechanic: something finally reads whether the air is unsettled.
         World unsettled = new World().mood("sad");
         unsettled.dispositions.put("tension", 40);
         assertEquals("conversations.day.rough.tense",
-                select("conversations.topic.day.rough.respond", "empathize", new Run(unsettled))
-                        .getAsJsonObject("actions").get("say").getAsString());
+                ContentFixture.spokenPhrase(
+                        select("conversations.topic.day.rough.respond", "empathize", new Run(unsettled))
+                                .getAsJsonObject("actions")));
 
         // With the vector switched off entirely, the gate cannot fire and the plain line returns.
         World vectorOff = new World().mood("sad");
         vectorOff.dispositions.put("tension", 40);
         vectorOff.dispositionsEnabled = false;
         assertEquals("conversations.day.rough.empathize",
-                select("conversations.topic.day.rough.respond", "empathize", new Run(vectorOff))
-                        .getAsJsonObject("actions").get("say").getAsString(),
+                ContentFixture.spokenPhrase(
+                        select("conversations.topic.day.rough.respond", "empathize", new Run(vectorOff))
+                                .getAsJsonObject("actions")),
                 "a disposition-gated result must degrade to its authored fallback, not vanish");
     }
 
@@ -1046,8 +1045,7 @@ class TopicPathSimulationTest {
     void theBudgetIsAudibleOnceItIsSpent() {
         Run run = new Run(new World().mood("sad"));
         assertEquals("conversations.day.rough.offer_help",
-                select("conversations.topic.day.rough.followup", "offer_help", run)
-                        .getAsJsonObject("actions").get("say").getAsString());
+                ContentFixture.spokenPhrase(select("conversations.topic.day.rough.followup", "offer_help", run).getAsJsonObject("actions")));
 
         // Spend the day's positive budget the way a player actually would — across different
         // topics. Repeating one kindness cannot do it: daily_repeat diminishes the same decision to
@@ -1067,8 +1065,7 @@ class TopicPathSimulationTest {
 
         run.newConversation(DepthClass.QUICK);
         assertEquals("conversations.day.rough.offer_help.spent",
-                select("conversations.topic.day.rough.followup", "offer_help", run)
-                        .getAsJsonObject("actions").get("say").getAsString(),
+                ContentFixture.spokenPhrase(select("conversations.topic.day.rough.followup", "offer_help", run).getAsJsonObject("actions")),
                 "at the cap the offer is turned down warmly rather than accepted for nothing");
     }
 
@@ -1258,7 +1255,7 @@ class TopicPathSimulationTest {
         Run run = new Run(new World());
         JsonObject chosen = select("conversations.topic.secret.respond", "accept", run);
         assertEquals("conversations.secret.respond.accept",
-                chosen.getAsJsonObject("actions").get("say").getAsString(),
+                ContentFixture.spokenPhrase(chosen.getAsJsonObject("actions")),
                 "the payload belongs to the answer that agreed to hear it, not to the opener");
         apply(chosen, run);
         assertTrue(run.milestone("secret.entrusted"), "hearing it is what entrusts you");

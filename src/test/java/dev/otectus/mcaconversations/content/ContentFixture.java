@@ -155,6 +155,28 @@ final class ContentFixture {
     }
 
     /** Variant-aware line lookup, shared with the trace exporter. */
+    /**
+     * The dialogue key a result speaks, whichever action carries it.
+     *
+     * <p>Since 1.5.0 this mod's own lines all go through {@code conversations_say}, so the variant can
+     * be named on the server instead of drawn at random on each client. MCA's native {@code say} is
+     * still legal in a datapack and still read here, because a lint that stopped seeing it would stop
+     * being able to say anything true about a third-party pack.
+     *
+     * @return the key without its {@code dialogue.} prefix, or null when the result says nothing
+     */
+    static String spokenPhrase(JsonObject actions) {
+        if (actions == null) {
+            return null;
+        }
+        JsonElement ours = actions.get("conversations_say");
+        if (ours != null && ours.isJsonObject() && ours.getAsJsonObject().has("phrase")) {
+            return ours.getAsJsonObject().get("phrase").getAsString();
+        }
+        JsonElement native_ = actions.get("say");
+        return native_ != null && native_.isJsonPrimitive() ? native_.getAsString() : null;
+    }
+
     static List<String> lines(String langKey) {
         return LangKeys.linesOf(english(), langKey);
     }

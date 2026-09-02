@@ -46,7 +46,9 @@
               "time": 36000
             },
             "next": "conversations.scene.village.getting_bigger.respond",
-            "say": "conversations.scene.village.getting_bigger"
+            "conversations_say": {
+              "phrase": "conversations.scene.village.getting_bigger"
+            }
           }
         },
         {
@@ -92,7 +94,111 @@
               "time": 36000
             },
             "next": "conversations.scene.village.after_something_happened.respond",
-            "say": "conversations.scene.village.after_something_happened"
+            "conversations_say": {
+              "phrase": "conversations.scene.village.after_something_happened"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.village.still_placing_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.village.still_placing_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "village.still_placing_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.village.still_placing_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.still_placing_it",
+              "slots": [
+                "change"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.village.change_settled"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.village.change_settled",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "village.change_settled.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.village.change_settled.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.change_settled",
+              "slots": [
+                "change"
+              ]
+            }
           }
         },
         {
@@ -159,7 +265,9 @@
               "time": 36000
             },
             "next": "conversations.arc.village.resume.respond",
-            "say": "conversations.village.resume"
+            "conversations_say": {
+              "phrase": "conversations.village.resume"
+            }
           }
         },
         {
@@ -190,7 +298,9 @@
               "beat": "village.again.to.village.again"
             },
             "next": "conversations.topic.village.again.respond",
-            "say": "conversations.village.again"
+            "conversations_say": {
+              "phrase": "conversations.village.again"
+            }
           }
         },
         {
@@ -230,7 +340,9 @@
               "time": 48000
             },
             "next": "conversations.topic.village.toddler.respond",
-            "say": "conversations.village.toddler"
+            "conversations_say": {
+              "phrase": "conversations.village.toddler"
+            }
           }
         },
         {
@@ -270,7 +382,9 @@
               "time": 48000
             },
             "next": "conversations.topic.village.young.respond",
-            "say": "conversations.village.child"
+            "conversations_say": {
+              "phrase": "conversations.village.child"
+            }
           }
         },
         {
@@ -310,7 +424,9 @@
               "time": 48000
             },
             "next": "conversations.topic.village.young.respond",
-            "say": "conversations.village.teen"
+            "conversations_say": {
+              "phrase": "conversations.village.teen"
+            }
           }
         },
         {
@@ -362,7 +478,9 @@
               "time": 48000
             },
             "next": "conversations.topic.village.none.respond",
-            "say": "conversations.village.none"
+            "conversations_say": {
+              "phrase": "conversations.village.none"
+            }
           }
         },
         {
@@ -501,7 +619,9 @@
               "time": 36000
             },
             "next": "conversations.scene.people.changed_my_mind.respond",
-            "say": "conversations.scene.people.changed_my_mind"
+            "conversations_say": {
+              "phrase": "conversations.scene.people.changed_my_mind"
+            }
           }
         },
         {
@@ -547,7 +667,9 @@
               "time": 36000
             },
             "next": "conversations.scene.people.the_newcomer.respond",
-            "say": "conversations.scene.people.the_newcomer"
+            "conversations_say": {
+              "phrase": "conversations.scene.people.the_newcomer"
+            }
           }
         },
         {
@@ -614,7 +736,9 @@
               "time": 36000
             },
             "next": "conversations.arc.people.resume.respond",
-            "say": "conversations.people.resume"
+            "conversations_say": {
+              "phrase": "conversations.people.resume"
+            }
           }
         },
         {
@@ -645,7 +769,9 @@
               "beat": "people.again.to.people.again"
             },
             "next": "conversations.topic.people.again.respond",
-            "say": "conversations.people.again"
+            "conversations_say": {
+              "phrase": "conversations.people.again"
+            }
           }
         },
         {
@@ -685,7 +811,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.young.respond",
-            "say": "conversations.people.child"
+            "conversations_say": {
+              "phrase": "conversations.people.child"
+            }
           }
         },
         {
@@ -725,7 +853,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.young.respond",
-            "say": "conversations.people.teen"
+            "conversations_say": {
+              "phrase": "conversations.people.teen"
+            }
           }
         },
         {
@@ -782,7 +912,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.fond.respond",
-            "say": "conversations.people.warm"
+            "conversations_say": {
+              "phrase": "conversations.people.warm"
+            }
           }
         },
         {
@@ -838,7 +970,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.sour.respond",
-            "say": "conversations.people.judgy"
+            "conversations_say": {
+              "phrase": "conversations.people.judgy"
+            }
           }
         },
         {
@@ -894,7 +1028,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.mixed.respond",
-            "say": "conversations.people.shy"
+            "conversations_say": {
+              "phrase": "conversations.people.shy"
+            }
           }
         },
         {
@@ -953,7 +1089,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.mixed.respond",
-            "say": "conversations.people.wry"
+            "conversations_say": {
+              "phrase": "conversations.people.wry"
+            }
           }
         },
         {
@@ -1044,7 +1182,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.mixed.respond",
-            "say": "conversations.people.revisit"
+            "conversations_say": {
+              "phrase": "conversations.people.revisit"
+            }
           }
         },
         {
@@ -1141,7 +1281,9 @@
               "time": 36000
             },
             "next": "conversations.topic.people.mixed.respond",
-            "say": "conversations.people.first"
+            "conversations_say": {
+              "phrase": "conversations.people.first"
+            }
           }
         },
         {
@@ -1164,7 +1306,9 @@
               "time": 36000
             },
             "next": "conversations.cat.village",
-            "say": "conversations.people.first"
+            "conversations_say": {
+              "phrase": "conversations.people.first"
+            }
           }
         }
       ]
@@ -1216,7 +1360,9 @@
               "time": 36000
             },
             "next": "conversations.scene.rumors.one_i_will_not_pass_on.respond",
-            "say": "conversations.scene.rumors.one_i_will_not_pass_on"
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.one_i_will_not_pass_on"
+            }
           }
         },
         {
@@ -1262,7 +1408,9 @@
               "time": 36000
             },
             "next": "conversations.scene.rumors.the_correction.respond",
-            "say": "conversations.scene.rumors.the_correction"
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.the_correction"
+            }
           }
         },
         {
@@ -1329,7 +1477,9 @@
               "time": 36000
             },
             "next": "conversations.arc.rumors.resume.respond",
-            "say": "conversations.rumors.resume"
+            "conversations_say": {
+              "phrase": "conversations.rumors.resume"
+            }
           }
         },
         {
@@ -1504,7 +1654,9 @@
               "beat": "rumors.none.to.rumors.none"
             },
             "next": "conversations.topic.rumors.none.respond",
-            "say": "conversations.rumors.none"
+            "conversations_say": {
+              "phrase": "conversations.rumors.none"
+            }
           }
         },
         {
@@ -1568,7 +1720,9 @@
               "time": 0
             },
             "next": "conversations.cat.village",
-            "say": "conversations.rumors.none"
+            "conversations_say": {
+              "phrase": "conversations.rumors.none"
+            }
           }
         }
       ]
@@ -1620,7 +1774,9 @@
               "time": 36000
             },
             "next": "conversations.scene.standing.still_being_read.respond",
-            "say": "conversations.scene.standing.still_being_read"
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.still_being_read"
+            }
           }
         },
         {
@@ -1666,7 +1822,9 @@
               "time": 36000
             },
             "next": "conversations.scene.standing.settled_opinion.respond",
-            "say": "conversations.scene.standing.settled_opinion"
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.settled_opinion"
+            }
           }
         },
         {
@@ -1733,7 +1891,9 @@
               "time": 36000
             },
             "next": "conversations.arc.standing.resume.respond",
-            "say": "conversations.standing.resume"
+            "conversations_say": {
+              "phrase": "conversations.standing.resume"
+            }
           }
         },
         {
@@ -1764,7 +1924,9 @@
               "beat": "standing.again.open"
             },
             "next": "conversations.topic.standing.again.respond",
-            "say": "conversations.standing.again"
+            "conversations_say": {
+              "phrase": "conversations.standing.again"
+            }
           }
         },
         {
@@ -1812,7 +1974,9 @@
               "time": 36000
             },
             "next": "conversations.topic.standing.unknown.respond",
-            "say": "conversations.standing.no_tally"
+            "conversations_say": {
+              "phrase": "conversations.standing.no_tally"
+            }
           }
         },
         {
@@ -1884,7 +2048,9 @@
               "time": 36000
             },
             "next": "conversations.topic.standing.mixed.respond",
-            "say": "conversations.standing.mixed"
+            "conversations_say": {
+              "phrase": "conversations.standing.mixed"
+            }
           }
         },
         {
@@ -1946,7 +2112,9 @@
               "time": 36000
             },
             "next": "conversations.topic.standing.praise.respond",
-            "say": "conversations.standing.praise"
+            "conversations_say": {
+              "phrase": "conversations.standing.praise"
+            }
           }
         },
         {
@@ -1975,7 +2143,9 @@
               "time": 36000
             },
             "next": "conversations.cat.village",
-            "say": "conversations.standing.child"
+            "conversations_say": {
+              "phrase": "conversations.standing.child"
+            }
           }
         },
         {
@@ -2004,7 +2174,9 @@
               "time": 36000
             },
             "next": "conversations.cat.village",
-            "say": "conversations.standing.teen"
+            "conversations_say": {
+              "phrase": "conversations.standing.teen"
+            }
           }
         },
         {
@@ -2060,7 +2232,9 @@
               "time": 36000
             },
             "next": "conversations.topic.standing.incident.respond",
-            "say": "conversations.standing.trouble"
+            "conversations_say": {
+              "phrase": "conversations.standing.trouble"
+            }
           }
         },
         {
@@ -2254,7 +2428,9 @@
               "time": 36000
             },
             "next": "conversations.topic.standing.neutral.respond",
-            "say": "conversations.standing.neutral"
+            "conversations_say": {
+              "phrase": "conversations.standing.neutral"
+            }
           }
         },
         {
@@ -2276,7 +2452,9 @@
               "time": 36000
             },
             "next": "conversations.cat.village",
-            "say": "conversations.standing.unknown"
+            "conversations_say": {
+              "phrase": "conversations.standing.unknown"
+            }
           }
         },
         {
@@ -2294,7 +2472,9 @@
               "time": 36000
             },
             "next": "conversations.cat.village",
-            "say": "conversations.standing.unknown"
+            "conversations_say": {
+              "phrase": "conversations.standing.unknown"
+            }
           }
         }
       ]
@@ -2346,7 +2526,9 @@
               "time": 36000
             },
             "next": "conversations.scene.neighbour.two_doors_down.respond",
-            "say": "conversations.scene.neighbour.two_doors_down"
+            "conversations_say": {
+              "phrase": "conversations.scene.neighbour.two_doors_down"
+            }
           }
         },
         {
@@ -2392,7 +2574,9 @@
               "time": 36000
             },
             "next": "conversations.scene.neighbour.the_unthanked_kindness.respond",
-            "say": "conversations.scene.neighbour.the_unthanked_kindness"
+            "conversations_say": {
+              "phrase": "conversations.scene.neighbour.the_unthanked_kindness"
+            }
           }
         },
         {
@@ -2459,7 +2643,9 @@
               "time": 36000
             },
             "next": "conversations.arc.neighbour.resume.respond",
-            "say": "conversations.neighbour.resume"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.resume"
+            }
           }
         },
         {
@@ -2532,7 +2718,9 @@
               "beat": "neighbour.none.to.neighbour.none"
             },
             "next": "conversations.topic.neighbour.none.respond",
-            "say": "conversations.neighbour.none"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.none"
+            }
           }
         },
         {
@@ -2545,7 +2733,9 @@
           ],
           "actions": {
             "next": "conversations.cat.village",
-            "say": "conversations.neighbour.none"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.none"
+            }
           }
         }
       ]
@@ -2597,7 +2787,9 @@
               "time": 36000
             },
             "next": "conversations.scene.place.the_village_at_this_hour.respond",
-            "say": "conversations.scene.place.the_village_at_this_hour"
+            "conversations_say": {
+              "phrase": "conversations.scene.place.the_village_at_this_hour"
+            }
           }
         },
         {
@@ -2643,7 +2835,9 @@
               "time": 36000
             },
             "next": "conversations.scene.place.the_place_this_season.respond",
-            "say": "conversations.scene.place.the_place_this_season"
+            "conversations_say": {
+              "phrase": "conversations.scene.place.the_place_this_season"
+            }
           }
         },
         {
@@ -2679,14 +2873,18 @@
               "beat": "place.open"
             },
             "next": "conversations.topic.place.open.respond",
-            "say": "conversations.place.open"
+            "conversations_say": {
+              "phrase": "conversations.place.open"
+            }
           }
         },
         {
           "baseChance": 1,
           "actions": {
             "next": "conversations.cat.village",
-            "say": "conversations.place.legacy"
+            "conversations_say": {
+              "phrase": "conversations.place.legacy"
+            }
           },
           "conditions": [
             {

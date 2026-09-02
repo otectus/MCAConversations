@@ -1,5 +1,7 @@
 package dev.otectus.mcaconversations.compat.mca;
 
+import dev.otectus.mcaconversations.conversation.OutcomeFamily;
+import dev.otectus.mcaconversations.conversation.StanceFamily;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.context.ContextQuery;
 import dev.otectus.mcaconversations.context.ContextRequest;
@@ -211,6 +213,24 @@ public final class LivingHistoriesRegistrar {
                     }
                 });
 
+        // What was actually decided, so a callback can name it. conversations_recent above answers
+        // "how long since this came up"; this answers "and what did we settle on", which is the
+        // difference between "as I was saying" and "you told me to save the ink".
+        McaHandles.registerCondition("conversations_exchange",
+                (json, name) -> SafeParse.orNull("conversations_exchange", json,
+                        () -> HistoryQuery.Exchange.fromJson(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> {
+                    try {
+                        if (query == null || !query.isValid() || player == null) {
+                            return 0.0f;
+                        }
+                        return query.matches(History.pair(villager, player), dayOf(villager)) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_exchange failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
         // The scene the director already chose. Reads the frozen plan; it never reruns selection, which
         // is what makes reopening the screen unable to change the subject (spec §9.3).
         McaHandles.registerCondition("conversations_scene",
@@ -370,9 +390,21 @@ public final class LivingHistoriesRegistrar {
             return;
         }
         if (directive.op() == HistoryDirective.Thread.Op.PLAYED) {
+            // The stance and the outcome come off the live session, not off the record. Until 1.5.0
+            // this line passed the thread's own values straight back into it, so `playerStance` and
+            // `lastOutcome` were written empty when the thread was opened and stayed empty for the
+            // life of the save: two schema fields that could never hold a value, and two callbacks
+            // that could never be written.
+            Optional<ConversationSession> session = ConversationSessions.raw(player.getUUID());
+            String stance = session.flatMap(ConversationSession::lastPlayerStance)
+                    .map(StanceFamily::key).orElse("");
+            String outcome = session.flatMap(ConversationSession::lastOutcome)
+                    .map(OutcomeFamily::key).orElse("");
             History.updateThread(villager, player, directive.templateId(), record -> record.played(
                     planOf(player).map(ConversationPlan::sceneId).orElse(record.lastScene()),
-                    record.lastOutcome(), record.playerStance(), today, directive.cooldownDays()));
+                    outcome.isEmpty() ? record.lastOutcome() : outcome,
+                    stance.isEmpty() ? record.playerStance() : stance,
+                    today, directive.cooldownDays()));
             return;
         }
         Optional<ThreadStatus> target = directive.targetStatus();

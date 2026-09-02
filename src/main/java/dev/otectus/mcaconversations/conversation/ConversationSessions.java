@@ -133,7 +133,7 @@ public final class ConversationSessions {
 
     private static int timeoutTicks() {
         try {
-            return McaConversationsConfig.COMMON.conversationSessionTimeoutTicks.get();
+            return McaConversationsConfig.conversationSessionTimeoutTicks();
         } catch (Throwable t) {
             // Config not loaded (unit tests, early startup): fall back to the documented default.
             return 1200;

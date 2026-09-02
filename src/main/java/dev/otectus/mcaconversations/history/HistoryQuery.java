@@ -1,6 +1,8 @@
 package dev.otectus.mcaconversations.history;
 
 import com.google.gson.JsonObject;
+import dev.otectus.mcaconversations.conversation.OutcomeFamily;
+import dev.otectus.mcaconversations.conversation.StanceFamily;
 import dev.otectus.mcaconversations.conversation.SceneShape;
 
 import java.util.LinkedHashSet;
@@ -11,7 +13,7 @@ import java.util.Set;
 /**
  * The parsed read-side of the living-history dialogue conditions (spec §10.6).
  *
- * <p>Six small queries in one file because they are one vocabulary: each is a handful of fields, each
+ * <p>Seven small queries in one file because they are one vocabulary: each is a handful of fields, each
  * follows the same never-throw parse rule, and reading them side by side is how an author sees that
  * {@code conversations_episode} and {@code conversations_thread} ask different questions about the
  * same situation.
@@ -351,6 +353,93 @@ public final class HistoryQuery {
                     .map(history -> history.recency().daysSince(level, id, today) <= withinDays)
                     .orElse(false);
             return negate != matched;
+        }
+    }
+
+    /**
+     * {@code conversations_exchange: {subject?, stance?, outcome?, within_days?, not?}}.
+     *
+     * <p>What was decided between these two, and how it landed. This is the condition a callback is
+     * written against: not "did we talk about the ink" — {@code conversations_recent} already answers
+     * that — but "when we talked about the ink, did you tell me to save it, and did I take it".
+     *
+     * <p>All three discriminators are optional and they intersect, so an author can ask a broad
+     * question ("did they push back about anything lately") or an exact one ("did they tell me to
+     * save the ink and did I accept"). Naming none of them is fail-closed: a condition that matches
+     * any decision at all would fire for every player who has ever finished a conversation, which is
+     * not a callback, it is a leak.
+     */
+    public record Exchange(String subject, Optional<StanceFamily> stance,
+                           Optional<OutcomeFamily> outcome, long withinDays, boolean negate) {
+
+        /** How far back a decision is still worth naming, when the author does not say. */
+        public static final long DEFAULT_WINDOW_DAYS = 30L;
+
+        public static final Exchange INVALID =
+                new Exchange("", Optional.empty(), Optional.empty(), 0L, false);
+
+        public Exchange {
+            subject = normalize(subject);
+        }
+
+        public boolean isValid() {
+            return withinDays > 0
+                    && (!subject.isEmpty() || stance.isPresent() || outcome.isPresent());
+        }
+
+        public static Exchange fromJson(JsonObject json) {
+            if (json == null) {
+                return INVALID;
+            }
+            // A named stance or outcome that is not a real one is a typo, and a typo must not widen
+            // the query by quietly dropping the term it could not read.
+            Optional<StanceFamily> stance = Optional.empty();
+            if (json.has("stance")) {
+                stance = StanceFamily.byKey(json.get("stance").getAsString());
+                if (stance.isEmpty()) {
+                    return INVALID;
+                }
+            }
+            Optional<OutcomeFamily> outcome = Optional.empty();
+            if (json.has("outcome")) {
+                outcome = OutcomeFamily.byKey(json.get("outcome").getAsString());
+                if (outcome.isEmpty()) {
+                    return INVALID;
+                }
+            }
+            return new Exchange(json.has("subject") ? json.get("subject").getAsString() : "",
+                    stance, outcome,
+                    json.has("within_days") ? json.get("within_days").getAsLong() : DEFAULT_WINDOW_DAYS,
+                    json.has("not") && json.get("not").getAsBoolean());
+        }
+
+        /**
+         * Matches when a remembered decision satisfies every named term inside the window.
+         *
+         * <p>With a subject named this is one map lookup; without one it scans, which is bounded by
+         * {@link PairHistory#MAX_EXCHANGES} and so is a scan of at most sixteen rows.
+         */
+        public boolean matches(Optional<PairHistory> pair, long today) {
+            if (!isValid()) {
+                return false;
+            }
+            boolean matched = pair.map(history -> {
+                if (!subject.isEmpty()) {
+                    return history.exchange(subject).filter(echo -> satisfies(echo, today)).isPresent();
+                }
+                return history.exchanges().stream().anyMatch(echo -> satisfies(echo, today));
+            }).orElse(false);
+            return negate != matched;
+        }
+
+        private boolean satisfies(StanceEchoRecord echo, long today) {
+            if (echo == null || echo.daysSince(today) > withinDays) {
+                return false;
+            }
+            if (stance.isPresent() && echo.stance() != stance.get()) {
+                return false;
+            }
+            return outcome.isEmpty() || echo.outcome() == outcome.get();
         }
     }
 

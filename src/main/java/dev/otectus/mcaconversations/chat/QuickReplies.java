@@ -110,14 +110,16 @@ public final class QuickReplies {
                 out.append(Component.literal("\n"));
             }
             int choice = shown;
-            out.append(Component.literal(shown + ". ").withStyle(style -> style
-                    .withColor(ChatFormatting.GOLD)
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                            Integer.toString(choice)))
-                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            Component.translatable("chat.mcaconversations.responses.hover", choice)))));
-            out.append(Component.translatable("dialogue." + question + "." + answer)
-                    .withStyle(ChatFormatting.GRAY));
+            ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, Integer.toString(choice));
+            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                    Component.translatable("chat.mcaconversations.responses.hover", choice));
+            MutableComponent option = Component.empty().withStyle(style -> style
+                    .withClickEvent(click).withHoverEvent(hover));
+            option.append(Component.literal(shown + ". ").withStyle(style -> style
+                    .withColor(0xFFC34D).withBold(true)));
+            option.append(Component.translatable("dialogue." + question + "." + answer)
+                    .withStyle(ChatFormatting.WHITE));
+            out.append(option);
         }
         out.append(Component.literal("\n"));
         out.append(Component.translatable("chat.mcaconversations.responses.hint")

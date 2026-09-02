@@ -243,10 +243,14 @@ public final class ConversationsEvents {
         // Villager attention (typing awareness + conversation presence) is applied every tick.
         VillagerAttention.tick(event.getServer(), gameTime);
 
-        // Proactive greeting rides its own light cadence (Phase 4, double-gated, off by default).
+        // The approach scan: one light cadence carrying both things a villager may say to somebody
+        // walking past. Greeting and initiative are separately switchable, so the scan runs when
+        // either is on and each half checks its own switch — a server that turned greetings off has
+        // not thereby decided that a due promise should go unmentioned.
         if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0
                 && McaConversationsConfig.COMMON.enableChatMode.get()
-                && McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()) {
+                && (McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()
+                        || McaConversationsConfig.maxInitiativesPerVillagerPlayerDay() > 0)) {
             GreetOnApproach.scan(event.getServer());
         }
 
@@ -263,7 +267,7 @@ public final class ConversationsEvents {
 
     /** Age-based disposition pruning, riding the gossip scan cadence (no extra tick work). */
     private static void pruneStaleDispositions(net.minecraft.server.MinecraftServer server) {
-        int staleDays = McaConversationsConfig.COMMON.dispositionStaleDays.get();
+        int staleDays = McaConversationsConfig.dispositionStaleDays();
         if (staleDays <= 0 || !McaConversationsConfig.COMMON.enableDispositions.get()) {
             return;
         }
@@ -280,7 +284,7 @@ public final class ConversationsEvents {
      * in a very long time" and an operator should not have to reason about two numbers.
      */
     private static void pruneStaleProgress(net.minecraft.server.MinecraftServer server) {
-        int staleDays = McaConversationsConfig.COMMON.dispositionStaleDays.get();
+        int staleDays = McaConversationsConfig.dispositionStaleDays();
         if (staleDays <= 0) {
             return;
         }

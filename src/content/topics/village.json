@@ -306,6 +306,478 @@
           }
         }
       ]
+    },
+    {
+      "name": "still_placing_it",
+      "subject": "village.change",
+      "shape": "confide",
+      "act": "disclose",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge",
+        "decide"
+      ],
+      "episode_kind": "village.change",
+      "episode_state": [
+        "active"
+      ],
+      "slots_used": [
+        "change"
+      ],
+      "thread": "village.change",
+      "base_priority": 34,
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "The village.",
+        "pt": "A vila."
+      },
+      "lines": {
+        "en": [
+          "There has been %2$s and I have not worked out yet what I think about it.",
+          "We have had %2$s. I keep starting sentences about it and not finishing them.",
+          "%2$s, and the village is behaving as though that is a small thing. It is not."
+        ],
+        "pt": [
+          "Houve %2$s e eu ainda não descobri o que penso disso.",
+          "Tivemos %2$s. Fico começando frases sobre isso e não terminando.",
+          "%2$s, e a vila age como se fosse pouca coisa. Não é."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_changed",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What has it changed, for you?",
+            "pt": "O que isso mudou, para você?"
+          },
+          "phrases": [
+            "what has it changed for you",
+            "how has that changed things"
+          ],
+          "requires_any": [
+            "changed",
+            "different"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "named_it",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "confide",
+            "predicate": "social_report",
+            "obligations": [
+              "acknowledge",
+              "decide"
+            ],
+            "slots_used": [
+              "change"
+            ],
+            "prompt": {
+              "en": "So where does that leave you?",
+              "pt": "E onde isso te deixa?"
+            },
+            "lines": {
+              "en": [
+                "Everything and nothing. The bread is the same. The room I walk into is not.",
+                "I find I was counting on things staying arranged the way they were, which is a foolish thing to count on.",
+                "It has moved me one place along a line I did not know I was standing in."
+              ],
+              "pt": [
+                "Tudo e nada. O pão é o mesmo. A sala em que eu entro não é.",
+                "Descobri que eu contava com as coisas continuarem arrumadas como estavam, o que é uma bobagem para se contar.",
+                "Isso me moveu um lugar numa fila em que eu não sabia que estava."
+              ]
+            },
+            "replies": [
+              {
+                "name": "sit_with_it",
+                "stance": "empathy",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "gentle",
+                "outcome": "appreciated",
+                "label": {
+                  "en": "Take your time with it.",
+                  "pt": "Vá com calma com isso."
+                },
+                "phrases": [
+                  "take your time with it",
+                  "give yourself time to place it"
+                ],
+                "requires_any": [
+                  "time"
+                ],
+                "disposition": {
+                  "warmth": 3,
+                  "trust": 2
+                },
+                "affection": {
+                  "decision": "village.change.sit",
+                  "delta": 2,
+                  "budget": "standard",
+                  "policy": "once_per_day"
+                },
+                "reaction": {
+                  "id": "eased",
+                  "act": "accept",
+                  "polarity": "positive",
+                  "shape": "confide",
+                  "lines": {
+                    "en": [
+                      "No. I suppose I do not. That is a kinder way round than the one I had.",
+                      "Thank you. I had been treating it as a sum I was failing.",
+                      "Right. Then I will stop trying to land on an opinion by supper."
+                    ],
+                    "pt": [
+                      "Não. Acho que não preciso. É um jeito mais gentil do que o meu.",
+                      "Obrigado. Eu estava tratando isso como uma conta que eu não conseguia fechar.",
+                      "Certo. Então vou parar de tentar chegar a uma opinião até o jantar."
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "press_for_the_line",
+                "stance": "challenge",
+                "answers": [
+                  "decide"
+                ],
+                "tone": "blunt",
+                "outcome": "qualified",
+                "label": {
+                  "en": "What line? Say the actual thing.",
+                  "pt": "Que fila? Diga a coisa de verdade."
+                },
+                "phrases": [
+                  "what line",
+                  "say the actual thing",
+                  "what do you really mean"
+                ],
+                "requires_any": [
+                  "line",
+                  "actual",
+                  "mean"
+                ],
+                "disposition": {
+                  "respect": 3,
+                  "tension": 2
+                },
+                "reaction": {
+                  "id": "said_it",
+                  "act": "explain",
+                  "polarity": "negative",
+                  "shape": "confide",
+                  "privacy": "discreet",
+                  "lines": {
+                    "en": [
+                      "The one where I am the older one now. There. You made me say it.",
+                      "That I am further from the start of my life than the end of it. Satisfied?",
+                      "That the village will do this again and one of the times it will be about me."
+                    ],
+                    "pt": [
+                      "Aquela em que agora eu sou o mais velho. Pronto. Você me fez dizer.",
+                      "Que estou mais longe do começo da minha vida do que do fim. Satisfeito?",
+                      "Que a vila vai fazer isso de novo e numa dessas vezes vai ser sobre mim."
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "offer_to_carry_it",
+          "stance": "practical_help",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Anything that needs doing about it?",
+            "pt": "Tem algo que precise ser feito por causa disso?"
+          },
+          "phrases": [
+            "anything that needs doing",
+            "is there something to be done"
+          ],
+          "requires_any": [
+            "doing",
+            "done"
+          ],
+          "disposition": {
+            "respect": 2,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "practical",
+            "act": "qualify",
+            "polarity": "neutral",
+            "shape": "plan",
+            "predicate": "plan",
+            "temporal": "future",
+            "lines": {
+              "en": [
+                "Not yet. Ask me in a few days and there will be a list, there always is.",
+                "Kind. Nothing today. The doing part comes after the sitting-about part.",
+                "There will be. Nobody has admitted it out loud yet, so nobody can be asked."
+              ],
+              "pt": [
+                "Ainda não. Me pergunte daqui a uns dias e vai ter uma lista, sempre tem.",
+                "Gentil. Hoje nada. A parte de fazer vem depois da parte de ficar sentado.",
+                "Vai ter. Ninguém admitiu em voz alta ainda, então ninguém pode ser chamado."
+              ]
+            }
+          }
+        },
+        {
+          "name": "shrug_it_off",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "resisted",
+          "label": {
+            "en": "Villages change. That's all.",
+            "pt": "Vilas mudam. É só isso."
+          },
+          "phrases": [
+            "villages change",
+            "that is just how it goes"
+          ],
+          "requires_any": [
+            "change",
+            "goes"
+          ],
+          "disposition": {
+            "warmth": -3,
+            "tension": 3
+          },
+          "affection": {
+            "decision": "village.change.shrug",
+            "delta": -2,
+            "budget": "standard",
+            "policy": "daily_repeat"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They do. I will keep the rest of it to myself, then.",
+                "That is true and it is not what I said. Never mind.",
+                "Yes. Well. I will not trouble you with the next one."
+              ],
+              "pt": [
+                "Mudam. Então vou guardar o resto para mim.",
+                "Isso é verdade e não é o que eu disse. Deixa para lá.",
+                "Sim. Bom. Não vou te incomodar com a próxima."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "change_settled",
+      "subject": "village.change",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "obligations": [
+        "acknowledge",
+        "clarify"
+      ],
+      "episode_kind": "village.change",
+      "episode_state": [
+        "succeeded"
+      ],
+      "slots_used": [
+        "change"
+      ],
+      "thread": "village.change",
+      "base_priority": 22,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Since then.",
+        "pt": "Desde então."
+      },
+      "lines": {
+        "en": [
+          "%2$s, and the village closed over it the way water does. I have made my peace.",
+          "I have stopped starting sentences about %2$s. That is what settled looks like, apparently.",
+          "We had %2$s and now we simply have had it. I did not expect that to be a relief."
+        ],
+        "pt": [
+          "%2$s, e a vila se fechou por cima como a água faz. Fiz as pazes com isso.",
+          "Parei de começar frases sobre %2$s. É essa a cara de estar resolvido, pelo visto.",
+          "Tivemos %2$s e agora simplesmente já tivemos. Não esperava que isso fosse um alívio."
+        ]
+      },
+      "replies": [
+        {
+          "name": "glad_of_it",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I'm glad it sits easier now.",
+            "pt": "Fico feliz que isso pese menos agora."
+          },
+          "phrases": [
+            "glad it sits easier",
+            "glad that is behind you"
+          ],
+          "requires_any": [
+            "glad",
+            "easier"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "warmed",
+            "temporal": "past",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "So am I. You asked about it when it was still sharp, which I have not forgotten.",
+                "It does. Some of that is time and some of it is having said it out loud once.",
+                "Easier, yes. Not gone. I do not think I want it gone."
+              ],
+              "pt": [
+                "Eu também. Você perguntou quando ainda estava em carne viva, e eu não esqueci.",
+                "Pesa menos. Parte disso é tempo e parte é ter dito em voz alta uma vez.",
+                "Mais leve, sim. Não sumiu. Acho que não quero que suma."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_helped",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What made the difference?",
+            "pt": "O que fez diferença?"
+          },
+          "phrases": [
+            "what made the difference",
+            "what helped in the end"
+          ],
+          "requires_any": [
+            "difference",
+            "helped"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "temporal": "past",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Nothing clever. It stopped being the newest thing and something else took the job.",
+                "Ordinary days, one after another, none of them about it.",
+                "Somebody asked me a plain question about it and I heard my own answer."
+              ],
+              "pt": [
+                "Nada esperto. Deixou de ser a novidade e outra coisa assumiu o posto.",
+                "Dias comuns, um atrás do outro, nenhum deles sobre isso.",
+                "Alguém me fez uma pergunta simples sobre isso e eu ouvi a minha própria resposta."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "slot_lang": {
+    "village_change_marriage": {
+      "en": "a wedding",
+      "pt": "um casamento"
+    },
+    "village_change_divorce": {
+      "en": "a marriage ending",
+      "pt": "um casamento acabando"
+    },
+    "village_change_death": {
+      "en": "a death",
+      "pt": "uma morte"
+    },
+    "village_change_birth": {
+      "en": "a birth",
+      "pt": "um nascimento"
+    },
+    "village_change_arrival": {
+      "en": "somebody moving in",
+      "pt": "alguém se mudando para cá"
+    },
+    "village_change_departure": {
+      "en": "somebody leaving for good",
+      "pt": "alguém indo embora de vez"
+    },
+    "village_change_quest": {
+      "en": "a favour somebody did us",
+      "pt": "um favor que fizeram por nós"
+    },
+    "village_weight_the_rota": {
+      "en": "the rota",
+      "pt": "a escala"
+    },
+    "village_weight_the_spare_room": {
+      "en": "the spare room",
+      "pt": "o quarto vago"
+    },
+    "village_weight_the_headcount": {
+      "en": "the headcount",
+      "pt": "a contagem de gente"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "village.change",
+      "subject": "village.change",
+      "initial_state": "active",
+      "salience": 55,
+      "expires_after_days": 20,
+      "slots": {
+        "change": [
+          "village_change_marriage"
+        ]
+      }
     }
   ]
 }

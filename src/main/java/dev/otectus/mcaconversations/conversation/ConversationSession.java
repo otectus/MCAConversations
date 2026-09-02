@@ -66,6 +66,7 @@ public final class ConversationSession {
     private String branch;
     private String currentQuestion;
     private List<String> currentAnswers = List.of();
+    private UUID offerVillagerId;
     private long offerRevision;
     private long offerCreatedGameTime;
     private boolean offerConsumed;
@@ -146,6 +147,10 @@ public final class ConversationSession {
         if (offeredVillagerId != null) {
             setVillagerId(offeredVillagerId);
         }
+        // GUI response packets do not identify a villager. Keep that absence explicit instead of
+        // leaking the broader session's previous villager into this offer and rejecting a valid
+        // candidate captured from the currently open interaction screen.
+        this.offerVillagerId = offeredVillagerId;
         this.offerRevision++;
         this.currentQuestion = question == null ? "" : question;
         this.currentAnswers = answers == null ? List.of() : List.copyOf(answers);
@@ -159,7 +164,7 @@ public final class ConversationSession {
         if (currentQuestion == null) {
             return Optional.empty();
         }
-        return Optional.of(new ChoiceOffer(offerRevision, villagerId, currentQuestion,
+        return Optional.of(new ChoiceOffer(offerRevision, offerVillagerId, currentQuestion,
                 currentAnswers, offerFrontend, offerCreatedGameTime, offerConsumed));
     }
 
@@ -230,6 +235,7 @@ public final class ConversationSession {
     public void clearOffer() {
         this.currentQuestion = null;
         this.currentAnswers = List.of();
+        this.offerVillagerId = null;
         this.offerConsumed = false;
     }
 

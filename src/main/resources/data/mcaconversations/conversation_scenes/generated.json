@@ -1873,6 +1873,37 @@
         "opening_beat": "village.after_something_happened.open"
       }
     },
+    "topic.village.change_settled": {
+      "purpose": "topic:village",
+      "shape": "reminisce",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "village.change",
+        "episode_state": [
+          "succeeded"
+        ],
+        "required_slots": {
+          "change": "localized_token"
+        }
+      },
+      "selection": {
+        "base_priority": 22,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.village.change_settled.respond",
+        "opening_beat": "village.change_settled.open"
+      },
+      "episode": {
+        "thread": "village.change"
+      }
+    },
     "topic.village.getting_bigger": {
       "purpose": "topic:village",
       "shape": "observe",
@@ -1902,6 +1933,37 @@
       "route": {
         "question": "conversations.scene.village.getting_bigger.respond",
         "opening_beat": "village.getting_bigger.open"
+      }
+    },
+    "topic.village.still_placing_it": {
+      "purpose": "topic:village",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "village.change",
+        "episode_state": [
+          "active"
+        ],
+        "required_slots": {
+          "change": "localized_token"
+        }
+      },
+      "selection": {
+        "base_priority": 34,
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.village.still_placing_it.respond",
+        "opening_beat": "village.still_placing_it.open"
+      },
+      "episode": {
+        "thread": "village.change"
       }
     },
     "topic.weather.the_long_dry": {

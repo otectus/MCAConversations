@@ -27,9 +27,20 @@ import java.util.TreeMap;
  */
 public final class PairHistory {
 
+    /**
+     * Subjects whose last decision is remembered.
+     *
+     * <p>Small on purpose. This is what a callback names, and a callback is only worth making about
+     * something recent enough that the player remembers it too — sixteen subjects is already more
+     * than one pair will revisit. Over the cap the oldest decision goes, which is the one whose
+     * callback would have landed as "you said something about this once" anyway.
+     */
+    public static final int MAX_EXCHANGES = 16;
+
     private final Map<String, SharedThreadRecord> threads = new LinkedHashMap<>();
     private final Map<String, CommitmentRecord> commitments = new LinkedHashMap<>();
     private final Map<String, PlayerClaimRecord> claims = new LinkedHashMap<>();
+    private final Map<String, StanceEchoRecord> exchanges = new LinkedHashMap<>();
     private TopicRecencyRecord recency = TopicRecencyRecord.EMPTY;
     private long firstMetDay = Long.MIN_VALUE;
     private long lastTalkedDay = Long.MIN_VALUE;
@@ -228,6 +239,46 @@ public final class PairHistory {
         return true;
     }
 
+    // --- Decisions --------------------------------------------------------------------------------
+
+    /** What was last decided about {@code subject} between these two, if anything was. */
+    public Optional<StanceEchoRecord> exchange(String subject) {
+        return Optional.ofNullable(exchanges.get(normalize(subject)));
+    }
+
+    /** Every remembered decision, newest day first. */
+    public List<StanceEchoRecord> exchanges() {
+        List<StanceEchoRecord> out = new ArrayList<>(exchanges.values());
+        out.sort(Comparator.comparingLong(StanceEchoRecord::day).reversed());
+        return List.copyOf(out);
+    }
+
+    /**
+     * Remembers how one subject was last left.
+     *
+     * <p>One row per subject rather than a log: a callback wants the state the subject was left in,
+     * and the fourth-most-recent thing said about the ink is not that. Re-deciding a subject
+     * overwrites, which is the correct behaviour — the player changed their mind, and the villager
+     * should remember the mind they ended up with.
+     */
+    public boolean recordExchange(StanceEchoRecord exchange) {
+        if (exchange == null || !exchange.isMeaningful()) {
+            return false;
+        }
+        StanceEchoRecord existing = exchanges.get(exchange.subject());
+        if (exchange.equals(existing)) {
+            return false;
+        }
+        exchanges.put(exchange.subject(), exchange);
+        if (exchanges.size() > MAX_EXCHANGES) {
+            exchanges.entrySet().stream()
+                    .min(Comparator.comparingLong(entry -> entry.getValue().day()))
+                    .map(Map.Entry::getKey)
+                    .ifPresent(exchanges::remove);
+        }
+        return true;
+    }
+
     // --- Recency and the shared clock -----------------------------------------------------------------
 
     public TopicRecencyRecord recency() {
@@ -276,7 +327,7 @@ public final class PairHistory {
     }
 
     public boolean isEmpty() {
-        return threads.isEmpty() && commitments.isEmpty() && claims.isEmpty()
+        return threads.isEmpty() && commitments.isEmpty() && claims.isEmpty() && exchanges.isEmpty()
                 && recency.equals(TopicRecencyRecord.EMPTY) && firstMetDay == Long.MIN_VALUE;
     }
 
@@ -331,6 +382,12 @@ public final class PairHistory {
                 .map(CommitmentRecord::save).toList()));
         tag.put("claims", saveList(new TreeMap<>(claims).values().stream()
                 .map(PlayerClaimRecord::save).toList()));
+        if (!exchanges.isEmpty()) {
+            // Absent when there are none, so a save written before 1.5.0 and one written after it
+            // with nothing decided are byte-identical.
+            tag.put("exchanges", saveList(new TreeMap<>(exchanges).values().stream()
+                    .map(StanceEchoRecord::save).toList()));
+        }
         CompoundTag recencyTag = recency.save();
         if (!recencyTag.isEmpty()) {
             tag.put("recency", recencyTag);
@@ -355,6 +412,10 @@ public final class PairHistory {
                 CommitmentRecord.load(row).ifPresent(c -> history.commitments.put(c.id(), c)));
         forEachCompound(tag, "claims", row ->
                 PlayerClaimRecord.load(row).ifPresent(c -> history.claims.put(c.type(), c)));
+        // Absent in every save written before 1.5.0, which loads as "nothing has been decided yet"
+        // rather than as a migration — there is no earlier form of this to convert.
+        forEachCompound(tag, "exchanges", row ->
+                StanceEchoRecord.load(row).ifPresent(e -> history.exchanges.put(e.subject(), e)));
         if (tag.contains("recency", Tag.TAG_COMPOUND)) {
             history.recency = TopicRecencyRecord.load(tag.getCompound("recency"));
         }

@@ -30,6 +30,7 @@ public final class ClientChoiceMessages {
         if (changed && message.reason() == ChoiceClearS2C.Reason.EXPIRED && minecraft.player != null) {
             minecraft.player.displayClientMessage(
                     Component.translatable("gui.mcaconversations.responses.expired"), true);
+            DialogueChoiceNarrator.expired();
         }
     }
 }

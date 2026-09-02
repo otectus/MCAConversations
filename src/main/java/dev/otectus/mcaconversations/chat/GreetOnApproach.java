@@ -4,6 +4,7 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.VillagerFinder.VillagerCandidate;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.scene.InitiativeGate;
+import dev.otectus.mcaconversations.scene.InitiativePlanner;
 import dev.otectus.mcaconversations.scene.ScenePurpose;
 import dev.otectus.mcaconversations.state.MemoryIds;
 import net.minecraft.server.MinecraftServer;
@@ -28,6 +29,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * its own {@code chatgreet.today} memory so it never consumes the GUI's ask-how-you've-been budget.
  * At most one villager (the nearest eligible) greets per scan per player. Server thread only; scan
  * cadence is owned by the tick handler.
+ *
+ * <p><b>Since 1.5.0 this scan carries two things.</b> Before the greeting roll, each newly-entered
+ * villager is asked whether it has something real to raise — a promise come due, an unacknowledged
+ * rupture, a thread left open, a situation of its own that has changed (see
+ * {@link InitiativePlanner}). If it has, that is what it says <em>instead</em> of hello: the same one
+ * line, carrying something rather than nothing. The two halves keep separate switches and separate
+ * budgets, so turning greetings off does not silence a due promise and vice versa.
  */
 public final class GreetOnApproach {
 
@@ -50,7 +58,7 @@ public final class GreetOnApproach {
 
     /** One scan over all online players. Caller gates on the config flags and the tick cadence. */
     public static void scan(MinecraftServer server) {
-        double radius = McaConversationsConfig.COMMON.chatModeRadius.get();
+        double radius = McaConversationsConfig.chatModeRadius();
         long now = server.overworld().getGameTime();
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (player.hasDisconnected() || !player.isAlive() || player.isSpectator()) {
@@ -76,12 +84,24 @@ public final class GreetOnApproach {
             return;
         }
 
-        double baseChance = McaConversationsConfig.COMMON.chatModeGreetChance.get();
+        double baseChance = McaConversationsConfig.chatModeGreetChance();
+        boolean greetingsOn = McaConversationsConfig.COMMON.chatModeGreetOnApproach.get();
         long gameDay = now / 24000L;
 
-        // Nearest newly-entered villager that may greet; at most one greeter per scan per player.
+        // Nearest newly-entered villager that has something to say; at most one speaker per scan
+        // per player, whichever of the two things they end up saying.
         for (VillagerCandidate c : candidates) { // already nearest-first
             if (!entered.contains(c.entity().getUUID())) {
+                continue;
+            }
+            // Something real outranks a hello. It is the same single line either way, so a villager
+            // who is owed torches leads with the torches rather than spending the moment on "morning"
+            // and leaving the promise for the player to remember. Its own budget, gate and cooldown
+            // live in InitiativeGate, so this cannot make the world any more talkative than it was.
+            if (InitiativePlanner.tryRaise(c.entity(), player, gameDay, now)) {
+                return;
+            }
+            if (!greetingsOn) {
                 continue;
             }
             String memoryId = MemoryIds.playerScoped(GREET_MEMORY, player.getUUID());

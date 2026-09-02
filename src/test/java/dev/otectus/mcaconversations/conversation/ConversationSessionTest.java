@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,6 +56,23 @@ class ConversationSessionTest {
                 PLAYER, second.revision(), 1, 101).orElseThrow());
         assertTrue(ConversationSessions.consumeOffer(PLAYER, second.revision(), 1, 101).isEmpty());
         assertTrue(ConversationSessions.consumeOffer(PLAYER, first.revision(), 0, 101).isEmpty());
+    }
+
+    @Test
+    @DisplayName("a GUI offer never inherits a stale villager from the broader session")
+    void guiOfferKeepsUnboundVillagerExplicit() {
+        ConversationSession session = ConversationSessions.get(PLAYER, 100);
+        session.setVillagerId(VILLAGER);
+
+        ConversationSession.ChoiceOffer gui = session.setOffer("conversations.q", List.of("answer"),
+                ConversationSession.Frontend.GUI, null, 101);
+        assertNull(gui.villagerId());
+        assertEquals(VILLAGER, session.villagerId(), "recording the offer must not end the topic");
+
+        ConversationSession.ChoiceOffer chat = session.setOffer("conversations.q", List.of("answer"),
+                ConversationSession.Frontend.CHAT, OTHER_VILLAGER, 102);
+        assertEquals(OTHER_VILLAGER, chat.villagerId());
+        assertEquals(OTHER_VILLAGER, session.villagerId());
     }
 
     @Test

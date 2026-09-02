@@ -8,7 +8,10 @@ import java.util.Optional;
 /** Client-only focus, paging and one-shot lock state for a synchronized offer. */
 public final class ClientChoiceState {
 
-    public static final int PAGE_SIZE = 9;
+    public static final int MAX_VISIBLE_SHORTCUTS = DialogueChoiceLayout.MAX_VISIBLE_SHORTCUTS;
+    /** @deprecated A page is now height-driven; this is only the maximum visible digit count. */
+    @Deprecated(forRemoval = false)
+    public static final int PAGE_SIZE = MAX_VISIBLE_SHORTCUTS;
 
     public record ClientChoiceOffer(long revision, String questionId, List<String> answerIds,
                                     ConversationSession.Frontend frontend, long receivedClientTick) {
@@ -22,6 +25,7 @@ public final class ClientChoiceState {
     private int focusedIndex;
     private int page;
     private int lockedIndex = -1;
+    private List<DialogueChoiceLayout.ChoicePage> pages = List.of();
 
     public boolean accept(ClientChoiceOffer incoming) {
         if (incoming == null || incoming.revision() <= highestRevision) {
@@ -32,6 +36,7 @@ public final class ClientChoiceState {
         focusedIndex = 0;
         page = 0;
         lockedIndex = -1;
+        pages = fixedPages(incoming.answerIds().size());
         return true;
     }
 
@@ -46,6 +51,7 @@ public final class ClientChoiceState {
         focusedIndex = 0;
         page = 0;
         lockedIndex = -1;
+        pages = List.of();
         return changed;
     }
 
@@ -54,6 +60,12 @@ public final class ClientChoiceState {
         focusedIndex = 0;
         page = 0;
         lockedIndex = -1;
+        pages = List.of();
+    }
+
+    /** Highest revision seen, so a caller can synthesise an offer that will not be rejected. */
+    public long highestRevision() {
+        return highestRevision;
     }
 
     public Optional<ClientChoiceOffer> offer() {
@@ -81,20 +93,41 @@ public final class ClientChoiceState {
     }
 
     public int pageCount() {
-        return offer == null ? 0 : Math.max(1, (offer.answerIds().size() + PAGE_SIZE - 1) / PAGE_SIZE);
+        return offer == null ? 0 : pages.size();
     }
 
     public int firstOnPage() {
-        return page * PAGE_SIZE;
+        return currentPage().map(DialogueChoiceLayout.ChoicePage::firstInclusive).orElse(0);
     }
 
     public int visibleCount() {
-        return offer == null ? 0 : Math.min(PAGE_SIZE, offer.answerIds().size() - firstOnPage());
+        return currentPage().map(DialogueChoiceLayout.ChoicePage::size).orElse(0);
+    }
+
+    public List<DialogueChoiceLayout.ChoicePage> pages() {
+        return pages;
+    }
+
+    /** Installs a font/height-aware page map while keeping the absolute focus visible. */
+    public boolean updatePages(List<DialogueChoiceLayout.ChoicePage> incoming) {
+        if (offer == null || !validPages(incoming, offer.answerIds().size())) {
+            return false;
+        }
+        List<DialogueChoiceLayout.ChoicePage> copy = List.copyOf(incoming);
+        if (copy.equals(pages)) {
+            return false;
+        }
+        pages = copy;
+        page = pageContaining(focusedIndex);
+        return true;
     }
 
     public boolean focus(int absoluteIndex) {
         if (offer == null || locked() || absoluteIndex < firstOnPage()
                 || absoluteIndex >= firstOnPage() + visibleCount()) {
+            return false;
+        }
+        if (focusedIndex == absoluteIndex) {
             return false;
         }
         focusedIndex = absoluteIndex;
@@ -105,9 +138,12 @@ public final class ClientChoiceState {
         if (offer == null || locked()) {
             return false;
         }
-        int first = firstOnPage();
-        int last = first + visibleCount() - 1;
-        focusedIndex = Math.max(first, Math.min(last, focusedIndex + delta));
+        int next = Math.max(0, Math.min(offer.answerIds().size() - 1, focusedIndex + delta));
+        if (next == focusedIndex) {
+            return false;
+        }
+        focusedIndex = next;
+        page = pageContaining(next);
         return true;
     }
 
@@ -115,7 +151,11 @@ public final class ClientChoiceState {
         if (offer == null || locked()) {
             return false;
         }
-        focusedIndex = end ? firstOnPage() + visibleCount() - 1 : firstOnPage();
+        int next = end ? firstOnPage() + visibleCount() - 1 : firstOnPage();
+        if (focusedIndex == next) {
+            return false;
+        }
+        focusedIndex = next;
         return true;
     }
 
@@ -139,5 +179,48 @@ public final class ClientChoiceState {
         focusedIndex = absoluteIndex;
         lockedIndex = absoluteIndex;
         return true;
+    }
+
+    private Optional<DialogueChoiceLayout.ChoicePage> currentPage() {
+        if (page < 0 || page >= pages.size()) {
+            return Optional.empty();
+        }
+        return Optional.of(pages.get(page));
+    }
+
+    private int pageContaining(int absoluteIndex) {
+        for (int i = 0; i < pages.size(); i++) {
+            if (pages.get(i).contains(absoluteIndex)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private static List<DialogueChoiceLayout.ChoicePage> fixedPages(int answerCount) {
+        if (answerCount <= 0) {
+            return List.of();
+        }
+        java.util.ArrayList<DialogueChoiceLayout.ChoicePage> result = new java.util.ArrayList<>();
+        for (int first = 0; first < answerCount; first += MAX_VISIBLE_SHORTCUTS) {
+            result.add(new DialogueChoiceLayout.ChoicePage(first,
+                    Math.min(answerCount, first + MAX_VISIBLE_SHORTCUTS)));
+        }
+        return List.copyOf(result);
+    }
+
+    private static boolean validPages(List<DialogueChoiceLayout.ChoicePage> incoming, int answerCount) {
+        if (incoming == null || incoming.isEmpty()) {
+            return false;
+        }
+        int expected = 0;
+        for (DialogueChoiceLayout.ChoicePage choicePage : incoming) {
+            if (choicePage.firstInclusive() != expected
+                    || choicePage.size() > MAX_VISIBLE_SHORTCUTS) {
+                return false;
+            }
+            expected = choicePage.lastExclusive();
+        }
+        return expected == answerCount;
     }
 }

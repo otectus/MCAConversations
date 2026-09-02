@@ -83,8 +83,9 @@ class AgeSeparationTest {
         JsonObject actions = result.actions();
         StringBuilder out = new StringBuilder();
         out.append(actions.has("next") ? actions.get("next").getAsString() : "(no page)");
-        if (actions.has("say")) {
-            out.append(" + ").append(actions.get("say").getAsString());
+        String spoken = ContentFixture.spokenPhrase(actions);
+        if (spoken != null) {
+            out.append(" + ").append(spoken);
         }
         JsonElement gossip = actions.get("conversations_gossip_say");
         if (gossip != null && gossip.isJsonObject() && gossip.getAsJsonObject().has("phrase_prefix")) {

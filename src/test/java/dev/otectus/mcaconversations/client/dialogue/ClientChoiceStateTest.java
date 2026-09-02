@@ -43,4 +43,33 @@ class ClientChoiceStateTest {
         assertTrue(state.clear(4));
         assertTrue(state.offer().isEmpty());
     }
+
+    @Test
+    void unchangedFocusOperationsReportFalseAndArrowsCrossPages() {
+        ClientChoiceState state = new ClientChoiceState();
+        state.accept(offer(1, 10));
+        assertFalse(state.focus(0));
+        assertFalse(state.focusBoundary(false));
+        assertTrue(state.moveFocus(8));
+        assertEquals(8, state.focusedIndex());
+        assertTrue(state.moveFocus(1));
+        assertEquals(1, state.page());
+        assertEquals(9, state.focusedIndex());
+        assertFalse(state.moveFocus(1));
+    }
+
+    @Test
+    void dynamicPageMapPreservesAbsoluteFocus() {
+        ClientChoiceState state = new ClientChoiceState();
+        state.accept(offer(1, 8));
+        assertTrue(state.moveFocus(5));
+        assertTrue(state.updatePages(List.of(
+                new DialogueChoiceLayout.ChoicePage(0, 3),
+                new DialogueChoiceLayout.ChoicePage(3, 6),
+                new DialogueChoiceLayout.ChoicePage(6, 8))));
+        assertEquals(1, state.page());
+        assertEquals(5, state.focusedIndex());
+        assertEquals(3, state.firstOnPage());
+        assertEquals(3, state.visibleCount());
+    }
 }

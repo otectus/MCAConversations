@@ -63,8 +63,62 @@ final class TopicPackCompiler {
         for (JsonElement element : scenes) {
             compileScene(element.getAsJsonObject());
         }
+        compileEpisodes(scenes);
         compileFollowup();
         compileFunnel();
+    }
+
+    /**
+     * The episode families this topic owns, if it owns any.
+     *
+     * <p>A topic pack could already point a scene at an episode; what it could not do was create
+     * one, so every persistent situation in the game belonged to somebody's trade. A villager's life
+     * was their job and nothing else — no running thread about the village, their family, or
+     * anything the two of you had actually done together.
+     *
+     * <p>Compiled after the scenes rather than before, because {@code resume_scenes} is derived from
+     * whichever scenes bound this kind rather than being written out by hand. Deriving it is what
+     * stops a thread naming a scene that was renamed or removed underneath it.
+     */
+    private void compileEpisodes(JsonArray scenes) {
+        JsonArray episodes = source.getAsJsonArray("episodes");
+        if (episodes == null || episodes.isEmpty()) {
+            return;
+        }
+        for (JsonElement element : episodes) {
+            JsonObject episode = element.getAsJsonObject();
+            String kind = ContentCompiler.require(episode, "kind", where);
+            if (kind.startsWith("work.")) {
+                // Profession packs compile first and addEpisode throws on a duplicate kind, so this
+                // would be a confusing failure a long way from its cause.
+                throw new IllegalStateException(where + " episode '" + kind
+                        + "' uses the work. prefix, which belongs to profession packs");
+            }
+            String subject = episode.has("subject")
+                    ? episode.get("subject").getAsString() : kind;
+            Set<String> stateNames = new LinkedHashSet<>();
+            List<String> resumeScenes = new ArrayList<>();
+            for (JsonElement sceneElement : scenes) {
+                JsonObject scene = sceneElement.getAsJsonObject();
+                if (!scene.has("episode_kind")
+                        || !kind.equals(scene.get("episode_kind").getAsString())) {
+                    continue;
+                }
+                resumeScenes.add("topic." + topic + "."
+                        + ContentCompiler.require(scene, "name", where));
+                for (String state : ContentCompiler.strings(scene, "episode_state")) {
+                    stateNames.add(state);
+                }
+            }
+            if (stateNames.isEmpty()) {
+                throw new IllegalStateException(where + " episode '" + kind
+                        + "' has no scene bound to it, so nothing could ever speak from it");
+            }
+            String threadId = topic + "." + kind.substring(kind.indexOf('.') + 1);
+            NarrativeTemplates.episode(out, episode, kind, subject, stateNames, List.of());
+            NarrativeTemplates.thread(out, episode, threadId, kind, topic, subject, resumeScenes);
+            NarrativeTemplates.commitment(out, episode, threadId, where);
+        }
     }
 
     private void compileSlotLang() {
@@ -304,19 +358,41 @@ final class TopicPackCompiler {
         String reactionSay = sayKey + "." + reactionId;
         List<String> reactionSlots = ContentCompiler.strings(reaction, "slots_used");
 
+        // A reaction that carries its own replies earns a page of its own, and the beat has to point
+        // at it: the stance rules are contracted against whichever beat opened the page, so a third
+        // turn hung off the shared followup would be offering buttons that answer a different line.
+        JsonArray followOnReplies = reaction.getAsJsonArray("replies");
+        boolean hasFollowOn = followOnReplies != null && !followOnReplies.isEmpty();
+        String followOnQuestion = "conversations.scene." + topic + "." + sceneName + "."
+                + reactionId + ".respond";
+        List<String> reactionObligations = ContentCompiler.strings(reaction, "obligations");
+        if (reactionObligations.isEmpty()) {
+            reactionObligations = List.of("acknowledge");
+        }
+        Set<String> reactionStances = new LinkedHashSet<>();
+        if (hasFollowOn) {
+            for (JsonElement element : followOnReplies) {
+                reactionStances.add(ContentCompiler.require(
+                        element.getAsJsonObject(), "stance", where));
+            }
+        } else {
+            reactionStances.addAll(List.of("curiosity", "candor"));
+        }
+        reactionStances.add("exit");
+
         JsonObject beat = new JsonObject();
         beat.addProperty("topic", topic);
         beat.addProperty("say", reactionSay);
-        beat.addProperty("response_question", followupQuestionId());
+        beat.addProperty("response_question",
+                hasFollowOn ? followOnQuestion : followupQuestionId());
         beat.addProperty("npc_act", ContentCompiler.require(reaction, "act", where));
         beat.addProperty("subject", subject);
         beat.addProperty("polarity",
                 reaction.has("polarity") ? reaction.get("polarity").getAsString() : "mixed");
         beat.addProperty("openness", "permits_followup");
         beat.add("facts", ContentCompiler.array(List.of("topic:" + topic)));
-        beat.add("allowed_stances", ContentCompiler.array(List.of("curiosity", "candor", "exit")));
-        beat.add("forbidden_stances", ContentCompiler.array(
-                forbidden(Set.of("curiosity", "candor", "exit"))));
+        beat.add("allowed_stances", ContentCompiler.array(reactionStances));
+        beat.add("forbidden_stances", ContentCompiler.array(forbidden(reactionStances)));
         beat.addProperty("outcome",
                 reply.has("outcome") ? reply.get("outcome").getAsString() : "engaged");
         JsonObject beatContext = new JsonObject();
@@ -329,11 +405,15 @@ final class TopicPackCompiler {
                 reaction.has("temporal") ? reaction.get("temporal").getAsString() : "current",
                 reaction.has("epistemic") ? reaction.get("epistemic").getAsString() : "observed",
                 reaction.has("privacy") ? reaction.get("privacy").getAsString() : "ordinary",
-                List.of("acknowledge"), reactionSlots,
+                reactionObligations, reactionSlots,
                 scene.has("episode_state") ? ContentCompiler.strings(scene, "episode_state") : List.of(),
                 reaction.has("shape") ? reaction.get("shape").getAsString() : "observe"));
         out.addBeat(reactionBeat, beat);
         addPool(reactionSay, reaction);
+        if (hasFollowOn) {
+            compileFollowOnPage(scene, sceneName, reaction, followOnReplies, followOnQuestion,
+                    reactionBeat, reactionSay, subject, reactionSlots, reactionObligations);
+        }
 
         JsonObject actions = new JsonObject();
         JsonObject session = new JsonObject();
@@ -357,12 +437,24 @@ final class TopicPackCompiler {
             claim.addProperty("source", replyKey);
             actions.add("conversations_claim", claim);
         }
+        String commitmentId = reply.has("commitment") ? reply.get("commitment").getAsString() : "";
         if (scene.has("thread")) {
             JsonObject thread = new JsonObject();
             thread.addProperty("op", reply.has("resolves_thread")
                     && reply.get("resolves_thread").getAsBoolean() ? "resolve" : "open");
             thread.addProperty("template", scene.get("thread").getAsString());
+            if (!commitmentId.isEmpty()) {
+                // The obligation is what makes the thread refuse to be evicted while the promise is
+                // outstanding, so a pair at the thread cap cannot lose a debt to make room.
+                thread.addProperty("obligation", "commitment:" + commitmentId);
+            }
             actions.add("conversations_thread", thread);
+        }
+        if (!commitmentId.isEmpty()) {
+            JsonObject promise = new JsonObject();
+            promise.addProperty("op", "make");
+            promise.addProperty("id", commitmentId);
+            actions.add("conversations_commitment", promise);
         }
         if (reply.has("advance") && scene.has("episode_kind")) {
             JsonObject advance = new JsonObject();
@@ -371,15 +463,10 @@ final class TopicPackCompiler {
             advance.addProperty("state", reply.get("advance").getAsString());
             actions.add("conversations_episode", advance);
         }
-        actions.addProperty("next", followupQuestionId());
-        if (reactionSlots.isEmpty()) {
-            actions.addProperty("say", reactionSay);
-        } else {
-            JsonObject say = new JsonObject();
-            say.addProperty("phrase", reactionSay);
-            say.add("slots", ContentCompiler.array(reactionSlots));
-            actions.add("conversations_say", say);
-        }
+        // The page the beat says it opens and the page the result actually opens have to be the same
+        // one, or the contract describes a route nothing plays.
+        actions.addProperty("next", hasFollowOn ? followOnQuestion : followupQuestionId());
+        actions.add("conversations_say", sayAction(reactionSay, reactionSlots));
 
         JsonObject result = new JsonObject();
         result.addProperty("baseChance", 1);
@@ -699,7 +786,7 @@ final class TopicPackCompiler {
             actions.add("conversations_disposition_apply", disposition);
         }
         actions.addProperty("next", responseQuestion);
-        actions.addProperty("say", reactionSay);
+        actions.add("conversations_say", sayAction(reactionSay, List.of()));
 
         JsonObject result = new JsonObject();
         result.addProperty("baseChance", 1);
@@ -748,7 +835,7 @@ final class TopicPackCompiler {
         JsonObject actions = new JsonObject();
         actions.add("conversations_session", session);
         actions.addProperty("next", funnelQuestionId(true));
-        actions.addProperty("say", "conversations." + topic + ".open");
+        actions.add("conversations_say", sayAction("conversations." + topic + ".open", List.of()));
 
         JsonObject route = new JsonObject();
         route.addProperty("baseChance", 800);
@@ -871,14 +958,7 @@ final class TopicPackCompiler {
         actions.add("conversations_session", session);
         actions.add("conversations_record", record);
         actions.addProperty("next", questionId);
-        if (slots.isEmpty()) {
-            actions.addProperty("say", sayKey);
-        } else {
-            JsonObject say = new JsonObject();
-            say.addProperty("phrase", sayKey);
-            say.add("slots", ContentCompiler.array(slots));
-            actions.add("conversations_say", say);
-        }
+        actions.add("conversations_say", sayAction(sayKey, slots));
 
         JsonObject route = new JsonObject();
         route.addProperty("baseChance", 0);
@@ -893,7 +973,7 @@ final class TopicPackCompiler {
         JsonObject actions = new JsonObject();
         actions.add("conversations_session", session);
         actions.addProperty("next", ContentCompiler.require(source, "return_question", where));
-        actions.addProperty("say", leaveSay());
+        actions.add("conversations_say", sayAction(leaveSay(), List.of()));
 
         JsonObject result = new JsonObject();
         result.addProperty("baseChance", 1);
@@ -962,7 +1042,72 @@ final class TopicPackCompiler {
         return out;
     }
 
+    /**
+     * A reaction's own page: the third turn of an exchange that earned one.
+     *
+     * <p>Its replies are contracted against the reaction beat rather than the opener, which is what
+     * puts the stance rules in the right place. A villager who has just pushed back on your advice
+     * does not permit the same moves as one who has just explained what is at stake, and a page
+     * shared between the two would offer buttons that answer neither.
+     *
+     * <p>Recursive by design: a follow-on reply is an ordinary reply with an ordinary reaction, so it
+     * goes through the same compiler and can itself carry a further page. Nothing here caps the depth
+     * — the authoring does, by choosing where to stop writing.
+     */
+    private void compileFollowOnPage(JsonObject scene, String sceneName, JsonObject reaction,
+                                     JsonArray replies, String questionId, String inboundBeat,
+                                     String inboundSay, String subject, List<String> inboundSlots,
+                                     List<String> obligations) {
+        JsonObject prompt = ContentCompiler.object(reaction, "prompt");
+        if (prompt == null) {
+            throw new IllegalStateException(where + " " + questionId
+                    + " has replies but no prompt to put above them");
+        }
+        out.addLang("dialogue." + questionId,
+                ContentCompiler.require(prompt, "en", where + " " + questionId + " prompt"),
+                ContentCompiler.require(prompt, "pt", where + " " + questionId + " prompt"));
+
+        JsonArray answers = new JsonArray();
+        for (JsonElement element : replies) {
+            answers.add(compileReply(element.getAsJsonObject(), scene, sceneName, inboundBeat,
+                    questionId, inboundSay, subject, inboundSlots, obligations));
+        }
+        answers.add(exitAnswer(questionId));
+        JsonObject page = new JsonObject();
+        page.add("answers", answers);
+        out.addDialogue(questionId, page);
+
+        JsonObject exit = new JsonObject();
+        exit.addProperty("stance", "exit");
+        exit.add("responds_to", ContentCompiler.array(List.of(inboundBeat)));
+        exit.addProperty("tone", "plain");
+        exit.addProperty("exit", true);
+        out.addReply(questionId + "/leave", exit);
+        out.addLang("dialogue." + questionId + ".leave",
+                ContentCompiler.require(ContentCompiler.object(source, "leave_label"), "en", where),
+                ContentCompiler.require(ContentCompiler.object(source, "leave_label"), "pt", where));
+    }
+
     private String followupQuestionId() {
         return "conversations.scene." + topic + ".followup";
     }
+
+    /**
+     * The {@code conversations_say} action for one line.
+     *
+     * <p>Every villager line goes through this action rather than MCA's native {@code say}, because
+     * MCA resolves a {@code /N} pool on the client with a fresh random draw and no memory of the last
+     * sentence. Ours names the variant on the server (see {@code LineVoice}), which is what stops a
+     * pool of three reading like a pool of one. The slot list is omitted when empty so the emitted
+     * JSON stays the smallest thing that says what it means.
+     */
+    private static JsonObject sayAction(String phrase, List<String> slots) {
+        JsonObject say = new JsonObject();
+        say.addProperty("phrase", phrase);
+        if (!slots.isEmpty()) {
+            say.add("slots", ContentCompiler.array(slots));
+        }
+        return say;
+    }
+
 }

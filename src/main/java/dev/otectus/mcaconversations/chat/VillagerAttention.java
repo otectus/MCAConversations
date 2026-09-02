@@ -60,7 +60,7 @@ public final class VillagerAttention {
 
     /** A typing ping from {@code player}: nearby villagers glance over until the pings stop. */
     public static void playerTyping(ServerPlayer player, long now) {
-        double radius = McaConversationsConfig.COMMON.chatModeRadius.get();
+        double radius = McaConversationsConfig.chatModeRadius();
         for (VillagerCandidate c : VillagerFinder.candidates(player, radius)) {
             hold(c.entity(), player, now + TYPING_HOLD_TICKS, Source.TYPING);
         }

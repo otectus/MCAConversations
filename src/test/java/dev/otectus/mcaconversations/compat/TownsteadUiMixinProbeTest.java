@@ -35,7 +35,7 @@ class TownsteadUiMixinProbeTest {
                     "scrollOffset", "entryHeights", "x", "y", "width", "height")) {
                 if (!declaresField(panel, field)) problems.add("ChoicePanel field " + field + " is missing");
             }
-            for (String method : List.of("render", "select", "isVisible")) {
+            for (String method : List.of("render", "select", "isVisible", "setVisible", "tick")) {
                 if (!declaresMethod(panel, method)) problems.add("ChoicePanel method " + method + " is missing");
             }
 

@@ -153,7 +153,7 @@ public final class RumourPropagation {
         }
         int moved = 0;
         try {
-            double radius = McaConversationsConfig.COMMON.chatModeRadius.get();
+            double radius = McaConversationsConfig.chatModeRadius();
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 if (moved >= MAX_EDGES_PER_SWEEP) {
                     break;

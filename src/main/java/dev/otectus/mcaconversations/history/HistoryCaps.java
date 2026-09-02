@@ -36,33 +36,27 @@ public final class HistoryCaps {
     public static final int HARD_PAIRS_PER_VILLAGER = 32;
 
     public static int activeEpisodes() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.activeEpisodeCap, 6), 1, HARD_ACTIVE_EPISODES);
+        return clamp(McaConversationsConfig.activeEpisodeCap(), 1, HARD_ACTIVE_EPISODES);
     }
 
     public static int resolvedEpisodes() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.resolvedEpisodeCap, 24), 1, HARD_RESOLVED_EPISODES);
+        return clamp(McaConversationsConfig.resolvedEpisodeCap(), 1, HARD_RESOLVED_EPISODES);
     }
 
     public static int threadsPerPair() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.openThreadCapPerPair, 8), 1, HARD_THREADS_PER_PAIR);
+        return clamp(McaConversationsConfig.openThreadCapPerPair(), 1, HARD_THREADS_PER_PAIR);
     }
 
     public static int commitmentsPerPair() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.commitmentCapPerPair, 8), 1, HARD_COMMITMENTS_PER_PAIR);
+        return clamp(McaConversationsConfig.commitmentCapPerPair(), 1, HARD_COMMITMENTS_PER_PAIR);
     }
 
     public static int claimsPerPair() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.playerClaimCapPerPair, 16), 1, HARD_CLAIMS_PER_PAIR);
+        return clamp(McaConversationsConfig.playerClaimCapPerPair(), 1, HARD_CLAIMS_PER_PAIR);
     }
 
     public static int opinionsPerVillager() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.socialEdgeCapPerVillager, 16), 1, HARD_OPINIONS_PER_VILLAGER);
+        return clamp(McaConversationsConfig.socialEdgeCapPerVillager(), 1, HARD_OPINIONS_PER_VILLAGER);
     }
 
     /**
@@ -74,18 +68,15 @@ public final class HistoryCaps {
      * their supplier.
      */
     public static int rolesPerVillager() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.socialEdgeCapPerVillager, 16), 1, HARD_ROLES_PER_VILLAGER);
+        return clamp(McaConversationsConfig.socialEdgeCapPerVillager(), 1, HARD_ROLES_PER_VILLAGER);
     }
 
     public static int recencyPerPair() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.topicRecencyCapPerPair, 32), 4, HARD_RECENCY_PER_PAIR);
+        return clamp(McaConversationsConfig.topicRecencyCapPerPair(), 4, HARD_RECENCY_PER_PAIR);
     }
 
     public static int episodeRetentionDays() {
-        return clamp(McaConversationsConfig.dynamicInt(
-                McaConversationsConfig.COMMON.episodeRetentionDays, 32), 1, 365);
+        return clamp(McaConversationsConfig.episodeRetentionDays(), 1, 365);
     }
 
     private static int clamp(int value, int min, int max) {
