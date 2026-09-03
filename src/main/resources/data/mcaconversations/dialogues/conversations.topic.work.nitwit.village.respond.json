@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_raid",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.village.ask_raid"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.village.ask_raid",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.nitwit.village.ask_raid"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.nitwit.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.nitwit.village.say_thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_mayor",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.village.ask_mayor"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.village.ask_mayor",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.nitwit.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.nitwit.village.ask_mayor"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.nitwit.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

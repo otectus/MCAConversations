@@ -1,0 +1,861 @@
+{
+  "_comment": [
+    "Florist (MoreVillagers). A trade in things that are useless and that everybody wants anyway.",
+    "",
+    "The §12.4 anchors are the beds, seed, the seasons, weddings and funerals, a plant that will not",
+    "take and the customer who cannot say what they mean. These three take a bed that has failed, an",
+    "order for a funeral, and a variety she has been trying to grow for four years.",
+    "",
+    "The florist's difficulty is that her work is mostly about other people's occasions. She is",
+    "practical about soil and careful about grief, and she is quietly firm that flowers are a real",
+    "trade rather than a decoration on one.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when MoreVillagers",
+    "is installed."
+  ],
+  "profession": "morevillagers:florist",
+  "id": "florist",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_beds",
+    "seed",
+    "the_seasons",
+    "occasions",
+    "a_plant_that_wont_take",
+    "what_people_mean"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the beds.",
+    "pt": "Vou deixar você voltar aos canteiros."
+  },
+  "slot_lang": {
+    "flo_the_south_bed": {
+      "en": "the south bed",
+      "pt": "o canteiro sul"
+    },
+    "flo_the_long_border": {
+      "en": "the long border",
+      "pt": "a bordadura comprida"
+    },
+    "flo_the_frames": {
+      "en": "the cold frames",
+      "pt": "as estufas frias"
+    },
+    "flo_a_late_frost": {
+      "en": "a late frost",
+      "pt": "uma geada tardia"
+    },
+    "flo_soil_gone_sour": {
+      "en": "soil that has gone sour",
+      "pt": "solo que azedou"
+    },
+    "flo_something_eating_the_roots": {
+      "en": "something eating the roots",
+      "pt": "algo comendo as raízes"
+    },
+    "flo_a_funeral": {
+      "en": "a funeral",
+      "pt": "um funeral"
+    },
+    "flo_a_wedding": {
+      "en": "a wedding",
+      "pt": "um casamento"
+    },
+    "flo_a_child_leaving_home": {
+      "en": "a child leaving home",
+      "pt": "uma criança saindo de casa"
+    },
+    "flo_the_blue_one": {
+      "en": "the blue one",
+      "pt": "a azul"
+    },
+    "flo_the_one_from_the_high_road": {
+      "en": "the one from the high road",
+      "pt": "a da estrada alta"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.failed_bed",
+      "subject": "work.florist.the_beds",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 24,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "bed": [
+          "flo_the_south_bed",
+          "flo_the_long_border",
+          "flo_the_frames"
+        ],
+        "cause": [
+          "flo_a_late_frost",
+          "flo_soil_gone_sour",
+          "flo_something_eating_the_roots"
+        ]
+      },
+      "commitment": {
+        "id": "work.florist.bring_bonemeal",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:bone_meal",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "bed",
+            "cause"
+          ],
+          "identity_values": [
+            "precision",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The beds.",
+            "pt": "Os canteiros."
+          },
+          "lines": {
+            "en": [
+              "%2$s has gone, all of it, to %3$s, and it was eight months of work standing in a row.",
+              "%3$s took %2$s in a night. I went out in the morning and stood there for a while before I did anything sensible.",
+              "%2$s is bare. I have orders for the autumn and the autumn is grown in the spring, and the spring is gone."
+            ],
+            "pt": [
+              "%2$s se foi, inteiro, por causa de %3$s, e eram oito meses de trabalho enfileirados.",
+              "%3$s levou %2$s numa noite. Saí de manhã e fiquei parada ali um tempo antes de fazer qualquer coisa sensata.",
+              "%2$s está pelado. Tenho encomendas para o outono, e o outono se planta na primavera, e a primavera acabou."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_recoverable",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Can the bed be brought back?",
+                "pt": "Dá para recuperar o canteiro?"
+              },
+              "phrases": [
+                "can the bed be brought back",
+                "is the ground recoverable"
+              ],
+              "requires_any": [
+                "bed",
+                "ground",
+                "recoverable"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "bed"
+                ],
+                "lines": {
+                  "en": [
+                    "The soil, yes, with a season of feeding. %2$s itself is a year gone, and a year is a year whatever you feed it.",
+                    "I can replant. What I cannot do is make anything old, and half of what I sell is old, because a plant with four years in it looks different.",
+                    "It depends what killed it. If it was the frost I lose a season; if the soil has turned I lose that ground for three years."
+                  ],
+                  "pt": [
+                    "O solo, sim, com uma estação de adubo. %2$s em si é um ano perdido, e um ano é um ano por mais que você aduba.",
+                    "Posso replantar. O que eu não consigo é fazer algo ficar velho, e metade do que eu vendo é velho, porque uma planta com quatro anos parece diferente.",
+                    "Depende do que matou. Se foi a geada, perco uma estação; se o solo virou, perco aquele terreno por três anos."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_bonemeal",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you bone meal.",
+                "pt": "Vou te trazer farinha de osso."
+              },
+              "phrases": [
+                "i can bring you bone meal",
+                "let me fetch bone meal for that"
+              ],
+              "requires_any": [
+                "meal",
+                "bone"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.florist.bed.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "bed"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s gets fed this week and I can put in the autumn stock instead of writing apologies.",
+                    "That saves me a season, which in this trade is most of a year. I do not think people know that about flowers.",
+                    "Yes. And come in the autumn and take whatever is best out of that bed, and I will not be argued with about it."
+                  ],
+                  "pt": [
+                    "Então %2$s recebe adubo esta semana e eu posso plantar o estoque do outono em vez de escrever desculpas.",
+                    "Isso me poupa uma estação, que neste ofício é quase um ano. Acho que as pessoas não sabem disso sobre flores.",
+                    "Sim. E venha no outono e leve o que houver de melhor naquele canteiro, e não vou aceitar discussão."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_telling_the_orders",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Warn the autumn orders now.",
+                "pt": "Avise já as encomendas do outono."
+              },
+              "phrases": [
+                "warn the autumn orders now",
+                "tell the customers early about the loss"
+              ],
+              "requires_any": [
+                "orders",
+                "customers",
+                "warn"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Two of those orders are weddings. Told now, they can plan; told in the autumn, I have ruined a day that cannot be moved.",
+                    "You are right and it is four difficult conversations, and I have been finding gardening to do instead of having them.",
+                    "I will go round this week. And I will offer them what I do have rather than only what I have lost, because one of those is a plan."
+                  ],
+                  "pt": [
+                    "Duas dessas encomendas são casamentos. Avisados agora, podem se planejar; avisados no outono, eu estraguei um dia que não se remarca.",
+                    "Você tem razão e são quatro conversas difíceis, e eu venho arranjando jardinagem para fazer em vez de tê-las.",
+                    "Vou passar nas casas esta semana. E vou oferecer o que eu tenho em vez de só o que perdi, porque uma dessas coisas é um plano."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "bed"
+          ],
+          "prompt": {
+            "en": "The beds, since.",
+            "pt": "Os canteiros, depois disso."
+          },
+          "lines": {
+            "en": [
+              "%2$s is planted and coming through. Not what it was, and coming through, and I will take that.",
+              "I told the four households and every one of them was decent about it, and two of them ordered more.",
+              "The soil took the feeding. %2$s will be a year behind for a year and then it will simply be a bed again."
+            ],
+            "pt": [
+              "%2$s está plantado e brotando. Não é o que era, e está brotando, e eu aceito.",
+              "Avisei as quatro casas e todas foram decentes, e duas encomendaram mais.",
+              "O solo aceitou o adubo. %2$s vai estar um ano atrasado por um ano e depois vai voltar a ser simplesmente um canteiro."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_conversations",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "How did the four conversations go?",
+                "pt": "Como foram as quatro conversas?"
+              },
+              "phrases": [
+                "how did the four conversations go",
+                "what did the customers say"
+              ],
+              "requires_any": [
+                "conversations",
+                "customers"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Better than the eleven days of dreading them. That is always the ratio and I have never once learned it.",
+                    "One woman cried, which I had not prepared for, and it turned out to be about her mother rather than about the flowers.",
+                    "They were kinder to me than I was going to be to myself, and I walked home feeling foolish in a good way."
+                  ],
+                  "pt": [
+                    "Melhores que os onze dias temendo elas. É sempre essa a proporção e eu nunca aprendo.",
+                    "Uma mulher chorou, coisa para a qual eu não estava preparada, e no fim era sobre a mãe dela e não sobre as flores.",
+                    "Foram mais gentis comigo do que eu ia ser comigo mesma, e voltei para casa me sentindo tola de um jeito bom."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.funeral_order",
+      "subject": "work.florist.occasions",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 2,
+      "expires_after_days": 20,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "occasion": [
+          "flo_a_funeral",
+          "flo_a_wedding",
+          "flo_a_child_leaving_home"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "occasion"
+          ],
+          "identity_values": [
+            "mercy",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The order.",
+            "pt": "A encomenda."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s on Thursday and the family cannot tell me what they want, which is entirely reasonable and leaves me guessing.",
+              "%2$s. They said something simple and then described something enormous, and both of those were true when they said them.",
+              "%2$s is the hardest kind of order, because getting it wrong is not a bad sale. It is a thing they will remember."
+            ],
+            "pt": [
+              "Tenho %2$s na quinta e a família não consegue me dizer o que quer, o que é inteiramente razoável e me deixa adivinhando.",
+              "%2$s. Disseram uma coisa simples e depois descreveram uma coisa enorme, e as duas eram verdade quando disseram.",
+              "%2$s é o tipo mais difícil de encomenda, porque errar não é uma venda ruim. É uma coisa de que vão lembrar."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_she_decides",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you decide, then?",
+                "pt": "Então como você decide?"
+              },
+              "phrases": [
+                "how do you decide then",
+                "what do you go on when they cannot say"
+              ],
+              "requires_any": [
+                "decide",
+                "go"
+              ],
+              "disposition": {
+                "familiarity": 3
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "I ask what was in her garden. Not what they want — what she grew. It is a different question and people can always answer it.",
+                    "I make two and take both. They point at one within a second and then apologise for being unhelpful earlier.",
+                    "Small and correct rather than large and safe. A large arrangement is a way of not deciding, and they can tell."
+                  ],
+                  "pt": [
+                    "Pergunto o que havia no jardim dela. Não o que querem — o que ela plantava. É outra pergunta e todo mundo consegue responder.",
+                    "Faço dois e levo os dois. Apontam para um em um segundo e depois pedem desculpa por terem sido pouco úteis antes.",
+                    "Pequeno e certo em vez de grande e seguro. Um arranjo grande é um jeito de não decidir, e as pessoas percebem."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_small_one",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Make the small correct one.",
+                "pt": "Faça o pequeno e certo."
+              },
+              "phrases": [
+                "make the small correct one",
+                "go small and specific rather than large"
+              ],
+              "requires_any": [
+                "small",
+                "specific"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.florist.order.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "resolved",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I will charge them for the small one, which is less, and spend twice as long on it, which they will never know.",
+                    "Yes. I will go and ask about her garden tomorrow morning, which is a visit rather than a transaction, and that is the right shape for it.",
+                    "That is what I would want. It has taken me years to trust that what I would want is a reasonable guide to what other people want."
+                  ],
+                  "pt": [
+                    "Então vou cobrar pelo pequeno, que é menos, e passar o dobro do tempo nele, coisa que eles nunca vão saber.",
+                    "Sim. Vou perguntar sobre o jardim dela amanhã de manhã, o que é uma visita e não uma transação, e é esse o formato certo.",
+                    "É o que eu ia querer. Levei anos para confiar que o que eu quero é um guia razoável do que os outros querem."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "occasion"
+          ],
+          "prompt": {
+            "en": "That order.",
+            "pt": "Aquela encomenda."
+          },
+          "lines": {
+            "en": [
+              "%2$s went well. I asked about her garden and made what was in it, and her son held it the whole way.",
+              "Small and specific. Somebody asked me afterwards who had told me what she grew, and the answer was that I had asked.",
+              "It was right. I will never be certain it was right, and nobody said otherwise, and in this trade that is as close as you get."
+            ],
+            "pt": [
+              "%2$s correu bem. Perguntei sobre o jardim dela e fiz o que havia lá, e o filho segurou o caminho inteiro.",
+              "Pequeno e específico. Alguém me perguntou depois quem tinha me contado o que ela plantava, e a resposta é que eu perguntei.",
+              "Estava certo. Nunca vou ter certeza de que estava certo, e ninguém disse o contrário, e neste ofício é o mais perto que se chega."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_asking",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Asking about her garden was the whole thing.",
+                "pt": "Perguntar do jardim dela foi tudo."
+              },
+              "phrases": [
+                "asking about her garden was the whole thing",
+                "the question you asked was the craft"
+              ],
+              "requires_any": [
+                "garden",
+                "question",
+                "asking"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is the only part of the trade that cannot be taught with a trowel, and it is the part I get thanked for.",
+                    "Thank you. I stole the question from the woman who taught me, who stole it from her mother, and I have told nobody until now.",
+                    "People think flowers are the product. The product is that somebody was paid attention to in a week when nobody could manage it."
+                  ],
+                  "pt": [
+                    "É a única parte do ofício que não se ensina com uma pá, e é a parte pela qual me agradecem.",
+                    "Obrigada. Roubei a pergunta da mulher que me ensinou, que roubou da mãe dela, e eu não tinha contado a ninguém até agora.",
+                    "As pessoas acham que a flor é o produto. O produto é que alguém recebeu atenção numa semana em que ninguém conseguia dar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.stubborn_variety",
+      "subject": "work.florist.a_plant_that_wont_take",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 34,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "plant": [
+          "flo_the_blue_one",
+          "flo_the_one_from_the_high_road"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "plant"
+          ],
+          "identity_values": [
+            "curiosity",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The one that won't take.",
+            "pt": "A que não pega."
+          },
+          "lines": {
+            "en": [
+              "I have been trying to grow %2$s for four years and I have got as far as leaves twice.",
+              "%2$s. Everybody who knows anything tells me it will not do here. I have decided to keep failing at it for a while longer.",
+              "Four years of %2$s. It is not a business decision. It is the only thing in the garden that is entirely mine."
+            ],
+            "pt": [
+              "Faz quatro anos que eu tento cultivar %2$s e cheguei até as folhas duas vezes.",
+              "%2$s. Todo mundo que entende do assunto me diz que não vinga aqui. Decidi continuar fracassando nisso mais um tempo.",
+              "Quatro anos de %2$s. Não é decisão de negócio. É a única coisa no jardim que é inteiramente minha."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why_persist",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why keep at it?",
+                "pt": "Por que insistir?"
+              },
+              "phrases": [
+                "why keep at it",
+                "what makes you keep trying with that"
+              ],
+              "requires_any": [
+                "keep",
+                "trying"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "plant"
+                ],
+                "lines": {
+                  "en": [
+                    "Because I have learned something new about soil every year I have failed, and none of that would have happened growing what works.",
+                    "%2$s grew in my grandmother's yard, forty miles north, in ground I have never seen. I would like to know what she knew.",
+                    "Everything else in the garden is for somebody. This is the only bed where I am allowed to be simply interested."
+                  ],
+                  "pt": [
+                    "Porque aprendi algo novo sobre solo em cada ano em que fracassei, e nada disso teria acontecido cultivando o que dá certo.",
+                    "%2$s crescia no quintal da minha avó, a sessenta quilômetros ao norte, num terreno que eu nunca vi. Eu gostaria de saber o que ela sabia.",
+                    "Todo o resto do jardim é para alguém. Este é o único canteiro em que eu tenho permissão de estar simplesmente interessada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "encourage_the_attempt",
+              "stance": "encouragement",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Give it another four years.",
+                "pt": "Dê mais quatro anos."
+              },
+              "phrases": [
+                "give it another four years",
+                "keep the bed going another few seasons"
+              ],
+              "requires_any": [
+                "another",
+                "seasons",
+                "years"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Four more, then. I will try shade this time, which everybody tells me is wrong, and everybody has been telling me that for four years.",
+                    "Thank you. People keep suggesting I use the ground for something that sells, and they are right, and I am going to ignore them.",
+                    "That is permission I did not know I was waiting for. It is one bed out of eleven and I have felt guilty about it every spring."
+                  ],
+                  "pt": [
+                    "Mais quatro, então. Vou tentar sombra desta vez, coisa que todo mundo diz que é errado, e todo mundo vem dizendo isso há quatro anos.",
+                    "Obrigada. Vivem sugerindo que eu use o terreno para algo que venda, e têm razão, e eu vou ignorar.",
+                    "É uma permissão que eu não sabia que estava esperando. É um canteiro em onze e eu me sinto culpada por ele toda primavera."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "plant"
+          ],
+          "prompt": {
+            "en": "That plant.",
+            "pt": "Aquela planta."
+          },
+          "lines": {
+            "en": [
+              "%2$s flowered. Five years, and it was shade all along, and it flowered in the corner I had almost given up on.",
+              "It took. I did not tell anybody for four days because I wanted to be sure it was not a trick of the light.",
+              "%2$s is up. Three of them. I have written down exactly what I did, in case it never happens again, which it may not."
+            ],
+            "pt": [
+              "%2$s floresceu. Cinco anos, e era sombra o tempo todo, e floresceu no canto que eu quase tinha abandonado.",
+              "Pegou. Não contei a ninguém por quatro dias porque queria ter certeza de que não era truque da luz.",
+              "%2$s está de pé. Três delas. Anotei exatamente o que fiz, caso nunca mais aconteça, o que pode ser o caso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "celebrate_it",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Five years is worth celebrating.",
+                "pt": "Cinco anos merecem comemoração."
+              },
+              "phrases": [
+                "five years is worth celebrating",
+                "that deserves celebrating"
+              ],
+              "requires_any": [
+                "celebrating",
+                "deserves"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "celebrate",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "I sat down next to it for an hour, which is exactly what I do at the quarry and is apparently what I do when I am happy.",
+                    "Thank you. Nobody in this village will understand why it matters and I have decided I do not need them to.",
+                    "I am going to send one north, to the yard it came from, which will take a month and will probably die on the way. I am sending it anyway."
+                  ],
+                  "pt": [
+                    "Sentei ao lado por uma hora, que é exatamente o que eu faço na pedreira e, aparentemente, o que eu faço quando estou feliz.",
+                    "Obrigada. Ninguém nesta vila vai entender por que importa e eu decidi que não preciso que entendam.",
+                    "Vou mandar uma para o norte, para o quintal de onde veio, o que vai levar um mês e provavelmente morrer no caminho. Vou mandar mesmo assim."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "And?",
+      "pt": "E então?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a bloom that fails?",
+        "pt": "Qual é a parte mais difícil de uma flor que não vinga?"
+      },
+      "requires_any": [
+        "hardest",
+        "bloom"
+      ],
+      "phrases": [
+        "what is the hardest part of a bloom that fails",
+        "hardest thing about a failed bloom"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the beds.",
+      "pt": "Vou deixar você com os canteiros."
+    }
+  }
+}

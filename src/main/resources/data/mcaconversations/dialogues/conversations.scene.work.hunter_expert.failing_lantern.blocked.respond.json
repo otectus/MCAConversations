@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "offer_lantern",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.failing_lantern.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter_expert.kit.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.the_kit",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.failing_lantern",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter_expert.failing_lantern",
+              "obligation": "commitment:work.hunter_expert.bring_lantern"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.hunter_expert.bring_lantern"
+            },
+            "next": "conversations.scene.work.hunter_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter_expert.failing_lantern.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_the_round",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.failing_lantern.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.the_kit",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter_expert.failing_lantern"
+            },
+            "next": "conversations.scene.work.hunter_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter_expert.failing_lantern.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.hunter_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

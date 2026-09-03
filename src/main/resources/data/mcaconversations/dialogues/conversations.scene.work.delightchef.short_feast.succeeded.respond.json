@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_spare",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.short_feast.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.ingredients",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.delightchef.short_feast"
+            },
+            "next": "conversations.scene.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightchef.short_feast.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

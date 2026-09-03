@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_deed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.good.deed"
+            },
+            "next": "conversations.topic.standing.good.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.deed",
+              "vars": [
+                "reputation_recent_deed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_keep",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.good.keep"
+            },
+            "next": "conversations.topic.standing.good.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.keep"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "deflect",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.good.deflect"
+            },
+            "next": "conversations.topic.standing.good.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.deflect"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.good.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.good.dismissed",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

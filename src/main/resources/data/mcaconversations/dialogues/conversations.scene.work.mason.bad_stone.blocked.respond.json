@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_using_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.bad_stone.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.the_quarry",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.bad_stone"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.bad_stone.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_stone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.bad_stone.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mason.stone.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.the_quarry",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.bad_stone",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.bad_stone",
+              "obligation": "commitment:work.mason.bring_stone"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.mason.bring_stone"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.bad_stone.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mason.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

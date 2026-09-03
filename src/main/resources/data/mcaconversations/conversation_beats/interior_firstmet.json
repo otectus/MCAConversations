@@ -1,0 +1,216 @@
+{
+  "beats": {
+    "us.firstmet.again.to.firstmet": {
+      "topic": "firstmet",
+      "say": "conversations.us.firstmet.again",
+      "response_question": "conversations.topic.firstmet.respond",
+      "npc_act": "accept",
+      "subject": "firstmet",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.firstmet.memory.to.firstmet": {
+      "topic": "firstmet",
+      "say": "conversations.us.firstmet.memory",
+      "response_question": "conversations.topic.firstmet.respond",
+      "npc_act": "accept",
+      "subject": "firstmet",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.firstmet.share_own.to.firstmet": {
+      "topic": "firstmet",
+      "say": "conversations.us.firstmet.share_own",
+      "response_question": "conversations.topic.firstmet.followup",
+      "npc_act": "accept",
+      "subject": "firstmet",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.firstmet.tease.to.firstmet": {
+      "topic": "firstmet",
+      "say": "conversations.us.firstmet.tease",
+      "response_question": "conversations.topic.firstmet.followup",
+      "npc_act": "accept",
+      "subject": "firstmet",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.firstmet.tell.to.firstmet": {
+      "topic": "firstmet",
+      "say": "conversations.us.firstmet.tell",
+      "response_question": "conversations.topic.firstmet.respond",
+      "npc_act": "disclose",
+      "subject": "firstmet",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "engaged"
+    }
+  },
+  "replies": {
+    "conversations.topic.firstmet.followup/ask_stood_out": {
+      "stance": "curiosity",
+      "responds_to": [
+        "us.firstmet.share_own.to.firstmet",
+        "us.firstmet.tease.to.firstmet"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.firstmet.followup/correct_gently": {
+      "stance": "candor",
+      "responds_to": [
+        "us.firstmet.share_own.to.firstmet",
+        "us.firstmet.tease.to.firstmet"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.firstmet.followup/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "us.firstmet.share_own.to.firstmet",
+        "us.firstmet.tease.to.firstmet"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.firstmet.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "us.firstmet.share_own.to.firstmet",
+        "us.firstmet.tease.to.firstmet"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.firstmet.respond/brush_off": {
+      "stance": "dismissal",
+      "responds_to": [
+        "us.firstmet.again.to.firstmet",
+        "us.firstmet.memory.to.firstmet",
+        "us.firstmet.tell.to.firstmet"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.firstmet.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "us.firstmet.again.to.firstmet",
+        "us.firstmet.memory.to.firstmet",
+        "us.firstmet.tell.to.firstmet"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.firstmet.respond/share_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "us.firstmet.again.to.firstmet",
+        "us.firstmet.memory.to.firstmet",
+        "us.firstmet.tell.to.firstmet"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.firstmet.respond/tease": {
+      "stance": "humor",
+      "responds_to": [
+        "us.firstmet.again.to.firstmet",
+        "us.firstmet.memory.to.firstmet",
+        "us.firstmet.tell.to.firstmet"
+      ],
+      "tone": "playful"
+    }
+  }
+}

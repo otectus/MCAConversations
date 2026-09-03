@@ -41,9 +41,11 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
 
     /** Installs the façade. Invoked reflectively by the bridge after the mod-present check. */
     public static void register() {
-        if (McaReputationApi.getApiVersion() != 1) {
+        // v2 is the NeoForge 1.21.1 generation of the Reputation API: its public event types extend
+        // NeoForge's event base, so anything compiled against v1 no longer links.
+        if (McaReputationApi.getApiVersion() != 2) {
             McaConversations.LOGGER.error("[MCA: Conversations] MCA: Reputation reports API v{} but this "
-                    + "build was written against v1; the integration stays disabled.",
+                    + "build was written against v2; the integration stays disabled.",
                     McaReputationApi.getApiVersion());
             return;
         }

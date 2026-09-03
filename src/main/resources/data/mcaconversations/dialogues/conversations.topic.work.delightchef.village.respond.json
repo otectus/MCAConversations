@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_wake",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.village.ask_wake"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.village.ask_wake",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.village.ask_wake"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightchef.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.village.say_thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_florist",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.village.ask_florist"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.village.ask_florist",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.village.ask_florist"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

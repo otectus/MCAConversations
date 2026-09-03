@@ -25,7 +25,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.future.negotiate"
+            "conversations_say": {
+              "phrase": "conversations.us.future.negotiate"
+            }
           }
         }
       ]
@@ -54,7 +56,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.future.promise_nothing"
+            "conversations_say": {
+              "phrase": "conversations.us.future.promise_nothing"
+            }
           }
         }
       ]
@@ -65,6 +69,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "us.future.rejected"
+            },
             "conversations_affection_apply": {
               "decision": "us.future.reject",
               "delta": -3,
@@ -79,8 +87,10 @@
                 "trust": -3
               }
             },
-            "next": "conversations.topic.us.close",
-            "say": "conversations.us.future.reject"
+            "next": "conversations.topic.us.hurt.close",
+            "conversations_say": {
+              "phrase": "conversations.us.future.reject"
+            }
           }
         }
       ]
@@ -95,7 +105,9 @@
               "op": "end"
             },
             "next": "conversations.us",
-            "say": "conversations.us.future.leave"
+            "conversations_say": {
+              "phrase": "conversations.us.future.leave"
+            }
           }
         }
       ]

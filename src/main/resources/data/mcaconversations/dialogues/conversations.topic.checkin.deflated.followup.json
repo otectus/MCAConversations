@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.deflated.apologize"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin.deflated.apologize",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.deflated.apologize",
+              "deltas": {
+                "tension": -3,
+                "warmth": 1
+              }
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.deflated.apologize"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "restore",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.deflated.restore"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin.deflated.restore",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.deflated.restore",
+              "deltas": {
+                "tension": -2,
+                "warmth": 3
+              }
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.deflated.restore"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "explain",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.deflated.explain"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.deflated.explain",
+              "deltas": {
+                "tension": -1
+              }
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.deflated.explain"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.deflated.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

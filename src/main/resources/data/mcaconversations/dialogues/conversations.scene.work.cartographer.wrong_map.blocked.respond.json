@@ -1,0 +1,84 @@
+{
+  "answers": [
+    {
+      "name": "advise_recall",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.wrong_map.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cartographer.wrong_map.owned",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.a_wrong_map",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.wrong_map"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.wrong_map.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_how_it_happened",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.wrong_map.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.a_wrong_map",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.wrong_map"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.wrong_map.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+{
+  "_comment": [
+    "The day, gated on which part of it we are actually standing in.",
+    "",
+    "The stock version of this topic answers the same way at dawn and at midnight. These two scenes",
+    "only exist at their own hour, so 'how's your day' gets a different kind of answer depending on",
+    "whether it has started or finished."
+  ],
+  "topic": "day",
+  "entry": {
+    "question": "conversations.cat.chitchat",
+    "answer": "day"
+  },
+  "return_question": "conversations.cat.chitchat",
+  "leave_lines": {
+    "en": [
+      "Go on, then. Plenty of it left.",
+      "Right. I have things to be getting to.",
+      "Mind how you go."
+    ],
+    "pt": [
+      "Vá lá, então. Ainda tem bastante dia.",
+      "Certo. Tenho coisas a fazer.",
+      "Vá com cuidado."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Right you are.",
+    "pt": "Certo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "leave": {
+      "en": "I'll let you get on with yours.",
+      "pt": "Vou deixar você seguir com o seu."
+    }
+  },
+  "scenes": [
+    {
+      "name": "before_the_light",
+      "subject": "day.early",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "dawn",
+            "morning"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "prompt": {
+        "en": "Your morning.",
+        "pt": "Sua manhã."
+      },
+      "lines": {
+        "en": [
+          "Started before it was properly light, which I say every morning and mean about half the time.",
+          "The first hour is the only one that belongs to me. After that it belongs to whoever turns up.",
+          "Well begun. Ask me again at four and you will get a different answer entirely."
+        ],
+        "pt": [
+          "Comecei antes de clarear direito, coisa que eu digo toda manhã e sinto de verdade umas metade das vezes.",
+          "A primeira hora é a única que é minha. Depois disso é de quem aparecer.",
+          "Bem começado. Me pergunte de novo às quatro e você vai ter uma resposta completamente diferente."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_first_hour",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What do you do with the first hour?",
+            "pt": "O que você faz na primeira hora?"
+          },
+          "phrases": [
+            "what do you do with the first hour",
+            "how do you spend the early hour"
+          ],
+          "requires_any": [
+            "hour",
+            "early"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Nothing that needs doing. That is the point of it. The moment I start doing something needed, the hour is over.",
+                "I walk to the same place and stand there. It is not a beautiful place. It is just mine at that hour.",
+                "Think about the day badly and then decide it is fine, which takes about forty minutes and never gets quicker."
+              ],
+              "pt": [
+                "Nada que precise ser feito. É esse o ponto. No instante em que eu faço algo necessário, a hora acabou.",
+                "Caminho até o mesmo lugar e fico parada. Não é um lugar bonito. É só meu naquela hora.",
+                "Penso mal no dia e depois decido que está tudo bem, o que leva uns quarenta minutos e nunca fica mais rápido."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_them_well",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Make it a good one.",
+            "pt": "Que seja um bom dia."
+          },
+          "phrases": [
+            "make it a good one",
+            "hope the day treats you well"
+          ],
+          "requires_any": [
+            "good",
+            "hope",
+            "day"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I intend to. Most of it is decided by about ten, so I shall be brisk until then.",
+                "You too. And if it goes badly, come and say so, because a day that is complained about is shorter.",
+                "That is a kind thing to say at this hour, when nobody has done anything to deserve it yet."
+              ],
+              "pt": [
+                "Pretendo. Quase tudo se decide até as dez, então vou ser rápida até lá.",
+                "Você também. E se for mal, venha reclamar, porque um dia do qual se reclama fica mais curto.",
+                "É uma coisa gentil de se dizer a esta hora, quando ninguém fez nada ainda para merecer."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "end_of_it",
+      "subject": "day.late",
+      "shape": "reminisce",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "night"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "prompt": {
+        "en": "The day you've had.",
+        "pt": "O dia que você teve."
+      },
+      "lines": {
+        "en": [
+          "Done, and I could not tell you what happened in the middle of it, which is usually a sign it went well.",
+          "Long. Not bad. There is a difference and it took me until about thirty to learn it.",
+          "I got one thing finished and four started, and at this hour I have decided that counts."
+        ],
+        "pt": [
+          "Acabou, e eu não saberia dizer o que aconteceu no meio, o que costuma ser sinal de que foi bom.",
+          "Longo. Não ruim. Existe diferença e eu levei até uns trinta anos para aprender.",
+          "Terminei uma coisa e comecei quatro, e a esta hora eu decidi que isso conta."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_best_part",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What was the best part of it?",
+            "pt": "Qual foi a melhor parte?"
+          },
+          "phrases": [
+            "what was the best part of it",
+            "which bit was worth having"
+          ],
+          "requires_any": [
+            "best",
+            "worth",
+            "bit"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "reminisce",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Somebody laughed at something I said and did not have to. That is enough to carry a Tuesday.",
+                "The walk back. It always is. Nothing happens on it and that is precisely the recommendation.",
+                "There was an hour in the afternoon when everything went right in a row, and I noticed it while it was happening, which is rare."
+              ],
+              "pt": [
+                "Alguém riu de algo que eu disse sem precisar rir. Já basta para segurar uma terça-feira.",
+                "A volta para casa. É sempre. Nada acontece nela, e é exatamente essa a recomendação.",
+                "Teve uma hora à tarde em que tudo deu certo em sequência, e eu percebi enquanto acontecia, o que é raro."
+              ]
+            }
+          }
+        },
+        {
+          "name": "tell_them_to_rest",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Get some rest.",
+            "pt": "Vá descansar."
+          },
+          "phrases": [
+            "get some rest",
+            "you should sleep soon"
+          ],
+          "requires_any": [
+            "rest",
+            "sleep"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Shortly. I say shortly at this hour every night and it means something between one hour and three.",
+                "I will. The trouble with the end of a day is that it is the only quiet part, so I spend it being awake on purpose.",
+                "You as well. Whatever tomorrow is, it will be easier having slept through the space before it."
+              ],
+              "pt": [
+                "Já já. Digo já já a esta hora toda noite e isso significa entre uma e três horas.",
+                "Vou. O problema do fim do dia é que é a única parte tranquila, então eu passo essa parte acordada de propósito.",
+                "Você também. Seja lá o que for amanhã, vai ser mais fácil tendo dormido no espaço antes dele."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

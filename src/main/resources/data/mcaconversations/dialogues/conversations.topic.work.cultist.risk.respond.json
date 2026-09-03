@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_wrong",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.risk.ask_wrong"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.risk.ask_wrong",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cultist.risk.ask_wrong"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cultist.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cultist.risk.sympathise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_before",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.risk.ask_before"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.risk.ask_before",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cultist.risk.ask_before"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cultist.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

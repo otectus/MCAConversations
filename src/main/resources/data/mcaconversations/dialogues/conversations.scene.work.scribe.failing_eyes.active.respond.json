@@ -1,0 +1,113 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_plan",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.failing_eyes.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.the_page",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.scribe.failing_eyes"
+            },
+            "next": "conversations.scene.work.scribe.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.scribe.failing_eyes.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "urge_teaching",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.failing_eyes.active.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.scribe.eyes.urged",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.the_page",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.scribe.failing_eyes"
+            },
+            "next": "conversations.scene.work.scribe.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.scribe.failing_eyes.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_loss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.scribe.failing_eyes.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.scribe.the_page",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.scribe.failing_eyes"
+            },
+            "next": "conversations.scene.work.scribe.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.scribe.failing_eyes.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.scribe.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

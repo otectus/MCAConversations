@@ -1,0 +1,159 @@
+{
+  "answers": [
+    {
+      "name": "ask_hard",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.hard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.hard",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.hard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "value",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.value"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.adventurer.value",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.value",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.value"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "relaxed",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.challenge.landed"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.adventurer.challenge",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.challenge",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.challenge.landed"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "relaxed",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.challenge.stung"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.adventurer.challenge",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.challenge",
+              "deltas": {
+                "respect": -1,
+                "tension": 4
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.challenge.stung"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

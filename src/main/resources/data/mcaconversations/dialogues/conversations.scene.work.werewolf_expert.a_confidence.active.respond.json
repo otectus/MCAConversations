@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.a_confidence.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.confidence",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.a_confidence"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.a_confidence.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_the_confidence",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.a_confidence.active.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.werewolf_expert.confidence.respected",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.confidence",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.a_confidence"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.a_confidence.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

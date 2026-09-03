@@ -1,0 +1,130 @@
+{
+  "answers": [
+    {
+      "name": "ask_whose_fault",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.failed_tool.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.edges",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.failed_tool"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.failed_tool.blocked.explained",
+              "slots": [
+                "cause"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_iron",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.failed_tool.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.toolsmith.failure.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.edges",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.failed_tool",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.failed_tool",
+              "obligation": "commitment:work.toolsmith.bring_iron"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.toolsmith.bring_iron"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.failed_tool.blocked.accepted",
+              "slots": [
+                "tool"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_owning_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.failed_tool.blocked.resolved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.edges",
+              "deltas": {
+                "respect": 4,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.failed_tool"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.failed_tool.blocked.resolved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1362 @@
+{
+  "_comment": [
+    "Farmer. Three situations that are actually going on, each with states that change.",
+    "",
+    "The §12.4 anchors for this trade are crop health, a soil decision, pests, inherited land and",
+    "prices. These three take crop health, the beetroot-price dispute and the fence-and-pests problem,",
+    "and each one is about a specific field with a specific thing wrong with it.",
+    "",
+    "Slots carry their own article so the sentences around them never agree with the noun."
+  ],
+  "profession": "minecraft:farmer",
+  "id": "farmer",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "crop_health",
+    "soil",
+    "harvest",
+    "pests",
+    "trade_prices",
+    "inherited_land"
+  ],
+  "leave_label": {
+    "en": "I'll let you get on.",
+    "pt": "Vou deixar você trabalhar."
+  },
+  "slot_lang": {
+    "wheat": {
+      "en": "the wheat",
+      "pt": "o trigo"
+    },
+    "beetroot": {
+      "en": "the beetroot",
+      "pt": "a beterraba"
+    },
+    "carrots": {
+      "en": "the carrot rows",
+      "pt": "as fileiras de cenoura"
+    },
+    "potatoes": {
+      "en": "the potato ground",
+      "pt": "o terreno de batatas"
+    },
+    "east_field": {
+      "en": "the east field",
+      "pt": "o campo leste"
+    },
+    "low_field": {
+      "en": "the low field",
+      "pt": "o campo baixo"
+    },
+    "terrace": {
+      "en": "the terrace",
+      "pt": "o terraço"
+    },
+    "home_plot": {
+      "en": "the plot behind the house",
+      "pt": "o terreno atrás da casa"
+    },
+    "standing_water": {
+      "en": "standing water",
+      "pt": "água parada"
+    },
+    "thin_soil": {
+      "en": "thin soil",
+      "pt": "terra fraca"
+    },
+    "late_frost": {
+      "en": "a late frost",
+      "pt": "uma geada tardia"
+    },
+    "root_rot": {
+      "en": "root rot",
+      "pt": "podridão de raiz"
+    },
+    "rabbits": {
+      "en": "rabbits",
+      "pt": "coelhos"
+    },
+    "crows": {
+      "en": "crows",
+      "pt": "corvos"
+    },
+    "beetles": {
+      "en": "beetles",
+      "pt": "besouros"
+    },
+    "the_miller": {
+      "en": "the miller",
+      "pt": "o moleiro"
+    },
+    "the_innkeeper": {
+      "en": "the innkeeper",
+      "pt": "o estalajadeiro"
+    },
+    "the_baker": {
+      "en": "the baker",
+      "pt": "o padeiro"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.crop_failing",
+      "subject": "work.farmer.crop_health",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 6,
+      "expires_after_days": 26,
+      "slots": {
+        "crop": [
+          "wheat",
+          "beetroot",
+          "carrots",
+          "potatoes"
+        ],
+        "worksite": [
+          "east_field",
+          "low_field",
+          "terrace",
+          "home_plot"
+        ],
+        "cause": [
+          "standing_water",
+          "thin_soil",
+          "late_frost",
+          "root_rot"
+        ]
+      },
+      "commitment": {
+        "id": "work.farmer.bring_bonemeal",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:bone_meal",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "crop",
+            "worksite",
+            "cause"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "tradition"
+          ],
+          "prompt": {
+            "en": "The field.",
+            "pt": "O campo."
+          },
+          "lines": {
+            "en": [
+              "%2$s is going yellow at the tips in %3$s and I have known why for four days. %4$s. Knowing has not helped.",
+              "Come and look at %3$s if you like. %2$s is failing and it is %4$s, and I have not worked out what to do that I can afford.",
+              "%4$s in %3$s. %2$s will not come to anything this year unless something changes, and nothing is changing."
+            ],
+            "pt": [
+              "As pontas de %2$s estão amarelando em %3$s e faz quatro dias que eu sei por quê. %4$s. Saber não ajudou.",
+              "Venha ver %3$s, se quiser. %2$s está morrendo por causa de %4$s, e ainda não descobri o que fazer que caiba no meu bolso.",
+              "%4$s em %3$s. %2$s não vai dar em nada este ano se nada mudar, e nada está mudando."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_cause",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How long has that been happening?",
+                "pt": "Há quanto tempo isso está acontecendo?"
+              },
+              "phrases": [
+                "how long has it been like that",
+                "when did that start"
+              ],
+              "requires_any": [
+                "long",
+                "start",
+                "started"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Longer than I said. I have been telling myself it was the weather since spring, and %2$s has been telling me otherwise since spring.",
+                    "Three weeks that I will admit to. My father farmed %2$s for thirty years and I have had it four, so you can imagine how eager I am to say it out loud.",
+                    "Since the thaw. I walked %2$s every morning hoping to be wrong, which is a very slow way of being right."
+                  ],
+                  "pt": [
+                    "Mais tempo do que eu disse. Venho me convencendo de que era o clima desde a primavera, e %2$s vem me dizendo o contrário desde a primavera.",
+                    "Três semanas, é o que eu admito. Meu pai cultivou %2$s por trinta anos e eu tenho ele há quatro, então imagine a minha vontade de dizer isso em voz alta.",
+                    "Desde o degelo. Percorri %2$s toda manhã esperando estar enganada, o que é um jeito muito lento de estar certa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_bonemeal",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I can bring you bone meal for it.",
+                "pt": "Posso trazer farinha de osso para isso."
+              },
+              "phrases": [
+                "let me bring you bone meal",
+                "i will fetch bone meal"
+              ],
+              "requires_any": [
+                "bone",
+                "meal"
+              ],
+              "disposition": {
+                "trust": 3,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.farmer.crop_failing.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I will hold off turning %2$s under until you are back. That is a real thing you have just done, and I am not going to pretend it is small.",
+                    "You will. Right. I had got as far as deciding to lose %2$s, so you have caught me a day before I did something stupid.",
+                    "I will take that, and I will take it gladly. %2$s gets one more chance and then I stop arguing with it."
+                  ],
+                  "pt": [
+                    "Então vou adiar revirar %2$s até você voltar. Isso que você acabou de fazer é coisa séria, e não vou fingir que é pouco.",
+                    "Vai mesmo. Certo. Eu já tinha chegado à decisão de perder %2$s, então você me pegou um dia antes de eu fazer uma bobagem.",
+                    "Aceito, e aceito com gosto. %2$s ganha mais uma chance e depois eu paro de discutir com ele."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_fallow",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Let it lie fallow a year. The ground is telling you something.",
+                "pt": "Deixe descansar um ano. A terra está te dizendo algo."
+              },
+              "phrases": [
+                "let it lie fallow",
+                "rest the ground a year",
+                "leave the field fallow"
+              ],
+              "requires_any": [
+                "fallow",
+                "rest",
+                "descansar"
+              ],
+              "disposition": {
+                "respect": 2,
+                "tension": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "It is telling me something, yes. It is telling me it wants a year I do not have. A fallow %2$s is a winter of buying bread instead of selling it.",
+                    "You are not wrong and it is still not advice I can take. Fallow is what people say when the field is not the one feeding them.",
+                    "I know. I have known since the thaw. Say it to me again after harvest and I might be able to hear it — right now %2$s is the difference between a lean year and a bad one."
+                  ],
+                  "pt": [
+                    "Está me dizendo algo, sim. Está dizendo que quer um ano que eu não tenho. Deixar %2$s em pousio é um inverno comprando pão em vez de vender.",
+                    "Você não está errada, e mesmo assim não é conselho que eu possa seguir. Pousio é o que se diz quando o campo não é o que alimenta a gente.",
+                    "Eu sei. Sei desde o degelo. Me diga isso de novo depois da colheita e talvez eu consiga ouvir — agora %2$s é a diferença entre um ano magro e um ano ruim."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "no_advice",
+              "stance": "restraint",
+              "move": "boundary",
+              "tone": "plain",
+              "outcome": "qualified",
+              "label": {
+                "en": "Ground is beyond me. I'd be guessing.",
+                "pt": "De terra eu não entendo. Eu estaria chutando."
+              },
+              "phrases": [
+                "ground is beyond me id be guessing",
+                "im guessing if i say anything about soil"
+              ],
+              "requires_any": [
+                "beyond",
+                "guessing",
+                "soil"
+              ],
+              "disposition": {
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "excused",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "observation",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Nor does half the village, and it has never stopped them. I would rather stand here with somebody who says so.",
+                    "That is an honest answer and I have had four dishonest ones this week. Thank you for it.",
+                    "Good. Then you will not tell me to lime it. Everyone tells me to lime it."
+                  ],
+                  "pt": [
+                    "Nem metade da vila entende, e isso nunca os impediu. Prefiro ficar aqui com alguém que admite.",
+                    "Essa é uma resposta honesta, e eu recebi quatro desonestas esta semana. Obrigada por ela.",
+                    "Ótimo. Então você não vai me mandar passar cal. Todo mundo me manda passar cal."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "active",
+          "shape": "plan",
+          "predicate": "status_change",
+          "temporal": "current",
+          "obligations": [
+            "acknowledge",
+            "clarify"
+          ],
+          "slots_used": [
+            "crop",
+            "worksite"
+          ],
+          "prompt": {
+            "en": "The field, again.",
+            "pt": "O campo, de novo."
+          },
+          "lines": {
+            "en": [
+              "%2$s in %3$s has stopped getting worse, which is not the same as getting better, but I will take it for now.",
+              "I have been out to %3$s twice a day since. %2$s is holding. I keep expecting to be punished for hoping.",
+              "Better. Not good. %2$s has put out new growth at the near end of %3$s and nothing at the far end, and I do not know yet which end is telling the truth."
+            ],
+            "pt": [
+              "%2$s em %3$s parou de piorar, o que não é a mesma coisa que melhorar, mas por ora eu aceito.",
+              "Tenho ido a %3$s duas vezes por dia desde então. %2$s está aguentando. Fico esperando ser castigada por ter esperança.",
+              "Melhor. Não bom. %2$s brotou de novo na ponta de cá de %3$s e nada na ponta de lá, e ainda não sei qual das duas está falando a verdade."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_odds",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What are the odds it comes back?",
+                "pt": "Que chance ele tem de se recuperar?"
+              },
+              "phrases": [
+                "what are its chances",
+                "do you think it will recover"
+              ],
+              "requires_any": [
+                "odds",
+                "chances",
+                "recover"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "guessed",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "plan",
+                "slots_used": [
+                  "crop"
+                ],
+                "lines": {
+                  "en": [
+                    "Even, if the weather is kind. Worse if it is not. I have stopped putting a number on %2$s because the number was only ever me talking to myself.",
+                    "Ask me in nine days. That is when %2$s either sets seed or does not, and no amount of standing over it moves that date.",
+                    "Better than a week ago, which is the only comparison I trust. I have been wrong about %2$s twice this season already."
+                  ],
+                  "pt": [
+                    "Meio a meio, se o tempo ajudar. Pior, se não. Parei de dar número a %2$s porque o número era só eu falando comigo mesma.",
+                    "Me pergunte em nove dias. É quando %2$s vai granar ou não, e ficar em cima não muda essa data.",
+                    "Melhor que na semana passada, que é a única comparação em que confio. Já errei sobre %2$s duas vezes nesta estação."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "glad",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "I'm glad it's holding.",
+                "pt": "Fico feliz que esteja aguentando."
+              },
+              "phrases": [
+                "glad it is holding on",
+                "good to hear it has stopped getting worse"
+              ],
+              "requires_any": [
+                "glad",
+                "holding",
+                "getting"
+              ],
+              "disposition": {
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.farmer.crop_failing.glad",
+                "delta": 1,
+                "budget": "standard",
+                "policy": "daily_repeat"
+              },
+              "reaction": {
+                "id": "shared",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "plan",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "So am I, and I am trying not to say so out loud too often in case %2$s hears me.",
+                    "It is a strange thing to be glad about. A field that has stopped dying. But there it is.",
+                    "Say that to me again in nine days and I will believe you. Today I am just walking %2$s and counting."
+                  ],
+                  "pt": [
+                    "Eu também, e estou tentando não dizer isso alto demais, para %2$s não me ouvir.",
+                    "É uma coisa estranha de comemorar. Um campo que parou de morrer. Mas é o que temos.",
+                    "Me diga isso de novo em nove dias e eu acredito. Hoje só estou andando por %2$s e contando."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "crop",
+            "worksite"
+          ],
+          "prompt": {
+            "en": "It came back.",
+            "pt": "Se recuperou."
+          },
+          "lines": {
+            "en": [
+              "%2$s came back. Not the far end of %3$s — that is gone — but the rest of it, and the rest of it is a year.",
+              "I cut %2$s yesterday. Two thirds of what %3$s should give, which after this spring I will call a good year and mean it.",
+              "It made it. I stood in %3$s at dawn feeling foolish about how much %2$s had come to mean, and then I got on with the day."
+            ],
+            "pt": [
+              "%2$s se recuperou. A ponta de lá de %3$s não — essa se foi — mas o resto sim, e o resto é um ano inteiro.",
+              "Colhi %2$s ontem. Dois terços do que %3$s deveria dar, o que depois desta primavera eu chamo de bom ano e falo sério.",
+              "Vingou. Fiquei em %3$s de madrugada me sentindo boba com o tanto que %2$s tinha passado a significar, e depois toquei o dia."
+            ]
+          },
+          "replies": [
+            {
+              "name": "credit_her",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You kept it alive. That was you.",
+                "pt": "Você o manteve vivo. Isso foi você."
+              },
+              "phrases": [
+                "you did that",
+                "that was your work not luck"
+              ],
+              "requires_any": [
+                "you",
+                "your"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.farmer.crop_failing.credit",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "credited",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Me and the weather, and the weather did not have to help. I will take my share and leave the rest to whoever arranges rain.",
+                    "It was me being stubborn in the right direction for once. Ask me next year and I may have picked the wrong direction.",
+                    "I will allow it. Not the whole of it — %2$s decided a good deal on its own — but I will allow it."
+                  ],
+                  "pt": [
+                    "Eu e o tempo, e o tempo não era obrigado a ajudar. Fico com a minha parte e deixo o resto para quem organiza a chuva.",
+                    "Foi eu ser teimosa na direção certa, pela primeira vez. Me pergunte no ano que vem e talvez eu tenha escolhido a direção errada.",
+                    "Aceito. Não tudo — %2$s decidiu boa parte sozinho — mas aceito."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_next_year",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Will you plant it again next year?",
+                "pt": "Vai plantar de novo no ano que vem?"
+              },
+              "phrases": [
+                "will you sow it again",
+                "same crop next season"
+              ],
+              "requires_any": [
+                "again",
+                "next",
+                "season"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "planned",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "plan",
+                "temporal": "future",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Not in the far end of %2$s. That corner has told me twice now and I am done arguing with it. Beans there, and we will see.",
+                    "The same, and I will hate every morning of it until it is up. That is farming.",
+                    "I have been standing at %2$s working that out for a week. Probably. Probably is what I have."
+                  ],
+                  "pt": [
+                    "Na ponta de lá de %2$s não. Aquele canto já me avisou duas vezes e eu parei de discutir. Feijão ali, e a gente vê.",
+                    "O mesmo, e vou detestar cada manhã até nascer. Isso é a lavoura.",
+                    "Faz uma semana que fico parada em %2$s pensando nisso. Provavelmente. Provavelmente é o que eu tenho."
+                  ]
+                },
+                "predicate": "plan"
+              }
+            }
+          ]
+        },
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "act": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "crop",
+            "worksite"
+          ],
+          "prompt": {
+            "en": "It didn't come back.",
+            "pt": "Não se recuperou."
+          },
+          "lines": {
+            "en": [
+              "I turned %2$s under last week. There was no point pretending %3$s was going to give me anything.",
+              "%3$s is bare. I gave %2$s until the ninth day and then I gave it three more, and then I stopped.",
+              "It is done. I have ploughed %2$s back into %3$s, which at least means next year starts with something."
+            ],
+            "pt": [
+              "Revirei %2$s na semana passada. Não adiantava fingir que %3$s ia me dar alguma coisa.",
+              "%3$s está pelado. Dei a %2$s até o nono dia, depois dei mais três, e então parei.",
+              "Acabou. Arei %2$s de volta em %3$s, o que pelo menos faz o ano que vem começar com alguma coisa."
+            ]
+          },
+          "replies": [
+            {
+              "name": "sit_with_it",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's a year's work. I'm sorry.",
+                "pt": "É um ano de trabalho. Sinto muito."
+              },
+              "phrases": [
+                "that is a whole year of work",
+                "im sorry that is a real loss"
+              ],
+              "requires_any": [
+                "sorry",
+                "year",
+                "loss"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.farmer.crop_failing.mourn",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "received",
+                "act": "qualify",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "It is, and thank you for calling it that. Everyone says there is always next year, which is true and is not what I needed today.",
+                    "A year and a half, if you count the winter I spent planning it. But yes. Thank you.",
+                    "I have not said that out loud yet. I have been calling it a setback since Tuesday. Standing in %2$s it did not feel like a setback."
+                  ],
+                  "pt": [
+                    "É mesmo, e obrigada por chamar assim. Todo mundo diz que sempre tem o ano que vem, o que é verdade e não era o que eu precisava hoje.",
+                    "Um ano e meio, se contar o inverno que passei planejando. Mas sim. Obrigada.",
+                    "Ainda não tinha dito isso em voz alta. Venho chamando de contratempo desde terça. Parada em %2$s não parecia contratempo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_lesson",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What would you do differently?",
+                "pt": "O que você faria diferente?"
+              },
+              "phrases": [
+                "what would you change",
+                "what did it teach you"
+              ],
+              "requires_any": [
+                "differently",
+                "change",
+                "teach"
+              ],
+              "disposition": {
+                "respect": 2,
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "learned",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Listen to %2$s in the first week instead of the fourth. I knew in the first week. I spent three more deciding I did not.",
+                    "Sow less of it and more beans. I have said that after every bad year and planted the same thing every good one.",
+                    "Ask somebody sooner. Not for the answer — I had the answer — for the company while I looked at it."
+                  ],
+                  "pt": [
+                    "Ouvir %2$s na primeira semana em vez de na quarta. Eu sabia na primeira semana. Passei mais três decidindo que não sabia.",
+                    "Plantar menos disso e mais feijão. Digo isso depois de todo ano ruim e planto a mesma coisa em todo ano bom.",
+                    "Perguntar a alguém antes. Não pela resposta — eu tinha a resposta — pela companhia enquanto eu olhava para aquilo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.price_dispute",
+      "subject": "work.farmer.trade_prices",
+      "initial_state": "blocked",
+      "salience": 42,
+      "due_after_days": 8,
+      "expires_after_days": 24,
+      "slots": {
+        "crop": [
+          "wheat",
+          "beetroot",
+          "carrots",
+          "potatoes"
+        ],
+        "buyer": [
+          "the_miller",
+          "the_innkeeper",
+          "the_baker"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "debate",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "act": "complain",
+          "polarity": "negative",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "crop",
+            "buyer"
+          ],
+          "identity_values": [
+            "fairness",
+            "independence"
+          ],
+          "prompt": {
+            "en": "About the price.",
+            "pt": "Sobre o preço."
+          },
+          "lines": {
+            "en": [
+              "%3$s has offered me the same for %2$s as last year, and last year was not a hard year. I have not said yes and I have not said no.",
+              "There is a conversation I have been avoiding with %3$s about what %2$s is worth. Avoiding it is costing me more than having it would.",
+              "%3$s wants %2$s at last year's price. Everyone's flour costs what it costs; apparently only my end of it is supposed to stay still."
+            ],
+            "pt": [
+              "%3$s me ofereceu pelo %2$s o mesmo do ano passado, e o ano passado não foi difícil. Não disse sim nem disse não.",
+              "Tem uma conversa que venho evitando com %3$s sobre quanto vale %2$s. Evitar está me custando mais do que ter ela custaria.",
+              "%3$s quer %2$s pelo preço do ano passado. A farinha de todo mundo custa o que custa; pelo visto só o meu lado é que deve ficar parado."
+            ]
+          },
+          "replies": [
+            {
+              "name": "urge_ask",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "label": {
+                "en": "Ask for more. The worst they say is no.",
+                "pt": "Peça mais. O pior que dizem é não."
+              },
+              "phrases": [
+                "you should ask for more",
+                "name a higher price"
+              ],
+              "requires_any": [
+                "more",
+                "higher",
+                "ask"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "advance": "active",
+              "reaction": {
+                "id": "resolved_to",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "debate",
+                "temporal": "future",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "buyer"
+                ],
+                "lines": {
+                  "en": [
+                    "The worst they say is no and then buy elsewhere for a season and come back. That is what I have been afraid of. But you are right, and I will ask %2$s on market day.",
+                    "Said plainly like that it sounds obvious. It has not been obvious from inside my own head for a fortnight.",
+                    "Right. Market day. I will write the number down first so I cannot talk myself down while %2$s is looking at me."
+                  ],
+                  "pt": [
+                    "O pior que dizem é não, e aí compram de outro por uma estação e voltam. É disso que eu tinha medo. Mas você tem razão, e vou falar com %2$s no dia de feira.",
+                    "Dito assim, parece óbvio. De dentro da minha cabeça não parecia óbvio há quinze dias.",
+                    "Certo. Dia de feira. Vou anotar o número antes, para não me convencer a baixar enquanto %2$s me encara."
+                  ]
+                },
+                "predicate": "plan"
+              }
+            },
+            {
+              "name": "ask_worth",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you think it's actually worth?",
+                "pt": "Quanto você acha que vale de verdade?"
+              },
+              "phrases": [
+                "what is it worth",
+                "what would be a fair price"
+              ],
+              "requires_any": [
+                "worth",
+                "fair",
+                "price"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "priced",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "debate",
+                "slots_used": [
+                  "crop"
+                ],
+                "lines": {
+                  "en": [
+                    "A third more than the offer, and I can show you the arithmetic. The arithmetic is not the hard part; saying the number to somebody's face is.",
+                    "Enough that I would not have to sell the last of %2$s in spring at whatever price spring feels like giving me.",
+                    "More than last year and less than I would like. I do not want to be greedy about %2$s. I want to stop subsidising other people's bread."
+                  ],
+                  "pt": [
+                    "Um terço a mais que a oferta, e posso te mostrar a conta. A conta não é a parte difícil; dizer o número na cara de alguém é.",
+                    "O bastante para eu não ter de vender o resto de %2$s na primavera pelo preço que a primavera resolver me dar.",
+                    "Mais que ano passado e menos do que eu gostaria. Não quero ser gananciosa com %2$s. Quero parar de bancar o pão dos outros."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "crop",
+            "buyer"
+          ],
+          "prompt": {
+            "en": "You asked, then.",
+            "pt": "Então você pediu."
+          },
+          "lines": {
+            "en": [
+              "I asked %3$s. I got most of it — not all, but most — and %2$s is sold at a price I can say out loud without wincing.",
+              "It went better than a fortnight of dreading it suggested. %3$s barely blinked. I have been undercharging for %2$s out of politeness for two years.",
+              "Done. %2$s is spoken for at the new price and %3$s and I are still on speaking terms, which I had genuinely not counted on."
+            ],
+            "pt": [
+              "Falei com %3$s. Consegui quase tudo — não tudo, mas quase — e %2$s está vendido a um preço que eu digo em voz alta sem encolher.",
+              "Correu melhor do que quinze dias de pavor sugeriam. %3$s mal piscou. Faz dois anos que eu cobro pouco por %2$s de pura educação.",
+              "Feito. %2$s está negociado pelo preço novo e eu e %3$s continuamos nos falando, o que sinceramente eu não esperava."
+            ]
+          },
+          "replies": [
+            {
+              "name": "well_done",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That took more nerve than the asking looked like.",
+                "pt": "Isso exigiu mais coragem do que parecia."
+              },
+              "phrases": [
+                "that took nerve",
+                "well done for asking"
+              ],
+              "requires_any": [
+                "nerve",
+                "courage",
+                "done"
+              ],
+              "disposition": {
+                "warmth": 2,
+                "respect": 2
+              },
+              "affection": {
+                "decision": "work.farmer.price_dispute.praise",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "It did. I rehearsed it to a fencepost. Do not tell anyone I rehearsed it to a fencepost.",
+                    "More than I would admit to most people. Thank you for noticing that it was the asking and not the number.",
+                    "I nearly did not. I got halfway there and turned round once, and then I turned round again."
+                  ],
+                  "pt": [
+                    "Exigiu. Ensaiei para um mourão de cerca. Não conte a ninguém que ensaiei para um mourão de cerca.",
+                    "Mais do que eu admitiria para a maioria. Obrigada por perceber que o difícil era pedir, não o número.",
+                    "Quase não fui. Cheguei na metade do caminho e voltei uma vez, e depois voltei de novo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_what_changed",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did they say when you named it?",
+                "pt": "O que disseram quando você falou o número?"
+              },
+              "phrases": [
+                "what did they say",
+                "how did they take it"
+              ],
+              "requires_any": [
+                "say",
+                "said",
+                "take"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "recounted",
+                "act": "reminisce",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "temporal": "past",
+                "slots_used": [
+                  "buyer"
+                ],
+                "lines": {
+                  "en": [
+                    "Nothing, for long enough that I nearly took it back. Then %2$s said 'about time' and wrote it down, and I had to go and sit in the cart.",
+                    "%2$s said the price of everything else had moved and mine had not, in a tone that suggested this had been obvious to everybody but me.",
+                    "Haggled a little, out of habit I think. We landed close to my number. %2$s asked why I had waited two years to say it, and I did not have an answer."
+                  ],
+                  "pt": [
+                    "Nada, por tempo suficiente para eu quase voltar atrás. Aí %2$s disse 'já não era sem tempo' e anotou, e eu tive de ir sentar na carroça.",
+                    "%2$s disse que o preço de tudo tinha mexido e o meu não, num tom que sugeria que isso era óbvio para todo mundo menos para mim.",
+                    "Pechinchou um pouco, por hábito, acho. Paramos perto do meu número. %2$s perguntou por que eu tinha esperado dois anos para falar, e eu não tinha resposta."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.pest_pressure",
+      "subject": "work.farmer.pests",
+      "initial_state": "active",
+      "salience": 38,
+      "expires_after_days": 20,
+      "slots": {
+        "pest": [
+          "rabbits",
+          "crows",
+          "beetles"
+        ],
+        "worksite": [
+          "east_field",
+          "low_field",
+          "terrace",
+          "home_plot"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "pest",
+            "worksite"
+          ],
+          "identity_values": [
+            "mercy",
+            "duty"
+          ],
+          "prompt": {
+            "en": "About the field.",
+            "pt": "Sobre o campo."
+          },
+          "lines": {
+            "en": [
+              "%2$s in %3$s again. Not enough to ruin me, enough to be there every morning, which is its own kind of grinding.",
+              "I have moved the netting twice and %2$s have found their way round it twice. %3$s is going to have to be fenced properly and I keep not doing it.",
+              "You will hear the noise before you see it. %2$s in %3$s, at dawn, every dawn since the seed went in."
+            ],
+            "pt": [
+              "%2$s em %3$s de novo. Não o bastante para me arruinar, o bastante para estar lá toda manhã, o que desgasta do seu próprio jeito.",
+              "Já mudei a tela duas vezes e %2$s deram a volta nela duas vezes. %3$s vai ter de ser cercado direito e eu continuo não fazendo.",
+              "Você ouve o barulho antes de ver. %2$s em %3$s, ao amanhecer, todo amanhecer desde que a semente entrou."
+            ]
+          },
+          "replies": [
+            {
+              "name": "urge_fence",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "label": {
+                "en": "Fence it properly. Once, and be done.",
+                "pt": "Cerque direito. De uma vez, e acabou."
+              },
+              "phrases": [
+                "build a proper fence",
+                "fence it once and for all"
+              ],
+              "requires_any": [
+                "fence",
+                "fencing",
+                "cerque"
+              ],
+              "disposition": {
+                "respect": 2,
+                "familiarity": 1
+              },
+              "advance": "succeeded",
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "problem_solve",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Yes. Yes, all right. I have known that since the first week and I have been doing the cheap thing every week since. %2$s gets a fence.",
+                    "You are the third person to say it and the first one I have not argued with. Fine. This week.",
+                    "It is two days of work I do not want to spend and forty mornings I do not want to keep spending. Put like that it decides itself."
+                  ],
+                  "pt": [
+                    "Sim. Sim, está bem. Eu sei disso desde a primeira semana e venho fazendo o barato toda semana desde então. %2$s vai ganhar cerca.",
+                    "Você é a terceira pessoa a dizer isso e a primeira com quem eu não discuti. Pronto. Esta semana.",
+                    "São dois dias de trabalho que eu não quero gastar e quarenta manhãs que eu não quero continuar gastando. Assim posto, decide sozinho."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_tolerance",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How much of it can you live with?",
+                "pt": "Com quanto disso você consegue conviver?"
+              },
+              "phrases": [
+                "how much can you tolerate",
+                "where is the line for you"
+              ],
+              "requires_any": [
+                "live",
+                "tolerate",
+                "line"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "weighed",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "pest"
+                ],
+                "lines": {
+                  "en": [
+                    "A tithe. Always a tithe — %2$s were here before the field was. It is when it goes past a tithe that I stop being philosophical about it.",
+                    "More than most farmers, which I get told about. I would rather feed %2$s than spend my life at war with the edge of my own land.",
+                    "Less than I did before I had a bad year. That is the honest answer and I am not proud of it."
+                  ],
+                  "pt": [
+                    "Um dízimo. Sempre um dízimo — %2$s estavam aqui antes do campo. É quando passa do dízimo que eu deixo de ser filosófica.",
+                    "Mais que a maioria dos lavradores, e me falam disso. Prefiro alimentar %2$s a passar a vida em guerra com a borda da minha própria terra.",
+                    "Menos do que antes de eu ter um ano ruim. Essa é a resposta honesta e não me orgulho dela."
+                  ]
+                }
+              }
+            }
+          ],
+          "identity_styles": [
+            "pragmatic"
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "pest",
+            "worksite"
+          ],
+          "prompt": {
+            "en": "The fence went up.",
+            "pt": "A cerca subiu."
+          },
+          "lines": {
+            "en": [
+              "The fence is up along %3$s. Two days of my life and I have not seen %2$s inside it since, and I am quietly furious about how simple that was.",
+              "%3$s is fenced. I woke at dawn out of habit, listened, heard nothing, and went back to sleep like a person.",
+              "Done, and done properly. %2$s can have the verge. They have stopped having the crop, which was always the whole of the argument."
+            ],
+            "pt": [
+              "A cerca está de pé ao longo de %3$s. Dois dias da minha vida, e não vi %2$s dentro dela desde então, e estou discretamente furiosa com o quanto foi simples.",
+              "%3$s está cercado. Acordei ao amanhecer por hábito, escutei, não ouvi nada e voltei a dormir como gente.",
+              "Feito, e feito direito. %2$s podem ficar com a beira. Pararam de ficar com a lavoura, que era a discussão inteira."
+            ]
+          },
+          "replies": [
+            {
+              "name": "tease",
+              "stance": "humor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "playful",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Two days, after forty mornings.",
+                "pt": "Dois dias, depois de quarenta manhãs."
+              },
+              "phrases": [
+                "only two days then",
+                "forty mornings and it took two days"
+              ],
+              "requires_any": [
+                "days",
+                "mornings"
+              ],
+              "disposition": {
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "wry",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "Say it. Go on. I have been saying it to myself with a hammer in my hand for two days and I would rather hear it from somebody else.",
+                    "Do not. I know. I am going to be told this by my own memory every spring for the rest of my life.",
+                    "Forty-one, but who is counting. I was, obviously. That is the joke."
+                  ],
+                  "pt": [
+                    "Fale. Pode falar. Passei dois dias dizendo isso a mim mesma com um martelo na mão e prefiro ouvir de outra pessoa.",
+                    "Não diga. Eu sei. Minha própria memória vai me lembrar disso toda primavera pelo resto da vida.",
+                    "Quarenta e uma, mas quem está contando. Eu estava, claro. É essa a piada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_cost",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did the timber cost you?",
+                "pt": "Quanto lhe custou a madeira?"
+              },
+              "phrases": [
+                "what did the wood cost",
+                "was the timber dear"
+              ],
+              "requires_any": [
+                "timber",
+                "wood",
+                "cost"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "counted",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "observe",
+                "slots_used": [
+                  "worksite"
+                ],
+                "lines": {
+                  "en": [
+                    "Less than the crop it will save in one year, which is the sum I should have done in the first week. I did it on the third day of building instead.",
+                    "Half of it came off the windbreak I lost in the storm, so cheaper than it should have been. %2$s is fenced with the remains of its own shelter, which I find funny at odd hours.",
+                    "Enough to notice. Not enough to have been the reason I waited, which is what makes waiting harder to explain."
+                  ],
+                  "pt": [
+                    "Menos do que a lavoura que ela vai salvar em um ano, que é a conta que eu deveria ter feito na primeira semana. Fiz no terceiro dia de obra.",
+                    "Metade veio do quebra-vento que perdi na tempestade, então saiu mais barato do que devia. %2$s está cercado com os restos do próprio abrigo, o que me diverte em horas estranhas.",
+                    "O bastante para notar. Não o bastante para ter sido o motivo da demora, o que torna a demora mais difícil de explicar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of the work?",
+        "pt": "Qual é a parte mais difícil do trabalho?"
+      },
+      "requires_any": [
+        "hardest",
+        "part"
+      ],
+      "phrases": [
+        "what is the hardest part of it",
+        "whats the worst part of the job"
+      ]
+    },
+    "leave": {
+      "en": "I'll let you get back to it.",
+      "pt": "Vou deixar você voltar ao trabalho."
+    }
+  }
+}

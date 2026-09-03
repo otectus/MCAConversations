@@ -1,0 +1,309 @@
+{
+  "beats": {
+    "village.again.to.village.again": {
+      "topic": "village",
+      "say": "conversations.village.again",
+      "response_question": "conversations.topic.village.again.respond",
+      "npc_act": "accept",
+      "subject": "village.repeat",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "village.child.to.village.young": {
+      "topic": "village",
+      "say": "conversations.village.child",
+      "response_question": "conversations.topic.village.young.respond",
+      "npc_act": "accept",
+      "subject": "village.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "village.home.to.village": {
+      "topic": "village",
+      "say": "conversations.village.home",
+      "response_question": "conversations.topic.village.respond",
+      "npc_act": "accept",
+      "subject": "village.home",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "village.none.to.village.none": {
+      "topic": "village",
+      "say": "conversations.village.none",
+      "response_question": "conversations.topic.village.none.respond",
+      "npc_act": "accept",
+      "subject": "village.no_home",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "village.teen.to.village.young": {
+      "topic": "village",
+      "say": "conversations.village.teen",
+      "response_question": "conversations.topic.village.young.respond",
+      "npc_act": "accept",
+      "subject": "village.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "village.toddler.to.village.toddler": {
+      "topic": "village",
+      "say": "conversations.village.toddler",
+      "response_question": "conversations.topic.village.toddler.respond",
+      "npc_act": "accept",
+      "subject": "village.toddler",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.village.again.respond/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "village.again.to.village.again"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.village.again.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.again.to.village.again"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.village.again.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "village.again.to.village.again"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.village.none.respond/ask_where": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.none.to.village.none"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.village.none.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "village.none.to.village.none"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.village.none.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.none.to.village.none"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.village.none.respond/sympathise": {
+      "stance": "empathy",
+      "responds_to": [
+        "village.none.to.village.none"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.village.respond/affirm": {
+      "stance": "encouragement",
+      "responds_to": [
+        "village.home.to.village"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.village.respond/ask_improve": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.home.to.village"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.village.respond/insult": {
+      "stance": "dismissal",
+      "responds_to": [
+        "village.home.to.village"
+      ],
+      "tone": "hostile"
+    },
+    "conversations.topic.village.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.home.to.village"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.village.toddler.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.toddler.to.village.toddler"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.village.toddler.respond/delight": {
+      "stance": "encouragement",
+      "responds_to": [
+        "village.toddler.to.village.toddler"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.village.toddler.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.toddler.to.village.toddler"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.village.young.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.child.to.village.young",
+        "village.teen.to.village.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.village.young.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "village.child.to.village.young",
+        "village.teen.to.village.young"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.village.young.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.child.to.village.young",
+        "village.teen.to.village.young"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.village.young.respond/play_along": {
+      "stance": "encouragement",
+      "responds_to": [
+        "village.child.to.village.young",
+        "village.teen.to.village.young"
+      ],
+      "tone": "playful"
+    }
+  }
+}

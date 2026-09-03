@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_thinks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.inherited_page.active.declined_politely"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.notes",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.inherited_page"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.inherited_page.active.declined_politely"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "suggest_asking_someone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.inherited_page.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.notes",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shady_wizard.inherited_page"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.inherited_page.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.shady_wizard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

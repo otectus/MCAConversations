@@ -1,0 +1,810 @@
+{
+  "_comment": [
+    "Nitwit. The villager the village has decided not to expect anything from.",
+    "",
+    "The §12.4 anchors are the day, the things she notices, being written off, small usefulness, being",
+    "talked over and the thing she is actually good at. These three take a job nobody will let her do,",
+    "something she noticed that turned out to matter, and a conversation she was left out of.",
+    "",
+    "The trap here is either pitying her or making her a secret genius. She is neither. She is slow at",
+    "some things, unusually observant about others, entirely aware of how she is spoken to, and she",
+    "declines to perform either gratitude or resentment about it."
+  ],
+  "profession": "minecraft:nitwit",
+  "id": "nitwit",
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "subjects_any": [
+    "the_day",
+    "what_i_notice",
+    "being_written_off",
+    "small_usefulness",
+    "being_talked_over",
+    "what_im_good_at"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to it.",
+    "pt": "Vou deixar você voltar ao que fazia."
+  },
+  "slot_lang": {
+    "nit_carrying_water": {
+      "en": "carrying water",
+      "pt": "carregar água"
+    },
+    "nit_minding_the_gate": {
+      "en": "minding the gate",
+      "pt": "cuidar do portão"
+    },
+    "nit_counting_the_sacks": {
+      "en": "counting the sacks",
+      "pt": "contar os sacos"
+    },
+    "nit_the_baker": {
+      "en": "the baker",
+      "pt": "o padeiro"
+    },
+    "nit_my_own_brother": {
+      "en": "my own brother",
+      "pt": "meu próprio irmão"
+    },
+    "nit_the_woman_at_the_well": {
+      "en": "the woman at the well",
+      "pt": "a mulher do poço"
+    },
+    "nit_a_gate_left_open": {
+      "en": "a gate left open",
+      "pt": "um portão deixado aberto"
+    },
+    "nit_a_smell_of_burning": {
+      "en": "a smell of burning",
+      "pt": "um cheiro de queimado"
+    },
+    "nit_a_cart_track_in_the_wrong_place": {
+      "en": "a cart track in the wrong place",
+      "pt": "um rastro de carroça no lugar errado"
+    },
+    "nit_the_meeting_about_the_well": {
+      "en": "the meeting about the well",
+      "pt": "a reunião sobre o poço"
+    },
+    "nit_the_talk_about_the_road": {
+      "en": "the talk about the road",
+      "pt": "a conversa sobre a estrada"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.refused_job",
+      "subject": "work.nitwit.small_usefulness",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "slots": {
+        "task": [
+          "nit_carrying_water",
+          "nit_minding_the_gate",
+          "nit_counting_the_sacks"
+        ],
+        "who": [
+          "nit_the_baker",
+          "nit_my_own_brother",
+          "nit_the_woman_at_the_well"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "task",
+            "who"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "The jobs.",
+            "pt": "Os serviços."
+          },
+          "lines": {
+            "en": [
+              "I asked %3$s if I could help with %2$s and got a laugh, and the laugh was meant kindly, which is worse.",
+              "%2$s is a thing I can do. %3$s took it back off me halfway through and finished it themselves, quickly, so that it would not be awkward.",
+              "Nobody says I cannot do %2$s. They just always have somebody else in mind by the time I arrive."
+            ],
+            "pt": [
+              "Perguntei a %3$s se eu podia ajudar com %2$s e recebi uma risada, e a risada era bem-intencionada, o que é pior.",
+              "%2$s é uma coisa que eu sei fazer. %3$s tirou de mim no meio e terminou sozinho, rápido, para não ficar constrangedor.",
+              "Ninguém diz que eu não posso fazer %2$s. Só que sempre já têm outra pessoa em mente quando eu chego."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_she_can",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Can you do it?",
+                "pt": "Você consegue fazer?"
+              },
+              "phrases": [
+                "can you do it",
+                "are you able to do that job"
+              ],
+              "requires_any": [
+                "able",
+                "job",
+                "do"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "task"
+                ],
+                "lines": {
+                  "en": [
+                    "Yes. Slower than the baker's boy and I have never once spilled any, which is a trade the baker would take.",
+                    "%2$s, yes. Some things no. I know the difference better than anybody, because I am the one who finds out.",
+                    "Thank you for asking that instead of asking whether I mind. Everyone asks whether I mind."
+                  ],
+                  "pt": [
+                    "Consigo. Mais devagar que o menino do padeiro e nunca derramei nada, o que é uma troca que o padeiro aceitaria.",
+                    "%2$s, sim. Algumas coisas não. Eu sei a diferença melhor que qualquer um, porque sou eu quem descobre.",
+                    "Obrigada por perguntar isso em vez de perguntar se eu me incomodo. Todo mundo pergunta se eu me incomodo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_to_ask_for_her",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "resisted",
+              "label": {
+                "en": "I could speak to them for you.",
+                "pt": "Eu posso falar com eles por você."
+              },
+              "phrases": [
+                "i could speak to them for you",
+                "shall i put in a word for you"
+              ],
+              "requires_any": [
+                "speak",
+                "word"
+              ],
+              "disposition": {
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "declined",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Then it is your word they trust, and next time I am back at the start with a smaller start.",
+                    "That is kind and I would rather you did not. I have watched people be spoken for and they never stop being spoken for.",
+                    "Ask me to help you with something instead. That is worth four of anybody putting in a word."
+                  ],
+                  "pt": [
+                    "Aí é na sua palavra que eles confiam, e da próxima vez eu volto ao começo com um começo menor.",
+                    "É gentil e eu preferia que não. Já vi gente falada por outros e nunca param de ser faladas por outros.",
+                    "Peça ajuda a mim em alguma coisa. Isso vale por quatro pessoas dando uma palavra."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_is_unfair",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You deserve a fair chance at it.",
+                "pt": "Você merece uma chance justa nisso."
+              },
+              "phrases": [
+                "that is unfair on you",
+                "you deserve a fair chance at it"
+              ],
+              "requires_any": [
+                "unfair",
+                "deserve",
+                "chance"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 2
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is not. I am careful about that word, though, because most of them are being nice and nice is harder to argue with.",
+                    "Thank you. I would rather be told it is unfair than told I am doing well, and I get told I am doing well a great deal.",
+                    "I have stopped keeping a list. The list did nothing for me except make me sour company, and sour company gets asked to help even less."
+                  ],
+                  "pt": [
+                    "Não é. Mas eu sou cuidadosa com essa palavra, porque a maioria está sendo gentil, e gentileza é mais difícil de contestar.",
+                    "Obrigada. Prefiro que me digam que é injusto a que me digam que estou indo bem, e me dizem que estou indo bem o tempo todo.",
+                    "Parei de fazer lista. A lista não fez nada por mim além de me deixar azeda, e companhia azeda é chamada para ajudar ainda menos."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "task"
+          ],
+          "prompt": {
+            "en": "The jobs, since.",
+            "pt": "Os serviços, depois disso."
+          },
+          "lines": {
+            "en": [
+              "I do %2$s now. Every day. Nobody announced it — they just stopped finding somebody else.",
+              "It took a month of turning up before anybody asked, and then one person asked, and now three do.",
+              "%2$s is mine. I am slower and I have not made a single mistake, and one of those facts gets mentioned and the other does not."
+            ],
+            "pt": [
+              "Eu faço %2$s agora. Todo dia. Ninguém anunciou — só pararam de procurar outra pessoa.",
+              "Levou um mês aparecendo antes de alguém pedir, e aí uma pessoa pediu, e agora três pedem.",
+              "%2$s é meu. Sou mais devagar e não cometi um erro sequer, e um desses fatos é mencionado e o outro não."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_it_changed",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "How did they come round?",
+                "pt": "Como eles mudaram de ideia?"
+              },
+              "phrases": [
+                "how did they come round",
+                "what changed their minds about it"
+              ],
+              "requires_any": [
+                "round",
+                "changed"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "I turned up at the same hour for a month and did it badly and then less badly, where they could see.",
+                    "Somebody was ill. That is the honest answer — a gap opened and I was standing in it, and afterwards it would have been awkward to take it back.",
+                    "I stopped asking. Asking makes it a favour. Being there at the right time makes it a solution, and people like solutions."
+                  ],
+                  "pt": [
+                    "Apareci no mesmo horário por um mês e fiz mal, e depois menos mal, onde eles podiam ver.",
+                    "Alguém adoeceu. É a resposta honesta — abriu uma brecha e eu estava parada nela, e depois teria sido constrangedor tomar de volta.",
+                    "Parei de pedir. Pedir transforma em favor. Estar ali na hora certa transforma em solução, e as pessoas gostam de solução."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.i_noticed",
+      "subject": "work.nitwit.what_i_notice",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "thing": [
+          "nit_a_gate_left_open",
+          "nit_a_smell_of_burning",
+          "nit_a_cart_track_in_the_wrong_place"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "thing"
+          ],
+          "identity_values": [
+            "curiosity",
+            "duty"
+          ],
+          "prompt": {
+            "en": "Something you saw.",
+            "pt": "Uma coisa que você viu."
+          },
+          "lines": {
+            "en": [
+              "There was %2$s yesterday and I told two people and both of them said thank you in the voice.",
+              "%2$s. I am fairly sure it matters. I am also fairly sure nobody is going to check, because of who noticed it.",
+              "I see things. It is the one thing I am reliably better at, and it is worth nothing if the telling does not work."
+            ],
+            "pt": [
+              "Teve %2$s ontem e eu contei a duas pessoas e as duas disseram obrigado naquele tom.",
+              "%2$s. Tenho quase certeza de que importa. Também tenho quase certeza de que ninguém vai conferir, por causa de quem reparou.",
+              "Eu reparo em coisas. É a única coisa em que sou confiavelmente melhor, e não vale nada se o contar não funciona."
+            ]
+          },
+          "replies": [
+            {
+              "name": "take_it_seriously",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Tell me exactly what you saw.",
+                "pt": "Me conte exatamente o que você viu."
+              },
+              "phrases": [
+                "tell me exactly what you saw",
+                "walk me through what you noticed"
+              ],
+              "requires_any": [
+                "exactly",
+                "noticed",
+                "saw"
+              ],
+              "disposition": {
+                "trust": 4,
+                "respect": 3
+              },
+              "affection": {
+                "decision": "work.nitwit.noticed.believed",
+                "delta": 3,
+                "budget": "deep",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "reported",
+                "act": "report",
+                "polarity": "positive",
+                "predicate": "social_report",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "thing"
+                ],
+                "lines": {
+                  "en": [
+                    "%2$s, between the second and third bell, and there were two sets of prints and only one of them came back.",
+                    "Right. I have been holding this for a day and a half and you are the first person to ask for the details rather than the summary.",
+                    "%2$s. I can show you where. It will take ten minutes and if I am wrong I will say so out loud in front of you."
+                  ],
+                  "pt": [
+                    "%2$s, entre o segundo e o terceiro sino, e havia duas trilhas de pegadas e só uma voltou.",
+                    "Certo. Estou segurando isso há um dia e meio e você é a primeira pessoa a pedir os detalhes em vez do resumo.",
+                    "%2$s. Posso te mostrar onde. Leva dez minutos e, se eu estiver errada, eu digo em voz alta na sua frente."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_who_to_tell",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Who would actually listen?",
+                "pt": "Quem de fato escutaria?"
+              },
+              "phrases": [
+                "who would actually listen",
+                "which person in the village would listen"
+              ],
+              "requires_any": [
+                "listen",
+                "person"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "The guard, if I catch her walking rather than standing. Standing still, she is being official at me. Walking, she just listens.",
+                    "Nobody, first time. Anybody, third time, if I say the same words in the same order and do not get flustered.",
+                    "That is the actual problem and it has taken me years to see it. It is not that I am wrong. It is that I have to be right three times."
+                  ],
+                  "pt": [
+                    "A guarda, se eu pegar ela caminhando em vez de parada. Parada, ela está sendo oficial comigo. Caminhando, ela só escuta.",
+                    "Ninguém, na primeira vez. Qualquer um, na terceira, se eu disser as mesmas palavras na mesma ordem e não me atrapalhar.",
+                    "É esse o problema de verdade e levei anos para enxergar. Não é que eu esteja errada. É que eu preciso estar certa três vezes."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "thing"
+          ],
+          "prompt": {
+            "en": "That thing you noticed.",
+            "pt": "Aquilo que você reparou."
+          },
+          "lines": {
+            "en": [
+              "%2$s turned out to matter. The guard went and looked and came back and said so where people could hear.",
+              "I was right, and being right in public once is worth about a year of being right quietly.",
+              "Somebody asked me yesterday whether I had seen anything odd. Asked me first. I have thought about it more than it deserves."
+            ],
+            "pt": [
+              "%2$s acabou importando. A guarda foi lá, olhou, voltou e disse isso onde as pessoas podiam ouvir.",
+              "Eu estava certa, e estar certa em público uma vez vale por um ano de estar certa em silêncio.",
+              "Alguém me perguntou ontem se eu tinha visto algo estranho. Perguntou a mim primeiro. Pensei nisso mais do que merece."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_shift",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "They asked you first.",
+                "pt": "Perguntaram a você primeiro."
+              },
+              "phrases": [
+                "they asked you first",
+                "you were the first person they asked"
+              ],
+              "requires_any": [
+                "asked",
+                "first"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "First. I know how small that sounds. I am not going to pretend it was small to me.",
+                    "Once. I am not building anything on one, and I did notice, and I will notice if it happens again.",
+                    "Thank you for saying the thing rather than making it a lesson about believing in myself. I did not need the lesson. I needed somebody to ask."
+                  ],
+                  "pt": [
+                    "Primeiro. Eu sei o quanto isso soa pequeno. Não vou fingir que foi pequeno para mim.",
+                    "Uma vez. Não estou construindo nada em cima de uma vez, e eu reparei, e vou reparar se acontecer de novo.",
+                    "Obrigada por dizer a coisa em vez de transformar numa lição sobre acreditar em mim. Eu não precisava da lição. Precisava que alguém perguntasse."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.left_out",
+      "subject": "work.nitwit.being_talked_over",
+      "initial_state": "active",
+      "salience": 48,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "occasion": [
+          "nit_the_meeting_about_the_well",
+          "nit_the_talk_about_the_road"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "observe",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "occasion"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The meeting.",
+            "pt": "A reunião."
+          },
+          "lines": {
+            "en": [
+              "There was %2$s and nobody told me it was happening, and it was about a thing I use every day.",
+              "I went to %2$s. I said one sentence and three people started talking, and by the time they finished the subject had moved.",
+              "%2$s decided something that affects my morning, and I found out from a child."
+            ],
+            "pt": [
+              "Teve %2$s e ninguém me avisou que ia acontecer, e era sobre uma coisa que eu uso todo dia.",
+              "Fui a %2$s. Disse uma frase e três pessoas começaram a falar, e quando terminaram o assunto já tinha mudado.",
+              "%2$s decidiu uma coisa que afeta minha manhã, e eu fiquei sabendo por uma criança."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_would_say",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What would you have said?",
+                "pt": "O que você teria dito?"
+              },
+              "phrases": [
+                "what would you have said",
+                "what was your sentence going to be"
+              ],
+              "requires_any": [
+                "said",
+                "sentence"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "That the bucket rope is the problem and not the well. I am there at first light every day and I am the only one who sees it wet.",
+                    "One sentence. That is all I had. I had practised it, which is the part I would rather not have told you.",
+                    "It does not matter now. It will matter again in the spring, and I will say it then, in the same words, standing up."
+                  ],
+                  "pt": [
+                    "Que o problema é a corda do balde e não o poço. Estou lá todo dia ao amanhecer e sou a única que vê aquilo molhado.",
+                    "Uma frase. Era tudo o que eu tinha. Eu tinha ensaiado, que é a parte que eu preferia não ter contado.",
+                    "Agora não importa. Vai importar de novo na primavera, e eu digo então, com as mesmas palavras, de pé."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_to_stand_with_her",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Say it again and I'll back you.",
+                "pt": "Diga de novo e eu te apoio."
+              },
+              "phrases": [
+                "say it again and i will back you",
+                "i will stand behind you when you say it"
+              ],
+              "requires_any": [
+                "back",
+                "stand",
+                "again"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 3
+              },
+              "affection": {
+                "decision": "work.nitwit.meeting.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Behind, not instead of. If you say it for me they will hear you, and I will still be the person who cannot say things.",
+                    "All right. Next time. And if they talk over me, wait, and then say you would like to hear the end of it.",
+                    "That is the useful version of help and almost nobody offers it. Everybody offers the other one."
+                  ],
+                  "pt": [
+                    "Atrás, não no lugar. Se você disser por mim, eles vão ouvir você, e eu continuo sendo a pessoa que não consegue dizer as coisas.",
+                    "Está bem. Na próxima. E se falarem por cima de mim, espere, e depois diga que gostaria de ouvir o final.",
+                    "Essa é a versão útil da ajuda e quase ninguém oferece. Todo mundo oferece a outra."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "The meeting, in the end.",
+            "pt": "A reunião, no fim."
+          },
+          "lines": {
+            "en": [
+              "I said it standing up and somebody waited for me to finish, and then the rope got replaced.",
+              "It took twenty seconds. Twenty seconds and a year of working out how to get them.",
+              "Nobody has said anything about it since, which is exactly right. It was a sentence about a rope, not a triumph."
+            ],
+            "pt": [
+              "Eu disse de pé e alguém esperou eu terminar, e aí a corda foi trocada.",
+              "Levou vinte segundos. Vinte segundos e um ano descobrindo como consegui-los.",
+              "Ninguém comentou nada desde então, o que está exatamente certo. Era uma frase sobre uma corda, não um triunfo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_she_did_it",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You said it yourself.",
+                "pt": "Você mesma disse."
+              },
+              "phrases": [
+                "you said it yourself",
+                "you were the one who said it"
+              ],
+              "requires_any": [
+                "yourself",
+                "said"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "I did. With somebody standing there, which I want counted, because doing it alone would have been a different thing entirely.",
+                    "And the rope is new. That is the part I keep going back to. A sentence turned into a rope.",
+                    "Yes. And next time I will need less help, and the time after that probably less again, and that is the whole plan."
+                  ],
+                  "pt": [
+                    "Disse. Com alguém ali de pé, o que eu quero que conte, porque fazer sozinha teria sido outra coisa totalmente.",
+                    "E a corda é nova. É a parte à qual eu volto sempre. Uma frase virou uma corda.",
+                    "Sim. E na próxima vou precisar de menos ajuda, e na seguinte provavelmente menos ainda, e é esse o plano inteiro."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Something more?",
+      "pt": "Mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of being written off?",
+        "pt": "Qual é a parte mais difícil de ser descartada?"
+      },
+      "requires_any": [
+        "hardest",
+        "written"
+      ],
+      "phrases": [
+        "what is the hardest part of being written off",
+        "hardest thing about people writing you off"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to your day.",
+      "pt": "Vou deixar você com o seu dia."
+    }
+  }
+}

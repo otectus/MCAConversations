@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "note_the_word",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.the_name_they_use.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.customers",
+              "deltas": {
+                "warmth": 3,
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.shady_wizard.the_name_they_use"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.the_name_they_use.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.shady_wizard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

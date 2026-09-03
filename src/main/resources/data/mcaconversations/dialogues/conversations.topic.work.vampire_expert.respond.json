@@ -1,0 +1,159 @@
+{
+  "answers": [
+    {
+      "name": "ask_hard",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.hard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.hard",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.vampire_expert.hard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "value",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.value"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.vampire_expert.value",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.value",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.vampire_expert.value"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "relaxed",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.challenge.landed"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.vampire_expert.challenge",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.challenge",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.vampire_expert.challenge.landed"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "confident",
+                "greedy",
+                "crabby",
+                "peaceful",
+                "relaxed",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.challenge.stung"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.vampire_expert.challenge",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.challenge",
+              "deltas": {
+                "respect": -1,
+                "tension": 4
+              }
+            },
+            "next": "conversations.topic.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.vampire_expert.challenge.stung"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.vampire_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

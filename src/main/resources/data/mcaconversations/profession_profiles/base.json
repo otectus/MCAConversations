@@ -1,0 +1,856 @@
+{
+  "profiles": {
+    "minecraft:farmer": {
+      "archetype": "cultivation",
+      "owner": "base",
+      "display_fallback": "farmer",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "crop_health",
+        "soil",
+        "harvest",
+        "pests",
+        "inherited_land",
+        "trade_prices"
+      ],
+      "materials": [
+        "seed",
+        "wheat",
+        "beetroot",
+        "water",
+        "compost",
+        "hoe"
+      ],
+      "risks": [
+        "drought",
+        "storm",
+        "pests",
+        "failed_harvest"
+      ],
+      "beneficiaries": [
+        "village_food",
+        "trade"
+      ],
+      "callback_types": [
+        "crop_problem",
+        "harvest_result",
+        "player_help"
+      ],
+      "season_affinity": true,
+      "weather_affinity": true
+    },
+    "minecraft:fisherman": {
+      "archetype": "food",
+      "owner": "base",
+      "display_fallback": "fisherman",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "catch",
+        "water_conditions",
+        "tackle",
+        "solitude",
+        "remembered_spot",
+        "scarcity"
+      ],
+      "materials": [
+        "net",
+        "rod",
+        "boat",
+        "line",
+        "bait"
+      ],
+      "risks": [
+        "storm",
+        "scarcity",
+        "drowning",
+        "wildlife"
+      ],
+      "beneficiaries": [
+        "village_food",
+        "trade"
+      ],
+      "callback_types": [
+        "catch_result",
+        "gear_problem",
+        "player_help"
+      ],
+      "season_affinity": true,
+      "weather_affinity": true
+    },
+    "minecraft:shepherd": {
+      "archetype": "cultivation",
+      "owner": "base",
+      "display_fallback": "shepherd",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "flock",
+        "lambing",
+        "shearing",
+        "pasture",
+        "predators",
+        "attachment"
+      ],
+      "materials": [
+        "wool",
+        "shears",
+        "fence",
+        "hay"
+      ],
+      "risks": [
+        "predators",
+        "sick_animal",
+        "exposure",
+        "lost_lamb"
+      ],
+      "beneficiaries": [
+        "village_cloth",
+        "trade"
+      ],
+      "callback_types": [
+        "animal_named",
+        "flock_problem",
+        "player_help"
+      ],
+      "season_affinity": true,
+      "weather_affinity": true
+    },
+    "minecraft:fletcher": {
+      "archetype": "craft",
+      "owner": "base",
+      "display_fallback": "fletcher",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "supply",
+        "balance",
+        "orders",
+        "testing",
+        "ethics_of_arms",
+        "invisible_craft"
+      ],
+      "materials": [
+        "feather",
+        "shaft",
+        "flint",
+        "glue"
+      ],
+      "risks": [
+        "rushed_batch",
+        "bad_shaft",
+        "shortage"
+      ],
+      "beneficiaries": [
+        "guards",
+        "hunters"
+      ],
+      "callback_types": [
+        "order_placed",
+        "batch_result",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:librarian": {
+      "archetype": "knowledge",
+      "owner": "base",
+      "display_fallback": "librarian",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "acquisition",
+        "catalogue",
+        "damaged_volume",
+        "literacy",
+        "local_history",
+        "quiet"
+      ],
+      "materials": [
+        "book",
+        "ink",
+        "binding",
+        "ledger"
+      ],
+      "risks": [
+        "damp",
+        "loss",
+        "dangerous_text",
+        "loneliness"
+      ],
+      "beneficiaries": [
+        "village_memory",
+        "children"
+      ],
+      "callback_types": [
+        "volume_at_risk",
+        "reader_request",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:cartographer": {
+      "archetype": "knowledge",
+      "owner": "base",
+      "display_fallback": "cartographer",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "blank_regions",
+        "surveying",
+        "landmarks",
+        "travellers",
+        "wanderlust",
+        "accuracy"
+      ],
+      "materials": [
+        "paper",
+        "ink",
+        "compass",
+        "chart"
+      ],
+      "risks": [
+        "dangerous_route",
+        "bad_visibility",
+        "misleading_map"
+      ],
+      "beneficiaries": [
+        "travellers",
+        "village_expansion"
+      ],
+      "callback_types": [
+        "route_surveyed",
+        "map_outcome",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": true
+    },
+    "minecraft:cleric": {
+      "archetype": "knowledge",
+      "owner": "base",
+      "display_fallback": "cleric",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "brewing",
+        "illness",
+        "grief",
+        "ingredients",
+        "confidence",
+        "overwork"
+      ],
+      "materials": [
+        "bottle",
+        "herb",
+        "candle",
+        "water"
+      ],
+      "risks": [
+        "scarce_ingredients",
+        "epidemic",
+        "limits_of_healing",
+        "exhaustion"
+      ],
+      "beneficiaries": [
+        "the_sick",
+        "the_bereaved"
+      ],
+      "callback_types": [
+        "patient_named",
+        "ingredient_needed",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:armorer": {
+      "archetype": "craft",
+      "owner": "base",
+      "display_fallback": "armorer",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "fitting",
+        "damage_patterns",
+        "repairs",
+        "fuel",
+        "responsibility",
+        "survivors"
+      ],
+      "materials": [
+        "iron",
+        "coal",
+        "rivet",
+        "leather_strap"
+      ],
+      "risks": [
+        "shortage",
+        "design_flaw",
+        "rushed_order",
+        "a_failure_that_cost_someone"
+      ],
+      "beneficiaries": [
+        "guards",
+        "travellers"
+      ],
+      "callback_types": [
+        "repeated_damage",
+        "commission",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:weaponsmith": {
+      "archetype": "craft",
+      "owner": "base",
+      "display_fallback": "weaponsmith",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "temper",
+        "commissions",
+        "dangerous_customers",
+        "ethics_of_arms",
+        "named_blade",
+        "repair_or_replace"
+      ],
+      "materials": [
+        "steel",
+        "coal",
+        "quench_oil",
+        "grindstone"
+      ],
+      "risks": [
+        "shortage",
+        "bad_temper",
+        "work_used_badly"
+      ],
+      "beneficiaries": [
+        "guards",
+        "hunters"
+      ],
+      "callback_types": [
+        "commission",
+        "blade_named",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:toolsmith": {
+      "archetype": "craft",
+      "owner": "base",
+      "display_fallback": "toolsmith",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "wear_patterns",
+        "repair_queue",
+        "design",
+        "material_supply",
+        "misuse",
+        "prototype"
+      ],
+      "materials": [
+        "iron",
+        "ash_handle",
+        "file",
+        "rivet"
+      ],
+      "risks": [
+        "shortage",
+        "misuse",
+        "backlog"
+      ],
+      "beneficiaries": [
+        "farmers",
+        "miners",
+        "builders"
+      ],
+      "callback_types": [
+        "tool_repaired",
+        "prototype",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:butcher": {
+      "archetype": "food",
+      "owner": "base",
+      "display_fallback": "butcher",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "preservation",
+        "feast_demand",
+        "waste",
+        "cleanliness",
+        "unease",
+        "inherited_recipe"
+      ],
+      "materials": [
+        "salt",
+        "cleaver",
+        "hook",
+        "smoke"
+      ],
+      "risks": [
+        "shortage",
+        "spoilage",
+        "winter"
+      ],
+      "beneficiaries": [
+        "village_food",
+        "feasts"
+      ],
+      "callback_types": [
+        "feast_promised",
+        "shortage_named",
+        "player_help"
+      ],
+      "season_affinity": true,
+      "weather_affinity": false
+    },
+    "minecraft:leatherworker": {
+      "archetype": "craft",
+      "owner": "base",
+      "display_fallback": "leatherworker",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "curing",
+        "dyes",
+        "waterproofing",
+        "hide_quality",
+        "complaints",
+        "apprenticeship"
+      ],
+      "materials": [
+        "hide",
+        "tannin",
+        "dye",
+        "awl"
+      ],
+      "risks": [
+        "bad_hide",
+        "smell_complaints",
+        "damp"
+      ],
+      "beneficiaries": [
+        "armorer",
+        "librarian",
+        "toolsmith"
+      ],
+      "callback_types": [
+        "custom_order",
+        "piece_that_aged",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": true
+    },
+    "minecraft:mason": {
+      "archetype": "craft",
+      "owner": "base",
+      "display_fallback": "mason",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "foundations",
+        "cracks",
+        "quarry",
+        "structural_risk",
+        "monuments",
+        "reading_stone"
+      ],
+      "materials": [
+        "stone",
+        "mortar",
+        "chisel",
+        "lime"
+      ],
+      "risks": [
+        "frost_damage",
+        "collapse",
+        "bad_stone"
+      ],
+      "beneficiaries": [
+        "village_buildings",
+        "walls"
+      ],
+      "callback_types": [
+        "building_named",
+        "crack_found",
+        "player_help"
+      ],
+      "season_affinity": true,
+      "weather_affinity": true
+    },
+    "minecraft:nitwit": {
+      "archetype": "untraded",
+      "owner": "base",
+      "display_fallback": "nitwit",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "errands",
+        "observation",
+        "stigma",
+        "freedom",
+        "quiet_help",
+        "calling"
+      ],
+      "materials": [],
+      "risks": [
+        "being_dismissed",
+        "no_schedule"
+      ],
+      "beneficiaries": [
+        "neighbours"
+      ],
+      "callback_types": [
+        "errand_run",
+        "observation_shared",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "minecraft:none": {
+      "archetype": "untraded",
+      "owner": "base",
+      "display_fallback": "villager",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "between_trades",
+        "apprenticeship",
+        "failed_attempt",
+        "worry",
+        "freedom",
+        "admiration"
+      ],
+      "materials": [],
+      "risks": [
+        "no_income",
+        "indecision"
+      ],
+      "beneficiaries": [
+        "family"
+      ],
+      "callback_types": [
+        "trade_considered",
+        "trade_taken",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "mca:guard": {
+      "archetype": "defense",
+      "owner": "base",
+      "display_fallback": "guard",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "patrol",
+        "shift_fatigue",
+        "recent_threat",
+        "equipment",
+        "weak_points",
+        "protecting_named"
+      ],
+      "materials": [
+        "spear",
+        "mail",
+        "lantern",
+        "gate"
+      ],
+      "risks": [
+        "attack",
+        "exhaustion",
+        "a_gap_in_the_watch"
+      ],
+      "beneficiaries": [
+        "every_resident"
+      ],
+      "callback_types": [
+        "threat_named",
+        "incident_unresolved",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": true
+    },
+    "mca:archer": {
+      "archetype": "defense",
+      "owner": "base",
+      "display_fallback": "archer",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "watchtower",
+        "sightlines",
+        "ammunition",
+        "wind",
+        "sightings",
+        "restraint"
+      ],
+      "materials": [
+        "bow",
+        "arrow",
+        "wax",
+        "tower"
+      ],
+      "risks": [
+        "bad_wind",
+        "night_watch",
+        "firing_too_soon"
+      ],
+      "beneficiaries": [
+        "guards",
+        "village_walls"
+      ],
+      "callback_types": [
+        "sighting",
+        "arrow_supply",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": true
+    },
+    "mca:adventurer": {
+      "archetype": "exploration",
+      "owner": "base",
+      "display_fallback": "adventurer",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "last_journey",
+        "next_destination",
+        "ruins",
+        "companions",
+        "supplies",
+        "exaggeration"
+      ],
+      "materials": [
+        "pack",
+        "rope",
+        "torch",
+        "map"
+      ],
+      "risks": [
+        "getting_lost",
+        "running_out",
+        "ruins"
+      ],
+      "beneficiaries": [
+        "travellers",
+        "village_stories"
+      ],
+      "callback_types": [
+        "journey_planned",
+        "discovery",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "mca:mercenary": {
+      "archetype": "defense",
+      "owner": "base",
+      "display_fallback": "mercenary",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "contract",
+        "payment",
+        "loyalty",
+        "moral_lines",
+        "wounds",
+        "why_they_stay"
+      ],
+      "materials": [
+        "blade",
+        "coin",
+        "kit"
+      ],
+      "risks": [
+        "bad_employer",
+        "wounds",
+        "reputation"
+      ],
+      "beneficiaries": [
+        "whoever_pays",
+        "the_village_lately"
+      ],
+      "callback_types": [
+        "contract_named",
+        "line_drawn",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "mca:cultist": {
+      "archetype": "occult",
+      "owner": "base",
+      "display_fallback": "cultist",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "rituals",
+        "omens",
+        "meetings",
+        "recruitment",
+        "doubt",
+        "forbidden_knowledge"
+      ],
+      "materials": [
+        "candle",
+        "pamphlet",
+        "chalk"
+      ],
+      "risks": [
+        "suspicion",
+        "a_ritual_that_worked",
+        "doubt"
+      ],
+      "beneficiaries": [
+        "the_faithful"
+      ],
+      "callback_types": [
+        "omen_named",
+        "doubt_confided",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    },
+    "mca:outlaw": {
+      "archetype": "occult",
+      "owner": "base",
+      "display_fallback": "outlaw",
+      "subjects": [
+        "current_task",
+        "craft",
+        "risk",
+        "village_value",
+        "learning",
+        "aspiration",
+        "wanted_status",
+        "safe_routes",
+        "grudges",
+        "fences",
+        "trust",
+        "redemption"
+      ],
+      "materials": [
+        "knife",
+        "coin",
+        "cloak"
+      ],
+      "risks": [
+        "betrayal",
+        "the_law",
+        "being_recognised"
+      ],
+      "beneficiaries": [
+        "nobody_officially"
+      ],
+      "callback_types": [
+        "route_shared",
+        "trust_given",
+        "player_help"
+      ],
+      "season_affinity": false,
+      "weather_affinity": false
+    }
+  }
+}

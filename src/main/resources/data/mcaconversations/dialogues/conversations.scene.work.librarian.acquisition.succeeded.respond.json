@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "ask_to_see",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.acquisition.succeeded.shown"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.acquisition",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.librarian.acquisition"
+            },
+            "next": "conversations.scene.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.librarian.acquisition.succeeded.shown",
+              "slots": [
+                "volume"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "credit_village",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.acquisition.succeeded.deflected"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.librarian.acquisition.credit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.acquisition",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.librarian.acquisition"
+            },
+            "next": "conversations.scene.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.librarian.acquisition.succeeded.deflected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.librarian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

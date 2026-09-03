@@ -1,0 +1,45 @@
+{
+  "answers": [
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.hard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.hard",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.hard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

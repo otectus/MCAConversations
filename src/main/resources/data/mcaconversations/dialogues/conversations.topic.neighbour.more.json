@@ -1,0 +1,93 @@
+{
+  "answers": [
+    {
+      "name": "their_family",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.more.their_family"
+            },
+            "next": "conversations.topic.neighbour.family",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.more.their_family"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "you_two",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.more.you_two"
+            },
+            "next": "conversations.topic.neighbour.dispute",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.more.you_two"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "they_need",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.more.they_need"
+            },
+            "next": "conversations.topic.neighbour.needs",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.more.they_need"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "should_you",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.more.should_you"
+            },
+            "next": "conversations.topic.neighbour.privacy",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.more.should_you"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.more.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

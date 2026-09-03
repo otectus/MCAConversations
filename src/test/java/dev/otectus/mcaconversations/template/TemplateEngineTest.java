@@ -12,7 +12,7 @@ class TemplateEngineTest {
 
     @Test
     void resolvedVarsPassThroughInOrder() {
-        SayDirective d = new SayDirective("conversations.test",
+        SayDirective d = SayDirective.of("conversations.test",
                 List.of(TemplateVariable.VILLAGER_NAME, TemplateVariable.VILLAGE_NAME));
         TemplateContext ctx = new TemplateContext()
                 .with(TemplateVariable.VILLAGER_NAME, Component.literal("Ann"))
@@ -25,7 +25,7 @@ class TemplateEngineTest {
 
     @Test
     void missingVarsFallBackToTheirLangKeys() {
-        SayDirective d = new SayDirective("conversations.test", List.of(TemplateVariable.LAST_GIFT_ITEM));
+        SayDirective d = SayDirective.of("conversations.test", List.of(TemplateVariable.LAST_GIFT_ITEM));
         Object[] args = TemplateEngine.buildArgs(d, new TemplateContext());
         assertEquals(1, args.length);
         TranslatableContents contents = (TranslatableContents) ((Component) args[0]).getContents();

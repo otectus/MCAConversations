@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_line",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.job_refused.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.the_line",
+              "deltas": {
+                "familiarity": 3,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.mercenary.job_refused"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.job_refused.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_the_refusal",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.job_refused.succeeded.acknowledged"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mercenary.line.respected",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.the_line",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.mercenary.job_refused"
+            },
+            "next": "conversations.scene.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mercenary.job_refused.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mercenary.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

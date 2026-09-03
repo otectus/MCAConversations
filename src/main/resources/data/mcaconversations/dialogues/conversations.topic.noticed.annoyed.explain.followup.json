@@ -1,0 +1,114 @@
+{
+  "answers": [
+    {
+      "name": "didnt_realise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.explain.didnt_realise"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.explain.didnt_realise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.explain.didnt_realise",
+              "deltas": {
+                "tension": -4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.annoyed.explain.didnt_realise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "own_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.explain.own_it"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.explain.own_it",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.explain.own_it",
+              "deltas": {
+                "respect": 4,
+                "tension": -5
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.annoyed.explain.own_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "push_back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.explain.push_back"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.annoyed.explain.push_back",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.annoyed.explain.push_back",
+              "deltas": {
+                "respect": 1,
+                "tension": 4
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.annoyed.explain.push_back"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.annoyed.explain.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

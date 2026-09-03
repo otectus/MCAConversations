@@ -58,8 +58,50 @@ public final class ConversationSessions {
      * both frontends from the outgoing-packet mixin, which is the only place that sees the real
      * offered set.
      */
-    public static void recordOffer(UUID playerId, String question, List<String> answers, long now) {
-        get(playerId, now).setOffer(question, answers);
+    public static ConversationSession.ChoiceOffer recordOffer(UUID playerId, String question,
+                                                               List<String> answers, long now) {
+        return recordOffer(playerId, null, question, answers, ConversationSession.Frontend.GUI, now);
+    }
+
+    /** Records a frontend-aware offer and returns the revision the client must echo when selecting. */
+    public static ConversationSession.ChoiceOffer recordOffer(UUID playerId, UUID villagerId,
+                                                               String question, List<String> answers,
+                                                               ConversationSession.Frontend frontend,
+                                                               long now) {
+        ConversationSession session = get(playerId, now);
+        session.setFrontend(frontend);
+        return session.setOffer(question, answers, frontend, villagerId, now);
+    }
+
+    /**
+     * Re-arms the offer a terminal villager reply just consumed, under a fresh revision.
+     *
+     * <p>MCA only sends a new response packet when the chosen answer leads to another question. A
+     * say-only answer leaves the screen's buttons in place in vanilla MCA, so mirroring that here is
+     * what stops a consume-once offer from dead-ending the conversation. Returns empty whenever the
+     * world already moved on — nothing offered, not consumed, a newer revision, a different question,
+     * or a topic that ended — so a real follow-up is never overwritten.
+     *
+     * <p>Deliberately unfiltered: every submission re-checks its answer's constraints, and dropping
+     * entries here would desync the numbering chat mode has already printed.
+     */
+    public static Optional<ConversationSession.ChoiceOffer> reofferConsumed(UUID playerId, String question,
+                                                                           long revisionBefore, long now) {
+        ConversationSession session = SESSIONS.get(playerId);
+        if (session == null) {
+            return Optional.empty();
+        }
+        ConversationSession.ChoiceOffer offer = session.currentOffer().orElse(null);
+        if (offer == null || !offer.consumed() || offer.revision() != revisionBefore
+                || !offer.questionId().equals(question)) {
+            return Optional.empty();
+        }
+        return Optional.of(session.setOffer(offer.questionId(), offer.answerIds(), offer.frontend(),
+                offer.villagerId(), now));
+    }
+
+    public static Optional<String> consumeOffer(UUID playerId, long revision, int index, long now) {
+        return peek(playerId, now).flatMap(session -> session.consumeOffer(revision, index));
     }
 
     /** Starts a topic for this player and villager. */
@@ -118,7 +160,7 @@ public final class ConversationSessions {
 
     private static int timeoutTicks() {
         try {
-            return McaConversationsConfig.COMMON.conversationSessionTimeoutTicks.get();
+            return McaConversationsConfig.conversationSessionTimeoutTicks();
         } catch (Throwable t) {
             // Config not loaded (unit tests, early startup): fall back to the documented default.
             return 1200;

@@ -1,0 +1,102 @@
+{
+  "answers": [
+    {
+      "name": "take_it_up",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.smitten.long_version"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.smitten.long_version",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 2
+              }
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.smitten.long_version"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "return_warmth",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.smitten.return_warmth"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin.smitten.return_warmth",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.smitten.return_warmth",
+              "deltas": {
+                "attraction": 4,
+                "warmth": 2
+              }
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.smitten.return_warmth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "stay_light",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.smitten.stay_light"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin.smitten.stay_light",
+              "deltas": {
+                "attraction": -1,
+                "respect": 3
+              }
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.smitten.stay_light"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.smitten.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "thank_you_for_saying",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.about_player.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "rumors.about_player.thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.about_player.thanks",
+              "deltas": {
+                "respect": 2,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.rumors.about_player.thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_it_right",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.about_player.correct"
+            },
+            "conversations_affection_apply": {
+              "decision": "rumors.about_player.correct",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.about_player.correct",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.rumors.about_player.correct"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.rumors.about_player.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

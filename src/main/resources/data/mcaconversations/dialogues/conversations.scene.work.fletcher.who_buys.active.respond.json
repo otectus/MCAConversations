@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "ask_whether_she_asks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.who_buys.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.the_bow_trade",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.who_buys"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.who_buys.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_her_rule",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.who_buys.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.the_bow_trade",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.who_buys"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.who_buys.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fletcher.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

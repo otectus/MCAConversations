@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_failures",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.craft.ask_failures"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.craft.ask_failures",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.netherian.craft.ask_failures"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.netherian.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.netherian.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_underlined",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.craft.ask_underlined"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.craft.ask_underlined",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.netherian.craft.ask_underlined"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.netherian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

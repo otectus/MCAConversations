@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -42,6 +43,33 @@ public final class GossipConditionLogic {
     /** True when this villager has an untold, unexpired story for this player. */
     public static boolean hasUntoldGossip(GossipQuery query, Entity villager, ServerPlayer player) {
         return findNext(query, villager, player).isPresent();
+    }
+
+    /**
+     * The type of the next untold <em>village</em> story this villager has for this player.
+     *
+     * <p>Backs the {@code village.recent_event} context field. Read-only and told-aware: it runs the
+     * same {@link #findNext} the condition and the action run, so a scene chosen because there is
+     * news to tell and the line that tells it cannot disagree about whether there is any.
+     *
+     * <p>External stories — a deed MCA: Reputation knows about the player — deliberately do not
+     * answer here. This field names something that happened in the village, and "you were seen
+     * doing something" is not that; content about the player's own deeds has
+     * {@code conversations_reputation} to ask instead.
+     */
+    public static Optional<String> nextUntoldEventType(Entity villager, ServerPlayer player) {
+        if (villager == null || player == null) {
+            return Optional.empty();
+        }
+        try {
+            return findNext(new GossipQuery(EnumSet.allOf(GossipEventType.class),
+                            GossipQuery.DEFAULT_MAX_AGE), villager, player)
+                    .filter(gossip -> !gossip.isExternal())
+                    .map(gossip -> gossip.nativeEvent().type().jsonName());
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("gossip context read failed; no recent event", t);
+            return Optional.empty();
+        }
     }
 
     /** Tells the next untold story in the dialogue screen and marks it told. No-op when none. */

@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_where",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.recipe.sourced"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.recipe.sourced",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.normal.ask_where"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "promise_try",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.recipe.promise_try"
+            },
+            "conversations_affection_apply": {
+              "decision": "food.recipe.promise_try",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.recipe.promise_try",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.recipe.promise_try"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "praise_method",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.recipe.praise_method"
+            },
+            "conversations_affection_apply": {
+              "decision": "food.recipe.praise_method",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.recipe.praise_method",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.recipe.praise_method"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.normal.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

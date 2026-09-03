@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_second",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.future.ask_second"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.future.ask_second",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.future.ask_second"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.archer.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_old",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.future.ask_old"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.future.ask_old",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.future.ask_old"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

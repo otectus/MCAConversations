@@ -6,6 +6,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.gift_remembered"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.glad",
               "delta": 1,
@@ -43,6 +47,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.player_hurt"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.glad",
               "delta": 1,
@@ -55,8 +63,10 @@
                 "warmth": 3
               }
             },
-            "next": "conversations.topic.checkin.good.followup",
-            "say": "conversations.checkin.glad.hurt"
+            "next": "conversations.topic.checkin.hurt.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin.glad.hurt"
+            }
           },
           "conditions": [
             {
@@ -79,6 +89,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.contentment"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.glad",
               "delta": 1,
@@ -92,7 +106,9 @@
               }
             },
             "next": "conversations.topic.checkin.good.followup",
-            "say": "conversations.checkin.good.glad"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.glad"
+            }
           },
           "conditions": [
             {
@@ -109,6 +125,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.smitten.offered"
+            },
             "conversations_disposition_apply": {
               "topic": "checkin.good.ask_more",
               "deltas": {
@@ -116,8 +136,10 @@
                 "warmth": 1
               }
             },
-            "next": "conversations.topic.checkin.good.followup",
-            "say": "conversations.checkin.ask_more.smitten"
+            "next": "conversations.topic.checkin.smitten.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin.ask_more.smitten"
+            }
           },
           "conditions": [
             {
@@ -136,6 +158,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.holiday.told"
+            },
             "conversations_disposition_apply": {
               "topic": "checkin.good.ask_more",
               "deltas": {
@@ -143,7 +169,7 @@
                 "warmth": 1
               }
             },
-            "next": "conversations.topic.checkin.good.followup",
+            "next": "conversations.topic.checkin.holiday.followup",
             "conversations_say": {
               "phrase": "conversations.checkin.ask_more.holiday",
               "vars": [
@@ -174,6 +200,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.cause_told"
+            },
             "conversations_disposition_apply": {
               "topic": "checkin.good.ask_more",
               "deltas": {
@@ -182,7 +212,9 @@
               }
             },
             "next": "conversations.topic.checkin.good.followup",
-            "say": "conversations.checkin.good.ask_more"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.ask_more"
+            }
           },
           "conditions": [
             {
@@ -201,6 +233,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.deflated"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.deflate",
               "delta": -1,
@@ -214,8 +250,10 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.checkin.good.followup",
-            "say": "conversations.checkin.good.deflate"
+            "next": "conversations.topic.checkin.deflated.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.deflate"
+            }
           }
         }
       ]
@@ -230,7 +268,9 @@
               "op": "end"
             },
             "next": "main",
-            "say": "conversations.checkin.good.leave"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.leave"
+            }
           }
         }
       ]

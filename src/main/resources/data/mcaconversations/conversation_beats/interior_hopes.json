@@ -1,0 +1,797 @@
+{
+  "beats": {
+    "deflect.personal.to.hopes.guarded": {
+      "topic": "hopes",
+      "say": "conversations.deflect.personal",
+      "response_question": "conversations.topic.hopes.guarded.respond",
+      "npc_act": "deflect",
+      "subject": "hopes.guarded",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "qualified"
+    },
+    "hopes.child.to.hopes.young": {
+      "topic": "hopes",
+      "say": "conversations.hopes.child",
+      "response_question": "conversations.topic.hopes.young.respond",
+      "npc_act": "accept",
+      "subject": "hopes.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.first.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.first",
+      "response_question": "conversations.topic.hopes.respond",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.followup.ask_first_step.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.followup.ask_first_step",
+      "response_question": "conversations.topic.hopes.close",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "hopes",
+        "resumes": [
+          "hopes.resume.offer_help.to.hopes",
+          "hopes.resume.still_hoping.named.to.hopes",
+          "hopes.resume.still_hoping.plain.to.hopes",
+          "hopes.revisit.opens"
+        ]
+      }
+    },
+    "hopes.followup.share_own.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.followup.share_own",
+      "response_question": "conversations.topic.hopes.close",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "hopes",
+        "resumes": [
+          "hopes.resume.offer_help.to.hopes",
+          "hopes.resume.still_hoping.named.to.hopes",
+          "hopes.resume.still_hoping.plain.to.hopes",
+          "hopes.revisit.opens"
+        ]
+      }
+    },
+    "hopes.listen.low.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.listen.low",
+      "response_question": "conversations.topic.hopes.followup",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.respond.encourage.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.respond.encourage",
+      "response_question": "conversations.topic.hopes.followup",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.respond.listen.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.respond.listen",
+      "response_question": "conversations.topic.hopes.followup",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.resume.followup.practical.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.resume.followup.practical",
+      "response_question": "conversations.topic.hopes.close",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.resume.followup.share_hope.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.resume.followup.share_hope",
+      "response_question": "conversations.topic.hopes.close",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.resume.followup.temper.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.resume.followup.temper",
+      "response_question": "conversations.topic.hopes.close",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.resume.offer_help.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.resume.offer_help",
+      "response_question": "conversations.arc.hopes.resume.followup",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "hopes",
+        "resumes": [
+          "hopes.resume.offer_help.to.hopes",
+          "hopes.resume.still_hoping.named.to.hopes",
+          "hopes.resume.still_hoping.plain.to.hopes",
+          "hopes.revisit.opens"
+        ]
+      }
+    },
+    "hopes.resume.still_hoping.named.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.resume.still_hoping.named",
+      "response_question": "conversations.arc.hopes.resume.followup",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "hopes",
+        "resumes": [
+          "hopes.resume.offer_help.to.hopes",
+          "hopes.resume.still_hoping.named.to.hopes",
+          "hopes.resume.still_hoping.plain.to.hopes",
+          "hopes.revisit.opens"
+        ]
+      }
+    },
+    "hopes.resume.still_hoping.plain.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.resume.still_hoping.plain",
+      "response_question": "conversations.arc.hopes.resume.followup",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "hopes",
+        "resumes": [
+          "hopes.resume.offer_help.to.hopes",
+          "hopes.resume.still_hoping.named.to.hopes",
+          "hopes.resume.still_hoping.plain.to.hopes",
+          "hopes.revisit.opens"
+        ]
+      }
+    },
+    "hopes.revisit.to.hopes": {
+      "topic": "hopes",
+      "say": "conversations.hopes.revisit",
+      "response_question": "conversations.topic.hopes.respond",
+      "npc_act": "accept",
+      "subject": "hopes",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.teen.to.hopes.young": {
+      "topic": "hopes",
+      "say": "conversations.hopes.teen",
+      "response_question": "conversations.topic.hopes.young.respond",
+      "npc_act": "accept",
+      "subject": "hopes.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "hopes.toddler.to.hopes.toddler": {
+      "topic": "hopes",
+      "say": "conversations.hopes.toddler",
+      "response_question": "conversations.topic.hopes.toddler.respond",
+      "npc_act": "accept",
+      "subject": "hopes.toddler",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.arc.hopes.resume.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.resume.offer_help.to.hopes",
+        "hopes.resume.still_hoping.named.to.hopes",
+        "hopes.resume.still_hoping.plain.to.hopes"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.arc.hopes.resume.followup/practical": {
+      "stance": "curiosity",
+      "responds_to": [
+        "hopes.resume.offer_help.to.hopes",
+        "hopes.resume.still_hoping.named.to.hopes",
+        "hopes.resume.still_hoping.plain.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.hopes.resume.followup/share_hope": {
+      "stance": "encouragement",
+      "responds_to": [
+        "hopes.resume.offer_help.to.hopes",
+        "hopes.resume.still_hoping.named.to.hopes",
+        "hopes.resume.still_hoping.plain.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.hopes.resume.followup/temper": {
+      "stance": "candor",
+      "responds_to": [
+        "hopes.resume.offer_help.to.hopes",
+        "hopes.resume.still_hoping.named.to.hopes",
+        "hopes.resume.still_hoping.plain.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.hopes.resume.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "hopes.revisit.opens"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.arc.hopes.resume.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.revisit.opens"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.arc.hopes.resume.respond/offer_help": {
+      "stance": "practical_help",
+      "responds_to": [
+        "hopes.revisit.opens"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.hopes.resume.respond/still_hoping": {
+      "stance": "curiosity",
+      "responds_to": [
+        "hopes.revisit.opens"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.close/confide": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "hopes.followup.ask_first_step.to.hopes",
+        "hopes.followup.share_own.to.hopes",
+        "hopes.resume.followup.practical.to.hopes",
+        "hopes.resume.followup.share_hope.to.hopes",
+        "hopes.resume.followup.temper.to.hopes"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.hopes.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.followup.ask_first_step.to.hopes",
+        "hopes.followup.share_own.to.hopes",
+        "hopes.resume.followup.practical.to.hopes",
+        "hopes.resume.followup.share_hope.to.hopes",
+        "hopes.resume.followup.temper.to.hopes"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.hopes.close/say_means": {
+      "stance": "candor",
+      "responds_to": [
+        "hopes.followup.ask_first_step.to.hopes",
+        "hopes.followup.share_own.to.hopes",
+        "hopes.resume.followup.practical.to.hopes",
+        "hopes.resume.followup.share_hope.to.hopes",
+        "hopes.resume.followup.temper.to.hopes"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.hopes.close/thank": {
+      "stance": "candor",
+      "responds_to": [
+        "hopes.followup.ask_first_step.to.hopes",
+        "hopes.followup.share_own.to.hopes",
+        "hopes.resume.followup.practical.to.hopes",
+        "hopes.resume.followup.share_hope.to.hopes",
+        "hopes.resume.followup.temper.to.hopes"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.hopes.followup/ask_first_step": {
+      "stance": "curiosity",
+      "responds_to": [
+        "hopes.listen.low.to.hopes",
+        "hopes.respond.encourage.to.hopes",
+        "hopes.respond.listen.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.listen.low.to.hopes",
+        "hopes.respond.encourage.to.hopes",
+        "hopes.respond.listen.to.hopes"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.hopes.followup/question_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "hopes.listen.low.to.hopes",
+        "hopes.respond.encourage.to.hopes",
+        "hopes.respond.listen.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.followup/share_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "hopes.listen.low.to.hopes",
+        "hopes.respond.encourage.to.hopes",
+        "hopes.respond.listen.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.guarded.respond/ask_safer": {
+      "stance": "curiosity",
+      "responds_to": [
+        "deflect.personal.to.hopes.guarded"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.hopes.guarded.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "deflect.personal.to.hopes.guarded"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.hopes.guarded.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "deflect.personal.to.hopes.guarded"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.hopes.guarded.respond/respect": {
+      "stance": "restraint",
+      "responds_to": [
+        "deflect.personal.to.hopes.guarded"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.respond/encourage": {
+      "stance": "encouragement",
+      "responds_to": [
+        "hopes.first.to.hopes",
+        "hopes.revisit.to.hopes"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.first.to.hopes",
+        "hopes.revisit.to.hopes"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.hopes.respond/listen": {
+      "stance": "restraint",
+      "responds_to": [
+        "hopes.first.to.hopes",
+        "hopes.revisit.to.hopes"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.hopes.respond/mock": {
+      "stance": "dismissal",
+      "responds_to": [
+        "hopes.first.to.hopes",
+        "hopes.revisit.to.hopes"
+      ],
+      "tone": "hostile"
+    },
+    "conversations.topic.hopes.toddler.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "hopes.toddler.to.hopes.toddler"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.toddler.respond/delight": {
+      "stance": "encouragement",
+      "responds_to": [
+        "hopes.toddler.to.hopes.toddler"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.hopes.toddler.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.toddler.to.hopes.toddler"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.hopes.young.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "hopes.child.to.hopes.young",
+        "hopes.teen.to.hopes.young"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.hopes.young.respond/encourage": {
+      "stance": "encouragement",
+      "responds_to": [
+        "hopes.child.to.hopes.young",
+        "hopes.teen.to.hopes.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.young.respond/interested": {
+      "stance": "curiosity",
+      "responds_to": [
+        "hopes.child.to.hopes.young",
+        "hopes.teen.to.hopes.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.hopes.young.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.child.to.hopes.young",
+        "hopes.teen.to.hopes.young"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

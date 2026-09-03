@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.good.followup.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.good.followup.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.good.followup.thanks",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.followup.thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_deserving",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.good.followup.keep_deserving"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.good.followup.keep_deserving",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.good.followup.keep_deserving",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.followup.keep_deserving"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.good.followup.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

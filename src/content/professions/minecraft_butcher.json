@@ -1,0 +1,920 @@
+{
+  "_comment": [
+    "Butcher. The trade nobody wants to picture and everybody relies on.",
+    "",
+    "The §12.4 anchors are the block, the animals, waste, the winter store, price and the customer who",
+    "wants it not to have been an animal. These three take a beast she has to put down and does not",
+    "want to, meat spoiling for want of salt, and the way people look at her hands.",
+    "",
+    "The rule for this voice is respect without squeamishness. She does not enjoy killing and she does",
+    "not apologise for it; she is precise, she wastes nothing, and she is hardest on people who want",
+    "the meat but want somebody else to have thought about where it came from."
+  ],
+  "profession": "minecraft:butcher",
+  "id": "butcher",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_block",
+    "animals",
+    "waste",
+    "winter_store",
+    "price",
+    "squeamish_customers"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the block.",
+    "pt": "Vou deixar você voltar ao cepo."
+  },
+  "slot_lang": {
+    "but_the_old_sow": {
+      "en": "the old sow",
+      "pt": "a porca velha"
+    },
+    "but_the_lame_ox": {
+      "en": "the lame ox",
+      "pt": "o boi manco"
+    },
+    "but_the_ewe_that_will_not_thrive": {
+      "en": "the ewe that will not thrive",
+      "pt": "a ovelha que não vinga"
+    },
+    "but_no_salt": {
+      "en": "no salt in the barrel",
+      "pt": "nada de sal no barril"
+    },
+    "but_a_warm_week": {
+      "en": "a week too warm for hanging",
+      "pt": "uma semana quente demais para pendurar"
+    },
+    "but_a_leaking_cellar": {
+      "en": "a cellar that has started to leak",
+      "pt": "um porão que começou a vazar"
+    },
+    "but_a_side_of_pork": {
+      "en": "a side of pork",
+      "pt": "meia carcaça de porco"
+    },
+    "but_the_winter_bacon": {
+      "en": "the winter bacon",
+      "pt": "o toucinho do inverno"
+    },
+    "but_a_whole_hindquarter": {
+      "en": "a whole hindquarter",
+      "pt": "um quarto traseiro inteiro"
+    },
+    "but_the_market_row": {
+      "en": "the market row",
+      "pt": "a fileira do mercado"
+    },
+    "but_the_doorway": {
+      "en": "the doorway",
+      "pt": "o vão da porta"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.hard_slaughter",
+      "subject": "work.butcher.animals",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 3,
+      "expires_after_days": 20,
+      "slots": {
+        "beast": [
+          "but_the_old_sow",
+          "but_the_lame_ox",
+          "but_the_ewe_that_will_not_thrive"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "beast"
+          ],
+          "identity_values": [
+            "duty",
+            "mercy",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The yard.",
+            "pt": "O curral."
+          },
+          "lines": {
+            "en": [
+              "%2$s has to go this week and I have put it off twice, which helps nobody and least of all her.",
+              "I have known %2$s for nine years. That is the whole difficulty and it is not a good enough reason to wait.",
+              "%2$s is in pain and I am the person who ends that, and I have been finding urgent errands for three days."
+            ],
+            "pt": [
+              "%2$s tem que ir esta semana e eu já adiei duas vezes, o que não ajuda ninguém, muito menos ela.",
+              "Conheço %2$s há nove anos. É essa a dificuldade inteira, e não é razão boa o bastante para esperar.",
+              "%2$s está com dor e eu sou a pessoa que encerra isso, e faz três dias que eu invento tarefas urgentes."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_she_does_it",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you get yourself to do it?",
+                "pt": "Como você consegue fazer isso?"
+              },
+              "phrases": [
+                "how do you get yourself to do it",
+                "how do you manage that part"
+              ],
+              "requires_any": [
+                "manage",
+                "yourself"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "beast"
+                ],
+                "lines": {
+                  "en": [
+                    "Early, alone, and quickly. Anything else is for my benefit rather than hers, and I am not the one it is happening to.",
+                    "I do it well. That is the only thing I actually control, so I have made it the only thing I think about.",
+                    "I say her name first. It sounds soft and it is not — it stops me pretending %2$s is a task, which is when hands get careless."
+                  ],
+                  "pt": [
+                    "Cedo, sozinha e rápido. Qualquer outra coisa é para meu benefício, não o dela, e não sou eu que estou passando por isso.",
+                    "Eu faço bem feito. É a única coisa que eu de fato controlo, então fiz dela a única coisa em que penso.",
+                    "Digo o nome dela primeiro. Parece sentimental e não é — impede que eu finja que %2$s é uma tarefa, e é aí que a mão fica descuidada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "acknowledge_the_weight",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's a heavy thing to carry.",
+                "pt": "É uma coisa pesada de carregar."
+              },
+              "phrases": [
+                "that is a heavy thing to carry",
+                "it must weigh on you"
+              ],
+              "requires_any": [
+                "heavy",
+                "weigh",
+                "carry"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.butcher.slaughter.seen",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is, and hardly anybody says so, because saying so means thinking about it and nobody wants to think about it before dinner.",
+                    "Thank you. I would rather carry it than have somebody careless carry it, so I am not asking to be relieved of it.",
+                    "Some weeks it is nothing and some weeks it is the whole week. This is one of the second kind."
+                  ],
+                  "pt": [
+                    "É, e quase ninguém diz isso, porque dizer significa pensar nisso, e ninguém quer pensar nisso antes do jantar.",
+                    "Obrigada. Prefiro carregar eu a ver alguém descuidado carregando, então não estou pedindo para me livrar disso.",
+                    "Tem semanas em que não é nada e semanas em que é a semana inteira. Esta é do segundo tipo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "urge_getting_on_with_it",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Waiting is worse for her.",
+                "pt": "Esperar é pior para ela."
+              },
+              "phrases": [
+                "waiting is worse for her",
+                "the delay only prolongs it"
+              ],
+              "requires_any": [
+                "waiting",
+                "delay",
+                "worse"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Yes. Tomorrow, at first light. Saying it to somebody makes it a thing I have to do rather than a thing I keep meaning to.",
+                    "I have said that exact sentence to farmers about their own animals. It is less convincing from the outside of my own head.",
+                    "You are right and I needed it said plainly. Kindness that costs the animal another week is not kindness."
+                  ],
+                  "pt": [
+                    "Sim. Amanhã, ao primeiro raio de luz. Dizer isso a alguém transforma em coisa que eu tenho que fazer, não em coisa que eu pretendo fazer.",
+                    "Já disse essa frase exata a fazendeiros sobre os animais deles. Convence menos vinda de fora da minha própria cabeça.",
+                    "Você tem razão e eu precisava ouvir com todas as letras. Bondade que custa mais uma semana ao animal não é bondade."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "beast"
+          ],
+          "prompt": {
+            "en": "The yard, after.",
+            "pt": "O curral, depois."
+          },
+          "lines": {
+            "en": [
+              "It is done. %2$s went easily, first light, and I sat on the wall afterwards for longer than I needed to.",
+              "%2$s is dealt with and nothing was wasted, and that is the closest thing to a good outcome this trade offers.",
+              "Done properly. I will not pretend I feel nothing. I will say that feeling something about it is how I know I am still doing it right."
+            ],
+            "pt": [
+              "Está feito. %2$s foi tranquila, ao amanhecer, e depois eu fiquei sentada no muro mais tempo do que precisava.",
+              "%2$s foi resolvida e nada se perdeu, e isso é o mais perto de um bom desfecho que este ofício oferece.",
+              "Feito direito. Não vou fingir que não sinto nada. Vou dizer que sentir alguma coisa é como eu sei que ainda faço certo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "sit_with_it",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You did right by her.",
+                "pt": "Você fez o certo por ela."
+              },
+              "phrases": [
+                "you did right by her",
+                "you treated her properly"
+              ],
+              "requires_any": [
+                "right",
+                "properly",
+                "treated"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "I hope so. That is the whole of what I have to offer them and it has to be enough, because there is no version where they get to stay.",
+                    "Thank you. I have been told I am hard about this and I think I am only being accurate, and accuracy is what she was owed.",
+                    "I will take that. It is a strange thing to be praised for and it is also the only praise in this trade that means anything."
+                  ],
+                  "pt": [
+                    "Espero que sim. É tudo o que tenho a oferecer a eles e tem que bastar, porque não existe versão em que eles fiquem.",
+                    "Obrigada. Já me disseram que sou dura com isso, e acho que sou apenas exata, e exatidão era o que ela merecia.",
+                    "Vou aceitar. É uma coisa estranha de se receber elogio, e é também o único elogio deste ofício que significa algo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.spoiling_store",
+      "subject": "work.butcher.winter_store",
+      "initial_state": "blocked",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 20,
+      "slots": {
+        "problem": [
+          "but_no_salt",
+          "but_a_warm_week",
+          "but_a_leaking_cellar"
+        ],
+        "meat": [
+          "but_a_side_of_pork",
+          "but_the_winter_bacon",
+          "but_a_whole_hindquarter"
+        ]
+      },
+      "commitment": {
+        "id": "work.butcher.bring_salt",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:sugar",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise",
+            "decide"
+          ],
+          "slots_used": [
+            "problem",
+            "meat"
+          ],
+          "identity_values": [
+            "duty",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The cellar.",
+            "pt": "O porão."
+          },
+          "lines": {
+            "en": [
+              "There is %3$s hanging and I have %2$s, and I am watching good food turn into an apology.",
+              "%2$s. Which means %3$s has about four days, and after that it is dogs' food and a whole animal wasted.",
+              "I can smell it starting. %3$s is fine today. With %2$s it will not be fine on Friday and everybody will be very understanding about it, which is worse."
+            ],
+            "pt": [
+              "Tem %3$s pendurado e eu tenho %2$s, e estou vendo boa comida virar um pedido de desculpas.",
+              "%2$s. O que significa que %3$s tem uns quatro dias, e depois disso é comida de cachorro e um animal inteiro desperdiçado.",
+              "Dá para sentir o cheiro começando. %3$s está bom hoje. Com %2$s não vai estar bom na sexta, e todo mundo vai ser muito compreensivo, o que é pior."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_the_arithmetic",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How much would be lost?",
+                "pt": "Quanto se perderia?"
+              },
+              "phrases": [
+                "how much would be lost",
+                "what is the loss if it spoils"
+              ],
+              "requires_any": [
+                "lost",
+                "loss",
+                "spoils"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Six weeks of somebody's winter. That is how I count it. Not coins — weeks of a family eating properly.",
+                    "The animal, and the year it took to raise, and my word to the farmer that it would not be wasted. The last one costs most.",
+                    "Enough that I would take the loss myself rather than sell it doubtful. Doubtful meat is how a butcher ends a career in one afternoon."
+                  ],
+                  "pt": [
+                    "Seis semanas do inverno de alguém. É assim que eu conto. Não em moedas — em semanas de uma família comendo direito.",
+                    "O animal, e o ano que levou para criá-lo, e a minha palavra ao fazendeiro de que não seria desperdiçado. Essa última custa mais.",
+                    "O bastante para eu assumir o prejuízo em vez de vender duvidoso. Carne duvidosa é como um açougueiro encerra a carreira numa tarde."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_salt",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you something to cure it.",
+                "pt": "Vou trazer algo para curar isso."
+              },
+              "phrases": [
+                "i can bring you curing supplies",
+                "let me fetch what you need to cure it"
+              ],
+              "requires_any": [
+                "curing",
+                "cure"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.butcher.store.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "meat"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s keeps until spring and four households eat, and I will remember which of those things you made happen.",
+                    "Bring it and I will work through the night. I have done it before and it is a good sort of tired.",
+                    "Yes. And take a joint for yourself when it is done, and do not argue with me about it in my own doorway."
+                  ],
+                  "pt": [
+                    "Então %2$s dura até a primavera e quatro casas comem, e eu vou lembrar qual dessas coisas você tornou possível.",
+                    "Traga e eu trabalho a noite inteira. Já fiz isso antes e é um cansaço do tipo bom.",
+                    "Sim. E leve uma peça para você quando terminar, e não discuta comigo sobre isso na minha própria porta."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "suggest_selling_cheap",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Sell it cheap today, then.",
+                "pt": "Então venda barato hoje."
+              },
+              "phrases": [
+                "sell it cheap today then",
+                "drop the price and move it fast"
+              ],
+              "requires_any": [
+                "cheap",
+                "price",
+                "sell"
+              ],
+              "disposition": {
+                "respect": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "And teach the whole village that my prices are a suggestion. They would remember the cheap week for four years.",
+                    "That is what a person does once. Then everybody waits for the cheap day, and I have destroyed my own trade to save one animal.",
+                    "Half of it, maybe, to people who I know will eat it this week. The other half I would rather salt badly than sell in a panic."
+                  ],
+                  "pt": [
+                    "E ensinar a vila inteira que meus preços são sugestão. Eles lembrariam da semana barata por quatro anos.",
+                    "É o que se faz uma vez. Depois todo mundo espera pelo dia barato, e eu destruí meu próprio ofício para salvar um animal.",
+                    "Metade, talvez, para gente que eu sei que vai comer esta semana. A outra metade eu prefiro salgar mal a vender no desespero."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge",
+            "clarify"
+          ],
+          "slots_used": [
+            "meat"
+          ],
+          "prompt": {
+            "en": "The cellar, after.",
+            "pt": "O porão, depois."
+          },
+          "lines": {
+            "en": [
+              "I lost %2$s. Buried it myself so that nobody would be tempted, and I have not told the farmer the whole of it yet.",
+              "%2$s went. I did everything I could think of on the last day and everything I could think of was two days late.",
+              "It spoiled. I want to say it was the weather. It was the weather and also me not asking for help on the Monday."
+            ],
+            "pt": [
+              "Perdi %2$s. Enterrei eu mesma para ninguém se tentar, e ainda não contei tudo ao fazendeiro.",
+              "%2$s se foi. Fiz tudo o que consegui pensar no último dia, e tudo o que consegui pensar chegou dois dias atrasado.",
+              "Estragou. Eu queria dizer que foi o tempo. Foi o tempo e também eu não ter pedido ajuda na segunda-feira."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_now",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What happens with the farmer?",
+                "pt": "E com o fazendeiro, como fica?"
+              },
+              "phrases": [
+                "what happens with the farmer now",
+                "how will you settle it with the farmer"
+              ],
+              "requires_any": [
+                "farmer",
+                "settle"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "lines": {
+                  "en": [
+                    "I pay him in full out of my own store and I tell him exactly what happened, in that order, because the order matters.",
+                    "He will be decent about it, which is worse. I would find a shouting match easier than being forgiven promptly.",
+                    "I will offer him the next two beasts at no charge for the work. It is more than the loss and that is deliberate."
+                  ],
+                  "pt": [
+                    "Pago a ele integralmente do meu próprio estoque e conto exatamente o que aconteceu, nessa ordem, porque a ordem importa.",
+                    "Ele vai ser decente a respeito, o que é pior. Eu acharia uma briga mais fácil do que ser perdoada na hora.",
+                    "Vou oferecer os próximos dois animais sem cobrar o trabalho. É mais do que a perda, e isso é de propósito."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_happens",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "A warm week isn't your fault.",
+                "pt": "Uma semana quente não é culpa sua."
+              },
+              "phrases": [
+                "a warm week is not your fault",
+                "the weather did that not you"
+              ],
+              "requires_any": [
+                "weather",
+                "fault",
+                "warm"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "qualified",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Half true, and I would rather hold the half that is mine, because that is the half I can do something about next year.",
+                    "Thank you. I will accept it in about a week. Today I am still going over the Monday I did nothing.",
+                    "The weather is not my fault. Waiting until Thursday to admit I was in trouble was entirely my doing."
+                  ],
+                  "pt": [
+                    "Meia verdade, e prefiro segurar a metade que é minha, porque é a metade sobre a qual posso fazer algo no ano que vem.",
+                    "Obrigada. Vou aceitar isso daqui a uma semana. Hoje ainda estou remoendo a segunda-feira em que não fiz nada.",
+                    "O tempo não é culpa minha. Esperar até quinta para admitir que eu estava em apuros foi inteiramente obra minha."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_hands",
+      "subject": "work.butcher.squeamish_customers",
+      "initial_state": "active",
+      "salience": 44,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "place": [
+          "but_the_market_row",
+          "but_the_doorway"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "observe",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "How people take you.",
+            "pt": "Como te veem."
+          },
+          "lines": {
+            "en": [
+              "People buy from me at %2$s and look at my hands the whole time, and then ask for it wrapped so they cannot see it.",
+              "At %2$s I am the only person who has to think about where supper came from, and everybody else gets to be squeamish at me for it.",
+              "I scrub to the elbow twice a day. It makes no difference at %2$s. It is not dirt they are looking at."
+            ],
+            "pt": [
+              "As pessoas compram de mim em %2$s e ficam olhando minhas mãos o tempo todo, e depois pedem embrulhado para não ver.",
+              "Em %2$s eu sou a única pessoa que precisa pensar de onde veio a janta, e todo mundo tem o direito de sentir nojo de mim por isso.",
+              "Eu esfrego até o cotovelo duas vezes por dia. Não faz diferença em %2$s. Não é sujeira que estão olhando."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_it_wears",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Does that wear on you?",
+                "pt": "Isso te desgasta?"
+              },
+              "phrases": [
+                "does that wear on you",
+                "how much does that grind you down"
+              ],
+              "requires_any": [
+                "wear",
+                "grind"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Less than it did. What still lands is being thanked in a lowered voice, as if I had done them a favour they would rather not name.",
+                    "Not the looking. The pretending. A person who says plainly that they do not like it is easy company; the ones who perform not minding are exhausting.",
+                    "Some days I want to hand somebody the knife and say go on, then. I never will. But I have thought it at %2$s more than once."
+                  ],
+                  "pt": [
+                    "Menos que antes. O que ainda dói é ser agradecida em voz baixa, como se eu tivesse feito um favor que preferem não nomear.",
+                    "O olhar, não. A fingida. Quem diz claramente que não gosta é companhia fácil; quem encena não se importar cansa.",
+                    "Tem dias em que eu quero entregar a faca para alguém e dizer: então vá. Nunca vou fazer. Mas já pensei isso em %2$s mais de uma vez."
+                  ]
+                },
+                "slots_used": [
+                  "place"
+                ]
+              }
+            },
+            {
+              "name": "say_it_is_honest_work",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Somebody has to do it, and well.",
+                "pt": "Alguém tem que fazer, e bem feito."
+              },
+              "phrases": [
+                "somebody has to do it and do it well",
+                "it is honest work done properly"
+              ],
+              "requires_any": [
+                "honest",
+                "somebody",
+                "properly"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "And well is the part that matters. A careless butcher and a careful one look the same at the market and are not the same at all.",
+                    "Thank you. That is the sentence I would like carved over the door, and I would like it said in a normal voice.",
+                    "It is honest. I have never once had to explain away anything I sold, and there are trades in this village that cannot say that."
+                  ],
+                  "pt": [
+                    "E o bem feito é a parte que importa. Um açougueiro descuidado e um cuidadoso parecem iguais na feira e não são nada iguais.",
+                    "Obrigada. É a frase que eu gostaria de ver entalhada sobre a porta, e gostaria que fosse dita em voz normal.",
+                    "É honesto. Nunca precisei justificar nada do que vendi, e há ofícios nesta vila que não podem dizer o mesmo."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "The market, lately.",
+            "pt": "A feira, ultimamente."
+          },
+          "lines": {
+            "en": [
+              "A child asked me how it works last week, properly and without flinching, and her mother let her.",
+              "Two people have started asking for the cuts by name instead of pointing, which sounds small and is not.",
+              "It has eased. I stopped apologising for the trade about a year ago and, oddly, that is when people stopped needing me to."
+            ],
+            "pt": [
+              "Uma criança me perguntou como funciona semana passada, direito e sem se encolher, e a mãe deixou.",
+              "Duas pessoas começaram a pedir os cortes pelo nome em vez de apontar, o que parece pouco e não é.",
+              "Melhorou. Parei de me desculpar pelo ofício faz um ano e, curiosamente, foi aí que as pessoas pararam de precisar disso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_shift",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You changed how they see it.",
+                "pt": "Você mudou como eles enxergam."
+              },
+              "phrases": [
+                "you changed how they see it",
+                "you shifted the way people see the trade"
+              ],
+              "requires_any": [
+                "changed",
+                "shifted",
+                "see"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "By being unembarrassed for a year. It is a very slow argument and it is the only one that has ever worked on a village.",
+                    "The child did more than I did. One honest question in public and four adults had to stand there and be reasonable.",
+                    "I would like to say I planned it. I got tired, and stopped performing, and it turned out tiredness looked like confidence."
+                  ],
+                  "pt": [
+                    "Por ficar sem constrangimento durante um ano. É um argumento muito lento e é o único que já funcionou com uma vila.",
+                    "A criança fez mais do que eu. Uma pergunta honesta em público e quatro adultos tiveram que ficar ali e ser razoáveis.",
+                    "Eu gostaria de dizer que planejei. Eu me cansei, parei de encenar, e acontece que cansaço parecia confiança."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything more you wanted?",
+      "pt": "Queria mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of the killing?",
+        "pt": "Qual é a parte mais difícil do abate?"
+      },
+      "requires_any": [
+        "hardest",
+        "killing"
+      ],
+      "phrases": [
+        "what is the hardest part of the killing",
+        "hardest thing about the killing"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the block.",
+      "pt": "Vou deixar você com o cepo."
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_mornings",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.the_house_as_it_was.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "memories.household",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.memories.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.memories.the_house_as_it_was.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_sounds_full",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.the_house_as_it_was.open.pleased"
+            },
+            "conversations_disposition_apply": {
+              "topic": "memories.household",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.memories.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.memories.the_house_as_it_was.pleased"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.scene.memories.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

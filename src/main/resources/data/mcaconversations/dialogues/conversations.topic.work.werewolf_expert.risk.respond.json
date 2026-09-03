@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_bolts",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.risk.ask_bolts"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.risk.ask_bolts",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.risk.ask_bolts"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.werewolf_expert.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.risk.sympathise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_three_know",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.risk.ask_three_know"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.risk.ask_three_know",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.risk.ask_three_know"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

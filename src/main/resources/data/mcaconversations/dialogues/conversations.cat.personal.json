@@ -7,6 +7,102 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.life.the_chapter_im_in"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.life.the_chapter_im_in",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "life",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "life.the_chapter_im_in.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.life",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.life.the_chapter_im_in.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.life.the_chapter_im_in"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.life.how_i_came_here"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.life.how_i_came_here",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "life",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "life.how_i_came_here.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.life",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.life.how_i_came_here.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.life.how_i_came_here"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.life",
@@ -27,10 +123,13 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "again"
+              "branch": "again",
+              "beat": "life.again.to.deep.again"
             },
             "next": "conversations.topic.deep.again.respond",
-            "say": "conversations.life.again"
+            "conversations_say": {
+              "phrase": "conversations.life.again"
+            }
           }
         },
         {
@@ -61,7 +160,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "life.toddler.to.life.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.life",
@@ -69,7 +169,9 @@
               "time": 48000
             },
             "next": "conversations.topic.life.toddler.respond",
-            "say": "conversations.life.toddler"
+            "conversations_say": {
+              "phrase": "conversations.life.toddler"
+            }
           }
         },
         {
@@ -100,7 +202,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "child"
+              "branch": "child",
+              "beat": "life.child.to.life.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.life",
@@ -108,7 +211,9 @@
               "time": 48000
             },
             "next": "conversations.topic.life.young.respond",
-            "say": "conversations.life.child"
+            "conversations_say": {
+              "phrase": "conversations.life.child"
+            }
           }
         },
         {
@@ -139,7 +244,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "life.teen.to.life.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.life",
@@ -147,7 +253,9 @@
               "time": 48000
             },
             "next": "conversations.topic.life.young.respond",
-            "say": "conversations.life.teen"
+            "conversations_say": {
+              "phrase": "conversations.life.teen"
+            }
           }
         },
         {
@@ -155,7 +263,13 @@
           "conditions": [
             {
               "chance": 100,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -190,7 +304,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.personal.to.life.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.life",
@@ -198,7 +313,9 @@
               "time": 48000
             },
             "next": "conversations.topic.life.guarded.respond",
-            "say": "conversations.deflect.personal"
+            "conversations_say": {
+              "phrase": "conversations.deflect.personal"
+            }
           }
         },
         {
@@ -214,7 +331,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -249,7 +372,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "resume"
+              "branch": "resume",
+              "beat": "life.revisit.opens"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.life",
@@ -257,7 +381,9 @@
               "time": 48000
             },
             "next": "conversations.arc.life.resume.respond",
-            "say": "conversations.life.revisit"
+            "conversations_say": {
+              "phrase": "conversations.life.revisit"
+            }
           }
         },
         {
@@ -274,7 +400,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -317,7 +449,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "first"
+              "branch": "first",
+              "beat": "life.first.to.life"
             },
             "remember": {
               "id": "mcaconversations.topic.life",
@@ -329,7 +462,9 @@
               "time": 48000
             },
             "next": "conversations.topic.life.respond",
-            "say": "conversations.life.first"
+            "conversations_say": {
+              "phrase": "conversations.life.first"
+            }
           }
         },
         {
@@ -344,7 +479,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -387,7 +528,8 @@
               "op": "begin",
               "topic": "life",
               "budget": "deep",
-              "branch": "again_open"
+              "branch": "again_open",
+              "beat": "life.revisit.to.life"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.life",
@@ -395,7 +537,9 @@
               "time": 48000
             },
             "next": "conversations.topic.life.respond",
-            "say": "conversations.life.revisit"
+            "conversations_say": {
+              "phrase": "conversations.life.revisit"
+            }
           }
         },
         {
@@ -418,7 +562,9 @@
               "time": 48000
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.life.first"
+            "conversations_say": {
+              "phrase": "conversations.life.first"
+            }
           }
         }
       ]
@@ -426,6 +572,102 @@
     {
       "name": "dreams",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.dreams.the_named_one"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.dreams.the_named_one",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "dreams",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "dreams.the_named_one.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.dreams",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.dreams.the_named_one.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.dreams.the_named_one"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.dreams.the_small_version"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.dreams.the_small_version",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "dreams",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "dreams.the_small_version.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.dreams",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.dreams.the_small_version.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.dreams.the_small_version"
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -450,10 +692,13 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "again"
+              "branch": "again",
+              "beat": "dreams.again.to.deep.again"
             },
             "next": "conversations.topic.deep.again.respond",
-            "say": "conversations.dreams.again"
+            "conversations_say": {
+              "phrase": "conversations.dreams.again"
+            }
           }
         },
         {
@@ -484,7 +729,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "dreams.toddler.to.dreams.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.dreams",
@@ -492,7 +738,9 @@
               "time": 48000
             },
             "next": "conversations.topic.dreams.toddler.respond",
-            "say": "conversations.dreams.toddler"
+            "conversations_say": {
+              "phrase": "conversations.dreams.toddler"
+            }
           }
         },
         {
@@ -523,7 +771,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "child"
+              "branch": "child",
+              "beat": "dreams.child.to.dreams.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.dreams",
@@ -531,7 +780,9 @@
               "time": 48000
             },
             "next": "conversations.topic.dreams.young.respond",
-            "say": "conversations.dreams.child"
+            "conversations_say": {
+              "phrase": "conversations.dreams.child"
+            }
           }
         },
         {
@@ -562,7 +813,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "dreams.teen.to.dreams.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.dreams",
@@ -570,7 +822,9 @@
               "time": 48000
             },
             "next": "conversations.topic.dreams.young.respond",
-            "say": "conversations.dreams.teen"
+            "conversations_say": {
+              "phrase": "conversations.dreams.teen"
+            }
           }
         },
         {
@@ -578,7 +832,13 @@
           "conditions": [
             {
               "chance": 100,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -613,7 +873,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.personal.to.dreams.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.dreams",
@@ -621,7 +882,9 @@
               "time": 48000
             },
             "next": "conversations.topic.dreams.guarded.respond",
-            "say": "conversations.deflect.personal"
+            "conversations_say": {
+              "phrase": "conversations.deflect.personal"
+            }
           }
         },
         {
@@ -637,7 +900,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -672,7 +941,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "resume"
+              "branch": "resume",
+              "beat": "dreams.revisit.opens"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.dreams",
@@ -680,7 +950,9 @@
               "time": 48000
             },
             "next": "conversations.arc.dreams.resume.respond",
-            "say": "conversations.dreams.revisit"
+            "conversations_say": {
+              "phrase": "conversations.dreams.revisit"
+            }
           }
         },
         {
@@ -697,7 +969,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -740,7 +1018,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "first"
+              "branch": "first",
+              "beat": "dreams.first.to.dreams"
             },
             "remember": {
               "id": "mcaconversations.topic.dreams",
@@ -752,7 +1031,9 @@
               "time": 48000
             },
             "next": "conversations.topic.dreams.respond",
-            "say": "conversations.dreams.first"
+            "conversations_say": {
+              "phrase": "conversations.dreams.first"
+            }
           }
         },
         {
@@ -767,7 +1048,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -810,7 +1097,8 @@
               "op": "begin",
               "topic": "dreams",
               "budget": "deep",
-              "branch": "again_open"
+              "branch": "again_open",
+              "beat": "dreams.revisit.to.dreams"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.dreams",
@@ -818,7 +1106,9 @@
               "time": 48000
             },
             "next": "conversations.topic.dreams.respond",
-            "say": "conversations.dreams.revisit"
+            "conversations_say": {
+              "phrase": "conversations.dreams.revisit"
+            }
           }
         },
         {
@@ -841,7 +1131,9 @@
               "time": 48000
             },
             "next": "conversations.dreams",
-            "say": "conversations.dreams.first"
+            "conversations_say": {
+              "phrase": "conversations.dreams.first"
+            }
           }
         }
       ]
@@ -849,6 +1141,102 @@
     {
       "name": "fears",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.fears.the_night_one"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.fears.the_night_one",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "fears.the_night_one.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.fears.the_night_one.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.the_night_one"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.fears.the_doorway_one"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.fears.the_doorway_one",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "fears",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "fears.the_doorway_one.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.fears",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.fears.the_doorway_one.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.the_doorway_one"
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -873,10 +1261,13 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "again"
+              "branch": "again",
+              "beat": "fears.again.to.fears.again"
             },
             "next": "conversations.topic.fears.again.respond",
-            "say": "conversations.fears.again"
+            "conversations_say": {
+              "phrase": "conversations.fears.again"
+            }
           }
         },
         {
@@ -907,7 +1298,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "fears.toddler.to.fears.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -915,7 +1307,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.toddler.respond",
-            "say": "conversations.fears.toddler"
+            "conversations_say": {
+              "phrase": "conversations.fears.toddler"
+            }
           }
         },
         {
@@ -946,7 +1340,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "child"
+              "branch": "child",
+              "beat": "fears.child.to.fears.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -954,7 +1349,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.young.respond",
-            "say": "conversations.fears.child"
+            "conversations_say": {
+              "phrase": "conversations.fears.child"
+            }
           }
         },
         {
@@ -985,7 +1382,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "fears.teen.to.fears.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -993,7 +1391,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.young.respond",
-            "say": "conversations.fears.teen"
+            "conversations_say": {
+              "phrase": "conversations.fears.teen"
+            }
           }
         },
         {
@@ -1038,7 +1438,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "scarred"
+              "branch": "scarred",
+              "beat": "fears.scarred.to.fears.scarred"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -1046,7 +1447,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.scarred.respond",
-            "say": "conversations.fears.scarred"
+            "conversations_say": {
+              "phrase": "conversations.fears.scarred"
+            }
           }
         },
         {
@@ -1054,7 +1457,13 @@
           "conditions": [
             {
               "chance": 100,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1095,7 +1504,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.personal.to.fears.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -1103,7 +1513,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.guarded.respond",
-            "say": "conversations.deflect.personal"
+            "conversations_say": {
+              "phrase": "conversations.deflect.personal"
+            }
           }
         },
         {
@@ -1137,7 +1549,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -1000,
@@ -1160,7 +1578,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "followthrough"
+              "branch": "followthrough",
+              "beat": "fears.resume.followthrough.to.fears.followthrough"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -1168,7 +1587,9 @@
               "time": 48000
             },
             "next": "conversations.arc.fears.followthrough.respond",
-            "say": "conversations.fears.resume.followthrough"
+            "conversations_say": {
+              "phrase": "conversations.fears.resume.followthrough"
+            }
           }
         },
         {
@@ -1202,7 +1623,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -1000,
@@ -1225,7 +1652,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "plan"
+              "branch": "plan",
+              "beat": "fears.resume.plan.to.fears.plan"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -1233,7 +1661,9 @@
               "time": 48000
             },
             "next": "conversations.arc.fears.plan.respond",
-            "say": "conversations.fears.resume.plan"
+            "conversations_say": {
+              "phrase": "conversations.fears.resume.plan"
+            }
           }
         },
         {
@@ -1268,7 +1698,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1299,7 +1735,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "open"
+              "branch": "open",
+              "beat": "fears.first.to.fears.open"
             },
             "remember": {
               "id": "mcaconversations.topic.fears",
@@ -1311,7 +1748,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.open.respond",
-            "say": "conversations.fears.first"
+            "conversations_say": {
+              "phrase": "conversations.fears.first"
+            }
           }
         },
         {
@@ -1344,7 +1783,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1375,7 +1820,8 @@
               "op": "begin",
               "topic": "fears",
               "budget": "deep",
-              "branch": "revisit"
+              "branch": "revisit",
+              "beat": "fears.revisit.to.fears.open"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.fears",
@@ -1383,7 +1829,9 @@
               "time": 48000
             },
             "next": "conversations.topic.fears.open.respond",
-            "say": "conversations.fears.revisit"
+            "conversations_say": {
+              "phrase": "conversations.fears.revisit"
+            }
           }
         },
         {
@@ -1406,7 +1854,9 @@
               "time": 48000
             },
             "next": "conversations.fears",
-            "say": "conversations.fears.first"
+            "conversations_say": {
+              "phrase": "conversations.fears.first"
+            }
           }
         }
       ]
@@ -1414,6 +1864,102 @@
     {
       "name": "hopes",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.hopes.spring_list"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.hopes.spring_list",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "hopes",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "hopes.spring_list.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.hopes",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.hopes.spring_list.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.hopes.spring_list"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.hopes.the_long_one"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.hopes.the_long_one",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "hopes",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "hopes.the_long_one.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.hopes",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.hopes.the_long_one.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.hopes.the_long_one"
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -1438,10 +1984,13 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "again"
+              "branch": "again",
+              "beat": "hopes.again.to.deep.again"
             },
             "next": "conversations.topic.deep.again.respond",
-            "say": "conversations.hopes.again"
+            "conversations_say": {
+              "phrase": "conversations.hopes.again"
+            }
           }
         },
         {
@@ -1472,7 +2021,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "hopes.toddler.to.hopes.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.hopes",
@@ -1480,7 +2030,9 @@
               "time": 48000
             },
             "next": "conversations.topic.hopes.toddler.respond",
-            "say": "conversations.hopes.toddler"
+            "conversations_say": {
+              "phrase": "conversations.hopes.toddler"
+            }
           }
         },
         {
@@ -1511,7 +2063,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "child"
+              "branch": "child",
+              "beat": "hopes.child.to.hopes.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.hopes",
@@ -1519,7 +2072,9 @@
               "time": 48000
             },
             "next": "conversations.topic.hopes.young.respond",
-            "say": "conversations.hopes.child"
+            "conversations_say": {
+              "phrase": "conversations.hopes.child"
+            }
           }
         },
         {
@@ -1550,7 +2105,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "hopes.teen.to.hopes.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.hopes",
@@ -1558,7 +2114,9 @@
               "time": 48000
             },
             "next": "conversations.topic.hopes.young.respond",
-            "say": "conversations.hopes.teen"
+            "conversations_say": {
+              "phrase": "conversations.hopes.teen"
+            }
           }
         },
         {
@@ -1566,7 +2124,13 @@
           "conditions": [
             {
               "chance": 100,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1601,7 +2165,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.personal.to.hopes.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.hopes",
@@ -1609,7 +2174,9 @@
               "time": 48000
             },
             "next": "conversations.topic.hopes.guarded.respond",
-            "say": "conversations.deflect.personal"
+            "conversations_say": {
+              "phrase": "conversations.deflect.personal"
+            }
           }
         },
         {
@@ -1625,7 +2192,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1660,7 +2233,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "resume"
+              "branch": "resume",
+              "beat": "hopes.revisit.opens"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.hopes",
@@ -1668,7 +2242,9 @@
               "time": 48000
             },
             "next": "conversations.arc.hopes.resume.respond",
-            "say": "conversations.hopes.revisit"
+            "conversations_say": {
+              "phrase": "conversations.hopes.revisit"
+            }
           }
         },
         {
@@ -1685,7 +2261,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1728,7 +2310,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "first"
+              "branch": "first",
+              "beat": "hopes.first.to.hopes"
             },
             "remember": {
               "id": "mcaconversations.topic.hopes",
@@ -1740,7 +2323,9 @@
               "time": 48000
             },
             "next": "conversations.topic.hopes.respond",
-            "say": "conversations.hopes.first"
+            "conversations_say": {
+              "phrase": "conversations.hopes.first"
+            }
           }
         },
         {
@@ -1755,7 +2340,13 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 24
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1798,7 +2389,8 @@
               "op": "begin",
               "topic": "hopes",
               "budget": "deep",
-              "branch": "again_open"
+              "branch": "again_open",
+              "beat": "hopes.revisit.to.hopes"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.hopes",
@@ -1806,7 +2398,9 @@
               "time": 48000
             },
             "next": "conversations.topic.hopes.respond",
-            "say": "conversations.hopes.revisit"
+            "conversations_say": {
+              "phrase": "conversations.hopes.revisit"
+            }
           }
         },
         {
@@ -1829,7 +2423,9 @@
               "time": 48000
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.hopes.first"
+            "conversations_say": {
+              "phrase": "conversations.hopes.first"
+            }
           }
         }
       ]
@@ -1837,6 +2433,102 @@
     {
       "name": "feelings",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.feelings.a_flat_stretch"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.feelings.a_flat_stretch",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "feelings.a_flat_stretch.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.feelings.a_flat_stretch.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.feelings.a_flat_stretch"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.feelings.ordinary_answer"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.feelings.ordinary_answer",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "feelings",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "feelings.ordinary_answer.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.feelings",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.feelings.ordinary_answer.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.feelings.ordinary_answer"
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -1869,10 +2561,13 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "again"
+              "branch": "again",
+              "beat": "feelings.again.to.feelings.again"
             },
             "next": "conversations.topic.feelings.again.respond",
-            "say": "conversations.feelings.again"
+            "conversations_say": {
+              "phrase": "conversations.feelings.again"
+            }
           }
         },
         {
@@ -1888,7 +2583,14 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -1923,7 +2625,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "resume"
+              "branch": "resume",
+              "beat": "feelings.revisit.to.feelings"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -1931,7 +2634,9 @@
               "time": 48000
             },
             "next": "conversations.arc.feelings.resume.respond",
-            "say": "conversations.feelings.revisit"
+            "conversations_say": {
+              "phrase": "conversations.feelings.revisit"
+            }
           }
         },
         {
@@ -1970,7 +2675,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "feelings.toddler.to.feelings.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -1978,7 +2684,9 @@
               "time": 48000
             },
             "next": "conversations.topic.feelings.toddler.respond",
-            "say": "conversations.feelings.toddler"
+            "conversations_say": {
+              "phrase": "conversations.feelings.toddler"
+            }
           }
         },
         {
@@ -2017,7 +2725,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "child"
+              "branch": "child",
+              "beat": "feelings.child.to.feelings.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -2025,7 +2734,9 @@
               "time": 48000
             },
             "next": "conversations.topic.feelings.young.respond",
-            "say": "conversations.feelings.child"
+            "conversations_say": {
+              "phrase": "conversations.feelings.child"
+            }
           }
         },
         {
@@ -2064,7 +2775,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "feelings.teen.to.feelings.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -2072,7 +2784,9 @@
               "time": 48000
             },
             "next": "conversations.topic.feelings.young.respond",
-            "say": "conversations.feelings.teen"
+            "conversations_say": {
+              "phrase": "conversations.feelings.teen"
+            }
           }
         },
         {
@@ -2123,7 +2837,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "romantic"
+              "branch": "romantic",
+              "beat": "feelings.spouse.to.feelings.romantic"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -2131,7 +2846,9 @@
               "time": 48000
             },
             "next": "conversations.topic.feelings.romantic.respond",
-            "say": "conversations.feelings.spouse"
+            "conversations_say": {
+              "phrase": "conversations.feelings.spouse"
+            }
           }
         },
         {
@@ -2139,7 +2856,14 @@
           "conditions": [
             {
               "chance": 100,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -2186,7 +2910,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.intimate.to.feelings.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -2194,7 +2919,9 @@
               "time": 48000
             },
             "next": "conversations.topic.feelings.guarded.respond",
-            "say": "conversations.deflect.intimate"
+            "conversations_say": {
+              "phrase": "conversations.deflect.intimate"
+            }
           }
         },
         {
@@ -2202,11 +2929,20 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -2253,7 +2989,8 @@
               "op": "begin",
               "topic": "feelings",
               "budget": "relationship",
-              "branch": "platonic"
+              "branch": "platonic",
+              "beat": "feelings.first.to.feelings.platonic"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.feelings",
@@ -2261,7 +2998,9 @@
               "time": 48000
             },
             "next": "conversations.topic.feelings.platonic.respond",
-            "say": "conversations.feelings.first"
+            "conversations_say": {
+              "phrase": "conversations.feelings.first"
+            }
           }
         },
         {
@@ -2280,7 +3019,9 @@
               "time": 48000
             },
             "next": "conversations.feelings",
-            "say": "conversations.feelings.first"
+            "conversations_say": {
+              "phrase": "conversations.feelings.first"
+            }
           }
         }
       ]
@@ -2293,6 +3034,102 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.regrets.the_old_one"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.regrets.the_old_one",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "regrets",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "regrets.the_old_one.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.regrets",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.regrets.the_old_one.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.regrets.the_old_one"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.regrets.the_small_one"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.regrets.the_small_one",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "regrets",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "regrets.the_small_one.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.regrets",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.regrets.the_small_one.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.regrets.the_small_one"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.regrets",
@@ -2313,10 +3150,13 @@
               "op": "begin",
               "topic": "regrets",
               "budget": "deep",
-              "branch": "again"
+              "branch": "again",
+              "beat": "regrets.again.to.deep.again"
             },
             "next": "conversations.topic.deep.again.respond",
-            "say": "conversations.regrets.again"
+            "conversations_say": {
+              "phrase": "conversations.regrets.again"
+            }
           }
         },
         {
@@ -2324,7 +3164,14 @@
           "conditions": [
             {
               "chance": 100,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -1000,
@@ -2347,7 +3194,8 @@
               "op": "begin",
               "topic": "regrets",
               "budget": "deep",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.intimate.to.regrets.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.regrets",
@@ -2355,7 +3203,9 @@
               "time": 48000
             },
             "next": "conversations.topic.regrets.guarded.respond",
-            "say": "conversations.deflect.intimate"
+            "conversations_say": {
+              "phrase": "conversations.deflect.intimate"
+            }
           }
         },
         {
@@ -2371,7 +3221,14 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -1000,
@@ -2394,7 +3251,8 @@
               "op": "begin",
               "topic": "regrets",
               "budget": "deep",
-              "branch": "resume"
+              "branch": "resume",
+              "beat": "regrets.revisit.opens"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.regrets",
@@ -2402,7 +3260,9 @@
               "time": 48000
             },
             "next": "conversations.arc.regrets.resume.respond",
-            "say": "conversations.regrets.revisit"
+            "conversations_say": {
+              "phrase": "conversations.regrets.revisit"
+            }
           }
         },
         {
@@ -2419,7 +3279,14 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -2450,7 +3317,8 @@
               "op": "begin",
               "topic": "regrets",
               "budget": "deep",
-              "branch": "first"
+              "branch": "first",
+              "beat": "regrets.first.to.regrets"
             },
             "remember": {
               "id": "mcaconversations.topic.regrets",
@@ -2462,7 +3330,9 @@
               "time": 48000
             },
             "next": "conversations.topic.regrets.respond",
-            "say": "conversations.regrets.first"
+            "conversations_say": {
+              "phrase": "conversations.regrets.first"
+            }
           }
         },
         {
@@ -2477,7 +3347,14 @@
             },
             {
               "chance": -2000,
-              "hearts_max": 59
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
             },
             {
               "chance": -2000,
@@ -2508,7 +3385,8 @@
               "op": "begin",
               "topic": "regrets",
               "budget": "deep",
-              "branch": "again_open"
+              "branch": "again_open",
+              "beat": "regrets.revisit.to.regrets"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.regrets",
@@ -2516,7 +3394,9 @@
               "time": 48000
             },
             "next": "conversations.topic.regrets.respond",
-            "say": "conversations.regrets.revisit"
+            "conversations_say": {
+              "phrase": "conversations.regrets.revisit"
+            }
           }
         },
         {
@@ -2539,7 +3419,9 @@
               "time": 48000
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.regrets.first"
+            "conversations_say": {
+              "phrase": "conversations.regrets.first"
+            }
           }
         }
       ]
@@ -2552,6 +3434,102 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.secret.deciding_whether_to_say"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.secret.deciding_whether_to_say",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "secret",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "secret.deciding_whether_to_say.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.secret",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.secret.deciding_whether_to_say.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.secret.deciding_whether_to_say"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.secret.holding_somebody_elses"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.secret.holding_somebody_elses",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "secret",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "secret.holding_somebody_elses.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.secret",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.secret.holding_somebody_elses.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.secret.holding_somebody_elses"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.secret",
@@ -2572,10 +3550,13 @@
               "op": "begin",
               "topic": "secret",
               "budget": "deep",
-              "branch": "again"
+              "branch": "again",
+              "beat": "secret.again.to.deep.again"
             },
             "next": "conversations.topic.deep.again.respond",
-            "say": "conversations.secret.again"
+            "conversations_say": {
+              "phrase": "conversations.secret.again"
+            }
           }
         },
         {
@@ -2611,7 +3592,8 @@
               "op": "begin",
               "topic": "secret",
               "budget": "deep",
-              "branch": "guarded"
+              "branch": "guarded",
+              "beat": "deflect.secret.to.secret.guarded"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.secret",
@@ -2619,7 +3601,9 @@
               "time": 48000
             },
             "next": "conversations.topic.secret.guarded.respond",
-            "say": "conversations.deflect.secret"
+            "conversations_say": {
+              "phrase": "conversations.deflect.secret"
+            }
           }
         },
         {
@@ -2663,7 +3647,8 @@
               "op": "begin",
               "topic": "secret",
               "budget": "deep",
-              "branch": "resume"
+              "branch": "resume",
+              "beat": "secret.revisit.opens"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.secret",
@@ -2671,7 +3656,9 @@
               "time": 48000
             },
             "next": "conversations.arc.secret.resume.respond",
-            "say": "conversations.secret.revisit"
+            "conversations_say": {
+              "phrase": "conversations.secret.revisit"
+            }
           }
         },
         {
@@ -2724,7 +3711,8 @@
               "op": "begin",
               "topic": "secret",
               "budget": "deep",
-              "branch": "first"
+              "branch": "first",
+              "beat": "secret.first.to.secret"
             },
             "remember": {
               "id": "mcaconversations.topic.secret",
@@ -2736,7 +3724,9 @@
               "time": 48000
             },
             "next": "conversations.topic.secret.respond",
-            "say": "conversations.secret.first"
+            "conversations_say": {
+              "phrase": "conversations.secret.first"
+            }
           }
         },
         {
@@ -2787,7 +3777,8 @@
               "op": "begin",
               "topic": "secret",
               "budget": "deep",
-              "branch": "again_open"
+              "branch": "again_open",
+              "beat": "secret.revisit.to.secret"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.secret",
@@ -2795,7 +3786,9 @@
               "time": 48000
             },
             "next": "conversations.topic.secret.respond",
-            "say": "conversations.secret.revisit"
+            "conversations_say": {
+              "phrase": "conversations.secret.revisit"
+            }
           }
         },
         {
@@ -2818,8 +3811,630 @@
               "time": 48000
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.secret.first"
+            "conversations_say": {
+              "phrase": "conversations.secret.first"
+            }
           }
+        }
+      ]
+    },
+    {
+      "name": "interests",
+      "constraints": "!toddler,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.interests.the_hour_for_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.interests.the_hour_for_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "interests",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "interests.the_hour_for_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.interests",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.interests.the_hour_for_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.the_hour_for_it"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.interests.the_one_who_shares_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.interests.the_one_who_shares_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "interests",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "interests.the_one_who_shares_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.interests",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.interests.the_one_who_shares_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.the_one_who_shares_it"
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.interests.the_hour_for_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.interests.the_one_who_shares_it"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "interests",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "interests.open"
+            },
+            "next": "conversations.topic.interests.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.interests.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.interests.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "constraints": "adult",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.values.what_it_cost_lately"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.values.what_it_cost_lately",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "values",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "values.what_it_cost_lately.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.values",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.values.what_it_cost_lately.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.values.what_it_cost_lately"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.values.the_one_i_put_down"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.values.the_one_i_put_down",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "values",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "values.the_one_i_put_down.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.values",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.values.the_one_i_put_down.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.values.the_one_i_put_down"
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.values.what_it_cost_lately"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.values.the_one_i_put_down"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "values",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "values.open"
+            },
+            "next": "conversations.topic.values.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.values.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.values.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "player",
+      "constraints": "!toddler,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.player.the_day_i_revised_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.player.the_day_i_revised_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "player",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "player.the_day_i_revised_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.player",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.player.the_day_i_revised_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.player.the_day_i_revised_it"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.player.what_i_say_about_you"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.player.what_i_say_about_you",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "player",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "player.what_i_say_about_you.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.player",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.player.what_i_say_about_you.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.player.what_i_say_about_you"
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.player.the_day_i_revised_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.player.what_i_say_about_you"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "player",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "player.open"
+            },
+            "next": "conversations.topic.player.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.player.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.player.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "origin",
+      "constraints": "!toddler,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.origin.the_season_that_smells_like_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.origin.the_season_that_smells_like_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "origin",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "origin.the_season_that_smells_like_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.origin",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.origin.the_season_that_smells_like_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.origin.the_season_that_smells_like_it"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.origin.whether_this_is_home"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.origin.whether_this_is_home",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "origin",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "origin.whether_this_is_home.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.origin",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.origin.whether_this_is_home.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.origin.whether_this_is_home"
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.origin.the_season_that_smells_like_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.origin.whether_this_is_home"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "origin",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "origin.open"
+            },
+            "next": "conversations.topic.origin.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.origin.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.origin.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
         }
       ]
     },

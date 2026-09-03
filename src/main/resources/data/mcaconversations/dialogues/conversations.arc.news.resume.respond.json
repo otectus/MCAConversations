@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "ask_after_them_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.resume.ask_after_them_now"
+            },
+            "next": "conversations.arc.news.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.resume.ask_after_them_now"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "anything_else",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.resume.anything_else"
+            },
+            "next": "conversations.arc.news.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.resume.anything_else"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "glad_it_helped",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.resume.glad_it_helped"
+            },
+            "conversations_affection_apply": {
+              "decision": "news.resume.glad",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.resume.glad_it_helped",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.news.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.resume.glad_it_helped"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.news.resume.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

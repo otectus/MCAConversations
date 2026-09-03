@@ -1,0 +1,84 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_she_decides",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.funeral_order.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.occasions",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.florist.funeral_order"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.funeral_order.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_small_one",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.funeral_order.active.resolved"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.florist.order.backed",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.occasions",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.florist.funeral_order"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.funeral_order.active.resolved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.florist.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

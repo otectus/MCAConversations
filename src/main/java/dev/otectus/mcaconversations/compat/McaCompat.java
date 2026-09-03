@@ -1,32 +1,16 @@
 package dev.otectus.mcaconversations.compat;
 
 import dev.otectus.mcaconversations.McaConversations;
+import dev.otectus.mcaconversations.locale.LineVoice;
+import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.personality.Personalities;
-import net.conczin.mca.network.Network;
-import net.conczin.mca.entity.VillagerEntityMCA;
-import net.conczin.mca.entity.VillagerLike;
-import net.conczin.mca.entity.ai.Memories;
-import net.conczin.mca.entity.ai.relationship.AgeState;
-import net.conczin.mca.entity.ai.relationship.EntityRelationship;
-import net.conczin.mca.entity.interaction.Constraint;
-import net.conczin.mca.network.s2c.InteractionDialogueQuestionResponse;
-import net.conczin.mca.resources.Dialogues;
-import net.conczin.mca.resources.data.dialogue.Answer;
-import net.conczin.mca.resources.data.dialogue.Question;
-import net.conczin.mca.server.world.data.FamilyTree;
-import net.conczin.mca.server.world.data.FamilyTreeNode;
-import net.conczin.mca.server.world.data.PlayerSaveData;
-import net.conczin.mca.server.world.data.Village;
-import net.conczin.mca.server.world.data.VillageManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,13 +23,20 @@ import java.util.UUID;
  * The single point of contact with Minecraft Comes Alive: Reborn (together with the
  * {@code compat.mca} adapter package, which implements MCA functional interfaces).
  *
- * <p><b>Why {@code net.conczin.mca.*}?</b> That is simply where MCA's classes live. The 1.20.1 line
- * shipped a Forgix-merged "Universal" jar that relocated each loader's copy under a loader-named
- * root ({@code forge.net.mca.*}); the 1.21.1 line drops that entirely and publishes a per-loader
- * artifact — {@code net.conczin.mca:mca-neoforge} — with the classes at their real package.
+ * <p><b>No MCA type appears anywhere in this file.</b> Every MCA class and member is reached by name
+ * at runtime through {@link McaHandles}, which probes for MCA's package root rather than assuming
+ * one. That is not gold-plating: MCA repackaged mid-version-line. It ships a Forgix-merged
+ * "Universal" jar, so its Forge classes sit under a loader-named root — {@code forge.net.mca.*}
+ * through 7.7.0-beta.2, and {@code forge.net.conczin.mca.*} from 7.7.1-alpha.1, when the base package
+ * was renamed. The root cannot be inferred from the version number, only probed.
  *
- * <p>Every method here fails safe: instanceof guards, {@code try/catch (Throwable)}, DEBUG log,
- * documented safe default. MCA API drift must never crash a server.
+ * <p>This file used to {@code import forge.net.mca.*}, and on the renamed build that made every
+ * method here throw {@code NoClassDefFoundError} while the JVM resolved the types in its own
+ * signatures — before any {@code catch} could run. {@code McaBridge} caught it once at registration
+ * and disabled the whole mod, which is why chat with villagers went silent.
+ *
+ * <p>Every method still fails safe: type guards, {@code try/catch (Throwable)}, DEBUG log, documented
+ * safe default. MCA API drift must never crash a server.
  */
 public final class McaCompat {
 
@@ -54,14 +45,17 @@ public final class McaCompat {
 
     /** True for an MCA human villager (not the zombie variant). */
     public static boolean isMcaVillager(Entity entity) {
-        return entity instanceof VillagerEntityMCA;
+        return McaHandles.isVillager(entity);
     }
 
     /** The villager's raw MCA name string (for gossip snapshot caching). Safe default: empty. */
     public static Optional<String> getVillagerName(Entity entity) {
-        if (entity instanceof VillagerEntityMCA mca) {
+        if (isMcaVillager(entity)) {
             try {
-                return Optional.ofNullable(mca.getDisplayName()).map(c -> c.getString());
+                // Vanilla dispatch on a vanilla receiver: MCA overrides getDisplayName to return the
+                // villager's given name, and reobfJar rewrites this call site, so it must not be
+                // resolved by name the way MCA's own methods are.
+                return Optional.ofNullable(entity.getDisplayName()).map(Component::getString);
             } catch (Throwable t) {
                 McaConversations.LOGGER.debug("MCA getVillagerName failed; defaulting empty", t);
             }
@@ -73,28 +67,18 @@ public final class McaCompat {
      * The villager's localized profession text (e.g. "Farmer", "Guard"). Returned as a Component
      * so translation resolves client-side in the player's locale. Safe default: empty.
      */
-    public static Optional<net.minecraft.network.chat.Component> getProfessionText(Entity villager) {
-        if (villager instanceof VillagerLike<?> v) {
-            try {
-                return Optional.ofNullable(v.getProfessionText());
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getProfessionText failed; defaulting empty", t);
-            }
+    public static Optional<Component> getProfessionText(Entity villager) {
+        try {
+            return Optional.ofNullable(McaHandles.professionText(villager));
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA getProfessionText failed; defaulting empty", t);
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     /** The player's relationship hearts with this villager. Safe default: 0. */
     public static int getHearts(ServerPlayer player, Entity villager) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                Memories memories = mca.getVillagerBrain().getMemoriesForPlayer(player);
-                return memories == null ? 0 : memories.getHearts();
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getHearts failed; defaulting 0", t);
-            }
-        }
-        return 0;
+        return McaHandles.hearts(villager, player);
     }
 
     /**
@@ -112,12 +96,12 @@ public final class McaCompat {
      * for guarded conversation outcomes. Safe default: 0 (nothing moved). <b>Server side only.</b>
      */
     public static int rewardHearts(Entity villager, ServerPlayer player, int delta) {
-        if (delta == 0 || player == null || !(villager instanceof VillagerEntityMCA mca)) {
+        if (delta == 0 || player == null || !isMcaVillager(villager)) {
             return 0;
         }
         try {
             int before = getHearts(player, villager);
-            mca.getVillagerBrain().rewardHearts(player, delta);
+            McaHandles.rewardHearts(villager, player, delta);
             return getHearts(player, villager) - before;
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("MCA rewardHearts({}) failed; no hearts moved", delta, t);
@@ -174,48 +158,22 @@ public final class McaCompat {
      * time; its JSON {@code memory} condition reads time-remaining). <b>Server side only.</b>
      */
     public static void remember(Entity villager, String id, long durationTicks) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                mca.getLongTermMemory().remember(id, durationTicks);
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA remember({}) failed; ignoring", id, t);
-            }
-        }
+        McaHandles.remember(villager, id, durationTicks);
     }
 
     /** Writes a permanent (never-expiring) LongTermMemory entry. <b>Server side only.</b> */
     public static void rememberForever(Entity villager, String id) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                mca.getLongTermMemory().remember(id);
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA rememberForever({}) failed; ignoring", id, t);
-            }
-        }
+        McaHandles.rememberForever(villager, id);
     }
 
     /** True when an unexpired LongTermMemory entry exists. Safe default: false. */
     public static boolean hasMemory(Entity villager, String id) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return mca.getLongTermMemory().getMemory(id) > 0;
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA hasMemory({}) failed; defaulting false", id, t);
-            }
-        }
-        return false;
+        return McaHandles.memoryTicks(villager, id).orElse(0L) > 0L;
     }
 
     /** Ticks remaining until the memory expires (0 = missing/expired). Safe default: empty. */
     public static OptionalLong getMemoryRemaining(Entity villager, String id) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return OptionalLong.of(mca.getLongTermMemory().getMemory(id));
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getMemoryRemaining({}) failed; defaulting empty", id, t);
-            }
-        }
-        return OptionalLong.empty();
+        return McaHandles.memoryTicks(villager, id);
     }
 
     // ------------------------------------------------------------------
@@ -232,21 +190,22 @@ public final class McaCompat {
      * MCA's network path fails: plain system chat message. <b>Server side only.</b>
      */
     public static void sayInDialogue(Entity villager, ServerPlayer player, String phrase, Object... args) {
-        Optional<MutableComponent> line = getDialogueLine(villager, player, phrase, args);
-        if (line.isEmpty()) {
+        Optional<MutableComponent> built = getDialogueLine(villager, player, phrase, args);
+        if (built.isEmpty()) {
             return;
         }
+        // Name the pooled variant here, on the server, before the packet leaves. MCA would otherwise
+        // resolve the pool on the client with a fresh random draw and no memory of the last sentence,
+        // which is what makes a pool of three read like a pool of one. See LineVoice.
+        Optional<Component> line = Optional.of(LineVoice.pinned(built.get(), villager, player));
+        if (McaHandles.sendDialogueLine(player, line.get())) {
+            return;
+        }
+        McaConversations.LOGGER.debug("MCA sayInDialogue({}) failed; falling back to chat", phrase);
         try {
-            // 1.21.1 argument order is (Component, boolean), the reverse of the 1.20.1 packet's
-            // (boolean, Component). silent=false keeps MCA's own delivery sound.
-            Network.sendToPlayer(new InteractionDialogueQuestionResponse(line.get(), false), player);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA sayInDialogue({}) failed; falling back to chat", phrase, t);
-            try {
-                player.sendSystemMessage(line.get());
-            } catch (Throwable t2) {
-                McaConversations.LOGGER.debug("Chat fallback failed too; dropping line", t2);
-            }
+            player.sendSystemMessage(line.get());
+        } catch (Throwable t2) {
+            McaConversations.LOGGER.debug("Chat fallback failed too; dropping line", t2);
         }
     }
 
@@ -259,14 +218,12 @@ public final class McaCompat {
      */
     public static Optional<MutableComponent> getDialogueLine(Entity villager, ServerPlayer player,
                                                              String phrase, Object... args) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return Optional.ofNullable(mca.getTranslatable(player, "dialogue." + phrase, args));
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getDialogueLine({}) failed; defaulting empty", phrase, t);
-            }
+        try {
+            return Optional.ofNullable(McaHandles.translatable(villager, player, "dialogue." + phrase, args));
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA getDialogueLine({}) failed; defaulting empty", phrase, t);
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     // ------------------------------------------------------------------
@@ -275,35 +232,17 @@ public final class McaCompat {
 
     /** The villager's spouse UUID, empty when unmarried. Safe default: empty. */
     public static Optional<UUID> getPartnerUuid(Entity villager) {
-        try {
-            return EntityRelationship.of(villager).flatMap(EntityRelationship::getPartnerUUID);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA getPartnerUuid failed; defaulting empty", t);
-            return Optional.empty();
-        }
+        return McaHandles.partnerUuid(villager);
     }
 
     /** The villager's spouse display name. Safe default: empty. */
     public static Optional<String> getSpouseName(Entity villager) {
-        try {
-            return EntityRelationship.of(villager)
-                    .flatMap(EntityRelationship::getPartnerName)
-                    .map(c -> c.getString());
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA getSpouseName failed; defaulting empty", t);
-            return Optional.empty();
-        }
+        return McaHandles.partnerName(villager);
     }
 
     /** Resolves a (possibly unloaded) villager's name from MCA's family tree. Safe default: empty. */
     public static Optional<String> familyTreeName(ServerLevel level, UUID villagerUuid) {
-        try {
-            FamilyTree tree = FamilyTree.get(level);
-            return tree.getOrEmpty(villagerUuid).map(FamilyTreeNode::getName).filter(n -> !n.isBlank());
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA familyTreeName failed; defaulting empty", t);
-            return Optional.empty();
-        }
+        return McaHandles.familyTreeName(level, villagerUuid);
     }
 
     /**
@@ -315,44 +254,29 @@ public final class McaCompat {
      * <b>Server side only.</b>
      */
     public static void syncPlayerFamilyName(ServerPlayer player) {
-        try {
-            PlayerSaveData data = PlayerSaveData.get(player);
-            String chosen = data.getEntityData().getString("villagerName");
-            if (chosen == null || chosen.isBlank()) {
-                return; // never chosen a name -> keep MCA's username fallback
-            }
-            FamilyTreeNode node = data.getFamilyEntry(); // get-or-create (defaults to username)
-            if (!chosen.equals(node.getName())) {
-                node.setName(chosen); // setName() -> markDirty() -> persists
-            }
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA syncPlayerFamilyName failed; ignoring", t);
-        }
+        McaHandles.syncPlayerFamilyName(player);
     }
 
     /**
      * The villager's MCA personality as its bare lowercase id (e.g. {@code odd}, {@code upbeat}) —
      * the same token MCA uses as the personality prefix on dialogue lang keys. Safe default: empty.
      *
-     * <p>Reads the stable registry id rather than {@code toString()}. The 1.20.1 build had to go
-     * through {@code toString()} because it targeted both MCA 7.6 (where {@code Personality} was an
-     * enum) and 7.7 (where it became a registry-backed class); this line targets 7.7 on 1.21.1 only,
-     * where {@code getPersonalityId()} is the documented stable accessor.
-     * {@link Personalities#normalize} still strips the {@code mca:} namespace and handles a
-     * third-party personality registered under some other namespace.
+     * <p><b>Version-agnostic on purpose.</b> MCA 7.6 declares {@code Personality} as an enum and 7.7
+     * as a registry-backed class, so neither {@code name()} (gone in 7.7) nor {@code getPersonalityId()}
+     * (absent in 7.6) can be called from a single binary. {@code toString()} exists in both — inherited
+     * from {@code Enum} on 7.6 ({@code "ODD"}) and overridden to the namespaced id on 7.7
+     * ({@code "mca:odd"}) — and {@link Personalities#normalize} reduces both to {@code "odd"}. Reading
+     * it as an opaque {@link Object} means the binding needs no entry for the type at all.
      */
     public static Optional<String> getPersonality(Entity villager) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return Optional.ofNullable(mca.getVillagerBrain().getPersonalityId())
-                        .map(Object::toString)
-                        .map(Personalities::normalize)
-                        .filter(s -> !s.isEmpty());
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getPersonality failed; defaulting empty", t);
-            }
+        try {
+            return Optional.ofNullable(McaHandles.personalityString(villager))
+                    .map(Personalities::normalize)
+                    .filter(s -> !s.isEmpty());
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("MCA getPersonality failed; defaulting empty", t);
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     /**
@@ -360,46 +284,22 @@ public final class McaCompat {
      * the native {@code mood} dialogue condition matches. Safe default: empty.
      */
     public static Optional<String> getMoodName(Entity villager) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return Optional.ofNullable(mca.getVillagerBrain().getMood()).map(m -> m.getName());
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getMoodName failed; defaulting empty", t);
-            }
-        }
-        return Optional.empty();
+        return Optional.ofNullable(McaHandles.moodName(villager));
     }
 
     /** True when the villager's MCA age state is ADULT. Safe default: false (fail closed for gating). */
     public static boolean isAdult(Entity villager) {
-        if (villager instanceof VillagerLike<?> v) {
-            try {
-                return v.getAgeState() == AgeState.ADULT;
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA isAdult failed; defaulting false", t);
-            }
-        }
-        return false;
+        return "adult".equals(McaHandles.ageStateName(villager));
     }
 
     /** True when the villager is married (to anyone — player or villager). Safe default: false. */
     public static boolean isMarried(Entity villager) {
-        try {
-            return EntityRelationship.of(villager).map(EntityRelationship::isMarried).orElse(false);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA isMarried failed; defaulting false", t);
-            return false;
-        }
+        return McaHandles.isMarried(villager);
     }
 
     /** True when the villager is married to exactly this player. Safe default: false. */
     public static boolean isMarriedToPlayer(Entity villager, UUID playerUuid) {
-        try {
-            return EntityRelationship.of(villager).map(r -> r.isMarriedTo(playerUuid)).orElse(false);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA isMarriedToPlayer failed; defaulting false", t);
-            return false;
-        }
+        return McaHandles.isMarriedTo(villager, playerUuid);
     }
 
     /**
@@ -417,14 +317,7 @@ public final class McaCompat {
 
     /** True when the villager's MCA age state is BABY (used for birth detection). Safe default: false. */
     public static boolean isBaby(Entity villager) {
-        if (villager instanceof VillagerLike<?> v) {
-            try {
-                return v.getAgeState() == AgeState.BABY;
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA isBaby failed; defaulting false", t);
-            }
-        }
-        return false;
+        return "baby".equals(McaHandles.ageStateName(villager));
     }
 
     /**
@@ -436,17 +329,7 @@ public final class McaCompat {
      * and toddlers get their own shorter variants of the chat-mode replies (see {@code AgeVoice}).
      */
     public static Optional<String> getAgeGroup(Entity villager) {
-        if (villager instanceof VillagerLike<?> v) {
-            try {
-                AgeState state = v.getAgeState();
-                return state == null
-                        ? Optional.empty()
-                        : Optional.of(state.name().toLowerCase(java.util.Locale.ROOT));
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getAgeGroup failed; defaulting empty", t);
-            }
-        }
-        return Optional.empty();
+        return Optional.ofNullable(McaHandles.ageStateName(villager));
     }
 
     // ------------------------------------------------------------------
@@ -455,50 +338,36 @@ public final class McaCompat {
 
     /** The id of the villager's home village. Safe default: empty. */
     public static OptionalInt getHomeVillageId(Entity villager) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                Optional<Village> village = mca.getResidency().getHomeVillage();
-                return village.map(v -> OptionalInt.of(v.getId())).orElseGet(OptionalInt::empty);
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getHomeVillageId failed; defaulting empty", t);
-            }
-        }
-        return OptionalInt.empty();
+        return McaHandles.homeVillageId(villager);
     }
 
     /** The villager's home village name. Safe default: empty. */
     public static Optional<String> getHomeVillageName(Entity villager) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return mca.getResidency().getHomeVillage().map(Village::getName);
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA getHomeVillageName failed; defaulting empty", t);
-            }
-        }
-        return Optional.empty();
+        return McaHandles.homeVillageName(villager);
+    }
+
+    /**
+     * MCA's own {@code Village} object for an id, handed back as an opaque {@link Object}.
+     *
+     * <p>The one MCA read whose <em>type</em> a caller must not see. Townstead's village-spirit
+     * aggregator takes an MCA {@code Village}, and the Townstead binding reaches it through a
+     * method handle whose parameters are all {@code Object} precisely so that no MCA package name
+     * enters that binding. Returning the real type here would put it straight back.
+     *
+     * <p>Nothing outside a guarded compatibility package should call this. Safe default: empty.
+     */
+    public static Optional<Object> villageHandle(ServerLevel level, int villageId) {
+        return McaHandles.villageHandle(level, villageId);
     }
 
     /** The nearest MCA village id within {@code radius} of {@code pos}. Safe default: empty. */
     public static OptionalInt findNearestVillageId(ServerLevel level, BlockPos pos, int radius) {
-        try {
-            return VillageManager.get(level).findNearestVillage(pos, radius)
-                    .map(v -> OptionalInt.of(v.getId())).orElseGet(OptionalInt::empty);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA findNearestVillageId failed; defaulting empty", t);
-            return OptionalInt.empty();
-        }
+        return McaHandles.nearestVillageId(level, pos, radius);
     }
 
     /** The currently-loaded resident villager entities of a village. Safe default: empty list. */
     public static List<Entity> loadedVillageResidents(ServerLevel level, int villageId) {
-        try {
-            return VillageManager.get(level).getOrEmpty(villageId)
-                    .map(v -> new ArrayList<Entity>(v.getResidents(level)))
-                    .orElseGet(ArrayList::new);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA loadedVillageResidents failed; defaulting empty", t);
-            return new ArrayList<>();
-        }
+        return McaHandles.loadedResidents(level, villageId);
     }
 
     /**
@@ -507,26 +376,12 @@ public final class McaCompat {
      * never mistaken for one who left. Safe default: empty set.
      */
     public static Set<UUID> villageResidentUuids(ServerLevel level, int villageId) {
-        try {
-            return VillageManager.get(level).getOrEmpty(villageId)
-                    .map(v -> v.getResidentsUUIDs().collect(java.util.stream.Collectors.toCollection(HashSet::new)))
-                    .orElseGet(HashSet::new);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA villageResidentUuids failed; defaulting empty", t);
-            return new HashSet<>();
-        }
+        return McaHandles.residentUuids(level, villageId);
     }
 
     /** UUID→name for the full residency set (also names unloaded residents). Safe default: empty map. */
     public static Map<UUID, String> villageResidentNames(ServerLevel level, int villageId) {
-        try {
-            return VillageManager.get(level).getOrEmpty(villageId)
-                    .map(v -> new HashMap<>(v.getResidentNames()))
-                    .orElseGet(HashMap::new);
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("MCA villageResidentNames failed; defaulting empty", t);
-            return new HashMap<>();
-        }
+        return McaHandles.residentNames(level, villageId);
     }
 
     // ------------------------------------------------------------------
@@ -542,44 +397,19 @@ public final class McaCompat {
      * only.</b>
      */
     public static boolean selectAnswer(Entity villager, ServerPlayer player, String questionId, String answerName) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                Dialogues.getInstance().selectAnswer(mca, player, questionId, answerName);
-                return true;
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA selectAnswer({}, {}) failed; ignoring", questionId, answerName, t);
-            }
-        }
-        return false;
+        return McaHandles.selectAnswer(villager, player, questionId, answerName);
     }
 
     /**
      * Enforces an answer's {@code constraints} the way the GUI does at render time (MCA's
      * {@code selectAnswer} trusts the click and does <em>not</em> re-validate), so chat mode cannot
-     * trigger e.g. spouse-only content for a non-spouse. Resolves the {@link Question}/{@link Answer},
-     * computes the villager+player's satisfied {@link Constraint} set, and checks the answer accepts it.
+     * trigger e.g. spouse-only content for a non-spouse. Resolves the question and answer, computes the
+     * villager+player's satisfied constraint set, and checks the answer accepts it.
      * <b>Fails closed:</b> an unknown binding or any MCA read failure returns false (ineligible), so a
      * compat break degrades to "answer unavailable", never "constraints bypassed".
      */
     public static boolean checkConstraints(Entity villager, ServerPlayer player, String questionId, String answerName) {
-        if (villager instanceof VillagerLike<?> v) {
-            try {
-                Question question = Dialogues.getInstance().getQuestion(questionId);
-                if (question == null) {
-                    return false;
-                }
-                Answer answer = question.getAnswer(answerName);
-                if (answer == null) {
-                    return false;
-                }
-                Set<Constraint> satisfied = Constraint.allMatching(v, player);
-                return answer.isValidForConstraint(satisfied);
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA checkConstraints({}, {}) failed; defaulting ineligible",
-                        questionId, answerName, t);
-            }
-        }
-        return false;
+        return McaHandles.checkConstraints(villager, player, questionId, answerName);
     }
 
     /**
@@ -589,14 +419,110 @@ public final class McaCompat {
      * empty on any failure. <b>Server side only.</b>
      */
     public static Optional<UUID> isInteractingWith(Entity villager) {
-        if (villager instanceof VillagerEntityMCA mca) {
-            try {
-                return mca.getInteractions().getInteractingPlayer()
-                        .map(net.minecraft.world.entity.player.Player::getUUID);
-            } catch (Throwable t) {
-                McaConversations.LOGGER.debug("MCA isInteractingWith failed; defaulting empty", t);
-            }
-        }
-        return Optional.empty();
+        return McaHandles.interactingPlayer(villager);
+    }
+
+    // ------------------------------------------------------------------
+    // Living-histories context capabilities (spec §7.3)
+    //
+    // Added as one group because they answer one question the mod could not previously ask: what does
+    // this villager's working and family life actually look like right now. Every one returns an
+    // Optional or an empty collection on a miss, so ConversationContextSnapshot can record the field
+    // as UNKNOWN rather than as a default that later reads like an observation.
+    // ------------------------------------------------------------------
+
+    /**
+     * The villager's exact profession registry id, {@code "minecraft:farmer"}.
+     *
+     * <p>The single most valuable of the new reads. Until now the mod inferred a profession from
+     * {@code getProfessionText}, which is a localized display string — so it could tell farmers from
+     * librarians only by matching translated prose, and never noticed a profession <em>change</em>.
+     * Safe default: empty.
+     */
+    public static Optional<String> getProfessionId(Entity villager) {
+        return McaHandles.professionId(villager);
+    }
+
+    /** The MCA chore the player assigned, lowercased ({@code none}, {@code harvest}…). Empty on a miss. */
+    public static Optional<String> getCurrentChore(Entity villager) {
+        return McaHandles.currentChore(villager);
+    }
+
+    /** True while MCA's brain reports panic — the strongest suppressor of ordinary initiative. */
+    public static boolean isPanicking(Entity villager) {
+        return McaHandles.isPanicking(villager);
+    }
+
+    /** True while MCA's brain reports grief. */
+    public static boolean isGrieving(Entity villager) {
+        return McaHandles.isGrieving(villager);
+    }
+
+    /** The villager's assigned workplace block. Safe default: empty. */
+    public static Optional<BlockPos> getWorkplace(Entity villager) {
+        return McaHandles.workplace(villager);
+    }
+
+    /** The villager's assigned home block, dimension dropped. Safe default: empty. */
+    public static Optional<BlockPos> getHomePos(Entity villager) {
+        return McaHandles.homePos(villager);
+    }
+
+    /** Registry ids of the villager's MCA traits, lowercased. Safe default: empty set. */
+    public static Set<String> getTraitIds(Entity villager) {
+        return McaHandles.traitIds(villager);
+    }
+
+    /**
+     * Which of {@code itemTags} the villager is carrying at least one of.
+     *
+     * <p>Presence only, never a count: "I have the iron" is an observation a villager can make, and
+     * "we are down to nine iron" is an economy claim this mod does not get to invent (spec §12.2).
+     */
+    public static Set<String> getCarriedTags(Entity villager, java.util.Collection<String> itemTags) {
+        return McaHandles.inventoryTags(villager, itemTags);
+    }
+
+    /** True when MCA's family tree records this UUID as deceased. Safe default: false. */
+    public static boolean isDeceased(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.isDeceased(level, villagerUuid);
+    }
+
+    /** A villager's partner from the family tree, whether or not they are loaded. */
+    public static Optional<UUID> getPartnerFromTree(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.partnerOf(level, villagerUuid);
+    }
+
+    /** Father then mother, absent relations skipped. Safe default: empty list. */
+    public static List<UUID> getParents(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.parentsOf(level, villagerUuid);
+    }
+
+    public static Set<UUID> getSiblings(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.siblingsOf(level, villagerUuid);
+    }
+
+    public static Set<UUID> getChildren(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.childrenOf(level, villagerUuid);
+    }
+
+    /** A family member's profession id, so "my sister the mason" is read rather than guessed. */
+    public static Optional<String> getFamilyTreeProfessionId(ServerLevel level, UUID villagerUuid) {
+        return McaHandles.familyTreeProfessionId(level, villagerUuid);
+    }
+
+    /** The village's current population. Safe default: empty. */
+    public static OptionalInt getVillagePopulation(ServerLevel level, int villageId) {
+        return McaHandles.villagePopulation(level, villageId);
+    }
+
+    /**
+     * MCA's building type token at a position ({@code library}, {@code smithy}, {@code house}…).
+     *
+     * <p>This is how a scene learns it is being told inside a library without any block-by-block
+     * simulation of its own (spec §7.3). Safe default: empty.
+     */
+    public static Optional<String> getBuildingTypeAt(ServerLevel level, int villageId, BlockPos pos) {
+        return McaHandles.buildingTypeAt(level, villageId, pos);
     }
 }

@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_watching",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.craft.ask_watching"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.craft.ask_watching",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.weaponsmith.craft.ask_watching"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.weaponsmith.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.weaponsmith.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_teach_differently",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.craft.ask_teach_differently"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.craft.ask_teach_differently",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.weaponsmith.craft.ask_teach_differently"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.weaponsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

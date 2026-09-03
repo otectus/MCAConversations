@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_list",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.village.ask_list"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.village.ask_list",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.priest.village.ask_list"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.priest.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.priest.village.say_thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_close",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.priest.village.ask_close"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.priest.village.ask_close",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.priest.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.priest.village.ask_close"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.priest.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

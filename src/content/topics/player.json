@@ -1,0 +1,709 @@
+{
+  "_comment": [
+    "Player — what she makes of you.",
+    "",
+    "The one topic where the villager is the observer and the player is the subject. The funnel is the",
+    "first impression and the current one; the scenes are the two things a villager would normally only",
+    "say behind your back — the day she revised her opinion, and what she tells other people."
+  ],
+  "topic": "player",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "player"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "That is my reading of you, for what it is worth.",
+      "You asked. I answered honestly.",
+      "Ask me again in a season and see whether it has moved."
+    ],
+    "pt": [
+      "É a minha leitura de você, pelo que valha.",
+      "Você perguntou. Eu respondi com honestidade.",
+      "Me pergunte de novo daqui a uma estação e veja se mudou."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Want the rest of it?",
+      "pt": "Quer o resto?"
+    },
+    "leave": {
+      "en": "Enough of you for one day.",
+      "pt": "Já chega de você por hoje."
+    }
+  },
+  "funnel": {
+    "legacy_lines": {
+      "en": [
+        "You are all right. I have known worse and I have known better and you are nearer the good end.",
+        "I decided you were harmless in the first week and I have had no cause to revise it.",
+        "You turn up, you do what you said, and you have not asked me for anything unreasonable. That is a decent record."
+      ],
+      "pt": [
+        "Você é gente boa. Já conheci pior e já conheci melhor, e você está mais perto do lado bom.",
+        "Decidi que você era inofensivo na primeira semana e não tive motivo para rever isso.",
+        "Você aparece, faz o que disse e nunca me pediu nada absurdo. É um histórico decente."
+      ]
+    },
+    "open": {
+      "subject": "player.first_impression",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "shape": "reminisce",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "What you thought at first.",
+        "pt": "O que você achou no começo."
+      },
+      "lines": {
+        "en": [
+          "Honestly? I assumed you were passing through. Nearly everybody who arrives with that much kit is.",
+          "I had you down as trouble for about nine days, and I would rather admit that than pretend I was welcoming.",
+          "I did not think about you at all for the first while, which is the most honest thing I can say about it."
+        ],
+        "pt": [
+          "Honestamente? Achei que você estava só de passagem. Quase todo mundo que chega com tanto equipamento está.",
+          "Te classifiquei como encrenca por uns nove dias, e prefiro admitir isso a fingir que fui acolhedora.",
+          "Eu não pensei em você de jeito nenhum no começo, que é a coisa mais honesta que posso dizer."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_changed_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What shifted your reading?",
+            "pt": "O que mudou a sua leitura?"
+          },
+          "phrases": [
+            "what shifted your reading",
+            "what changed your mind about me"
+          ],
+          "requires_any": [
+            "shifted",
+            "reading",
+            "changed"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "You came back. That is genuinely most of it. People who mean well and leave are the same as people who did nothing.",
+                "You did a small thing nobody was watching, and I happened to be watching, and that settled it.",
+                "You took a correction without arguing. I have known men in this village forty years who cannot do that."
+              ],
+              "pt": [
+                "Você voltou. É genuinamente a maior parte. Quem tem boa intenção e vai embora dá no mesmo que quem não fez nada.",
+                "Você fez uma coisa pequena que ninguém estava vendo, e eu por acaso estava, e aquilo resolveu.",
+                "Você aceitou uma correção sem discutir. Conheço homens desta vila há quarenta anos que não conseguem."
+              ]
+            }
+          }
+        },
+        {
+          "name": "admit_the_impression",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I'd have thought the same of me.",
+            "pt": "Eu teria pensado o mesmo de mim."
+          },
+          "phrases": [
+            "i would have thought the same of me",
+            "that is a fair first impression"
+          ],
+          "requires_any": [
+            "same",
+            "impression"
+          ],
+          "disposition": {
+            "respect": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That answer is the reason the reading changed, if you want the short version.",
+                "Nearly everybody argues with the first impression. You are the third in my life to just take it.",
+                "See, that is exactly the thing. You keep declining the chance to be offended and it keeps working on me."
+              ],
+              "pt": [
+                "Essa resposta é o motivo de a leitura ter mudado, se você quiser a versão curta.",
+                "Quase todo mundo discute com a primeira impressão. Você é a terceira pessoa na minha vida a só aceitar.",
+                "Viu, é exatamente isso. Você continua recusando a chance de se ofender e isso continua funcionando comigo."
+              ]
+            }
+          },
+          "claim": {
+            "type": "takes_correction_well",
+            "value": "flag:true"
+          }
+        },
+        {
+          "name": "refuse_the_verdict",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "You judged me early, then.",
+            "pt": "Você me julgou cedo, então."
+          },
+          "phrases": [
+            "you judged me early then",
+            "you made up your mind quickly"
+          ],
+          "requires_any": [
+            "judged",
+            "quickly"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 3
+          },
+          "affection": {
+            "decision": "topic.player.dismissed",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "qualify",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I did. Everybody does. The difference is that I told you the early verdict instead of keeping it.",
+                "Yes. And I changed it, which is the part of the story you have just decided to skip.",
+                "Right. I shall keep my readings to myself from here on, then."
+              ],
+              "pt": [
+                "Julguei. Todo mundo julga. A diferença é que eu te contei o veredito inicial em vez de guardar.",
+                "Sim. E mudei, que é a parte da história que você acabou de decidir pular.",
+                "Certo. Guardo minhas leituras para mim daqui em diante, então."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "more": {
+      "subject": "player.current_reading",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "discreet",
+      "shape": "confide",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "And now?",
+        "pt": "E agora?"
+      },
+      "lines": {
+        "en": [
+          "Now I would notice if you stopped coming, which is more than I can say about most of the people I see daily.",
+          "Now you are somebody I would ask for help, and I have a short list of those and I keep it in my head.",
+          "Now I think you are better than you let on and worse at resting than anybody I have met."
+        ],
+        "pt": [
+          "Agora eu notaria se você parasse de aparecer, o que é mais do que posso dizer da maioria que vejo todo dia.",
+          "Agora você é alguém a quem eu pediria ajuda, e essa lista é curta e eu guardo na cabeça.",
+          "Agora eu acho que você é melhor do que deixa transparecer e pior em descansar do que qualquer um que eu conheci."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_worst_of_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Give me the unflattering half.",
+            "pt": "Me dê a metade nada lisonjeira."
+          },
+          "phrases": [
+            "give me the unflattering half",
+            "tell me the bad part too"
+          ],
+          "requires_any": [
+            "unflattering",
+            "bad"
+          ],
+          "disposition": {
+            "respect": 3,
+            "familiarity": 2
+          },
+          "affection": {
+            "decision": "topic.player.asked_for_candour",
+            "delta": 1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "levelled",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "You take on other people's problems faster than you put down your own, and one day that arithmetic will catch you.",
+                "You are hard to say no to, and you have not yet noticed that this is a thing you do rather than a thing about you.",
+                "You listen well and you answer almost nothing about yourself, and after a year that starts to feel like a wall."
+              ],
+              "pt": [
+                "Você assume os problemas dos outros mais rápido do que larga os seus, e um dia essa conta te alcança.",
+                "É difícil te dizer não, e você ainda não notou que isso é algo que você faz, e não algo sobre você.",
+                "Você escuta bem e quase não responde nada sobre si, e depois de um ano isso começa a parecer um muro."
+              ]
+            }
+          }
+        },
+        {
+          "name": "return_the_reading",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I'd notice that gap too.",
+            "pt": "Eu também notaria essa falta."
+          },
+          "phrases": [
+            "i would notice that gap too",
+            "the gap would be on my side as well"
+          ],
+          "requires_any": [
+            "notice",
+            "gap"
+          ],
+          "disposition": {
+            "warmth": 4,
+            "trust": 2
+          },
+          "affection": {
+            "decision": "topic.player.returned",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "met",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Good. That is the sort of thing people feel for years and never once say out loud.",
+                "Then we are square, and I shall stop pretending I only tolerate you.",
+                "I was hoping you would say something and I had entirely accepted that you might not."
+              ],
+              "pt": [
+                "Que bom. É o tipo de coisa que as pessoas sentem por anos e nunca dizem em voz alta.",
+                "Então estamos quites, e eu paro de fingir que só te tolero.",
+                "Eu esperava que você dissesse algo e já tinha aceitado por completo que talvez não dissesse."
+              ]
+            }
+          },
+          "claim": {
+            "type": "notices_absence",
+            "value": "flag:true"
+          }
+        },
+        {
+          "name": "end_the_appraisal",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "Keep the appraisal to yourself.",
+            "pt": "Guarde a avaliação para você."
+          },
+          "phrases": [
+            "keep the appraisal to yourself",
+            "i would rather skip the appraisal"
+          ],
+          "requires_any": [
+            "appraisal",
+            "skip"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.player.cut_short",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Then I shall stop, and I shall note that you asked me the question first.",
+                "Understood. It is an uncomfortable thing to hear and I was going to say the kind half anyway.",
+                "Right. Consider the ledger closed."
+              ],
+              "pt": [
+                "Então eu paro, e registro que foi você quem fez a pergunta primeiro.",
+                "Entendido. É desconfortável de ouvir e eu ia dizer a metade gentil de qualquer forma.",
+                "Certo. Considere o balanço encerrado."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_day_i_revised_it",
+      "subject": "player.revision",
+      "shape": "confide",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The day it changed.",
+        "pt": "O dia em que mudou."
+      },
+      "lines": {
+        "en": [
+          "There was one afternoon that did it, and you have no idea which one, and I have never told you.",
+          "I can date the day I stopped being careful around you. You were not doing anything remarkable at the time.",
+          "It was not a favour. It was the way you spoke to somebody who could do nothing for you."
+        ],
+        "pt": [
+          "Teve uma tarde que resolveu a questão, e você não faz ideia de qual, e eu nunca te contei.",
+          "Eu sei datar o dia em que parei de ser cautelosa perto de você. Você não estava fazendo nada notável na hora.",
+          "Não foi um favor. Foi o jeito como você falou com alguém que não podia fazer nada por você."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_which_day",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which afternoon was it?",
+            "pt": "Que tarde foi essa?"
+          },
+          "phrases": [
+            "which afternoon was it",
+            "tell me which day it was"
+          ],
+          "requires_any": [
+            "afternoon",
+            "day"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "trust": 2
+          },
+          "affection": {
+            "decision": "topic.player.revision.asked",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "told",
+            "act": "reminisce",
+            "polarity": "positive",
+            "temporal": "past",
+            "privacy": "discreet",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "You will not remember it, which is exactly why it counted. You did the decent thing with no audience worth having.",
+                "A wet afternoon, and you waited for somebody slower than you, and you did not make a performance of waiting.",
+                "You told me a small truth that made you look worse. Nobody does that to a person they are managing."
+              ],
+              "pt": [
+                "Você não vai lembrar, e é exatamente por isso que contou. Fez a coisa decente sem plateia que valesse a pena.",
+                "Uma tarde chuvosa, e você esperou alguém mais lento que você, e não fez cena de estar esperando.",
+                "Você me contou uma verdade pequena que te deixou pior na foto. Ninguém faz isso com quem está manipulando."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_matters_to_hear",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It means something, hearing that.",
+            "pt": "Significa algo, ouvir isso."
+          },
+          "phrases": [
+            "it means something hearing that",
+            "that means a great deal to me"
+          ],
+          "requires_any": [
+            "means",
+            "hearing"
+          ],
+          "disposition": {
+            "warmth": 4,
+            "trust": 2
+          },
+          "affection": {
+            "decision": "topic.player.revision.received",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Then I am glad I said it. I have been sitting on it for a season out of pure stubbornness.",
+                "Good. People ought to be told the day somebody decided in their favour. Almost nobody ever is.",
+                "It cost me nothing and I put it off for months, which tells you more about me than about you."
+              ],
+              "pt": [
+                "Então fico contente de ter dito. Fiquei sentada em cima disso uma estação inteira por pura teimosia.",
+                "Bom. As pessoas deviam saber o dia em que alguém decidiu a favor delas. Quase ninguém sabe.",
+                "Não me custou nada e eu adiei por meses, o que diz mais sobre mim do que sobre você."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_i_say_about_you",
+      "subject": "player.reputation_here",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "observation",
+      "temporal": "habitual",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 20,
+          "unknown": "fail"
+        },
+        {
+          "field": "social.village_population",
+          "min": 4,
+          "unknown": "neutral"
+        }
+      ],
+      "base_priority": 27,
+      "identity_values": [
+        "fairness",
+        "duty"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What you tell others.",
+        "pt": "O que você diz aos outros."
+      },
+      "lines": {
+        "en": [
+          "You get talked about here, and I am usually the one doing the talking, and you come out of it well.",
+          "Somebody asked me about you last week and I gave them the honest answer rather than the polite one.",
+          "There is a version of you that goes round this village, and I have been quietly correcting it for months."
+        ],
+        "pt": [
+          "Falam de você aqui, e normalmente sou eu que falo, e você sai bem da conversa.",
+          "Alguém me perguntou sobre você semana passada e eu dei a resposta honesta em vez da educada.",
+          "Existe uma versão sua circulando por esta vila, e eu venho corrigindo essa versão em silêncio faz meses."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_version",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What version is going round?",
+            "pt": "Que versão está circulando?"
+          },
+          "phrases": [
+            "what version is going round",
+            "what do people say about me"
+          ],
+          "requires_any": [
+            "version",
+            "people"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "reported",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "That you are generous and in a hurry. Half of them think the hurry means you are hiding something.",
+                "That you can be relied on and cannot be read, and people find the second half unsettling.",
+                "A kind one, mostly. There is one household that thinks otherwise and I have stopped arguing with them."
+              ],
+              "pt": [
+                "Que você é generoso e apressado. Metade deles acha que a pressa quer dizer que você esconde algo.",
+                "Que dá para contar com você e que não dá para te ler, e a segunda metade incomoda as pessoas.",
+                "Uma versão gentil, na maior parte. Tem uma casa que pensa diferente e eu parei de discutir com eles."
+              ]
+            }
+          }
+        },
+        {
+          "name": "thank_them_for_the_correcting",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "You've been defending me, then.",
+            "pt": "Você tem me defendido, então."
+          },
+          "phrases": [
+            "you have been defending me then",
+            "you spoke up for me"
+          ],
+          "requires_any": [
+            "defending",
+            "spoke"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 2
+          },
+          "affection": {
+            "decision": "topic.player.reputation.thanked",
+            "delta": 1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Correcting, not defending. If the unkind version were true I would have let it stand.",
+                "Somebody has to. A reputation left alone in a village this size goes bad in about a season.",
+                "It is not charity. I have to live with these people and I would rather they were accurate."
+              ],
+              "pt": [
+                "Corrigindo, não defendendo. Se a versão cruel fosse verdade eu teria deixado passar.",
+                "Alguém tem que fazer. Uma reputação largada numa vila deste tamanho azeda em uma estação.",
+                "Não é caridade. Eu tenho que conviver com essa gente e prefiro que estejam corretos."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

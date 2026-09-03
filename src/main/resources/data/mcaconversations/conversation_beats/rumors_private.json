@@ -1,0 +1,177 @@
+{
+  "beats": {
+    "rumors.private.ask_after_them": {
+      "topic": "rumors",
+      "say": "conversations.rumors.private.ask_after_them",
+      "response_question": "conversations.cat.village",
+      "npc_act": "disclose",
+      "subject": "rumors.private",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.private.ask_what_kind": {
+      "topic": "rumors",
+      "say": "conversations.rumors.private.ask_what_kind",
+      "response_question": "conversations.topic.rumors.private.followup",
+      "npc_act": "qualify",
+      "subject": "rumors.private",
+      "polarity": "mixed",
+      "openness": "guarded",
+      "allowed_stances": [
+        "candor",
+        "empathy",
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.private.leave": {
+      "topic": "rumors",
+      "say": "conversations.rumors.private.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.private",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.private.let_it_be": {
+      "topic": "rumors",
+      "say": "conversations.rumors.private.let_it_be",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.private",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.private.press": {
+      "topic": "rumors",
+      "say": "conversations.rumors.private.press",
+      "response_question": "conversations.cat.village",
+      "npc_act": "set_boundary",
+      "subject": "rumors.private",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "boundary_closed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.private.promise_discretion": {
+      "topic": "rumors",
+      "say": "conversations.rumors.private.promise_discretion",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.private",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "rumors",
+        "resumes": [
+          "rumors.resume.believe_you",
+          "rumors.resume.let_it_die",
+          "rumors.resume.opener",
+          "rumors.resume.who_then"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.rumors.private.followup/ask_after_them": {
+      "stance": "empathy",
+      "tone": "plain",
+      "responds_to": [
+        "rumors.private.ask_what_kind"
+      ]
+    },
+    "conversations.topic.rumors.private.followup/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "rumors.private.ask_what_kind"
+      ]
+    },
+    "conversations.topic.rumors.private.followup/promise_discretion": {
+      "stance": "candor",
+      "tone": "plain",
+      "responds_to": [
+        "rumors.private.ask_what_kind"
+      ]
+    },
+    "conversations.topic.rumors.private.respond/ask_what_kind": {
+      "stance": "curiosity",
+      "tone": "plain",
+      "responds_to": [
+        "*"
+      ]
+    },
+    "conversations.topic.rumors.private.respond/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "*"
+      ]
+    },
+    "conversations.topic.rumors.private.respond/let_it_be": {
+      "stance": "restraint",
+      "tone": "plain",
+      "responds_to": [
+        "*"
+      ]
+    },
+    "conversations.topic.rumors.private.respond/press": {
+      "stance": "boundary_push",
+      "tone": "plain",
+      "responds_to": [
+        "*"
+      ]
+    }
+  }
+}

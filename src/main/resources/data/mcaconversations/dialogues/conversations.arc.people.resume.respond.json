@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "glad",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.resume.glad"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.resume.glad",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.resume.glad",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.arc.people.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.people.resume.glad"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "no_hurry_people",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.resume.no_hurry_people"
+            },
+            "next": "conversations.arc.people.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.people.resume.no_hurry_people"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_said",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.resume.ask_what_said"
+            },
+            "next": "conversations.arc.people.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.people.resume.ask_what_said"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.people.resume.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

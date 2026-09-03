@@ -1,0 +1,108 @@
+{
+  "answers": [
+    {
+      "name": "how_long",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.admitted.how_long"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.admitted.how_long",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.admitted.how_long"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.admitted.offer_help"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.admitted.offer_help",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.admitted.offer_help",
+              "deltas": {
+                "trust": 2,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.admitted.offer_help"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "be_around",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.admitted.be_around"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.admitted.be_around",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.admitted.be_around",
+              "deltas": {
+                "trust": 2,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.admitted.be_around"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.admitted.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

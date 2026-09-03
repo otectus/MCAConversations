@@ -66,8 +66,8 @@ public final class ConversationGuard {
             return reject(playerId, question, answer, "answer was not among the offered choices for "
                     + session.currentQuestion());
         }
-        if (!session.claimTransaction(question + "|" + answer + "|" + villagerId + "@" + now)) {
-            return reject(playerId, question, answer, "duplicate submission in the same tick");
+        if (!session.consumeOfferedAnswer(question, answer)) {
+            return reject(playerId, question, answer, "offer revision was already consumed");
         }
         session.setVillagerId(villagerId);
         session.touch(now);

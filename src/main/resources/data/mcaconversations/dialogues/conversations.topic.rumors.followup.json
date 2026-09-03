@@ -19,7 +19,9 @@
               }
             },
             "next": "conversations.cat.village",
-            "say": "conversations.rumors.followup.promise_discretion"
+            "conversations_say": {
+              "phrase": "conversations.rumors.followup.promise_discretion"
+            }
           }
         }
       ]
@@ -44,7 +46,9 @@
               }
             },
             "next": "conversations.cat.village",
-            "say": "conversations.rumors.followup.let_it_go"
+            "conversations_say": {
+              "phrase": "conversations.rumors.followup.let_it_go"
+            }
           }
         }
       ]
@@ -69,7 +73,27 @@
               }
             },
             "next": "conversations.cat.village",
-            "say": "conversations.rumors.followup.encourage_spread"
+            "conversations_say": {
+              "phrase": "conversations.rumors.followup.encourage_spread"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.more.open"
+            },
+            "next": "conversations.topic.rumors.more",
+            "conversations_say": {
+              "phrase": "conversations.rumors.more"
+            }
           }
         }
       ]
@@ -84,7 +108,9 @@
               "op": "end"
             },
             "next": "conversations.cat.village",
-            "say": "conversations.rumors.respond.leave"
+            "conversations_say": {
+              "phrase": "conversations.rumors.respond.leave"
+            }
           }
         }
       ]

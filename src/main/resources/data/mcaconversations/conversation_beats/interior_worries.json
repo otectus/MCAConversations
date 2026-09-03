@@ -1,0 +1,217 @@
+{
+  "beats": {
+    "us.worries.again.to.worries": {
+      "topic": "worries",
+      "say": "conversations.us.worries.again",
+      "response_question": "conversations.topic.worries.respond",
+      "npc_act": "accept",
+      "subject": "worries",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.worries.ask_detail.to.worries": {
+      "topic": "worries",
+      "say": "conversations.us.worries.ask_detail",
+      "response_question": "conversations.topic.worries.followup",
+      "npc_act": "accept",
+      "subject": "worries",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.worries.fine.to.worries": {
+      "topic": "worries",
+      "say": "conversations.us.worries.fine",
+      "response_question": "conversations.topic.worries.respond",
+      "npc_act": "accept",
+      "subject": "worries",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.worries.open.to.worries": {
+      "topic": "worries",
+      "say": "conversations.us.worries.open",
+      "response_question": "conversations.topic.worries.respond",
+      "npc_act": "accept",
+      "subject": "worries",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "us.worries.validate.to.worries": {
+      "topic": "worries",
+      "say": "conversations.us.worries.validate",
+      "response_question": "conversations.topic.worries.followup",
+      "npc_act": "accept",
+      "subject": "worries",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.worries.followup/change_subject": {
+      "stance": "exit",
+      "responds_to": [
+        "us.worries.ask_detail.to.worries",
+        "us.worries.validate.to.worries"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.worries.followup/give_space": {
+      "stance": "restraint",
+      "responds_to": [
+        "us.worries.ask_detail.to.worries",
+        "us.worries.validate.to.worries"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.worries.followup/help_solve": {
+      "stance": "practical_help",
+      "responds_to": [
+        "us.worries.ask_detail.to.worries",
+        "us.worries.validate.to.worries"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.worries.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "us.worries.ask_detail.to.worries",
+        "us.worries.validate.to.worries"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.worries.respond/ask_detail": {
+      "stance": "curiosity",
+      "responds_to": [
+        "us.worries.again.to.worries",
+        "us.worries.fine.to.worries",
+        "us.worries.open.to.worries"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.worries.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "us.worries.again.to.worries",
+        "us.worries.fine.to.worries",
+        "us.worries.open.to.worries"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.worries.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "us.worries.again.to.worries",
+        "us.worries.fine.to.worries",
+        "us.worries.open.to.worries"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.worries.respond/validate": {
+      "stance": "empathy",
+      "responds_to": [
+        "us.worries.again.to.worries",
+        "us.worries.fine.to.worries",
+        "us.worries.open.to.worries"
+      ],
+      "tone": "gentle"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "note_the_discipline",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.missed_shot.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.missed_shot",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.archer.missed_shot"
+            },
+            "next": "conversations.scene.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.archer.missed_shot.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

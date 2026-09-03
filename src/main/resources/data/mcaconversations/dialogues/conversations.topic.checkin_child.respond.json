@@ -20,7 +20,9 @@
               }
             },
             "next": "conversations.topic.checkin_child.followup",
-            "say": "conversations.family.child.listen"
+            "conversations_say": {
+              "phrase": "conversations.family.child.listen"
+            }
           }
         }
       ]
@@ -44,7 +46,9 @@
               }
             },
             "next": "conversations.topic.checkin_child.followup",
-            "say": "conversations.family.child.praise"
+            "conversations_say": {
+              "phrase": "conversations.family.child.praise"
+            }
           }
         }
       ]
@@ -55,6 +59,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.rebuffed.open"
+            },
             "conversations_affection_apply": {
               "decision": "family.child.dismiss",
               "delta": -2,
@@ -68,8 +76,28 @@
                 "tension": 5
               }
             },
-            "next": "conversations.topic.checkin_child.followup",
-            "say": "conversations.family.child.dismiss"
+            "next": "conversations.topic.checkin_child.rebuffed.followup",
+            "conversations_say": {
+              "phrase": "conversations.family.child.dismiss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_promise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.promise"
+            },
+            "next": "conversations.topic.checkin_child.promise",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.promise"
+            }
           }
         }
       ]
@@ -84,7 +112,9 @@
               "op": "end"
             },
             "next": "conversations.family",
-            "say": "conversations.family.child.leave"
+            "conversations_say": {
+              "phrase": "conversations.family.child.leave"
+            }
           }
         }
       ]

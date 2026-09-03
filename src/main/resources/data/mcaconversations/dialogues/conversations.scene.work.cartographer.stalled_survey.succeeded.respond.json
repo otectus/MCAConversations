@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_light_hand",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.stalled_survey.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.paper",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.cartographer.stalled_survey"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.stalled_survey.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

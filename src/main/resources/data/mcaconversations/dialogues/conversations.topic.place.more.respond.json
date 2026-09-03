@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_happened_there",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "place.more.told"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.place.asked_after",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.the_avoided_one",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.place.more.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_the_long_way_is_fine",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "place.more.eased"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.the_avoided_one",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.place.more.eased"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "call_it_silly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "place.more.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.place.cut_short",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.the_avoided_one",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.place.more.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.place.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

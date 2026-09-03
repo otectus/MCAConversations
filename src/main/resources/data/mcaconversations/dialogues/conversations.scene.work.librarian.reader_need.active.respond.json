@@ -1,0 +1,88 @@
+{
+  "answers": [
+    {
+      "name": "urge_patience",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.reader_need.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.literacy",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.reader_need",
+              "state": "succeeded"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.librarian.reader_need"
+            },
+            "next": "conversations.scene.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.librarian.reader_need.active.steadied",
+              "slots": [
+                "reader"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_method",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.reader_need.active.described"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.literacy",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.librarian.reader_need"
+            },
+            "next": "conversations.scene.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.librarian.reader_need.active.described",
+              "slots": [
+                "reader"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.librarian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "answers": [
+    {
+      "name": "hold_them_to_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.old_admiration.succeeded.held"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.admiration",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.none.old_admiration"
+            },
+            "next": "conversations.scene.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.none.old_admiration.succeeded.held"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_they_said",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.old_admiration.succeeded.reported"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.admiration",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.none.old_admiration"
+            },
+            "next": "conversations.scene.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.none.old_admiration.succeeded.reported",
+              "slots": [
+                "trade"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.none.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

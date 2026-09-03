@@ -1,0 +1,568 @@
+{
+  "beats": {
+    "rumors.about_player.correct": {
+      "topic": "rumors",
+      "say": "conversations.rumors.about_player.correct",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.about_player",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.about_player.leave": {
+      "topic": "rumors",
+      "say": "conversations.rumors.about_player.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.about_player",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.about_player.thanks": {
+      "topic": "rumors",
+      "say": "conversations.rumors.about_player.thanks",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.about_player",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.doubt.hold": {
+      "topic": "rumors",
+      "say": "conversations.rumors.doubt.hold",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.doubt",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "rumors",
+        "resumes": [
+          "rumors.resume.believe_you",
+          "rumors.resume.let_it_die",
+          "rumors.resume.opener",
+          "rumors.resume.who_then"
+        ]
+      }
+    },
+    "rumors.doubt.leave": {
+      "topic": "rumors",
+      "say": "conversations.rumors.doubt.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.doubt",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.doubt.who_would": {
+      "topic": "rumors",
+      "say": "conversations.rumors.doubt.who_would",
+      "response_question": "conversations.cat.village",
+      "npc_act": "explain",
+      "subject": "rumors.doubt",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.harmless.glad": {
+      "topic": "rumors",
+      "say": "conversations.rumors.harmless.glad",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.harmless",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.harmless.leave": {
+      "topic": "rumors",
+      "say": "conversations.rumors.harmless.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.harmless",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.harmless.why": {
+      "topic": "rumors",
+      "say": "conversations.rumors.harmless.why",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "rumors.harmless",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.more.anything_about_me": {
+      "topic": "rumors",
+      "say": "conversations.rumors.more.anything_about_me",
+      "response_question": "conversations.topic.rumors.about_player",
+      "npc_act": "report",
+      "subject": "rumors.talk",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.more.do_you_believe_it": {
+      "topic": "rumors",
+      "say": "conversations.rumors.more.do_you_believe_it",
+      "response_question": "conversations.topic.rumors.doubt",
+      "npc_act": "qualify",
+      "subject": "rumors.talk",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "practical_help",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.more.is_it_serious": {
+      "topic": "rumors",
+      "say": "conversations.rumors.more.is_it_serious",
+      "response_question": "conversations.topic.rumors.harmless",
+      "npc_act": "qualify",
+      "subject": "rumors.talk",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.more.is_this_old": {
+      "topic": "rumors",
+      "say": "conversations.rumors.more.is_this_old",
+      "response_question": "conversations.topic.rumors.stale",
+      "npc_act": "report",
+      "subject": "rumors.talk",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.more.leave": {
+      "topic": "rumors",
+      "say": "conversations.rumors.more.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.more.open": {
+      "topic": "rumors",
+      "say": "conversations.rumors.more",
+      "response_question": "conversations.topic.rumors.more",
+      "npc_act": "invite",
+      "subject": "rumors.talk",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.stale.die": {
+      "topic": "rumors",
+      "say": "conversations.rumors.stale.die",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.stale",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.stale.leave": {
+      "topic": "rumors",
+      "say": "conversations.rumors.stale.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "rumors.stale",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "rumors.stale.untold": {
+      "topic": "rumors",
+      "say": "conversations.rumors.stale.untold",
+      "response_question": "conversations.cat.village",
+      "npc_act": "explain",
+      "subject": "rumors.stale",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.rumors.about_player/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.more.anything_about_me"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.rumors.about_player/set_it_right": {
+      "stance": "practical_help",
+      "responds_to": [
+        "rumors.more.anything_about_me"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.rumors.about_player/thank_you_for_saying": {
+      "stance": "candor",
+      "responds_to": [
+        "rumors.more.anything_about_me"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.rumors.doubt/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.more.do_you_believe_it"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.rumors.doubt/then_dont_pass_it": {
+      "stance": "practical_help",
+      "responds_to": [
+        "rumors.more.do_you_believe_it"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.rumors.doubt/who_would_know": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.more.do_you_believe_it"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.rumors.followup/ask_about_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.respond.ask_source.to.rumors",
+        "rumors.respond.challenge.to.rumors",
+        "rumors.challenge.trader.to.rumors",
+        "rumors.respond.listen.to.rumors"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.rumors.harmless/glad_its_small": {
+      "stance": "candor",
+      "responds_to": [
+        "rumors.more.is_it_serious"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.rumors.harmless/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.more.is_it_serious"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.rumors.harmless/why_repeat_it": {
+      "stance": "challenge",
+      "responds_to": [
+        "rumors.more.is_it_serious"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.rumors.more/anything_about_me": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.rumors.more/do_you_believe_it": {
+      "stance": "challenge",
+      "responds_to": [
+        "rumors.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.rumors.more/is_it_serious": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.rumors.more/is_this_old": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.rumors.more/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.rumors.stale/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.more.is_this_old"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.rumors.stale/nobody_told_me": {
+      "stance": "candor",
+      "responds_to": [
+        "rumors.more.is_this_old"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.rumors.stale/then_let_it_die": {
+      "stance": "restraint",
+      "responds_to": [
+        "rumors.more.is_this_old"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    }
+  }
+}

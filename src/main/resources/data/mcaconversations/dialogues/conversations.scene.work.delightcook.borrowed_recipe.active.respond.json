@@ -1,0 +1,84 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_stops_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.borrowed_recipe.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.a_recipe_not_mine",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.borrowed_recipe"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.borrowed_recipe.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_asking_the_family",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightcook.borrowed_recipe.active.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightcook.recipe.asked",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightcook.a_recipe_not_mine",
+              "deltas": {
+                "respect": 3,
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightcook.borrowed_recipe"
+            },
+            "next": "conversations.scene.work.delightcook.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightcook.borrowed_recipe.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightcook.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

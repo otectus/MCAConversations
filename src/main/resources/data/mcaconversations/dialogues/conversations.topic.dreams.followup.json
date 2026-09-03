@@ -36,7 +36,9 @@
               }
             },
             "next": "conversations.topic.dreams.close",
-            "say": "conversations.dreams.followup.pledge_help"
+            "conversations_say": {
+              "phrase": "conversations.dreams.followup.pledge_help"
+            }
           }
         }
       ]
@@ -72,7 +74,9 @@
               }
             },
             "next": "conversations.topic.dreams.close.honest",
-            "say": "conversations.dreams.followup.be_honest"
+            "conversations_say": {
+              "phrase": "conversations.dreams.followup.be_honest"
+            }
           }
         }
       ]
@@ -83,6 +87,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.mocked.open"
+            },
             "conversations_progress_apply": {
               "arc": "dreams",
               "op": "advance",
@@ -101,8 +109,10 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.dreams.close",
-            "say": "conversations.dreams.followup.mock"
+            "next": "conversations.topic.dreams.mocked.close",
+            "conversations_say": {
+              "phrase": "conversations.dreams.followup.mock"
+            }
           }
         }
       ]
@@ -117,7 +127,9 @@
               "op": "end"
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.dreams.respond.leave"
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.leave"
+            }
           }
         }
       ]

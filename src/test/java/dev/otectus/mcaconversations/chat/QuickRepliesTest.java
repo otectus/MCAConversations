@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.OptionalInt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Numbered quick-replies: the second, unambiguous way to name a stance in chat. */
@@ -20,6 +21,7 @@ class QuickRepliesTest {
         assertEquals(OptionalInt.of(3), QuickReplies.parse(" (3) ", 3));
         assertEquals(OptionalInt.of(2), QuickReplies.parse("#2", 3));
         assertEquals(OptionalInt.of(1), QuickReplies.parse("1)", 3));
+        assertEquals(OptionalInt.of(10), QuickReplies.parse("(10)", 12));
     }
 
     @Test
@@ -57,12 +59,13 @@ class QuickRepliesTest {
     @Test
     @DisplayName("the options line lists the same button labels the GUI would draw")
     void rendersTheOfferedLabels() {
-        var line = QuickReplies.optionsLine("conversations.topic.day.rough.respond",
+        var line = QuickReplies.optionsBlock("conversations.topic.day.rough.respond",
                 List.of("empathize", "ask", "leave")).orElseThrow();
         String flat = line.getString();
-        assertTrue(flat.contains("[1]"), flat);
-        assertTrue(flat.contains("[2]"), flat);
-        assertTrue(flat.contains("[3]"), flat);
+        assertTrue(flat.contains("1."), flat);
+        assertTrue(flat.contains("2."), flat);
+        assertTrue(flat.contains("3."), flat);
+        assertTrue(flat.contains("\n"), "choices are a vertical block: " + flat);
         assertTrue(flat.contains("dialogue.conversations.topic.day.rough.respond.empathize"),
                 "labels are translatable keys the client resolves in its own locale: " + flat);
     }
@@ -70,16 +73,19 @@ class QuickRepliesTest {
     @Test
     @DisplayName("nothing worth numbering is not numbered")
     void staysQuietWhenThereIsNoChoice() {
-        assertTrue(QuickReplies.optionsLine("conversations.topic.day.rough.respond", List.of()).isEmpty());
-        assertTrue(QuickReplies.optionsLine("conversations.topic.day.rough.respond", List.of("leave")).isEmpty());
-        assertTrue(QuickReplies.optionsLine(null, List.of("a", "b")).isEmpty());
+        assertTrue(QuickReplies.optionsBlock("conversations.topic.day.rough.respond", List.of()).isEmpty());
+        assertTrue(QuickReplies.optionsBlock("conversations.topic.day.rough.respond", List.of("leave")).isEmpty());
+        assertTrue(QuickReplies.optionsBlock(null, List.of("a", "b")).isEmpty());
     }
 
     @Test
-    @DisplayName("a page never numbers more choices than MCA will show")
-    void capsAtThePageSize() {
-        var line = QuickReplies.optionsLine("q", List.of("a", "b", "c", "d", "e", "f", "g")).orElseThrow();
-        assertTrue(line.getString().contains("[" + QuickReplies.MAX_OPTIONS + "]"));
-        assertTrue(!line.getString().contains("[" + (QuickReplies.MAX_OPTIONS + 1) + "]"));
+    @DisplayName("bundled menus above the old five-choice cap remain complete")
+    void doesNotTruncateLargeMenus() {
+        var line = QuickReplies.optionsBlock("q",
+                List.of("a", "b", "c", "d", "e", "f", "g", "h")).orElseThrow();
+        String flat = line.getString();
+        assertTrue(flat.contains("6."), flat);
+        assertTrue(flat.contains("8."), flat);
+        assertFalse(flat.contains("9."), flat);
     }
 }

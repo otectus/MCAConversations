@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.joy_shared"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.elated.share_joy",
               "delta": 2,
@@ -18,8 +22,10 @@
                 "warmth": 4
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.elated.share_joy"
+            "next": "conversations.topic.noticed.elated.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.share_joy"
+            }
           }
         }
       ]
@@ -30,14 +36,20 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.cause_told"
+            },
             "conversations_disposition_apply": {
               "topic": "noticed.elated.ask_more",
               "deltas": {
                 "familiarity": 3
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.elated.ask_more"
+            "next": "conversations.topic.noticed.elated.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.ask_more"
+            }
           }
         }
       ]
@@ -48,6 +60,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.deflated"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.elated.deflate",
               "delta": -1,
@@ -61,8 +77,10 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.elated.deflate"
+            "next": "conversations.topic.noticed.elated.deflated.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.deflate"
+            }
           }
         }
       ]
@@ -77,7 +95,9 @@
               "op": "end"
             },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.elated.leave"
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.leave"
+            }
           }
         }
       ]

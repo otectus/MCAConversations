@@ -1,0 +1,322 @@
+{
+  "_comment": [
+    "Hopes, gated on the season and on whether she is the sort to say them.",
+    "",
+    "Spring hopes are about the year ahead and are said easily; the other scene is the hope somebody",
+    "has been carrying long enough to be careful about, and it needs a reason to come out."
+  ],
+  "topic": "hopes",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "hopes"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "We shall see.",
+      "Ask me again at the end of it.",
+      "Right. That is the plan, anyway."
+    ],
+    "pt": [
+      "Vamos ver.",
+      "Me pergunte de novo no fim.",
+      "Certo. É o plano, pelo menos."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "I hope it comes off.",
+    "pt": "Espero que dê certo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else you're hoping for?",
+      "pt": "Mais alguma coisa que você espera?"
+    },
+    "leave": {
+      "en": "That's the year, then.",
+      "pt": "É o ano, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "spring_list",
+      "subject": "hopes.this_year",
+      "shape": "plan",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "plan",
+      "temporal": "future",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.season",
+          "any_of": [
+            "spring"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "ambition"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "This year.",
+        "pt": "Este ano."
+      },
+      "lines": {
+        "en": [
+          "Three things, written on the inside of a cupboard door where only I see them.",
+          "I want this year to be dull and productive. I have wanted exciting years and I have had two and that was plenty.",
+          "One large hope and two that I could finish by summer, which is how you keep a list from becoming a reproach."
+        ],
+        "pt": [
+          "Três coisas, escritas na parte de dentro da porta do armário, onde só eu vejo.",
+          "Quero que este ano seja monótono e produtivo. Já quis anos empolgantes, tive dois, e foi mais que suficiente.",
+          "Uma esperança grande e duas que eu poderia terminar até o verão, que é como se impede uma lista de virar cobrança."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_large_one",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's the large one?",
+            "pt": "Qual é a grande?"
+          },
+          "phrases": [
+            "what is the large one",
+            "tell me the big hope"
+          ],
+          "requires_any": [
+            "large",
+            "big"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "It takes more than a year, which is why it is on a one-year list. You put the long one on so that it does not stop being true.",
+                "Something that requires two other people to agree with me, and I have not asked either of them yet.",
+                "I would rather show you than say it. Ask me at harvest and there may be something to point at."
+              ],
+              "pt": [
+                "Leva mais de um ano, e é por isso que está numa lista de um ano. A gente põe a longa para ela não deixar de ser verdade.",
+                "Uma coisa que exige que duas outras pessoas concordem comigo, e eu ainda não perguntei a nenhuma delas.",
+                "Prefiro mostrar a dizer. Me pergunte na colheita e talvez haja algo para apontar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_them_well",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope the year gives you all three.",
+            "pt": "Espero que o ano te dê as três."
+          },
+          "phrases": [
+            "i hope the year gives you all three",
+            "hope all three come off"
+          ],
+          "requires_any": [
+            "three",
+            "hope"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Two would be a good year. Three would be a year I talked about for a decade, and I am trying not to want that.",
+                "Thank you. Saying it to somebody is the only part of a list that ever actually moves it.",
+                "If none of them come off I will still have had the spring where I wrote them down, and that is worth having on its own."
+              ],
+              "pt": [
+                "Duas já seria um bom ano. Três seria um ano de que eu falaria por uma década, e estou tentando não querer isso.",
+                "Obrigada. Dizer a alguém é a única parte de uma lista que de fato faz ela andar.",
+                "Se nenhuma der certo, eu ainda vou ter tido a primavera em que as escrevi, e isso já vale por si."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_long_one",
+      "subject": "hopes.carried",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "future",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The one you don't say.",
+        "pt": "Aquela que você não diz."
+      },
+      "lines": {
+        "en": [
+          "There is one I have had for eleven years and have said out loud about four times, all to the same two people.",
+          "It is not impossible. That is what makes it heavy. An impossible hope is easy company.",
+          "I keep it the way you keep a seed. Somewhere dry, checked rarely, and never explained to visitors."
+        ],
+        "pt": [
+          "Existe uma que eu tenho há onze anos e disse em voz alta umas quatro vezes, todas para as mesmas duas pessoas.",
+          "Não é impossível. É isso que a torna pesada. Uma esperança impossível é companhia fácil.",
+          "Guardo do jeito que se guarda uma semente. Num lugar seco, conferida raramente, e nunca explicada a visitas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_would_help",
+          "stance": "practical_help",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What would move it along?",
+            "pt": "O que faria isso andar?"
+          },
+          "phrases": [
+            "what would move it along",
+            "what would make it likelier"
+          ],
+          "requires_any": [
+            "move",
+            "likelier"
+          ],
+          "disposition": {
+            "trust": 3,
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "privacy": "discreet",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "Time and one conversation I have been avoiding for four years, and the conversation is the whole of it.",
+                "Nothing you could do, and I want to be clear that I am not saying that to be gracious. It is genuinely mine to move.",
+                "Somebody asking me about it once a year without pushing. That is what you are doing now and it is not nothing."
+              ],
+              "pt": [
+                "Tempo e uma conversa que eu venho evitando há quatro anos, e a conversa é tudo.",
+                "Nada que você possa fazer, e quero deixar claro que não digo isso por gentileza. É genuinamente minha para mover.",
+                "Alguém me perguntando uma vez por ano sem empurrar. É o que você está fazendo agora e não é pouco."
+              ]
+            }
+          }
+        },
+        {
+          "name": "keep_it_safe",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It's safe with me.",
+            "pt": "Está seguro comigo."
+          },
+          "phrases": [
+            "it is safe with me",
+            "i will keep that to myself"
+          ],
+          "requires_any": [
+            "safe",
+            "keep",
+            "myself"
+          ],
+          "disposition": {
+            "trust": 5,
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.hopes.kept",
+            "delta": 3,
+            "budget": "deep",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "I know. That is why it got said. There are two people it can be said to and you are one of them now.",
+                "Thank you. A hope that is repeated at the well stops being a hope and becomes a thing people ask you about.",
+                "Then it is in two heads instead of one, which is either safer or twice as likely to get out, and I have decided to believe the first."
+              ],
+              "pt": [
+                "Eu sei. É por isso que foi dito. São duas pessoas a quem isso pode ser dito e agora você é uma delas.",
+                "Obrigada. Uma esperança repetida no poço deixa de ser esperança e vira uma coisa sobre a qual perguntam.",
+                "Então está em duas cabeças em vez de uma, o que é mais seguro ou duas vezes mais provável de vazar, e eu decidi acreditar na primeira."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

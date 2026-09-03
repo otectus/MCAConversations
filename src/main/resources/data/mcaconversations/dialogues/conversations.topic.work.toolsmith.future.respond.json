@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_angle",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.future.ask_angle"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.future.ask_angle",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.future.ask_angle"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.toolsmith.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_sets",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.future.ask_sets"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.future.ask_sets",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.future.ask_sets"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

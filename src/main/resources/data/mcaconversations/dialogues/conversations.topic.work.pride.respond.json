@@ -1,0 +1,233 @@
+{
+  "answers": [
+    {
+      "name": "praise",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.praised.storm"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.respond.praise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.respond.praise",
+              "deltas": {
+                "respect": 5,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.work.pride.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.praise.storm"
+            }
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_weather": {
+                "is": "storm"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "world"
+            }
+          ]
+        },
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.praised.high"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.respond.praise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.respond.praise",
+              "deltas": {
+                "respect": 5,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.work.pride.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.praise.high"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_weather": {
+                "is": "storm"
+              }
+            },
+            {
+              "chance": 100,
+              "mood": "overjoyed"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.praised"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.respond.praise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.respond.praise",
+              "deltas": {
+                "respect": 5,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.work.pride.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.respond.praise"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "overjoyed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ask_why",
+      "results": [
+        {
+          "baseChance": 0,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.reason.harvest"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.respond.ask_why",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.work.pride.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.ask_why.harvest",
+              "vars": [
+                "season"
+              ]
+            }
+          },
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_season": {
+                "is": "autumn"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "seasons"
+            }
+          ]
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.reason"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.respond.ask_why",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.topic.work.pride.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.respond.ask_why"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_season": {
+                "is": "autumn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blunt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.conceded"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.blunt",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.blunt",
+              "deltas": {
+                "respect": 5,
+                "tension": 2
+              }
+            },
+            "next": "conversations.topic.work.pride.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.blunt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.respond.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

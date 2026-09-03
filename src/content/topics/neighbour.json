@@ -1,0 +1,309 @@
+{
+  "_comment": [
+    "Neighbours, gated on how full the village is and on whether she is the sort to mediate.",
+    "",
+    "One scene is a disagreement two doors down that she is deciding whether to step into; the other is",
+    "the small kindness nobody has acknowledged, which is the more common village event and the one",
+    "nobody tells stories about."
+  ],
+  "topic": "neighbour",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "neighbour"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "They will sort it out or they will not.",
+      "Right. That is the lane for you.",
+      "It will keep."
+    ],
+    "pt": [
+      "Vão resolver ou não vão.",
+      "Certo. É a viela.",
+      "Isso pode esperar."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about them?",
+      "pt": "Mais alguma coisa sobre eles?"
+    },
+    "leave": {
+      "en": "That's the neighbours, then.",
+      "pt": "São os vizinhos, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "two_doors_down",
+      "subject": "neighbour.dispute",
+      "shape": "problem_solve",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "social.village_population",
+          "min": 6,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_styles": [
+        "mediator"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "The two doors down.",
+        "pt": "Os dois da porta ao lado."
+      },
+      "lines": {
+        "en": [
+          "Two of them have stopped speaking over something neither will name, and the lane has quietly picked sides.",
+          "It started over a fence and it is not about the fence, and everybody knows that and everybody keeps saying fence.",
+          "I am being asked to agree with both of them separately, which is a request I have refused four times this week."
+        ],
+        "pt": [
+          "Dois deles pararam de se falar por causa de algo que nenhum quer nomear, e a viela silenciosamente tomou partido.",
+          "Começou por uma cerca e não é sobre a cerca, e todo mundo sabe disso e todo mundo continua dizendo cerca.",
+          "Estão me pedindo para concordar com os dois em separado, um pedido que eu recusei quatro vezes esta semana."
+        ]
+      },
+      "replies": [
+        {
+          "name": "advise_staying_out",
+          "stance": "candor",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Keep refusing to take a side.",
+            "pt": "Continue recusando tomar partido."
+          },
+          "phrases": [
+            "keep refusing to take a side",
+            "stay out of the argument"
+          ],
+          "requires_any": [
+            "refusing",
+            "side",
+            "argument"
+          ],
+          "disposition": {
+            "respect": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "That is the plan and it costs me something with both of them, and it will cost me less than the alternative.",
+                "Yes. The person who agrees with both is trusted by neither the day they find out, and they always find out.",
+                "I shall keep saying I do not know, which happens to be true, and which nobody in this lane believes."
+              ],
+              "pt": [
+                "É o plano e me custa alguma coisa com os dois, e vai custar menos que a alternativa.",
+                "Sim. Quem concorda com os dois não é confiado por nenhum no dia em que descobrem, e eles sempre descobrem.",
+                "Vou continuar dizendo que não sei, o que por acaso é verdade, e em que ninguém nesta viela acredita."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_it_is_really_about",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's it really about?",
+            "pt": "Sobre o que é de verdade?"
+          },
+          "phrases": [
+            "what is it really about",
+            "what lies under the fence"
+          ],
+          "requires_any": [
+            "really",
+            "under"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "declined_to_say",
+            "act": "deflect",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I have a fair idea and I am going to keep it, because a guess repeated becomes the official version by Thursday.",
+                "Something from before I lived here. That is as much as I will say and it is more than I should have.",
+                "If either of them wants it known they will say it. Me saying it for them is how a fence becomes a feud."
+              ],
+              "pt": [
+                "Tenho uma boa ideia e vou guardar, porque um palpite repetido vira a versão oficial até quinta.",
+                "Alguma coisa de antes de eu morar aqui. É tudo o que eu vou dizer e já é mais do que eu deveria.",
+                "Se um dos dois quiser que se saiba, vai dizer. Eu dizer por eles é como uma cerca vira uma rixa."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_unthanked_kindness",
+      "subject": "neighbour.small_good",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "social.village_population",
+          "min": 4,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "identity_values": [
+        "hospitality"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Something a neighbour did.",
+        "pt": "Algo que um vizinho fez."
+      },
+      "lines": {
+        "en": [
+          "Somebody has been leaving firewood at a door and has told nobody, and I have decided to let them get away with it.",
+          "A neighbour walked a mile in the rain to tell me a thing that could have waited until Thursday, and it could not, and they were right.",
+          "The house at the end got its roof mended by four people in an afternoon and nobody has mentioned it since."
+        ],
+        "pt": [
+          "Alguém vem deixando lenha numa porta e não contou a ninguém, e eu decidi deixar essa pessoa escapar com isso.",
+          "Um vizinho caminhou um quilômetro na chuva para me contar uma coisa que podia esperar até quinta, e não podia, e ele tinha razão.",
+          "A casa do fim teve o telhado consertado por quatro pessoas numa tarde e ninguém comentou desde então."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_who",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Do you know who it was?",
+            "pt": "Você sabe quem foi?"
+          },
+          "phrases": [
+            "do you know who it was",
+            "who did that"
+          ],
+          "requires_any": [
+            "who"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "deflect",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I do, and they have gone to some trouble not to be known, so I am going to respect the trouble.",
+                "I have a suspicion and one boot print, which is more evidence than I usually have about anything.",
+                "It does not matter. That is the whole point of doing it that way and I would spoil it by naming them."
+              ],
+              "pt": [
+                "Sei, e essa pessoa se deu ao trabalho de não ser identificada, então eu vou respeitar o trabalho.",
+                "Tenho uma suspeita e uma pegada de bota, o que é mais prova do que eu costumo ter sobre qualquer coisa.",
+                "Não importa. É esse o objetivo de fazer assim, e eu estragaria nomeando."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_the_village",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That's what a village is for.",
+            "pt": "É para isso que serve uma vila."
+          },
+          "phrases": [
+            "that is what a village is for",
+            "that is the point of living close"
+          ],
+          "requires_any": [
+            "village",
+            "close",
+            "point"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and it happens about four times a week and nobody counts, and the arguments happen once a season and everybody does.",
+                "Yes. If you wrote down only the good ones you would get a very strange and much more accurate history of this lane.",
+                "Thank you for saying it out loud. That sort of thing needs saying occasionally or it stops happening."
+              ],
+              "pt": [
+                "É, e acontece umas quatro vezes por semana e ninguém conta, e as brigas acontecem uma vez por estação e todo mundo conta.",
+                "Sim. Se você anotasse só as boas, teria uma história muito estranha e bem mais exata desta viela.",
+                "Obrigada por dizer em voz alta. Esse tipo de coisa precisa ser dito de vez em quando ou para de acontecer."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

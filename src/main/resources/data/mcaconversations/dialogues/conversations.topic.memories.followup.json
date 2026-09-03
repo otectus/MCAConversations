@@ -25,7 +25,9 @@
               }
             },
             "next": "conversations.topic.family.close",
-            "say": "conversations.family.memories.add_own"
+            "conversations_say": {
+              "phrase": "conversations.family.memories.add_own"
+            }
           }
         }
       ]
@@ -49,7 +51,9 @@
               }
             },
             "next": "conversations.topic.family.close",
-            "say": "conversations.family.memories.question_detail"
+            "conversations_say": {
+              "phrase": "conversations.family.memories.question_detail"
+            }
           }
         }
       ]
@@ -74,7 +78,27 @@
               }
             },
             "next": "conversations.topic.family.close",
-            "say": "conversations.family.memories.dismiss"
+            "conversations_say": {
+              "phrase": "conversations.family.memories.dismiss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_holiday",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.holiday"
+            },
+            "next": "conversations.topic.memories.holiday",
+            "conversations_say": {
+              "phrase": "conversations.memories.holiday"
+            }
           }
         }
       ]
@@ -89,7 +113,9 @@
               "op": "end"
             },
             "next": "conversations.family",
-            "say": "conversations.family.memories.leave"
+            "conversations_say": {
+              "phrase": "conversations.family.memories.leave"
+            }
           }
         }
       ]

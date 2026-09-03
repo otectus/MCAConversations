@@ -32,6 +32,10 @@ public final class McaConversations {
 
     public McaConversations(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, McaConversationsConfig.COMMON_SPEC);
+        // SERVER: gameplay values the server decides and Forge synchronises to every client, stored
+        // per world under serverconfig/. COMMON is loaded on both sides and synchronised on neither,
+        // so anything a client must agree with the server about belongs here instead.
+        container.registerConfig(ModConfig.Type.SERVER, McaConversationsConfig.SERVER_SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, McaConversationsConfig.CLIENT_SPEC);
 
         modBus.addListener(this::onCommonSetup);
@@ -62,5 +66,9 @@ public final class McaConversations {
         event.enqueueWork(dev.otectus.mcaconversations.compat.ReputationBridge::tryRegister);
         // And the optional Serene Seasons integration (reflection-only; calendar fallback when absent).
         event.enqueueWork(SeasonsBridge::tryRegister);
+        // Last, and by name: the Townstead implementation is reached through a string so no
+        // Townstead class resolves on the many installs that do not have it. Must follow
+        // McaBridge, because the spirit read needs an MCA village that only McaCompat produces.
+        event.enqueueWork(dev.otectus.mcaconversations.compat.TownsteadCompat::init);
     }
 }

@@ -1,0 +1,326 @@
+{
+  "_comment": [
+    "Noticing, gated on how well the two of them actually know each other.",
+    "",
+    "Noticing something about somebody is a claim to know them. One scene is what a friend is willing",
+    "to have noticed about the player; the other is what a near-stranger is willing to say, which is",
+    "much less and is deliberately about the room rather than the person."
+  ],
+  "topic": "noticed",
+  "entry": {
+    "question": "conversations.cat.events",
+    "answer": "noticed"
+  },
+  "return_question": "conversations.cat.events",
+  "leave_lines": {
+    "en": [
+      "I will leave it there.",
+      "Right. I have said my piece.",
+      "That is all I meant by it."
+    ],
+    "pt": [
+      "Vou parar por aqui.",
+      "Certo. Já disse o que tinha.",
+      "Era só isso que eu queria dizer."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thanks for noticing.",
+    "pt": "Obrigado por reparar."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else you've noticed?",
+      "pt": "Mais alguma coisa que você reparou?"
+    },
+    "leave": {
+      "en": "We'll leave it there.",
+      "pt": "Vamos deixar assim."
+    }
+  },
+  "scenes": [
+    {
+      "name": "you_look_tired",
+      "subject": "noticed.the_player",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "epistemic": "observed",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Something you've noticed.",
+        "pt": "Algo que você reparou."
+      },
+      "lines": {
+        "en": [
+          "You have been walking differently. I am not going to make a thing of it, and I did notice.",
+          "You come in and you look at the door before you look at anybody. You have done it four times now.",
+          "Nothing is wrong that I can see. You are just carrying something, and I would rather say so than watch it for another month."
+        ],
+        "pt": [
+          "Você anda diferente. Não vou fazer disso um caso, e eu reparei.",
+          "Você entra e olha para a porta antes de olhar para qualquer pessoa. Já fez isso quatro vezes.",
+          "Nada de errado que eu consiga ver. Você só está carregando alguma coisa, e prefiro dizer a ficar observando por mais um mês."
+        ]
+      },
+      "replies": [
+        {
+          "name": "admit_it",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "You read that correctly.",
+            "pt": "Você leu certo."
+          },
+          "phrases": [
+            "you have read that correctly",
+            "you are right about that"
+          ],
+          "requires_any": [
+            "correctly",
+            "right",
+            "read"
+          ],
+          "disposition": {
+            "trust": 4,
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.noticed.admitted",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "received",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Then I will stop asking and start being about. That is the useful half and it is the half people forget to offer.",
+                "Thank you for saying so plainly. I had a whole speech prepared for if you had said you were fine.",
+                "Right. I am not going to ask what it is. If you want to say, I am usually here at the same hour."
+              ],
+              "pt": [
+                "Então eu paro de perguntar e passo a estar por perto. É a metade útil e é a metade que as pessoas esquecem de oferecer.",
+                "Obrigada por dizer com franqueza. Eu tinha um discurso inteiro pronto caso você dissesse que estava bem.",
+                "Certo. Não vou perguntar o que é. Se você quiser contar, eu costumo estar aqui na mesma hora."
+              ]
+            }
+          }
+        },
+        {
+          "name": "deflect_it",
+          "stance": "restraint",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "qualified",
+          "label": {
+            "en": "I would rather leave that where it is.",
+            "pt": "Prefiro deixar isso onde está."
+          },
+          "phrases": [
+            "i would rather leave that where it is",
+            "let us talk about something else"
+          ],
+          "requires_any": [
+            "rather",
+            "something",
+            "else"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "accepted_the_boundary",
+            "act": "accept",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Fair enough. I said it so that it had been said, not so that you had to answer it.",
+                "Right. I will not raise it again. If it changes, you know where I am and you know I noticed once.",
+                "That is your business and I meant it as an observation, not a door I was standing in."
+              ],
+              "pt": [
+                "Justo. Eu disse para que ficasse dito, não para que você tivesse que responder.",
+                "Certo. Não vou levantar de novo. Se mudar, você sabe onde eu estou e sabe que eu reparei uma vez.",
+                "É assunto seu, e eu disse como observação, não como uma porta em que eu estivesse parada."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "something_about_the_room",
+      "subject": "noticed.the_village",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "neutral",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "stranger",
+            "acquaintance"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 20,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Something you've spotted.",
+        "pt": "Algo que você notou."
+      },
+      "lines": {
+        "en": [
+          "The lane has been quieter since the harvest. Not unhappy. Quieter. There is a difference and it takes a season to hear.",
+          "Somebody has been mending the fence at the top and has told nobody, which I find more interesting than most things that get announced.",
+          "Two households have started walking the long way round to the well. I have no idea why and I have decided not to find out."
+        ],
+        "pt": [
+          "A viela está mais calada desde a colheita. Não infeliz. Mais calada. Existe diferença e leva uma estação para se ouvir.",
+          "Alguém vem consertando a cerca lá em cima e não contou a ninguém, o que eu acho mais interessante que a maioria das coisas anunciadas.",
+          "Duas casas passaram a dar a volta maior até o poço. Não faço ideia por quê e decidi não descobrir."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_means",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What do you make of it?",
+            "pt": "O que você acha disso?"
+          },
+          "phrases": [
+            "what do you make of it",
+            "what do you reckon that means"
+          ],
+          "requires_any": [
+            "make",
+            "reckon",
+            "means"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Very little, on its own. Three small things in a row mean something. One is just a Tuesday.",
+                "I keep it in mind and I do not act on it. That has served me better than the alternative, which is being right loudly and early.",
+                "Ask me in a month. If it is still true in a month it is a fact, and until then it is a habit of mine."
+              ],
+              "pt": [
+                "Muito pouco, sozinho. Três coisinhas em sequência significam algo. Uma é só uma terça-feira.",
+                "Guardo na cabeça e não ajo. Isso me serviu melhor que a alternativa, que é estar certa em voz alta e cedo demais.",
+                "Me pergunte daqui a um mês. Se ainda for verdade em um mês, é um fato, e até lá é um hábito meu."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_hadnt_noticed",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "You pay close attention.",
+            "pt": "Você presta muita atenção."
+          },
+          "phrases": [
+            "you pay close attention",
+            "you notice a great deal"
+          ],
+          "requires_any": [
+            "attention",
+            "notice"
+          ],
+          "disposition": {
+            "respect": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I stand in one place for a great deal of the day. Attention is mostly just staying still where things happen.",
+                "It is the only skill I am sure of, and it is not much use unless somebody asks, which almost nobody does.",
+                "Thank you. Half the village thinks it is nosiness and the other half has never thought about it at all."
+              ],
+              "pt": [
+                "Eu fico parada num lugar só boa parte do dia. Atenção é quase só ficar quieta onde as coisas acontecem.",
+                "É a única habilidade de que eu tenho certeza, e não serve para muita coisa a menos que alguém pergunte, o que quase ninguém faz.",
+                "Obrigada. Metade da vila acha que é intrometimento e a outra metade nunca pensou no assunto."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

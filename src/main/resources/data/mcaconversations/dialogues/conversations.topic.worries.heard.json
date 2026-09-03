@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "then_ill_listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.heard.listened"
+            },
+            "conversations_affection_apply": {
+              "decision": "worries.heard.listened",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "worries.heard.listened",
+              "deltas": {
+                "respect": 2,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.us",
+            "conversations_say": {
+              "phrase": "conversations.worries.heard.listened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "when_youre_ready",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.heard.later"
+            },
+            "conversations_affection_apply": {
+              "decision": "worries.heard.later",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "worries.heard.later",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.us",
+            "conversations_say": {
+              "phrase": "conversations.worries.heard.later"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "conversations_say": {
+              "phrase": "conversations.worries.heard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

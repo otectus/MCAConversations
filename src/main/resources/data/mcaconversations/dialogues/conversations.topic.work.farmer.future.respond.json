@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_stops",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.future.ask_what_stops"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.future.ask_what_stops",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.farmer.future.ask_what_stops"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.farmer.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.farmer.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_father",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.future.ask_father"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.future.ask_father",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.farmer.future.ask_father"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.farmer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

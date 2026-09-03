@@ -1,0 +1,116 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_she_does_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.hard_slaughter.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.animals",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.hard_slaughter"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.hard_slaughter.blocked.explained",
+              "slots": [
+                "beast"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_weight",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.hard_slaughter.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.butcher.slaughter.seen",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.animals",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.hard_slaughter"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.hard_slaughter.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "urge_getting_on_with_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.butcher.hard_slaughter.blocked.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.butcher.animals",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.butcher.hard_slaughter"
+            },
+            "next": "conversations.scene.work.butcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.butcher.hard_slaughter.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.butcher.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

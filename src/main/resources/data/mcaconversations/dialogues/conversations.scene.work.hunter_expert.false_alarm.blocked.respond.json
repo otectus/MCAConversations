@@ -1,0 +1,117 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_she_tells",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.false_alarm.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.false_alarms",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter_expert.false_alarm"
+            },
+            "next": "conversations.scene.work.hunter_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter_expert.false_alarm.blocked.explained",
+              "slots": [
+                "evidence"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_refusal",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.false_alarm.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.hunter_expert.alarm.backed",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.false_alarms",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter_expert.false_alarm"
+            },
+            "next": "conversations.scene.work.hunter_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter_expert.false_alarm.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "worry_about_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.hunter_expert.false_alarm.blocked.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.hunter_expert.false_alarms",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.hunter_expert.false_alarm"
+            },
+            "next": "conversations.scene.work.hunter_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.hunter_expert.false_alarm.blocked.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.hunter_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

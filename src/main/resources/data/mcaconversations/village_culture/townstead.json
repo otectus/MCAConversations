@@ -1,0 +1,60 @@
+{
+  "_comment": [
+    "Townstead-owned culture tokens (spec §21.1, §22.3).",
+    "",
+    "A separate file in its own right, not entries mixed into base.json, because that is what makes the",
+    "slice removable: every token here declares the integration it belongs to, so on a plain install the",
+    "catalog filters them out before a village can draw one and nothing else changes. A village that has",
+    "already drawn one keeps it if Townstead is later removed — the id simply stops resolving to a token,",
+    "which is the same shape of degradation as a renamed token with no alias, and is why the six base",
+    "families must always be able to fill a village on their own.",
+    "",
+    "The tokens themselves are things only Townstead makes true: a town that tracks how well people are",
+    "living, that ages and trains its residents, and that argues about growth because growth is a thing",
+    "that can actually happen there."
+  ],
+  "tokens": {
+    "the_apprentice_year": {
+      "family": "tradition",
+      "weight": 12,
+      "integrations": ["townstead"],
+      "endorsed_by": ["teaching", "tradition", "methodical"],
+      "questioned_by": ["independence", "improvising"]
+    },
+    "nobody_ages_alone": {
+      "family": "value",
+      "weight": 12,
+      "integrations": ["townstead"],
+      "endorsed_by": ["mercy", "hospitality"],
+      "questioned_by": ["privacy", "independence"]
+    },
+    "the_skills_are_slipping": {
+      "family": "work_concern",
+      "weight": 12,
+      "integrations": ["townstead"],
+      "endorsed_by": ["teaching", "perfectionist"],
+      "questioned_by": ["pragmatic"]
+    },
+    "the_first_house": {
+      "family": "landmark",
+      "weight": 11,
+      "integrations": ["townstead"],
+      "endorsed_by": ["local_history", "tradition"],
+      "questioned_by": ["ambition"]
+    },
+    "the_naming_day": {
+      "family": "festival",
+      "weight": 11,
+      "integrations": ["townstead"],
+      "endorsed_by": ["hospitality", "stories"],
+      "questioned_by": ["crowds"]
+    },
+    "whether_to_keep_growing": {
+      "family": "debate",
+      "weight": 12,
+      "integrations": ["townstead"],
+      "endorsed_by": ["ambition", "building"],
+      "questioned_by": ["tradition", "quiet_places"]
+    }
+  }
+}

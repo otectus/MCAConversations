@@ -1,0 +1,110 @@
+{
+  "answers": [
+    {
+      "name": "what_about",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.proud.what_about"
+            },
+            "next": "conversations.topic.noticed.proud.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.proud.what_about"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "who_told",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.proud.who_told"
+            },
+            "next": "conversations.topic.noticed.proud.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.proud.who_told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "embarrassed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.proud.embarrassed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.proud.embarrassed",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.noticed.proud.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.proud.embarrassed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.proud.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.proud.dismissed",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.proud.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.proud.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

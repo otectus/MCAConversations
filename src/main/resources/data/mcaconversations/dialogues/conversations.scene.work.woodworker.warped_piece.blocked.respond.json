@@ -1,0 +1,128 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.warped_piece.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.seasoning",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.woodworker.warped_piece"
+            },
+            "next": "conversations.scene.work.woodworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.woodworker.warped_piece.blocked.explained",
+              "slots": [
+                "piece"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_planks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.warped_piece.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.woodworker.warp.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.seasoning",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.warped_piece",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.woodworker.warped_piece",
+              "obligation": "commitment:work.woodworker.bring_planks"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.woodworker.bring_planks"
+            },
+            "next": "conversations.scene.work.woodworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.woodworker.warped_piece.blocked.accepted",
+              "slots": [
+                "piece"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_telling_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.warped_piece.blocked.resolved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.seasoning",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.woodworker.warped_piece"
+            },
+            "next": "conversations.scene.work.woodworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.woodworker.warped_piece.blocked.resolved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.woodworker.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

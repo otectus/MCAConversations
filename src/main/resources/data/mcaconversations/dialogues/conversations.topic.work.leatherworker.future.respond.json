@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_eleven",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.future.ask_eleven"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.future.ask_eleven",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.future.ask_eleven"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.leatherworker.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_saddle_dream",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.future.ask_saddle_dream"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.future.ask_saddle_dream",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.future.ask_saddle_dream"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

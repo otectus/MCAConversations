@@ -6,6 +6,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praise_earned"
+            },
             "conversations_affection_apply": {
               "decision": "village.respond.affirm",
               "delta": 2,
@@ -19,8 +23,10 @@
                 "respect": 1
               }
             },
-            "next": "conversations.topic.village.followup",
-            "say": "conversations.village.respond.agree.longknown"
+            "next": "conversations.topic.village.praised.followup",
+            "conversations_say": {
+              "phrase": "conversations.village.respond.agree.longknown"
+            }
           },
           "conditions": [
             {
@@ -39,6 +45,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.praise_taken"
+            },
             "conversations_affection_apply": {
               "decision": "village.respond.affirm",
               "delta": 2,
@@ -52,8 +62,10 @@
                 "respect": 1
               }
             },
-            "next": "conversations.topic.village.followup",
-            "say": "conversations.village.respond.affirm"
+            "next": "conversations.topic.village.praised.followup",
+            "conversations_say": {
+              "phrase": "conversations.village.respond.affirm"
+            }
           },
           "conditions": [
             {
@@ -73,6 +85,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.fault_smith"
+            },
             "conversations_disposition_apply": {
               "topic": "village.respond.ask_improve",
               "deltas": {
@@ -80,8 +96,10 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.village.followup",
-            "say": "conversations.village.ask_improve.smith"
+            "next": "conversations.topic.village.fault.followup",
+            "conversations_say": {
+              "phrase": "conversations.village.ask_improve.smith"
+            }
           },
           "conditions": [
             {
@@ -93,6 +111,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.no_complaint"
+            },
             "conversations_disposition_apply": {
               "topic": "village.respond.ask_improve",
               "deltas": {
@@ -100,8 +122,10 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.village.followup",
-            "say": "conversations.village.ask_improve.passive"
+            "next": "conversations.topic.village.settled.followup",
+            "conversations_say": {
+              "phrase": "conversations.village.ask_improve.passive"
+            }
           },
           "conditions": [
             {
@@ -117,6 +141,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.fault_named"
+            },
             "conversations_disposition_apply": {
               "topic": "village.respond.ask_improve",
               "deltas": {
@@ -124,8 +152,10 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.village.followup",
-            "say": "conversations.village.respond.ask_improve"
+            "next": "conversations.topic.village.fault.followup",
+            "conversations_say": {
+              "phrase": "conversations.village.respond.ask_improve"
+            }
           },
           "conditions": [
             {
@@ -142,6 +172,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.insulted"
+            },
             "conversations_affection_apply": {
               "decision": "village.respond.insult",
               "delta": -2,
@@ -155,8 +189,10 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.village.followup",
-            "say": "conversations.village.respond.insult"
+            "next": "conversations.topic.village.insulted.followup",
+            "conversations_say": {
+              "phrase": "conversations.village.respond.insult"
+            }
           }
         }
       ]
@@ -171,7 +207,9 @@
               "op": "end"
             },
             "next": "conversations.cat.village",
-            "say": "conversations.village.respond.leave"
+            "conversations_say": {
+              "phrase": "conversations.village.respond.leave"
+            }
           }
         }
       ]

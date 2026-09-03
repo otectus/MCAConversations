@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "back_the_silence",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.one_i_will_not_pass_on.open.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.rumors.stopped",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.withheld",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.rumors.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.one_i_will_not_pass_on.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_if_it_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.one_i_will_not_pass_on.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.withheld",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.rumors.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.one_i_will_not_pass_on.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_ford",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.task.ask_ford"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.task.ask_ford",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.task.ask_ford"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cartographer.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.task.offer_hands"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_memory",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.task.ask_memory"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.task.ask_memory",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.task.ask_memory"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -10,6 +10,9 @@ import dev.otectus.mcaconversations.chat.Normalizer.NormalizedMessage;
 import dev.otectus.mcaconversations.chat.VillagerFinder.VillagerCandidate;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.Dispositions;
@@ -106,7 +109,7 @@ public final class ChatModeDispatcher {
         // A canceled chat event never reaches vanilla's broadcast OR its log — keep the server's
         // chat record (moderation history) intact.
         McaConversations.LOGGER.info("[local-chat] <{}> {}", sender.getGameProfile().getName(), raw);
-        double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double radius = McaConversationsConfig.chatModeAddressedRadius();
         double r2 = radius * radius;
         Component line = Component.literal("<").append(sender.getDisplayName())
                 .append(Component.literal("> " + raw));
@@ -187,7 +190,7 @@ public final class ChatModeDispatcher {
         }
 
         // Targeting (tiers 1–4): gather within the larger addressed radius, let Addressing resolve.
-        double addressedRadius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double addressedRadius = McaConversationsConfig.chatModeAddressedRadius();
         List<VillagerCandidate> candidates = VillagerFinder.candidates(player, addressedRadius);
         if (candidates.isEmpty()) {
             return;
@@ -213,7 +216,7 @@ public final class ChatModeDispatcher {
 
         // A tier-3/4 (look-at / ambient) target must be within the tighter ambient radius to overhear;
         // tier-1 (named) and tier-2 (sticky) reach across the full addressed radius.
-        double ambientRadius = McaConversationsConfig.COMMON.chatModeRadius.get();
+        double ambientRadius = McaConversationsConfig.chatModeRadius();
         boolean reachesAcross = address.named() || address.targetIndex() == stickyIndex;
         if (!reachesAcross && target.distSqr() > ambientRadius * ambientRadius) {
             return;
@@ -266,9 +269,27 @@ public final class ChatModeDispatcher {
                 java.util.Optional<String> picked = QuickReplies.answerFor(offered, choice.getAsInt());
                 if (picked.isPresent()
                         && McaCompat.checkConstraints(target.entity(), player, currentQuestion, picked.get())) {
-                    drive(target, player, currentQuestion, picked.get(), now);
-                    return;
+                    ConversationSession.ChoiceOffer offer = ConversationSessions.raw(player.getUUID())
+                            .flatMap(ConversationSession::currentOffer).orElse(null);
+                    if (offer != null && ConversationSessions.consumeOffer(player.getUUID(),
+                            offer.revision(), choice.getAsInt() - 1, now).isPresent()) {
+                        drive(target, player, currentQuestion, picked.get(), now);
+                        return;
+                    }
                 }
+            }
+        }
+
+        // A dynamic hub entry is an exact offer the villager has just made, so it is matched ahead
+        // of the general corpus: a phrase the player was shown a moment ago should not have to win a
+        // scoring contest against every topic in the pack (spec §14.2).
+        if (offered.isEmpty()) {
+            dev.otectus.mcaconversations.hub.HubPlan hub =
+                    dev.otectus.mcaconversations.hub.DynamicHub.open(target.entity(), player, gameDay(player));
+            java.util.Optional<dev.otectus.mcaconversations.hub.HubSlot> picked =
+                    dev.otectus.mcaconversations.hub.HubLabels.resolve(hub, address.message());
+            if (picked.isPresent() && driveHubSlot(target, player, picked.get(), now)) {
+                return;
             }
         }
 
@@ -583,6 +604,15 @@ public final class ChatModeDispatcher {
         driveStaggered(target, player, question, answer, now, 0, true);
     }
 
+    /** Entry used after the numbered packet service has atomically consumed a CHAT offer. */
+    public static void selectOfferedChoice(Entity villager, ServerPlayer player,
+                                           String question, String answer, long now) {
+        VillagerCandidate target = new VillagerCandidate(villager,
+                McaCompat.getVillagerName(villager).orElse(""),
+                villager.distanceToSqr(player), 1.0D);
+        drive(target, player, question, answer, now);
+    }
+
     /**
      * Drives one exchange with an optional delivery {@code stagger} and, when {@code makeSticky}, marks
      * the villager as the sticky target. Ambient non-first responders drive normally but do not steal
@@ -592,7 +622,19 @@ public final class ChatModeDispatcher {
                                        String answer, long now, int stagger, boolean makeSticky) {
         boolean showHearts = McaConversationsConfig.COMMON.chatModeShowHeartChanges.get();
         int heartsBefore = showHearts ? McaCompat.getHearts(player, target.entity()) : 0;
+        // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
+        // planning hook never fires here. Calling it explicitly is what keeps the two frontends
+        // behaviourally equivalent: the same topic opens the same scene whichever way it was asked
+        // for, and switching between them mid-conversation reuses one frozen plan (spec 3.1.8).
+        dev.otectus.mcaconversations.scene.ConversationPlanner
+                .onAnswerSubmitted(target.entity(), player, question, answer);
         boolean ok;
+        // Remembered across the drive so a say-only reply — which records no new offer — can re-arm
+        // the numbers the options block is about to print again.
+        long revisionBefore = ConversationSessions.raw(player.getUUID())
+                .flatMap(ConversationSession::currentOffer)
+                .map(ConversationSession.ChoiceOffer::revision)
+                .orElse(-1L);
         try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity(), stagger)) {
             ok = McaCompat.selectAnswer(target.entity(), player, question, answer);
             if (showHearts && ok) {
@@ -604,18 +646,24 @@ public final class ChatModeDispatcher {
                 // offered, so the reply can carry the choices the GUI would have drawn as buttons.
                 String nextQuestion = ChatModeSession.currentQuestion(player.getUUID());
                 if (nextQuestion != null && !isHubQuestion(nextQuestion)) {
-                    QuickReplies.optionsLine(nextQuestion, ChatModeSession.currentAnswers(player.getUUID()))
+                    QuickReplies.optionsBlock(nextQuestion, ChatModeSession.currentAnswers(player.getUUID()))
                             .ifPresent(line -> scope.options = line);
                 }
             }
         }
         if (ok) {
+            ChoiceSelectionService.reofferAfterTerminal(player, target.entity(), question,
+                    revisionBefore, now);
             // The redirect mixin may have recorded a follow-up currentQuestion during selectAnswer;
             // recordExchange marks the sticky target + resets the miss ladder without clearing it.
             if (makeSticky) {
                 ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
             }
             attend(target, player, now);
+            // The one place a bystander may join in. Off by default, capped at one voice per
+            // exchange, and every interjection has to answer the beat that was just spoken.
+            dev.otectus.mcaconversations.chat.group.GroupDirector
+                    .maybeInterject(target.entity(), player, now);
         } else {
             McaConversations.LOGGER.debug("chat-mode selectAnswer({}, {}) returned false", question, answer);
         }
@@ -657,6 +705,38 @@ public final class ChatModeDispatcher {
                 voiced(target.entity(), player, "chatmode.hint", eligibleTopics(target, player)));
     }
 
+    /** The current game day, for the records that count in days rather than ticks. */
+    private static long gameDay(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        return server == null || server.overworld() == null
+                ? 0L : server.overworld().getDayTime() / 24000L;
+    }
+
+    /**
+     * Opens the topic behind a dynamic hub entry, as though the player had pressed its button.
+     *
+     * <p>The entry never routes anywhere of its own: it drives the topic's real question and answer,
+     * so a contextual shortcut and the menu path are the same conversation reached two different
+     * ways. Returns false when the topic is unknown or its constraints refuse this pairing, so the
+     * message falls through to ordinary matching rather than being swallowed.
+     */
+    private static boolean driveHubSlot(VillagerCandidate target, ServerPlayer player,
+                                        dev.otectus.mcaconversations.hub.HubSlot slot, long now) {
+        java.util.Optional<dev.otectus.mcaconversations.conversation.TopicEntry> entry =
+                dev.otectus.mcaconversations.conversation.ConversationCatalogLoader.active()
+                        .topic(slot.topic());
+        if (entry.isEmpty()) {
+            return false;
+        }
+        String question = entry.get().entryQuestion();
+        String answer = entry.get().entryAnswer();
+        if (!McaCompat.checkConstraints(target.entity(), player, question, answer)) {
+            return false;
+        }
+        drive(target, player, question, answer, now);
+        return true;
+    }
+
     /** Preferred hint order for the shipped topic hubs; datapack-added topics follow alphabetically. */
     private static final List<String> TOPIC_ORDER =
             List.of("chitchat", "greet", "profession", "village", "events", "personal", "us", "family");
@@ -683,9 +763,23 @@ public final class ChatModeDispatcher {
             return Component.translatable("dialogue.chatmode.topics");
         }
         MutableComponent out = Component.empty();
+        // Contextual entries first and at most three of them (spec §14.2). They are what this
+        // villager has going on right now, so they belong above a list of standing categories — and
+        // each label says no more than its domain, which is what keeps a menu from leaking.
+        List<String> hubLabels = new ArrayList<>();
+        for (dev.otectus.mcaconversations.hub.HubSlot slot
+                : dev.otectus.mcaconversations.hub.DynamicHub.showing(player.getUUID()).slots()) {
+            hubLabels.add(dev.otectus.mcaconversations.hub.HubLabels.langKey(slot));
+        }
+        for (int i = 0; i < hubLabels.size(); i++) {
+            if (i > 0) {
+                out.append(Component.literal(", "));
+            }
+            out.append(Component.translatable(hubLabels.get(i)));
+        }
         List<String> ordered = orderedTopics(suffixes);
         for (int i = 0; i < ordered.size(); i++) {
-            if (i > 0) {
+            if (i > 0 || !hubLabels.isEmpty()) {
                 out.append(Component.literal(", "));
             }
             out.append(Component.translatableWithFallback(
@@ -746,7 +840,7 @@ public final class ChatModeDispatcher {
         if (session == null || session.villagerId == null) {
             return -1;
         }
-        int stickinessTicks = McaConversationsConfig.COMMON.chatModeStickinessTicks.get();
+        int stickinessTicks = McaConversationsConfig.chatModeStickinessTicks();
         if (stickinessTicks > 0 && now - session.lastExchangeGameTime >= stickinessTicks) {
             return -1; // stickiness window lapsed
         }
@@ -794,12 +888,16 @@ public final class ChatModeDispatcher {
         if (!McaBridge.isAvailable()) {
             return "MCA is not available; chat mode is inert.";
         }
-        double radius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double radius = McaConversationsConfig.chatModeAddressedRadius();
         List<VillagerFinder.VillagerCandidate> candidates = VillagerFinder.candidates(player, radius);
         if (candidates.isEmpty()) {
             return "No MCA villager within " + (int) radius + " blocks.";
         }
         VillagerFinder.VillagerCandidate target = candidates.get(0);
+        // The op test driver plans too, so "debug-ask a topic opener" reproduces what a real click
+        // would produce rather than a version of it with no scene behind it.
+        dev.otectus.mcaconversations.scene.ConversationPlanner
+                .onAnswerSubmitted(target.entity(), player, questionId, answerName);
         boolean ok;
         try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity())) {
             ok = McaCompat.selectAnswer(target.entity(), player, questionId, answerName);
@@ -846,7 +944,7 @@ public final class ChatModeDispatcher {
 
     /** Conversation attention: the villager stays put facing the player until the timer lapses. */
     private static void attend(VillagerCandidate target, ServerPlayer player, long now) {
-        int ticks = McaConversationsConfig.COMMON.chatModeAttentionTicks.get();
+        int ticks = McaConversationsConfig.chatModeAttentionTicks();
         if (ticks > 0) {
             VillagerAttention.hold(target.entity(), player, now + ticks, AttentionLedger.Source.CONVERSATION);
         }
@@ -884,7 +982,7 @@ public final class ChatModeDispatcher {
             return List.of("No server.");
         }
         long now = server.overworld().getGameTime();
-        double addressedRadius = McaConversationsConfig.COMMON.chatModeAddressedRadius.get();
+        double addressedRadius = McaConversationsConfig.chatModeAddressedRadius();
         List<VillagerCandidate> candidates = VillagerFinder.candidates(player, addressedRadius);
         if (candidates.isEmpty()) {
             return List.of("No MCA villager within " + (int) addressedRadius + " blocks.");

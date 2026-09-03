@@ -1,0 +1,130 @@
+{
+  "beats": {
+    "hopes.rebuked": {
+      "topic": "hopes",
+      "say": "conversations.hopes.respond.mock",
+      "response_question": "conversations.topic.hopes.belittled.followup",
+      "npc_act": "refuse",
+      "subject": "hopes.wish",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "player:belittled_the_hope"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "humor",
+        "encouragement",
+        "curiosity",
+        "self_disclosure",
+        "respectful_disagreement"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "hopes.rebuked.apologize": {
+      "topic": "hopes",
+      "say": "conversations.hopes.rebuked.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "qualify",
+      "subject": "hopes.wish",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "hopes.rebuked.explain": {
+      "topic": "hopes",
+      "say": "conversations.hopes.rebuked.explain",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "qualify",
+      "subject": "hopes.wish",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "hopes.rebuked.leave": {
+      "topic": "hopes",
+      "say": "conversations.hopes.rebuked.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "hopes.wish",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.hopes.belittled.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "hopes.rebuked"
+      ],
+      "requires_facts": [
+        "player:belittled_the_hope"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.hopes.belittled.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "hopes.rebuked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.hopes.belittled.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "hopes.rebuked"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

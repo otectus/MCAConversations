@@ -25,7 +25,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.worries.help_solve"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.help_solve"
+            }
           }
         }
       ]
@@ -55,7 +57,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.worries.give_space"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.give_space"
+            }
           }
         }
       ]
@@ -67,7 +71,27 @@
           "baseChance": 1,
           "actions": {
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.worries.change_subject"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.change_subject"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_would_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.information"
+            },
+            "next": "conversations.topic.worries.information",
+            "conversations_say": {
+              "phrase": "conversations.worries.information"
+            }
           }
         }
       ]
@@ -82,7 +106,9 @@
               "op": "end"
             },
             "next": "conversations.us",
-            "say": "conversations.us.worries.leave"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.leave"
+            }
           }
         }
       ]

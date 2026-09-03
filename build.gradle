@@ -78,17 +78,52 @@ repositories {
     }
 }
 
+// Every MCA build McaBindingProbeTest verifies the manifest against, one configuration each. Two
+// versions of the same module cannot share a configuration -- Gradle's conflict resolution would
+// collapse them to the newer and the older binary would go untested, which is the whole point of
+// probing more than one. Each is opened in its own class loader.
+ext.mcaProbeVersions = (project.findProperty('mcaProbeVersions') ?: mca_probe_versions)
+        .toString().split(',').collect { it.trim() }.findAll { !it.isEmpty() }
+
+// MCA deliberately stays on testRuntimeClasspath. ModDevGradle's unitTest boots FML in the test JVM,
+// and FML enforces neoforge.mods.toml's mandatory `mca` dependency -- excluding the jar makes every
+// test fail at bootstrap. SOURCE's ForgeGradle tests never booted FML, which is why SOURCE could
+// exclude it. McaBindingProbeTest keeps its isolation via a filtering parent classloader instead.
+
+mcaProbeVersions.eachWithIndex { version, i ->
+    configurations.create("mcaProbe${i}") {
+        canBeConsumed = false
+        // Just the MCA jar: the probe opens it against the test classloader, which already carries
+        // Minecraft, and pulling MCA's own dependency graph in (sodium, ferrite-core from the
+        // Modrinth Maven) would not resolve anyway.
+        transitive = false
+    }
+}
+
 dependencies {
     // MCA Reborn — a mojmap NeoForge mod jar, so it loads as a real mod under runClient/runServer.
     // (On 1.20.1 it could not: MCA's Forge mixins shipped SRG-named with no refmap.)
+    //
+    // runtimeOnly, NOT implementation: no class in src/main/java names an MCA type any more, because
+    // compat.mca.McaBinding resolves every MCA class and member by name at runtime and the mixins
+    // declare their targets as strings. A compile dependency would only invite the static linkage
+    // back -- NoMcaStaticLinkTest fails the build if it ever returns.
     //
     // transitive = false on purpose: MCA's POM declares runtime dependencies on
     // maven.modrinth:sodium and maven.modrinth:ferrite-core, which do not resolve without the
     // Modrinth Maven. MixinExtras is already jarJar'd inside the MCA jar, so nothing needed is lost.
     //
     // All MCA access is isolated behind dev.otectus.mcaconversations.compat and .mixin.
-    implementation("net.conczin.mca:mca-neoforge:${mca_version}") {
+    runtimeOnly("net.conczin.mca:mca-neoforge:${mca_version}") {
         transitive = false
+    }
+
+    // The probe fleet McaBindingProbeTest replays the binding manifest against (see
+    // ext.mcaProbeVersions). Same group/artifact and Maven as the pinned mca_version above; the
+    // loader is in the artifact id, so there is nothing to disambiguate. These are never on any
+    // compile or runtime classpath -- the test task hands them over as file paths.
+    mcaProbeVersions.eachWithIndex { version, i ->
+        add("mcaProbe${i}", "net.conczin.mca:mca-neoforge:${version}")
     }
 
     // MCA: Quests — OPTIONAL integration, compile-only. The sibling mod isn't published to a
@@ -114,10 +149,11 @@ dependencies {
                 'dev/otectus/mcaconversations/compat/quests/UnlockTopicReward.java')
     }
 
-    // MCA: Reputation — OPTIONAL integration, same pattern. Reputation has not been ported to
-    // 1.21.1 NeoForge yet, so this takes the exclude branch today; the sources stay in the tree
-    // and compile again the moment the sibling port exists. Every reputation-gated dialogue
-    // condition and template variable already falls back to a documented safe default.
+    // MCA: Reputation — OPTIONAL integration, same pattern. The sibling MCAReputation_1.21.1
+    // port exists, so on a machine that has built it this takes the compileOnly branch and the
+    // integration compiles. The exclude fallback stays for machines without that sibling checkout;
+    // every reputation-gated dialogue condition and template variable already falls back to a
+    // documented safe default.
     def mcaReputationClasses = file("${projectDir}/../MCAReputation_1.21.1/build/classes/java/main")
     if (mcaReputationClasses.exists()) {
         compileOnly files(mcaReputationClasses)
@@ -141,6 +177,168 @@ test {
     // ModDevGradle's unitTest runner works out of build/minecraft-junit, so the content lints,
     // locale parity and mixin-JSON tests cannot reach src/ through a bare relative path.
     systemProperty 'mcaconversations.projectRoot', project.projectDir.absolutePath
+
+    // The MCA jars travel as paths, not a classpath: McaBindingProbeTest opens each in its own
+    // URLClassLoader, so the binding manifest is verified against real MCA without a single MCA
+    // class being linked into the test JVM. Resolved in doFirst so the configurations are not
+    // resolved while the build is still being configured.
+    doFirst {
+        systemProperty 'mcaconversations.probe.jars', mcaProbeVersions.indices
+                .collect { i -> configurations.getByName("mcaProbe${i}").files }
+                .flatten()
+                .findAll { it.name.contains('mca-neoforge') }
+                .join(File.pathSeparator)
+    }
+}
+
+// ModDevGradle's unitTest wiring lands on `test` and on no other Test task. It is `test` alone that
+// gets the prepare tasks, the build/minecraft-junit working directory, `fml.junit.argsfile`, the
+// @argfile on the command line and the mod-folders argument provider. Without them FML's JUnit
+// LauncherSessionListener -- which is on the test runtime classpath and boots the game for every
+// Test task -- looks for mainargs.txt in the project directory and dies before a single test runs.
+//
+// So the hand-registered Test tasks below borrow `test`'s fork options at execution time and set
+// their own system properties on top: the copy replaces the whole system property map, so theirs
+// have to go on after it, not before. `test` is already realized and configured by the `test { }`
+// block above, so reading it here costs nothing and runs none of it.
+//
+// Copied field by field rather than through JavaForkOptions.copyTo: copyTo also assigns the debug
+// options, and by the time a Test task's actions run its `debugOptions.enabled` is already final.
+ext.inheritUnitTestWiring = { Test task ->
+    def wired = tasks.getByName('test')
+    task.workingDir = wired.workingDir
+    task.jvmArgs = wired.jvmArgs
+    task.systemProperties = wired.systemProperties
+    task.environment = wired.environment
+    task.jvmArgumentProviders.addAll(wired.jvmArgumentProviders)
+}
+
+// The prepare tasks `test` depends on for those same arg files.
+def unitTestPrepareTasks = ['prepareNeoForgeTestFiles', 'writeNeoForgeTestClasspath', 'downloadAssets']
+
+// Resolves TownsteadBinding's manifest against a real Townstead jar, in its own JVM and its own
+// classloader. Separate from `test` because it needs a jar nobody can resolve from a maven: Townstead
+// is published on CurseForge only, so the path is supplied by the person running it.
+//
+//     ./gradlew townsteadProbeTest -PtownsteadModernJar=/path/townstead-0.7.6+1.21.1.jar
+//
+// Both -PtownsteadModernJar and -PtownsteadLegacyJar are accepted and either may be given alone.
+// MCA rides along on `mcaconversations.probe.jars` for a load-bearing reason: Townstead is compiled
+// against MCA, so enumerating TownsteadAPI's methods resolves an MCA parameter type, and without MCA
+// present the whole class reads as unbound and the probe would pass vacuously. Minecraft itself comes
+// from sourceSets.test.runtimeClasspath for the same reason.
+//
+// Never wired into `build` or `check`: it needs an operator-supplied jar.
+tasks.register('townsteadProbeTest', Test) {
+    group = 'verification'
+    description = 'Verifies the Townstead binding manifest against a supplied Townstead jar.'
+    dependsOn unitTestPrepareTasks
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'dev.otectus.mcaconversations.compat.TownsteadBindingProbeTest'
+        includeTestsMatching 'dev.otectus.mcaconversations.compat.TownsteadUiMixinProbeTest'
+    }
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+    doFirst {
+        inheritUnitTestWiring(it)
+        systemProperty 'mcaconversations.townstead.probe.jars',
+                ['townsteadModernJar', 'townsteadLegacyJar']
+                        .findAll { project.hasProperty(it) }
+                        .collect { project.property(it).toString() }
+                        .join(File.pathSeparator)
+        systemProperty 'mcaconversations.probe.jars', mcaProbeVersions.indices
+                .collect { i -> configurations.getByName("mcaProbe${i}").files }
+                .flatten()
+                .findAll { it.name.contains('mca-neoforge') }
+                .join(File.pathSeparator)
+    }
+}
+
+// The content compiler: expands src/content/ authoring sources into runtime resources (spec 19).
+//
+// Deliberately NOT wired into processResources. The compiler lives in the test source set - it is
+// build tooling and has no business in the shipped jar - and compileTestJava already depends on
+// processResources through `classes`, so making processResources depend on it would be a cycle.
+//
+// Instead the generated files are committed and ContentCompilerTest verifies them on every
+// `./gradlew check`: it compiles src/content into a scratch copy of the output tree and byte-compares
+// it back, failing on any file that is stale, missing or left over. That check never writes into the
+// repository. Regenerating is this task, and it is an explicit author command:
+//
+//     ./gradlew generateConversationContent
+//
+// The check alone, for the edit-compile-look loop:
+//
+//     ./gradlew verifyGeneratedConversationContent
+//
+// Nothing in the authoring package imports net.minecraft, but the test runtime classpath still
+// carries FML's JUnit launcher, so these two inherit `test`'s wiring like the probe task does. Both
+// get the project root injected the way `test` does -- TestPaths resolves src/ through it, and they
+// run out of the same build/minecraft-junit working directory.
+tasks.register('verifyGeneratedConversationContent', Test) {
+    group = 'verification'
+    description = 'Fails if the committed generated content is not what src/content compiles to.'
+    dependsOn unitTestPrepareTasks
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    doFirst {
+        inheritUnitTestWiring(it)
+        systemProperty 'mcaconversations.projectRoot', project.projectDir.absolutePath
+    }
+    filter { includeTestsMatching 'dev.otectus.mcaconversations.authoring.ContentCompilerTest' }
+    // Content drift is a property of the working tree, not of the inputs Gradle can see: a hand edit
+    // to a generated file changes neither this task's classpath nor its sources.
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+}
+
+tasks.register('generateConversationContent', JavaExec) {
+    group = 'documentation'
+    description = 'Compiles src/content authoring sources into runtime data and lang resources.'
+    dependsOn tasks.named('compileTestJava'), tasks.named('processTestResources')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'dev.otectus.mcaconversations.authoring.ContentCompiler'
+    args 'src/content', 'src/main/resources'
+    outputs.upToDateWhen { false }
+}
+
+// The personality overlays are six voices, not twenty-one. Each voice is authored once in
+// src/content/voices and expanded into every namespace that speaks it, in both locales, by
+//
+//     ./gradlew generateVoiceOverlays
+//
+// Before this existed the expansion was done by hand, which is why 999 of every family's 1,084 keys
+// are byte-identical and why overlay coverage sat at 5.9%: adding one line cost forty-two edits.
+//
+tasks.register('verifyVoiceOverlays', Test) {
+    group = 'verification'
+    description = 'Fails if the committed personality overlays are not what src/content/voices compiles to.'
+    dependsOn unitTestPrepareTasks
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    doFirst {
+        inheritUnitTestWiring(it)
+        systemProperty 'mcaconversations.projectRoot', project.projectDir.absolutePath
+    }
+    filter { includeTestsMatching 'dev.otectus.mcaconversations.authoring.VoiceFamilyCompilerTest' }
+    // Overlay drift is a property of the working tree, not of any input Gradle can see.
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+}
+
+tasks.register('generateVoiceOverlays', JavaExec) {
+    group = 'documentation'
+    description = 'Expands the six authored voices into every personality overlay namespace.'
+    dependsOn tasks.named('compileTestJava'), tasks.named('processTestResources')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'dev.otectus.mcaconversations.authoring.VoiceFamilyCompiler'
+    args 'src/content/voices', 'src/main/resources/assets'
+    outputs.upToDateWhen { false }
 }
 
 // Expand metadata placeholders into neoforge.mods.toml / pack.mcmeta at build time.
@@ -177,6 +375,21 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Vendor'   : mod_authors
         ])
     }
+}
+
+// Phase 9: the generated review and coverage reports are release artifacts, not build leftovers.
+// `./gradlew build` leaves them beside the jar in build/libs/reports/, so a release can be cut
+// with the adjacency report (English and Portuguese) and the content coverage table attached.
+tasks.register('conversationsReports', Copy) {
+    description = 'Collects the conversation adjacency and coverage reports next to the jar.'
+    group = 'documentation'
+    dependsOn tasks.named('test')
+    from layout.buildDirectory.dir('reports/conversations')
+    into layout.buildDirectory.dir('libs/reports')
+}
+
+tasks.named('build').configure {
+    dependsOn 'conversationsReports'
 }
 
 // Forward the build's stdin to the game's console. ModDevGradle's run tasks otherwise get an
@@ -254,8 +467,20 @@ tasks.register('verifyJarContents') {
             }
         }
         def dialogues = entries.count { it.startsWith('data/mcaconversations/dialogues/') && it.endsWith('.json') }
-        if (dialogues < 173) {
-            problems << "only ${dialogues} dialogue files; 173 are expected (content must not shrink)"
+        if (dialogues < 920) {
+            problems << "only ${dialogues} dialogue files; 920 are expected (content must not shrink)"
+        }
+        // The rest of the generated data trees, each with the floor the committed resources carry.
+        // A compiler run that silently dropped a directory shows up here and nowhere else.
+        ['conversation_beats': 110, 'chat_intents': 26, 'profession_profiles': 7,
+         'village_culture': 2, 'thread_templates': 1, 'identity_tokens': 1,
+         'episode_templates': 1, 'conversation_scenes': 1,
+         'commitment_templates': 1].each { dir, floor ->
+            def prefix = "data/mcaconversations/${dir}/"
+            def found = entries.count { it.startsWith(prefix) && it.endsWith('.json') }
+            if (found < floor) {
+                problems << "only ${found} file(s) under ${prefix}; ${floor} are expected (content must not shrink)"
+            }
         }
         def langFiles = entries.count { it.startsWith('assets/') && it.endsWith('.json') }
         if (langFiles < 46) {

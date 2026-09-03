@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_different",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.craft.ask_different"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.craft.ask_different",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.craft.ask_different"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.guard.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_hated",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.craft.ask_hated"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.craft.ask_hated",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.craft.ask_hated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

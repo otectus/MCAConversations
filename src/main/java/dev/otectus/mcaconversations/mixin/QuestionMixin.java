@@ -2,10 +2,9 @@ package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
-import net.conczin.mca.entity.VillagerEntityMCA;
-import net.conczin.mca.resources.data.dialogue.Question;
-import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,29 +25,36 @@ import java.util.List;
  * button); {@code REPLACE} drops it because MCA's Chat already leads to the hub and two entries
  * would be duplicates; {@code HIDDEN} drops it because the UI entry is switched off.
  *
+ * <p><b>One target, one jar</b> — see {@link NetworkHandlerMixin} for why the MCA package root is
+ * given as a string and why {@link Pseudo} is set. The question's own name is read through a
+ * {@link Shadow}ed {@code getName()} rather than the old {@code ((Question) (Object) this)} cast,
+ * which would have named the MCA type this mixin must stay agnostic about.
+ *
  * <p>Server-side: {@code getValidAnswers} takes a {@code ServerPlayer}, so this loads no client
  * class and is registered in the common {@code mixins} list. {@code remap = false} (MCA's own
  * method) and {@code require = 0} — if MCA reshapes the method the button simply stays visible
  * rather than the game failing to start.
  */
-@Mixin(value = Question.class, remap = false)
+@Pseudo
+@Mixin(targets = "net.conczin.mca.resources.data.dialogue.Question", remap = false)
 public abstract class QuestionMixin {
 
     /** The question our {@code main.json} merges into, and the answer name it adds. */
     private static final String MAIN_QUESTION = "main";
     private static final String CONVERSATIONS_ANSWER = "conversations";
 
+    @Shadow
+    public abstract String getName();
+
     @Inject(method = "getValidAnswers", at = @At("RETURN"), require = 0)
-    private void mcaconversations$hideHubButtonWhenNotAdditive(ServerPlayer player,
-                                                               VillagerEntityMCA villager,
-                                                               CallbackInfoReturnable<List<String>> cir) {
+    private void mcaconversations$hideHubButtonWhenNotAdditive(CallbackInfoReturnable<List<String>> cir) {
         try {
             if (McaConversationsConfig.hubEntryMode().showsOwnButton()) {
                 return;
             }
             // Scoped to the main menu: only the answer we inject there is ours to remove. A
             // same-named answer in any other question (ours or a third-party pack's) is left be.
-            if (!MAIN_QUESTION.equals(((Question) (Object) this).getName())) {
+            if (!MAIN_QUESTION.equals(getName())) {
                 return;
             }
             List<String> answers = cir.getReturnValue();

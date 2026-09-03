@@ -1,0 +1,766 @@
+{
+  "_comment": [
+    "Netherian (MoreVillagers). A trader whose stock comes out of somewhere that burns.",
+    "",
+    "The §12.4 anchors are the heat, the crossing, what will and will not travel, buyers, burns and the",
+    "way back. These three take a load that spoiled on the road, a burn that has changed how she works,",
+    "and a young trader who wants to be taken along.",
+    "",
+    "The voice is worn and practical. She does not romanticise the crossing and she is short with people",
+    "who ask what it is like as if it were a story. What she talks about is heat, weight, water and the",
+    "hours she has learned to walk in.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when MoreVillagers",
+    "is installed."
+  ],
+  "profession": "morevillagers:netherian",
+  "id": "netherian",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_heat",
+    "the_crossing",
+    "what_travels",
+    "buyers",
+    "burns",
+    "the_way_back"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to your load.",
+    "pt": "Vou deixar você voltar à sua carga."
+  },
+  "slot_lang": {
+    "net_a_load_of_quartz": {
+      "en": "a load of pale quartz",
+      "pt": "uma carga de quartzo claro"
+    },
+    "net_a_crate_of_red_stone": {
+      "en": "a crate of red stone",
+      "pt": "um caixote de pedra vermelha"
+    },
+    "net_a_bundle_of_dry_stalks": {
+      "en": "a bundle of dry stalks",
+      "pt": "um feixe de talos secos"
+    },
+    "net_a_cracked_water_skin": {
+      "en": "a cracked water skin",
+      "pt": "um odre rachado"
+    },
+    "net_a_day_lost_to_weather": {
+      "en": "a day lost to weather",
+      "pt": "um dia perdido para o tempo"
+    },
+    "net_a_pack_that_shifted": {
+      "en": "a pack that shifted on the climb",
+      "pt": "uma mochila que desandou na subida"
+    },
+    "net_the_left_hand": {
+      "en": "the left hand",
+      "pt": "a mão esquerda"
+    },
+    "net_the_side_of_the_face": {
+      "en": "the side of the face",
+      "pt": "o lado do rosto"
+    },
+    "net_a_boy_of_nineteen": {
+      "en": "a boy of nineteen",
+      "pt": "um rapaz de dezenove"
+    },
+    "net_a_woman_with_debts": {
+      "en": "a woman with debts",
+      "pt": "uma mulher endividada"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.spoiled_load",
+      "subject": "work.netherian.what_travels",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 24,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "load": [
+          "net_a_load_of_quartz",
+          "net_a_crate_of_red_stone",
+          "net_a_bundle_of_dry_stalks"
+        ],
+        "cause": [
+          "net_a_cracked_water_skin",
+          "net_a_day_lost_to_weather",
+          "net_a_pack_that_shifted"
+        ]
+      },
+      "commitment": {
+        "id": "work.netherian.bring_quartz",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:quartz",
+        "due_after_days": 4
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "load",
+            "cause"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "independence"
+          ],
+          "prompt": {
+            "en": "The load.",
+            "pt": "A carga."
+          },
+          "lines": {
+            "en": [
+              "%2$s came back in a state because of %3$s, and a spoiled load is nine days of walking for nothing.",
+              "%3$s. That is all it takes. Nine days out, nine days back, and %2$s is worth about a third of what it should be.",
+              "I have %2$s that I cannot sell at the price I need and I have already paid the carrier."
+            ],
+            "pt": [
+              "%2$s voltou num estado ruim por causa de %3$s, e uma carga estragada são nove dias de caminhada por nada.",
+              "%3$s. É só o que basta. Nove dias de ida, nove de volta, e %2$s vale um terço do que deveria.",
+              "Tenho %2$s que não consigo vender pelo preço de que preciso, e já paguei o transportador."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_crossing",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What does the journey take out of you?",
+                "pt": "O que a viagem tira de você?"
+              },
+              "phrases": [
+                "what does the journey take out of you",
+                "how much does the trip cost you"
+              ],
+              "requires_any": [
+                "journey",
+                "trip"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Water, mostly. You carry it, it weighs more than the goods, and you still run out on the sixth day if you have judged badly.",
+                    "Sleep. You cannot sleep properly in that heat, so you walk nine days on four nights, and the mistakes all happen on days seven and eight.",
+                    "People want me to say it is frightening. It is hot and it is dull and it is very heavy, and dull is what actually breaks a trader."
+                  ],
+                  "pt": [
+                    "Água, principalmente. Você carrega, ela pesa mais que a mercadoria, e mesmo assim acaba no sexto dia se você calculou mal.",
+                    "Sono. Não dá para dormir direito naquele calor, então você caminha nove dias com quatro noites, e os erros acontecem todos no sétimo e no oitavo.",
+                    "As pessoas querem que eu diga que é assustador. É quente, é monótono e é muito pesado, e é a monotonia que de fato quebra um comerciante."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_quartz",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you quartz to make up the load.",
+                "pt": "Vou trazer quartzo para completar a carga."
+              },
+              "phrases": [
+                "i can bring you quartz",
+                "let me fetch quartz for that"
+              ],
+              "requires_any": [
+                "quartz"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.netherian.load.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then the season pays for itself and I do not have to make the crossing again before winter.",
+                    "You are handing me nine days of my life back. I am going to spend most of them asleep and I am telling you so honestly.",
+                    "Yes. And I will trade you at cost for as long as I am in this village, and I will not be argued out of that either."
+                  ],
+                  "pt": [
+                    "Então a estação se paga e eu não preciso fazer a travessia de novo antes do inverno.",
+                    "Você está me devolvendo nove dias de vida. Vou passar quase todos dormindo e digo isso com toda a franqueza.",
+                    "Sim. E vou te vender a preço de custo enquanto eu estiver nesta vila, e também não aceito discussão sobre isso."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_a_second_carrier",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Split the load across two carriers.",
+                "pt": "Divida a carga entre dois transportadores."
+              },
+              "phrases": [
+                "split the load across two carriers",
+                "carry it in two loads instead of one"
+              ],
+              "requires_any": [
+                "split",
+                "carriers",
+                "loads"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "considered",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Two carriers is half the profit and a quarter of the risk. Written down like that it has never once been a difficult sum.",
+                    "I have carried alone for eleven years because I did not want to trust anybody with the crossing. That is pride, not policy.",
+                    "Yes. There is a woman in the next valley who has been asking to come along for two years and I have said no twice."
+                  ],
+                  "pt": [
+                    "Dois transportadores são metade do lucro e um quarto do risco. Escrito assim, nunca foi uma conta difícil.",
+                    "Carreguei sozinha por onze anos porque não queria confiar a travessia a ninguém. Isso é orgulho, não política.",
+                    "Sim. Tem uma mulher no vale vizinho que pede para ir junto há dois anos e eu disse não duas vezes."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "load"
+          ],
+          "prompt": {
+            "en": "The load, in the end.",
+            "pt": "A carga, no fim."
+          },
+          "lines": {
+            "en": [
+              "%2$s went out whole and at the right price. Two of us carried and neither of us ran short of water.",
+              "It worked. Half the profit, all of the sleep, and I have already agreed to the next crossing before this one is unpacked.",
+              "%2$s sold in a morning. I have not had a load sell in a morning since I was thirty."
+            ],
+            "pt": [
+              "%2$s saiu inteira e pelo preço certo. Nós duas carregamos e nenhuma ficou sem água.",
+              "Funcionou. Metade do lucro, todo o sono, e eu já concordei com a próxima travessia antes de desfazer esta.",
+              "%2$s vendeu numa manhã. Eu não vendia uma carga numa manhã desde os trinta."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_partner",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How was it with somebody along?",
+                "pt": "Como foi com alguém junto?"
+              },
+              "phrases": [
+                "how was it with somebody along",
+                "what was it like having company"
+              ],
+              "requires_any": [
+                "somebody",
+                "company"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Easier and much more irritating. She talks in the mornings, which I had forgotten was a thing people did.",
+                    "She spotted a bad skin on the second day that I would have found on the sixth. That is the whole argument for a second person.",
+                    "I slept. Actually slept, because somebody else was awake. Eleven years and I had forgotten what a full night on the road was."
+                  ],
+                  "pt": [
+                    "Mais fácil e muito mais irritante. Ela fala de manhã, e eu tinha esquecido que as pessoas fazem isso.",
+                    "Ela viu um odre ruim no segundo dia que eu teria descoberto no sexto. É esse o argumento inteiro a favor de uma segunda pessoa.",
+                    "Eu dormi. Dormi de verdade, porque tinha outra pessoa acordada. Onze anos e eu tinha esquecido o que era uma noite inteira na estrada."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_burn",
+      "subject": "work.netherian.burns",
+      "initial_state": "succeeded",
+      "salience": 50,
+      "due_after_days": 2,
+      "expires_after_days": 34,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "where": [
+          "net_the_left_hand",
+          "net_the_side_of_the_face"
+        ]
+      },
+      "states": [
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "predicate": "memory",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "where"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "Your hand.",
+            "pt": "Sua mão."
+          },
+          "lines": {
+            "en": [
+              "%2$s. Seven years ago, on the way out rather than the way back, which is the stupid part.",
+              "I got %2$s from a moment of not paying attention at the end of a good day, which is when everybody gets theirs.",
+              "%2$s cost me four months and taught me to walk at night and rest at noon, and I should have been doing that all along."
+            ],
+            "pt": [
+              "%2$s. Sete anos atrás, na ida e não na volta, que é a parte idiota.",
+              "Ganhei %2$s num momento de desatenção no fim de um dia bom, que é quando todo mundo ganha a sua.",
+              "%2$s me custou quatro meses e me ensinou a caminhar de noite e descansar ao meio-dia, coisa que eu deveria estar fazendo desde sempre."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_it_stopped_her",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "Did you think about giving it up?",
+                "pt": "Você pensou em largar?"
+              },
+              "phrases": [
+                "did you think about giving it up",
+                "were you tempted to leave the trade"
+              ],
+              "requires_any": [
+                "giving",
+                "tempted",
+                "leave"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Every day for four months. Then I could hold a pack again and the question simply stopped being interesting.",
+                    "I made a list of other trades. It had four things on it and I was qualified for none of them, which settled it faster than courage would have.",
+                    "I went back out too early, at three months, and turned round on the second day. The second attempt at four months was the one that held."
+                  ],
+                  "pt": [
+                    "Todo dia por quatro meses. Depois consegui segurar uma mochila de novo e a pergunta simplesmente parou de ser interessante.",
+                    "Fiz uma lista de outros ofícios. Tinha quatro itens e eu não servia para nenhum, o que resolveu mais rápido do que a coragem resolveria.",
+                    "Voltei cedo demais, aos três meses, e desisti no segundo dia. A segunda tentativa, aos quatro meses, foi a que segurou."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "note_the_change",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You changed how you work because of it.",
+                "pt": "Você mudou como trabalha por causa disso."
+              },
+              "phrases": [
+                "you changed how you work because of it",
+                "it changed your habits for good"
+              ],
+              "requires_any": [
+                "changed",
+                "habits"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Night walking. It halves the water and doubles the sleep, and it took a burn to make me try a thing every old trader had told me.",
+                    "Thank you. I would rather have been told and listened. That option was available for eleven years and I did not take it.",
+                    "I teach it now, first thing, before anybody has earned the right to argue with me about it."
+                  ],
+                  "pt": [
+                    "Caminhar de noite. Corta a água pela metade e dobra o sono, e foi preciso uma queimadura para eu testar algo que todo comerciante velho já tinha me dito.",
+                    "Obrigada. Eu preferia ter sido avisada e ter escutado. Essa opção esteve disponível por onze anos e eu não aproveitei.",
+                    "Eu ensino isso agora, de saída, antes de qualquer um ganhar o direito de discutir comigo a respeito."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_apprentice_trader",
+      "subject": "work.netherian.the_crossing",
+      "initial_state": "active",
+      "salience": 48,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "young": [
+          "net_a_boy_of_nineteen",
+          "net_a_woman_with_debts"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "young"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The one who wants to come.",
+            "pt": "Quem quer ir junto."
+          },
+          "lines": {
+            "en": [
+              "%2$s wants to come on the crossing and has asked three times, and I have run out of polite ways to delay.",
+              "%2$s could do it. That is not the question. The question is whether they will still want to after the seventh day.",
+              "If I say no, %2$s goes with somebody careless instead, and that is the argument that keeps winning against my own caution."
+            ],
+            "pt": [
+              "%2$s quer ir na travessia e já pediu três vezes, e eu esgotei os jeitos educados de adiar.",
+              "%2$s conseguiria. Não é essa a questão. A questão é se ainda vai querer depois do sétimo dia.",
+              "Se eu disser não, %2$s vai com alguém descuidado, e é esse o argumento que sempre vence a minha cautela."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_worries_her",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What are you worried about?",
+                "pt": "Com o que você se preocupa?"
+              },
+              "phrases": [
+                "what are you worried about",
+                "what is the worry exactly"
+              ],
+              "requires_any": [
+                "worried",
+                "worry"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "young"
+                ],
+                "lines": {
+                  "en": [
+                    "That %2$s will be my responsibility on day seven, when I am at my worst and least able to be anybody's responsibility.",
+                    "Not the heat. The dullness. People who are excited about the crossing are exactly the people who find day five unbearable.",
+                    "That I will get it wrong the way somebody got it wrong with me at twenty, and I remember exactly how that felt and who it was."
+                  ],
+                  "pt": [
+                    "Que %2$s vire responsabilidade minha no sétimo dia, quando eu estou no meu pior e menos capaz de ser responsável por alguém.",
+                    "Não o calor. A monotonia. Quem se empolga com a travessia é exatamente quem acha o quinto dia insuportável.",
+                    "Que eu erre do jeito que alguém errou comigo aos vinte, e eu lembro exatamente como aquilo foi e quem era."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_a_short_trip",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Take them on a short run first.",
+                "pt": "Leve numa viagem curta primeiro."
+              },
+              "phrases": [
+                "take them on a short run first",
+                "try a shorter journey before the crossing"
+              ],
+              "requires_any": [
+                "short",
+                "shorter",
+                "run"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Four days to the coast and back. Long enough to be dull and short enough that quitting costs nobody anything.",
+                    "That is obvious and I had not thought of it, because I have been treating this as a yes or a no for two years.",
+                    "Yes. And if they hate it, they will find that out at four days from home instead of nine days from anywhere."
+                  ],
+                  "pt": [
+                    "Quatro dias até a costa e volta. Longo o bastante para ser monótono e curto o bastante para desistir não custar nada a ninguém.",
+                    "Isso é óbvio e eu não tinha pensado, porque venho tratando a coisa como um sim ou um não há dois anos.",
+                    "Sim. E se odiarem, vão descobrir a quatro dias de casa em vez de a nove dias de qualquer lugar."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "young"
+          ],
+          "prompt": {
+            "en": "Your second carrier.",
+            "pt": "Sua segunda carregadora."
+          },
+          "lines": {
+            "en": [
+              "%2$s did the short run and asked for the long one on the walk home, which is the answer I was hoping for.",
+              "Four days to the coast sorted it. %2$s was bored on the third day, said so out loud, and kept walking anyway. That is the whole test.",
+              "%2$s is coming on the next crossing. I have written down everything I know about water, which took a night and filled two pages."
+            ],
+            "pt": [
+              "%2$s fez a viagem curta e pediu a longa no caminho de volta, que é a resposta que eu esperava.",
+              "Quatro dias até a costa resolveram. %2$s ficou entediada no terceiro dia, disse isso em voz alta, e continuou andando. É esse o teste inteiro.",
+              "%2$s vem na próxima travessia. Anotei tudo o que sei sobre água, o que levou uma noite e encheu duas páginas."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_two_pages",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Two pages is eleven years of learning.",
+                "pt": "Duas páginas são onze anos de aprendizado."
+              },
+              "phrases": [
+                "two pages is eleven years of learning",
+                "that is your whole experience written down"
+              ],
+              "requires_any": [
+                "pages",
+                "experience",
+                "learning"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Two pages, and about half of it is things somebody told me and I ignored until it cost me something.",
+                    "Thank you. I had never written any of it down. If I had gone under on a crossing, all of it would have gone with me.",
+                    "It was the strangest night's work I have done. Everything I know about a nine-day walk fitted on two sides of a page, and I expected more."
+                  ],
+                  "pt": [
+                    "Duas páginas, e quase metade são coisas que alguém me disse e eu ignorei até me custarem alguma coisa.",
+                    "Obrigada. Eu nunca tinha escrito nada disso. Se eu tivesse ficado numa travessia, tudo teria ido junto.",
+                    "Foi a noite de trabalho mais estranha que eu já tive. Tudo o que eu sei sobre uma caminhada de nove dias coube em duas páginas, e eu esperava mais."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Was there something more?",
+      "pt": "Tinha mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of the heat?",
+        "pt": "Qual é a parte mais difícil do calor?"
+      },
+      "requires_any": [
+        "hardest",
+        "heat"
+      ],
+      "phrases": [
+        "what is the hardest part of the heat",
+        "hardest thing about working in that heat"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the heat.",
+      "pt": "Vou deixar você com o calor."
+    }
+  }
+}

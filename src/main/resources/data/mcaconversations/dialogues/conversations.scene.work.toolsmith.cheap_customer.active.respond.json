@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_does",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.cheap_customer.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.the_people_who_use_them",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.cheap_customer"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.cheap_customer.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_honest_price",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.cheap_customer.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.the_people_who_use_them",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.cheap_customer"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.cheap_customer.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

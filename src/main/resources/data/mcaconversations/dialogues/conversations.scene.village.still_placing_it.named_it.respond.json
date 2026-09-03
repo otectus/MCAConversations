@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "sit_with_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.still_placing_it.open.named_it.eased"
+            },
+            "conversations_affection_apply": {
+              "decision": "village.change.sit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once_per_day"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.change",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "village.change"
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.still_placing_it.named_it.eased"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "press_for_the_line",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.still_placing_it.open.named_it.said_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.change",
+              "deltas": {
+                "respect": 3,
+                "tension": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "village.change"
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.still_placing_it.named_it.said_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "answers": [
+    {
+      "name": "ask_certainty",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.night_sighting.blocked.hedged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.recent_threat",
+              "deltas": {
+                "respect": 3,
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.night_sighting"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.night_sighting.blocked.hedged",
+              "slots": [
+                "sighting"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_to_watch",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.night_sighting.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.guard.night_sighting.company",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.recent_threat",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.night_sighting",
+              "state": "succeeded"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.night_sighting"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.night_sighting.blocked.accepted",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

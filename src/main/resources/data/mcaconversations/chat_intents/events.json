@@ -50,26 +50,343 @@
       ],
       "category": "topics"
     },
-    "news.young.take_seriously": {
-      "question": "conversations.topic.news.young.respond",
-      "answer": "take_seriously",
-      "context": "conversations.topic.news.young.respond",
+    "news.callous.apologize": {
+      "question": "conversations.topic.news.callous.followup",
+      "answer": "apologize",
+      "context": "conversations.topic.news.callous.followup",
       "keywords": {
-        "properly": 1.5,
-        "telling": 1.1
+        "unforgivable": 1.5,
+        "cruel": 1.2,
+        "sorry": 1.0
       },
       "requiresAny": [
-        "properly",
-        "telling"
+        "unforgivable",
+        "cruel",
+        "sorry"
       ],
       "antiKeywords": [
-        "find",
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "that was unforgivable, i am sorry",
+        "that was a cruel thing to say",
+        "i should never have said that"
+      ],
+      "category": "topics"
+    },
+    "news.deflated.apologize": {
+      "question": "conversations.topic.news.deflated.followup",
+      "answer": "apologize",
+      "context": "conversations.topic.news.deflated.followup",
+      "keywords": {
+        "right": 1.0,
+        "sorry": 1.2,
+        "spoil": 1.5
+      },
+      "requiresAny": [
+        "right",
+        "sorry",
+        "spoil"
+      ],
+      "antiKeywords": [
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "you are right, let it be good",
+        "i did not mean to spoil it",
+        "sorry, i will not spoil it"
+      ],
+      "category": "topics"
+    },
+    "news.deflated.let_it_be": {
+      "question": "conversations.topic.news.deflated.followup",
+      "answer": "let_it_be",
+      "context": "conversations.topic.news.deflated.followup",
+      "keywords": {
+        "understood": 1.2,
+        "quiet": 1.2,
+        "enough": 1.2
+      },
+      "requiresAny": [
+        "understood",
+        "quiet",
+        "enough"
+      ],
+      "phrases": [
+        "understood, i will say no more",
+        "i will keep quiet about it",
+        "enough said"
+      ],
+      "category": "topics"
+    },
+    "news.glad.ask_how": {
+      "question": "conversations.topic.news.glad.followup",
+      "answer": "ask_how_they_are",
+      "context": "conversations.topic.news.glad.followup",
+      "keywords": {
+        "yourself": 1.5,
+        "pleased": 1.5,
+        "glad": 1.0
+      },
+      "requiresAny": [
+        "yourself",
+        "pleased",
+        "glad"
+      ],
+      "phrases": [
+        "and how are you finding it yourself",
+        "are you pleased about it yourself",
+        "and you, are you glad of it"
+      ],
+      "category": "topics"
+    },
+    "news.glad.celebrate_too": {
+      "question": "conversations.topic.news.glad.followup",
+      "answer": "celebrate_too",
+      "context": "conversations.topic.news.glad.followup",
+      "keywords": {
+        "good": 0.6,
+        "week": 1.2,
+        "us": 0.8
+      },
+      "requiresAny": [
+        "week"
+      ],
+      "phrases": [
+        "then it is a good week for all of us",
+        "a good week for everyone",
+        "that is good news for all of us"
+      ],
+      "category": "topics"
+    },
+    "news.glad.pass_it_on": {
+      "question": "conversations.topic.news.glad.followup",
+      "answer": "pass_it_on",
+      "context": "conversations.topic.news.glad.followup",
+      "keywords": {
+        "pass": 1.5,
+        "gladly": 1.5,
+        "tell": 0.8
+      },
+      "requiresAny": [
+        "pass",
+        "gladly"
+      ],
+      "phrases": [
+        "i will pass it on gladly",
+        "i will spread that one",
+        "i will tell everyone i see"
+      ],
+      "category": "topics"
+    },
+    "news.grave.ask_how": {
+      "question": "conversations.topic.news.grave.followup",
+      "answer": "ask_how_they_are",
+      "context": "conversations.topic.news.grave.followup",
+      "keywords": {
+        "bearing": 1.5,
+        "yourself": 1.2,
+        "carrying": 1.2
+      },
+      "requiresAny": [
+        "bearing",
+        "yourself",
+        "carrying"
+      ],
+      "phrases": [
+        "and how are you bearing up",
+        "how are you carrying all that",
+        "and how are you yourself, with all that"
+      ],
+      "category": "topics"
+    },
+    "news.grave.keep_quiet": {
+      "question": "conversations.topic.news.grave.followup",
+      "answer": "keep_quiet",
+      "context": "conversations.topic.news.grave.followup",
+      "keywords": {
+        "breathe": 1.5,
+        "word": 1.5,
+        "repeat": 1.0
+      },
+      "requiresAny": [
+        "breathe",
+        "word",
         "repeat"
       ],
       "phrases": [
-        "thank you for telling me properly",
-        "thank you for telling me that properly",
-        "you told me that properly"
+        "i will not breathe a word of it",
+        "not a word from me",
+        "i will repeat none of it"
+      ],
+      "category": "topics"
+    },
+    "news.grave.offer_help": {
+      "question": "conversations.topic.news.grave.followup",
+      "answer": "offer_help",
+      "context": "conversations.topic.news.grave.followup",
+      "keywords": {
+        "family": 1.5,
+        "needs": 1.2,
+        "anything": 0.8
+      },
+      "requiresAny": [
+        "family",
+        "needs"
+      ],
+      "phrases": [
+        "is there anything the family needs",
+        "what does the family need",
+        "can i do anything for them"
+      ],
+      "category": "topics"
+    },
+    "news.mixed.keep_quiet": {
+      "question": "conversations.topic.news.mixed.followup",
+      "answer": "keep_quiet",
+      "context": "conversations.topic.news.mixed.followup",
+      "keywords": {
+        "repeat": 1.5,
+        "quiet": 1.2,
+        "nobody": 1.0
+      },
+      "requiresAny": [
+        "repeat",
+        "quiet",
+        "nobody"
+      ],
+      "phrases": [
+        "i will not repeat any of it",
+        "it stays quiet with me",
+        "nobody will hear it from me"
+      ],
+      "category": "topics"
+    },
+    "news.mixed.let_them_be": {
+      "question": "conversations.topic.news.mixed.followup",
+      "answer": "let_them_be",
+      "context": "conversations.topic.news.mixed.followup",
+      "keywords": {
+        "theirs": 1.5,
+        "business": 1.5,
+        "whatever": 1.0
+      },
+      "requiresAny": [
+        "theirs",
+        "business",
+        "whatever"
+      ],
+      "phrases": [
+        "whatever it is, it is theirs",
+        "it is their business",
+        "that is their own affair"
+      ],
+      "category": "topics"
+    },
+    "news.spread_refused": {
+      "question": "conversations.topic.news.mixed.followup",
+      "answer": "spread",
+      "context": "conversations.topic.news.mixed.followup",
+      "keywords": {
+        "everyone": 1.2,
+        "hear": 1.2,
+        "spread": 1.5
+      },
+      "requiresAny": [
+        "everyone",
+        "hear",
+        "spread"
+      ],
+      "phrases": [
+        "everyone should hear about this",
+        "i will spread that around",
+        "people should know about this"
+      ],
+      "category": "topics"
+    },
+    "news.teen.ask_how_they_know": {
+      "question": "conversations.topic.news.teen.respond",
+      "answer": "ask_how_they_know",
+      "context": "conversations.topic.news.teen.respond",
+      "keywords": {
+        "certain": 1.5,
+        "much": 0.6,
+        "sure": 1.2
+      },
+      "requiresAny": [
+        "certain",
+        "much",
+        "sure"
+      ],
+      "phrases": [
+        "how much of that is certain",
+        "how sure are you",
+        "which parts do you know"
+      ],
+      "category": "topics"
+    },
+    "news.teen.dismiss": {
+      "question": "conversations.topic.news.teen.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.news.teen.respond",
+      "keywords": {
+        "repeating": 1.2,
+        "too": 0.5,
+        "young": 1.5
+      },
+      "requiresAny": [
+        "repeating",
+        "too",
+        "young"
+      ],
+      "phrases": [
+        "you are too young to be repeating that",
+        "you should not repeat that",
+        "that is not yours to pass on"
+      ],
+      "category": "topics"
+    },
+    "news.teen.leave": {
+      "question": "conversations.topic.news.teen.respond",
+      "answer": "leave",
+      "context": "conversations.topic.news.teen.respond",
+      "keywords": {
+        "get": 0.5,
+        "leave": 1.2,
+        "on": 0.4
+      },
+      "requiresAny": [
+        "get",
+        "leave",
+        "on"
+      ],
+      "phrases": [
+        "i will let you get on",
+        "i should go",
+        "another time"
+      ],
+      "category": "topics"
+    },
+    "news.teen.take_seriously": {
+      "question": "conversations.topic.news.teen.respond",
+      "answer": "take_seriously",
+      "context": "conversations.topic.news.teen.respond",
+      "keywords": {
+        "straight": 1.5,
+        "telling": 1.2,
+        "thank": 0.8
+      },
+      "requiresAny": [
+        "straight",
+        "telling",
+        "thank"
+      ],
+      "phrases": [
+        "thank you for telling me straight",
+        "you told me straight",
+        "i appreciate you being direct"
       ],
       "category": "topics"
     },
@@ -115,6 +432,29 @@
         "you should not repeat things",
         "do not repeat things like that",
         "that is just repeating gossip"
+      ],
+      "category": "topics"
+    },
+    "news.young.take_seriously": {
+      "question": "conversations.topic.news.young.respond",
+      "answer": "take_seriously",
+      "context": "conversations.topic.news.young.respond",
+      "keywords": {
+        "properly": 1.5,
+        "telling": 1.1
+      },
+      "requiresAny": [
+        "properly",
+        "telling"
+      ],
+      "antiKeywords": [
+        "find",
+        "repeat"
+      ],
+      "phrases": [
+        "thank you for telling me properly",
+        "thank you for telling me that properly",
+        "you told me that properly"
       ],
       "category": "topics"
     }

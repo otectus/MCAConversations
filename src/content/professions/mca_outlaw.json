@@ -1,0 +1,886 @@
+{
+  "_comment": [
+    "Outlaw. Somebody with a name that arrived before they did.",
+    "",
+    "The §12.4 anchors are the old business, the name, the people owed, going straight, being watched",
+    "and the one thing she will not explain. These three take a debt she is trying to pay back, a",
+    "village that will not let the name go, and an old associate who has turned up.",
+    "",
+    "She is not glamorous and she is not repentant on demand. She is precise about what she did, blunt",
+    "about what she owes, and impatient with people who want either a confession or a legend. Nothing",
+    "here invites the player to join anything."
+  ],
+  "profession": "mca:outlaw",
+  "id": "outlaw",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "old_business",
+    "the_name",
+    "people_owed",
+    "going_straight",
+    "being_watched",
+    "the_unexplained"
+  ],
+  "leave_label": {
+    "en": "I'll let you get on with it.",
+    "pt": "Vou deixar você seguir com isso."
+  },
+  "slot_lang": {
+    "out_a_miller_downriver": {
+      "en": "a miller downriver",
+      "pt": "um moleiro rio abaixo"
+    },
+    "out_a_widow_two_valleys_over": {
+      "en": "a widow two valleys over",
+      "pt": "uma viúva a dois vales daqui"
+    },
+    "out_a_carter_who_lost_a_load": {
+      "en": "a carter who lost a load",
+      "pt": "um carroceiro que perdeu uma carga"
+    },
+    "out_a_year_of_wages": {
+      "en": "a year of wages",
+      "pt": "um ano de salário"
+    },
+    "out_a_horse": {
+      "en": "a horse",
+      "pt": "um cavalo"
+    },
+    "out_a_winter_of_grain": {
+      "en": "a winter of grain",
+      "pt": "um inverno de grãos"
+    },
+    "out_the_headman": {
+      "en": "the headman",
+      "pt": "o chefe da vila"
+    },
+    "out_the_families_at_the_top_of_the_lane": {
+      "en": "the families at the top of the lane",
+      "pt": "as famílias no fim da viela"
+    },
+    "out_the_children": {
+      "en": "the children",
+      "pt": "as crianças"
+    },
+    "out_a_man_from_before": {
+      "en": "a man from before",
+      "pt": "um homem de antes"
+    },
+    "out_a_woman_i_travelled_with": {
+      "en": "a woman I travelled with",
+      "pt": "uma mulher com quem eu viajava"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.old_debt",
+      "subject": "work.outlaw.people_owed",
+      "initial_state": "blocked",
+      "salience": 62,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "slots": {
+        "creditor": [
+          "out_a_miller_downriver",
+          "out_a_widow_two_valleys_over",
+          "out_a_carter_who_lost_a_load"
+        ],
+        "debt": [
+          "out_a_year_of_wages",
+          "out_a_horse",
+          "out_a_winter_of_grain"
+        ]
+      },
+      "commitment": {
+        "id": "work.outlaw.bring_repayment",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:emerald",
+        "due_after_days": 4
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "creditor",
+            "debt"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The old business.",
+            "pt": "Os assuntos antigos."
+          },
+          "lines": {
+            "en": [
+              "I owe %2$s %3$s and I have saved about a third of it, which after two years is not a good rate.",
+              "%3$s. That is what %2$s is out, and no amount of my being sorry converts into %3$s.",
+              "I have been paying %2$s back in instalments through a third party, because turning up in person would frighten them."
+            ],
+            "pt": [
+              "Devo %3$s a %2$s e já juntei cerca de um terço, o que depois de dois anos não é bom ritmo.",
+              "%3$s. É isso que %2$s perdeu, e nenhuma quantidade de arrependimento meu vira %3$s.",
+              "Venho pagando %2$s em parcelas por intermédio de terceiros, porque aparecer em pessoa assustaria eles."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why_repay",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why pay it back at all?",
+                "pt": "Por que pagar de volta?"
+              },
+              "phrases": [
+                "why pay it back at all",
+                "what makes you repay it"
+              ],
+              "requires_any": [
+                "repay",
+                "pay"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "creditor"
+                ],
+                "lines": {
+                  "en": [
+                    "Because %2$s is a person and I am the reason their year went badly. That is the entire argument and it does not need help.",
+                    "Not for absolution. Absolution is a thing you give yourself and I have no interest in it. This is arithmetic.",
+                    "Because otherwise I am a person who says she has changed, and saying it is free."
+                  ],
+                  "pt": [
+                    "Porque %2$s é uma pessoa e eu sou o motivo de o ano dela ter sido ruim. É o argumento inteiro e não precisa de ajuda.",
+                    "Não por absolvição. Absolvição é coisa que a gente dá a si mesma e não me interessa. Isto é aritmética.",
+                    "Porque senão eu sou uma pessoa que diz que mudou, e dizer é de graça."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_help_repaying",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll put emeralds toward it.",
+                "pt": "Vou entrar com esmeraldas nisso."
+              },
+              "phrases": [
+                "i can put emeralds toward it",
+                "let me contribute emeralds"
+              ],
+              "requires_any": [
+                "emeralds",
+                "contribute"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.outlaw.debt.helped",
+                "delta": 3,
+                "budget": "deep",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "I will take it, and I will keep a tally, and you will get it back whether you want it or not.",
+                    "That shortens two years to one. I am not going to make a speech, but I want you to know I did the sum immediately.",
+                    "Careful. Helping me is the sort of thing this village notices, and it notices in the wrong direction."
+                  ],
+                  "pt": [
+                    "Vou aceitar, e vou anotar, e você vai receber de volta querendo ou não.",
+                    "Isso encurta dois anos para um. Não vou fazer discurso, mas quero que saiba que eu fiz a conta na hora.",
+                    "Cuidado. Ajudar a mim é o tipo de coisa que esta vila repara, e repara na direção errada."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_going_in_person",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Go to them yourself.",
+                "pt": "Vá até eles pessoalmente."
+              },
+              "phrases": [
+                "go to them yourself",
+                "deliver it in person"
+              ],
+              "requires_any": [
+                "yourself",
+                "person"
+              ],
+              "disposition": {
+                "respect": 2
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "That would be for me. They would have to stand in their own doorway and be gracious to the person who did it.",
+                    "One day, if they ask. Not before. The choice about whether to see me again is theirs and I have taken enough of their choices.",
+                    "I have written. Twice. Both letters said the same four things and neither asked for an answer, and that is as close as I will go uninvited."
+                  ],
+                  "pt": [
+                    "Isso seria para mim. Eles teriam que ficar na própria porta e ser gentis com a pessoa que fez aquilo.",
+                    "Um dia, se pedirem. Antes não. A escolha de me ver de novo é deles e eu já tomei escolhas demais deles.",
+                    "Eu escrevi. Duas vezes. As duas cartas diziam as mesmas quatro coisas e nenhuma pedia resposta, e é o mais perto que eu chego sem convite."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "creditor"
+          ],
+          "prompt": {
+            "en": "That debt.",
+            "pt": "Aquela dívida."
+          },
+          "lines": {
+            "en": [
+              "Paid. All of it, through the same third party, and %2$s sent back three words and I have kept them.",
+              "It is settled. I expected to feel something and what I felt was that the next one is still outstanding.",
+              "%2$s is square with me. Not friendly. Square. Square was the whole objective and I would like that understood."
+            ],
+            "pt": [
+              "Paga. Toda, pelo mesmo intermediário, e %2$s mandou de volta três palavras que eu guardei.",
+              "Está quitada. Eu esperava sentir alguma coisa e o que senti foi que a próxima continua em aberto.",
+              "%2$s está quite comigo. Não amigável. Quite. Quite era o objetivo inteiro, e gostaria que isso ficasse entendido."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_they_said",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did they send back?",
+                "pt": "O que mandaram de volta?"
+              },
+              "phrases": [
+                "what did they send back",
+                "what were the words in the reply"
+              ],
+              "requires_any": [
+                "send",
+                "reply",
+                "words"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Received in full. That is all. It is the correct amount of warmth and I have read it about forty times.",
+                    "Nothing kind. Nothing cruel either, which I had prepared for and would have accepted.",
+                    "Three words, in a hand that had clearly been thought about. I am not going to repeat them. They are the only thing I own from all of it."
+                  ],
+                  "pt": [
+                    "Recebido integralmente. Só isso. É a quantidade correta de calor humano e eu já li umas quarenta vezes.",
+                    "Nada gentil. Nada cruel também, coisa para a qual eu tinha me preparado e que teria aceitado.",
+                    "Três palavras, numa letra que claramente foi pensada. Não vou repetir. São a única coisa que eu tenho de tudo aquilo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_name",
+      "subject": "work.outlaw.the_name",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 28,
+      "slots": {
+        "watcher": [
+          "out_the_headman",
+          "out_the_families_at_the_top_of_the_lane",
+          "out_the_children"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "watcher"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The name.",
+            "pt": "O nome."
+          },
+          "lines": {
+            "en": [
+              "%2$s knows what I was, and there is no version of the next ten years where %2$s forgets.",
+              "Every time something goes missing, %2$s looks at me first. Twice they have been decent enough to say so to my face.",
+              "%2$s has been fair and watchful at once, which is exactly what I would do, and it is still tiring to live inside."
+            ],
+            "pt": [
+              "%2$s sabe o que eu fui, e não existe versão dos próximos dez anos em que %2$s esqueça.",
+              "Toda vez que some alguma coisa, %2$s olha para mim primeiro. Duas vezes tiveram a decência de dizer na minha cara.",
+              "%2$s tem sido justo e vigilante ao mesmo tempo, que é exatamente o que eu faria, e ainda assim é cansativo viver dentro disso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_it_can_change",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Can that ever change?",
+                "pt": "Isso pode mudar algum dia?"
+              },
+              "phrases": [
+                "can that ever change",
+                "will the name ever shift"
+              ],
+              "requires_any": [
+                "change",
+                "shift",
+                "name"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Not the knowing. The weight of it, maybe, in about fifteen years, if I am very boring for all fifteen.",
+                    "It changes one household at a time and it changes back the first time a barn burns anywhere within a day's ride.",
+                    "The children are the answer. They will grow up with me as the woman who mends carts, and their version will outlive their parents' version."
+                  ],
+                  "pt": [
+                    "O saber, não. O peso, talvez, em uns quinze anos, se eu for muito entediante nos quinze.",
+                    "Muda uma casa por vez e desmuda na primeira vez que um celeiro pega fogo a um dia de viagem daqui.",
+                    "As crianças são a resposta. Vão crescer comigo como a mulher que conserta carroças, e a versão delas vai sobreviver à versão dos pais."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_you_judge_by_now",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "I judge people by what they do now.",
+                "pt": "Eu julgo pelo que a pessoa faz agora."
+              },
+              "phrases": [
+                "i judge people by what they do now",
+                "what you do now is what counts"
+              ],
+              "requires_any": [
+                "judge",
+                "now",
+                "counts"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.outlaw.name.trusted",
+                "delta": 3,
+                "budget": "deep",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "That is a rarer position than you think, and I would advise you to hold it quietly rather than at the well.",
+                    "Thank you. I am not going to pretend that undoes anything. It does make today easier, and today is what I have.",
+                    "Be careful with that. People who decide I am fine tend to decide it all at once, and then they are hurt when I turn out to be ordinary."
+                  ],
+                  "pt": [
+                    "Essa é uma posição mais rara do que você imagina, e eu aconselharia sustentar em silêncio, não no poço.",
+                    "Obrigada. Não vou fingir que isso desfaz alguma coisa. Facilita o dia de hoje, e hoje é o que eu tenho.",
+                    "Cuidado com isso. Quem decide que eu presto costuma decidir tudo de uma vez, e depois se magoa quando eu me revelo comum."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_patience",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Then be boring for fifteen years.",
+                "pt": "Então seja entediante por quinze anos."
+              },
+              "phrases": [
+                "then be boring for fifteen years",
+                "outlast it by being ordinary"
+              ],
+              "requires_any": [
+                "boring",
+                "ordinary",
+                "outlast"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "That is the plan and it is a poor one and it is the only one available, which is roughly how I feel about most of my plans.",
+                    "Fifteen years of being unremarkable. I have done harder things in a week, and none of them lasted fifteen years.",
+                    "Yes. And the difficulty is that boring is not a thing you can be seen doing. It only exists in the absence of stories."
+                  ],
+                  "pt": [
+                    "É o plano, é um plano ruim e é o único disponível, que é mais ou menos como me sinto sobre a maioria dos meus planos.",
+                    "Quinze anos sendo comum. Já fiz coisas mais difíceis em uma semana, e nenhuma durou quinze anos.",
+                    "Sim. E a dificuldade é que entediante não é algo que se possa ser visto fazendo. Só existe na ausência de histórias."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "watcher"
+          ],
+          "prompt": {
+            "en": "The village, lately.",
+            "pt": "A vila, ultimamente."
+          },
+          "lines": {
+            "en": [
+              "%2$s asked me to look at a lock last week. Asked. That is the first time in four years.",
+              "Something went missing in the autumn and nobody came to my door, and I only noticed a week later that nobody had.",
+              "It has shifted. Not forgiven — shifted. %2$s treats me as a neighbour with a past rather than a past with a house."
+            ],
+            "pt": [
+              "%2$s me pediu para olhar uma fechadura semana passada. Pediu. É a primeira vez em quatro anos.",
+              "Sumiu uma coisa no outono e ninguém bateu na minha porta, e eu só percebi uma semana depois que ninguém tinha vindo.",
+              "Mudou. Não perdoado — mudou. %2$s me trata como vizinha com passado, em vez de passado com uma casa."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_it_shifted",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Four years of boring did that.",
+                "pt": "Quatro anos de tédio fizeram isso."
+              },
+              "phrases": [
+                "four years of boring did that",
+                "the ordinary years earned that"
+              ],
+              "requires_any": [
+                "boring",
+                "ordinary",
+                "years"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Four years and one lock. I would like to be more moved by it than I am, and I am aware that says something about me.",
+                    "It did. And it can be undone by one bad harvest and one missing purse, so I have not started resting.",
+                    "Thank you. There is no ceremony for this. Nobody announces that you have been let back in; you just notice the door was open."
+                  ],
+                  "pt": [
+                    "Quatro anos e uma fechadura. Eu gostaria de me emocionar mais do que me emociono, e sei que isso diz algo a meu respeito.",
+                    "Fizeram. E dá para desfazer com uma colheita ruim e uma bolsa sumida, então eu não comecei a descansar.",
+                    "Obrigada. Não existe cerimônia para isso. Ninguém anuncia que você foi readmitida; você só repara que a porta estava aberta."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.old_associate",
+      "subject": "work.outlaw.old_business",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 3,
+      "expires_after_days": 20,
+      "slots": {
+        "visitor": [
+          "out_a_man_from_before",
+          "out_a_woman_i_travelled_with"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "visitor"
+          ],
+          "identity_values": [
+            "fairness",
+            "tradition",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The visitor.",
+            "pt": "A visita."
+          },
+          "lines": {
+            "en": [
+              "%2$s came through on Tuesday and knew exactly which door was mine.",
+              "I gave %2$s a meal and no answers, and %2$s is still in the district, which I know because I have been counting the days.",
+              "%2$s wants something. Nobody rides four days to say hello to a person who has stopped being useful."
+            ],
+            "pt": [
+              "%2$s passou por aqui na terça e sabia exatamente qual porta era a minha.",
+              "Dei uma refeição a %2$s e nenhuma resposta, e %2$s continua na região, o que eu sei porque venho contando os dias.",
+              "%2$s quer alguma coisa. Ninguém cavalga quatro dias para dar bom-dia a uma pessoa que parou de ser útil."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_they_want",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do they want from you?",
+                "pt": "O que querem de você?"
+              },
+              "phrases": [
+                "what do they want from you",
+                "what are they after"
+              ],
+              "requires_any": [
+                "want",
+                "after"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "visitor"
+                ],
+                "lines": {
+                  "en": [
+                    "A door left unlocked, most likely, and a night when I look the other way. That is what I was for, and %2$s has no reason to think it changed.",
+                    "Company, possibly. That is the version I would prefer and the one I trust least.",
+                    "%2$s has not asked yet. That is the part that frightens me — the asking is the easy bit, and %2$s is taking their time."
+                  ],
+                  "pt": [
+                    "Uma porta destrancada, provavelmente, e uma noite em que eu olhe para o outro lado. Era para isso que eu servia, e %2$s não tem motivo para achar que mudou.",
+                    "Companhia, talvez. É a versão que eu preferiria e a de que menos desconfio bem.",
+                    "%2$s ainda não pediu. É essa a parte que me assusta — pedir é o fácil, e %2$s está tomando seu tempo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_telling_someone",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Tell the headman before they ask you.",
+                "pt": "Fale com o chefe antes de te pedirem."
+              },
+              "phrases": [
+                "tell the headman before they ask you",
+                "warn somebody in the village first"
+              ],
+              "requires_any": [
+                "headman",
+                "warn",
+                "village"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.outlaw.visitor.declared",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "That is the right answer and it costs me the last thing I have from before, and I am going to do it tomorrow.",
+                    "Yes. Told first, it is information. Found out later, it is a conspiracy, and there is no third version.",
+                    "It will confirm every suspicion for a fortnight and settle them for good afterwards. I have run the arithmetic four times."
+                  ],
+                  "pt": [
+                    "É a resposta certa e me custa a última coisa que eu tenho de antes, e eu vou fazer amanhã.",
+                    "Sim. Contado antes, é informação. Descoberto depois, é conspiração, e não existe terceira versão.",
+                    "Vai confirmar todas as suspeitas por duas semanas e encerrá-las de vez depois. Já fiz essa conta quatro vezes."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "visitor"
+          ],
+          "prompt": {
+            "en": "That visitor.",
+            "pt": "Aquela visita."
+          },
+          "lines": {
+            "en": [
+              "I told the headman and %2$s left the district within two days, and I have not heard since.",
+              "It went the way you said. A bad fortnight, and then it was simply a thing the village knew and had dealt with.",
+              "%2$s never did ask me. I will never know whether I gave away a friend or headed off a robbery, and I have decided to live with that."
+            ],
+            "pt": [
+              "Contei ao chefe e %2$s saiu da região em dois dias, e não tive notícias desde então.",
+              "Foi como você disse. Duas semanas ruins, e depois virou simplesmente uma coisa que a vila sabia e tinha resolvido.",
+              "%2$s nunca chegou a me pedir nada. Nunca vou saber se entreguei uma amiga ou evitei um roubo, e decidi conviver com isso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "acknowledge_the_cost",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That cost you something.",
+                "pt": "Isso te custou algo."
+              },
+              "phrases": [
+                "that cost you something real",
+                "there was a price in that for you"
+              ],
+              "requires_any": [
+                "cost",
+                "price"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It cost the last person alive who knew me before. I am not asking for sympathy about that. I am saying it out loud once.",
+                    "Yes. And the cost is the reason it counts. A choice that costs nothing tells you nothing about the person making it.",
+                    "Thank you for not calling it brave. It was not brave. It was a woman doing sums at her own table at two in the morning."
+                  ],
+                  "pt": [
+                    "Custou a última pessoa viva que me conhecia de antes. Não estou pedindo compaixão por isso. Estou dizendo em voz alta uma vez.",
+                    "Sim. E o custo é o motivo de contar. Uma escolha que não custa nada não diz nada sobre quem escolhe.",
+                    "Obrigada por não chamar de corajoso. Não foi corajoso. Foi uma mulher fazendo contas na própria mesa às duas da manhã."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything you still want?",
+      "pt": "Ainda quer alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a name that follows you?",
+        "pt": "Qual é a parte mais difícil de um nome que te segue?"
+      },
+      "requires_any": [
+        "hardest",
+        "name"
+      ],
+      "phrases": [
+        "what is the hardest part of a name that follows you",
+        "hardest thing about a name you cannot lose"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to your own business.",
+      "pt": "Vou deixar você com seus assuntos."
+    }
+  }
+}

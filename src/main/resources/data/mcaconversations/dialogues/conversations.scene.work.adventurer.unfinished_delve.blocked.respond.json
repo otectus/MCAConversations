@@ -1,0 +1,130 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_is_down_there",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.unfinished_delve.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.ruin_found",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.adventurer.unfinished_delve"
+            },
+            "next": "conversations.scene.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.adventurer.unfinished_delve.blocked.explained",
+              "slots": [
+                "site"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_torches",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.unfinished_delve.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.adventurer.delve.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.ruin_found",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.unfinished_delve",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.adventurer.unfinished_delve",
+              "obligation": "commitment:work.adventurer.bring_torches"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.adventurer.bring_torches"
+            },
+            "next": "conversations.scene.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.adventurer.unfinished_delve.blocked.accepted",
+              "slots": [
+                "site"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "urge_caution",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.unfinished_delve.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.ruin_found",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.adventurer.unfinished_delve"
+            },
+            "next": "conversations.scene.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.adventurer.unfinished_delve.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

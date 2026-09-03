@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_seen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.task.ask_seen"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.task.ask_seen",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.task.ask_seen"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.outlaw.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.task.offer_hands"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_widow",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.task.ask_widow"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.task.ask_widow",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.task.ask_widow"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import java.util.Optional;
  * <pre>{@code
  * "conversations_session": {"op": "begin",  "topic": "day", "budget": "quick"}
  * "conversations_session": {"op": "branch", "branch": "rough"}
+ * "conversations_session": {"op": "turn",   "beat": "work.minecraft_farmer.crop_stress.dry"}
  * "conversations_session": {"op": "end"}
  * }</pre>
  *
@@ -21,12 +22,22 @@ import java.util.Optional;
  * the player returns to a category — the session itself survives, because the player is still stood
  * in front of the villager.
  *
+ * <p>{@code turn} is the semantic bookkeeping op (spec §6.4): it names the beat this result is
+ * playing so the session knows what was just said, what it established, and how it landed. It grants
+ * nothing and speaks nothing — {@code say} still delivers the line — which is why it is safe to put on
+ * every speaking result. A {@code beat} may also ride along on {@code begin} or {@code branch} when a
+ * result does both jobs at once.
+ *
  * <p>{@code budget} is optional: the catalog's depth class for {@code topic} is used when it is
  * absent, which is the normal case and keeps the depth declared in exactly one place.
  */
-public record SessionDirective(Op op, Optional<String> topic, Optional<DepthClass> budget, Optional<String> branch) {
+public record SessionDirective(Op op,
+                               Optional<String> topic,
+                               Optional<DepthClass> budget,
+                               Optional<String> branch,
+                               Optional<String> beat) {
 
-    public enum Op { BEGIN, BRANCH, END }
+    public enum Op { BEGIN, BRANCH, TURN, END }
 
     public static SessionDirective fromJson(JsonObject json) {
         if (!json.has("op")) {
@@ -35,9 +46,10 @@ public record SessionDirective(Op op, Optional<String> topic, Optional<DepthClas
         Op op = switch (json.get("op").getAsString().trim().toLowerCase(Locale.ROOT)) {
             case "begin" -> Op.BEGIN;
             case "branch" -> Op.BRANCH;
+            case "turn" -> Op.TURN;
             case "end" -> Op.END;
             default -> throw new IllegalArgumentException(
-                    "conversations_session op must be begin, branch or end");
+                    "conversations_session op must be begin, branch, turn or end");
         };
 
         Optional<String> topic = Optional.empty();
@@ -70,6 +82,19 @@ public record SessionDirective(Op op, Optional<String> topic, Optional<DepthClas
         if (op == Op.BRANCH && branch.isEmpty()) {
             throw new IllegalArgumentException("conversations_session branch requires a \"branch\"");
         }
-        return new SessionDirective(op, topic, budget, branch);
+
+        Optional<String> beat = Optional.empty();
+        if (json.has("beat")) {
+            String value = json.get("beat").getAsString();
+            if (!BeatContract.ID.matcher(value).matches()) {
+                throw new IllegalArgumentException(
+                        "beat id '" + value + "' must match " + BeatContract.ID.pattern());
+            }
+            beat = Optional.of(value);
+        }
+        if (op == Op.TURN && beat.isEmpty()) {
+            throw new IllegalArgumentException("conversations_session turn requires a \"beat\"");
+        }
+        return new SessionDirective(op, topic, budget, branch, beat);
     }
 }

@@ -1,0 +1,913 @@
+{
+  "beats": {
+    "deflect.personal.to.life.guarded": {
+      "topic": "life",
+      "say": "conversations.deflect.personal",
+      "response_question": "conversations.topic.life.guarded.respond",
+      "npc_act": "deflect",
+      "subject": "life.guarded",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "qualified"
+    },
+    "life.ask_which.low.to.life": {
+      "topic": "life",
+      "say": "conversations.life.ask_which.low",
+      "response_question": "conversations.topic.life.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.child.to.life.young": {
+      "topic": "life",
+      "say": "conversations.life.child",
+      "response_question": "conversations.topic.life.young.respond",
+      "npc_act": "accept",
+      "subject": "life.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.first.to.life": {
+      "topic": "life",
+      "say": "conversations.life.first",
+      "response_question": "conversations.topic.life.respond",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.followup.compare_own.to.life": {
+      "topic": "life",
+      "say": "conversations.life.followup.compare_own",
+      "response_question": "conversations.topic.life.close",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "life",
+        "resumes": [
+          "life.resume.ask_chapter.plain.to.life",
+          "life.resume.ask_chapter.remembered.to.life",
+          "life.resume.ask_now.to.life",
+          "life.revisit.opens"
+        ]
+      }
+    },
+    "life.followup.follow_thread.to.life": {
+      "topic": "life",
+      "say": "conversations.life.followup.follow_thread",
+      "response_question": "conversations.topic.life.close",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "life",
+        "resumes": [
+          "life.resume.ask_chapter.plain.to.life",
+          "life.resume.ask_chapter.remembered.to.life",
+          "life.resume.ask_now.to.life",
+          "life.revisit.opens"
+        ]
+      }
+    },
+    "life.followup.joke.to.life": {
+      "topic": "life",
+      "say": "conversations.life.followup.joke",
+      "response_question": "conversations.topic.life.close",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.no_words.to.life": {
+      "topic": "life",
+      "say": "conversations.life.no_words",
+      "response_question": "conversations.topic.life.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.respond.ask_which.to.life": {
+      "topic": "life",
+      "say": "conversations.life.respond.ask_which",
+      "response_question": "conversations.topic.life.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.respond.empathise.longknown.to.life": {
+      "topic": "life",
+      "say": "conversations.life.respond.empathise.longknown",
+      "response_question": "conversations.topic.life.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.respond.empathise.to.life": {
+      "topic": "life",
+      "say": "conversations.life.respond.empathise",
+      "response_question": "conversations.topic.life.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.resume.ask_chapter.plain.to.life": {
+      "topic": "life",
+      "say": "conversations.life.resume.ask_chapter.plain",
+      "response_question": "conversations.arc.life.resume.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "life",
+        "resumes": [
+          "life.resume.ask_chapter.plain.to.life",
+          "life.resume.ask_chapter.remembered.to.life",
+          "life.resume.ask_now.to.life",
+          "life.revisit.opens"
+        ]
+      }
+    },
+    "life.resume.ask_chapter.remembered.to.life": {
+      "topic": "life",
+      "say": "conversations.life.resume.ask_chapter.remembered",
+      "response_question": "conversations.arc.life.resume.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "life",
+        "resumes": [
+          "life.resume.ask_chapter.plain.to.life",
+          "life.resume.ask_chapter.remembered.to.life",
+          "life.resume.ask_now.to.life",
+          "life.revisit.opens"
+        ]
+      }
+    },
+    "life.resume.ask_now.to.life": {
+      "topic": "life",
+      "say": "conversations.life.resume.ask_now",
+      "response_question": "conversations.arc.life.resume.followup",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "life",
+        "resumes": [
+          "life.resume.ask_chapter.plain.to.life",
+          "life.resume.ask_chapter.remembered.to.life",
+          "life.resume.ask_now.to.life",
+          "life.revisit.opens"
+        ]
+      }
+    },
+    "life.resume.followup.connect.to.life": {
+      "topic": "life",
+      "say": "conversations.life.resume.followup.connect",
+      "response_question": "conversations.topic.life.close",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.resume.followup.probe.to.life": {
+      "topic": "life",
+      "say": "conversations.life.resume.followup.probe",
+      "response_question": "conversations.topic.life.close",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.resume.followup.thank.to.life": {
+      "topic": "life",
+      "say": "conversations.life.resume.followup.thank",
+      "response_question": "conversations.topic.life.close",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.revisit.to.life": {
+      "topic": "life",
+      "say": "conversations.life.revisit",
+      "response_question": "conversations.topic.life.respond",
+      "npc_act": "accept",
+      "subject": "life",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.teen.to.life.young": {
+      "topic": "life",
+      "say": "conversations.life.teen",
+      "response_question": "conversations.topic.life.young.respond",
+      "npc_act": "accept",
+      "subject": "life.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "life.toddler.to.life.toddler": {
+      "topic": "life",
+      "say": "conversations.life.toddler",
+      "response_question": "conversations.topic.life.toddler.respond",
+      "npc_act": "accept",
+      "subject": "life.toddler",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.arc.life.resume.followup/connect": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.resume.ask_chapter.plain.to.life",
+        "life.resume.ask_chapter.remembered.to.life",
+        "life.resume.ask_now.to.life"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.life.resume.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.resume.ask_chapter.plain.to.life",
+        "life.resume.ask_chapter.remembered.to.life",
+        "life.resume.ask_now.to.life"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.arc.life.resume.followup/probe": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.resume.ask_chapter.plain.to.life",
+        "life.resume.ask_chapter.remembered.to.life",
+        "life.resume.ask_now.to.life"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.life.resume.followup/thank": {
+      "stance": "candor",
+      "responds_to": [
+        "life.resume.ask_chapter.plain.to.life",
+        "life.resume.ask_chapter.remembered.to.life",
+        "life.resume.ask_now.to.life"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.arc.life.resume.respond/ask_chapter": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.revisit.opens"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.life.resume.respond/ask_now": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.revisit.opens"
+      ],
+      "tone": "plain"
+    },
+    "conversations.arc.life.resume.respond/brush_off": {
+      "stance": "dismissal",
+      "responds_to": [
+        "life.revisit.opens"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.arc.life.resume.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.revisit.opens"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.close/confide": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "life.followup.compare_own.to.life",
+        "life.followup.follow_thread.to.life",
+        "life.followup.joke.to.life",
+        "life.resume.followup.connect.to.life",
+        "life.resume.followup.probe.to.life",
+        "life.resume.followup.thank.to.life"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.life.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.followup.compare_own.to.life",
+        "life.followup.follow_thread.to.life",
+        "life.followup.joke.to.life",
+        "life.resume.followup.connect.to.life",
+        "life.resume.followup.probe.to.life",
+        "life.resume.followup.thank.to.life"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.close/say_means": {
+      "stance": "candor",
+      "responds_to": [
+        "life.followup.compare_own.to.life",
+        "life.followup.follow_thread.to.life",
+        "life.followup.joke.to.life",
+        "life.resume.followup.connect.to.life",
+        "life.resume.followup.probe.to.life",
+        "life.resume.followup.thank.to.life"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.life.close/thank": {
+      "stance": "candor",
+      "responds_to": [
+        "life.followup.compare_own.to.life",
+        "life.followup.follow_thread.to.life",
+        "life.followup.joke.to.life",
+        "life.resume.followup.connect.to.life",
+        "life.resume.followup.probe.to.life",
+        "life.resume.followup.thank.to.life"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.life.followup/change_subject": {
+      "stance": "exit",
+      "responds_to": [
+        "life.ask_which.low.to.life",
+        "life.no_words.to.life",
+        "life.respond.ask_which.to.life",
+        "life.respond.empathise.longknown.to.life",
+        "life.respond.empathise.to.life"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.followup/compare_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "life.ask_which.low.to.life",
+        "life.no_words.to.life",
+        "life.respond.ask_which.to.life",
+        "life.respond.empathise.longknown.to.life",
+        "life.respond.empathise.to.life"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.followup/follow_thread": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.ask_which.low.to.life",
+        "life.no_words.to.life",
+        "life.respond.ask_which.to.life",
+        "life.respond.empathise.longknown.to.life",
+        "life.respond.empathise.to.life"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.followup/joke": {
+      "stance": "humor",
+      "responds_to": [
+        "life.ask_which.low.to.life",
+        "life.no_words.to.life",
+        "life.respond.ask_which.to.life",
+        "life.respond.empathise.longknown.to.life",
+        "life.respond.empathise.to.life"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.life.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.ask_which.low.to.life",
+        "life.no_words.to.life",
+        "life.respond.ask_which.to.life",
+        "life.respond.empathise.longknown.to.life",
+        "life.respond.empathise.to.life"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.guarded.respond/ask_safer": {
+      "stance": "curiosity",
+      "responds_to": [
+        "deflect.personal.to.life.guarded"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.life.guarded.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "deflect.personal.to.life.guarded"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.guarded.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "deflect.personal.to.life.guarded"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.life.guarded.respond/respect": {
+      "stance": "restraint",
+      "responds_to": [
+        "deflect.personal.to.life.guarded"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.respond/ask_which": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.first.to.life",
+        "life.revisit.to.life"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.respond/empathise": {
+      "stance": "empathy",
+      "responds_to": [
+        "life.first.to.life",
+        "life.revisit.to.life"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.life.respond/judge": {
+      "stance": "dismissal",
+      "responds_to": [
+        "life.first.to.life",
+        "life.revisit.to.life"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.life.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.first.to.life",
+        "life.revisit.to.life"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.respond/no_words": {
+      "stance": "restraint",
+      "responds_to": [
+        "life.first.to.life",
+        "life.revisit.to.life"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.life.toddler.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.toddler.to.life.toddler"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.toddler.respond/delight": {
+      "stance": "encouragement",
+      "responds_to": [
+        "life.toddler.to.life.toddler"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.life.toddler.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.toddler.to.life.toddler"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.life.young.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "life.child.to.life.young",
+        "life.teen.to.life.young"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.life.young.respond/encourage": {
+      "stance": "encouragement",
+      "responds_to": [
+        "life.child.to.life.young",
+        "life.teen.to.life.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.young.respond/interested": {
+      "stance": "curiosity",
+      "responds_to": [
+        "life.child.to.life.young",
+        "life.teen.to.life.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.life.young.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "life.child.to.life.young",
+        "life.teen.to.life.young"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

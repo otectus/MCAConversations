@@ -1,0 +1,580 @@
+{
+  "beats": {
+    "neighbour.dispute.between": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.dispute.between",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.dispute",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.dispute.leave": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.dispute.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.dispute",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.dispute.mend": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.dispute.mend",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "neighbour.dispute",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.family.common": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.family.common",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "neighbour.family",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.family.hard": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.family.hard",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.family",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.family.leave": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.family.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.family",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.more.leave": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.more.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.more.open": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.more",
+      "response_question": "conversations.topic.neighbour.more",
+      "npc_act": "invite",
+      "subject": "neighbour.talk",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.more.should_you": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.more.should_you",
+      "response_question": "conversations.topic.neighbour.privacy",
+      "npc_act": "qualify",
+      "subject": "neighbour.talk",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.more.their_family": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.more.their_family",
+      "response_question": "conversations.topic.neighbour.family",
+      "npc_act": "report",
+      "subject": "neighbour.talk",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.more.they_need": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.more.they_need",
+      "response_question": "conversations.topic.neighbour.needs",
+      "npc_act": "report",
+      "subject": "neighbour.talk",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.more.you_two": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.more.you_two",
+      "response_question": "conversations.topic.neighbour.dispute",
+      "npc_act": "disclose",
+      "subject": "neighbour.talk",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "practical_help",
+        "restraint",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.needs.go": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.needs.go",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.needs",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "neighbour",
+        "resumes": [
+          "neighbour.resume.ask_how_they_are",
+          "neighbour.resume.ill_keep_going",
+          "neighbour.resume.opener",
+          "neighbour.resume.say_nothing"
+        ]
+      }
+    },
+    "neighbour.needs.leave": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.needs.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.needs",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.needs.offered": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.needs.offered",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.needs",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "neighbour",
+        "resumes": [
+          "neighbour.resume.ask_how_they_are",
+          "neighbour.resume.ill_keep_going",
+          "neighbour.resume.opener",
+          "neighbour.resume.say_nothing"
+        ]
+      }
+    },
+    "neighbour.privacy.from_them": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.privacy.from_them",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.privacy",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.privacy.leave": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.privacy.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.privacy",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "neighbour.privacy.stays": {
+      "topic": "neighbour",
+      "say": "conversations.neighbour.privacy.stays",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "neighbour.privacy",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.neighbour.dispute/between_you": {
+      "stance": "restraint",
+      "responds_to": [
+        "neighbour.more.you_two"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.neighbour.dispute/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.more.you_two"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.neighbour.dispute/want_it_mended": {
+      "stance": "practical_help",
+      "responds_to": [
+        "neighbour.more.you_two"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.neighbour.family/common_enough": {
+      "stance": "candor",
+      "responds_to": [
+        "neighbour.more.their_family"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.neighbour.family/hard_to_live_beside": {
+      "stance": "empathy",
+      "responds_to": [
+        "neighbour.more.their_family"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.neighbour.family/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.more.their_family"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.neighbour.followup/ask_about_them": {
+      "stance": "curiosity",
+      "responds_to": [
+        "neighbour.ask_more.to.neighbour",
+        "neighbour.defend_them.to.neighbour",
+        "neighbour.encourage_more.to.neighbour"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.neighbour.more/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.neighbour.more/should_you": {
+      "stance": "restraint",
+      "responds_to": [
+        "neighbour.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.neighbour.more/their_family": {
+      "stance": "curiosity",
+      "responds_to": [
+        "neighbour.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.neighbour.more/they_need": {
+      "stance": "practical_help",
+      "responds_to": [
+        "neighbour.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.neighbour.more/you_two": {
+      "stance": "curiosity",
+      "responds_to": [
+        "neighbour.more.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.neighbour.needs/ill_go": {
+      "stance": "practical_help",
+      "responds_to": [
+        "neighbour.more.they_need"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.neighbour.needs/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.more.they_need"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.neighbour.needs/tell_them_i_offered": {
+      "stance": "candor",
+      "responds_to": [
+        "neighbour.more.they_need"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.neighbour.privacy/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "neighbour.more.should_you"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.neighbour.privacy/rather_hear_it_from_them": {
+      "stance": "restraint",
+      "responds_to": [
+        "neighbour.more.should_you"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.neighbour.privacy/stays_with_me": {
+      "stance": "candor",
+      "responds_to": [
+        "neighbour.more.should_you"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    }
+  }
+}

@@ -11,10 +11,12 @@ import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.BeatContractLoader;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
 import dev.otectus.mcaconversations.interiority.Interiority;
+import dev.otectus.mcaconversations.profession.ProfessionProfileLoader;
 import dev.otectus.mcaconversations.progress.ProgressSavedData;
 import dev.otectus.mcaconversations.gossip.GossipDetectors;
 import dev.otectus.mcaconversations.state.ConversationState;
@@ -59,6 +61,7 @@ public final class ConversationsEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             ChatModeSession.clear(player.getUUID());
             GreetOnApproach.clear(player.getUUID());
+            dev.otectus.mcaconversations.hub.DynamicHub.clear(player.getUUID());
             VillagerAttention.clearPlayer(player.getUUID());
         }
     }
@@ -137,6 +140,7 @@ public final class ConversationsEvents {
             GossipDetectors.onVillagerDeath(event.getEntity());
             dropDispositions(event.getEntity());
             dropProgress(event.getEntity());
+            dropLivingHistory(event.getEntity());
             ConversationSessions.clearVillager(event.getEntity().getUUID());
         }
     }
@@ -170,6 +174,26 @@ public final class ConversationsEvents {
         }
     }
 
+    /**
+     * A dead villager's identity and history go the same way as their progress rows.
+     *
+     * <p>Their episodes were theirs, their threads were with them, and their opinions were about
+     * neighbours they can no longer discuss. Nothing left in the world could read any of it back, and
+     * keeping it would be the one way this store could grow without bound in a long-lived world.
+     */
+    private static void dropLivingHistory(Entity villager) {
+        try {
+            if (villager.getServer() != null) {
+                dev.otectus.mcaconversations.identity.Identity.forget(
+                        villager.getServer(), villager.getUUID());
+                dev.otectus.mcaconversations.history.History.forget(
+                        villager.getServer(), villager.getUUID());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("living-history death-prune failed; ignoring", t);
+        }
+    }
+
     // --- Conversation states ---------------------------------------------------
 
     @SubscribeEvent
@@ -197,10 +221,14 @@ public final class ConversationsEvents {
         // Villager attention (typing awareness + conversation presence) is applied every tick.
         VillagerAttention.tick(event.getServer(), gameTime);
 
-        // Proactive greeting rides its own light cadence (Phase 4, double-gated, off by default).
+        // The approach scan: one light cadence carrying both things a villager may say to somebody
+        // walking past. Greeting and initiative are separately switchable, so the scan runs when
+        // either is on and each half checks its own switch — a server that turned greetings off has
+        // not thereby decided that a due promise should go unmentioned.
         if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0
                 && McaConversationsConfig.COMMON.enableChatMode.get()
-                && McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()) {
+                && (McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()
+                        || McaConversationsConfig.maxInitiativesPerVillagerPlayerDay() > 0)) {
             GreetOnApproach.scan(event.getServer());
         }
 
@@ -209,13 +237,15 @@ public final class ConversationsEvents {
             GossipDetectors.scan(event.getServer());
             pruneStaleDispositions(event.getServer());
             pruneStaleProgress(event.getServer());
+            pruneLivingHistory(event.getServer());
+            spreadVillageTalk(event.getServer());
             ConversationSessions.sweep(gameTime);
         }
     }
 
     /** Age-based disposition pruning, riding the gossip scan cadence (no extra tick work). */
     private static void pruneStaleDispositions(net.minecraft.server.MinecraftServer server) {
-        int staleDays = McaConversationsConfig.COMMON.dispositionStaleDays.get();
+        int staleDays = McaConversationsConfig.dispositionStaleDays();
         if (staleDays <= 0 || !McaConversationsConfig.COMMON.enableDispositions.get()) {
             return;
         }
@@ -232,7 +262,7 @@ public final class ConversationsEvents {
      * in a very long time" and an operator should not have to reason about two numbers.
      */
     private static void pruneStaleProgress(net.minecraft.server.MinecraftServer server) {
-        int staleDays = McaConversationsConfig.COMMON.dispositionStaleDays.get();
+        int staleDays = McaConversationsConfig.dispositionStaleDays();
         if (staleDays <= 0) {
             return;
         }
@@ -240,6 +270,38 @@ public final class ConversationsEvents {
             ProgressSavedData.get(server).prune(server.overworld().getGameTime(), staleDays * 24_000L);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("progress prune failed; ignoring", t);
+        }
+    }
+
+    /**
+     * Expiry-based history pruning, riding the same low-frequency cadence as everything else here.
+     *
+     * <p>Deliberately not a tick job of its own. §21.6 forbids a per-tick scan of history, and the
+     * gossip sweep already runs at exactly the frequency this needs: expired episodes, lapsed threads
+     * and settled promises are not urgent, and a pass every few thousand ticks is plenty.
+     */
+    private static void pruneLivingHistory(net.minecraft.server.MinecraftServer server) {
+        try {
+            long today = server.overworld().getDayTime() / 24000L;
+            dev.otectus.mcaconversations.history.History.prune(server, today);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("living-history prune failed; ignoring", t);
+        }
+    }
+
+    /**
+     * One pass of village talk, riding the same low-frequency cadence as everything else here.
+     *
+     * <p>Deliberately not a job of its own. §16.4 says propagation runs on the existing village sweep
+     * or as a conversation consequence, and the sweep already runs at the right frequency: a story
+     * moving between two neighbours is not urgent, and a pass every few thousand ticks is the point.
+     */
+    private static void spreadVillageTalk(net.minecraft.server.MinecraftServer server) {
+        try {
+            long today = server.overworld().getDayTime() / 24000L;
+            dev.otectus.mcaconversations.history.RumourPropagation.sweep(server, today);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("rumour sweep failed; ignoring", t);
         }
     }
 
@@ -253,8 +315,8 @@ public final class ConversationsEvents {
     // --- Datapack listeners ------------------------------------------------------
 
     /**
-     * Registers this mod's datapack loaders — chat intents, the conversation catalog and the
-     * per-personality interiority profiles, each merged across namespaces so packs can extend them.
+     * Registers this mod's datapack loaders — chat intents, the conversation catalog, the semantic beat
+     * contracts, the profession profiles and the per-personality interiority profiles, each merged across namespaces so packs can extend them.
      * MCA-independent — these are our own resources — so they attach regardless of
      * {@link McaBridge#isAvailable()}; each loaded index is inert until its feature is on.
      */
@@ -262,6 +324,15 @@ public final class ConversationsEvents {
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(new ChatIntentLoader());
         event.addListener(new ConversationCatalogLoader());
+        event.addListener(new BeatContractLoader());
+        event.addListener(new ProfessionProfileLoader());
         event.addListener(new Interiority());
+        // Living histories: identity tokens, conversation scenes, and the three narrative
+        // template directories. Inert until dynamic.enabled is on, like every other index here.
+        event.addListener(new dev.otectus.mcaconversations.identity.IdentityCatalogLoader());
+        event.addListener(new dev.otectus.mcaconversations.scene.SceneCatalogLoader());
+        event.addListener(new dev.otectus.mcaconversations.village.VillageCultureCatalogLoader());
+        dev.otectus.mcaconversations.history.NarrativeCatalogLoader.listeners()
+                .forEach(event::addListener);
     }
 }

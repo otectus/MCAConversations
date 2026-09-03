@@ -6,6 +6,10 @@
         {
           "baseChance": 0,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.grieving.quiet_thanked"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.grieving.validate",
               "delta": 2,
@@ -20,8 +24,10 @@
                 "tension": -2
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.grieving.validate.guarded"
+            "next": "conversations.topic.noticed.grieving.quiet.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving.validate.guarded"
+            }
           },
           "conditions": [
             {
@@ -37,6 +43,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.grieving.validated"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.grieving.validate",
               "delta": 2,
@@ -50,8 +60,10 @@
                 "trust": 3
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.grieving.validate"
+            "next": "conversations.topic.noticed.grieving.supported.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving.validate"
+            }
           },
           "conditions": [
             {
@@ -72,6 +84,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.grieving.space_given"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.grieving.give_space",
               "delta": 1,
@@ -85,8 +101,10 @@
                 "trust": 1
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.grieving.give_space"
+            "next": "conversations.topic.noticed.grieving.quiet.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving.give_space"
+            }
           }
         }
       ]
@@ -97,6 +115,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.grieving.dismissed"
+            },
             "conversations_affection_apply": {
               "decision": "noticed.grieving.dismiss",
               "delta": -2,
@@ -110,8 +132,10 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.noticed.followup",
-            "say": "conversations.noticed.grieving.dismiss"
+            "next": "conversations.topic.noticed.grieving.hostile.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving.dismiss"
+            }
           }
         }
       ]
@@ -126,7 +150,9 @@
               "op": "end"
             },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.grieving.leave"
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving.leave"
+            }
           }
         }
       ]

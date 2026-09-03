@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "make_case",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.debate.make_case"
+            },
+            "conversations_affection_apply": {
+              "decision": "food.debate.make_case",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.debate.make_case",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.debate.make_case"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "concede",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.debate.concede"
+            },
+            "conversations_affection_apply": {
+              "decision": "food.debate.concede",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.debate.concede",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.debate.concede"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "why_care",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.debate.why_care"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.debate.why_care",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.debate.why_care"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.normal.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

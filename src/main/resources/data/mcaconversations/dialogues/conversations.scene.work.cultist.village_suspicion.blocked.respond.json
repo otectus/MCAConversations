@@ -1,0 +1,112 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_they_fear",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.village_suspicion.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.suspicion",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cultist.village_suspicion"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.village_suspicion.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_unfair",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.village_suspicion.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cultist.suspicion.stood_up",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.suspicion",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cultist.village_suspicion"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.village_suspicion.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "suggest_explaining",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cultist.village_suspicion.blocked.resisted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cultist.suspicion",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cultist.village_suspicion"
+            },
+            "next": "conversations.scene.work.cultist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cultist.village_suspicion.blocked.resisted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cultist.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_it_fades",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.stalled_survey.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.paper",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.stalled_survey"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.stalled_survey.blocked.explained",
+              "slots": [
+                "region"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_paper",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.stalled_survey.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cartographer.survey.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.paper",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.stalled_survey",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.stalled_survey",
+              "obligation": "commitment:work.cartographer.bring_paper"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.cartographer.bring_paper"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.stalled_survey.blocked.accepted",
+              "slots": [
+                "region"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_rough_copy",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.stalled_survey.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.paper",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.stalled_survey"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.stalled_survey.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

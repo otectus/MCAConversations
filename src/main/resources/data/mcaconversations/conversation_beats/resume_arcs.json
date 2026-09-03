@@ -1,0 +1,763 @@
+{
+  "beats": {
+    "family.resume.admit_forgot": {
+      "topic": "memories",
+      "say": "conversations.family.resume.admit_forgot",
+      "response_question": "conversations.arc.family.resume.followup",
+      "npc_act": "qualify",
+      "subject": "memories.revisit",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "family.resume.ask_again_later": {
+      "topic": "memories",
+      "say": "conversations.family.resume.ask_again_later",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.revisit",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "family.resume.ask_how_it_went": {
+      "topic": "memories",
+      "say": "conversations.family.resume.ask_how_it_went",
+      "response_question": "conversations.arc.family.resume.followup",
+      "npc_act": "disclose",
+      "subject": "memories.revisit",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "family.resume.just_listen": {
+      "topic": "memories",
+      "say": "conversations.family.resume.just_listen",
+      "response_question": "conversations.arc.family.resume.close",
+      "npc_act": "accept",
+      "subject": "memories.revisit",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "family.resume.keep_promise": {
+      "topic": "memories",
+      "say": "conversations.family.resume.keep_promise",
+      "response_question": "conversations.arc.family.resume.followup",
+      "npc_act": "accept",
+      "subject": "memories.revisit",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "family.resume.leave": {
+      "topic": "memories",
+      "say": "conversations.family.resume.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.revisit",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      }
+    },
+    "family.resume.offer_to_help": {
+      "topic": "memories",
+      "say": "conversations.family.resume.offer_to_help",
+      "response_question": "conversations.arc.family.resume.close",
+      "npc_act": "accept",
+      "subject": "memories.revisit",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "family.resume.opener": {
+      "topic": "memories",
+      "say": "conversations.family.revisit",
+      "response_question": "conversations.arc.family.resume.respond",
+      "npc_act": "reminisce",
+      "subject": "memories.revisit",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "humor"
+      ],
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      }
+    },
+    "family.resume.say_it_matters": {
+      "topic": "memories",
+      "say": "conversations.family.resume.say_it_matters",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.revisit",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "us.resume.admit_drift": {
+      "topic": "future",
+      "say": "conversations.us.resume.admit_drift",
+      "response_question": "conversations.arc.us.resume.followup",
+      "npc_act": "qualify",
+      "subject": "future.revisit",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    },
+    "us.resume.ask_again_later": {
+      "topic": "future",
+      "say": "conversations.us.resume.ask_again_later",
+      "response_question": "conversations.us",
+      "npc_act": "accept",
+      "subject": "future.revisit",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    },
+    "us.resume.ask_where_it_stands": {
+      "topic": "future",
+      "say": "conversations.us.resume.ask_where_it_stands",
+      "response_question": "conversations.arc.us.resume.followup",
+      "npc_act": "disclose",
+      "subject": "future.revisit",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    },
+    "us.resume.hold_to_it": {
+      "topic": "future",
+      "say": "conversations.us.resume.hold_to_it",
+      "response_question": "conversations.arc.us.resume.followup",
+      "npc_act": "accept",
+      "subject": "future.revisit",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    },
+    "us.resume.leave": {
+      "topic": "future",
+      "say": "conversations.us.resume.leave",
+      "response_question": "conversations.us",
+      "npc_act": "accept",
+      "subject": "future.revisit",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "us.resume.let_it_rest": {
+      "topic": "future",
+      "say": "conversations.us.resume.let_it_rest",
+      "response_question": "conversations.arc.us.resume.close",
+      "npc_act": "accept",
+      "subject": "future.revisit",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    },
+    "us.resume.name_a_step": {
+      "topic": "future",
+      "say": "conversations.us.resume.name_a_step",
+      "response_question": "conversations.arc.us.resume.close",
+      "npc_act": "accept",
+      "subject": "future.revisit",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "practical_help",
+        "empathy",
+        "restraint",
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    },
+    "us.resume.opener": {
+      "topic": "future",
+      "say": "conversations.us.revisit",
+      "response_question": "conversations.arc.us.resume.respond",
+      "npc_act": "reminisce",
+      "subject": "future.revisit",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "humor"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "us.resume.say_it_matters": {
+      "topic": "future",
+      "say": "conversations.us.resume.say_it_matters",
+      "response_question": "conversations.us",
+      "npc_act": "accept",
+      "subject": "future.revisit",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "us",
+        "resumes": [
+          "us.resume.admit_drift",
+          "us.resume.ask_where_it_stands",
+          "us.resume.hold_to_it",
+          "us.resume.let_it_rest",
+          "us.resume.name_a_step",
+          "us.resume.opener"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.arc.family.resume.close/ask_again_later": {
+      "stance": "curiosity",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.offer_to_help",
+        "family.resume.just_listen"
+      ]
+    },
+    "conversations.arc.family.resume.close/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "family.resume.offer_to_help",
+        "family.resume.just_listen"
+      ]
+    },
+    "conversations.arc.family.resume.close/say_it_matters": {
+      "stance": "encouragement",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.offer_to_help",
+        "family.resume.just_listen"
+      ]
+    },
+    "conversations.arc.family.resume.followup/just_listen": {
+      "stance": "empathy",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.ask_how_it_went",
+        "family.resume.keep_promise",
+        "family.resume.admit_forgot"
+      ]
+    },
+    "conversations.arc.family.resume.followup/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "family.resume.ask_how_it_went",
+        "family.resume.keep_promise",
+        "family.resume.admit_forgot"
+      ]
+    },
+    "conversations.arc.family.resume.followup/offer_to_help": {
+      "stance": "practical_help",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.ask_how_it_went",
+        "family.resume.keep_promise",
+        "family.resume.admit_forgot"
+      ]
+    },
+    "conversations.arc.family.resume.respond/admit_forgot": {
+      "stance": "candor",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.opener"
+      ]
+    },
+    "conversations.arc.family.resume.respond/ask_how_it_went": {
+      "stance": "curiosity",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.opener"
+      ]
+    },
+    "conversations.arc.family.resume.respond/keep_promise": {
+      "stance": "candor",
+      "tone": "plain",
+      "responds_to": [
+        "family.resume.opener"
+      ]
+    },
+    "conversations.arc.family.resume.respond/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "family.resume.opener"
+      ]
+    },
+    "conversations.arc.us.resume.close/ask_again_later": {
+      "stance": "curiosity",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.name_a_step",
+        "us.resume.let_it_rest"
+      ]
+    },
+    "conversations.arc.us.resume.close/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "us.resume.name_a_step",
+        "us.resume.let_it_rest"
+      ]
+    },
+    "conversations.arc.us.resume.close/say_it_matters": {
+      "stance": "encouragement",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.name_a_step",
+        "us.resume.let_it_rest"
+      ]
+    },
+    "conversations.arc.us.resume.followup/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "us.resume.ask_where_it_stands",
+        "us.resume.hold_to_it",
+        "us.resume.admit_drift"
+      ]
+    },
+    "conversations.arc.us.resume.followup/let_it_rest": {
+      "stance": "restraint",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.ask_where_it_stands",
+        "us.resume.hold_to_it",
+        "us.resume.admit_drift"
+      ]
+    },
+    "conversations.arc.us.resume.followup/name_a_step": {
+      "stance": "practical_help",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.ask_where_it_stands",
+        "us.resume.hold_to_it",
+        "us.resume.admit_drift"
+      ]
+    },
+    "conversations.arc.us.resume.respond/admit_drift": {
+      "stance": "candor",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.opener"
+      ]
+    },
+    "conversations.arc.us.resume.respond/ask_where_it_stands": {
+      "stance": "curiosity",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.opener"
+      ]
+    },
+    "conversations.arc.us.resume.respond/hold_to_it": {
+      "stance": "candor",
+      "tone": "plain",
+      "responds_to": [
+        "us.resume.opener"
+      ]
+    },
+    "conversations.arc.us.resume.respond/leave": {
+      "stance": "exit",
+      "tone": "plain",
+      "exit": true,
+      "responds_to": [
+        "us.resume.opener"
+      ]
+    }
+  }
+}

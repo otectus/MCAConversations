@@ -1,0 +1,49 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_feeling",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.arrow_shortage.succeeded.described"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.supply",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.archer.arrow_shortage"
+            },
+            "next": "conversations.scene.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.archer.arrow_shortage.succeeded.described"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

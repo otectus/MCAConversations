@@ -1,0 +1,126 @@
+{
+  "answers": [
+    {
+      "name": "offer_timber",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.failing_props.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.miner.props.offer",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.props",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.failing_props",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.miner.failing_props",
+              "obligation": "commitment:work.miner.bring_timber"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.miner.bring_timber"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.failing_props.blocked.accepted",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "urge_stopping",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.failing_props.blocked.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.props",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.miner.failing_props"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.failing_props.blocked.conceded"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_the_risk",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.failing_props.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.props",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.miner.failing_props"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.failing_props.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.miner.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

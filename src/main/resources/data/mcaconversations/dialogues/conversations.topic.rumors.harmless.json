@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "glad_its_small",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.harmless.glad"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.harmless.glad",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.rumors.harmless.glad"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "why_repeat_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.harmless.why"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.harmless.why",
+              "deltas": {
+                "respect": 1,
+                "warmth": -1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.rumors.harmless.why"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.rumors.harmless.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

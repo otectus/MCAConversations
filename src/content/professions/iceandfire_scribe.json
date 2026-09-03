@@ -1,0 +1,897 @@
+{
+  "_comment": [
+    "Scribe (Ice and Fire). Copying, which is the least glamorous way a thing survives.",
+    "",
+    "The §12.4 anchors are the page, ink, errors, commissions, the archive and a text she does not",
+    "believe. These three take an error she has found running through generations of copies, eyes that",
+    "are beginning to fail, and an account she is required to copy and does not credit.",
+    "",
+    "Her central conviction is that a copyist has no right to improve a text. She writes what is there,",
+    "marks what is doubtful, and keeps her own opinion in the margin where the next reader can weigh it",
+    "separately.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when Ice and Fire",
+    "is installed."
+  ],
+  "profession": "iceandfire:scribe",
+  "id": "scribe",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_page",
+    "ink",
+    "errors",
+    "commissions",
+    "the_archive",
+    "a_text_i_doubt"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the page.",
+    "pt": "Vou deixar você voltar à página."
+  },
+  "slot_lang": {
+    "scr_a_date_that_moved": {
+      "en": "a date that has moved",
+      "pt": "uma data que se deslocou"
+    },
+    "scr_a_name_spelled_two_ways": {
+      "en": "a name spelled two ways",
+      "pt": "um nome grafado de duas formas"
+    },
+    "scr_a_missing_line": {
+      "en": "a line that fell out of a copy",
+      "pt": "uma linha que caiu de uma cópia"
+    },
+    "scr_four_generations_of_copies": {
+      "en": "four generations of copies",
+      "pt": "quatro gerações de cópias"
+    },
+    "scr_the_village_register": {
+      "en": "the village register",
+      "pt": "o registro da vila"
+    },
+    "scr_the_old_chronicle": {
+      "en": "the old chronicle",
+      "pt": "a crônica antiga"
+    },
+    "scr_ink_that_fades": {
+      "en": "ink that fades within a decade",
+      "pt": "tinta que desbota em uma década"
+    },
+    "scr_a_shaking_hand": {
+      "en": "a hand that shakes after an hour",
+      "pt": "uma mão que treme depois de uma hora"
+    },
+    "scr_small_letters": {
+      "en": "letters I can no longer see clearly",
+      "pt": "letras que eu já não vejo com nitidez"
+    },
+    "scr_an_account_of_a_beast": {
+      "en": "an account of a beast",
+      "pt": "um relato de uma fera"
+    },
+    "scr_a_claim_about_a_flood": {
+      "en": "a claim about a flood",
+      "pt": "uma alegação sobre uma enchente"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.inherited_error",
+      "subject": "work.scribe.errors",
+      "initial_state": "blocked",
+      "salience": 60,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "integrations": [
+        "iceandfire"
+      ],
+      "slots": {
+        "error": [
+          "scr_a_date_that_moved",
+          "scr_a_name_spelled_two_ways",
+          "scr_a_missing_line"
+        ],
+        "source": [
+          "scr_four_generations_of_copies",
+          "scr_the_village_register",
+          "scr_the_old_chronicle"
+        ]
+      },
+      "commitment": {
+        "id": "work.scribe.bring_paper",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:paper",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "error",
+            "source"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The copies.",
+            "pt": "As cópias."
+          },
+          "lines": {
+            "en": [
+              "There is %2$s in %3$s, and it has been faithfully copied forward by everybody since, including me, twice.",
+              "%2$s. I found it by holding two copies side by side, which nobody had done in about ninety years.",
+              "%3$s is the only record this village has. If I correct %2$s I am changing the record, and if I do not I am passing on a lie."
+            ],
+            "pt": [
+              "Existe %2$s em %3$s, e vem sendo copiado fielmente por todo mundo desde então, inclusive por mim, duas vezes.",
+              "%2$s. Descobri comparando duas cópias lado a lado, coisa que ninguém fazia havia uns noventa anos.",
+              "%3$s é o único registro que esta vila tem. Se eu corrigir %2$s estou alterando o registro, e se eu não corrigir estou repassando uma mentira."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_should_do",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What are your options?",
+                "pt": "Quais são suas opções?"
+              },
+              "phrases": [
+                "what are your options here",
+                "what can a copyist do about that"
+              ],
+              "requires_any": [
+                "options",
+                "copyist"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "error"
+                ],
+                "lines": {
+                  "en": [
+                    "Copy it as it stands and mark %2$s in the margin. That is the only one of the three that leaves the next reader free to decide.",
+                    "Correct it silently, which is what a helpful person does and what destroys an archive over four generations.",
+                    "Write a separate note and bind it in. It is ugly, it doubles the work, and in two hundred years it will be the useful page."
+                  ],
+                  "pt": [
+                    "Copiar como está e marcar %2$s na margem. É a única das três que deixa o próximo leitor livre para decidir.",
+                    "Corrigir em silêncio, que é o que uma pessoa prestativa faz e o que destrói um arquivo em quatro gerações.",
+                    "Escrever uma nota separada e encadernar junto. É feio, dobra o trabalho, e em duzentos anos vai ser a página útil."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_paper",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you paper for the archive.",
+                "pt": "Vou trazer papel para o arquivo."
+              },
+              "phrases": [
+                "i can bring you paper for the archive",
+                "let me fetch paper for the binding"
+              ],
+              "requires_any": [
+                "paper"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.scribe.error.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "source"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s gets a note bound in behind it, saying what I found and how, and signed, so that the next person can disagree with me by name.",
+                    "Bound in rather than loose. A loose note is lost in one generation, and a lost note is worse than none because it was written.",
+                    "Yes. And I will copy the note twice, into both books, because a correction that exists in one place is a correction waiting to be lost."
+                  ],
+                  "pt": [
+                    "Então %2$s ganha uma nota encadernada atrás, dizendo o que eu encontrei e como, e assinada, para a próxima pessoa poder discordar de mim pelo nome.",
+                    "Encadernada, não solta. Uma nota solta se perde em uma geração, e nota perdida é pior que nenhuma porque foi escrita.",
+                    "Sim. E vou copiar a nota duas vezes, nos dois livros, porque uma correção que existe em um lugar só é uma correção esperando para se perder."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_margin",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Copy it as it stands and mark it.",
+                "pt": "Copie como está e marque."
+              },
+              "phrases": [
+                "copy it as it stands and mark it",
+                "leave the text and note the doubt"
+              ],
+              "requires_any": [
+                "stands",
+                "mark",
+                "doubt"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "That is the rule and it is the one I have to talk myself into every single time, because helping is such a pleasant feeling.",
+                    "Yes. A copyist who improves a text has replaced it with herself, and everybody afterwards is reading her and thinking they are reading the source.",
+                    "Thank you. It is the answer I knew and I wanted to hear somebody outside the trade say it, because inside the trade it sounds like an excuse for laziness."
+                  ],
+                  "pt": [
+                    "É a regra, e é a que eu preciso me convencer a seguir toda vez, porque ajudar é uma sensação muito agradável.",
+                    "Sim. Uma copista que melhora um texto o substituiu por si mesma, e todo mundo depois está lendo ela achando que lê a fonte.",
+                    "Obrigada. É a resposta que eu já sabia e eu queria ouvir alguém de fora do ofício dizer, porque dentro do ofício soa como desculpa para preguiça."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "iceandfire"
+          ],
+          "slots_used": [
+            "source"
+          ],
+          "prompt": {
+            "en": "The copies, since.",
+            "pt": "As cópias, depois disso."
+          },
+          "lines": {
+            "en": [
+              "%2$s carries the note now, bound in, in both books, and the text above it is exactly as wrong as it always was.",
+              "It is done, and it took four days, and the four days were entirely the writing of one careful paragraph.",
+              "Somebody read the note last month and came to argue with me about it, which is the single best thing that has happened to that archive in a century."
+            ],
+            "pt": [
+              "%2$s leva a nota agora, encadernada, nos dois livros, e o texto acima continua exatamente tão errado quanto sempre foi.",
+              "Está feito, levou quatro dias, e os quatro dias foram inteiramente escrever um parágrafo cuidadoso.",
+              "Alguém leu a nota mês passado e veio discutir comigo, o que é a melhor coisa que aconteceu àquele arquivo em um século."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_argument",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did they argue?",
+                "pt": "O que argumentaram?"
+              },
+              "phrases": [
+                "what did they argue with you about",
+                "what was their objection"
+              ],
+              "requires_any": [
+                "argue",
+                "objection"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "That the older spelling was the right one, and he may be correct, and now there are two notes and the reader has both.",
+                    "He was cross for about a minute and then genuinely interested, which is the most common shape an argument takes when the evidence is on the table.",
+                    "He knew something I did not. His grandmother's family used the other spelling, and that is exactly the sort of thing an archive cannot hold and a person can."
+                  ],
+                  "pt": [
+                    "Que a grafia mais antiga era a certa, e ele pode ter razão, e agora há duas notas e o leitor tem as duas.",
+                    "Ficou bravo por um minuto e depois genuinamente interessado, que é o formato mais comum de uma discussão quando a prova está na mesa.",
+                    "Ele sabia algo que eu não sabia. A família da avó dele usava a outra grafia, e é exatamente o tipo de coisa que um arquivo não guarda e uma pessoa guarda."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.failing_eyes",
+      "subject": "work.scribe.the_page",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "integrations": [
+        "iceandfire"
+      ],
+      "slots": {
+        "trouble": [
+          "scr_ink_that_fades",
+          "scr_a_shaking_hand",
+          "scr_small_letters"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trouble"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The work itself.",
+            "pt": "O trabalho em si."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s, and I have been working shorter days and telling nobody, which is a plan with a very short life in it.",
+              "%2$s. Three good hours a day now, where it used to be nine, and the three are as good as the nine ever were.",
+              "%2$s means I will have to stop, at some point, and I would like to choose the point rather than have it chosen."
+            ],
+            "pt": [
+              "Tenho %2$s, e venho trabalhando dias mais curtos sem contar a ninguém, o que é um plano com prazo de validade muito curto.",
+              "%2$s. Três boas horas por dia agora, onde eram nove, e as três são tão boas quanto as nove sempre foram.",
+              "%2$s significa que eu vou ter que parar, em algum momento, e eu gostaria de escolher o momento em vez de que ele me escolha."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_plan",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What's your plan for it?",
+                "pt": "Qual é o seu plano?"
+              },
+              "phrases": [
+                "what is your plan for that",
+                "how are you planning around it"
+              ],
+              "requires_any": [
+                "plan",
+                "planning"
+              ],
+              "disposition": {
+                "familiarity": 3
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Copy the important books first, in the good hours, and let the register wait. It has waited ninety years already.",
+                    "Teach somebody. That is the real plan and it is the one I have been putting off for two years for reasons I do not like about myself.",
+                    "Bigger letters and shorter lines. It looks like a child's book and it will be readable in a century, which is more than my best work at thirty will be."
+                  ],
+                  "pt": [
+                    "Copiar os livros importantes primeiro, nas boas horas, e deixar o registro esperar. Ele já esperou noventa anos.",
+                    "Ensinar alguém. É o plano de verdade e é o que eu venho adiando há dois anos por motivos de que eu não gosto a meu respeito.",
+                    "Letras maiores e linhas mais curtas. Parece livro de criança e vai estar legível em um século, o que é mais do que o meu melhor trabalho aos trinta vai estar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "urge_teaching",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Take an apprentice now.",
+                "pt": "Pegue uma aprendiz agora."
+              },
+              "phrases": [
+                "take an apprentice now",
+                "start teaching somebody this year"
+              ],
+              "requires_any": [
+                "apprentice",
+                "teaching"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.scribe.eyes.urged",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "While I can still see well enough to correct them. That is the argument and it has a date on it, which is why I have been avoiding it.",
+                    "Yes. And I have to teach them the marking and the marginal note and the refusing to improve, and those take longer than the letters.",
+                    "There is a child in this village who reads for pleasure and has no trade. I have known that for a year and said nothing, out of something I would rather not name."
+                  ],
+                  "pt": [
+                    "Enquanto eu ainda enxergo o bastante para corrigir. É o argumento, e ele tem data marcada, e por isso eu venho evitando.",
+                    "Sim. E eu preciso ensinar a marcação, a nota de margem e a recusa a melhorar o texto, e isso leva mais tempo que as letras.",
+                    "Tem uma criança nesta vila que lê por prazer e não tem ofício. Eu sei disso há um ano e não disse nada, por algo que eu prefiro não nomear."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "acknowledge_the_loss",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Nine hours to three is a real loss.",
+                "pt": "De nove horas para três é uma perda real."
+              },
+              "phrases": [
+                "nine hours to three is a real loss",
+                "losing those hours is hard"
+              ],
+              "requires_any": [
+                "hours",
+                "loss",
+                "losing"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is, and I have been very reasonable about it in public and much less so at four in the morning.",
+                    "Thank you. Everybody says at least you can still read. I can. It is not the same as being the person who writes it down.",
+                    "The strange part is that the three hours are better. Whatever this is has taken the quantity and left the quality entirely alone."
+                  ],
+                  "pt": [
+                    "É, e eu venho sendo muito razoável a respeito em público e muito menos às quatro da manhã.",
+                    "Obrigada. Todo mundo diz que pelo menos eu ainda leio. Eu leio. Não é a mesma coisa que ser a pessoa que escreve.",
+                    "O estranho é que as três horas são melhores. Seja lá o que for isso, levou a quantidade e deixou a qualidade inteiramente em paz."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "iceandfire"
+          ],
+          "prompt": {
+            "en": "Your apprentice.",
+            "pt": "Sua aprendiz."
+          },
+          "lines": {
+            "en": [
+              "She has copied forty pages and made eleven errors, and she has marked all eleven herself, which is the whole of the trade.",
+              "Three hours of mine and eight of hers. The archive is moving faster than it has in twenty years and I am doing less of it than ever.",
+              "I taught her the marginal note first, before the letters. She thought that was strange. She does not think so any more."
+            ],
+            "pt": [
+              "Ela copiou quarenta páginas e cometeu onze erros, e marcou os onze sozinha, que é o ofício inteiro.",
+              "Três horas minhas e oito dela. O arquivo anda mais rápido do que em vinte anos e eu faço menos do que nunca.",
+              "Ensinei a nota de margem primeiro, antes das letras. Ela achou estranho. Não acha mais."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_order",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Teaching the note first was clever.",
+                "pt": "Ensinar a nota primeiro foi esperto."
+              },
+              "phrases": [
+                "teaching the note first was clever",
+                "starting with the marginal note was wise"
+              ],
+              "requires_any": [
+                "note",
+                "clever",
+                "wise"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Anybody can be taught to form letters. What takes years is the habit of doubting yourself in writing, where somebody can check.",
+                    "Thank you. My own teacher did it the other way round and I did not learn the marking until I was thirty-one and had already spoiled a book.",
+                    "She will be better than me. I have been careful to say that out loud to her, in those words, because I was never told it and I noticed."
+                  ],
+                  "pt": [
+                    "Qualquer um aprende a formar letras. O que leva anos é o hábito de duvidar de si por escrito, onde alguém pode conferir.",
+                    "Obrigada. Minha própria mestra fez ao contrário e eu só aprendi a marcação aos trinta e um, depois de já ter estragado um livro.",
+                    "Ela vai ser melhor que eu. Tomei o cuidado de dizer isso a ela em voz alta, com essas palavras, porque a mim nunca disseram e eu reparei."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.text_she_doubts",
+      "subject": "work.scribe.a_text_i_doubt",
+      "initial_state": "active",
+      "salience": 48,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "integrations": [
+        "iceandfire"
+      ],
+      "slots": {
+        "text": [
+          "scr_an_account_of_a_beast",
+          "scr_a_claim_about_a_flood"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "debate",
+          "predicate": "opinion",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "text"
+          ],
+          "identity_values": [
+            "fairness",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The text you're copying.",
+            "pt": "O texto que você copia."
+          },
+          "lines": {
+            "en": [
+              "I am copying %2$s that I do not believe a word of, and my job is to write it out exactly.",
+              "%2$s. The man who wrote it was there and I was not, and that is the only fact I am certain of in the whole document.",
+              "It would be very easy to copy %2$s slightly less convincingly. A word here, a hesitation there. That is the temptation nobody warns a copyist about."
+            ],
+            "pt": [
+              "Estou copiando %2$s em que eu não acredito uma palavra, e o meu trabalho é escrever exatamente.",
+              "%2$s. O homem que escreveu estava lá e eu não estava, e é o único fato de que eu tenho certeza no documento inteiro.",
+              "Seria muito fácil copiar %2$s de um jeito um pouco menos convincente. Uma palavra aqui, uma hesitação ali. É a tentação sobre a qual ninguém avisa uma copista."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_does_with_doubt",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Where does your doubt go?",
+                "pt": "Para onde vai a sua dúvida?"
+              },
+              "phrases": [
+                "where does your doubt go",
+                "what happens to your own view of it"
+              ],
+              "requires_any": [
+                "doubt",
+                "view"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "lines": {
+                  "en": [
+                    "Into the margin, signed and dated, where it is clearly mine and clearly not his. That is the only honest place for it.",
+                    "Nowhere, in the text. A reader in two hundred years is entitled to his account, not to mine of his account.",
+                    "I write what I would need to be persuaded. Not that he is wrong — what evidence would change my mind. It is a better note and it is harder to write."
+                  ],
+                  "pt": [
+                    "Para a margem, assinada e datada, onde é claramente minha e claramente não dele. É o único lugar honesto.",
+                    "Para lugar nenhum, no texto. Um leitor daqui a duzentos anos tem direito ao relato dele, não ao meu sobre o relato dele.",
+                    "Escrevo o que eu precisaria para ser convencida. Não que ele esteja errado — que prova mudaria minha cabeça. É uma nota melhor e é mais difícil de escrever."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_faithful_copy",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Copy it faithfully anyway.",
+                "pt": "Copie fielmente mesmo assim."
+              },
+              "phrases": [
+                "copy it faithfully anyway",
+                "keep the copy faithful to his words"
+              ],
+              "requires_any": [
+                "faithfully",
+                "faithful"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Faithfully, and with my name at the end so that anybody who wants to blame somebody for the copy can blame the right person.",
+                    "Yes. If I am right about him, the record will show it eventually without my help. If I am wrong, I will have kept the only evidence.",
+                    "It is the whole discipline. A copyist who only copies what she believes has produced a book about herself."
+                  ],
+                  "pt": [
+                    "Fielmente, e com meu nome no fim, para que quem quiser culpar alguém pela cópia culpe a pessoa certa.",
+                    "Sim. Se eu estiver certa sobre ele, o registro vai mostrar isso sem a minha ajuda. Se eu estiver errada, terei guardado a única prova.",
+                    "É a disciplina inteira. Uma copista que só copia aquilo em que acredita produziu um livro sobre si mesma."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "iceandfire"
+          ],
+          "slots_used": [
+            "text"
+          ],
+          "prompt": {
+            "en": "That account.",
+            "pt": "Aquele relato."
+          },
+          "lines": {
+            "en": [
+              "%2$s is copied, word for word, with four lines of mine in the margin saying what would persuade me.",
+              "I finished it. I still do not believe it and the copy does not show that, and I am prouder of the copy than of almost anything else I have made.",
+              "Somebody read my margin note and told me it was the fairest disagreement they had ever read. I have thought about that more than I should."
+            ],
+            "pt": [
+              "%2$s está copiado, palavra por palavra, com quatro linhas minhas na margem dizendo o que me convenceria.",
+              "Terminei. Continuo sem acreditar e a cópia não mostra isso, e tenho mais orgulho dessa cópia do que de quase tudo que já fiz.",
+              "Alguém leu minha nota de margem e me disse que era a discordância mais justa que já tinha lido. Penso nisso mais do que deveria."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_discipline",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "A fair disagreement is a rare thing.",
+                "pt": "Uma discordância justa é coisa rara."
+              },
+              "phrases": [
+                "a fair disagreement is a rare thing",
+                "disagreeing fairly is rare"
+              ],
+              "requires_any": [
+                "disagreement",
+                "disagreeing",
+                "fair"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is only rare because disagreement usually happens out loud, where it costs nothing to be unfair, and I had four days and a margin.",
+                    "Thank you. Writing down what would change my mind took three of those four days, and it changed my mind about two other things while I was at it.",
+                    "The trick is that you have to mean it. A note that lists impossible evidence is a sneer with better handwriting."
+                  ],
+                  "pt": [
+                    "Só é rara porque a discordância costuma acontecer em voz alta, onde ser injusto não custa nada, e eu tinha quatro dias e uma margem.",
+                    "Obrigada. Escrever o que mudaria minha cabeça levou três desses quatro dias, e mudou minha cabeça sobre outras duas coisas de quebra.",
+                    "O truque é que você tem que estar falando sério. Uma nota que lista provas impossíveis é um deboche com letra melhor."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Was there another question?",
+      "pt": "Tinha outra pergunta?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of copying a page?",
+        "pt": "Qual é a parte mais difícil de copiar uma página?"
+      },
+      "requires_any": [
+        "hardest",
+        "copying"
+      ],
+      "phrases": [
+        "what is the hardest part of copying a page",
+        "hardest thing about copying"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the page.",
+      "pt": "Vou deixar você com a página."
+    }
+  }
+}

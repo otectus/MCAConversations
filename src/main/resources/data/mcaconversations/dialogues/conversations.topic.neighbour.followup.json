@@ -13,7 +13,9 @@
               }
             },
             "next": "conversations.cat.village",
-            "say": "conversations.neighbour.ask_history"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.ask_history"
+            }
           }
         }
       ]
@@ -38,7 +40,9 @@
               }
             },
             "next": "conversations.cat.village",
-            "say": "conversations.neighbour.be_honest"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.be_honest"
+            }
           }
         }
       ]
@@ -63,7 +67,27 @@
               }
             },
             "next": "conversations.cat.village",
-            "say": "conversations.neighbour.let_it_lie"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.let_it_lie"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.more.open"
+            },
+            "next": "conversations.topic.neighbour.more",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.more"
+            }
           }
         }
       ]
@@ -78,7 +102,9 @@
               "op": "end"
             },
             "next": "conversations.cat.village",
-            "say": "conversations.neighbour.followup_leave"
+            "conversations_say": {
+              "phrase": "conversations.neighbour.followup_leave"
+            }
           }
         }
       ]

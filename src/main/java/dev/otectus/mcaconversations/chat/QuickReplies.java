@@ -2,6 +2,8 @@ package dev.otectus.mcaconversations.chat;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
@@ -20,12 +22,12 @@ import java.util.OptionalInt;
  * identical hearts, identical state — just a second way to name the same choice.
  *
  * <p>Both halves are pure and unit-tested: {@link #parse} never touches the world, and
- * {@link #optionsLine} builds translatable components the client resolves in its own locale.
+ * {@link #optionsBlock} builds translatable components the client resolves in its own locale.
  */
 public final class QuickReplies {
 
-    /** Never number more choices than MCA itself will show on a page. */
-    public static final int MAX_OPTIONS = 5;
+    /** Mirrors the bounded synchronized-offer protocol; choices are never silently truncated. */
+    public static final int MAX_OPTIONS = 64;
 
     private QuickReplies() {
     }
@@ -54,7 +56,7 @@ public final class QuickReplies {
             end--;
         }
         String core = trimmed.substring(start, end);
-        if (core.isEmpty() || core.length() > 2) {
+        if (core.isEmpty() || core.length() > Integer.toString(MAX_OPTIONS).length()) {
             return OptionalInt.empty();
         }
         for (int i = 0; i < core.length(); i++) {
@@ -93,7 +95,7 @@ public final class QuickReplies {
      * <p>Returns empty when there is nothing worth numbering: no question, no answers, or only a
      * single option (a list of one is noise, and the player can just say it).
      */
-    public static java.util.Optional<Component> optionsLine(String question, List<String> offered) {
+    public static java.util.Optional<Component> optionsBlock(String question, List<String> offered) {
         if (question == null || offered == null || offered.size() < 2) {
             return java.util.Optional.empty();
         }
@@ -101,16 +103,33 @@ public final class QuickReplies {
         int shown = 0;
         for (String answer : offered) {
             if (shown >= MAX_OPTIONS) {
-                break;
+                return java.util.Optional.empty();
             }
             shown++;
             if (shown > 1) {
-                out.append(Component.literal("  "));
+                out.append(Component.literal("\n"));
             }
-            out.append(Component.literal("[" + shown + "] ").withStyle(ChatFormatting.DARK_GRAY));
-            out.append(Component.translatable("dialogue." + question + "." + answer)
-                    .withStyle(ChatFormatting.GRAY));
+            int choice = shown;
+            ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, Integer.toString(choice));
+            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                    Component.translatable("chat.mcaconversations.responses.hover", choice));
+            MutableComponent option = Component.empty().withStyle(style -> style
+                    .withClickEvent(click).withHoverEvent(hover));
+            option.append(Component.literal(shown + ". ").withStyle(style -> style
+                    .withColor(0xFFC34D).withBold(true)));
+            option.append(Component.translatable("dialogue." + question + "." + answer)
+                    .withStyle(ChatFormatting.WHITE));
+            out.append(option);
         }
+        out.append(Component.literal("\n"));
+        out.append(Component.translatable("chat.mcaconversations.responses.hint")
+                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
         return shown < 2 ? java.util.Optional.empty() : java.util.Optional.of(out);
+    }
+
+    /** Source-compatible alias for integrations compiled against the pre-1.4.3 helper name. */
+    @Deprecated(forRemoval = false)
+    public static java.util.Optional<Component> optionsLine(String question, List<String> offered) {
+        return optionsBlock(question, offered);
     }
 }

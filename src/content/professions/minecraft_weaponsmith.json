@@ -1,0 +1,834 @@
+{
+  "_comment": [
+    "Weaponsmith. A trade whose products are only ever used on somebody.",
+    "",
+    "The §12.4 anchors are the forge, edges, who buys, the balance of a blade, materials and the piece",
+    "she will not make. These three take a commission she is uneasy about, a blade that came back from",
+    "a guard who used it, and an argument with the armorer about who is responsible for what.",
+    "",
+    "She refuses both squeamishness and swagger. She makes tools that are for hurting people, she says",
+    "so in those words, and she has thought about it more carefully than anybody who has ever teased",
+    "her about it."
+  ],
+  "profession": "minecraft:weaponsmith",
+  "id": "weaponsmith",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_forge",
+    "edges",
+    "who_buys",
+    "balance",
+    "materials",
+    "what_i_wont_make"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the hammer.",
+    "pt": "Vou deixar você voltar ao martelo."
+  },
+  "slot_lang": {
+    "wea_a_short_blade": {
+      "en": "a short blade",
+      "pt": "uma lâmina curta"
+    },
+    "wea_a_pair_of_them": {
+      "en": "a pair of them",
+      "pt": "um par delas"
+    },
+    "wea_something_light_and_quiet": {
+      "en": "something light and easily hidden",
+      "pt": "algo leve e fácil de esconder"
+    },
+    "wea_a_man_who_would_not_look_at_me": {
+      "en": "a man who would not look at me",
+      "pt": "um homem que não me olhava"
+    },
+    "wea_a_woman_in_a_hurry": {
+      "en": "a woman in a hurry",
+      "pt": "uma mulher com pressa"
+    },
+    "wea_a_boy_of_sixteen": {
+      "en": "a boy of sixteen",
+      "pt": "um rapaz de dezesseis"
+    },
+    "wea_a_notched_edge": {
+      "en": "a notched edge",
+      "pt": "um fio lascado"
+    },
+    "wea_a_bent_tang": {
+      "en": "a bent tang",
+      "pt": "uma espiga entortada"
+    },
+    "wea_a_loose_grip": {
+      "en": "a grip that has worked loose",
+      "pt": "um punho que soltou"
+    },
+    "wea_the_armorer": {
+      "en": "the armorer",
+      "pt": "a armeira"
+    },
+    "wea_the_guard_captain": {
+      "en": "the captain of the watch",
+      "pt": "o capitão da ronda"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.uneasy_commission",
+      "subject": "work.weaponsmith.who_buys",
+      "initial_state": "blocked",
+      "salience": 60,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "piece": [
+          "wea_a_short_blade",
+          "wea_a_pair_of_them",
+          "wea_something_light_and_quiet"
+        ],
+        "buyer": [
+          "wea_a_man_who_would_not_look_at_me",
+          "wea_a_woman_in_a_hurry",
+          "wea_a_boy_of_sixteen"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "piece",
+            "buyer"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The commission.",
+            "pt": "A encomenda."
+          },
+          "lines": {
+            "en": [
+              "%3$s came in and asked for %2$s and would give me no reason, and I have not started it.",
+              "%2$s, for %3$s. I have made forty of those and this is the first one I have left on the bench overnight.",
+              "There is nothing wrong with the order. %3$s paid properly and asked politely. It is the way they asked that I keep going back over."
+            ],
+            "pt": [
+              "%3$s apareceu e pediu %2$s e não me deu motivo nenhum, e eu não comecei.",
+              "%2$s, para %3$s. Já fiz quarenta dessas e é a primeira que eu deixo na bancada de um dia para o outro.",
+              "Não há nada de errado com o pedido. %3$s pagou direito e pediu com educação. É o jeito de pedir que eu fico remoendo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_her_rule",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you refuse to make?",
+                "pt": "O que você se recusa a fazer?"
+              },
+              "phrases": [
+                "what do you refuse to make",
+                "which pieces are off your bench"
+              ],
+              "requires_any": [
+                "refuse",
+                "pieces",
+                "bench"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Anything made to be hidden. A blade that has to be concealed is a blade for somebody who is not going to be challenged first.",
+                    "Nothing for a child, and nothing where the buyer will not say the word for what it is out loud in my shop.",
+                    "I have one rule and it is short, and I have broken it once, and that piece is why the rule is short."
+                  ],
+                  "pt": [
+                    "Qualquer coisa feita para ser escondida. Uma lâmina que precisa ser ocultada é uma lâmina para quem não vai ser desafiado antes.",
+                    "Nada para criança, e nada em que o comprador se recuse a dizer em voz alta, na minha oficina, o nome do que é.",
+                    "Tenho uma regra e ela é curta, e eu quebrei uma vez, e é por causa daquela peça que a regra é curta."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_refusing",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Turn that commission down.",
+                "pt": "Recuse essa encomenda."
+              },
+              "phrases": [
+                "turn that commission down",
+                "let that order go"
+              ],
+              "requires_any": [
+                "commission",
+                "order",
+                "down"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 1
+              },
+              "affection": {
+                "decision": "work.weaponsmith.commission.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "resolved",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "I will return the payment tomorrow and say the reason plainly, which will be worse for me than saying nothing.",
+                    "Yes. And they will find somebody in the town who asks fewer questions, and I have to be able to live with that too.",
+                    "That is what I have known since Tuesday. I needed to hear somebody else say it before I would act on my own stomach."
+                  ],
+                  "pt": [
+                    "Vou devolver o pagamento amanhã e dizer o motivo com todas as letras, o que vai ser pior para mim do que não dizer nada.",
+                    "Sim. E vão encontrar alguém na cidade que pergunta menos, e eu também preciso conseguir conviver com isso.",
+                    "É o que eu sei desde terça. Eu precisava ouvir outra pessoa dizer antes de agir com base no meu próprio estômago."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_is_hard",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's a lot to weigh on your own.",
+                "pt": "É muita coisa para pesar sozinha."
+              },
+              "phrases": [
+                "that is a lot to weigh on your own",
+                "you carry that judgement alone"
+              ],
+              "requires_any": [
+                "weigh",
+                "judgement",
+                "carry"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Every commission. Most of them take a second and are obvious, and about one a year takes a week and does not become obvious.",
+                    "Thank you. People either think I should refuse everything or that I should think about none of it, and neither of those is a trade.",
+                    "It is the whole job, actually. The metal is the easy half. I could teach the metal to anyone in three years."
+                  ],
+                  "pt": [
+                    "Toda encomenda. A maioria leva um segundo e é óbvia, e umas uma por ano leva uma semana e nunca fica óbvia.",
+                    "Obrigada. As pessoas acham que eu deveria recusar tudo ou que não deveria pensar em nada, e nenhuma das duas é um ofício.",
+                    "É o trabalho inteiro, na verdade. O metal é a metade fácil. Eu ensinaria o metal a qualquer um em três anos."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "buyer"
+          ],
+          "prompt": {
+            "en": "That commission.",
+            "pt": "Aquela encomenda."
+          },
+          "lines": {
+            "en": [
+              "I gave %2$s the money back and said why. They were angry for about a minute and then they were something else.",
+              "Returned. And the strange part is that %2$s came back a month later to buy an axe, and told me the reason without being asked.",
+              "I refused it. Nothing happened afterwards, which is the outcome you never get to enjoy, because you cannot see what did not happen."
+            ],
+            "pt": [
+              "Devolvi o dinheiro a %2$s e disse por quê. Ficaram bravos por um minuto e depois ficaram outra coisa.",
+              "Devolvida. E o estranho é que %2$s voltou um mês depois para comprar um machado, e me contou o motivo sem eu perguntar.",
+              "Recusei. Nada aconteceu depois, que é o resultado que a gente nunca chega a aproveitar, porque não dá para ver o que não aconteceu."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_not_knowing",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Do you ever find out if you were right?",
+                "pt": "Você chega a saber se estava certa?"
+              },
+              "phrases": [
+                "do you ever find out if you were right",
+                "how do you know your judgement was right"
+              ],
+              "requires_any": [
+                "right",
+                "judgement",
+                "find"
+              ],
+              "disposition": {
+                "familiarity": 3
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Almost never. That is the discipline of it — you refuse, and then you live without the ending, and you do it again next time.",
+                    "Once. Four years ago. I would rather not have found out, and I would make the same refusal again knowing what I know.",
+                    "The one time I said yes against my own judgement, I found out within the year. That is the only evidence I have and it was enough."
+                  ],
+                  "pt": [
+                    "Quase nunca. É essa a disciplina — você recusa, e depois vive sem o final, e faz de novo na próxima vez.",
+                    "Uma vez. Quatro anos atrás. Eu preferiria não ter descoberto, e faria a mesma recusa de novo sabendo o que sei.",
+                    "A única vez em que eu disse sim contra o meu próprio julgamento, descobri dentro do ano. É a única prova que tenho e bastou."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.returned_blade",
+      "subject": "work.weaponsmith.edges",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "damage": [
+          "wea_a_notched_edge",
+          "wea_a_bent_tang",
+          "wea_a_loose_grip"
+        ]
+      },
+      "commitment": {
+        "id": "work.weaponsmith.bring_iron",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:iron_ingot",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "damage"
+          ],
+          "identity_values": [
+            "precision",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The blade that came back.",
+            "pt": "A lâmina que voltou."
+          },
+          "lines": {
+            "en": [
+              "One of the watch brought a blade back with %2$s, which means it was used, which means somebody was on the other end of it.",
+              "%2$s. She handed it over and said nothing about the night, and I did not ask, and I have been thinking about the not asking.",
+              "I can fix %2$s in a morning. What I cannot do is hand it back without knowing whether it worked, and I am not going to ask that either."
+            ],
+            "pt": [
+              "Alguém da ronda trouxe uma lâmina de volta com %2$s, o que quer dizer que foi usada, o que quer dizer que alguém estava do outro lado.",
+              "%2$s. Ela entregou e não disse nada sobre a noite, e eu não perguntei, e venho pensando no não ter perguntado.",
+              "Consigo consertar %2$s numa manhã. O que eu não consigo é devolver sem saber se funcionou, e também não vou perguntar isso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_if_she_wants_to_know",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "Would you rather know?",
+                "pt": "Você preferiria saber?"
+              },
+              "phrases": [
+                "would you rather know",
+                "do you want to know what happened"
+              ],
+              "requires_any": [
+                "rather",
+                "know",
+                "happened"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "No, and I dislike that answer about myself. Knowing would change how I make the next one, and it should not.",
+                    "It is her night, not mine. If she wants to tell me she will, and if she does I will listen and I will not repeat it.",
+                    "I know enough. A notch that deep is a hard stop against something that was not wood, and there is no version where I need the details."
+                  ],
+                  "pt": [
+                    "Não, e não gosto dessa resposta a meu respeito. Saber mudaria como eu faço a próxima, e não deveria.",
+                    "A noite é dela, não minha. Se ela quiser contar, conta, e se contar eu escuto e não repito.",
+                    "Eu sei o bastante. Uma lasca fundo assim é uma parada dura contra algo que não era madeira, e não existe versão em que eu precise dos detalhes."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_iron",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring iron for the repair.",
+                "pt": "Vou trazer ferro para o conserto."
+              },
+              "phrases": [
+                "i can bring iron for the repair",
+                "let me fetch iron for that blade"
+              ],
+              "requires_any": [
+                "iron",
+                "repair"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.weaponsmith.blade.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then she has it back before her next watch, which is the only thing about this that I can actually do something about.",
+                    "Bring it and I will work through the morning. She should not have to stand a night with a borrowed blade she has not learned.",
+                    "Yes. And I will put a new grip on it while I am there, because she has been holding it wrong for a year and never said."
+                  ],
+                  "pt": [
+                    "Então ela recebe de volta antes da próxima ronda, que é a única coisa nisso tudo sobre a qual eu posso de fato fazer algo.",
+                    "Traga e eu trabalho a manhã inteira. Ela não deveria passar uma noite com uma lâmina emprestada que não conhece.",
+                    "Sim. E vou pôr um punho novo enquanto estou nisso, porque ela segura errado há um ano e nunca disse."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "That blade.",
+            "pt": "Aquela lâmina."
+          },
+          "lines": {
+            "en": [
+              "Repaired and handed back before her watch. She weighed it, nodded, and that was the entire conversation.",
+              "It is done. She has not told me about the night and I expect she never will, and that is how it should be.",
+              "New grip, new edge. She noticed the grip and looked at me and said thank you in a way that was about more than the grip."
+            ],
+            "pt": [
+              "Consertada e devolvida antes da ronda dela. Ela pesou na mão, assentiu, e a conversa foi essa inteira.",
+              "Está feito. Ela não me contou sobre a noite e imagino que nunca conte, e é assim que deve ser.",
+              "Punho novo, fio novo. Ela reparou no punho, olhou para mim e disse obrigada de um jeito que era sobre mais do que o punho."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_discretion",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Your discretion was the kind part.",
+                "pt": "Sua discrição foi a parte gentil."
+              },
+              "phrases": [
+                "leaving the question alone was the kindness",
+                "your discretion was the kind part"
+              ],
+              "requires_any": [
+                "discretion",
+                "kindness",
+                "question"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It cost me nothing and it is the only thing I had to give, so I would not call it much of a virtue.",
+                    "Thank you. I have watched people be asked at the well the morning after, by three separate neighbours, all of them meaning well.",
+                    "She will tell somebody, eventually. It should be somebody she chose, not the woman who happens to have made the thing."
+                  ],
+                  "pt": [
+                    "Não me custou nada e era a única coisa que eu tinha para dar, então eu não chamaria de grande virtude.",
+                    "Obrigada. Já vi gente ser interrogada no poço na manhã seguinte, por três vizinhos diferentes, todos bem-intencionados.",
+                    "Ela vai contar a alguém, um dia. Deve ser alguém que ela escolheu, não a mulher que por acaso fabricou a coisa."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.trade_argument",
+      "subject": "work.weaponsmith.balance",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "other": [
+          "wea_the_armorer",
+          "wea_the_guard_captain"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "debate",
+          "predicate": "opinion",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "other"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The argument.",
+            "pt": "A discussão."
+          },
+          "lines": {
+            "en": [
+              "%2$s and I disagree about weight, and we have been disagreeing about it, politely, for four years.",
+              "%2$s says a heavier blade is safer. I say a blade nobody can hold for an hour is the most dangerous thing in the village.",
+              "It sounds like a small argument with %2$s. It decides what the watch carries, so it is not small at all."
+            ],
+            "pt": [
+              "%2$s e eu discordamos sobre peso, e vimos discordando, com educação, há quatro anos.",
+              "%2$s diz que lâmina mais pesada é mais segura. Eu digo que uma lâmina que ninguém segura por uma hora é a coisa mais perigosa da vila.",
+              "Parece uma discussão pequena com %2$s. Decide o que a ronda carrega, então não é nada pequena."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_who_is_right",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How would you settle it?",
+                "pt": "Como você resolveria isso?"
+              },
+              "phrases": [
+                "how would you settle it",
+                "what would settle the argument"
+              ],
+              "requires_any": [
+                "settle",
+                "argument"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "other"
+                ],
+                "lines": {
+                  "en": [
+                    "Let the watch decide after a month of carrying both. %2$s will hate that and it is the only fair test there is.",
+                    "Neither of us can. That is the honest position. Both of us are arguing from four good years and no measurements.",
+                    "I would rather be shown wrong by a guard than agreed with by %2$s, and I would like that quoted accurately."
+                  ],
+                  "pt": [
+                    "Deixar a ronda decidir depois de um mês carregando as duas. %2$s vai detestar, e é o único teste justo que existe.",
+                    "Nenhum de nós dois pode. Essa é a posição honesta. Os dois argumentam a partir de quatro bons anos e nenhuma medição.",
+                    "Prefiro ser corrigida por um guarda a receber a concordância de %2$s, e eu gostaria que isso fosse citado com exatidão."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_the_test",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Let the watch carry both and choose.",
+                "pt": "Deixe a ronda carregar as duas e escolher."
+              },
+              "phrases": [
+                "let the watch carry both and choose",
+                "put both to the people who use them"
+              ],
+              "requires_any": [
+                "carry",
+                "choose",
+                "both"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "A month each and then ask them separately, so that nobody is agreeing with the room. I will propose it on Thursday.",
+                    "Yes. And I have to accept the answer if it goes against me, which is the part I have been avoiding for four years.",
+                    "It costs me two blades and my pride. Both of those are cheaper than the watch carrying the wrong thing for another four years."
+                  ],
+                  "pt": [
+                    "Um mês cada e depois perguntar a cada um em separado, para ninguém concordar com a sala. Vou propor na quinta.",
+                    "Sim. E eu tenho que aceitar a resposta se for contra mim, que é a parte que eu venho evitando há quatro anos.",
+                    "Me custa duas lâminas e o orgulho. As duas coisas são mais baratas do que a ronda carregar a coisa errada por mais quatro anos."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "other"
+          ],
+          "prompt": {
+            "en": "That argument.",
+            "pt": "Aquela discussão."
+          },
+          "lines": {
+            "en": [
+              "The watch chose lighter, five to two, and %2$s took it better than I would have.",
+              "We ran the month. I was right about the weight and wrong about %2$s, who turned out to be interested in the answer rather than in winning.",
+              "Settled by the people who carry them, which is how it should have been settled in the first year rather than the fifth."
+            ],
+            "pt": [
+              "A ronda escolheu a mais leve, cinco a dois, e %2$s levou melhor do que eu teria levado.",
+              "Fizemos o mês. Eu estava certa sobre o peso e errada sobre %2$s, que acabou se interessando pela resposta em vez de vencer.",
+              "Resolvido por quem carrega, que é como deveria ter sido resolvido no primeiro ano, não no quinto."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_method",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Asking the people who carry them was right.",
+                "pt": "Perguntar a quem carrega estava certo."
+              },
+              "phrases": [
+                "asking the people who carry them was right",
+                "the users were the right judges"
+              ],
+              "requires_any": [
+                "carry",
+                "users",
+                "judges"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Obviously right, and it took an outsider to say it, which is the humbling part of the whole business.",
+                    "Thank you. Two craftspeople arguing will argue for a decade. Two craftspeople asking will have an answer in a month.",
+                    "%2$s and I have started doing it for everything now. We disagree twice as often and it takes a quarter of the time."
+                  ],
+                  "pt": [
+                    "Obviamente certo, e precisou de alguém de fora dizer, que é a parte humilhante da história toda.",
+                    "Obrigada. Dois artesãos discutindo discutem por uma década. Dois artesãos perguntando têm resposta em um mês.",
+                    "%2$s e eu passamos a fazer isso para tudo agora. Discordamos o dobro das vezes e leva um quarto do tempo."
+                  ]
+                },
+                "slots_used": [
+                  "other"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything more to ask?",
+      "pt": "Mais alguma pergunta?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of arming someone?",
+        "pt": "Qual é a parte mais difícil de armar alguém?"
+      },
+      "requires_any": [
+        "hardest",
+        "arming"
+      ],
+      "phrases": [
+        "what is the hardest part of arming someone",
+        "hardest thing about arming people"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the anvil.",
+      "pt": "Vou deixar você com a bigorna."
+    }
+  }
+}

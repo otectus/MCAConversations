@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_entries",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.open.counted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.the_ledger",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.shared_history.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.shared_history.open.counted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_has_been_good",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.the_ledger",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.topic.shared_history.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.shared_history.open.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "shrug_off_the_ledger",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "shared_history.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.shared_history.dismissed",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.the_ledger",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.shared_history.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

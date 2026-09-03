@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_children",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.village.ask_children"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.village.ask_children",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.village.ask_children"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_credit",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.village.say_credit"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fisherman.village.say_credit",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.village.say_credit",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.village.say_credit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_stopped",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.village.ask_stopped"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.village.ask_stopped",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.village.ask_stopped"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "answers": [
+    {
+      "name": "take_it_back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.deflated.take_it_back"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.elated.deflated.take_it_back",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.elated.deflated.take_it_back",
+              "deltas": {
+                "tension": -3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.deflated.take_it_back"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "explain_meant",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.deflated.explain_meant"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.elated.deflated.explain_meant",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.elated.deflated.explain_meant",
+              "deltas": {
+                "tension": -2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.deflated.explain_meant"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "stand_by_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.deflated.stand_by_it"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.elated.deflated.stand_by_it",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.elated.deflated.stand_by_it",
+              "deltas": {
+                "respect": 1,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.deflated.stand_by_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated.deflated.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

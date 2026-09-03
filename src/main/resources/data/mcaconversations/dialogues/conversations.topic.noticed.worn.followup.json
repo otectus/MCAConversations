@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "not_alone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.worn.followup.not_alone"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.worn.followup.not_alone",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.worn.followup.not_alone",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.followup.not_alone"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "take_a_day",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.worn.followup.day"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.worn.followup.day",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.worn.followup.day",
+              "deltas": {
+                "respect": 2,
+                "warmth": 2
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "noticed",
+              "op": "advance"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.followup.day"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.followup.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

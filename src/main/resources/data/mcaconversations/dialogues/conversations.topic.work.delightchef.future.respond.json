@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_timings",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.future.ask_timings"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.future.ask_timings",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.future.ask_timings"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightchef.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.future.ask_hands"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.future.ask_hands",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.future.ask_hands"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

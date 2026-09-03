@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_smith",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.village.ask_smith"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.village.ask_smith",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.miner.village.ask_smith"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.miner.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.miner.village.say_thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_ladder",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.village.ask_ladder"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.village.ask_ladder",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.miner.village.ask_ladder"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.miner.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

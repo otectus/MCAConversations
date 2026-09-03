@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_to_see_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "origin.more.shown"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.origin.asked_after",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.what_i_carried",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.origin.more.shown"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_worth_keeping",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "origin.more.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.what_i_carried",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.origin.more.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "wave_off_the_keepsake",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "origin.more.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.origin.cut_short",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.what_i_carried",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.origin.more.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.origin.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

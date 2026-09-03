@@ -1,0 +1,124 @@
+{
+  "answers": [
+    {
+      "name": "ask_deed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.incident.deed"
+            },
+            "next": "conversations.topic.standing.incident.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.incident.deed",
+              "vars": [
+                "reputation_recent_deed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "amends",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.amends.done"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.amends",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.amends.done",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "conversations_reputation_signal": {
+              "incident": "mcareputation:public_apology",
+              "visibility": "village",
+              "decision": "standing.amends.public_apology"
+            },
+            "next": "conversations.topic.standing.incident.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.amends.done"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "deny",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.incident.deny"
+            },
+            "next": "conversations.topic.standing.incident.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.incident.deny"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.incident.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.incident.dismissed",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.incident.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.incident.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

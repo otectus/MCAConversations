@@ -1,0 +1,601 @@
+{
+  "beats": {
+    "noticed.guarded.back": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.back",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.guarded",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.followup.another": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.followup.another",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.guarded",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.followup.fair": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.followup.fair",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.guarded",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.followup.leave": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.followup.leave",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.guarded",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.lighter": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.lighter",
+      "response_question": "conversations.topic.noticed.guarded.followup",
+      "npc_act": "invite",
+      "subject": "noticed.guarded",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "restraint",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.open": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded",
+      "response_question": "conversations.topic.noticed.guarded.respond",
+      "npc_act": "deflect",
+      "subject": "noticed.guarded",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "facts": [
+        "noticed:guarded"
+      ],
+      "allowed_stances": [
+        "restraint",
+        "curiosity",
+        "candor",
+        "self_disclosure",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "flirtation",
+        "humor",
+        "dismissal"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.pressed": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.pressed",
+      "response_question": "conversations.cat.events",
+      "npc_act": "set_boundary",
+      "subject": "noticed.guarded",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "boundary_closed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.respect": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.respect",
+      "response_question": "conversations.topic.noticed.guarded.followup",
+      "npc_act": "accept",
+      "subject": "noticed.guarded",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "restraint",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.guarded.trade": {
+      "topic": "noticed",
+      "say": "conversations.noticed.guarded.trade",
+      "response_question": "conversations.topic.noticed.guarded.followup",
+      "npc_act": "qualify",
+      "subject": "noticed.guarded",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "restraint",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.back": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.back",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.exhaustion",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.dismissed": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.dismissed",
+      "response_question": "conversations.cat.events",
+      "npc_act": "hurt",
+      "subject": "noticed.exhaustion",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.followup.day": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.followup.day",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.exhaustion",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "noticed",
+        "resumes": [
+          "noticed.resume.how_is_it_now",
+          "noticed.resume.ill_come_regular",
+          "noticed.resume.opener",
+          "noticed.resume.sorry_i_didnt"
+        ]
+      }
+    },
+    "noticed.worn.followup.leave": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.followup.leave",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.exhaustion",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.followup.not_alone": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.followup.not_alone",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "noticed.exhaustion",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.how_long": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.how_long",
+      "response_question": "conversations.topic.noticed.worn.followup",
+      "npc_act": "disclose",
+      "subject": "noticed.exhaustion",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "dismissal"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.no_fixing": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.no_fixing",
+      "response_question": "conversations.topic.noticed.worn.followup",
+      "npc_act": "accept",
+      "subject": "noticed.exhaustion",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "dismissal"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.open": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn",
+      "response_question": "conversations.topic.noticed.worn.respond",
+      "npc_act": "disclose_problem",
+      "subject": "noticed.exhaustion",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "noticed:worn"
+      ],
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "practical_help",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "challenge"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "noticed.worn.take_something": {
+      "topic": "noticed",
+      "say": "conversations.noticed.worn.take_something",
+      "response_question": "conversations.topic.noticed.worn.followup",
+      "npc_act": "request_help",
+      "subject": "noticed.exhaustion",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "dismissal"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.noticed.guarded.followup/another_day": {
+      "stance": "restraint",
+      "responds_to": [
+        "noticed.guarded.respect",
+        "noticed.guarded.lighter",
+        "noticed.guarded.trade"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.noticed.guarded.followup/fair_enough": {
+      "stance": "candor",
+      "responds_to": [
+        "noticed.guarded.respect",
+        "noticed.guarded.lighter",
+        "noticed.guarded.trade"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.noticed.guarded.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "noticed.guarded.respect",
+        "noticed.guarded.lighter",
+        "noticed.guarded.trade"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.noticed.guarded.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "noticed.guarded.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.noticed.guarded.respond/lighter": {
+      "stance": "curiosity",
+      "responds_to": [
+        "noticed.guarded.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.noticed.guarded.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "noticed.guarded.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "boundary_closed"
+      ]
+    },
+    "conversations.topic.noticed.guarded.respond/respect": {
+      "stance": "restraint",
+      "responds_to": [
+        "noticed.guarded.open"
+      ],
+      "requires_facts": [
+        "noticed:guarded"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.noticed.guarded.respond/trade": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "noticed.guarded.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.noticed.worn.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "noticed.worn.how_long",
+        "noticed.worn.take_something",
+        "noticed.worn.no_fixing"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.noticed.worn.followup/not_alone": {
+      "stance": "empathy",
+      "responds_to": [
+        "noticed.worn.how_long",
+        "noticed.worn.take_something",
+        "noticed.worn.no_fixing"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.noticed.worn.followup/take_a_day": {
+      "stance": "practical_help",
+      "responds_to": [
+        "noticed.worn.how_long",
+        "noticed.worn.take_something",
+        "noticed.worn.no_fixing"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.noticed.worn.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "noticed.worn.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.noticed.worn.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "noticed.worn.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "hurt"
+      ]
+    },
+    "conversations.topic.noticed.worn.respond/how_long": {
+      "stance": "curiosity",
+      "responds_to": [
+        "noticed.worn.open"
+      ],
+      "requires_facts": [
+        "noticed:worn"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.noticed.worn.respond/no_fixing": {
+      "stance": "empathy",
+      "responds_to": [
+        "noticed.worn.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.noticed.worn.respond/take_something": {
+      "stance": "practical_help",
+      "responds_to": [
+        "noticed.worn.open"
+      ],
+      "requires_facts": [
+        "noticed:worn"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    }
+  }
+}

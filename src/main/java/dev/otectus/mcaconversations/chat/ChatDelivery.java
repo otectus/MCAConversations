@@ -3,11 +3,10 @@ package dev.otectus.mcaconversations.chat;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
-import dev.otectus.mcaconversations.locale.VariantPools;
+import dev.otectus.mcaconversations.locale.LineVoice;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,10 +49,12 @@ public final class ChatDelivery {
                              ChatModeSession.Scope feedback) {
         McaConversationsConfig.Common cfg = McaConversationsConfig.COMMON;
         String name = McaCompat.getVillagerName(villager).filter(n -> !n.isBlank()).orElse("Villager");
-        MutableComponent coloredName = Component.literal(name).withStyle(ChatFormatting.YELLOW);
+        MutableComponent coloredName = Component.literal(name).withStyle(style -> style
+                .withColor(0xFFC34D)
+                .withBold(true));
         // Choose the pooled variant here, once, rather than letting every recipient's client roll
         // its own — see VariantPools. Also yields the sentence length the delay is scaled from.
-        Voiced voiced = voice(line, villager);
+        Voiced voiced = voice(line, villager, player);
         MutableComponent rendered = applyFormat(cfg.chatModeMessageFormat.get(), coloredName, voiced.line());
 
         MinecraftServer server = player.getServer();
@@ -63,7 +64,7 @@ public final class ChatDelivery {
         boolean publicReplies = cfg.chatModePublicReplies.get();
         // Public replies travel as far as an overheard player message (the addressed radius), so a
         // bystander hears whole conversations — not the question without the answer.
-        double radius = cfg.chatModeAddressedRadius.get();
+        double radius = McaConversationsConfig.chatModeAddressedRadius();
 
         ChatModeScheduler.schedule(now + delay,
                 () -> deliver(villager, player, rendered, publicReplies, radius, feedback));
@@ -116,58 +117,18 @@ public final class ChatDelivery {
     }
 
     /**
-     * Names one concrete {@code …/N} variant of a pooled line, so the speaker and every bystander
-     * inside the addressed radius read the same sentence. (The interaction screen needs its own fix,
-     * {@code VillagerMessageMixin}: there MCA renders one line from three separate components.)
+     * Picks the pooled variant for this line, and measures the sentence that was picked.
      *
-     * <p>MCA resolves {@code /N} pools on the client with a fresh random draw per component instance,
-     * so an unpinned line arriving at three clients is three different sentences. Appending the index
-     * to the marker-laden key is safe: MCA's {@code applyFallback} strips its {@code #G}/{@code #E}/
-     * {@code #P}/{@code #T} tokens by dot-separated prefix and the pool regex is anchored at
-     * {@code /[0-9]+$}, so the client sees a concrete key, finds no pool for it, and renders that one
-     * line — through the personality overlay when it has one, which is what
-     * {@link VariantPools#deliverablePoolSize} keeps the index inside.
-     *
-     * <p>Fails open: anything that is not a pooled translatable we own is passed through untouched and
-     * keeps MCA's own behaviour.
+     * <p>The choice itself belongs to {@link LineVoice}: it is the same decision the interaction
+     * screen needs, it has to remember what this villager last said to this player, and it has to
+     * come out the same for the speaker and for every bystander inside the addressed radius. All
+     * that is left here is the one thing that is chat's own business — how long to spend pretending
+     * to type it.
      */
-    private static Voiced voice(Component line, Entity villager) {
-        try {
-            if (line.getContents() instanceof TranslatableContents contents) {
-                String key = contents.getKey();
-                String base = stripMarkers(key);
-                int pool = VariantPools.deliverablePoolSize(base,
-                        McaCompat.getPersonality(villager).orElse(""));
-                if (pool >= 2) {
-                    int n = 1 + villager.level().getRandom().nextInt(pool);
-                    MutableComponent pinned = Component.translatable(key + "/" + n, contents.getArgs())
-                            .setStyle(line.getStyle());
-                    line.getSiblings().forEach(pinned::append);
-                    int length = VariantPools.variantLength(base, n);
-                    return new Voiced(pinned, length > 0 ? length : NOMINAL_LINE_LENGTH);
-                }
-            }
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("variant pinning failed; leaving MCA's per-client pick", t);
-        }
-        return new Voiced(line, typedLength(line.getString()));
-    }
-
-    /**
-     * Pure: drops MCA's leading {@code #G…}/{@code #E…}/{@code #P…}/{@code #T…} marker tokens from a
-     * {@code getTranslatable} key, leaving the plain lang key. Mirrors what
-     * {@code DialogueType.applyFallback} does client-side. A malformed key is returned unchanged.
-     */
-    static String stripMarkers(String key) {
-        int i = 0;
-        while (i < key.length() && key.charAt(i) == '#') {
-            int dot = key.indexOf('.', i);
-            if (dot < 0) {
-                return key;
-            }
-            i = dot + 1;
-        }
-        return key.substring(i);
+    private static Voiced voice(Component line, Entity villager, ServerPlayer player) {
+        LineVoice.Voiced voiced = LineVoice.pin(line, villager, player);
+        int length = voiced.length() > 0 ? voiced.length() : typedLength(voiced.line().getString());
+        return new Voiced(voiced.line(), length);
     }
 
     /**

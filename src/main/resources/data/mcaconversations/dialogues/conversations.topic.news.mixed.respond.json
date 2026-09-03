@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.mixed.guessed"
+            },
             "conversations_affection_apply": {
               "decision": "news.mixed.curious",
               "delta": 1,
@@ -18,8 +22,10 @@
                 "familiarity": 3
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.mixed.curious"
+            "next": "conversations.topic.news.mixed.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.mixed.curious"
+            }
           }
         }
       ]
@@ -30,6 +36,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.mixed.wished_well"
+            },
             "conversations_affection_apply": {
               "decision": "news.mixed.wish_well",
               "delta": 1,
@@ -42,8 +52,14 @@
                 "warmth": 3
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.mixed.wish_well"
+            "conversations_progress_apply": {
+              "arc": "news",
+              "op": "advance"
+            },
+            "next": "conversations.topic.news.mixed.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.mixed.wish_well"
+            }
           }
         }
       ]
@@ -65,6 +81,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.mixed.suspicion_shared"
+            },
             "conversations_affection_apply": {
               "decision": "news.mixed.skeptical",
               "delta": 1,
@@ -77,8 +97,10 @@
                 "respect": 3
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.mixed.skeptical.landed"
+            "next": "conversations.topic.news.mixed.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.mixed.skeptical.landed"
+            }
           }
         },
         {
@@ -95,6 +117,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.mixed.suspicion_checked"
+            },
             "conversations_affection_apply": {
               "decision": "news.mixed.skeptical",
               "delta": -1,
@@ -107,8 +133,10 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.mixed.skeptical.flat"
+            "next": "conversations.topic.news.mixed.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.mixed.skeptical.flat"
+            }
           }
         },
         {
@@ -134,14 +162,20 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.mixed.suspicion_allowed"
+            },
             "conversations_disposition_apply": {
               "topic": "news.mixed.skeptical",
               "deltas": {
                 "familiarity": 1
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.mixed.skeptical.polite"
+            "next": "conversations.topic.news.mixed.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.mixed.skeptical.polite"
+            }
           }
         }
       ]
@@ -156,7 +190,9 @@
               "op": "end"
             },
             "next": "conversations.cat.events",
-            "say": "conversations.news.mixed.leave"
+            "conversations_say": {
+              "phrase": "conversations.news.mixed.leave"
+            }
           }
         }
       ]

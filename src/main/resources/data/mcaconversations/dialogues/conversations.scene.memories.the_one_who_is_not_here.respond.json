@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "just_be_there",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.the_one_who_is_not_here.open.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.family.absent.held",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "memories.absent",
+              "deltas": {
+                "trust": 4,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.scene.memories.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.memories.the_one_who_is_not_here.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_if_they_write",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.the_one_who_is_not_here.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "memories.absent",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.memories.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.memories.the_one_who_is_not_here.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.scene.memories.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

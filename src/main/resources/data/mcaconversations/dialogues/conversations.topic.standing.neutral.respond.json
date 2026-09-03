@@ -1,0 +1,104 @@
+{
+  "answers": [
+    {
+      "name": "ask_how",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.neutral.how"
+            },
+            "next": "conversations.topic.standing.neutral.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.neutral.how"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_you",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.neutral.mine"
+            },
+            "next": "conversations.topic.standing.neutral.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.neutral.mine"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "content",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.neutral.suits_me"
+            },
+            "next": "conversations.topic.standing.neutral.followup",
+            "conversations_say": {
+              "phrase": "conversations.standing.neutral.suits_me"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.neutral.dismiss",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.neutral.dismissed",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.neutral.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.neutral.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

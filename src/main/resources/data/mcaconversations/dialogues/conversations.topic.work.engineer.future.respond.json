@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_august",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.future.ask_august"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.future.ask_august",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.engineer.future.ask_august"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.engineer.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.engineer.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_careful",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.future.ask_careful"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.future.ask_careful",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.engineer.future.ask_careful"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.engineer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

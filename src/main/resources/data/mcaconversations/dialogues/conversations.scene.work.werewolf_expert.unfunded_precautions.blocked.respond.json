@@ -1,0 +1,128 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_costs",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.unfunded_precautions.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.precautions",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.unfunded_precautions"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.unfunded_precautions.blocked.explained",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_bars",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.unfunded_precautions.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.werewolf_expert.precautions.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.precautions",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.unfunded_precautions",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.unfunded_precautions",
+              "obligation": "commitment:work.werewolf_expert.bring_bars"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.werewolf_expert.bring_bars"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.unfunded_precautions.blocked.accepted",
+              "slots": [
+                "place"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_the_comparison",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.unfunded_precautions.blocked.agreed_to_say_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.precautions",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.unfunded_precautions"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.unfunded_precautions.blocked.agreed_to_say_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

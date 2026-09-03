@@ -178,6 +178,12 @@ public final class ChatModeSession {
         return s != null && s.player == player;
     }
 
+    /** Villager owned by the active redirect scope, for frontend-aware offer recording. */
+    public static UUID activeVillagerId(ServerPlayer player) {
+        Scope s = activeScope;
+        return s != null && s.player == player ? s.villager.getUUID() : null;
+    }
+
     /** True once {@code NetworkHandlerMixin} has been observed running at least once. */
     public static boolean redirectionAvailable() {
         return redirectInstalled;

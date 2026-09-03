@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_they_want",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.heirloom_repair.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.repairs",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.heirloom_repair"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.heirloom_repair.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_doing_both",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.heirloom_repair.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.repairs",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.toolsmith.heirloom_repair"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.heirloom_repair.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

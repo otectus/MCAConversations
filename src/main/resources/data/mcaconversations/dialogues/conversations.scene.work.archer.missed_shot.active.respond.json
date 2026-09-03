@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "ask_why",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.missed_shot.active.diagnosed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.missed_shot",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.archer.missed_shot"
+            },
+            "next": "conversations.scene.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.archer.missed_shot.active.diagnosed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_it_go",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.missed_shot.active.softened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.missed_shot",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.archer.missed_shot"
+            },
+            "next": "conversations.scene.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.archer.missed_shot.active.softened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "urge_practice",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.archer.missed_shot.active.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.archer.missed_shot",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.archer.missed_shot"
+            },
+            "next": "conversations.scene.work.archer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.archer.missed_shot.active.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.archer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

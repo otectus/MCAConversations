@@ -1,0 +1,320 @@
+{
+  "_comment": [
+    "The season, which only says anything if it says which one.",
+    "",
+    "Two scenes: the turn into autumn, which everybody in a village measures against last year, and",
+    "deep winter, which is measured against the stores."
+  ],
+  "topic": "season",
+  "entry": {
+    "question": "conversations.cat.chitchat",
+    "answer": "season"
+  },
+  "return_question": "conversations.cat.chitchat",
+  "leave_lines": {
+    "en": [
+      "It will do what it does.",
+      "Right. Another one along soon enough.",
+      "Aye. Mind the evenings."
+    ],
+    "pt": [
+      "Vai fazer o que quiser.",
+      "Certo. Logo vem outra.",
+      "Pois é. Cuidado com as noites."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Fair enough.",
+    "pt": "Justo."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the season?",
+      "pt": "Mais alguma coisa sobre a estação?"
+    },
+    "leave": {
+      "en": "That's the year, then.",
+      "pt": "É o ano, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_turn",
+      "subject": "season.autumn",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.season",
+          "any_of": [
+            "autumn"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_interests": [
+        "gardening"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "This autumn.",
+        "pt": "Este outono."
+      },
+      "lines": {
+        "en": [
+          "Early. Everything is a week ahead of last year and I have written it down, because nobody ever remembers what last year did.",
+          "It turned in a single night. One evening it was the end of summer and the next morning it was not.",
+          "I like it and I do not trust it. Autumn is the season that decides how the winter goes and it never tells you which way."
+        ],
+        "pt": [
+          "Cedo. Tudo está uma semana adiantado em relação ao ano passado e eu anotei, porque ninguém lembra o que o ano passado fez.",
+          "Virou numa noite só. Numa tarde era o fim do verão e na manhã seguinte não era mais.",
+          "Eu gosto e não confio. O outono é a estação que decide como o inverno vai ser, e nunca avisa para que lado."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_last_year",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How does it compare to last year?",
+            "pt": "Como se compara ao ano passado?"
+          },
+          "phrases": [
+            "how does it compare to last year",
+            "was last year different"
+          ],
+          "requires_any": [
+            "compare",
+            "last",
+            "year"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Last year it hung on until the frost and then went in a week. This one is doing it properly, in order, which is rarer than it sounds.",
+                "Warmer, and warmer in autumn is not the gift it sounds like. Things keep growing that should be stopping.",
+                "I have four years written down. Two were like this and two were not, which is exactly as useful as it sounds."
+              ],
+              "pt": [
+                "Ano passado se arrastou até a geada e depois foi embora numa semana. Este está fazendo direito, na ordem, o que é mais raro do que parece.",
+                "Mais quente, e mais quente no outono não é o presente que parece. As coisas continuam crescendo quando deviam parar.",
+                "Tenho quatro anos anotados. Dois foram assim e dois não, o que é exatamente tão útil quanto soa."
+              ]
+            }
+          }
+        },
+        {
+          "name": "note_the_light",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "The light is lovely just now.",
+            "pt": "A luz está linda agora."
+          },
+          "phrases": [
+            "the light is lovely just now",
+            "the evening light has been beautiful"
+          ],
+          "requires_any": [
+            "light",
+            "lovely",
+            "beautiful"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and it lasts about eleven days, and I have never once managed to be unbusy for all eleven.",
+                "That is the part of autumn nobody puts in the almanac. Everything in there is about grain.",
+                "I stood in the lane for a while yesterday doing nothing at all. At my age that is practically a festival."
+              ],
+              "pt": [
+                "Está, e dura uns onze dias, e eu nunca consegui estar desocupada nos onze.",
+                "É a parte do outono que ninguém põe no almanaque. Lá dentro é tudo sobre grão.",
+                "Fiquei parada na viela um tempo ontem sem fazer nada. Na minha idade isso é praticamente uma festa."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "deep_winter",
+      "subject": "season.winter",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.season",
+          "any_of": [
+            "winter"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "tradition"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "This winter.",
+        "pt": "Este inverno."
+      },
+      "lines": {
+        "en": [
+          "Halfway. The second half is always shorter than it feels and I say that to myself most mornings.",
+          "Cold and steady, which is the good kind. It is the mild winters with three thaws in them that break things.",
+          "We are eating what we put by in the autumn, and the autumn version of me did a reasonable job, so I am not going to complain about her."
+        ],
+        "pt": [
+          "Metade. A segunda metade é sempre mais curta do que parece, e eu digo isso a mim mesma quase toda manhã.",
+          "Frio e constante, que é o tipo bom. São os invernos amenos com três degelos que estragam as coisas.",
+          "Estamos comendo o que guardamos no outono, e a eu do outono fez um trabalho razoável, então não vou reclamar dela."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_stores",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Will the stores hold?",
+            "pt": "Os estoques vão durar?"
+          },
+          "phrases": [
+            "will the stores hold",
+            "is there plenty put by"
+          ],
+          "requires_any": [
+            "stores",
+            "plenty",
+            "hold"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "report",
+            "polarity": "mixed",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "For me, yes, with about three weeks to spare. For two houses at the top of the lane, no, and everybody knows which two.",
+                "They will if the thaw comes when it usually does. That is the whole of the plan and it has held nine years out of eleven.",
+                "I count them on the first of every month. It is a grim little ritual and it has never once been a wasted hour."
+              ],
+              "pt": [
+                "Para mim, sim, com umas três semanas de folga. Para duas casas no fim da viela, não, e todo mundo sabe quais duas.",
+                "Vão, se o degelo vier quando costuma vir. É o plano inteiro e funcionou nove anos em onze.",
+                "Eu conto no primeiro dia de cada mês. É um ritualzinho sombrio e nunca foi uma hora desperdiçada."
+              ]
+            }
+          }
+        },
+        {
+          "name": "offer_to_help",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Tell me if anybody runs short.",
+            "pt": "Me avise se alguém ficar sem."
+          },
+          "phrases": [
+            "tell me if anybody runs short",
+            "let me know if a house runs out"
+          ],
+          "requires_any": [
+            "short",
+            "house",
+            "runs"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 2
+          },
+          "affection": {
+            "decision": "topic.season.winter.offered",
+            "delta": 2,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "accepted",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "I will, and I will tell you before they ask, because by the time a house asks it has been short for a fortnight.",
+                "That is a useful thing to be told and a rare one. Most offers arrive after the thaw, when they are a sentiment.",
+                "Understood. And I will not name the house to you unless they say I may, which I hope you would want."
+              ],
+              "pt": [
+                "Vou, e vou avisar antes de pedirem, porque quando uma casa pede já está sem há duas semanas.",
+                "É uma coisa útil de se ouvir e é rara. Quase toda oferta chega depois do degelo, quando já é só sentimento.",
+                "Entendido. E não vou dizer a você qual casa a menos que eles permitam, o que eu espero que você prefira."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

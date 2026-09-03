@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.toolsmith.failed_tool.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.toolsmith.edges",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.toolsmith.failed_tool"
+            },
+            "next": "conversations.scene.work.toolsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.toolsmith.failed_tool.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.toolsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

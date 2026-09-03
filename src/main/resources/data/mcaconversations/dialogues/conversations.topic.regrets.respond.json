@@ -20,7 +20,9 @@
               }
             },
             "next": "conversations.topic.regrets.sit_with_it",
-            "say": "conversations.regrets.respond.listen"
+            "conversations_say": {
+              "phrase": "conversations.regrets.respond.listen"
+            }
           }
         }
       ]
@@ -45,7 +47,9 @@
               }
             },
             "next": "conversations.topic.regrets.sit_with_it",
-            "say": "conversations.regrets.respond.ask_repair"
+            "conversations_say": {
+              "phrase": "conversations.regrets.respond.ask_repair"
+            }
           }
         }
       ]
@@ -56,6 +60,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "regrets.rebuked"
+            },
             "conversations_affection_apply": {
               "decision": "regrets.respond.pry",
               "delta": -2,
@@ -69,8 +77,10 @@
                 "trust": -3
               }
             },
-            "next": "conversations.topic.regrets.sit_with_it",
-            "say": "conversations.regrets.respond.pry"
+            "next": "conversations.topic.regrets.pried.followup",
+            "conversations_say": {
+              "phrase": "conversations.regrets.respond.pry"
+            }
           }
         }
       ]
@@ -95,7 +105,9 @@
               }
             },
             "next": "conversations.topic.regrets.sit_with_it",
-            "say": "conversations.regrets.no_words"
+            "conversations_say": {
+              "phrase": "conversations.regrets.no_words"
+            }
           }
         }
       ]
@@ -110,7 +122,9 @@
               "op": "end"
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.regrets.respond.leave"
+            "conversations_say": {
+              "phrase": "conversations.regrets.respond.leave"
+            }
           }
         }
       ]

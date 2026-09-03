@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_cough",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.task.ask_cough"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.task.ask_cough",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cleric.task.ask_cough"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_hands",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.task.offer_hands"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cleric.task.offer_hands",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.task.offer_hands",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cleric.task.offer_hands"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_sitting",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.task.ask_sitting"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.task.ask_sitting",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cleric.task.ask_sitting"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cleric.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

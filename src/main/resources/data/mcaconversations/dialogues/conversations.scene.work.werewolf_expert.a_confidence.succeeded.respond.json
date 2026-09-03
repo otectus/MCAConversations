@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "note_the_quiet_success",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.a_confidence.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.confidence",
+              "deltas": {
+                "warmth": 3,
+                "respect": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.werewolf_expert.a_confidence"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.a_confidence.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

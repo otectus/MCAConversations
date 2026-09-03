@@ -8,6 +8,171 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.news.while_you_were_away"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.news.while_you_were_away",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "news.while_you_were_away.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.news.while_you_were_away.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.while_you_were_away"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.news.quiet_week"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.news.quiet_week",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "news.quiet_week.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.news.quiet_week.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.quiet_week"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 200,
+              "conversations_progress": {
+                "arc": "news",
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "news",
+                "max": 0
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.news",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "resume",
+              "beat": "news.resume.opener"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.arc.news.resume.respond",
+            "conversations_say": {
+              "phrase": "conversations.news.resume"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "age_group": "child"
             },
@@ -54,11 +219,11 @@
               "op": "begin",
               "topic": "news",
               "budget": "standard",
-              "branch": "young"
+              "branch": "teen"
             },
-            "next": "conversations.topic.news.young.respond",
+            "next": "conversations.topic.news.teen.respond",
             "conversations_gossip_say": {
-              "phrase_prefix": "conversations.gossip.young"
+              "phrase_prefix": "conversations.gossip.teen"
             }
           }
         },
@@ -315,7 +480,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -374,10 +541,13 @@
               "op": "begin",
               "topic": "news",
               "budget": "standard",
-              "branch": "none"
+              "branch": "none",
+              "beat": "gossip.none.to.news.none"
             },
             "next": "conversations.topic.news.none.respond",
-            "say": "conversations.gossip.none"
+            "conversations_say": {
+              "phrase": "conversations.gossip.none"
+            }
           }
         },
         {
@@ -395,7 +565,9 @@
               "time": 0
             },
             "next": "conversations.cat.events",
-            "say": "conversations.gossip.none"
+            "conversations_say": {
+              "phrase": "conversations.gossip.none"
+            }
           }
         }
       ]
@@ -408,6 +580,424 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.noticed.you_look_tired"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.noticed.you_look_tired",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "noticed.you_look_tired.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.noticed",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.noticed.you_look_tired.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.noticed.you_look_tired"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.noticed.something_about_the_room"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.noticed.something_about_the_room",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "noticed.something_about_the_room.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.noticed",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.noticed.something_about_the_room.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.noticed.something_about_the_room"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 200,
+              "conversations_progress": {
+                "arc": "noticed",
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_progress": {
+                "arc": "noticed",
+                "max": 0
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.noticed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "resume",
+              "beat": "noticed.resume.opener"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.noticed",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.arc.noticed.resume.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.resume"
+            }
+          }
+        },
+        {
+          "baseChance": 200,
+          "conditions": [
+            {
+              "chance": -2000,
+              "min_health": 15
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "hurt",
+              "beat": "noticed.hurt.open"
+            },
+            "next": "conversations.topic.noticed.hurt.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 180,
+              "min_infection_progress": 1
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "afflicted",
+              "beat": "noticed.afflicted.open"
+            },
+            "next": "conversations.topic.noticed.afflicted.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.afflicted"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 140,
+              "is_pregnant": true
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "expecting",
+              "beat": "noticed.expecting.open"
+            },
+            "next": "conversations.topic.noticed.expecting.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 120,
+              "memory": {
+                "id": "mcaconversations.state.proud",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.annoyed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "proud",
+              "beat": "noticed.proud.open"
+            },
+            "next": "conversations.topic.noticed.proud.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.proud"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 110,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.annoyed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.elated"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "worn",
+              "beat": "noticed.worn.open"
+            },
+            "next": "conversations.topic.noticed.worn.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 90,
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "tense",
+                  "hostile"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.grieving"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.annoyed",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.elated"
+              }
+            },
+            {
+              "chance": -2000,
+              "memory": {
+                "id": "mcaconversations.state.proud",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "noticed",
+              "budget": "standard",
+              "branch": "guarded",
+              "beat": "noticed.guarded.open"
+            },
+            "next": "conversations.topic.noticed.guarded.respond",
+            "conversations_say": {
+              "phrase": "conversations.noticed.guarded"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "memory": {
                 "id": "mcaconversations.state.grieving"
@@ -427,10 +1017,13 @@
               "op": "begin",
               "topic": "noticed",
               "budget": "standard",
-              "branch": "grieving"
+              "branch": "grieving",
+              "beat": "noticed.grieving.open"
             },
             "next": "conversations.topic.noticed.grieving.respond",
-            "say": "conversations.noticed.grieving"
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving"
+            }
           }
         },
         {
@@ -463,10 +1056,13 @@
               "op": "begin",
               "topic": "noticed",
               "budget": "standard",
-              "branch": "annoyed"
+              "branch": "annoyed",
+              "beat": "noticed.annoyed.open"
             },
             "next": "conversations.topic.noticed.annoyed.respond",
-            "say": "conversations.noticed.annoyed"
+            "conversations_say": {
+              "phrase": "conversations.noticed.annoyed"
+            }
           }
         },
         {
@@ -505,10 +1101,13 @@
               "op": "begin",
               "topic": "noticed",
               "budget": "standard",
-              "branch": "elated"
+              "branch": "elated",
+              "beat": "noticed.elated.open"
             },
             "next": "conversations.topic.noticed.elated.respond",
-            "say": "conversations.noticed.elated"
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated"
+            }
           }
         },
         {
@@ -516,7 +1115,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -551,10 +1152,13 @@
               "op": "begin",
               "topic": "noticed",
               "budget": "standard",
-              "branch": "fine"
+              "branch": "fine",
+              "beat": "noticed.fine.open"
             },
             "next": "conversations.topic.noticed.fine.respond",
-            "say": "conversations.noticed.fine"
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine"
+            }
           }
         },
         {
@@ -572,6 +1176,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.grieving.open.legacy"
+            },
             "positive": 1,
             "conversations_record": {
               "id": "mcaconversations.cooldown.noticed",
@@ -579,7 +1187,9 @@
               "time": 0
             },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.grieving"
+            "conversations_say": {
+              "phrase": "conversations.noticed.grieving"
+            }
           }
         },
         {
@@ -598,6 +1208,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.annoyed.open.legacy"
+            },
             "positive": 1,
             "conversations_record": {
               "id": "mcaconversations.cooldown.noticed",
@@ -605,7 +1219,9 @@
               "time": 0
             },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.annoyed"
+            "conversations_say": {
+              "phrase": "conversations.noticed.annoyed"
+            }
           }
         },
         {
@@ -623,6 +1239,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.elated.open.legacy"
+            },
             "positive": 1,
             "conversations_record": {
               "id": "mcaconversations.cooldown.noticed",
@@ -630,7 +1250,9 @@
               "time": 0
             },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.elated"
+            "conversations_say": {
+              "phrase": "conversations.noticed.elated"
+            }
           }
         },
         {
@@ -642,6 +1264,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.open.legacy"
+            },
             "positive": 1,
             "conversations_record": {
               "id": "mcaconversations.cooldown.noticed",
@@ -649,8 +1275,165 @@
               "time": 0
             },
             "next": "conversations.cat.events",
-            "say": "conversations.noticed.fine"
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine"
+            }
           }
+        }
+      ]
+    },
+    {
+      "name": "shared_history",
+      "constraints": "adult",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_thing_we_avoid"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_thing_we_avoid",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "shared_history.the_thing_we_avoid.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.shared_history",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.shared_history.the_thing_we_avoid.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_thing_we_avoid"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_date_nobody_marks"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_date_nobody_marks",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "shared_history.the_date_nobody_marks.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.shared_history",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.shared_history.the_date_nobody_marks.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_date_nobody_marks"
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_thing_we_avoid"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_date_nobody_marks"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "shared_history.open"
+            },
+            "next": "conversations.topic.shared_history.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.shared_history.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.shared_history.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
         }
       ]
     },

@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "note_the_absence",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.ignored_warning.remembered.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.what_the_fishermen_say",
+              "deltas": {
+                "warmth": 3,
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.oceanographer.ignored_warning"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.ignored_warning.remembered.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.oceanographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "advise_staying_out",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.two_doors_down.open.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.dispute",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.neighbour.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.neighbour.two_doors_down.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_it_is_really_about",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.two_doors_down.open.declined_to_say"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.dispute",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.neighbour.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.neighbour.two_doors_down.declined_to_say"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.neighbour.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

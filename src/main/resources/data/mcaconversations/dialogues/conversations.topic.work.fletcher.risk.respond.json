@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_rushed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.risk.ask_rushed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.risk.ask_rushed",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fletcher.risk.ask_rushed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fletcher.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fletcher.risk.sympathise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_refuse",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.risk.ask_refuse"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.risk.ask_refuse",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fletcher.risk.ask_refuse"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fletcher.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

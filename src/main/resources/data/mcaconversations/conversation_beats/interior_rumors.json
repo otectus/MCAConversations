@@ -1,0 +1,209 @@
+{
+  "beats": {
+    "rumors.challenge.trader.to.rumors": {
+      "topic": "rumors",
+      "say": "conversations.rumors.challenge.trader",
+      "response_question": "conversations.topic.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.source",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "rumors.none.to.rumors.none": {
+      "topic": "rumors",
+      "say": "conversations.rumors.none",
+      "response_question": "conversations.topic.rumors.none.respond",
+      "npc_act": "accept",
+      "subject": "rumors.none",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "rumors.respond.ask_source.to.rumors": {
+      "topic": "rumors",
+      "say": "conversations.rumors.respond.ask_source",
+      "response_question": "conversations.topic.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.source",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "rumors.respond.challenge.to.rumors": {
+      "topic": "rumors",
+      "say": "conversations.rumors.respond.challenge",
+      "response_question": "conversations.topic.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.source",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "rumors.respond.listen.to.rumors": {
+      "topic": "rumors",
+      "say": "conversations.rumors.respond.listen",
+      "response_question": "conversations.topic.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.listen",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.rumors.followup/encourage_spread": {
+      "stance": "encouragement",
+      "responds_to": [
+        "rumors.challenge.trader.to.rumors",
+        "rumors.respond.ask_source.to.rumors",
+        "rumors.respond.challenge.to.rumors",
+        "rumors.respond.listen.to.rumors"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.rumors.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.challenge.trader.to.rumors",
+        "rumors.respond.ask_source.to.rumors",
+        "rumors.respond.challenge.to.rumors",
+        "rumors.respond.listen.to.rumors"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.rumors.followup/let_it_go": {
+      "stance": "restraint",
+      "responds_to": [
+        "rumors.challenge.trader.to.rumors",
+        "rumors.respond.ask_source.to.rumors",
+        "rumors.respond.challenge.to.rumors",
+        "rumors.respond.listen.to.rumors"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.rumors.followup/promise_discretion": {
+      "stance": "restraint",
+      "responds_to": [
+        "rumors.challenge.trader.to.rumors",
+        "rumors.respond.ask_source.to.rumors",
+        "rumors.respond.challenge.to.rumors",
+        "rumors.respond.listen.to.rumors"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.rumors.none.respond/ask_anyway": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.none.to.rumors.none"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.rumors.none.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.none.to.rumors.none"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.rumors.none.respond/relieved": {
+      "stance": "restraint",
+      "responds_to": [
+        "rumors.none.to.rumors.none"
+      ],
+      "tone": "plain"
+    }
+  }
+}

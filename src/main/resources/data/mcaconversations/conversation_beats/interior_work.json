@@ -1,0 +1,145 @@
+{
+  "beats": {
+    "work.again.to.work.again": {
+      "topic": "work",
+      "say": "conversations.work.again",
+      "response_question": "conversations.topic.work.again.respond",
+      "npc_act": "accept",
+      "subject": "work.again",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "work.child.to.work.young": {
+      "topic": "work",
+      "say": "conversations.work.child",
+      "response_question": "conversations.topic.work.young.respond",
+      "npc_act": "accept",
+      "subject": "work.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "work.teen.to.work.young": {
+      "topic": "work",
+      "say": "conversations.work.teen",
+      "response_question": "conversations.topic.work.young.respond",
+      "npc_act": "accept",
+      "subject": "work.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.work.again.respond/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "work.again.to.work.again"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.work.again.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "work.again.to.work.again"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.work.again.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "work.again.to.work.again"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.work.young.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "work.child.to.work.young",
+        "work.teen.to.work.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.work.young.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "work.child.to.work.young",
+        "work.teen.to.work.young"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.work.young.respond/encourage": {
+      "stance": "encouragement",
+      "responds_to": [
+        "work.child.to.work.young",
+        "work.teen.to.work.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.work.young.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "work.child.to.work.young",
+        "work.teen.to.work.young"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

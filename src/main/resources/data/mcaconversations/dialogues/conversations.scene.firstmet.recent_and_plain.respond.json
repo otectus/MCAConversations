@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_they_thought",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.recent_and_plain.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "firstmet.recent",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.firstmet.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.firstmet.recent_and_plain.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_remember_it_too",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.recent_and_plain.open.pleased"
+            },
+            "conversations_disposition_apply": {
+              "topic": "firstmet.recent",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.firstmet.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.firstmet.recent_and_plain.pleased"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "conversations_say": {
+              "phrase": "conversations.scene.firstmet.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "values.the_one_i_put_down.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "values.abandoned",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.values.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.values.the_one_i_put_down.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_the_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "values.the_one_i_put_down.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "values.abandoned",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.values.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.values.the_one_i_put_down.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.values.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

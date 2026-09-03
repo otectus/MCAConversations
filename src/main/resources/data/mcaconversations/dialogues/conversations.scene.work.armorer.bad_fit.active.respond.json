@@ -1,0 +1,80 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_they_wont",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.bad_fit.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.fitting",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.armorer.bad_fit"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.bad_fit.active.explained",
+              "slots": [
+                "customer"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_go_to_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.bad_fit.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.fitting",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.armorer.bad_fit"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.bad_fit.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.armorer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

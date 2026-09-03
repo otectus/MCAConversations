@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_best_part",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.end_of_it.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.late",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.day.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.end_of_it.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tell_them_to_rest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.end_of_it.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.late",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.day.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.end_of_it.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

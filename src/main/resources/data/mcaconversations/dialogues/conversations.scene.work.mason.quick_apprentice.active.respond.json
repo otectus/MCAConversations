@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_to_teach_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.quick_apprentice.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.apprentices",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.quick_apprentice"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_letting_them_fail",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.quick_apprentice.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.apprentices",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.quick_apprentice"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mason.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

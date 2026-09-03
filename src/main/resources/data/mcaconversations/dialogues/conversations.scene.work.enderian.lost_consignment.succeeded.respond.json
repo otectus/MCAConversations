@@ -1,0 +1,49 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_walk",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.lost_consignment.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.pearls",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.enderian.lost_consignment"
+            },
+            "next": "conversations.scene.work.enderian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.enderian.lost_consignment.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.enderian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

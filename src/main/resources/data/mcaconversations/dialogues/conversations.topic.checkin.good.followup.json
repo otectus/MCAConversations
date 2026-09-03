@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.keep_it_up"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.keep_it_up",
               "delta": 1,
@@ -20,7 +24,9 @@
               }
             },
             "next": "main",
-            "say": "conversations.checkin.good.keep_it_up"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.keep_it_up"
+            }
           }
         }
       ]
@@ -45,6 +51,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.tease.landed"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.tease",
               "delta": 1,
@@ -58,7 +68,9 @@
               }
             },
             "next": "main",
-            "say": "conversations.checkin.good.tease.landed"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.tease.landed"
+            }
           }
         },
         {
@@ -76,6 +88,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.tease.flat"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.tease",
               "delta": -1,
@@ -90,7 +106,9 @@
               }
             },
             "next": "main",
-            "say": "conversations.checkin.good.tease.flat"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.tease.flat"
+            }
           }
         },
         {
@@ -120,6 +138,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.tease.polite"
+            },
             "conversations_disposition_apply": {
               "topic": "checkin.good.tease",
               "deltas": {
@@ -127,7 +149,9 @@
               }
             },
             "next": "main",
-            "say": "conversations.checkin.good.tease.polite"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.tease.polite"
+            }
           }
         }
       ]
@@ -138,6 +162,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin.good.share_own"
+            },
             "conversations_affection_apply": {
               "decision": "checkin.good.share_own",
               "delta": 1,
@@ -152,7 +180,9 @@
               }
             },
             "next": "main",
-            "say": "conversations.checkin.good.share_own"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.share_own"
+            }
           }
         }
       ]
@@ -167,7 +197,9 @@
               "op": "end"
             },
             "next": "main",
-            "say": "conversations.checkin.good.leave"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good.leave"
+            }
           }
         }
       ]

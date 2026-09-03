@@ -1,0 +1,367 @@
+{
+  "_comment": [
+    "Dreams — the wanting kind, not the sleeping kind.",
+    "",
+    "One scene is for people she trusts enough to name an ambition to; the other is the version she",
+    "gives everybody else, which is smaller on purpose and is not a lie."
+  ],
+  "topic": "dreams",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "dreams"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "That is enough of that.",
+      "Right. Back to the day.",
+      "I have said more than I meant to."
+    ],
+    "pt": [
+      "Já chega disso.",
+      "Certo. De volta ao dia.",
+      "Falei mais do que pretendia."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thanks for telling me.",
+    "pt": "Obrigado por contar."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about it?",
+      "pt": "Mais alguma coisa sobre isso?"
+    },
+    "leave": {
+      "en": "We'll leave it there for now.",
+      "pt": "Vamos deixar assim por ora."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_named_one",
+      "subject": "dreams.ambition",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "plan",
+      "temporal": "future",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_values": [
+        "ambition"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What you want.",
+        "pt": "O que você quer."
+      },
+      "lines": {
+        "en": [
+          "There is a thing I want and I have said it out loud twice, counting now, and both times to somebody I trusted.",
+          "I want to be the person other people come to for one particular thing. That is smaller than it sounds and harder than it sounds.",
+          "It takes about six years and I have done two of them, and the two have been better than the four before them."
+        ],
+        "pt": [
+          "Existe uma coisa que eu quero e já disse em voz alta duas vezes, contando agora, e as duas para alguém em quem confio.",
+          "Quero ser a pessoa que os outros procuram para uma coisa específica. É menor do que parece e mais difícil do que parece.",
+          "Leva uns seis anos e eu já fiz dois, e esses dois foram melhores que os quatro anteriores."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_next_step",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's the next step?",
+            "pt": "Qual é o próximo passo?"
+          },
+          "phrases": [
+            "what is the next step",
+            "what comes next for that"
+          ],
+          "requires_any": [
+            "step",
+            "next"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "A dull one. It always is. The next step in anything worth doing is four months of something nobody would watch.",
+                "Asking somebody who already does it whether they will let me stand behind them for a season. I have been putting that off since spring.",
+                "I have written it down in three parts, and the first part is finished, and I look at the list more than I work on it."
+              ],
+              "pt": [
+                "Um passo chato. Sempre é. O próximo passo de qualquer coisa que valha a pena são quatro meses de algo que ninguém assistiria.",
+                "Pedir a alguém que já faz isso para me deixar ficar atrás dela por uma estação. Venho adiando desde a primavera.",
+                "Escrevi em três partes, e a primeira está pronta, e eu olho para a lista mais do que trabalho nela."
+              ]
+            }
+          }
+        },
+        {
+          "name": "back_them",
+          "stance": "encouragement",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Go and ask them this week.",
+            "pt": "Vá pedir a eles esta semana."
+          },
+          "phrases": [
+            "go and ask them this week",
+            "make the ask this week"
+          ],
+          "requires_any": [
+            "ask",
+            "week"
+          ],
+          "disposition": {
+            "trust": 3,
+            "warmth": 3
+          },
+          "affection": {
+            "decision": "topic.dreams.backed",
+            "delta": 3,
+            "budget": "deep",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "resolved",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "This week. You have made it a thing I have said to somebody, which is the only trick that has ever worked on me.",
+                "Right. The worst answer is no, and no leaves me exactly where I am, which is where I have been since spring anyway.",
+                "I will. And if I have not by the weekend, ask me about it, and be unpleasant about it, because that is what I would want."
+              ],
+              "pt": [
+                "Esta semana. Você transformou isso numa coisa que eu disse a alguém, que é o único truque que já funcionou comigo.",
+                "Certo. A pior resposta é não, e não me deixa exatamente onde estou, que é onde estou desde a primavera de qualquer forma.",
+                "Vou. E se eu não tiver ido até o fim de semana, me pergunte, e seja chata a respeito, porque é o que eu ia querer."
+              ]
+            }
+          }
+        },
+        {
+          "name": "just_listen",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I'm glad you said it out loud.",
+            "pt": "Que bom que você disse em voz alta."
+          },
+          "phrases": [
+            "i am glad you said it out loud",
+            "saying it aloud matters"
+          ],
+          "requires_any": [
+            "loud",
+            "aloud",
+            "glad"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "So am I, and I notice you did not immediately tell me how to do it, which is why I said it to you.",
+                "It changes shape when it is said. Smaller and more possible, both at once, which I did not expect.",
+                "Thank you. I will probably be embarrassed about this tomorrow and I would like it noted that I said it anyway."
+              ],
+              "pt": [
+                "Eu também, e reparei que você não me disse na hora como fazer, e é por isso que eu contei a você.",
+                "Muda de formato quando é dito. Menor e mais possível ao mesmo tempo, o que eu não esperava.",
+                "Obrigada. Provavelmente vou ficar sem graça com isso amanhã e gostaria que ficasse registrado que eu disse mesmo assim."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_small_version",
+      "subject": "dreams.modest",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "plan",
+      "temporal": "future",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "stranger",
+            "acquaintance",
+            "friend"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 20,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Anything you're after?",
+        "pt": "Está atrás de alguma coisa?"
+      },
+      "lines": {
+        "en": [
+          "A better roof and a quieter winter. That is what I tell people and it happens to be true, just not all of it.",
+          "Nothing grand. I would like the next year to look like this one with two things fixed.",
+          "I want to finish something I started. I am not going to say what, because saying what makes it a promise."
+        ],
+        "pt": [
+          "Um telhado melhor e um inverno mais calmo. É o que eu digo às pessoas e por acaso é verdade, só não é tudo.",
+          "Nada grandioso. Eu gostaria que o ano que vem fosse igual a este com duas coisas consertadas.",
+          "Quero terminar algo que comecei. Não vou dizer o quê, porque dizer o quê transforma em promessa."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_which_two",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which two things?",
+            "pt": "Quais duas coisas?"
+          },
+          "phrases": [
+            "which two things",
+            "what are the two you would fix"
+          ],
+          "requires_any": [
+            "two",
+            "fix"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The roof, and the fact that I am the only person who knows how to do one part of my job.",
+                "One is a thing I can buy and one is a thing I have to be braver about, and I would rather talk about the first.",
+                "Nothing you could help with, which I say kindly. Some things only get fixed by the person who has been avoiding them."
+              ],
+              "pt": [
+                "O telhado, e o fato de eu ser a única pessoa que sabe fazer uma parte do meu trabalho.",
+                "Uma é uma coisa que dá para comprar e a outra é uma coisa em que eu preciso ser mais corajosa, e eu prefiro falar da primeira.",
+                "Nada em que você possa ajudar, e digo isso com carinho. Algumas coisas só se resolvem por quem vem evitando elas."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_them_luck",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope you get both.",
+            "pt": "Espero que consiga as duas."
+          },
+          "phrases": [
+            "i hope you get both",
+            "hope both of those come off"
+          ],
+          "requires_any": [
+            "hope",
+            "both"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "One of them is likely and one of them is up to me, so I shall report back in the spring on the second.",
+                "Thank you. That is a decent thing to say to somebody who has just given you the short version.",
+                "If I get one I will call it a good year, which is the sort of arithmetic that keeps a person cheerful."
+              ],
+              "pt": [
+                "Uma é provável e a outra depende de mim, então eu dou notícias na primavera sobre a segunda.",
+                "Obrigada. É uma coisa decente de se dizer a quem acabou de te dar a versão curta.",
+                "Se eu conseguir uma, já chamo de bom ano, que é o tipo de conta que mantém a pessoa animada."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "say_it_back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.glad_of_you.open.moved"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.happy.mutual",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "happy.of_the_player",
+              "deltas": {
+                "warmth": 4,
+                "trust": 3
+              }
+            },
+            "next": "conversations.scene.happy.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.happy.glad_of_you.moved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_prompted_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.glad_of_you.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "happy.of_the_player",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.happy.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.happy.glad_of_you.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "conversations_say": {
+              "phrase": "conversations.scene.happy.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

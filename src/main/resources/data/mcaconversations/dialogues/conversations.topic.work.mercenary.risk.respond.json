@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_year",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.risk.ask_year"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.risk.ask_year",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mercenary.risk.ask_year"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.mercenary.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mercenary.risk.sympathise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_children",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mercenary.risk.ask_children"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mercenary.risk.ask_children",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.mercenary.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mercenary.risk.ask_children"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mercenary.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

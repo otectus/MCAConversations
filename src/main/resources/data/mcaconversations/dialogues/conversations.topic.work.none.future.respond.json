@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_fill",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.future.ask_fill"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.future.ask_fill",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.none.future.ask_fill"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.none.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.none.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_east",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.none.future.ask_east"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.none.future.ask_east",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.none.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.none.future.ask_east"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.none.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

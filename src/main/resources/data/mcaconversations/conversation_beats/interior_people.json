@@ -1,0 +1,145 @@
+{
+  "beats": {
+    "people.again.to.people.again": {
+      "topic": "people",
+      "say": "conversations.people.again",
+      "response_question": "conversations.topic.people.again.respond",
+      "npc_act": "accept",
+      "subject": "people.repeat",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "people.child.to.people.young": {
+      "topic": "people",
+      "say": "conversations.people.child",
+      "response_question": "conversations.topic.people.young.respond",
+      "npc_act": "accept",
+      "subject": "people.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "people.teen.to.people.young": {
+      "topic": "people",
+      "say": "conversations.people.teen",
+      "response_question": "conversations.topic.people.young.respond",
+      "npc_act": "accept",
+      "subject": "people.young",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.people.again.respond/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "people.again.to.people.again"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.people.again.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.again.to.people.again"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.people.again.respond/press": {
+      "stance": "boundary_push",
+      "responds_to": [
+        "people.again.to.people.again"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.people.young.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "people.child.to.people.young",
+        "people.teen.to.people.young"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.people.young.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "people.child.to.people.young",
+        "people.teen.to.people.young"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.people.young.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "people.child.to.people.young",
+        "people.teen.to.people.young"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.people.young.respond/listen": {
+      "stance": "restraint",
+      "responds_to": [
+        "people.child.to.people.young",
+        "people.teen.to.people.young"
+      ],
+      "tone": "gentle"
+    }
+  }
+}

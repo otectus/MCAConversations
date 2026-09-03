@@ -30,8 +30,7 @@ class MixinsJsonLintTest {
         assertTrue(names.contains("BreedableRelationshipMixin"), "gift-detection mixin missing");
         assertTrue(names.contains("DialoguesMixin"), "chat-redirect mixin missing");
         assertTrue(names.contains("InteractionDialogueMessageMixin"), "submission-guard mixin missing");
-        // Renamed from NetworkHandlerMixin: MCA 1.21.1 replaced cobalt NetworkHandler with Network.
-        assertTrue(names.contains("McaNetworkMixin"), "chat-mode delivery-redirect mixin missing");
+        assertTrue(names.contains("NetworkHandlerMixin"), "chat-mode delivery-redirect mixin missing");
         assertTrue(names.contains("PlayerLegacyDataMixin"), "ForgeCaps migration mixin missing");
         assertTrue(names.contains("QuestionMixin"), "hub-button visibility mixin missing");
 

@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.settled.agree"
+            },
+            "conversations_affection_apply": {
+              "decision": "village.settled.agree",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.settled.agree",
+              "deltas": {
+                "respect": 1,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.village.settled.agree"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "press",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.settled.press"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.settled.press",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.village.settled.press"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "joke",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.settled.joke"
+            },
+            "conversations_affection_apply": {
+              "decision": "village.settled.joke",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.settled.joke",
+              "deltas": {
+                "tension": -1,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.village.settled.joke"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.village.respond.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

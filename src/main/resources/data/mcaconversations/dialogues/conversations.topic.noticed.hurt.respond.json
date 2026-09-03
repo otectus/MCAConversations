@@ -1,0 +1,111 @@
+{
+  "answers": [
+    {
+      "name": "what_happened",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.hurt.what_happened"
+            },
+            "next": "conversations.topic.noticed.hurt.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.what_happened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tend_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.hurt.tend_it"
+            },
+            "next": "conversations.topic.noticed.hurt.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.tend_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "rest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.hurt.rest"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.hurt.rest",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.noticed.hurt.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.rest"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.hurt.dismiss",
+              "delta": -2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.hurt.dismissed",
+              "deltas": {
+                "respect": -1,
+                "warmth": -3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

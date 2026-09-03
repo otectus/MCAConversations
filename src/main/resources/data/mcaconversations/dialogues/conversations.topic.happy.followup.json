@@ -25,7 +25,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.happy.ask_improve"
+            "conversations_say": {
+              "phrase": "conversations.us.happy.ask_improve"
+            }
           }
         }
       ]
@@ -54,7 +56,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.happy.reassure"
+            "conversations_say": {
+              "phrase": "conversations.us.happy.reassure"
+            }
           }
         }
       ]
@@ -65,6 +69,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "us.happy.brushed_off"
+            },
             "conversations_affection_apply": {
               "decision": "us.happy.dismiss",
               "delta": -2,
@@ -78,8 +86,28 @@
                 "tension": 5
               }
             },
-            "next": "conversations.topic.us.close",
-            "say": "conversations.us.happy.dismiss"
+            "next": "conversations.topic.us.hurt.close",
+            "conversations_say": {
+              "phrase": "conversations.us.happy.dismiss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_unspoken",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "happy.unspoken"
+            },
+            "next": "conversations.topic.happy.unspoken",
+            "conversations_say": {
+              "phrase": "conversations.happy.unspoken"
+            }
           }
         }
       ]
@@ -94,7 +122,9 @@
               "op": "end"
             },
             "next": "conversations.us",
-            "say": "conversations.us.happy.leave"
+            "conversations_say": {
+              "phrase": "conversations.us.happy.leave"
+            }
           }
         }
       ]

@@ -54,7 +54,7 @@ at `HEAD`, which is why rejected, inventory-full and desaturated gifts were reco
 
 Villager resolution: `Relationship.getWorld()` → `ServerLevel`, `Relationship.getUUID()` → `UUID`.
 
-### `net.conczin.mca.network.Network` — `McaNetworkMixin`
+### `net.conczin.mca.network.Network` — `NetworkHandlerMixin`
 
 ```
 public static void sendToPlayer(HandleablePayload, ServerPlayer)
@@ -133,8 +133,9 @@ GiftPredicate.register(String, BiFunction<JsonElement,String,T>, GiftPredicate.F
 Actions.register(String, BiFunction<JsonElement,String,T>, Actions.Factory<T>)
 ```
 
-Both still public static generics with the same shape, so all 18 conditions and 9 actions
-register unchanged.
+Both still public static generics with the same shape, so every condition and action registers
+unchanged: 19 conditions and 9 actions from `ConversationsMcaRegistrar`, plus 12 conditions and 6
+actions from `LivingHistoriesRegistrar` (31 + 15 in total, id multiset identical to SOURCE).
 
 ## Personality roster
 
@@ -158,3 +159,70 @@ Stable accessors: `Personality.getId()` → `ResourceLocation`, `getDialoguePref
 The MCA jar ships `META-INF/accesstransformer.cfg`. A dependency's AT is **not** applied to this
 mod's compilation. If any mixin or compat call turns out to need an AT-widened Minecraft member,
 Conversations must declare its own `accessTransformers` entry rather than relying on MCA's.
+
+## Reflective binding manifest (1.21.1)
+
+Single candidate root: `net.conczin.mca.` (src/main/java/dev/otectus/mcaconversations/compat/mca/McaBinding.java:66).
+
+PROBE_CLASS: `entity.VillagerEntityMCA` (McaBinding.java:70).
+
+Member constant count: 88 `static final Member` declarations (McaBinding.java).
+
+Two members whose 1.21.1 shape differs from 1.20.1:
+
+- `NETWORK_SEND_TO_PLAYER` (McaBinding.java:341): targets `network.Network#sendToPlayer(HandleablePayload, ServerPlayer)`, replacing the removed `cobalt.network.NetworkHandler` / `NetworkHandler.send(...)`.
+- `QUESTION_RESPONSE_TEXT` (McaBinding.java:344–345): accessor `questionText()` on the record `InteractionDialogueQuestionResponse`, replacing the 1.20.1 `getQuestionText()`.
+
+Optional miss (neither required nor causing resolution failure): `TRAIT_GET_ID` and `TRAIT_ID_LEGACY` (McaBinding.java:393–394), accounting for the 7.6–7.7 `Trait#id` / `Trait#getId` rename. Both optional; McaHandles tries the modern name first.
+
+Five members whose declaring class was confirmed unchanged:
+
+- `GET_TRANSLATABLE` (McaBinding.java:257): inherited from `Messenger` interface default, on `VillagerEntityMCA`.
+- `REWARD_HEARTS` (McaBinding.java:267): on `VillagerBrain`.
+- `BRAIN_SHOULD_GRIEVE` (McaBinding.java:400): on `VillagerBrain`.
+- `MOOD_GET_NAME` (McaBinding.java:271): on `Mood`.
+- `GET_HOME_VILLAGE` (McaBinding.java:281): on `Residency`.
+
+McaHandles.sendDialogueLine argument order (McaHandles.java:372): `invoke(line, false)` where `line` is `Component` and `false` is `boolean`, because the 1.21.1 record is `(Component questionText, boolean silent)`.
+
+## InteractScreen (1.21.1)
+
+Mixin target: `net.conczin.mca.client.gui.InteractScreen` (InteractScreenChoiceMixin.java:33, `@Pseudo` string target).
+
+Constructor: `<init>(Lnet/conczin/mca/entity/VillagerLike;)V` (InteractScreenChoiceMixin.java:51–62, `@Inject` at `RETURN`).
+
+`setLastPhrase` method (InteractScreenChoiceMixin.java:64–78): accepts `(Component, boolean)` parameters. Contains exactly one invocation of `Font.split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;` (InteractScreenChoiceMixin.java:70–72, `@ModifyArg` on that target at index 0).
+
+Declared instance methods with injectors:
+
+- `tick()V` (InteractScreenChoiceMixin.java:80–83, `@Inject` at `TAIL`).
+- `render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V` (InteractScreenChoiceMixin.java:85–107, two `@Inject` points: HEAD and TAIL).
+- `keyPressed(III)Z` (InteractScreenChoiceMixin.java:109–143, `@Inject` at HEAD with `cancellable=true`).
+- `mouseClicked(DDI)Z` (InteractScreenChoiceMixin.java:145–163, `@Inject` at HEAD with `cancellable=true`).
+- `mouseScrolled(DDDD)Z` (InteractScreenChoiceMixin.java:165–178, four-parameter form for 1.21.1, `@Inject` at HEAD with `cancellable=true`).
+- `onClose()V` (InteractScreenChoiceMixin.java:180–187, `@Inject` at TAIL).
+
+Shadow fields: `dialogAnswers`, `dialogAnswerHover`, `dialogQuestionText`, `dialogQuestionId` (InteractScreenChoiceMixin.java:36–39, no `@Final`).
+
+## Townstead 0.7.6 NeoForge 1.21.1
+
+Jar: CurseForge file id 8611587, `townstead-0.7.6+1.21.1.jar`, 5,301,544 bytes, SHA-256 `d8fe667d340e54dc7fd46bca762f8b5a0964a2bcce8a640dce3cd0370ebdbffe`.
+
+TownsteadBinding manifest: 112 `static final Member` declarations (src/main/java/dev/otectus/mcaconversations/compat/townstead/TownsteadBinding.java). All resolve against the jar; all required members confirmed present and identically named.
+
+Mixin targets:
+
+- `ChoicePanel.setVisible(Z)V` (TownsteadChoicePanelMixin.java:40, `@Inject` at TAIL).
+- `ChoicePanel.tick()V` (TownsteadChoicePanelMixin.java:46, `@Inject` at TAIL).
+- `ChoicePanel.render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Font;II)V` (TownsteadChoicePanelMixin.java:53, `@Inject` at TAIL).
+- `RpgDialogueScreen.keyPressed(III)Z` (TownsteadRpgDialogueScreenMixin.java, `@Inject` at HEAD).
+
+Shadow fields on ChoicePanel (TownsteadChoicePanelMixin.java:26–35): `displayEntries`, `visible`, `hoveredIndex`, `selectedIndex`, `scrollOffset`, `entryHeights` (declared `@Final`), `x`, `y`, `width`, `height`.
+
+## Test harness on 1.21.1
+
+Repository-path resolution (`TestPaths`, src/test/java/dev/otectus/mcaconversations/support/TestPaths.java): ModDevGradle's `unitTest` runner executes tests with `build/minecraft-junit` as the working directory. Bare relative paths no longer resolve; `build.gradle` injects `-Dmcaconversations.projectRoot`, and when absent, TestPaths walks up from the working directory to the first directory containing `settings.gradle`.
+
+MCA probe isolation (`McaHidingClassLoader`, src/test/java/dev/otectus/mcaconversations/compat/McaHidingClassLoader.java): ModDevGradle's `unitTest` boots FML, which enforces the mandatory `mca` dependency declared in `neoforge.mods.toml`. Without this filter, every probe jar opened by `McaBindingProbeTest` would resolve its MCA classes from the parent classloader rather than from itself. `McaHidingClassLoader` hides all `net.conczin.mca.*` classes and resources from child loaders, so the multi-version probe fleet tests each version independently rather than silently replaying the pinned one repeatedly.
+
+Mixin class loading (`MixinClassLoader`, src/test/java/dev/otectus/mcaconversations/support/MixinClassLoader.java): ModDevGradle's `unitTest` boots FML with Mixin installed. Any class registered in `mcaconversations.mixins.json` is off-limits to a plain `Class.forName` on the test classloader; Mixin forbids it with `IllegalClassLoadError` once the transforming loader is active. Reading the class bytes off disk and defining them in a child loader of our own (`MixinClassLoader`) sidesteps this guard. The class is defined but never applied, so `@Shadow` annotations retained with `RUNTIME` visibility are readable without any target being touched. Child-first for `dev.otectus.mcaconversations.mixin.*` only; everything else delegates to the parent, so Mixin's own annotation types (whose identity must match the `Shadow.class` literal the test compares against) come from the parent.

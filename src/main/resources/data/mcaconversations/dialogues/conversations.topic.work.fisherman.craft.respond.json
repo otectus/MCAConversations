@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_which_half",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.craft.ask_which_half"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.craft.ask_which_half",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.craft.ask_which_half"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fisherman.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_teach",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.craft.ask_teach"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.craft.ask_teach",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.craft.ask_teach"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

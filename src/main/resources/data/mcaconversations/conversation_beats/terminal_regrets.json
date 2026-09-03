@@ -1,0 +1,267 @@
+{
+  "beats": {
+    "regrets.again.apologize.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.again.apologize",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.again.leave.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.again.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.again.press.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.again.press",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "resist",
+      "subject": "regrets.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.close.confide.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.close.confide",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "disclose",
+      "subject": "regrets.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.close.leave.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.close.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.close.say_means.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.close.say_means",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.close.thank.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.close.thank",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.first.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.first",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.followup.challenge.flat.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.followup.challenge.flat",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.followup.challenge.landed.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.followup.challenge.landed",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.followup.challenge.polite.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.followup.challenge.polite",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.forgive.rebuff.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.forgive.rebuff",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "refuse",
+      "subject": "regrets.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "callback": {
+        "fact": "arc",
+        "value": "regrets",
+        "resumes": [
+          "regrets.resume.ask_since.forgave.to.regrets",
+          "regrets.resume.ask_since.listened.to.regrets",
+          "regrets.resume.ask_since.plain.to.regrets",
+          "regrets.resume.encourage_repair.to.regrets",
+          "regrets.revisit.opens"
+        ]
+      }
+    },
+    "regrets.guarded.ask_safer.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.guarded.ask_safer",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "deflect",
+      "subject": "regrets.talk",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.guarded.leave.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.guarded.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.guarded.press.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.guarded.press",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "resist",
+      "subject": "regrets.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.guarded.respect.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.guarded.respect",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "deflect",
+      "subject": "regrets.talk",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.respond.leave.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.respond.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.resume.bring_it_up.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.bring_it_up",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.resume.followup.leave.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.followup.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.resume.leave.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.resume.leave",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "regrets.sit_with_it.step_away.terminal": {
+      "topic": "regrets",
+      "say": "conversations.regrets.sit_with_it.step_away",
+      "response_question": "conversations.cat.personal",
+      "npc_act": "accept",
+      "subject": "regrets.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    }
+  }
+}

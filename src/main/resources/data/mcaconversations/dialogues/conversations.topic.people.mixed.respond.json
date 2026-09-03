@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.agreed"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.mixed.agree",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.respond.agree",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.topic.people.grumble.followup",
+            "conversations_say": {
+              "phrase": "conversations.people.respond.agree"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_example",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.example_offered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.respond.ask_example",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.topic.people.gossip.followup",
+            "conversations_say": {
+              "phrase": "conversations.people.respond.ask_example"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "blunt",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "people.blunted"
+            },
+            "conversations_affection_apply": {
+              "decision": "people.mixed.blunt",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "people.blunt",
+              "deltas": {
+                "respect": 4,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.people.blunt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.people.respond.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1501 @@
+{
+  "beats": {
+    "checkin.deflated.apologize": {
+      "topic": "checkin",
+      "say": "conversations.checkin.deflated.apologize",
+      "response_question": "main",
+      "npc_act": "qualify",
+      "subject": "checkin.wellbeing",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.deflated.explain": {
+      "topic": "checkin",
+      "say": "conversations.checkin.deflated.explain",
+      "response_question": "main",
+      "npc_act": "qualify",
+      "subject": "checkin.wellbeing",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.deflated.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.deflated.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.deflated.restore": {
+      "topic": "checkin",
+      "say": "conversations.checkin.deflated.restore",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.cause_told": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.ask_more",
+      "response_question": "conversations.topic.checkin.good.followup",
+      "npc_act": "explain",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "state:good"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "practical_help",
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "challenge"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.contentment": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.glad",
+      "response_question": "conversations.topic.checkin.good.followup",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "state:good"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "practical_help",
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "challenge"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.deflated": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.deflate",
+      "response_question": "conversations.topic.checkin.deflated.followup",
+      "npc_act": "hurt",
+      "subject": "checkin.wellbeing",
+      "polarity": "negative",
+      "openness": "guarded",
+      "facts": [
+        "state:good",
+        "player:deflated_good_news"
+      ],
+      "allowed_stances": [
+        "candor",
+        "empathy",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "flirtation",
+        "dismissal",
+        "boundary_push",
+        "challenge",
+        "encouragement",
+        "practical_help",
+        "self_disclosure",
+        "curiosity"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.gift_remembered": {
+      "topic": "checkin",
+      "say": "conversations.checkin.glad.grateful",
+      "response_question": "conversations.topic.checkin.good.followup",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "state:good",
+        "gift:remembered"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "practical_help",
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "challenge"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.keep_it_up": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.keep_it_up",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.share_own": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.share_own",
+      "response_question": "main",
+      "npc_act": "celebrate",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.tease.flat": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.tease.flat",
+      "response_question": "main",
+      "npc_act": "hurt",
+      "subject": "checkin.wellbeing",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.tease.landed": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.tease.landed",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.good.tease.polite": {
+      "topic": "checkin",
+      "say": "conversations.checkin.good.tease.polite",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.wellbeing",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.holiday.join_in": {
+      "topic": "checkin",
+      "say": "conversations.checkin.holiday.join_in",
+      "response_question": "main",
+      "npc_act": "invite",
+      "subject": "checkin.holiday",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.holiday.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.holiday.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.holiday",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.holiday.told": {
+      "topic": "checkin",
+      "say": "conversations.checkin.ask_more.holiday",
+      "response_question": "conversations.topic.checkin.holiday.followup",
+      "npc_act": "celebrate",
+      "subject": "checkin.holiday",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "state:good",
+        "occasion:holiday"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "practical_help",
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.holiday.tradition": {
+      "topic": "checkin",
+      "say": "conversations.checkin.holiday.tradition",
+      "response_question": "main",
+      "npc_act": "explain",
+      "subject": "checkin.holiday",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.holiday.wish_well": {
+      "topic": "checkin",
+      "say": "conversations.checkin.holiday.wish_well",
+      "response_question": "main",
+      "npc_act": "celebrate",
+      "subject": "checkin.holiday",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.hurt.ask_help": {
+      "topic": "checkin",
+      "say": "conversations.checkin.hurt.ask_help",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.player_health",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.hurt.explain": {
+      "topic": "checkin",
+      "say": "conversations.checkin.hurt.explain",
+      "response_question": "main",
+      "npc_act": "qualify",
+      "subject": "checkin.player_health",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.hurt.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.hurt.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.player_health",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.hurt.sit": {
+      "topic": "checkin",
+      "say": "conversations.checkin.hurt.sit",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.player_health",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.hurt.wave_off": {
+      "topic": "checkin",
+      "say": "conversations.checkin.hurt.wave_off",
+      "response_question": "main",
+      "npc_act": "refuse",
+      "subject": "checkin.player_health",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.late.awake_too": {
+      "topic": "checkin",
+      "say": "conversations.checkin.late.awake_too",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.sleeplessness",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.late.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.late.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.sleeplessness",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.late.name_it": {
+      "topic": "checkin",
+      "say": "conversations.checkin.late.name_it",
+      "response_question": "main",
+      "npc_act": "disclose",
+      "subject": "checkin.sleeplessness",
+      "polarity": "mixed",
+      "openness": "guarded",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.late.sit_with": {
+      "topic": "checkin",
+      "say": "conversations.checkin.late.sit_with",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.sleeplessness",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.late.told": {
+      "topic": "checkin",
+      "say": "conversations.checkin.late.ask_why_up",
+      "response_question": "conversations.topic.checkin.late.followup",
+      "npc_act": "disclose",
+      "subject": "checkin.sleeplessness",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "time:night",
+        "villager:sleepless"
+      ],
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "self_disclosure",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "challenge",
+        "encouragement"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.player_hurt": {
+      "topic": "checkin",
+      "say": "conversations.checkin.glad.hurt",
+      "response_question": "conversations.topic.checkin.hurt.followup",
+      "npc_act": "ask",
+      "subject": "checkin.player_health",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "player:injured"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "candor",
+        "practical_help",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "flirtation",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.brushed_off": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.dismiss",
+      "response_question": "conversations.topic.checkin.rough.dismissed.followup",
+      "npc_act": "resist",
+      "subject": "checkin.hard_stretch",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "state:rough",
+        "player:brushed_off"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "flirtation",
+        "dismissal",
+        "boundary_push",
+        "challenge",
+        "encouragement",
+        "practical_help",
+        "empathy",
+        "self_disclosure"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.dismissed.apologize": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.dismissed.apologize",
+      "response_question": "main",
+      "npc_act": "qualify",
+      "subject": "checkin.hard_stretch",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.dismissed.ask_properly": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.dismissed.ask_properly",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.dismissed.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.dismissed.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.dismissed.respect": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.dismissed.respect",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.give_space": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.give_space",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.offer_help": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.offer_help",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.offer_help.spent": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.offer_help.spent",
+      "response_question": "main",
+      "npc_act": "deflect",
+      "subject": "checkin.hard_stretch",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.share_own.flat": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.share_own.flat",
+      "response_question": "main",
+      "npc_act": "resist",
+      "subject": "checkin.hard_stretch",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.share_own.landed": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.share_own.landed",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.hard_stretch",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.share_own.polite": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.share_own.polite",
+      "response_question": "main",
+      "npc_act": "qualify",
+      "subject": "checkin.hard_stretch",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.told": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.listen",
+      "response_question": "conversations.topic.checkin.rough.followup",
+      "npc_act": "disclose",
+      "subject": "checkin.hard_stretch",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "state:rough",
+        "villager:tired"
+      ],
+      "allowed_stances": [
+        "practical_help",
+        "restraint",
+        "self_disclosure",
+        "empathy",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "flirtation",
+        "dismissal",
+        "boundary_push",
+        "challenge",
+        "encouragement"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.unnamed": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.ask",
+      "response_question": "conversations.topic.checkin.rough.followup",
+      "npc_act": "disclose_problem",
+      "subject": "checkin.hard_stretch",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "facts": [
+        "state:rough"
+      ],
+      "allowed_stances": [
+        "practical_help",
+        "restraint",
+        "self_disclosure",
+        "empathy",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "flirtation",
+        "dismissal",
+        "boundary_push",
+        "challenge",
+        "encouragement"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.rough.wary": {
+      "topic": "checkin",
+      "say": "conversations.checkin.rough.tense",
+      "response_question": "conversations.topic.checkin.rough.followup",
+      "npc_act": "disclose",
+      "subject": "checkin.hard_stretch",
+      "polarity": "negative",
+      "openness": "guarded",
+      "facts": [
+        "state:rough",
+        "relationship:tense"
+      ],
+      "allowed_stances": [
+        "practical_help",
+        "restraint",
+        "self_disclosure",
+        "empathy",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "humor",
+        "flirtation",
+        "dismissal",
+        "boundary_push",
+        "challenge",
+        "encouragement"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.smitten.leave": {
+      "topic": "checkin",
+      "say": "conversations.checkin.smitten.leave",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.affection",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.smitten.long_version": {
+      "topic": "checkin",
+      "say": "conversations.checkin.smitten.long_version",
+      "response_question": "main",
+      "npc_act": "disclose",
+      "subject": "checkin.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.smitten.offered": {
+      "topic": "checkin",
+      "say": "conversations.checkin.ask_more.smitten",
+      "response_question": "conversations.topic.checkin.smitten.followup",
+      "npc_act": "invite",
+      "subject": "checkin.affection",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "state:good",
+        "villager:smitten"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "flirtation",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "practical_help",
+        "empathy",
+        "humor",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.smitten.return_warmth": {
+      "topic": "checkin",
+      "say": "conversations.checkin.smitten.return_warmth",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.affection",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "checkin.smitten.stay_light": {
+      "topic": "checkin",
+      "say": "conversations.checkin.smitten.stay_light",
+      "response_question": "main",
+      "npc_act": "accept",
+      "subject": "checkin.affection",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.checkin.deflated.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "checkin.good.deflated"
+      ],
+      "requires_facts": [
+        "player:deflated_good_news"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.deflated.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "checkin.good.deflated"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.checkin.deflated.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.good.deflated"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.deflated.followup/restore": {
+      "stance": "empathy",
+      "responds_to": [
+        "checkin.good.deflated"
+      ],
+      "requires_facts": [
+        "state:good"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.good.followup/keep_it_up": {
+      "stance": "encouragement",
+      "responds_to": [
+        "checkin.good.contentment",
+        "checkin.good.cause_told",
+        "checkin.good.gift_remembered"
+      ],
+      "requires_facts": [
+        "state:good"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.good.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.good.contentment",
+        "checkin.good.cause_told",
+        "checkin.good.gift_remembered"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.good.followup/share_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "checkin.good.contentment",
+        "checkin.good.cause_told",
+        "checkin.good.gift_remembered"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.good.followup/tease": {
+      "stance": "humor",
+      "responds_to": [
+        "checkin.good.contentment",
+        "checkin.good.cause_told",
+        "checkin.good.gift_remembered"
+      ],
+      "requires_facts": [
+        "state:good"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.holiday.followup/ask_tradition": {
+      "stance": "curiosity",
+      "responds_to": [
+        "checkin.holiday.told"
+      ],
+      "requires_facts": [
+        "occasion:holiday"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.checkin.holiday.followup/join_in": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "checkin.holiday.told"
+      ],
+      "requires_facts": [
+        "occasion:holiday"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.checkin.holiday.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.holiday.told"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.holiday.followup/wish_well": {
+      "stance": "encouragement",
+      "responds_to": [
+        "checkin.holiday.told"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.hurt.followup/ask_help": {
+      "stance": "practical_help",
+      "responds_to": [
+        "checkin.player_hurt"
+      ],
+      "requires_facts": [
+        "player:injured"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.hurt.followup/explain": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "checkin.player_hurt"
+      ],
+      "requires_facts": [
+        "player:injured"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.checkin.hurt.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.player_hurt"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.hurt.followup/sit": {
+      "stance": "candor",
+      "responds_to": [
+        "checkin.player_hurt"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.hurt.followup/wave_off": {
+      "stance": "dismissal",
+      "responds_to": [
+        "checkin.player_hurt"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "rebuffed"
+      ]
+    },
+    "conversations.topic.checkin.late.followup/awake_too": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "checkin.late.told"
+      ],
+      "requires_facts": [
+        "time:night"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.checkin.late.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.late.told"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.late.followup/name_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "checkin.late.told"
+      ],
+      "requires_facts": [
+        "villager:sleepless"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.checkin.late.followup/sit_with": {
+      "stance": "empathy",
+      "responds_to": [
+        "checkin.late.told"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.rough.dismissed.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "checkin.rough.brushed_off"
+      ],
+      "requires_facts": [
+        "player:brushed_off"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.rough.dismissed.followup/ask_properly": {
+      "stance": "curiosity",
+      "responds_to": [
+        "checkin.rough.brushed_off"
+      ],
+      "requires_facts": [
+        "state:rough"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.rough.dismissed.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.rough.brushed_off"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.rough.dismissed.followup/respect": {
+      "stance": "restraint",
+      "responds_to": [
+        "checkin.rough.brushed_off"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.rough.followup/give_space": {
+      "stance": "restraint",
+      "responds_to": [
+        "checkin.rough.unnamed",
+        "checkin.rough.told",
+        "checkin.rough.wary"
+      ],
+      "requires_facts": [
+        "state:rough"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.rough.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.rough.unnamed",
+        "checkin.rough.told",
+        "checkin.rough.wary"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.rough.followup/offer_help": {
+      "stance": "practical_help",
+      "responds_to": [
+        "checkin.rough.unnamed",
+        "checkin.rough.told",
+        "checkin.rough.wary"
+      ],
+      "requires_facts": [
+        "state:rough"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.rough.followup/share_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "checkin.rough.unnamed",
+        "checkin.rough.told",
+        "checkin.rough.wary"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.smitten.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin.smitten.offered"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin.smitten.followup/return_warmth": {
+      "stance": "flirtation",
+      "responds_to": [
+        "checkin.smitten.offered"
+      ],
+      "requires_facts": [
+        "villager:smitten"
+      ],
+      "tone": "intimate",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin.smitten.followup/stay_light": {
+      "stance": "restraint",
+      "responds_to": [
+        "checkin.smitten.offered"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.checkin.smitten.followup/take_it_up": {
+      "stance": "curiosity",
+      "responds_to": [
+        "checkin.smitten.offered"
+      ],
+      "requires_facts": [
+        "villager:smitten"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    }
+  }
+}

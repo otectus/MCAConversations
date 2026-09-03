@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "apologize",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.young.snubbed.apologize"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.young.snubbed.apologize",
+              "deltas": {
+                "tension": -3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.day.young.snubbed.apologize"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "explain",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.young.snubbed.explain"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.young.snubbed.explain",
+              "deltas": {
+                "tension": -1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.day.young.snubbed.explain"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.day.young.snubbed.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

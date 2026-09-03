@@ -1,0 +1,84 @@
+{
+  "answers": [
+    {
+      "name": "congratulate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.doubted_idea.succeeded.acknowledged"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.engineer.doubted_idea.praise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.skepticism",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.engineer.doubted_idea"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.doubted_idea.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_next_build",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.engineer.doubted_idea.succeeded.planned"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.engineer.skepticism",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.engineer.doubted_idea"
+            },
+            "next": "conversations.scene.work.engineer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.engineer.doubted_idea.succeeded.planned"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.engineer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

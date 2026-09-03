@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_keeps",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.followup.ask_what_keeps"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.followup.ask_what_keeps",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.followup.ask_what_keeps"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "wish_it_holds",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.followup.wish_it_holds"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.fine.followup.wish_it_holds",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.followup.wish_it_holds",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.followup.wish_it_holds"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.fine.followup.share_own"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.fine.followup.share_own",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.followup.share_own"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.fine.followup.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

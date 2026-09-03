@@ -1,0 +1,90 @@
+{
+  "answers": [
+    {
+      "name": "urge_replace",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.failing_kit.active.conceded"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.equipment",
+              "deltas": {
+                "respect": 2,
+                "familiarity": 1
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.failing_kit",
+              "state": "succeeded"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.failing_kit"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.failing_kit.active.conceded",
+              "slots": [
+                "kit"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_why_wait",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.failing_kit.active.admitted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.equipment",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.guard.failing_kit"
+            },
+            "next": "conversations.scene.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.guard.failing_kit.active.admitted",
+              "slots": [
+                "kit"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

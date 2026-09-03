@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.bad.followup.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.bad.followup.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.bad.followup.thanks",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.bad.followup.thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "brush",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.bad.followup.brush"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.bad.followup.brush",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.bad.followup.brush",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.bad.followup.brush"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.bad.followup.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

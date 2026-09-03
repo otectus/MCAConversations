@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_notes",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shady_wizard.misfire.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shady_wizard.a_misfire",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.shady_wizard.misfire"
+            },
+            "next": "conversations.scene.work.shady_wizard.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shady_wizard.misfire.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.shady_wizard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

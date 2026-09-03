@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_will_do",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.old_dog.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.the_dog",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.old_dog"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.old_dog.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_she_knows_best",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.old_dog.active.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.the_dog",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.old_dog"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.old_dog.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_the_young_one",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.old_dog.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.the_dog",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.shepherd.old_dog"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.old_dog.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.shepherd.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

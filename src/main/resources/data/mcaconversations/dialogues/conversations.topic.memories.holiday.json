@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "bring_it_back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.holiday.revive"
+            },
+            "conversations_affection_apply": {
+              "decision": "memories.holiday.revive",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "memories.holiday.revive",
+              "deltas": {
+                "respect": 2,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.memories.holiday.revive"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "who_was_there",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "memories.holiday.who"
+            },
+            "conversations_disposition_apply": {
+              "topic": "memories.holiday.who",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.memories.holiday.who"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.memories.holiday.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

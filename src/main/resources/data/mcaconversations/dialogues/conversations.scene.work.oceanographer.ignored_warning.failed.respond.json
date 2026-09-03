@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_would_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.ignored_warning.failed.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.what_the_fishermen_say",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.oceanographer.ignored_warning"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.ignored_warning.failed.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_was_not_hers",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.oceanographer.ignored_warning.failed.qualified"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.oceanographer.what_the_fishermen_say",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.oceanographer.ignored_warning"
+            },
+            "next": "conversations.scene.work.oceanographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.oceanographer.ignored_warning.failed.qualified"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.oceanographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

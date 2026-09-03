@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_means",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.something_about_the_room.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.the_village",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.noticed.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.noticed.something_about_the_room.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_hadnt_noticed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.something_about_the_room.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.the_village",
+              "deltas": {
+                "respect": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.noticed.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.noticed.something_about_the_room.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.noticed.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "answers": [
+    {
+      "name": "bring_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.expecting.followup.bring"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.expecting.followup.bring",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.expecting.followup.bring",
+              "deltas": {
+                "respect": 1,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.followup.bring"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "glad_for_you",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.expecting.followup.glad"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.expecting.followup.glad",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.expecting.followup.glad",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.followup.glad"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.followup.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

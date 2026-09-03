@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "ask_where_it_is",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "place.open.shown"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.the_fond_one",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.place.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.place.open.shown"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_will_go",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "place.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.the_fond_one",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.place.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.place.open.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "shrug_at_the_ground",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "place.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.place.dismissed",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "place.the_fond_one",
+              "deltas": {
+                "warmth": -2,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.place.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.place.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

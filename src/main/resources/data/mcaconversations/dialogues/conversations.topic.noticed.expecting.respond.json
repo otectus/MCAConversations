@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "how_feeling",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.expecting.how_feeling"
+            },
+            "next": "conversations.topic.noticed.expecting.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.how_feeling"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_needed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.expecting.what_needed"
+            },
+            "next": "conversations.topic.noticed.expecting.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.what_needed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ready",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.expecting.ready"
+            },
+            "next": "conversations.topic.noticed.expecting.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.ready"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.expecting.dismiss",
+              "delta": -2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.expecting.dismissed",
+              "deltas": {
+                "respect": -2,
+                "warmth": -3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.expecting.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

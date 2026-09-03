@@ -25,7 +25,9 @@
               }
             },
             "next": "conversations.topic.feelings.close",
-            "say": "conversations.feelings.platonic.call_them_friend"
+            "conversations_say": {
+              "phrase": "conversations.feelings.platonic.call_them_friend"
+            }
           }
         }
       ]
@@ -54,7 +56,9 @@
               }
             },
             "next": "conversations.topic.feelings.close",
-            "say": "conversations.feelings.platonic.be_honest"
+            "conversations_say": {
+              "phrase": "conversations.feelings.platonic.be_honest"
+            }
           }
         }
       ]
@@ -65,6 +69,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "feelings.platonic.corrected"
+            },
             "conversations_affection_apply": {
               "decision": "feelings.platonic.dismiss",
               "delta": -2,
@@ -78,8 +86,10 @@
                 "tension": 5
               }
             },
-            "next": "conversations.topic.feelings.close",
-            "say": "conversations.feelings.platonic.dismiss"
+            "next": "conversations.topic.feelings.hurt.close",
+            "conversations_say": {
+              "phrase": "conversations.feelings.platonic.dismiss"
+            }
           }
         }
       ]
@@ -94,7 +104,9 @@
               "op": "end"
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.feelings.platonic.leave"
+            "conversations_say": {
+              "phrase": "conversations.feelings.platonic.leave"
+            }
           }
         }
       ]

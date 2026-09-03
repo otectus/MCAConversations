@@ -27,6 +27,14 @@ public final class IntentMatcher {
     private static final double BIGRAM_CAP = 0.10;
     private static final double ANTI_PENALTY = 0.30;
     private static final double CONTEXT_BONUS = 0.25;
+    /**
+     * Keyword credit for a phrase that accounts for the whole message.
+     *
+     * <p>Deliberately a floor rather than full credit: the same sentence can be an answer to the
+     * question on the table and an idle remark, and the context bonus has to stay able to tell those
+     * apart. Full credit saturates the cap and makes every such pair a tie.
+     */
+    private static final double EXACT_PHRASE_BASE = 0.50;
     private static final double COVER_SLOPE = 0.25;
     private static final double COVER_FREE_RATIO = 0.6;
     private static final double MARGIN = 0.10;
@@ -216,7 +224,33 @@ public final class IntentMatcher {
             }
         }
         double base = intent.norm > 0 ? Math.min(1.0, kw / intent.norm) : 0;
+        // A phrase that accounts for the whole message is not partial evidence.
+        //
+        // The keyword score is a ratio over everything the intent could have matched, which is the
+        // right measure of a half-recognised sentence and the wrong one here: if the player typed the
+        // sentence the author wrote, there is no missing evidence to discount. Left as a ratio it also
+        // drifts — every intent added anywhere in the corpus raises the divisor for an intent matching
+        // one of its several keywords, so "stop talking" quietly stops muting as content grows, which
+        // is not a thing any author could see in a diff.
+        if (!phraseStems.isEmpty() && phraseStems.containsAll(pos)) {
+            base = Math.max(base, EXACT_PHRASE_BASE);
+        }
         matchedStems.addAll(phraseStems);
+
+        // A phrase is worth what the intent explains. "How are you" really is inside "how are you
+        // feeling", but a greeting that accounts for half the sentence must not sit level with a topic
+        // that accounts for all of it. Measured against everything the intent matched, not the phrase
+        // alone, so a short phrase whose remaining words are the intent's own keywords keeps full
+        // credit — "see you" plus the keyword "later" explains "see you later" completely.
+        if (!pos.isEmpty() && phrase > 0) {
+            int covered = 0;
+            for (String stem : pos) {
+                if (matchedStems.contains(stem)) {
+                    covered++;
+                }
+            }
+            phrase *= (double) covered / pos.size();
+        }
 
         // --- Bigram boost ---
         double bigram = 0;

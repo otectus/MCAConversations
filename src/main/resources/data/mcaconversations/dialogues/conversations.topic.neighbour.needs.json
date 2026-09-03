@@ -1,0 +1,90 @@
+{
+  "answers": [
+    {
+      "name": "ill_go",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.needs.go"
+            },
+            "conversations_affection_apply": {
+              "decision": "neighbour.needs.go",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.needs.go",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "neighbour",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.needs.go"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tell_them_i_offered",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.needs.offered"
+            },
+            "conversations_affection_apply": {
+              "decision": "neighbour.needs.offered",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.needs.offered",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "neighbour",
+              "op": "advance"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.needs.offered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.needs.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_wall",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.woodworker.warped_piece.succeeded.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.woodworker.seasoning",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.woodworker.warped_piece"
+            },
+            "next": "conversations.scene.work.woodworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.woodworker.warped_piece.succeeded.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.woodworker.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

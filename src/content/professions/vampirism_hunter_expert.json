@@ -1,0 +1,778 @@
+{
+  "_comment": [
+    "Hunter expert (Vampirism). The person a frightened village sends for, whose main work is saying no.",
+    "",
+    "The §12.4 anchors are the night watch, the kit, false alarms, training people, the one real night",
+    "and fear itself. These three take a village certain about a neighbour, a lantern she cannot",
+    "replace, and the night that was genuinely something.",
+    "",
+    "The whole point of this voice is restraint. Nine times in ten her job is to walk into a frightened",
+    "room and say that there is nothing there, and she takes that half of the work more seriously than",
+    "the other half. She never confirms a suspicion she cannot evidence, and she is hardest on people",
+    "who want her to.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when Vampirism is",
+    "installed."
+  ],
+  "profession": "vampirism:hunter_expert",
+  "id": "hunter_expert",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_night_watch",
+    "the_kit",
+    "false_alarms",
+    "training_people",
+    "the_one_real_night",
+    "fear"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the watch.",
+    "pt": "Vou deixar você voltar à ronda."
+  },
+  "slot_lang": {
+    "hex_the_family_at_the_mill": {
+      "en": "the family at the mill",
+      "pt": "a família do moinho"
+    },
+    "hex_a_man_who_keeps_odd_hours": {
+      "en": "a man who keeps odd hours",
+      "pt": "um homem de horários estranhos"
+    },
+    "hex_a_woman_who_moved_in_last_year": {
+      "en": "a woman who moved in last year",
+      "pt": "uma mulher que se mudou para cá ano passado"
+    },
+    "hex_a_dead_ewe": {
+      "en": "a dead ewe",
+      "pt": "uma ovelha morta"
+    },
+    "hex_a_door_found_open": {
+      "en": "a door found open",
+      "pt": "uma porta encontrada aberta"
+    },
+    "hex_a_child_s_bad_dream": {
+      "en": "a child's bad dream",
+      "pt": "o pesadelo de uma criança"
+    },
+    "hex_a_lantern_with_a_cracked_glass": {
+      "en": "a lantern with a cracked glass",
+      "pt": "uma lanterna com o vidro rachado"
+    },
+    "hex_a_strap_that_has_perished": {
+      "en": "a strap that has perished",
+      "pt": "uma correia que apodreceu"
+    },
+    "hex_boots_that_let_water": {
+      "en": "boots that let water",
+      "pt": "botas que deixam entrar água"
+    },
+    "hex_the_night_of_the_storm": {
+      "en": "the night of the storm",
+      "pt": "a noite da tempestade"
+    },
+    "hex_the_week_before_midwinter": {
+      "en": "the week before midwinter",
+      "pt": "a semana antes do solstício"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.false_alarm",
+      "subject": "work.hunter_expert.false_alarms",
+      "initial_state": "blocked",
+      "salience": 64,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "vampirism"
+      ],
+      "slots": {
+        "accused": [
+          "hex_the_family_at_the_mill",
+          "hex_a_man_who_keeps_odd_hours",
+          "hex_a_woman_who_moved_in_last_year"
+        ],
+        "evidence": [
+          "hex_a_dead_ewe",
+          "hex_a_door_found_open",
+          "hex_a_child_s_bad_dream"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "accused",
+            "evidence"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The village, this week.",
+            "pt": "A vila, esta semana."
+          },
+          "lines": {
+            "en": [
+              "Half the lane has decided about %2$s on the strength of %3$s, and I am the only person expected to say otherwise.",
+              "%3$s. That is the whole case. I have been asked four times to go and look at %2$s and I have said no four times.",
+              "I have seen %3$s a hundred times and it has meant something twice. The village has seen it once and it means everything."
+            ],
+            "pt": [
+              "Metade da viela já decidiu sobre %2$s com base em %3$s, e eu sou a única pessoa de quem se espera o contrário.",
+              "%3$s. É o caso inteiro. Já me pediram quatro vezes para ir olhar %2$s e eu disse não quatro vezes.",
+              "Já vi %3$s umas cem vezes e significou algo duas. A vila viu uma vez e significa tudo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_she_tells",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you tell the difference?",
+                "pt": "Como você distingue?"
+              },
+              "phrases": [
+                "how do you tell the difference",
+                "what separates a real case from a scare"
+              ],
+              "requires_any": [
+                "difference",
+                "separates",
+                "scare"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "evidence"
+                ],
+                "lines": {
+                  "en": [
+                    "Evidence that would still be evidence if I disliked the person less. That is the only test I have and it throws out nine cases in ten.",
+                    "%2$s on its own is nothing. It becomes something when three separate things line up and none of them is about somebody being unpopular.",
+                    "I ask who benefits from the accusation. Four times out of five somebody does, and it is never the person making it who notices that."
+                  ],
+                  "pt": [
+                    "Prova que continuaria sendo prova se eu gostasse mais da pessoa. É o único teste que eu tenho e ele descarta nove casos em dez.",
+                    "%2$s sozinho não é nada. Vira alguma coisa quando três coisas separadas se alinham e nenhuma delas é sobre alguém ser impopular.",
+                    "Pergunto quem se beneficia da acusação. Em quatro de cinco vezes alguém se beneficia, e nunca é quem acusa que percebe isso."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_refusal",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Keep refusing until there's evidence.",
+                "pt": "Continue recusando até haver prova."
+              },
+              "phrases": [
+                "keep refusing until there is evidence",
+                "hold out for actual evidence"
+              ],
+              "requires_any": [
+                "refusing",
+                "evidence",
+                "hold"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.hunter_expert.alarm.backed",
+                "delta": 3,
+                "budget": "deep",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "I will, and it will cost me the lane's goodwill for a season, and that is a cheaper thing than a family driven out.",
+                    "Yes. The moment I go and look, the looking becomes the evidence. That is the part nobody understands and it is the whole reason I stay home.",
+                    "Thank you. It is a very lonely no and it helps enormously to hear somebody else say it out loud."
+                  ],
+                  "pt": [
+                    "Vou, e isso vai me custar a boa vontade da viela por uma estação, e é coisa mais barata que uma família expulsa.",
+                    "Sim. No instante em que eu for olhar, o olhar vira a prova. É a parte que ninguém entende e é o motivo inteiro de eu ficar em casa.",
+                    "Obrigada. É um não muito solitário e ajuda enormemente ouvir outra pessoa dizer em voz alta."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "worry_about_her",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That puts you against the whole lane.",
+                "pt": "Isso te coloca contra a viela inteira."
+              },
+              "phrases": [
+                "that puts you against the whole lane",
+                "you are standing against everybody there"
+              ],
+              "requires_any": [
+                "lane",
+                "against",
+                "standing"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It does. That is what the position is for. If I agreed with the lane there would be no reason to have somebody like me in it.",
+                    "For a season. Then the ewe turns out to have been a dog and everybody is quietly relieved and nobody says thank you, and that is correct.",
+                    "The frightening version is the one where I go along with it once, because after that I am not a check on anything."
+                  ],
+                  "pt": [
+                    "Coloca. É para isso que a posição serve. Se eu concordasse com a viela, não haveria motivo para ter alguém como eu nela.",
+                    "Por uma estação. Depois a ovelha acaba tendo sido um cachorro e todo mundo fica discretamente aliviado e ninguém agradece, e está certo.",
+                    "A versão assustadora é aquela em que eu concordo uma vez, porque depois disso eu não sou controle de nada."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "vampirism"
+          ],
+          "slots_used": [
+            "accused"
+          ],
+          "prompt": {
+            "en": "That accusation.",
+            "pt": "Aquela acusação."
+          },
+          "lines": {
+            "en": [
+              "It was a dog. Two lanes over, somebody's dog, and %2$s is still here and still being looked at sideways.",
+              "It passed. Nobody apologised to %2$s and nobody will, and I have started making a point of buying from them at the market.",
+              "I held out for eleven days. On the twelfth the actual cause turned up and the whole thing evaporated as if nobody had ever said anything."
+            ],
+            "pt": [
+              "Era um cachorro. Duas vielas adiante, o cachorro de alguém, e %2$s continua aqui e continua sendo olhada de lado.",
+              "Passou. Ninguém pediu desculpa a %2$s e ninguém vai pedir, e eu passei a fazer questão de comprar deles na feira.",
+              "Segurei por onze dias. No décimo segundo a causa real apareceu e a coisa toda evaporou como se ninguém tivesse dito nada."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_after",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What happens to them afterwards?",
+                "pt": "O que acontece com eles depois?"
+              },
+              "phrases": [
+                "what happens to them afterwards",
+                "how does a family recover from that"
+              ],
+              "requires_any": [
+                "afterwards",
+                "recover"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Nothing, officially, which is the problem. There is a procedure for accusing somebody and none at all for having been wrong about them.",
+                    "They leave, usually, within two years, and everybody says it was for work. I have watched three families do it.",
+                    "This one stayed. I think it is because two households went and sat in their kitchen the following week, and I have been trying to work out who organised that."
+                  ],
+                  "pt": [
+                    "Nada, oficialmente, que é o problema. Existe um procedimento para acusar alguém e nenhum para ter errado sobre a pessoa.",
+                    "Vão embora, normalmente, dentro de dois anos, e todo mundo diz que foi por trabalho. Já vi três famílias fazerem isso.",
+                    "Esta ficou. Acho que é porque duas casas foram sentar na cozinha deles na semana seguinte, e eu venho tentando descobrir quem organizou aquilo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.failing_lantern",
+      "subject": "work.hunter_expert.the_kit",
+      "initial_state": "blocked",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "vampirism"
+      ],
+      "slots": {
+        "fault": [
+          "hex_a_lantern_with_a_cracked_glass",
+          "hex_a_strap_that_has_perished",
+          "hex_boots_that_let_water"
+        ]
+      },
+      "commitment": {
+        "id": "work.hunter_expert.bring_lantern",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:lantern",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "fault"
+          ],
+          "identity_values": [
+            "precision",
+            "independence"
+          ],
+          "prompt": {
+            "en": "The kit.",
+            "pt": "O equipamento."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s and I am still walking the round with it, which is exactly the sort of thing I would tell somebody else off for.",
+              "%2$s. It works until the night it does not, and I will not know which night that is until I am standing in it.",
+              "The village pays me in goodwill, which is generous and does not mend %2$s."
+            ],
+            "pt": [
+              "Tenho %2$s e continuo fazendo a ronda com isso, que é exatamente o tipo de coisa pela qual eu daria bronca em outra pessoa.",
+              "%2$s. Funciona até a noite em que não funciona, e eu não vou saber qual noite é até estar dentro dela.",
+              "A vila me paga em boa vontade, o que é generoso e não conserta %2$s."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_lantern",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you a lantern for the round.",
+                "pt": "Vou trazer uma lanterna para a ronda."
+              },
+              "phrases": [
+                "i can bring you a lantern",
+                "let me fetch a lantern for the round"
+              ],
+              "requires_any": [
+                "lantern"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.hunter_expert.kit.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then the round is a round again rather than a hope, and I will sleep the day before it instead of worrying.",
+                    "Take it as a loan and let me pay you back over the winter, because if it is a gift I will feel it every night I carry it.",
+                    "Yes. And I will show you the round, if you want. Everybody has opinions about it and nobody has walked it."
+                  ],
+                  "pt": [
+                    "Então a ronda volta a ser ronda em vez de esperança, e eu vou dormir no dia anterior em vez de me preocupar.",
+                    "Aceite como empréstimo e me deixe pagar durante o inverno, porque se for presente eu vou sentir isso toda noite que carregar.",
+                    "Sim. E eu te mostro a ronda, se quiser. Todo mundo tem opinião sobre ela e ninguém a percorreu."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_about_the_round",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What does the round involve?",
+                "pt": "O que a ronda envolve?"
+              },
+              "phrases": [
+                "what does the round involve",
+                "what do you actually do on the round"
+              ],
+              "requires_any": [
+                "round",
+                "involve"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Eleven doors, two barns and a stretch of hedge, twice a night, and the point of it is that the village sleeps rather than that I find anything.",
+                    "Mostly I check that latches are latched and lamps are lit. It is dull and it is preventative and dull preventative work is the whole job.",
+                    "I talk to whoever is awake. Half my useful information comes from a woman with a bad hip who cannot sleep and sees everything."
+                  ],
+                  "pt": [
+                    "Onze portas, dois celeiros e um trecho de cerca viva, duas vezes por noite, e o objetivo é que a vila durma, não que eu ache alguma coisa.",
+                    "Basicamente eu confiro se as trancas estão trancadas e as lamparinas acesas. É monótono, é preventivo, e trabalho preventivo monótono é o ofício inteiro.",
+                    "Converso com quem estiver acordado. Metade da minha informação útil vem de uma mulher com o quadril ruim que não dorme e vê tudo."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "vampirism"
+          ],
+          "prompt": {
+            "en": "The kit, since.",
+            "pt": "O equipamento, depois disso."
+          },
+          "lines": {
+            "en": [
+              "The round is done properly again. I had forgotten how much of the worry was about the equipment rather than the dark.",
+              "Mended and paid for over the winter, in instalments, and I insisted on the instalments and I am glad I did.",
+              "Two other people on the watch have replaced their lamps since. Apparently everybody had been carrying something broken and saying nothing."
+            ],
+            "pt": [
+              "A ronda voltou a ser feita direito. Eu tinha esquecido o quanto da preocupação era sobre o equipamento e não sobre o escuro.",
+              "Consertado e pago ao longo do inverno, em parcelas, e eu insisti nas parcelas e estou feliz por ter insistido.",
+              "Duas outras pessoas da ronda trocaram as lamparinas desde então. Aparentemente todo mundo carregava algo quebrado e não dizia nada."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_others",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Others followed once you said it.",
+                "pt": "Outros seguiram depois que você falou."
+              },
+              "phrases": [
+                "others followed once you said it",
+                "the rest of the watch followed you"
+              ],
+              "requires_any": [
+                "followed",
+                "watch",
+                "others"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Everybody was waiting for somebody to admit it first, which is how a watch ends up walking around in the dark with broken lamps.",
+                    "Thank you. I said it out loud because you had already made it a normal thing to say, and normal is most of what makes a thing sayable.",
+                    "We check each other's kit at the start of the night now. It takes four minutes and nobody has argued about it once."
+                  ],
+                  "pt": [
+                    "Todo mundo esperava alguém admitir primeiro, que é como uma ronda acaba andando no escuro com lamparinas quebradas.",
+                    "Obrigada. Eu disse em voz alta porque você já tinha tornado aquilo uma coisa normal de se dizer, e normal é quase tudo o que torna algo dizível.",
+                    "Agora a gente confere o equipamento um do outro no começo da noite. Leva quatro minutos e ninguém reclamou uma vez sequer."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_real_night",
+      "subject": "work.hunter_expert.the_one_real_night",
+      "initial_state": "succeeded",
+      "salience": 50,
+      "due_after_days": 2,
+      "expires_after_days": 34,
+      "integrations": [
+        "vampirism"
+      ],
+      "slots": {
+        "night": [
+          "hex_the_night_of_the_storm",
+          "hex_the_week_before_midwinter"
+        ]
+      },
+      "states": [
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "predicate": "memory",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "night"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The night that was real.",
+            "pt": "A noite que foi real."
+          },
+          "lines": {
+            "en": [
+              "There was %2$s, six years ago, and it was the one time in nineteen years that any of this was not a false alarm.",
+              "%2$s. Everybody in this village has a version of it and mine is the dullest, because I was busy and did not see most of it.",
+              "I do not talk about %2$s much. The talking is what turns one night into the reason a family gets driven out four years later."
+            ],
+            "pt": [
+              "Teve %2$s, seis anos atrás, e foi a única vez em dezenove anos em que nada disso foi alarme falso.",
+              "%2$s. Todo mundo nesta vila tem uma versão e a minha é a mais sem graça, porque eu estava ocupada e não vi quase nada.",
+              "Eu não falo muito sobre %2$s. É a conversa que transforma uma noite no motivo de uma família ser expulsa quatro anos depois."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_learned",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did you take from it?",
+                "pt": "O que você tirou daquilo?"
+              },
+              "phrases": [
+                "what did you take from it",
+                "what did that night teach you"
+              ],
+              "requires_any": [
+                "take",
+                "teach"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "That the preparation was what mattered and the preparation was boring, and not one person has asked me about the boring part since.",
+                    "That being right about one night does not make me right about the next ninety. That is the lesson and it is the one I have to relearn every winter.",
+                    "That I want to be wrong. Every time I go out I am hoping to be wrong, and the one time I was not is the reason I hope harder."
+                  ],
+                  "pt": [
+                    "Que a preparação era o que importava e a preparação era chata, e nenhuma pessoa me perguntou sobre a parte chata desde então.",
+                    "Que estar certa sobre uma noite não me deixa certa sobre as próximas noventa. É a lição e é a que eu preciso reaprender todo inverno.",
+                    "Que eu quero estar errada. Toda vez que eu saio estou torcendo para estar errada, e a única vez em que não estive é o motivo de eu torcer mais."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "respect_the_silence",
+              "stance": "restraint",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Keeping that private makes sense.",
+                "pt": "Guardar isso em particular faz sentido."
+              },
+              "phrases": [
+                "your reasons for keeping it private are sound",
+                "keeping that private makes sense"
+              ],
+              "requires_any": [
+                "private",
+                "reasons",
+                "keeping"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 3
+              },
+              "affection": {
+                "decision": "work.hunter_expert.night.respected",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "softened",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Thank you. You are the first person in six years to hear that I would rather not and then simply stop, and it is a strange relief.",
+                    "The story does harm and the facts do not, and separating those has taken me most of a decade.",
+                    "I will tell somebody one day, properly, in writing, so that it exists without me having to perform it in a tavern."
+                  ],
+                  "pt": [
+                    "Obrigada. Você é a primeira pessoa em seis anos a ouvir que eu prefiro não falar e simplesmente parar, e é um alívio estranho.",
+                    "A história faz mal e os fatos não, e separar as duas coisas me levou quase uma década.",
+                    "Vou contar a alguém um dia, direito, por escrito, para que aquilo exista sem eu ter que encenar numa taverna."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything more to go over?",
+      "pt": "Mais alguma coisa para repassar?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a night patrol?",
+        "pt": "Qual é a parte mais difícil de uma patrulha noturna?"
+      },
+      "requires_any": [
+        "hardest",
+        "patrol"
+      ],
+      "phrases": [
+        "what is the hardest part of a night patrol",
+        "hardest thing about the night patrol"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the watch.",
+      "pt": "Vou deixar você com a ronda."
+    }
+  }
+}

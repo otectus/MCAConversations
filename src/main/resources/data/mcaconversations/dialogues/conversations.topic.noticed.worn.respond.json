@@ -1,0 +1,117 @@
+{
+  "answers": [
+    {
+      "name": "how_long",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.worn.how_long"
+            },
+            "next": "conversations.topic.noticed.worn.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.how_long"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "take_something",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.worn.take_something"
+            },
+            "next": "conversations.topic.noticed.worn.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.take_something"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "no_fixing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.worn.no_fixing"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.worn.no_fixing",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.worn.no_fixing",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.noticed.worn.followup",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.no_fixing"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dismiss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.worn.dismiss",
+              "delta": -2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.worn.dismissed",
+              "deltas": {
+                "respect": -1,
+                "warmth": -3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.dismissed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.worn.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

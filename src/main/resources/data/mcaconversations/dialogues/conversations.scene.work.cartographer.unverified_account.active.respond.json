@@ -1,0 +1,78 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_to_judge",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.unverified_account.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.accounts",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.unverified_account"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.unverified_account.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_marking_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.unverified_account.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.accounts",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cartographer.unverified_account"
+            },
+            "next": "conversations.scene.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cartographer.unverified_account.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

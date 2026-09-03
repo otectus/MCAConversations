@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.chat;
 
+import dev.otectus.mcaconversations.locale.LineVoice;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,7 @@ class ChatDeliveryTest {
     @Test
     void allFourMarkersAreStripped() {
         assertEquals("dialogue.conversations.work_offer.ask_terms",
-                ChatDelivery.stripMarkers(
+                LineVoice.stripMarkers(
                         "#Gmale.#Ecrabby.#Pfarmer.#Tadult.dialogue.conversations.work_offer.ask_terms"));
     }
 
@@ -80,23 +81,23 @@ class ChatDeliveryTest {
     void aPartialMarkerSetIsStripped() {
         // gender, profession and personality are all optional in MCA's getTranslatable.
         assertEquals("dialogue.chatmode.confused",
-                ChatDelivery.stripMarkers("#Tadult.dialogue.chatmode.confused"));
+                LineVoice.stripMarkers("#Tadult.dialogue.chatmode.confused"));
     }
 
     @Test
     void anUnmarkedKeyIsUnchanged() {
         // ChatModeDispatcher's fallback builds a bare translatable when MCA has no line.
-        assertEquals("dialogue.chatmode.hint", ChatDelivery.stripMarkers("dialogue.chatmode.hint"));
+        assertEquals("dialogue.chatmode.hint", LineVoice.stripMarkers("dialogue.chatmode.hint"));
     }
 
     @Test
     void aMalformedMarkerLeavesTheKeyAlone() {
-        assertEquals("#Tadult", ChatDelivery.stripMarkers("#Tadult"));
+        assertEquals("#Tadult", LineVoice.stripMarkers("#Tadult"));
     }
 
     @Test
     void keyBodyKeepsItsOwnDots() {
-        assertEquals("dialogue.a.b.c", ChatDelivery.stripMarkers("#Eodd.dialogue.a.b.c"));
+        assertEquals("dialogue.a.b.c", LineVoice.stripMarkers("#Eodd.dialogue.a.b.c"));
     }
 
     // --- Reply-delay length ------------------------------------------------------

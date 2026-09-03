@@ -25,7 +25,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.firstmet.ask_stood_out"
+            "conversations_say": {
+              "phrase": "conversations.us.firstmet.ask_stood_out"
+            }
           }
         }
       ]
@@ -49,7 +51,9 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.firstmet.correct_gently"
+            "conversations_say": {
+              "phrase": "conversations.us.firstmet.correct_gently"
+            }
           }
         }
       ]
@@ -74,7 +78,27 @@
               }
             },
             "next": "conversations.topic.us.close",
-            "say": "conversations.us.firstmet.dismiss"
+            "conversations_say": {
+              "phrase": "conversations.us.firstmet.dismiss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "another_version",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "firstmet.disagreement"
+            },
+            "next": "conversations.topic.firstmet.disagreement",
+            "conversations_say": {
+              "phrase": "conversations.firstmet.disagreement"
+            }
           }
         }
       ]
@@ -89,7 +113,9 @@
               "op": "end"
             },
             "next": "conversations.us",
-            "say": "conversations.us.firstmet.leave"
+            "conversations_say": {
+              "phrase": "conversations.us.firstmet.leave"
+            }
           }
         }
       ]

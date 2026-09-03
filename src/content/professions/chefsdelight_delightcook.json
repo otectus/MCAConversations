@@ -1,0 +1,847 @@
+{
+  "_comment": [
+    "Delight cook (Farmer's Delight). The everyday kitchen, as opposed to the feast.",
+    "",
+    "The §12.4 anchors are the daily pot, the pass, who is fed, stores, the hours and a recipe that is",
+    "not hers. These three take a run of long evenings, a supplier whose vegetables keep arriving",
+    "bruised, and a family recipe she was given and is careful about.",
+    "",
+    "The distinction from the chef is repetition rather than occasion: she cooks the same thing four",
+    "hundred times and cares about the four hundredth. Her voice is quick, physical, and slightly",
+    "short of breath.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when Farmer's",
+    "Delight is installed."
+  ],
+  "profession": "chefsdelight:delightcook",
+  "id": "delightcook",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_daily_pot",
+    "the_pass",
+    "who_is_fed",
+    "stores",
+    "the_hours",
+    "a_recipe_not_mine"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the pass.",
+    "pt": "Vou deixar você voltar ao balcão."
+  },
+  "slot_lang": {
+    "cook_four_late_nights": {
+      "en": "four late nights running",
+      "pt": "quatro noites tarde seguidas"
+    },
+    "cook_a_kitchen_hand_who_left": {
+      "en": "a kitchen hand who left",
+      "pt": "um ajudante que foi embora"
+    },
+    "cook_a_broken_oven_door": {
+      "en": "a broken oven door",
+      "pt": "uma porta de forno quebrada"
+    },
+    "cook_bruised_vegetables": {
+      "en": "vegetables that arrive bruised",
+      "pt": "legumes que chegam machucados"
+    },
+    "cook_short_weight": {
+      "en": "sacks that are short weight",
+      "pt": "sacos com peso a menos"
+    },
+    "cook_deliveries_that_come_late": {
+      "en": "deliveries that come after service",
+      "pt": "entregas que chegam depois do serviço"
+    },
+    "cook_a_soup_from_her_mother": {
+      "en": "a soup her mother made",
+      "pt": "uma sopa que a mãe dela fazia"
+    },
+    "cook_a_bread_from_the_north": {
+      "en": "a bread from the north",
+      "pt": "um pão do norte"
+    },
+    "cook_the_evening_rush": {
+      "en": "the evening rush",
+      "pt": "a correria da noite"
+    },
+    "cook_the_quiet_hour": {
+      "en": "the hour before service",
+      "pt": "a hora antes do serviço"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.long_evenings",
+      "subject": "work.delightcook.the_hours",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "chefsdelight"
+      ],
+      "slots": {
+        "trouble": [
+          "cook_four_late_nights",
+          "cook_a_kitchen_hand_who_left",
+          "cook_a_broken_oven_door"
+        ],
+        "hour": [
+          "cook_the_evening_rush",
+          "cook_the_quiet_hour"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trouble",
+            "hour"
+          ],
+          "identity_values": [
+            "duty",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The kitchen.",
+            "pt": "A cozinha."
+          },
+          "lines": {
+            "en": [
+              "%2$s, and %3$s is now the only part of the day where I am any good, and it is getting shorter.",
+              "%2$s. I am cooking well and I am cooking angry, and the second one is going to reach the food eventually.",
+              "%3$s used to be when I thought about the food. Now it is when I catch up, and the food is thought about while it cooks, which is too late."
+            ],
+            "pt": [
+              "%2$s, e %3$s agora é a única parte do dia em que eu presto, e está ficando mais curta.",
+              "%2$s. Estou cozinhando bem e cozinhando com raiva, e a segunda coisa vai chegar na comida em algum momento.",
+              "%3$s costumava ser quando eu pensava na comida. Agora é quando eu corro atrás, e a comida é pensada enquanto cozinha, o que é tarde demais."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_would_fix_it",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What would actually fix it?",
+                "pt": "O que resolveria de fato?"
+              },
+              "phrases": [
+                "what would actually fix it",
+                "what is the real solution here"
+              ],
+              "requires_any": [
+                "fix",
+                "solution"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "One more pair of hands for two hours an evening. That is the whole answer and it costs less than the food I am spoiling by being tired.",
+                    "Closing one night a week. Everybody says they would understand and nobody would, and I have run that experiment twice.",
+                    "Doing less. Four dishes instead of seven. It is obviously right and it feels like giving up, which is why I have not done it."
+                  ],
+                  "pt": [
+                    "Mais um par de mãos por duas horas à noite. É a resposta inteira e custa menos que a comida que eu estrago de cansaço.",
+                    "Fechar uma noite por semana. Todo mundo diz que entenderia e ninguém entenderia, e eu já rodei esse experimento duas vezes.",
+                    "Fazer menos. Quatro pratos em vez de sete. É obviamente certo e parece desistência, e é por isso que eu não fiz."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_fewer_dishes",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Cook four dishes instead of seven.",
+                "pt": "Faça quatro pratos em vez de sete."
+              },
+              "phrases": [
+                "cook four dishes instead of seven",
+                "cut the number of dishes down"
+              ],
+              "requires_any": [
+                "dishes",
+                "four",
+                "cut"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 1
+              },
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Four done properly beats seven done at speed, and I have said that to other cooks and never once to myself.",
+                    "Yes. Three people will complain for a fortnight and then order one of the four and forget they ever objected.",
+                    "It is a smaller kitchen than the one in my head. I have been cooking for the kitchen in my head for about three years."
+                  ],
+                  "pt": [
+                    "Quatro bem feitos vencem sete feitos na correria, e eu já disse isso a outros cozinheiros e nunca uma vez a mim mesma.",
+                    "Sim. Três pessoas vão reclamar por duas semanas e depois pedir um dos quatro e esquecer que reclamaram.",
+                    "É uma cozinha menor do que a que existe na minha cabeça. Faz uns três anos que eu cozinho para a cozinha da minha cabeça."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "notice_the_tiredness",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You look worn out.",
+                "pt": "Você parece exausta."
+              },
+              "phrases": [
+                "you look worn out",
+                "you seem exhausted lately"
+              ],
+              "requires_any": [
+                "worn",
+                "exhausted"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I am, and you are the first person to say it to my face rather than to somebody else in the doorway.",
+                    "Four nights. It is not the four nights. It is that I cannot see the end of the four nights, and that is a different kind of tired.",
+                    "Thank you. I will be all right. I would like the record to show that I said that too quickly, because I always do."
+                  ],
+                  "pt": [
+                    "Estou, e você é a primeira pessoa a dizer isso na minha cara em vez de a outra pessoa na porta.",
+                    "Quatro noites. Não são as quatro noites. É que eu não vejo o fim das quatro noites, e isso é outro tipo de cansaço.",
+                    "Obrigada. Vou ficar bem. Quero que fique registrado que eu disse isso rápido demais, porque eu sempre digo."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "chefsdelight"
+          ],
+          "slots_used": [
+            "hour"
+          ],
+          "prompt": {
+            "en": "The kitchen, since.",
+            "pt": "A cozinha, depois disso."
+          },
+          "lines": {
+            "en": [
+              "Four dishes. %2$s is mine again and I have started tasting things before they go out, which I had stopped doing without noticing.",
+              "Two people complained and both of them are eating here twice a week now, so I have decided the complaint was about change rather than food.",
+              "I sleep. That is the whole report. I sleep, and the food is better, and I resent how simple it turned out to be."
+            ],
+            "pt": [
+              "Quatro pratos. %2$s voltou a ser minha e eu voltei a provar as coisas antes de saírem, coisa que eu tinha parado de fazer sem perceber.",
+              "Duas pessoas reclamaram e as duas comem aqui duas vezes por semana agora, então decidi que a reclamação era sobre mudança e não sobre comida.",
+              "Eu durmo. É o relatório inteiro. Eu durmo, a comida está melhor, e me irrita o quanto isso acabou sendo simples."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_tasting",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "You'd stopped tasting?",
+                "pt": "Você tinha parado de provar?"
+              },
+              "phrases": [
+                "you had stopped tasting the food",
+                "when did the tasting stop"
+              ],
+              "requires_any": [
+                "tasting",
+                "taste"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "About a year ago, gradually, the way everything important stops. There was no day I decided it.",
+                    "You taste to check, and checking takes four seconds, and when you are behind by an hour four seconds is the first thing to go.",
+                    "That is how I know the tiredness had reached the food. Not that anything was bad. That I had stopped being able to tell."
+                  ],
+                  "pt": [
+                    "Faz mais ou menos um ano, aos poucos, do jeito que tudo o que é importante para. Não houve um dia em que eu decidi.",
+                    "A gente prova para conferir, e conferir leva quatro segundos, e quando você está uma hora atrasada quatro segundos é a primeira coisa a ir embora.",
+                    "É assim que eu sei que o cansaço tinha chegado na comida. Não que algo estivesse ruim. Que eu tinha perdido a capacidade de saber."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.bruised_deliveries",
+      "subject": "work.delightcook.stores",
+      "initial_state": "blocked",
+      "salience": 54,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "chefsdelight"
+      ],
+      "slots": {
+        "problem": [
+          "cook_bruised_vegetables",
+          "cook_short_weight",
+          "cook_deliveries_that_come_late"
+        ]
+      },
+      "commitment": {
+        "id": "work.delightcook.bring_potatoes",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:potato",
+        "due_after_days": 2
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise",
+            "decide"
+          ],
+          "slots_used": [
+            "problem"
+          ],
+          "identity_values": [
+            "fairness",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The deliveries.",
+            "pt": "As entregas."
+          },
+          "lines": {
+            "en": [
+              "%2$s, every week for a month, and I trim off a third of it before it reaches the pot.",
+              "%2$s. I have mentioned it twice and been told twice that it is the season, and it is not the season.",
+              "I pay full price for %2$s. The trimming is my time and the loss is my loss, and the grower has never once had a bad week over it."
+            ],
+            "pt": [
+              "%2$s, toda semana faz um mês, e eu descarto um terço antes de chegar na panela.",
+              "%2$s. Já mencionei duas vezes e me disseram duas vezes que é a estação, e não é a estação.",
+              "Pago preço cheio por %2$s. A limpeza é meu tempo e a perda é minha, e o produtor nunca teve uma semana ruim por causa disso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_produce",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you potatoes this week.",
+                "pt": "Vou trazer batatas esta semana."
+              },
+              "phrases": [
+                "i can bring you potatoes this week",
+                "let me fetch potatoes for the kitchen"
+              ],
+              "requires_any": [
+                "potatoes",
+                "potato"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.delightcook.stores.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I can refuse next week's delivery outright, which I could not do while it was the only food in the building.",
+                    "That is the difference between a complaint and a position. Thank you, and I mean the second part more than the first.",
+                    "Yes. And you will eat here free until they run out, and I will not be argued with while I am holding a knife."
+                  ],
+                  "pt": [
+                    "Então eu posso recusar a entrega da semana que vem de vez, o que eu não podia enquanto era a única comida do prédio.",
+                    "É a diferença entre uma reclamação e uma posição. Obrigada, e eu falo mais sério na segunda parte do que na primeira.",
+                    "Sim. E você come aqui de graça até acabarem, e não se discute comigo enquanto eu estou com uma faca na mão."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_refusing",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Refuse the next delivery.",
+                "pt": "Recuse a próxima entrega."
+              },
+              "phrases": [
+                "refuse the next delivery",
+                "send the next load back to the grower"
+              ],
+              "requires_any": [
+                "delivery",
+                "grower",
+                "load"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "resolved",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "In front of the cart, at the door, where the whole lane can see. That is the part that makes it stick and the part I have been avoiding.",
+                    "Yes. He will be furious and then he will send better, because I am four of his eleven customers by weight.",
+                    "I have to have food in the building first. Once I do, refusing is easy, and everything before that is why I have not done it."
+                  ],
+                  "pt": [
+                    "Diante da carroça, na porta, onde a viela inteira possa ver. É a parte que faz aquilo pegar e a parte que eu venho evitando.",
+                    "Sim. Ele vai ficar furioso e depois vai mandar melhor, porque eu sou quatro dos onze clientes dele em peso.",
+                    "Preciso ter comida no prédio primeiro. Depois disso, recusar é fácil, e tudo antes disso é o motivo de eu não ter feito."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "chefsdelight"
+          ],
+          "prompt": {
+            "en": "The deliveries, since.",
+            "pt": "As entregas, depois disso."
+          },
+          "lines": {
+            "en": [
+              "I refused a load at the door and the next one was the best I have had from him in four years.",
+              "He shouted for a minute and then went quiet and then said he had known. That last part is the one I keep thinking about.",
+              "It is sorted. And two other kitchens have started refusing as well, which was not my plan and is the best outcome available."
+            ],
+            "pt": [
+              "Recusei uma carga na porta e a seguinte foi a melhor que ele me mandou em quatro anos.",
+              "Ele gritou por um minuto, depois ficou quieto, depois disse que sabia. É essa última parte que eu fico remoendo.",
+              "Está resolvido. E outras duas cozinhas passaram a recusar também, o que não era meu plano e é o melhor desfecho possível."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_spread",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Two other kitchens followed you.",
+                "pt": "Outras duas cozinhas te seguiram."
+              },
+              "phrases": [
+                "two other kitchens followed you",
+                "the other kitchens followed your lead"
+              ],
+              "requires_any": [
+                "kitchens",
+                "followed"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "One of them had been trimming a third off for six years and had never said so to me, and I had never said so to her.",
+                    "Thank you. Doing it at the door mattered. If I had done it politely in a letter, nobody would have known it was possible.",
+                    "We have started talking, the three of us, on the quiet afternoon. It has been eleven years and we had never once compared prices."
+                  ],
+                  "pt": [
+                    "Uma delas vinha descartando um terço fazia seis anos e nunca tinha me contado, e eu nunca tinha contado a ela.",
+                    "Obrigada. Fazer na porta importou. Se eu tivesse feito educadamente por carta, ninguém saberia que era possível.",
+                    "Começamos a conversar, nós três, na tarde parada. São onze anos e a gente nunca tinha comparado preços."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.borrowed_recipe",
+      "subject": "work.delightcook.a_recipe_not_mine",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 32,
+      "integrations": [
+        "chefsdelight"
+      ],
+      "slots": {
+        "dish": [
+          "cook_a_soup_from_her_mother",
+          "cook_a_bread_from_the_north"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "dish"
+          ],
+          "identity_values": [
+            "fairness",
+            "tradition"
+          ],
+          "prompt": {
+            "en": "That recipe.",
+            "pt": "Aquela receita."
+          },
+          "lines": {
+            "en": [
+              "A woman gave me %2$s before she died and I have been cooking it and I have never once put a name to it on the board.",
+              "%2$s is not mine. I make it better than she did, which I would never say to anybody who knew her, and it is still not mine.",
+              "People ask me what %2$s is called and I say the name of the dish. They are asking whose it is and I have not worked out how to answer that."
+            ],
+            "pt": [
+              "Uma mulher me deu %2$s antes de morrer e eu venho fazendo e nunca pus um nome naquilo no quadro.",
+              "%2$s não é minha. Eu faço melhor do que ela fazia, coisa que eu jamais diria a alguém que a conheceu, e ainda assim não é minha.",
+              "As pessoas perguntam como %2$s se chama e eu digo o nome do prato. Estão perguntando de quem é, e eu ainda não descobri como responder."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_stops_her",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "What holds you back from naming it?",
+                "pt": "O que te impede de dar o nome?"
+              },
+              "phrases": [
+                "what holds you back from naming it",
+                "why leave the name off the board"
+              ],
+              "requires_any": [
+                "naming",
+                "name",
+                "board"
+              ],
+              "disposition": {
+                "familiarity": 3
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Her family are still here. Putting her name up makes it a memorial, and nobody asked me to make her a memorial out of soup.",
+                    "Putting mine up would be a lie, and putting neither up is what I have been doing, and that is a lie of a quieter sort.",
+                    "I do not know what she would have wanted. I could ask her daughter. I have been not-asking her daughter for two years."
+                  ],
+                  "pt": [
+                    "A família dela ainda está aqui. Pôr o nome dela transforma aquilo em memorial, e ninguém me pediu para fazer um memorial de sopa.",
+                    "Pôr o meu seria mentira, e não pôr nenhum é o que eu venho fazendo, e isso é uma mentira mais silenciosa.",
+                    "Eu não sei o que ela ia querer. Eu poderia perguntar à filha dela. Faz dois anos que eu venho não-perguntando à filha dela."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_asking_the_family",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Ask her daughter what she'd want.",
+                "pt": "Pergunte à filha o que ela quereria."
+              },
+              "phrases": [
+                "ask her daughter what she would want",
+                "let the family decide the name"
+              ],
+              "requires_any": [
+                "daughter",
+                "family"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.delightcook.recipe.asked",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "It is the obvious thing and it is two years overdue, and the reason it is overdue is that I might be told to stop cooking it.",
+                    "Yes. And I will take her a bowl of it, which is either the right way to open that conversation or an act of enormous cheek.",
+                    "You are right. It is her decision and I have been keeping it from her in order to keep making it, and that is worse than either answer."
+                  ],
+                  "pt": [
+                    "É o óbvio e está dois anos atrasado, e o motivo do atraso é que podem me mandar parar de fazer.",
+                    "Sim. E vou levar uma tigela para ela, o que ou é o jeito certo de abrir essa conversa ou é um atrevimento enorme.",
+                    "Você tem razão. A decisão é dela e eu vinha escondendo isso para poder continuar fazendo, e isso é pior que qualquer uma das respostas."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "chefsdelight"
+          ],
+          "slots_used": [
+            "dish"
+          ],
+          "prompt": {
+            "en": "That recipe, since.",
+            "pt": "Aquela receita, depois disso."
+          },
+          "lines": {
+            "en": [
+              "Her daughter cried and then laughed and then told me a detail about %2$s that I had been getting wrong for two years.",
+              "It has her mother's name on the board now, and underneath, in smaller letters, the daughter's, because she gave me the missing step.",
+              "%2$s is right for the first time. Two years of very slightly wrong soup, ended by a conversation I was frightened of."
+            ],
+            "pt": [
+              "A filha chorou, depois riu, e depois me contou um detalhe de %2$s que eu vinha errando havia dois anos.",
+              "Está com o nome da mãe dela no quadro agora, e embaixo, em letras menores, o da filha, porque foi ela quem me deu o passo que faltava.",
+              "%2$s está certa pela primeira vez. Dois anos de sopa levemente errada, encerrados por uma conversa de que eu tinha medo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_asking",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Asking gave her something too.",
+                "pt": "Perguntar deu algo a ela também."
+              },
+              "phrases": [
+                "asking gave her something too",
+                "the question was a gift to her"
+              ],
+              "requires_any": [
+                "asking",
+                "question",
+                "gift"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "She said nobody had asked her about her mother in a year. I had spent two years protecting her from being asked.",
+                    "Thank you. I had built the whole delay out of kindness and it was made entirely of my own nerve, which I am still sitting with.",
+                    "She comes in on Thursdays now and tells me one thing each time. There are apparently four more steps I have never heard of."
+                  ],
+                  "pt": [
+                    "Ela disse que ninguém perguntava sobre a mãe dela havia um ano. Eu passei dois anos protegendo ela de ser perguntada.",
+                    "Obrigada. Eu tinha construído o adiamento inteiro em nome da gentileza e ele era feito só do meu próprio medo, e ainda estou digerindo isso.",
+                    "Ela vem às quintas agora e me conta uma coisa por vez. Aparentemente existem mais quatro passos de que eu nunca ouvi falar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else at the pass?",
+      "pt": "Mais alguma coisa no balcão?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a kitchen at dusk?",
+        "pt": "Qual é a parte mais difícil de uma cozinha ao anoitecer?"
+      },
+      "requires_any": [
+        "hardest",
+        "kitchen"
+      ],
+      "phrases": [
+        "what is the hardest part of a kitchen at dusk",
+        "hardest thing about the kitchen at dusk"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the pass.",
+      "pt": "Vou deixar você com o balcão."
+    }
+  }
+}

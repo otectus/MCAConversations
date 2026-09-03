@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_its_better",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.getting_bigger.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.growth",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.getting_bigger.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_like_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.getting_bigger.open.pleased"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.growth",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.getting_bigger.pleased"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

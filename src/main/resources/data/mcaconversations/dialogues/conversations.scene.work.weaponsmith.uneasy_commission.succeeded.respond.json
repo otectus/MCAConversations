@@ -1,0 +1,49 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_not_knowing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.weaponsmith.uneasy_commission.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.weaponsmith.who_buys",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.weaponsmith.uneasy_commission"
+            },
+            "next": "conversations.scene.work.weaponsmith.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.weaponsmith.uneasy_commission.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.weaponsmith.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

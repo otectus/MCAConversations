@@ -36,7 +36,8 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "late"
+              "branch": "late",
+              "beat": "checkin.late.to.checkin.late"
             },
             "conversations_record": {
               "id": "mcaconversations.greet.today",
@@ -44,7 +45,9 @@
               "time": 12000
             },
             "next": "conversations.topic.checkin.late.respond",
-            "say": "conversations.checkin.late"
+            "conversations_say": {
+              "phrase": "conversations.checkin.late"
+            }
           }
         },
         {
@@ -71,10 +74,13 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "again"
+              "branch": "again",
+              "beat": "checkin.again.to.checkin.again"
             },
             "next": "conversations.topic.checkin.again.respond",
-            "say": "conversations.checkin.again"
+            "conversations_say": {
+              "phrase": "conversations.checkin.again"
+            }
           }
         },
         {
@@ -105,7 +111,8 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "checkin.toddler.to.checkin.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.greet.today",
@@ -113,7 +120,9 @@
               "time": 12000
             },
             "next": "conversations.topic.checkin.toddler.respond",
-            "say": "conversations.checkin.toddler"
+            "conversations_say": {
+              "phrase": "conversations.checkin.toddler"
+            }
           }
         },
         {
@@ -144,7 +153,8 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "child"
+              "branch": "child",
+              "beat": "checkin.child.to.checkin.young"
             },
             "conversations_record": {
               "id": "mcaconversations.greet.today",
@@ -152,7 +162,9 @@
               "time": 12000
             },
             "next": "conversations.topic.checkin.young.respond",
-            "say": "conversations.checkin.child"
+            "conversations_say": {
+              "phrase": "conversations.checkin.child"
+            }
           }
         },
         {
@@ -183,7 +195,8 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "checkin.teen.to.checkin.young"
             },
             "conversations_record": {
               "id": "mcaconversations.greet.today",
@@ -191,7 +204,9 @@
               "time": 12000
             },
             "next": "conversations.topic.checkin.young.respond",
-            "say": "conversations.checkin.teen"
+            "conversations_say": {
+              "phrase": "conversations.checkin.teen"
+            }
           }
         },
         {
@@ -242,7 +257,8 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "rough"
+              "branch": "rough",
+              "beat": "checkin.rough.to.checkin.rough"
             },
             "conversations_record": {
               "id": "mcaconversations.greet.today",
@@ -250,7 +266,9 @@
               "time": 12000
             },
             "next": "conversations.topic.checkin.rough.respond",
-            "say": "conversations.checkin.rough"
+            "conversations_say": {
+              "phrase": "conversations.checkin.rough"
+            }
           }
         },
         {
@@ -258,7 +276,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -305,7 +325,8 @@
               "op": "begin",
               "topic": "checkin",
               "budget": "quick",
-              "branch": "good"
+              "branch": "good",
+              "beat": "checkin.good.to.checkin.good"
             },
             "conversations_record": {
               "id": "mcaconversations.greet.today",
@@ -313,7 +334,9 @@
               "time": 12000
             },
             "next": "conversations.topic.checkin.good.respond",
-            "say": "conversations.checkin.good"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good"
+            }
           }
         },
         {
@@ -332,7 +355,9 @@
               "time": 12000
             },
             "next": "main",
-            "say": "conversations.checkin.good"
+            "conversations_say": {
+              "phrase": "conversations.checkin.good"
+            }
           }
         }
       ]

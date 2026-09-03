@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_changed_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "player.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "player.first_impression",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.player.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.player.open.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admit_the_impression",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "player.open.warmed"
+            },
+            "conversations_claim": {
+              "op": "record",
+              "type": "takes_correction_well",
+              "value": "flag:true",
+              "source": "conversations.topic.player.open.respond/admit_the_impression"
+            },
+            "conversations_disposition_apply": {
+              "topic": "player.first_impression",
+              "deltas": {
+                "respect": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.topic.player.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.player.open.warmed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "refuse_the_verdict",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "player.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.player.dismissed",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "player.first_impression",
+              "deltas": {
+                "warmth": -2,
+                "tension": 3
+              }
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.player.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.player.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

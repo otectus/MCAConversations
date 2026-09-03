@@ -20,7 +20,9 @@
               }
             },
             "next": "conversations.topic.worries.followup",
-            "say": "conversations.us.worries.validate"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.validate"
+            }
           }
         }
       ]
@@ -45,7 +47,9 @@
               }
             },
             "next": "conversations.topic.worries.followup",
-            "say": "conversations.us.worries.ask_detail"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.ask_detail"
+            }
           }
         }
       ]
@@ -56,6 +60,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.dismissed.open"
+            },
             "conversations_affection_apply": {
               "decision": "us.worries.dismiss",
               "delta": -2,
@@ -69,8 +77,28 @@
                 "tension": 6
               }
             },
-            "next": "conversations.topic.worries.followup",
-            "say": "conversations.us.worries.dismiss"
+            "next": "conversations.topic.worries.dismissed.followup",
+            "conversations_say": {
+              "phrase": "conversations.us.worries.dismiss"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "just_listen",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "worries.heard"
+            },
+            "next": "conversations.topic.worries.heard",
+            "conversations_say": {
+              "phrase": "conversations.worries.heard"
+            }
           }
         }
       ]
@@ -85,7 +113,9 @@
               "op": "end"
             },
             "next": "conversations.us",
-            "say": "conversations.us.worries.leave"
+            "conversations_say": {
+              "phrase": "conversations.us.worries.leave"
+            }
           }
         }
       ]

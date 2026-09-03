@@ -1,0 +1,846 @@
+{
+  "_comment": [
+    "Shady wizard (Ars Nouveau). A hedge practitioner with a bad name and a careful method.",
+    "",
+    "The §12.4 anchors are the workings, notes, a working that misfired, customers, the shed and doubt.",
+    "These three take an experiment that went wrong in a way she has not explained to anybody, the",
+    "village's settled opinion of her, and a page of notes she inherited and cannot read.",
+    "",
+    "The word shady is the village's, not hers. She is written as a methodical person doing careful",
+    "work in an unregulated trade: she keeps records, she stops when she does not understand something,",
+    "and she is more worried about the practitioners who do neither than the village will ever be.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when Ars Nouveau",
+    "is installed."
+  ],
+  "profession": "ars_nouveau:shady_wizard",
+  "id": "shady_wizard",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_workings",
+    "notes",
+    "a_misfire",
+    "customers",
+    "the_shed",
+    "doubt"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to your workings.",
+    "pt": "Vou deixar você voltar aos seus trabalhos."
+  },
+  "slot_lang": {
+    "wiz_a_binding": {
+      "en": "a binding",
+      "pt": "uma amarração"
+    },
+    "wiz_a_light_working": {
+      "en": "a light working",
+      "pt": "um trabalho de luz"
+    },
+    "wiz_a_water_draw": {
+      "en": "a water draw",
+      "pt": "uma captação de água"
+    },
+    "wiz_a_scorched_bench": {
+      "en": "a scorched bench",
+      "pt": "uma bancada chamuscada"
+    },
+    "wiz_a_week_of_headaches": {
+      "en": "a week of headaches",
+      "pt": "uma semana de dores de cabeça"
+    },
+    "wiz_a_sound_in_the_walls": {
+      "en": "a sound in the walls for three nights",
+      "pt": "um som nas paredes por três noites"
+    },
+    "wiz_the_lane": {
+      "en": "the lane",
+      "pt": "a viela"
+    },
+    "wiz_the_market_end": {
+      "en": "the market end",
+      "pt": "o fim do mercado"
+    },
+    "wiz_a_page_in_another_hand": {
+      "en": "a page in another hand",
+      "pt": "uma página com outra caligrafia"
+    },
+    "wiz_a_diagram_with_no_key": {
+      "en": "a diagram with no key",
+      "pt": "um diagrama sem legenda"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.misfire",
+      "subject": "work.shady_wizard.a_misfire",
+      "initial_state": "blocked",
+      "salience": 60,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "integrations": [
+        "ars_nouveau"
+      ],
+      "slots": {
+        "working": [
+          "wiz_a_binding",
+          "wiz_a_light_working",
+          "wiz_a_water_draw"
+        ],
+        "result": [
+          "wiz_a_scorched_bench",
+          "wiz_a_week_of_headaches",
+          "wiz_a_sound_in_the_walls"
+        ]
+      },
+      "commitment": {
+        "id": "work.shady_wizard.bring_lapis",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:lapis_lazuli",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "working",
+            "result"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness",
+            "curiosity"
+          ],
+          "prompt": {
+            "en": "The shed.",
+            "pt": "O galpão."
+          },
+          "lines": {
+            "en": [
+              "%2$s went wrong on Tuesday and left me %3$s, and I have stopped work until I understand why.",
+              "%3$s. That is what %2$s did instead of what it was supposed to do, and the gap between those two is the entire problem.",
+              "I have written down everything I did before %2$s, in order, twice, and the two lists do not quite agree."
+            ],
+            "pt": [
+              "%2$s deu errado na terça e me deixou %3$s, e eu parei o trabalho até entender por quê.",
+              "%3$s. Foi isso que %2$s fez em vez do que deveria, e a distância entre as duas coisas é o problema inteiro.",
+              "Anotei tudo o que fiz antes de %2$s, em ordem, duas vezes, e as duas listas não batem exatamente."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why_stop",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why stop instead of trying again?",
+                "pt": "Por que parar em vez de tentar de novo?"
+              },
+              "phrases": [
+                "why halt instead of trying again",
+                "what makes you pause the work"
+              ],
+              "requires_any": [
+                "halt",
+                "pause",
+                "again"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "working"
+                ],
+                "lines": {
+                  "en": [
+                    "Because a working I do not understand is one I cannot repeat and cannot avoid, and both halves of that are dangerous.",
+                    "Trying again is how a small surprise becomes a large one. I have watched a man in the next valley do exactly that.",
+                    "%2$s is not urgent. Nothing I do is urgent. That is the one advantage of an unregulated trade and I intend to use it."
+                  ],
+                  "pt": [
+                    "Porque um trabalho que eu não entendo é um que eu não sei repetir nem evitar, e as duas metades disso são perigosas.",
+                    "Tentar de novo é como uma surpresa pequena vira uma grande. Já vi um homem no vale vizinho fazer exatamente isso.",
+                    "%2$s não é urgente. Nada do que eu faço é urgente. É a única vantagem de um ofício sem regras e eu pretendo usá-la."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_lapis",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you lapis for the work.",
+                "pt": "Vou trazer lápis-lazúli para o trabalho."
+              },
+              "phrases": [
+                "i can bring you lapis",
+                "let me fetch lapis for that"
+              ],
+              "requires_any": [
+                "lapis"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.shady_wizard.misfire.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I can run it four times at a quarter strength and find out which step is the liar.",
+                    "Four small tests instead of one large one. That is what the material buys, and it is the difference between method and gambling.",
+                    "Yes. And you may watch, from the doorway, with the door open, which is how I would want to watch somebody else."
+                  ],
+                  "pt": [
+                    "Então eu posso rodar quatro vezes a um quarto da força e descobrir qual passo é o mentiroso.",
+                    "Quatro testes pequenos em vez de um grande. É isso que o material compra, e é a diferença entre método e aposta.",
+                    "Sim. E você pode assistir, da porta, com a porta aberta, que é como eu gostaria de assistir a outra pessoa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_the_caution",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Halting there was the right call.",
+                "pt": "Interromper ali foi a decisão certa."
+              },
+              "phrases": [
+                "halting there was the right call",
+                "pausing the work was correct"
+              ],
+              "requires_any": [
+                "halting",
+                "pausing",
+                "correct"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is the only rule I have that has never let me down, and it is also the rule that makes me look slow and evasive.",
+                    "Thank you. Everybody in this village would rather I were reckless and cheerful about it. Reckless and cheerful is what they think a wizard is.",
+                    "I have a shelf of workings I stopped and never went back to. It is the most useful shelf in the shed."
+                  ],
+                  "pt": [
+                    "É a única regra minha que nunca me decepcionou, e é também a regra que me faz parecer lenta e evasiva.",
+                    "Obrigada. Todo mundo nesta vila preferiria que eu fosse imprudente e alegre a respeito. Imprudente e alegre é o que acham que uma maga é.",
+                    "Tenho uma prateleira de trabalhos que eu interrompi e nunca retomei. É a prateleira mais útil do galpão."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "ars_nouveau"
+          ],
+          "slots_used": [
+            "working"
+          ],
+          "prompt": {
+            "en": "That working.",
+            "pt": "Aquele trabalho."
+          },
+          "lines": {
+            "en": [
+              "Four quarter-strength runs and the third one told me. %2$s was fine; the bench under it was damp.",
+              "It was the material all along. I had been suspecting my own hands for eleven days, which is its own kind of exhausting.",
+              "%2$s runs clean now, and I have added a line to the notes about checking the bench, which nobody taught me and which everybody apparently knows."
+            ],
+            "pt": [
+              "Quatro execuções a um quarto da força e a terceira me disse. %2$s estava bem; a bancada embaixo estava úmida.",
+              "Era o material o tempo todo. Eu vinha desconfiando das minhas próprias mãos por onze dias, o que é um cansaço à parte.",
+              "%2$s roda limpo agora, e acrescentei uma linha às notas sobre conferir a bancada, coisa que ninguém me ensinou e que aparentemente todo mundo sabe."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_notes",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What goes in your notes?",
+                "pt": "O que vai nas suas anotações?"
+              },
+              "phrases": [
+                "what goes in your notes",
+                "what do you write down about a working"
+              ],
+              "requires_any": [
+                "notes",
+                "write"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Everything, including the weather and what I had eaten, because the third time something goes wrong the pattern is always in the boring column.",
+                    "Failures at the front, successes at the back. Anybody who reads it will see the failures first, and that is deliberate.",
+                    "The things I do not understand get a mark in the margin. There are nineteen marks. I would be worried about a practitioner with none."
+                  ],
+                  "pt": [
+                    "Tudo, inclusive o tempo e o que eu tinha comido, porque na terceira vez que algo dá errado o padrão está sempre na coluna chata.",
+                    "Fracassos na frente, acertos no fim. Quem ler vai ver os fracassos primeiro, e isso é de propósito.",
+                    "O que eu não entendo ganha uma marca na margem. São dezenove marcas. Eu me preocuparia com uma praticante que não tivesse nenhuma."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_name_they_use",
+      "subject": "work.shady_wizard.customers",
+      "initial_state": "active",
+      "salience": 56,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "integrations": [
+        "ars_nouveau"
+      ],
+      "slots": {
+        "place": [
+          "wiz_the_lane",
+          "wiz_the_market_end"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "observe",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "identity_values": [
+            "fairness",
+            "duty"
+          ],
+          "prompt": {
+            "en": "What they call you.",
+            "pt": "Como te chamam."
+          },
+          "lines": {
+            "en": [
+              "They call me shady at %2$s, and they buy from me anyway, and both of those happen in the same afternoon.",
+              "%2$s has decided what I am. The word arrived before I did and I have spent four years failing to be interesting enough to keep it.",
+              "The people who come to the shed at night are the ones who called me that at %2$s in the morning. I sell to them at the same price."
+            ],
+            "pt": [
+              "Me chamam de suspeita em %2$s, e compram de mim assim mesmo, e as duas coisas acontecem na mesma tarde.",
+              "%2$s já decidiu o que eu sou. A palavra chegou antes de mim e passei quatro anos falhando em ser interessante o bastante para merecê-la.",
+              "Quem aparece no galpão à noite é quem me chamou disso em %2$s de manhã. Vendo pelo mesmo preço."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why_the_word",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Where did the word come from?",
+                "pt": "De onde veio essa palavra?"
+              },
+              "phrases": [
+                "where did the word come from",
+                "who started calling you that"
+              ],
+              "requires_any": [
+                "word",
+                "calling"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "From the trade, mostly. There is no guild and no examination, so anybody with a shed can call themselves what I call myself.",
+                    "From one man, eleven years ago, in another village, who took money and left. Every one of us has been paying for him since.",
+                    "It is not unearned by the trade as a whole. That is the part I cannot argue with and the reason I keep such careful notes."
+                  ],
+                  "pt": [
+                    "Do ofício, principalmente. Não há guilda nem exame, então qualquer um com um galpão pode se chamar do que eu me chamo.",
+                    "De um homem, onze anos atrás, em outra vila, que pegou dinheiro e sumiu. Todos nós vimos pagando por ele desde então.",
+                    "Não é imerecido pelo ofício como um todo. É a parte que eu não consigo contestar e o motivo de eu manter notas tão cuidadosas."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_showing_the_notes",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Show somebody the notebook.",
+                "pt": "Mostre o caderno a alguém."
+              },
+              "phrases": [
+                "show somebody the notebook",
+                "let one person read your record"
+              ],
+              "requires_any": [
+                "notebook",
+                "record"
+              ],
+              "disposition": {
+                "respect": 3,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.shady_wizard.name.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "considered",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "One person. The cleric, probably, who will not understand a word of it and will understand exactly what it is.",
+                    "That had not occurred to me because the notebook is for me. It has never been evidence before and I dislike that it has to be.",
+                    "Yes. And the failures are at the front, which means the first thing they read is nineteen things I got wrong. That is either brave or foolish."
+                  ],
+                  "pt": [
+                    "Uma pessoa. A clériga, provavelmente, que não vai entender uma palavra e vai entender exatamente o que aquilo é.",
+                    "Isso não tinha me ocorrido porque o caderno é para mim. Nunca foi prova antes e eu não gosto que tenha que ser.",
+                    "Sim. E os fracassos estão na frente, então a primeira coisa que vão ler são dezenove erros meus. Isso é corajoso ou tolo."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "ars_nouveau"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "prompt": {
+            "en": "The lane, lately.",
+            "pt": "A viela, ultimamente."
+          },
+          "lines": {
+            "en": [
+              "The cleric read the notebook and said one sentence about it at the well, and %2$s has been different since.",
+              "Not fixed. Different. Two households ask me questions now instead of asking somebody else about me.",
+              "Somebody at %2$s called me careful last week. I would like that word on my door and I am not going to put it there."
+            ],
+            "pt": [
+              "A clériga leu o caderno e disse uma frase sobre isso no poço, e %2$s está diferente desde então.",
+              "Não resolvido. Diferente. Duas casas agora me fazem perguntas em vez de perguntar sobre mim a outra pessoa.",
+              "Alguém em %2$s me chamou de cuidadosa semana passada. Eu queria essa palavra na minha porta e não vou colocar lá."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_word",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Careful is the right word for you.",
+                "pt": "Cuidadosa é a palavra certa para você."
+              },
+              "phrases": [
+                "careful is the right word for you",
+                "careful describes you accurately"
+              ],
+              "requires_any": [
+                "careful",
+                "describes"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is the only word I have ever wanted and it took a notebook full of failures to get it, which is a joke I enjoy.",
+                    "Thank you. Careful is a slower reputation than shady and it is the only one that survives being checked.",
+                    "One person said it once. I am aware of exactly how thin that is and I have thought about it every day since."
+                  ],
+                  "pt": [
+                    "É a única palavra que eu sempre quis, e precisou de um caderno cheio de fracassos para consegui-la, o que é uma piada de que eu gosto.",
+                    "Obrigada. Cuidadosa é uma reputação mais lenta que suspeita e é a única que sobrevive a ser conferida.",
+                    "Uma pessoa disse uma vez. Sei exatamente o quanto isso é pouco e penso nisso todo dia desde então."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.inherited_page",
+      "subject": "work.shady_wizard.notes",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 34,
+      "integrations": [
+        "ars_nouveau"
+      ],
+      "slots": {
+        "page": [
+          "wiz_a_page_in_another_hand",
+          "wiz_a_diagram_with_no_key"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "page"
+          ],
+          "identity_values": [
+            "curiosity",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The page you can't read.",
+            "pt": "A página que você não lê."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s that came with the shed and I have been looking at it for two years without getting anywhere.",
+              "%2$s. Somebody knew something and wrote it down badly, and now it is mine and it is useless and I cannot throw it away.",
+              "The tempting thing about %2$s is to try what I think it says. I have not, and the not-trying is the whole of my professional discipline."
+            ],
+            "pt": [
+              "Tenho %2$s que veio junto com o galpão e faz dois anos que eu olho aquilo sem chegar a lugar nenhum.",
+              "%2$s. Alguém sabia alguma coisa e anotou mal, e agora é minha, é inútil e eu não consigo jogar fora.",
+              "O tentador em %2$s é testar o que eu acho que diz. Eu não testei, e esse não-testar é a minha disciplina profissional inteira."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_she_thinks",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What do you think it says?",
+                "pt": "O que você acha que diz?"
+              },
+              "phrases": [
+                "what do you think it says",
+                "what is your reading of it"
+              ],
+              "requires_any": [
+                "says",
+                "reading"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "declined_politely",
+                "act": "deflect",
+                "polarity": "neutral",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "I am not going to say, and that is not mystery-making. A half-read instruction repeated out loud is how somebody else tries it.",
+                    "Three things, and the three contradict, and saying the most plausible one aloud would make it the one I remember.",
+                    "Ask me when I know. It has been two years and I would rather it were twenty than be the person who guessed."
+                  ],
+                  "pt": [
+                    "Não vou dizer, e isso não é mistério. Uma instrução lida pela metade e repetida em voz alta é como outra pessoa acaba testando.",
+                    "Três coisas, e as três se contradizem, e dizer a mais plausível em voz alta faria dela a que eu lembro.",
+                    "Me pergunte quando eu souber. Já são dois anos e eu prefiro que sejam vinte a ser a pessoa que chutou."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "suggest_asking_someone",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Find somebody who reads that hand.",
+                "pt": "Ache alguém que leia essa letra."
+              },
+              "phrases": [
+                "find somebody who reads that hand",
+                "ask a scribe to look at it"
+              ],
+              "requires_any": [
+                "hand",
+                "scribe"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "A copyist would read the letters without knowing what they mean, which is exactly the help I need and I had not thought of it.",
+                    "Yes. It means handing my strangest possession to somebody who will tell the village about it, and that is a price I can now afford.",
+                    "Two years of staring and the answer is somebody with a different skill. I am going to be annoyed about that for a while."
+                  ],
+                  "pt": [
+                    "Um copista leria as letras sem saber o que significam, que é exatamente a ajuda de que eu preciso e eu não tinha pensado nisso.",
+                    "Sim. Significa entregar meu bem mais estranho a alguém que vai contar à vila, e é um preço que agora eu posso pagar.",
+                    "Dois anos encarando e a resposta é alguém com outra habilidade. Vou ficar irritada com isso por um tempo."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "ars_nouveau"
+          ],
+          "slots_used": [
+            "page"
+          ],
+          "prompt": {
+            "en": "That page.",
+            "pt": "Aquela página."
+          },
+          "lines": {
+            "en": [
+              "A copyist read %2$s in an afternoon. It is a shopping list. Two years, and it is a shopping list.",
+              "%2$s turned out to be notes on where to buy good glass, in an old hand, from somebody who was as careful as I am.",
+              "It is read. I have kept it, framed, over the bench, as a permanent reminder of what two years of assuming looks like."
+            ],
+            "pt": [
+              "Um copista leu %2$s numa tarde. É uma lista de compras. Dois anos, e é uma lista de compras.",
+              "%2$s acabou sendo anotações sobre onde comprar bom vidro, em letra antiga, de alguém tão cuidadoso quanto eu.",
+              "Está lida. Guardei, emoldurada, sobre a bancada, como lembrete permanente do que dois anos de suposição parecem."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_restraint",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You held off for two whole years.",
+                "pt": "Você se conteve por dois anos inteiros."
+              },
+              "phrases": [
+                "the restraint was the point",
+                "you held off for two whole years"
+              ],
+              "requires_any": [
+                "restraint",
+                "held",
+                "years"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Two years of not doing a thing, and the reward is finding out it would have been harmless. That is how it always goes and it proves nothing.",
+                    "Thank you. The version where it was not a shopping list is the version I was actually preparing for, and it cost me nothing to prepare.",
+                    "It is the only discipline in this trade and it is invisible. There is no praise anywhere for a working somebody declined to attempt."
+                  ],
+                  "pt": [
+                    "Dois anos sem fazer uma coisa, e o prêmio é descobrir que teria sido inofensivo. É sempre assim e não prova nada.",
+                    "Obrigada. A versão em que não era lista de compras é a versão para a qual eu estava me preparando, e me preparar não custou nada.",
+                    "É a única disciplina deste ofício e é invisível. Não existe elogio em lugar nenhum para um trabalho que alguém deixou de tentar."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else, then?",
+      "pt": "Mais alguma coisa, então?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a working that misfires?",
+        "pt": "Qual é a parte mais difícil de um trabalho que falha?"
+      },
+      "requires_any": [
+        "hardest",
+        "misfires"
+      ],
+      "phrases": [
+        "what is the hardest part of a working that misfires",
+        "hardest thing about a misfire"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to your notes.",
+      "pt": "Vou deixar você com suas anotações."
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_unpaid",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.village.ask_unpaid"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.village.ask_unpaid",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.village.ask_unpaid"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.werewolf_expert.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.village.say_thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_pot",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.village.ask_pot"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.village.ask_pot",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.village.ask_pot"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

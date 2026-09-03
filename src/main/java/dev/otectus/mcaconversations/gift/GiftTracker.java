@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.gift;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.history.CommitmentObserver;
 import dev.otectus.mcaconversations.state.ConversationState;
 import dev.otectus.mcaconversations.state.LastGift;
 import dev.otectus.mcaconversations.state.StateTracker;
@@ -17,6 +18,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
  *   <li>player capability — last gift per villager, for the {@code last_gift_item} template var</li>
  *   <li>villager LongTermMemory — player-scoped {@code mcaconversations.state.grateful} with the
  *       configured expiry window, so pure-JSON dialogue can condition on recent gratitude</li>
+ *   <li>any promise this gift keeps — {@code gift_tag_received} is the one commitment resolver that
+ *       is a genuine event rather than something noticed later, so it is observed here</li>
  * </ol>
  */
 public final class GiftTracker {
@@ -39,6 +42,11 @@ public final class GiftTracker {
                     villager.getUUID(),
                     new LastGift(itemId, stack.getCount(), now),
                     McaConversationsConfig.COMMON.giftMemoryPerPlayerCap.get());
+
+            // A promised delivery is settled at the moment it arrives, not the next time the subject
+            // comes up. This runs before the gratitude state so a villager who has just had a promise
+            // kept is already in that world when the rest of the exchange reads it.
+            CommitmentObserver.onGiftAccepted(villager, player, stack, now / 24000L);
 
             StateTracker.apply(villager, player, ConversationState.GRATEFUL);
             // A gift given while already very fond deepens gratitude into being smitten.

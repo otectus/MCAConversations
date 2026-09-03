@@ -6,6 +6,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.shared"
+            },
             "conversations_affection_apply": {
               "decision": "news.glad.celebrate",
               "delta": 2,
@@ -18,8 +22,10 @@
                 "warmth": 4
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.glad.celebrate"
+            "next": "conversations.topic.news.glad.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.glad.celebrate"
+            }
           }
         }
       ]
@@ -30,14 +36,20 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.told"
+            },
             "conversations_disposition_apply": {
               "topic": "news.glad.ask_more",
               "deltas": {
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.glad.ask_more"
+            "next": "conversations.topic.news.glad.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.glad.ask_more"
+            }
           }
         }
       ]
@@ -48,6 +60,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.glad.soured"
+            },
             "conversations_affection_apply": {
               "decision": "news.glad.sour",
               "delta": -1,
@@ -61,8 +77,10 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.news.followup",
-            "say": "conversations.news.glad.sour"
+            "next": "conversations.topic.news.deflated.followup",
+            "conversations_say": {
+              "phrase": "conversations.news.glad.sour"
+            }
           }
         }
       ]
@@ -77,7 +95,9 @@
               "op": "end"
             },
             "next": "conversations.cat.events",
-            "say": "conversations.news.glad.leave"
+            "conversations_say": {
+              "phrase": "conversations.news.glad.leave"
+            }
           }
         }
       ]

@@ -258,20 +258,21 @@ class ReputationIntegrationTest {
                 StandardCharsets.UTF_8);
 
         int index = toml.indexOf("modId=\"mcareputation\"");
-        if (index < 0) {
-            // The current, deliberate state on 1.21.1: MCA: Reputation has no NeoForge release yet,
-            // and the 1.20.1 entry's [0.2,) range would admit Forge-only jars that cannot load here.
-            // Conversations must still build and run without it, which the rest of this class covers.
-            return;
-        }
-        // Once a real 1.21.1 Reputation release exists and the entry comes back, it must come back
-        // optional and ordered after — never as a hard dependency.
+        assertTrue(index > 0, "the optional MCA: Reputation entry is missing; the 1.21.1 NeoForge "
+                + "port of that mod now exists, so the integration is live again");
+
+        // It may come back, but only optional and ordered after — never as a hard dependency.
         String block = toml.substring(index, Math.min(toml.length(), index + 200));
         assertTrue(block.contains("type=\"optional\""),
                 "Reputation must never become a required dependency");
         assertTrue(block.contains("ordering=\"AFTER\""));
-        assertFalse(block.contains("versionRange=\"[0.2,)\""),
-                "that range admits the Forge-only 1.20.1 jars");
+
+        // The declared range is deliberately NOT policed here any more. This test used to reject
+        // [0.2,) on the grounds that it admits the Forge-only 1.20.1 jars, but that is not what a
+        // version range does: a Forge jar ships META-INF/mods.toml and targets Minecraft 1.20.1, so
+        // FML on 1.21.1 never loads it as a mod at all. The loader excludes it, not the range —
+        // so policing the range here never bought anything. MCA: Reputation's own mod_version moves
+        // with its feature set (it is on 0.3.0 now), which is one more reason not to pin it here.
     }
 
     @Test
@@ -279,9 +280,11 @@ class ReputationIntegrationTest {
         // §30.2: the keys must be known even without the mod, or a suite-authored pack fails to load.
         String registrar = Files.readString(SOURCE_ROOT.resolve("compat/mca/ConversationsMcaRegistrar.java"),
                 StandardCharsets.UTF_8);
-        assertTrue(registrar.contains("GiftPredicate.register(\"conversations_reputation\""));
-        assertTrue(registrar.contains("GiftPredicate.register(\"conversations_reputation_incident\""));
-        assertTrue(registrar.contains("Actions.register(\"conversations_reputation_signal\""));
+        // The registration entry points moved to McaHandles when MCA's package root stopped being
+        // knowable at compile time; the keys and the unconditional-registration rule are unchanged.
+        assertTrue(registrar.contains("McaHandles.registerCondition(\"conversations_reputation\""));
+        assertTrue(registrar.contains("McaHandles.registerCondition(\"conversations_reputation_incident\""));
+        assertTrue(registrar.contains("McaHandles.registerAction(\"conversations_reputation_signal\""));
         assertFalse(registrar.contains("import dev.otectus.mcareputation."),
                 "the registrar is always loaded and must not name a Reputation type");
     }

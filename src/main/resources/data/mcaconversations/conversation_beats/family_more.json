@@ -1,0 +1,538 @@
+{
+  "beats": {
+    "ask_parent.event": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.event",
+      "response_question": "conversations.topic.ask_parent.event",
+      "npc_act": "explain",
+      "subject": "ask_parent.event",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged"
+    },
+    "ask_parent.event.leave": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.event.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.event",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "ask_parent.event.plain": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.event.plain",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.event",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "ask_parent.event.together": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.event.together",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.event",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "ask_parent.pride": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.pride",
+      "response_question": "conversations.topic.ask_parent.pride",
+      "npc_act": "report",
+      "subject": "ask_parent.pride",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged"
+    },
+    "ask_parent.pride.leave": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.pride.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.pride",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "ask_parent.pride.said": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.pride.said",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.pride",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "ask_parent.pride.show": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.pride.show",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.pride",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "checkin_child.promise": {
+      "topic": "checkin_child",
+      "say": "conversations.checkin_child.promise",
+      "response_question": "conversations.topic.checkin_child.promise",
+      "npc_act": "report",
+      "subject": "checkin_child.promise",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged"
+    },
+    "checkin_child.promise.keep": {
+      "topic": "checkin_child",
+      "say": "conversations.checkin_child.promise.keep",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "checkin_child.promise",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "checkin_child.promise.leave": {
+      "topic": "checkin_child",
+      "say": "conversations.checkin_child.promise.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "checkin_child.promise",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "checkin_child.promise.owned": {
+      "topic": "checkin_child",
+      "say": "conversations.checkin_child.promise.owned",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "checkin_child.promise",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "memories.disputed": {
+      "topic": "memories",
+      "say": "conversations.memories.disputed",
+      "response_question": "conversations.topic.memories.disputed",
+      "npc_act": "qualify",
+      "subject": "memories.disputed",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged"
+    },
+    "memories.disputed.both": {
+      "topic": "memories",
+      "say": "conversations.memories.disputed.both",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.disputed",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "memories.disputed.leave": {
+      "topic": "memories",
+      "say": "conversations.memories.disputed.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.disputed",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "memories.disputed.yours": {
+      "topic": "memories",
+      "say": "conversations.memories.disputed.yours",
+      "response_question": "conversations.family",
+      "npc_act": "reminisce",
+      "subject": "memories.disputed",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "memories.holiday": {
+      "topic": "memories",
+      "say": "conversations.memories.holiday",
+      "response_question": "conversations.topic.memories.holiday",
+      "npc_act": "reminisce",
+      "subject": "memories.holiday",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "engaged"
+    },
+    "memories.holiday.leave": {
+      "topic": "memories",
+      "say": "conversations.memories.holiday.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.holiday",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "memories.holiday.revive": {
+      "topic": "memories",
+      "say": "conversations.memories.holiday.revive",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "memories.holiday",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "memories.holiday.who": {
+      "topic": "memories",
+      "say": "conversations.memories.holiday.who",
+      "response_question": "conversations.family",
+      "npc_act": "reminisce",
+      "subject": "memories.holiday",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    }
+  },
+  "replies": {
+    "conversations.topic.ask_parent.event/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "ask_parent.event"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.ask_parent.event/tell_them_plainly": {
+      "stance": "candor",
+      "responds_to": [
+        "ask_parent.event"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.ask_parent.event/together_next_time": {
+      "stance": "practical_help",
+      "responds_to": [
+        "ask_parent.event"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.ask_parent.followup/ask_event": {
+      "stance": "curiosity",
+      "responds_to": [
+        "family.parent.answer_honestly.to.ask_parent",
+        "family.parent.reassure.to.ask_parent"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.ask_parent.pride/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "ask_parent.pride"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.ask_parent.pride/say_it_back": {
+      "stance": "encouragement",
+      "responds_to": [
+        "ask_parent.pride"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.ask_parent.pride/show_me": {
+      "stance": "practical_help",
+      "responds_to": [
+        "ask_parent.pride"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.ask_parent.respond/ask_pride": {
+      "stance": "curiosity",
+      "responds_to": [
+        "family.parent.again.to.ask_parent",
+        "family.parent.proud.to.ask_parent",
+        "family.parent.worried.to.ask_parent"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.checkin_child.promise/keep_it": {
+      "stance": "practical_help",
+      "responds_to": [
+        "checkin_child.promise"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin_child.promise/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "checkin_child.promise"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.checkin_child.promise/own_the_miss": {
+      "stance": "candor",
+      "responds_to": [
+        "checkin_child.promise"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.checkin_child.respond/ask_promise": {
+      "stance": "curiosity",
+      "responds_to": [
+        "family.child.again.to.checkin_child",
+        "family.child.doing.to.checkin_child",
+        "family.child.little.to.checkin_child",
+        "family.child.teen.to.checkin_child"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.memories.disputed/both_true": {
+      "stance": "candor",
+      "responds_to": [
+        "memories.disputed"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.memories.disputed/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "memories.disputed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.memories.disputed/tell_me_yours": {
+      "stance": "curiosity",
+      "responds_to": [
+        "memories.disputed"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.memories.followup/ask_holiday": {
+      "stance": "curiosity",
+      "responds_to": [
+        "family.memories.ask_more.to.memories",
+        "family.memories.brush_off.to.memories",
+        "family.memories.laugh.again.to.memories",
+        "family.memories.laugh.to.memories"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.memories.holiday/bring_it_back": {
+      "stance": "practical_help",
+      "responds_to": [
+        "memories.holiday"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.memories.holiday/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "memories.holiday"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.memories.holiday/who_was_there": {
+      "stance": "curiosity",
+      "responds_to": [
+        "memories.holiday"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.memories.respond/remember_it_differently": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "family.memories.again.to.memories",
+        "family.memories.share.to.memories",
+        "family.memories.tell.to.memories",
+        "family.memories.toddler.to.memories"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ]
+    }
+  }
+}

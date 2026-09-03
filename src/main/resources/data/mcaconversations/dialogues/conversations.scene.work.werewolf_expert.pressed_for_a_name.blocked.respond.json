@@ -1,0 +1,113 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_not",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.pressed_for_a_name.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.the_village_fear",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.pressed_for_a_name"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.pressed_for_a_name.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_refusal",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.pressed_for_a_name.blocked.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.werewolf_expert.name.backed",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.the_village_fear",
+              "deltas": {
+                "respect": 4,
+                "trust": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.pressed_for_a_name"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.pressed_for_a_name.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_pressure",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.werewolf_expert.pressed_for_a_name.blocked.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.werewolf_expert.the_village_fear",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.werewolf_expert.pressed_for_a_name"
+            },
+            "next": "conversations.scene.work.werewolf_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.werewolf_expert.pressed_for_a_name.blocked.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.werewolf_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

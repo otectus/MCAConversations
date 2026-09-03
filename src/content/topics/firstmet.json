@@ -1,0 +1,310 @@
+{
+  "_comment": [
+    "The first meeting, gated on how long ago it actually was.",
+    "",
+    "A villager who met you last week tells it as a fact; one who met you two seasons ago tells it as a",
+    "story, and the story has been edited. Both scenes say so."
+  ],
+  "topic": "firstmet",
+  "entry": {
+    "question": "conversations.us",
+    "answer": "firstmet"
+  },
+  "return_question": "conversations.us",
+  "leave_lines": {
+    "en": [
+      "That is how it went, near enough.",
+      "Right. A long time ago now.",
+      "Anyway. You are here."
+    ],
+    "pt": [
+      "Foi mais ou menos assim.",
+      "Certo. Faz tempo já.",
+      "Enfim. Você está aqui."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Good to remember it.",
+    "pt": "Bom lembrar disso."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about then?",
+      "pt": "Mais alguma coisa sobre aquela época?"
+    },
+    "leave": {
+      "en": "We'll leave the rest of it.",
+      "pt": "Deixamos o resto."
+    }
+  },
+  "scenes": [
+    {
+      "name": "recent_and_plain",
+      "subject": "firstmet.recent",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "max": 20,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "When we met.",
+        "pt": "Quando nos conhecemos."
+      },
+      "lines": {
+        "en": [
+          "You came through the gate and asked a sensible question, which put you ahead of about half the people who arrive.",
+          "I remember it exactly, which is only because it was recent and I want to be honest about why.",
+          "It was unremarkable and I mean that kindly. The remarkable arrivals are usually somebody in trouble."
+        ],
+        "pt": [
+          "Você passou pelo portão e fez uma pergunta sensata, o que já te colocou à frente de metade de quem chega.",
+          "Lembro exatamente, e é só porque foi recente, e quero ser honesta sobre o motivo.",
+          "Foi comum, e digo isso com carinho. As chegadas memoráveis costumam ser alguém em apuros."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_thought",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "playful",
+          "outcome": "engaged",
+          "label": {
+            "en": "What did you make of me?",
+            "pt": "O que você achou de mim?"
+          },
+          "phrases": [
+            "what did you make of me",
+            "what was your first impression"
+          ],
+          "requires_any": [
+            "make",
+            "impression"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "That you were listening, which is rarer than being friendly and lasts about four times as long.",
+                "Nothing, honestly. I decide about people in the third week and I have told you that so you can hold me to it.",
+                "That you would either be gone by winter or here for years, and I could not tell which, and I still could not."
+              ],
+              "pt": [
+                "Que você estava escutando, o que é mais raro que ser simpático e dura umas quatro vezes mais.",
+                "Nada, sinceramente. Eu decido sobre as pessoas na terceira semana e te contei isso para você poder me cobrar.",
+                "Que você ou ia embora até o inverno ou ia ficar anos, e eu não sabia qual, e continuo não sabendo."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_remember_it_too",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I remember it too.",
+            "pt": "Eu também lembro."
+          },
+          "phrases": [
+            "i remember it too",
+            "that stuck with me as well"
+          ],
+          "requires_any": [
+            "remember",
+            "stuck"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "pleased",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Good. In about a year we will both remember it differently and it will be nobody's fault.",
+                "Then it happened, which is more than can be said for most first meetings in this village.",
+                "That is worth something. I have arrived somewhere and been forgotten by the following week, and it is a poor feeling."
+              ],
+              "pt": [
+                "Ótimo. Daqui a um ano nós dois vamos lembrar diferente e não vai ser culpa de ninguém.",
+                "Então aconteceu, o que já é mais do que se pode dizer da maioria dos primeiros encontros nesta vila.",
+                "Isso vale alguma coisa. Já cheguei em algum lugar e fui esquecida na semana seguinte, e é uma sensação ruim."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "long_enough_to_be_a_story",
+      "subject": "firstmet.retold",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 60,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_styles": [
+        "storyteller"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The first time.",
+        "pt": "A primeira vez."
+      },
+      "lines": {
+        "en": [
+          "I have told that story about nine times and I am fairly sure it has improved, which means it is no longer entirely true.",
+          "You were carrying something and it was raining, and I have since discovered that neither of those is certain.",
+          "The version I tell has a good line in it that I am almost sure I thought of afterwards."
+        ],
+        "pt": [
+          "Já contei essa história umas nove vezes e tenho quase certeza de que ela melhorou, o que quer dizer que não é mais inteiramente verdade.",
+          "Você carregava alguma coisa e chovia, e desde então eu descobri que nenhuma das duas é certeza.",
+          "A versão que eu conto tem uma boa frase que eu tenho quase certeza de ter pensado depois."
+        ]
+      },
+      "replies": [
+        {
+          "name": "correct_the_record",
+          "stance": "candor",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "playful",
+          "outcome": "engaged",
+          "label": {
+            "en": "My memory of it differs.",
+            "pt": "Minha memória disso é outra."
+          },
+          "phrases": [
+            "my memory of it differs",
+            "i recall it going another way"
+          ],
+          "requires_any": [
+            "memory",
+            "recall",
+            "differs"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "conceded",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "I expect it is not. Nine tellings is enough to sand the corners off anything, and I have enjoyed every one of them.",
+                "Then tell me yours and I shall adopt whichever is better, which is exactly how the current version happened.",
+                "Two people and one afternoon and two entirely different afternoons. That is the whole trouble with a good memory."
+              ],
+              "pt": [
+                "Imagino que não. Nove narrativas bastam para lixar os cantos de qualquer coisa, e eu gostei de todas as nove.",
+                "Então me conte a sua e eu adoto a melhor, que é exatamente como a versão atual apareceu.",
+                "Duas pessoas e uma tarde e duas tardes completamente diferentes. É esse o problema inteiro de uma boa memória."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_for_the_good_line",
+          "stance": "curiosity",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "playful",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Let's hear the good line.",
+            "pt": "Quero ouvir a boa frase."
+          },
+          "phrases": [
+            "let us hear the good line",
+            "give me the good line then"
+          ],
+          "requires_any": [
+            "line",
+            "hear"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "delighted",
+            "act": "celebrate",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "celebrate",
+            "lines": {
+              "en": [
+                "It is better in the telling and I am not going to spoil it by delivering it flat in a doorway.",
+                "Come to the inn on a Saturday and you shall have the whole thing with the pauses in the right places.",
+                "I will give you the line and you must promise to look surprised, because four people already have and it is going well."
+              ],
+              "pt": [
+                "É melhor na narração e eu não vou estragar entregando sem graça num vão de porta.",
+                "Apareça na estalagem num sábado e você recebe a coisa toda com as pausas nos lugares certos.",
+                "Eu te dou a frase e você promete parecer surpreso, porque quatro pessoas já pareceram e está indo bem."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

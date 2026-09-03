@@ -1,0 +1,248 @@
+{
+  "beats": {
+    "family.child.again.to.checkin_child": {
+      "topic": "checkin_child",
+      "say": "conversations.family.child.again",
+      "response_question": "conversations.topic.checkin_child.respond",
+      "npc_act": "accept",
+      "subject": "checkin_child",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.child.doing.to.checkin_child": {
+      "topic": "checkin_child",
+      "say": "conversations.family.child.doing",
+      "response_question": "conversations.topic.checkin_child.respond",
+      "npc_act": "accept",
+      "subject": "checkin_child",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.child.listen.to.checkin_child": {
+      "topic": "checkin_child",
+      "say": "conversations.family.child.listen",
+      "response_question": "conversations.topic.checkin_child.followup",
+      "npc_act": "accept",
+      "subject": "checkin_child",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.child.little.to.checkin_child": {
+      "topic": "checkin_child",
+      "say": "conversations.family.child.little",
+      "response_question": "conversations.topic.checkin_child.respond",
+      "npc_act": "accept",
+      "subject": "checkin_child",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.child.praise.to.checkin_child": {
+      "topic": "checkin_child",
+      "say": "conversations.family.child.praise",
+      "response_question": "conversations.topic.checkin_child.followup",
+      "npc_act": "accept",
+      "subject": "checkin_child",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "family.child.teen.to.checkin_child": {
+      "topic": "checkin_child",
+      "say": "conversations.family.child.teen",
+      "response_question": "conversations.topic.checkin_child.respond",
+      "npc_act": "accept",
+      "subject": "checkin_child",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    }
+  },
+  "replies": {
+    "conversations.topic.checkin_child.followup/guide": {
+      "stance": "practical_help",
+      "responds_to": [
+        "family.child.listen.to.checkin_child",
+        "family.child.praise.to.checkin_child"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.checkin_child.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "family.child.listen.to.checkin_child",
+        "family.child.praise.to.checkin_child"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.checkin_child.followup/play_along": {
+      "stance": "encouragement",
+      "responds_to": [
+        "family.child.listen.to.checkin_child",
+        "family.child.praise.to.checkin_child"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.checkin_child.followup/scold": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "family.child.listen.to.checkin_child",
+        "family.child.praise.to.checkin_child"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.checkin_child.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "family.child.again.to.checkin_child",
+        "family.child.doing.to.checkin_child",
+        "family.child.little.to.checkin_child",
+        "family.child.teen.to.checkin_child"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.checkin_child.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "family.child.again.to.checkin_child",
+        "family.child.doing.to.checkin_child",
+        "family.child.little.to.checkin_child",
+        "family.child.teen.to.checkin_child"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.checkin_child.respond/listen": {
+      "stance": "restraint",
+      "responds_to": [
+        "family.child.again.to.checkin_child",
+        "family.child.doing.to.checkin_child",
+        "family.child.little.to.checkin_child",
+        "family.child.teen.to.checkin_child"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.checkin_child.respond/praise": {
+      "stance": "encouragement",
+      "responds_to": [
+        "family.child.again.to.checkin_child",
+        "family.child.doing.to.checkin_child",
+        "family.child.little.to.checkin_child",
+        "family.child.teen.to.checkin_child"
+      ],
+      "tone": "plain"
+    }
+  }
+}

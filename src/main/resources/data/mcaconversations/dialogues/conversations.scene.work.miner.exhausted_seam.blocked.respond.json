@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_she_knows",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.exhausted_seam.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.the_seam",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.miner.exhausted_seam"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.exhausted_seam.blocked.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_new_ground",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.exhausted_seam.blocked.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.the_seam",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.miner.exhausted_seam"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.exhausted_seam.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_loss",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.miner.exhausted_seam.blocked.steadied"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.miner.the_seam",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.miner.exhausted_seam"
+            },
+            "next": "conversations.scene.work.miner.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.miner.exhausted_seam.blocked.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.miner.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

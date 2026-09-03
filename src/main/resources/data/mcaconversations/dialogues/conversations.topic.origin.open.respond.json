@@ -1,0 +1,100 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_they_left",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "origin.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.where_from",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.origin.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.origin.open.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_is_a_long_road",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "origin.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.where_from",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.origin.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.origin.open.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "drop_the_subject",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "origin.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.origin.dismissed",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "origin.where_from",
+              "deltas": {
+                "warmth": -2,
+                "tension": 2
+              }
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.origin.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.origin.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

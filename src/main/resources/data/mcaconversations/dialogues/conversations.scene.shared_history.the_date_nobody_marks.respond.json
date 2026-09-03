@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_count",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_date_nobody_marks.open.counted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.unmarked_date",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_date_nobody_marks.counted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_deserves_marking",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_date_nobody_marks.open.marked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.shared_history.date.marked",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.unmarked_date",
+              "deltas": {
+                "warmth": 4,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_date_nobody_marks.marked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

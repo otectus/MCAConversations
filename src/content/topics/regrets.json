@@ -1,0 +1,331 @@
+{
+  "_comment": [
+    "Regrets, gated on trust and on how long they have known each other.",
+    "",
+    "A regret told early is a performance. One scene needs years behind it; the other is the small,",
+    "sayable kind that anybody will admit to and that is still true."
+  ],
+  "topic": "regrets",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "regrets"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "It is done and it stays done.",
+      "Right. No use turning it over again.",
+      "That is where I leave it."
+    ],
+    "pt": [
+      "Está feito e continua feito.",
+      "Certo. Não adianta remoer de novo.",
+      "É aí que eu deixo."
+    ]
+  },
+  "ages": [
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for saying it.",
+    "pt": "Obrigado por dizer."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about that?",
+      "pt": "Mais alguma coisa sobre isso?"
+    },
+    "leave": {
+      "en": "We'll leave the rest alone.",
+      "pt": "Deixamos o resto quieto."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_old_one",
+      "subject": "regrets.long_carried",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "disclosure",
+      "temporal": "past",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 30,
+          "unknown": "fail"
+        },
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 7,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Something you'd take back.",
+        "pt": "Algo que você desfaria."
+      },
+      "lines": {
+        "en": [
+          "One conversation, about nine years ago, that I ended too well. Ending it badly would have left a door.",
+          "I let somebody go and told myself it was respect. It was that I did not want to be told no.",
+          "It is not a thing I did. It is four years of not doing a thing, which is the sort that does not have a date on it."
+        ],
+        "pt": [
+          "Uma conversa, uns nove anos atrás, que eu encerrei bem demais. Encerrar mal teria deixado uma porta.",
+          "Deixei alguém ir e disse a mim mesma que era respeito. Era que eu não queria ouvir um não.",
+          "Não é uma coisa que eu fiz. São quatro anos sem fazer uma coisa, do tipo que não tem data."
+        ]
+      },
+      "replies": [
+        {
+          "name": "sit_with_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That's a heavy one to carry.",
+            "pt": "Essa é pesada de carregar."
+          },
+          "phrases": [
+            "that is a heavy one to carry",
+            "that has weight to it"
+          ],
+          "requires_any": [
+            "heavy",
+            "weight",
+            "carry"
+          ],
+          "disposition": {
+            "trust": 4,
+            "warmth": 4
+          },
+          "affection": {
+            "decision": "topic.regrets.held",
+            "delta": 3,
+            "budget": "deep",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It is, and it has got lighter about twice, both times because somebody heard it and left it where it was.",
+                "Thank you. The version where you tell me it was for the best is the version I have had four times.",
+                "I do not want it fixed. I want it to have been said in a room with somebody else in it, and now it has."
+              ],
+              "pt": [
+                "É, e ficou mais leve umas duas vezes, as duas porque alguém ouviu e deixou onde estava.",
+                "Obrigada. A versão em que você me diz que foi melhor assim é a versão que eu já ouvi quatro vezes.",
+                "Não quero que seja consertado. Quero que tenha sido dito numa sala com outra pessoa dentro, e agora foi."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_they_would_do",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What would you do differently?",
+            "pt": "O que você faria diferente?"
+          },
+          "phrases": [
+            "what would you do differently",
+            "how would you do it now"
+          ],
+          "requires_any": [
+            "differently",
+            "now"
+          ],
+          "disposition": {
+            "familiarity": 3
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "past",
+            "privacy": "confidential",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Stay in the room four minutes longer. That is the whole of it and I have run it about a thousand times.",
+                "Ask one question instead of assuming the answer. I was twenty-nine and I thought assuming was the same as knowing.",
+                "Nothing, honestly. I would do it again with the same information and that is the part that is actually hard to hold."
+              ],
+              "pt": [
+                "Ficar na sala mais quatro minutos. É tudo, e eu já refiz isso umas mil vezes.",
+                "Fazer uma pergunta em vez de supor a resposta. Eu tinha vinte e nove anos e achava que supor era o mesmo que saber.",
+                "Nada, sinceramente. Eu faria de novo com a mesma informação, e é essa a parte de fato difícil de segurar."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_small_one",
+      "subject": "regrets.ordinary",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "past",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "acquaintance",
+            "friend"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 20,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Anything you'd change?",
+        "pt": "Alguma coisa que mudaria?"
+      },
+      "lines": {
+        "en": [
+          "I should have learned to swim. Everybody in this village can and I made a joke of it at fifteen and here we are.",
+          "Selling a good tool to pay for a bad week. I have replaced it twice and neither replacement was the same.",
+          "One argument I won that I should have lost on purpose. It cost me a friendship worth more than the point."
+        ],
+        "pt": [
+          "Eu deveria ter aprendido a nadar. Todo mundo nesta vila sabe, e eu fiz piada disso aos quinze, e aqui estamos.",
+          "Vender uma boa ferramenta para pagar uma semana ruim. Já substituí duas vezes e nenhuma substituta foi a mesma coisa.",
+          "Uma discussão que eu ganhei e deveria ter perdido de propósito. Me custou uma amizade que valia mais que o ponto."
+        ]
+      },
+      "replies": [
+        {
+          "name": "say_it_is_fixable",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Some of that is still fixable.",
+            "pt": "Parte disso ainda tem conserto."
+          },
+          "phrases": [
+            "some of that is still fixable",
+            "you could still put that right"
+          ],
+          "requires_any": [
+            "fixable",
+            "right",
+            "still"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "considered",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "The swimming is. I have thought that every summer for twenty years and this is the first time anybody has said it to me.",
+                "One of the three, maybe. That is a better ratio than I usually give myself credit for.",
+                "You are right and I would rather you were wrong, because being right makes it a thing I have to do something about."
+              ],
+              "pt": [
+                "A natação tem. Eu penso isso todo verão há vinte anos e é a primeira vez que alguém me diz.",
+                "Uma das três, talvez. É uma proporção melhor do que eu costumo me dar crédito.",
+                "Você tem razão e eu preferia que estivesse errada, porque estar certa transforma isso em coisa que eu tenho que resolver."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_about_the_friendship",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Could you mend the friendship?",
+            "pt": "Dá para remendar a amizade?"
+          },
+          "phrases": [
+            "could you mend the friendship",
+            "is the friendship recoverable"
+          ],
+          "requires_any": [
+            "friendship",
+            "mend",
+            "recoverable"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "current",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "We speak. We speak about weather and prices and we have not spoken about anything else in six years.",
+                "It would take one of us saying so, and both of us are waiting for the other, and I know that and still wait.",
+                "Probably. The awkwardness of trying is four minutes and the awkwardness of the last six years is six years, so the arithmetic is embarrassing."
+              ],
+              "pt": [
+                "A gente se fala. Falamos de tempo e de preços e não falamos de mais nada há seis anos.",
+                "Bastaria um de nós dizer, e nós dois esperamos o outro, e eu sei disso e ainda espero.",
+                "Provavelmente. O constrangimento de tentar são quatro minutos e o constrangimento dos últimos seis anos são seis anos, então a conta é vergonhosa."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

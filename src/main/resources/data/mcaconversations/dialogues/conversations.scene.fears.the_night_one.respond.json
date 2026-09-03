@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "stay_with_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "fears.the_night_one.open.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.fears.held",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.the_real_one",
+              "deltas": {
+                "trust": 4,
+                "warmth": 4
+              }
+            },
+            "next": "conversations.scene.fears.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.the_night_one.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_how_long",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "fears.the_night_one.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.the_real_one",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.fears.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.the_night_one.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

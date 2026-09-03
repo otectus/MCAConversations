@@ -1,0 +1,75 @@
+{
+  "answers": [
+    {
+      "name": "hard_to_live_beside",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.family.hard"
+            },
+            "conversations_affection_apply": {
+              "decision": "neighbour.family.hard",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.family.hard",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.family.hard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "common_enough",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "neighbour.family.common"
+            },
+            "conversations_disposition_apply": {
+              "topic": "neighbour.family.common",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.family.common"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.neighbour.family.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

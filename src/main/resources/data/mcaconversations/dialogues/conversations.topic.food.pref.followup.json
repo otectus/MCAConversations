@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "praise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.pref.praised"
+            },
+            "conversations_affection_apply": {
+              "decision": "food.normal.praise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.pref.praised",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.normal.praise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "promise_bring",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.pref.promised"
+            },
+            "conversations_affection_apply": {
+              "decision": "food.normal.promise_bring",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.pref.promised",
+              "deltas": {
+                "trust": 2,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.normal.promise_bring"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_worst",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "food.pref.ask_worst"
+            },
+            "conversations_disposition_apply": {
+              "topic": "food.pref.ask_worst",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.pref.ask_worst"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.food.normal.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

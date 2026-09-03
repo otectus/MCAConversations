@@ -1,0 +1,85 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.the_case_i_got_wrong.failed.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.misdiagnosis",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.vampire_expert.the_case_i_got_wrong"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.the_case_i_got_wrong.failed.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_the_weight",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.vampire_expert.the_case_i_got_wrong.failed.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.vampire_expert.error.seen",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.vampire_expert.misdiagnosis",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.vampire_expert.the_case_i_got_wrong"
+            },
+            "next": "conversations.scene.work.vampire_expert.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.vampire_expert.the_case_i_got_wrong.failed.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.vampire_expert.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

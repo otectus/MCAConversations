@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_teacher",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.future.ask_teacher"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.future.ask_teacher",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.future.ask_teacher"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.outlaw.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_road",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.future.ask_road"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.future.ask_road",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.future.ask_road"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_cause",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.empty_water.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.the_season",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fisherman.empty_water"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.empty_water.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_moving",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fisherman.empty_water.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fisherman.the_season",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fisherman.empty_water"
+            },
+            "next": "conversations.scene.work.fisherman.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fisherman.empty_water.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fisherman.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

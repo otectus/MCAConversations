@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_losses",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.shepherd.hard_lambing.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.shepherd.lambing",
+              "deltas": {
+                "familiarity": 3,
+                "warmth": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.shepherd.hard_lambing"
+            },
+            "next": "conversations.scene.work.shepherd.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.shepherd.hard_lambing.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.shepherd.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

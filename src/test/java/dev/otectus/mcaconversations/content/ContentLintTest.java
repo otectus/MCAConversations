@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.content;
 
+import dev.otectus.mcaconversations.scene.InitiativePlanner;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -54,10 +55,16 @@ class ContentLintTest {
             "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
             "conversations_season", "conversations_holiday", "conversations_personality",
             "conversations_disposition", "conversations_check", "conversations_progress",
+            "conversations_relationship",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed",
             "conversations_reputation", "conversations_reputation_incident",
-            "conversations_session", "conversations_budget");
+            "conversations_session", "conversations_budget",
+            // Living histories, registered by LivingHistoriesRegistrar.
+            "conversations_profile", "conversations_context", "conversations_episode",
+            "conversations_thread", "conversations_commitment", "conversations_claim",
+            "conversations_opinion", "conversations_recent", "conversations_scene",
+            "conversations_exchange");
 
     /** MCA 7.6.23 action vocabulary (from Actions registrations) + ours. */
     private static final Set<String> ACTION_KEYS = Set.of(
@@ -65,7 +72,11 @@ class ContentLintTest {
             "conversations_record", "conversations_say", "conversations_gossip_say",
             "conversations_disposition_apply", "conversations_quest_open",
             "conversations_session", "conversations_affection_apply", "conversations_progress_apply",
-            "conversations_reputation_signal");
+            "conversations_reputation_signal",
+            // Living histories. Every one instantiates an authored template rather than a
+            // shape, so a result can never invent an episode kind or an unregistered promise.
+            "conversations_episode", "conversations_thread", "conversations_commitment",
+            "conversations_claim", "conversations_opinion");
 
     /** The four quest-aware condition keys, whose values are objects ({scope,min}), not MCA enum strings. */
     private static final Set<String> QUEST_CONDITION_KEYS = Set.of(
@@ -124,7 +135,11 @@ class ContentLintTest {
             // McaConversationsConfig.isFeatureEnabled learned them they fell through its default
             // and scored as permanently enabled, so a sink on either could never fire.
             "seasons", "holidays",
-            "branching", "chat");
+            "branching", "chat",
+            // Living-histories switches. Each is gated by dynamic.enabled as well as its own, so
+            // a sink on "dynamic" silences the whole layer and one on "episodes" silences a part.
+            "dynamic", "identity", "episodes", "history", "social_opinions", "village_culture",
+            "group");
 
     /** Weather buckets the {@code conversations_weather} condition matches (see {@code WorldContext}). */
     private static final Set<String> WEATHERS = Set.of("clear", "rain", "storm");
@@ -426,8 +441,9 @@ class ContentLintTest {
         List<String> problems = new ArrayList<>();
         questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
             JsonObject actions = result.getAsJsonObject("actions");
-            if (actions.has("say")) {
-                requireLang("dialogue." + actions.get("say").getAsString(), name + "/" + answerName, problems);
+            String spoken = ContentFixture.spokenPhrase(actions);
+            if (spoken != null) {
+                requireLang("dialogue." + spoken, name + "/" + answerName, problems);
             }
             if (actions.has("conversations_say")) {
                 requireLang("dialogue." + actions.getAsJsonObject("conversations_say").get("phrase").getAsString(),
@@ -440,7 +456,9 @@ class ContentLintTest {
     /**
      * A line may not name an argument its call site never passes. MCA's {@code getTranslatable} supplies
      * exactly one argument of its own — the spouse-aware player name at {@code %1$s} — so a plain
-     * {@code say} caps there, and a {@code conversations_say} earns one further slot per declared var.
+     * {@code say} caps there, and a {@code conversations_say} earns one further slot per declared var
+     * and one per declared scene slot. Slots fill the positions after the vars, in declaration order,
+     * which is the ordering the locale files depend on (spec 18.5).
      *
      * <p>Overrunning does not crash: {@code TranslatableContents.decompose} catches the format error and
      * renders the raw template instead, so the player reads a literal <em>"%2$s? It's home."</em> on
@@ -458,7 +476,9 @@ class ContentLintTest {
             if (actions.has("conversations_say")) {
                 JsonObject say = actions.getAsJsonObject("conversations_say");
                 int vars = say.has("vars") ? say.getAsJsonArray("vars").size() : 0;
-                checkArity(say.get("phrase").getAsString(), 1 + vars, where + " conversations_say", problems);
+                int slots = say.has("slots") ? say.getAsJsonArray("slots").size() : 0;
+                checkArity(say.get("phrase").getAsString(), 1 + vars + slots,
+                        where + " conversations_say", problems);
             }
         }));
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
@@ -627,8 +647,9 @@ class ContentLintTest {
             }
             forEachResult(json, (answerName, result) -> {
                 JsonObject actions = result.getAsJsonObject("actions");
-                if (actions.has("say")) {
-                    referenced.add("dialogue." + actions.get("say").getAsString());
+                String spoken = ContentFixture.spokenPhrase(actions);
+                if (spoken != null) {
+                    referenced.add("dialogue." + spoken);
                 }
                 if (actions.has("conversations_say")) {
                     referenced.add("dialogue." + actions.getAsJsonObject("conversations_say").get("phrase").getAsString());
@@ -665,6 +686,12 @@ class ContentLintTest {
             if (base.startsWith("dialogue.mcareputation.gossip.")) {
                 continue;
             }
+            // dialogue.conversations.initiative.* are the lines a villager opens with when it has
+            // something of its own to raise. Spoken from InitiativePlanner, which reaches them by
+            // purpose key rather than through any dialogue file, so nothing references them here.
+            if (base.startsWith("dialogue." + InitiativePlanner.PHRASE_PREFIX)) {
+                continue;
+            }
             if (!referenced.contains(base) && !mcaPoolBases.contains(base)) {
                 problems.add("orphaned lang key: " + key);
             }
@@ -690,8 +717,9 @@ class ContentLintTest {
         questions.forEach((name, json) -> forEachResult(json, (answerName, result) -> {
             List<String> spoken = new ArrayList<>();
             JsonObject actions = result.getAsJsonObject("actions");
-            if (actions.has("say")) {
-                spoken.add(actions.get("say").getAsString());
+            String said = ContentFixture.spokenPhrase(actions);
+            if (said != null) {
+                spoken.add(said);
             }
             if (actions.has("conversations_say")) {
                 spoken.add(actions.getAsJsonObject("conversations_say").get("phrase").getAsString());
@@ -1233,9 +1261,10 @@ class ContentLintTest {
             if (name.equals("babble")) {
                 // The one hub answer that is not navigation: a baby has no categories to offer, so
                 // this leaf says its line and returns to the main menu. Shape-checked explicitly.
-                if (!actions.keySet().equals(Set.of("next", "say"))
+                String babble = ContentFixture.spokenPhrase(actions);
+                if (!actions.keySet().equals(Set.of("next", "conversations_say"))
                         || !actions.get("next").getAsString().equals("main")
-                        || !actions.get("say").getAsString().startsWith("conversations.babble.")) {
+                        || babble == null || !babble.startsWith("conversations.babble.")) {
                     problems.add("conversations/babble: must say a conversations.babble.* line and "
                             + "return to 'main', got " + actions);
                 }
@@ -1407,7 +1436,7 @@ class ContentLintTest {
             }
             String where = name + "/" + answerName;
             JsonObject actions = result.getAsJsonObject("actions");
-            if (!actions.has("say")) {
+            if (ContentFixture.spokenPhrase(actions) == null) {
                 problems.add(where + ": check tier result has no say line");
             }
             if (!actions.has("next")

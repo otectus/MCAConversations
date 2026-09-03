@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_it_went",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.resume.ask_how_it_went",
+              "deltas": {
+                "familiarity": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.arc.family.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.family.resume.ask_how_it_went"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_promise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_affection_apply": {
+              "decision": "family.resume.keep_promise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.resume.keep_promise",
+              "deltas": {
+                "warmth": 4,
+                "trust": 4
+              }
+            },
+            "next": "conversations.arc.family.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.family.resume.keep_promise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admit_forgot",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 2
+            },
+            "conversations_disposition_apply": {
+              "topic": "family.resume.admit_forgot",
+              "deltas": {
+                "trust": 2,
+                "warmth": -1
+              }
+            },
+            "next": "conversations.arc.family.resume.followup",
+            "conversations_say": {
+              "phrase": "conversations.family.resume.admit_forgot"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.family.resume.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

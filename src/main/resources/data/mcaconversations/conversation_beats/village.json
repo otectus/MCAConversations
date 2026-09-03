@@ -1,0 +1,791 @@
+{
+  "beats": {
+    "village.agreed": {
+      "topic": "village",
+      "say": "conversations.village.followup.agree",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.praise",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.criticised.flat": {
+      "topic": "village",
+      "say": "conversations.village.followup.criticise_fairly.flat",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "village.criticism",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.criticised.landed": {
+      "topic": "village",
+      "say": "conversations.village.followup.criticise_fairly.landed",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.criticism",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.criticised.mayor": {
+      "topic": "village",
+      "say": "conversations.village.criticise_fairly.mayor",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.criticism",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.criticised.polite": {
+      "topic": "village",
+      "say": "conversations.village.followup.criticise_fairly.polite",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "village.criticism",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.fault_named": {
+      "topic": "village",
+      "say": "conversations.village.respond.ask_improve",
+      "response_question": "conversations.topic.village.fault.followup",
+      "npc_act": "disclose_problem",
+      "subject": "village.home",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "village:home",
+        "village:fault_named"
+      ],
+      "allowed_stances": [
+        "practical_help",
+        "respectful_disagreement",
+        "self_disclosure",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.fault_smith": {
+      "topic": "village",
+      "say": "conversations.village.ask_improve.smith",
+      "response_question": "conversations.topic.village.fault.followup",
+      "npc_act": "disclose_problem",
+      "subject": "village.home",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "village:home",
+        "village:fault_named"
+      ],
+      "allowed_stances": [
+        "practical_help",
+        "respectful_disagreement",
+        "self_disclosure",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "challenge"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.help.crit": {
+      "topic": "village",
+      "say": "conversations.village.offer_help.crit",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.home",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.help.partial": {
+      "topic": "village",
+      "say": "conversations.village.offer_help.partial",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "village.home",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.help.plain": {
+      "topic": "village",
+      "say": "conversations.village.followup.offer_help",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.home",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "village",
+        "resumes": [
+          "village.resume.cannot",
+          "village.resume.opener",
+          "village.resume.still_stands",
+          "village.resume.when"
+        ]
+      }
+    },
+    "village.help.rebuff": {
+      "topic": "village",
+      "say": "conversations.village.offer_help.rebuff",
+      "response_question": "conversations.cat.village",
+      "npc_act": "refuse",
+      "subject": "village.home",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.help.success": {
+      "topic": "village",
+      "say": "conversations.village.offer_help.success",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.home",
+      "polarity": "mixed",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "callback": {
+        "fact": "arc",
+        "value": "village",
+        "resumes": [
+          "village.resume.cannot",
+          "village.resume.opener",
+          "village.resume.still_stands",
+          "village.resume.when"
+        ]
+      }
+    },
+    "village.insulted": {
+      "topic": "village",
+      "say": "conversations.village.respond.insult",
+      "response_question": "conversations.topic.village.insulted.followup",
+      "npc_act": "hurt",
+      "subject": "village.insult",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "village:home",
+        "player:insulted_village"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "respectful_disagreement",
+        "humor",
+        "encouragement",
+        "curiosity",
+        "self_disclosure"
+      ],
+      "outcome": "hurt",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.insulted.apologize": {
+      "topic": "village",
+      "say": "conversations.village.insulted.apologize",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "village.insult",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.insulted.explain": {
+      "topic": "village",
+      "say": "conversations.village.insulted.explain",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "village.insult",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.joked": {
+      "topic": "village",
+      "say": "conversations.village.followup.joke",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.belonging",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.left": {
+      "topic": "village",
+      "say": "conversations.village.respond.leave",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.belonging",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.no_complaint": {
+      "topic": "village",
+      "say": "conversations.village.ask_improve.passive",
+      "response_question": "conversations.topic.village.settled.followup",
+      "npc_act": "report",
+      "subject": "village.criticism",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "village:home",
+        "village:no_complaint"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "curiosity",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "respectful_disagreement"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.praise_earned": {
+      "topic": "village",
+      "say": "conversations.village.respond.agree.longknown",
+      "response_question": "conversations.topic.village.praised.followup",
+      "npc_act": "accept",
+      "subject": "village.home",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "village:home",
+        "village:praised"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "respectful_disagreement"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.praise_taken": {
+      "topic": "village",
+      "say": "conversations.village.respond.affirm",
+      "response_question": "conversations.topic.village.praised.followup",
+      "npc_act": "accept",
+      "subject": "village.home",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "village:home",
+        "village:praised"
+      ],
+      "allowed_stances": [
+        "self_disclosure",
+        "curiosity",
+        "humor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help",
+        "challenge",
+        "respectful_disagreement"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.praised.agree": {
+      "topic": "village",
+      "say": "conversations.village.praised.agree",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.praise",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.praised.ask_best": {
+      "topic": "village",
+      "say": "conversations.village.praised.ask_best",
+      "response_question": "conversations.cat.village",
+      "npc_act": "disclose",
+      "subject": "village.praise",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.praised.joke": {
+      "topic": "village",
+      "say": "conversations.village.praised.joke",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.praise",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.settled.agree": {
+      "topic": "village",
+      "say": "conversations.village.settled.agree",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.belonging",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.settled.joke": {
+      "topic": "village",
+      "say": "conversations.village.settled.joke",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "village.belonging",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "village.settled.press": {
+      "topic": "village",
+      "say": "conversations.village.settled.press",
+      "response_question": "conversations.cat.village",
+      "npc_act": "qualify",
+      "subject": "village.belonging",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "conversations.topic.village.fault.followup/agree": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "village.fault_named",
+        "village.fault_smith"
+      ],
+      "requires_facts": [
+        "village:fault_named"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.village.fault.followup/criticise_fairly": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "village.fault_named",
+        "village.fault_smith"
+      ],
+      "requires_facts": [
+        "village:fault_named"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.village.fault.followup/joke": {
+      "stance": "humor",
+      "responds_to": [
+        "village.fault_named",
+        "village.fault_smith"
+      ],
+      "requires_facts": [
+        "village:home"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.village.fault.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.fault_named",
+        "village.fault_smith"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.village.fault.followup/offer_help": {
+      "stance": "practical_help",
+      "responds_to": [
+        "village.fault_named",
+        "village.fault_smith"
+      ],
+      "requires_facts": [
+        "village:fault_named"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.village.insulted.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "village.insulted"
+      ],
+      "requires_facts": [
+        "player:insulted_village"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.village.insulted.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "village.insulted"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.village.insulted.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.insulted"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.village.praised.followup/agree": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "village.praise_taken",
+        "village.praise_earned"
+      ],
+      "requires_facts": [
+        "village:praised"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.village.praised.followup/ask_best": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.praise_taken",
+        "village.praise_earned"
+      ],
+      "requires_facts": [
+        "village:praised"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.village.praised.followup/joke": {
+      "stance": "humor",
+      "responds_to": [
+        "village.praise_taken",
+        "village.praise_earned"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.village.praised.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.praise_taken",
+        "village.praise_earned"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.village.settled.followup/agree": {
+      "stance": "encouragement",
+      "responds_to": [
+        "village.no_complaint"
+      ],
+      "requires_facts": [
+        "village:no_complaint"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.village.settled.followup/joke": {
+      "stance": "humor",
+      "responds_to": [
+        "village.no_complaint"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.village.settled.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.no_complaint"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.village.settled.followup/press": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.no_complaint"
+      ],
+      "requires_facts": [
+        "village:no_complaint"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_room",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.craft.ask_room"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.craft.ask_room",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.craft.ask_room"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.outlaw.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_carpentry",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.outlaw.craft.ask_carpentry"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.outlaw.craft.ask_carpentry",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.outlaw.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.craft.ask_carpentry"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.outlaw.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

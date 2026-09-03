@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_she_thinks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.who_eats_last.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.the_crowd",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightchef.who_eats_last"
+            },
+            "next": "conversations.scene.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightchef.who_eats_last.active.explained",
+              "slots": [
+                "group"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back_the_bowl",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.delightchef.who_eats_last.active.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.delightchef.table.backed",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.delightchef.the_crowd",
+              "deltas": {
+                "respect": 3,
+                "warmth": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.delightchef.who_eats_last"
+            },
+            "next": "conversations.scene.work.delightchef.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.delightchef.who_eats_last.active.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.delightchef.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

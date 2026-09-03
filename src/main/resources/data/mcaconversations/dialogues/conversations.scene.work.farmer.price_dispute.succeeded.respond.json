@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "well_done",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.price_dispute.succeeded.acknowledged"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.farmer.price_dispute.praise",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.trade_prices",
+              "deltas": {
+                "warmth": 2,
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.farmer.price_dispute"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.price_dispute.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_changed",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.farmer.price_dispute.succeeded.recounted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.farmer.trade_prices",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.farmer.price_dispute"
+            },
+            "next": "conversations.scene.work.farmer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.farmer.price_dispute.succeeded.recounted",
+              "slots": [
+                "buyer"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.farmer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

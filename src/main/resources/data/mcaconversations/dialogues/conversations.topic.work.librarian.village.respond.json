@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_readers",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.village.ask_readers"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.village.ask_readers",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.librarian.village.ask_readers"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.village.say_thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.librarian.village.say_thanks",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.village.say_thanks",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.librarian.village.say_thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_disputes",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.librarian.village.ask_disputes"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.librarian.village.ask_disputes",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.librarian.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.librarian.village.ask_disputes"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.librarian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

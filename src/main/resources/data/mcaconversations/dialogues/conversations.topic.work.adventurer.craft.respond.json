@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_turn",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.craft.ask_turn"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.craft.ask_turn",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.craft.ask_turn"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.adventurer.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_wrong",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.adventurer.craft.ask_wrong"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.adventurer.craft.ask_wrong",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.adventurer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.craft.ask_wrong"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.adventurer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

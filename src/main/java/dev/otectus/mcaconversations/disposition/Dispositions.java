@@ -69,7 +69,7 @@ public final class Dispositions {
             }
             int value = DispositionSavedData.get(server).readAxis(villager.getUUID(), player.getUUID(),
                     axis, baseline, villager.level().getGameTime(),
-                    McaConversationsConfig.COMMON.dispositionDecayMultiplier.get());
+                    McaConversationsConfig.dispositionDecayMultiplier());
             if (McaConversationsConfig.COMMON.debugRpg.get()) {
                 McaConversations.LOGGER.info("[rpg] read {}={} villager={} player={}",
                         axis.key(), value, villager.getUUID(), player.getName().getString());
@@ -106,9 +106,9 @@ public final class Dispositions {
             Map<DispositionAxis, Integer> applied = DispositionSavedData.get(server).apply(
                     villager.getUUID(), player.getUUID(), directive.topic(), deltas,
                     axis -> baseline(villager, axis), villager.level().getGameTime(),
-                    McaConversationsConfig.COMMON.dispositionDailyAxisCap.get(),
-                    McaConversationsConfig.COMMON.dispositionGainMultiplier.get(),
-                    McaConversationsConfig.COMMON.dispositionDecayMultiplier.get());
+                    McaConversationsConfig.dispositionDailyAxisCap(),
+                    McaConversationsConfig.dispositionGainMultiplier(),
+                    McaConversationsConfig.dispositionDecayMultiplier());
             if (McaConversationsConfig.COMMON.debugRpg.get()) {
                 McaConversations.LOGGER.info("[rpg] apply topic={} requested={} applied={} villager={} player={}",
                         directive.topic(), directive.deltas(), applied, villager.getUUID(),

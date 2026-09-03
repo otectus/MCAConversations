@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_nine",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.craft.ask_nine"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.craft.ask_nine",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.craft.ask_nine"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.craft.admire"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.leatherworker.craft.admire",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.craft.admire",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.craft.admire"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_awl",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.leatherworker.craft.ask_awl"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.leatherworker.craft.ask_awl",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.leatherworker.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.craft.ask_awl"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.leatherworker.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -40,7 +40,42 @@ description='''${mod_description}'''
 # NOTE: Architectury is deliberately NOT declared. MCA's 1.21.1 NeoForge artifact does not use
 # it at all, and Conversations has zero Architectury references.
 #
-# NOTE: the optional mcaquests / mcareputation dependency entries from the 1.20.1 build are
-# deliberately absent for now. Their old ranges ([0.8,) and [0.2,)) admit Forge-only jars that
-# cannot load here, and no 1.21.1 NeoForge release of either sibling has a fixed version yet.
-# They come back with real ranges once those releases exist.
+# MCA: Reputation is an OPTIONAL integration. Conversations loads and plays fully without it: every
+# reputation-gated dialogue condition scores a neutral 0, the standing check term is exactly 0, the
+# conversations_reputation_signal action is a no-op, and no external gossip is offered. When present
+# we load AFTER it so its API and registries exist before ReputationBridge installs its query facade.
+#
+# On the range: a Forge 1.20.1 jar ships META-INF/mods.toml and targets Minecraft 1.20.1, so FML on
+# 1.21.1 never loads it as a mod whatever range is declared here. The loader, not the range, is what
+# excludes it - which is why [0.2,) is safe now even though the 1.20.1 build's identical range was
+# not worth trusting on its own.
+[[dependencies.${mod_id}]]
+    modId="mcareputation"
+    type="optional"
+    versionRange="[0.2,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# MCA: Quests is an OPTIONAL integration. Conversations loads and works fully without it; when present
+# we load AFTER it so its objective/reward registries and dialogue-hook API exist before our setup runs.
+# The integration needs the Quests build that ships the api.QuestDialogueHooks / ExternalSignalObjective
+# seams; an older Quests without them degrades gracefully (QuestsBridge catches the missing API and
+# disables the integration), so the range stays permissive. The 1.21.1 NeoForge port exists as v1.1.0,
+# well inside [0.8,).
+[[dependencies.${mod_id}]]
+    modId="mcaquests"
+    type="optional"
+    versionRange="[0.8,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Townstead - OPTIONAL. When absent, nothing changes: every Townstead dialogue condition scores 0,
+# every Townstead template variable falls back, and no Townstead class is resolved. Ordered AFTER so
+# its registries and reaction data exist before we read them. Townstead 0.7.6 has a NeoForge 1.21.1
+# release, so this range is live on 1.21.1 rather than inert.
+[[dependencies.${mod_id}]]
+    modId="townstead"
+    type="optional"
+    versionRange="[0.7.5,0.8)"
+    ordering="AFTER"
+    side="BOTH"

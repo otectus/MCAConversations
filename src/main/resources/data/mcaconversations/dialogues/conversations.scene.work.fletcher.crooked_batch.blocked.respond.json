@@ -1,0 +1,125 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_usable",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.crooked_batch.blocked.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.batch_work",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.crooked_batch"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.crooked_batch.blocked.explained",
+              "slots": [
+                "batch"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_shafts",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.crooked_batch.blocked.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.fletcher.batch.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.batch_work",
+              "deltas": {
+                "trust": 4,
+                "warmth": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.crooked_batch",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.crooked_batch",
+              "obligation": "commitment:work.fletcher.bring_sticks"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.fletcher.bring_sticks"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.crooked_batch.blocked.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_burning_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.fletcher.crooked_batch.blocked.agreed_to_burn"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.fletcher.batch_work",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.fletcher.crooked_batch"
+            },
+            "next": "conversations.scene.work.fletcher.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.fletcher.crooked_batch.blocked.agreed_to_burn"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.fletcher.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

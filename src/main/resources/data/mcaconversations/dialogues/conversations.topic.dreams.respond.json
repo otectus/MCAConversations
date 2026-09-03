@@ -20,7 +20,9 @@
               }
             },
             "next": "conversations.topic.dreams.followup",
-            "say": "conversations.dreams.respond.encourage"
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.encourage"
+            }
           }
         }
       ]
@@ -44,7 +46,9 @@
               }
             },
             "next": "conversations.topic.dreams.followup",
-            "say": "conversations.dreams.respond.ask_more"
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.ask_more"
+            }
           }
         }
       ]
@@ -79,7 +83,9 @@
               }
             },
             "next": "conversations.topic.dreams.followup",
-            "say": "conversations.dreams.respond.realism.landed"
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.realism.landed"
+            }
           }
         },
         {
@@ -96,6 +102,10 @@
             }
           ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.rebuked"
+            },
             "conversations_affection_apply": {
               "decision": "dreams.respond.realism",
               "delta": -1,
@@ -109,8 +119,10 @@
                 "tension": 4
               }
             },
-            "next": "conversations.topic.dreams.followup",
-            "say": "conversations.dreams.respond.realism.flat"
+            "next": "conversations.topic.dreams.deflated.followup",
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.realism.flat"
+            }
           }
         },
         {
@@ -143,7 +155,9 @@
               }
             },
             "next": "conversations.topic.dreams.followup",
-            "say": "conversations.dreams.respond.realism.polite"
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.realism.polite"
+            }
           }
         }
       ]
@@ -168,7 +182,9 @@
               }
             },
             "next": "conversations.topic.dreams.followup",
-            "say": "conversations.dreams.no_words"
+            "conversations_say": {
+              "phrase": "conversations.dreams.no_words"
+            }
           }
         }
       ]
@@ -183,7 +199,9 @@
               "op": "end"
             },
             "next": "conversations.cat.personal",
-            "say": "conversations.dreams.respond.leave"
+            "conversations_say": {
+              "phrase": "conversations.dreams.respond.leave"
+            }
           }
         }
       ]

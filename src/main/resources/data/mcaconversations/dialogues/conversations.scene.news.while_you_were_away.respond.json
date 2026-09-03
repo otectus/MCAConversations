@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_two_things",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.while_you_were_away.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.absence",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.news.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.while_you_were_away.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_missed_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.while_you_were_away.open.softened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.absence",
+              "deltas": {
+                "warmth": 3,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.news.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.while_you_were_away.softened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

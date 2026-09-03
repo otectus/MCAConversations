@@ -1,0 +1,49 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_conversations",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.failed_bed.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.the_beds",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.florist.failed_bed"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.failed_bed.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.florist.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

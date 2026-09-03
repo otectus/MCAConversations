@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_would_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "hopes.the_long_one.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.carried",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.hopes.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.hopes.the_long_one.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_it_safe",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "hopes.the_long_one.open.steadied"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.hopes.kept",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "hopes.carried",
+              "deltas": {
+                "trust": 5,
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.hopes.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.hopes.the_long_one.steadied"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.hopes.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_to_earn_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.still_being_read.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.early",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.still_being_read.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "take_it_well",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.still_being_read.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.early",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.still_being_read.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

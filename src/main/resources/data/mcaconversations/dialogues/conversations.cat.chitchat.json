@@ -7,6 +7,102 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.day.before_the_light"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.day.before_the_light",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "day.before_the_light.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.day.before_the_light.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.before_the_light"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.day.end_of_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.day.end_of_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "day.end_of_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.day.end_of_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.end_of_it"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.day",
@@ -27,10 +123,13 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "again"
+              "branch": "again",
+              "beat": "day.again.to.day.again"
             },
             "next": "conversations.topic.day.again.respond",
-            "say": "conversations.day.again"
+            "conversations_say": {
+              "phrase": "conversations.day.again"
+            }
           }
         },
         {
@@ -61,7 +160,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "day.toddler.to.day.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -69,7 +169,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.toddler.respond",
-            "say": "conversations.day.toddler"
+            "conversations_say": {
+              "phrase": "conversations.day.toddler"
+            }
           }
         },
         {
@@ -100,7 +202,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "child"
+              "branch": "child",
+              "beat": "day.child.to.day.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -108,7 +211,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.young.respond",
-            "say": "conversations.day.child"
+            "conversations_say": {
+              "phrase": "conversations.day.child"
+            }
           }
         },
         {
@@ -139,7 +244,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "day.teen.to.day.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -147,7 +253,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.young.respond",
-            "say": "conversations.day.teen"
+            "conversations_say": {
+              "phrase": "conversations.day.teen"
+            }
           }
         },
         {
@@ -198,7 +306,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "rough"
+              "branch": "rough",
+              "beat": "day.rough.to.day.rough"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -206,7 +315,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.rough.respond",
-            "say": "conversations.day.rough"
+            "conversations_say": {
+              "phrase": "conversations.day.rough"
+            }
           }
         },
         {
@@ -253,7 +364,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "good"
+              "branch": "good",
+              "beat": "day.good.to.day.good"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -261,7 +373,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.good.respond",
-            "say": "conversations.day.good"
+            "conversations_say": {
+              "phrase": "conversations.day.good"
+            }
           }
         },
         {
@@ -340,7 +454,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "working"
+              "branch": "working",
+              "beat": "day.working.to.day.ordinary"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -348,7 +463,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.ordinary.respond",
-            "say": "conversations.day.working"
+            "conversations_say": {
+              "phrase": "conversations.day.working"
+            }
           }
         },
         {
@@ -427,7 +544,8 @@
               "op": "begin",
               "topic": "day",
               "budget": "quick",
-              "branch": "plain"
+              "branch": "plain",
+              "beat": "day.plain.to.day.ordinary"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.day",
@@ -435,7 +553,9 @@
               "time": 12000
             },
             "next": "conversations.topic.day.ordinary.respond",
-            "say": "conversations.day.plain"
+            "conversations_say": {
+              "phrase": "conversations.day.plain"
+            }
           }
         },
         {
@@ -473,7 +593,9 @@
               "time": 12000
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.day.rough"
+            "conversations_say": {
+              "phrase": "conversations.day.rough"
+            }
           }
         },
         {
@@ -492,7 +614,9 @@
               "time": 12000
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.day.plain"
+            "conversations_say": {
+              "phrase": "conversations.day.plain"
+            }
           }
         }
       ]
@@ -500,6 +624,102 @@
     {
       "name": "food",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.food.whats_on_today"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.food.whats_on_today",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "food.whats_on_today.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.food.whats_on_today.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.food.whats_on_today"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.food.the_fourteenth_time"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.food.the_fourteenth_time",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "food",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "food.the_fourteenth_time.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.food",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.food.the_fourteenth_time.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.food.the_fourteenth_time"
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -524,10 +744,13 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "again"
+              "branch": "again",
+              "beat": "food.again.to.food.again"
             },
             "next": "conversations.topic.food.again.respond",
-            "say": "conversations.food.again"
+            "conversations_say": {
+              "phrase": "conversations.food.again"
+            }
           }
         },
         {
@@ -558,7 +781,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "food.toddler.to.food.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -566,7 +790,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.toddler.respond",
-            "say": "conversations.food.toddler"
+            "conversations_say": {
+              "phrase": "conversations.food.toddler"
+            }
           }
         },
         {
@@ -597,7 +823,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "child"
+              "branch": "child",
+              "beat": "food.child.to.food.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -605,7 +832,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.young.respond",
-            "say": "conversations.food.child"
+            "conversations_say": {
+              "phrase": "conversations.food.child"
+            }
           }
         },
         {
@@ -636,7 +865,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "teen"
+              "branch": "teen",
+              "beat": "food.teen.to.food.young"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -644,7 +874,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.young.respond",
-            "say": "conversations.food.teen"
+            "conversations_say": {
+              "phrase": "conversations.food.teen"
+            }
           }
         },
         {
@@ -687,7 +919,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "trait"
+              "branch": "trait",
+              "beat": "food.trait.coeliac"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -695,7 +928,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.trait.respond",
-            "say": "conversations.food.trait.coeliac"
+            "conversations_say": {
+              "phrase": "conversations.food.trait.coeliac"
+            }
           }
         },
         {
@@ -738,7 +973,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "trait"
+              "branch": "trait",
+              "beat": "food.trait.lactose"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -746,7 +982,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.trait.respond",
-            "say": "conversations.food.trait.lactose"
+            "conversations_say": {
+              "phrase": "conversations.food.trait.lactose"
+            }
           }
         },
         {
@@ -789,7 +1027,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "trait"
+              "branch": "trait",
+              "beat": "food.trait.diabetes"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -797,7 +1036,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.trait.respond",
-            "say": "conversations.food.trait.diabetes"
+            "conversations_say": {
+              "phrase": "conversations.food.trait.diabetes"
+            }
           }
         },
         {
@@ -840,7 +1081,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "trait"
+              "branch": "trait",
+              "beat": "food.trait.vegetarian"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -848,7 +1090,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.trait.respond",
-            "say": "conversations.food.trait.vegetarian"
+            "conversations_say": {
+              "phrase": "conversations.food.trait.vegetarian"
+            }
           }
         },
         {
@@ -891,7 +1135,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "trait"
+              "branch": "trait",
+              "beat": "food.trait.sirben"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -899,7 +1144,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.trait.respond",
-            "say": "conversations.food.trait.sirben"
+            "conversations_say": {
+              "phrase": "conversations.food.trait.sirben"
+            }
           }
         },
         {
@@ -965,7 +1212,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "revisit"
+              "branch": "revisit",
+              "beat": "food.revisited"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.food",
@@ -973,7 +1221,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.normal.respond",
-            "say": "conversations.food.revisit"
+            "conversations_say": {
+              "phrase": "conversations.food.revisit"
+            }
           }
         },
         {
@@ -1041,7 +1291,8 @@
               "op": "begin",
               "topic": "food",
               "budget": "quick",
-              "branch": "first"
+              "branch": "first",
+              "beat": "food.first_choice"
             },
             "remember": {
               "id": "mcaconversations.topic.food",
@@ -1053,7 +1304,9 @@
               "time": 24000
             },
             "next": "conversations.topic.food.normal.respond",
-            "say": "conversations.food.first"
+            "conversations_say": {
+              "phrase": "conversations.food.first"
+            }
           }
         },
         {
@@ -1076,7 +1329,9 @@
               "time": 24000
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.food.first"
+            "conversations_say": {
+              "phrase": "conversations.food.first"
+            }
           }
         }
       ]
@@ -1088,6 +1343,102 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.weather.working_in_the_wet"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.weather.working_in_the_wet",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "weather",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "weather.working_in_the_wet.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.weather.working_in_the_wet.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.weather.working_in_the_wet"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.weather.the_long_dry"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.weather.the_long_dry",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "weather",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "weather.the_long_dry.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.weather",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.weather.the_long_dry.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.weather.the_long_dry"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "age_group": "toddler"
             },
@@ -1105,7 +1456,8 @@
               "op": "begin",
               "topic": "weather",
               "budget": "quick",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "weather.toddler.to.weather.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.weather",
@@ -1113,7 +1465,9 @@
               "time": 6000
             },
             "next": "conversations.topic.weather.toddler.respond",
-            "say": "conversations.weather.toddler"
+            "conversations_say": {
+              "phrase": "conversations.weather.toddler"
+            }
           }
         },
         {
@@ -1143,7 +1497,8 @@
               "op": "begin",
               "topic": "weather",
               "budget": "quick",
-              "branch": "storm"
+              "branch": "storm",
+              "beat": "weather.storm.to.weather.storm"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.weather",
@@ -1151,7 +1506,9 @@
               "time": 6000
             },
             "next": "conversations.topic.weather.storm.respond",
-            "say": "conversations.weather.storm"
+            "conversations_say": {
+              "phrase": "conversations.weather.storm"
+            }
           }
         },
         {
@@ -1181,7 +1538,8 @@
               "op": "begin",
               "topic": "weather",
               "budget": "quick",
-              "branch": "rain"
+              "branch": "rain",
+              "beat": "weather.rain.to.weather.mild"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.weather",
@@ -1189,7 +1547,9 @@
               "time": 6000
             },
             "next": "conversations.topic.weather.mild.respond",
-            "say": "conversations.weather.rain"
+            "conversations_say": {
+              "phrase": "conversations.weather.rain"
+            }
           }
         },
         {
@@ -1197,7 +1557,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -1229,7 +1591,8 @@
               "op": "begin",
               "topic": "weather",
               "budget": "quick",
-              "branch": "clear"
+              "branch": "clear",
+              "beat": "weather.clear.to.weather.mild"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.weather",
@@ -1237,7 +1600,9 @@
               "time": 6000
             },
             "next": "conversations.topic.weather.mild.respond",
-            "say": "conversations.weather.clear"
+            "conversations_say": {
+              "phrase": "conversations.weather.clear"
+            }
           }
         },
         {
@@ -1256,7 +1621,9 @@
               "time": 6000
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.weather.clear"
+            "conversations_say": {
+              "phrase": "conversations.weather.clear"
+            }
           }
         }
       ]
@@ -1264,6 +1631,102 @@
     {
       "name": "season",
       "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.season.the_turn"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.season.the_turn",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "season.the_turn.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.season.the_turn.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.season.the_turn"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.season.deep_winter"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.season.deep_winter",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "season.deep_winter.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.season.deep_winter.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.season.deep_winter"
+            }
+          }
+        },
         {
           "baseChance": 0,
           "conditions": [
@@ -1288,10 +1751,13 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "again"
+              "branch": "again",
+              "beat": "season.again.to.season.turn"
             },
             "next": "conversations.topic.season.turn.respond",
-            "say": "conversations.season.again"
+            "conversations_say": {
+              "phrase": "conversations.season.again"
+            }
           }
         },
         {
@@ -1322,7 +1788,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "toddler"
+              "branch": "toddler",
+              "beat": "season.toddler.to.season.toddler"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1330,7 +1797,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.toddler.respond",
-            "say": "conversations.season.toddler"
+            "conversations_say": {
+              "phrase": "conversations.season.toddler"
+            }
           }
         },
         {
@@ -1367,7 +1836,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "spring_bloom"
+              "branch": "spring_bloom",
+              "beat": "season.holiday.spring_bloom.to.season.holiday"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1375,7 +1845,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.holiday.respond",
-            "say": "conversations.season.holiday.spring_bloom"
+            "conversations_say": {
+              "phrase": "conversations.season.holiday.spring_bloom"
+            }
           }
         },
         {
@@ -1412,7 +1884,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "midsummer"
+              "branch": "midsummer",
+              "beat": "season.holiday.midsummer.to.season.holiday"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1420,7 +1893,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.holiday.respond",
-            "say": "conversations.season.holiday.midsummer"
+            "conversations_say": {
+              "phrase": "conversations.season.holiday.midsummer"
+            }
           }
         },
         {
@@ -1457,7 +1932,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "harvest_festival"
+              "branch": "harvest_festival",
+              "beat": "season.holiday.harvest_festival.to.season.holiday"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1465,7 +1941,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.holiday.respond",
-            "say": "conversations.season.holiday.harvest_festival"
+            "conversations_say": {
+              "phrase": "conversations.season.holiday.harvest_festival"
+            }
           }
         },
         {
@@ -1502,7 +1980,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "midwinter"
+              "branch": "midwinter",
+              "beat": "season.holiday.midwinter.to.season.holiday"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1510,7 +1989,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.holiday.respond",
-            "say": "conversations.season.holiday.midwinter"
+            "conversations_say": {
+              "phrase": "conversations.season.holiday.midwinter"
+            }
           }
         },
         {
@@ -1571,7 +2052,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "spring"
+              "branch": "spring",
+              "beat": "season.spring.to.season.turn"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1579,7 +2061,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.turn.respond",
-            "say": "conversations.season.spring"
+            "conversations_say": {
+              "phrase": "conversations.season.spring"
+            }
           }
         },
         {
@@ -1640,7 +2124,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "summer"
+              "branch": "summer",
+              "beat": "season.summer.to.season.turn"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1648,7 +2133,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.turn.respond",
-            "say": "conversations.season.summer"
+            "conversations_say": {
+              "phrase": "conversations.season.summer"
+            }
           }
         },
         {
@@ -1709,7 +2196,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "autumn"
+              "branch": "autumn",
+              "beat": "season.autumn.to.season.turn"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1717,7 +2205,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.turn.respond",
-            "say": "conversations.season.autumn"
+            "conversations_say": {
+              "phrase": "conversations.season.autumn"
+            }
           }
         },
         {
@@ -1778,7 +2268,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "winter"
+              "branch": "winter",
+              "beat": "season.winter.to.season.turn"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1786,7 +2277,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.turn.respond",
-            "say": "conversations.season.winter"
+            "conversations_say": {
+              "phrase": "conversations.season.winter"
+            }
           }
         },
         {
@@ -1794,7 +2287,9 @@
           "conditions": [
             {
               "chance": 1,
-              "hearts_min": 0
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
             },
             {
               "chance": -2000,
@@ -1869,7 +2364,8 @@
               "op": "begin",
               "topic": "season",
               "budget": "quick",
-              "branch": "any"
+              "branch": "any",
+              "beat": "season.any.to.season.turn"
             },
             "conversations_record": {
               "id": "mcaconversations.cooldown.season",
@@ -1877,7 +2373,9 @@
               "time": 48000
             },
             "next": "conversations.topic.season.turn.respond",
-            "say": "conversations.season.any"
+            "conversations_say": {
+              "phrase": "conversations.season.any"
+            }
           }
         },
         {
@@ -1896,8 +2394,165 @@
               "time": 48000
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.season.any"
+            "conversations_say": {
+              "phrase": "conversations.season.any"
+            }
           }
+        }
+      ]
+    },
+    {
+      "name": "routine",
+      "constraints": "!toddler,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.routine.the_first_hour"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.routine.the_first_hour",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "routine",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "routine.the_first_hour.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.routine",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.routine.the_first_hour.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.routine.the_first_hour"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.routine.after_the_work"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.routine.after_the_work",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "routine",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "routine.after_the_work.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.routine",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.routine.after_the_work.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.routine.after_the_work"
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.routine.the_first_hour"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.routine.after_the_work"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "routine",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "routine.open"
+            },
+            "next": "conversations.topic.routine.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.routine.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.routine.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
         }
       ]
     },

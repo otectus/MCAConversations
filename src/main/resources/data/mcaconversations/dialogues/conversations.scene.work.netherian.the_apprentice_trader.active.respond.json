@@ -1,0 +1,81 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_worries_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.the_apprentice_trader.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.the_crossing",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.netherian.the_apprentice_trader"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.the_apprentice_trader.active.explained",
+              "slots": [
+                "young"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "advise_a_short_trip",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.netherian.the_apprentice_trader.active.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.netherian.the_crossing",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.netherian.the_apprentice_trader"
+            },
+            "next": "conversations.scene.work.netherian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.netherian.the_apprentice_trader.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.netherian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

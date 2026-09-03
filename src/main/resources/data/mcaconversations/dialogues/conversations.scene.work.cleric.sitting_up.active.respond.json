@@ -1,0 +1,123 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_is_like",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.sitting_up.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.unseen_hours",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.sitting_up"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.sitting_up.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_food",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.sitting_up.active.accepted"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cleric.vigil.offer",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.unseen_hours",
+              "deltas": {
+                "trust": 4,
+                "warmth": 3
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.sitting_up",
+              "state": "active"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.sitting_up",
+              "obligation": "commitment:work.cleric.bring_food"
+            },
+            "conversations_commitment": {
+              "op": "make",
+              "id": "work.cleric.bring_food"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.sitting_up.active.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_rest_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cleric.sitting_up.active.qualified"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cleric.unseen_hours",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.cleric.sitting_up"
+            },
+            "next": "conversations.scene.work.cleric.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.cleric.sitting_up.active.qualified"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cleric.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

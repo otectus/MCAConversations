@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "ask_wrong",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.risk.ask_wrong"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.risk.ask_wrong",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.risk.ask_wrong"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sympathise",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.risk.sympathise"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.cartographer.risk.sympathise",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.risk.sympathise",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.topic.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.risk.sympathise"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_gap",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.cartographer.risk.ask_gap"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.cartographer.risk.ask_gap",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.cartographer.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.risk.ask_gap"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.cartographer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,662 @@
+{
+  "_comment": [
+    "Interests — the first of the seven new stable topics (§13).",
+    "",
+    "A funnel that is always there, and two scenes on top of it that only exist when the world agrees:",
+    "one for a villager whose interest is something she does with her hands, and one for the hour when",
+    "she actually gets to do it.",
+    "",
+    "The funnel is deliberately plain. Its job is to be the version that works on the day nothing is",
+    "gated in, and to give the player somewhere to be warm and somewhere to be dismissive, because a",
+    "topic where nothing can go wrong is not a conversation."
+  ],
+  "topic": "interests",
+  "entry": {
+    "question": "conversations.cat.personal",
+    "answer": "interests"
+  },
+  "return_question": "conversations.cat.personal",
+  "leave_lines": {
+    "en": [
+      "Anyway. It keeps me out of trouble.",
+      "Right. Enough about that.",
+      "You will be sorry you asked."
+    ],
+    "pt": [
+      "Enfim. Me mantém fora de encrenca.",
+      "Certo. Chega disso.",
+      "Você vai se arrepender de ter perguntado."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Good to know.",
+    "pt": "Bom saber."
+  },
+  "followup": {
+    "prompt": {
+      "en": "More of that?",
+      "pt": "Mais disso?"
+    },
+    "leave": {
+      "en": "Another time, then.",
+      "pt": "Outra hora, então."
+    }
+  },
+  "funnel": {
+    "legacy_lines": {
+      "en": [
+        "One or two things. Nothing anybody would put in a song.",
+        "I keep myself occupied. That is about as much as there is to say.",
+        "Enough to fill an evening, which is all an evening needs."
+      ],
+      "pt": [
+        "Uma ou duas coisas. Nada que alguém colocasse numa canção.",
+        "Eu me mantenho ocupada. É mais ou menos tudo o que há para dizer.",
+        "O suficiente para encher uma noite, que é tudo de que uma noite precisa."
+      ]
+    },
+    "open": {
+      "subject": "interests.what_i_like",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "habitual",
+      "shape": "observe",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "What you enjoy.",
+        "pt": "Do que você gosta."
+      },
+      "lines": {
+        "en": [
+          "There is one thing I would do even if nobody paid me for anything, and it is not my trade.",
+          "I have a thing I am no good at and do anyway, which I have decided is the definition of the word.",
+          "Small things, mostly. I have got very interested in something nobody else in this village has noticed exists."
+        ],
+        "pt": [
+          "Existe uma coisa que eu faria mesmo se ninguém me pagasse por nada, e não é o meu ofício.",
+          "Tenho uma coisa em que eu sou ruim e faço mesmo assim, o que eu decidi que é a definição da palavra.",
+          "Coisas pequenas, na maioria. Fiquei muito interessada em algo que ninguém mais nesta vila reparou que existe."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_is",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Tell me what the thing is.",
+            "pt": "Me conte que coisa é essa."
+          },
+          "phrases": [
+            "what is the thing",
+            "tell me what it is"
+          ],
+          "requires_any": [
+            "thing",
+            "tell"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Watching where water goes. It sounds like nothing and I have four years of notes about this village's ditches.",
+                "Whistling. Properly, in parts. I can do two and I am working towards a third and it is going badly.",
+                "Old walls. Who built them and in what order. Somebody laid every stone in this place and almost all of them are forgotten."
+              ],
+              "pt": [
+                "Observar para onde a água vai. Parece nada e eu tenho quatro anos de anotações sobre as valas desta vila.",
+                "Assobiar. Direito, em vozes. Consigo duas e estou trabalhando na terceira e vai mal.",
+                "Muros velhos. Quem construiu e em que ordem. Alguém assentou cada pedra deste lugar e quase todos foram esquecidos."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_good",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It's good to have something of your own.",
+            "pt": "É bom ter algo só seu."
+          },
+          "phrases": [
+            "it is good to have something of your own",
+            "everyone should have something of their own"
+          ],
+          "requires_any": [
+            "own",
+            "something"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and it took me until about thirty to stop apologising for it, which is longer than it should have.",
+                "That is a kinder answer than the usual one, which is somebody explaining why my thing is really a waste.",
+                "Everybody here has one. Half of them will deny it and all of them go quiet about theirs on a Sunday."
+              ],
+              "pt": [
+                "É, e eu levei até uns trinta anos para parar de me desculpar por isso, o que é mais tempo do que devia.",
+                "É uma resposta mais gentil do que a de sempre, que é alguém explicando por que a minha coisa é desperdício.",
+                "Todo mundo aqui tem uma. Metade vai negar e todos ficam quietos sobre a sua num domingo."
+              ]
+            }
+          }
+        },
+        {
+          "name": "brush_it_aside",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "Sounds like a waste of an evening.",
+            "pt": "Parece desperdício de uma noite."
+          },
+          "phrases": [
+            "sounds like a waste of an evening",
+            "that seems a waste of time"
+          ],
+          "requires_any": [
+            "waste"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.interests.dismissed",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Probably. It is my evening, so I shall go on wasting it, and I will stop describing it to you.",
+                "Right. That is the answer I get about four times a year and I have stopped being surprised by it.",
+                "Fair enough. Ask me about the weather instead and we shall both have a nicer minute."
+              ],
+              "pt": [
+                "Provavelmente. É a minha noite, então vou continuar desperdiçando, e paro de descrever para você.",
+                "Certo. É a resposta que eu recebo umas quatro vezes por ano e parei de me surpreender.",
+                "Tudo bem. Me pergunte do tempo e nós dois teremos um minuto melhor."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "more": {
+      "subject": "interests.how_it_started",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "shape": "reminisce",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "How it started.",
+        "pt": "Como começou."
+      },
+      "lines": {
+        "en": [
+          "It started by accident, the way anything worth doing does, and I did not notice for about a year.",
+          "Somebody showed me once and then left, and I have been working the rest of it out on my own ever since.",
+          "I was avoiding something else. That is the honest beginning and it is nearly always the honest beginning."
+        ],
+        "pt": [
+          "Começou por acaso, do jeito que começa qualquer coisa que valha a pena, e eu não percebi por uns um ano.",
+          "Alguém me mostrou uma vez e depois foi embora, e desde então venho descobrindo o resto sozinha.",
+          "Eu estava evitando outra coisa. É o começo honesto, e quase sempre é esse o começo honesto."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_to_be_shown",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would you show me sometime?",
+            "pt": "Você me mostraria algum dia?"
+          },
+          "phrases": [
+            "would you show me sometime",
+            "i would like to be shown"
+          ],
+          "requires_any": [
+            "show",
+            "shown"
+          ],
+          "disposition": {
+            "familiarity": 3,
+            "warmth": 2
+          },
+          "affection": {
+            "decision": "topic.interests.asked_to_see",
+            "delta": 1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "pleased",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "Yes. Come on a dry evening and expect to be bored for the first ten minutes, because everybody is.",
+                "That question does not get asked. I have thought about how I would answer it and I still managed to be surprised.",
+                "You may, and I shall be insufferable about it, and you will have brought that on yourself."
+              ],
+              "pt": [
+                "Sim. Venha numa noite seca e espere ficar entediado nos dez primeiros minutos, porque todo mundo fica.",
+                "Ninguém tinha perguntado isso antes. Já pensei em como responderia e ainda assim me surpreendi.",
+                "Pode, e eu vou ficar insuportável a respeito, e você terá causado isso a si mesmo."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_suits_them",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That suits you.",
+            "pt": "Isso combina com você."
+          },
+          "phrases": [
+            "that suits you",
+            "it fits you well"
+          ],
+          "requires_any": [
+            "suits",
+            "fits"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It does, and being told so by somebody who has known me a while is worth more than the doing of it some weeks.",
+                "Thank you. That is a small sentence and I shall be thinking about it in the middle of Thursday.",
+                "I think it made me rather than the other way round, which is a strange thing to say about a hobby and is true."
+              ],
+              "pt": [
+                "Combina, e ouvir isso de quem me conhece já faz um tempo vale mais que a coisa em si em algumas semanas.",
+                "Obrigada. É uma frase pequena e eu vou ficar pensando nela no meio da quinta-feira.",
+                "Acho que ela me fez, e não o contrário, o que é estranho de se dizer de um passatempo e é verdade."
+              ]
+            }
+          }
+        },
+        {
+          "name": "cut_it_short",
+          "stance": "dismissal",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "blunt",
+          "outcome": "rebuffed",
+          "label": {
+            "en": "That is more than I needed.",
+            "pt": "Isso é mais do que eu precisava."
+          },
+          "phrases": [
+            "i have heard plenty about it",
+            "that is more than i needed"
+          ],
+          "requires_any": [
+            "plenty",
+            "needed"
+          ],
+          "disposition": {
+            "warmth": -2,
+            "tension": 2
+          },
+          "affection": {
+            "decision": "topic.interests.cut_short",
+            "delta": -1,
+            "budget": "standard",
+            "policy": "once"
+          },
+          "reaction": {
+            "id": "closed",
+            "act": "deflect",
+            "polarity": "negative",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Right. I did warn you, in fairness, and you asked anyway, and here we both are.",
+                "Understood. I shall keep the rest of it to the people who ask twice.",
+                "That is fine. It is the sort of thing that only interests the person doing it and I have always known that."
+              ],
+              "pt": [
+                "Certo. Eu avisei, para ser justa, e você perguntou assim mesmo, e aqui estamos nós dois.",
+                "Entendido. Guardo o resto para quem pergunta duas vezes.",
+                "Tudo bem. É o tipo de coisa que só interessa a quem faz e eu sempre soube disso."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_hour_for_it",
+      "subject": "interests.tonight",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "afternoon",
+            "night"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_interests": [
+        "mechanisms",
+        "music",
+        "stories",
+        "local_history"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "What you're up to later.",
+        "pt": "O que você vai fazer depois."
+      },
+      "lines": {
+        "en": [
+          "I have an hour after this and I know exactly what I am doing with it, which does not happen most days.",
+          "Everything is finished and the light holds until late, so tonight is mine and I have plans nobody would find impressive.",
+          "This is the part of the day the rest of the day is for. I would not say that in front of the headman."
+        ],
+        "pt": [
+          "Tenho uma hora depois disto e sei exatamente o que vou fazer com ela, o que não acontece na maioria dos dias.",
+          "Tudo está terminado e a luz aguenta até tarde, então hoje à noite é minha e eu tenho planos que ninguém acharia impressionantes.",
+          "Esta é a parte do dia para a qual o resto do dia serve. Eu não diria isso na frente do chefe da vila."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_plan",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What are the plans?",
+            "pt": "Quais são os planos?"
+          },
+          "phrases": [
+            "what are the plans",
+            "what will you do with the hour"
+          ],
+          "requires_any": [
+            "plans",
+            "hour"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "An hour of the thing I am bad at, on purpose, where nobody can hear me being bad at it.",
+                "Sitting somewhere specific and doing something nobody would call an activity. It is the best hour of the week.",
+                "I am going to finish a thing I started in the spring. It will take twenty minutes and I have had six months of intending to."
+              ],
+              "pt": [
+                "Uma hora da coisa em que eu sou ruim, de propósito, onde ninguém pode me ouvir sendo ruim.",
+                "Sentar num lugar específico e fazer algo que ninguém chamaria de atividade. É a melhor hora da semana.",
+                "Vou terminar uma coisa que comecei na primavera. Leva vinte minutos e eu tive seis meses de intenção."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_them_the_hour",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Enjoy the hour.",
+            "pt": "Aproveite a hora."
+          },
+          "phrases": [
+            "enjoy the hour",
+            "make the most of it"
+          ],
+          "requires_any": [
+            "enjoy",
+            "most"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I intend to, and I shall be back to being useful by morning, which is the bargain I have made with this village.",
+                "Thank you. Almost nobody says that. They ask what I am doing and then look slightly disappointed.",
+                "One hour. It sounds like very little and it is the difference between a good week and a long one."
+              ],
+              "pt": [
+                "Pretendo, e volto a ser útil pela manhã, que é o acordo que eu fiz com esta vila.",
+                "Obrigada. Quase ninguém diz isso. Perguntam o que eu vou fazer e depois parecem levemente decepcionados.",
+                "Uma hora. Parece pouquíssimo e é a diferença entre uma boa semana e uma longa."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_one_who_shares_it",
+      "subject": "interests.shared",
+      "shape": "celebrate",
+      "act": "celebrate",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "social.village_population",
+          "min": 8,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_styles": [
+        "storyteller"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Somebody who shares it.",
+        "pt": "Alguém que compartilha isso."
+      },
+      "lines": {
+        "en": [
+          "I found out last month that somebody else here does the same thing, and neither of us had said a word in six years.",
+          "There are two of us now. Two is an enormous number when it has been one for a long time.",
+          "We have started meeting on a Thursday and pretending it is about something else, which fools nobody and suits us both."
+        ],
+        "pt": [
+          "Descobri mês passado que outra pessoa aqui faz a mesma coisa, e nenhuma de nós tinha dito uma palavra em seis anos.",
+          "Agora somos duas. Duas é um número enorme quando foi uma por muito tempo.",
+          "Começamos a nos encontrar às quintas e fingir que é sobre outra coisa, o que não engana ninguém e serve às duas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_they_found_out",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How did you find out?",
+            "pt": "Como você descobriu?"
+          },
+          "phrases": [
+            "how did you find out",
+            "how did that come to light"
+          ],
+          "requires_any": [
+            "find",
+            "light"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "told",
+            "act": "reminisce",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "They left something out on a windowsill and I recognised what it was from four doors down.",
+                "A child told me, entirely by accident, while asking me an unrelated question. Children are the whole intelligence service of a village.",
+                "We both stopped in the same place on the same evening to look at the same thing, and stood there being awkward for a minute."
+              ],
+              "pt": [
+                "Deixaram uma coisa no peitoril e eu reconheci o que era de quatro portas de distância.",
+                "Uma criança me contou, completamente por acaso, enquanto me perguntava outra coisa. Criança é o serviço de inteligência inteiro de uma vila.",
+                "Nós duas paramos no mesmo lugar na mesma noite para olhar a mesma coisa, e ficamos ali sem jeito por um minuto."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_lucky",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Two is lucky in a place this size.",
+            "pt": "Duas é sorte num lugar desse tamanho."
+          },
+          "phrases": [
+            "two is lucky in a place this size",
+            "that is a lucky find here"
+          ],
+          "requires_any": [
+            "lucky",
+            "find"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "delighted",
+            "act": "celebrate",
+            "polarity": "positive",
+            "shape": "celebrate",
+            "lines": {
+              "en": [
+                "It is, and I have started wondering how many more of us there are being quiet about it in separate houses.",
+                "Six years of both of us assuming we were the only one. I keep thinking about the six years rather than the finding.",
+                "Lucky and slightly absurd. We live four doors apart and it took a windowsill."
+              ],
+              "pt": [
+                "É, e comecei a me perguntar quantas mais de nós existem, caladas a respeito em casas separadas.",
+                "Seis anos com nós duas achando que éramos a única. Eu fico pensando nos seis anos, não na descoberta.",
+                "Sorte e um pouco absurdo. Moramos a quatro portas e precisou de um peitoril."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

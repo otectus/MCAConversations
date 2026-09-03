@@ -1,0 +1,82 @@
+{
+  "answers": [
+    {
+      "name": "better_than_a_number",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.unknown.followup.better"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.unknown.followup.better",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.unknown.followup.better",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.unknown.followup.better"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "same_of_myself",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.unknown.followup.same"
+            },
+            "conversations_affection_apply": {
+              "decision": "standing.unknown.followup.same",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.unknown.followup.same",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.unknown.followup.same"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.standing.unknown.followup.back"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "note_the_asking",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.florist.funeral_order.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.florist.occasions",
+              "deltas": {
+                "warmth": 3,
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.florist.funeral_order"
+            },
+            "next": "conversations.scene.work.florist.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.florist.funeral_order.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.florist.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

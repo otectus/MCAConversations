@@ -1,0 +1,1370 @@
+{
+  "beats": {
+    "standing.again.apologize": {
+      "topic": "standing",
+      "say": "conversations.standing.again.apologize",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.repeat",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.again.back": {
+      "topic": "standing",
+      "say": "conversations.standing.again.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.repeat",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.again.open": {
+      "topic": "standing",
+      "say": "conversations.standing.again",
+      "response_question": "conversations.topic.standing.again.respond",
+      "npc_act": "deflect",
+      "subject": "standing.repeat",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "facts": [
+        "standing:asked_before"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "practical_help",
+        "empathy"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.again.press": {
+      "topic": "standing",
+      "say": "conversations.standing.again.press",
+      "response_question": "conversations.cat.village",
+      "npc_act": "report",
+      "subject": "standing.repeat",
+      "polarity": "neutral",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.amends.done": {
+      "topic": "standing",
+      "say": "conversations.standing.amends.done",
+      "response_question": "conversations.topic.standing.incident.followup",
+      "npc_act": "accept",
+      "subject": "standing.amends",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:bad",
+        "incident:active",
+        "player:apologized_publicly"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ]
+    },
+    "standing.bad.back": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.bad",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.bad.deed": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.deed",
+      "response_question": "conversations.topic.standing.bad.followup",
+      "npc_act": "report",
+      "subject": "standing.bad",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:bad",
+        "deed:named"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ]
+    },
+    "standing.bad.dismissed": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.dismissed",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "standing.bad",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.bad.followup.back": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.followup.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.bad",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.bad.followup.brush": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.followup.brush",
+      "response_question": "conversations.cat.village",
+      "npc_act": "refuse",
+      "subject": "standing.bad",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.bad.followup.thanks": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.followup.thanks",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.bad",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.bad.mend": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.mend",
+      "response_question": "conversations.topic.standing.bad.followup",
+      "npc_act": "explain",
+      "subject": "standing.bad",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:bad",
+        "advice:given"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ]
+    },
+    "standing.bad.open": {
+      "topic": "standing",
+      "say": "conversations.standing.bad",
+      "response_question": "conversations.topic.standing.bad.respond",
+      "npc_act": "report",
+      "subject": "standing.bad",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "standing:bad"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "respectful_disagreement",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement"
+      ],
+      "context": {
+        "integrations": [
+          "mcareputation"
+        ]
+      }
+    },
+    "standing.bad.protest": {
+      "topic": "standing",
+      "say": "conversations.standing.bad.protest",
+      "response_question": "conversations.topic.standing.bad.followup",
+      "npc_act": "qualify",
+      "subject": "standing.bad",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:bad"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ]
+    },
+    "standing.good.back": {
+      "topic": "standing",
+      "say": "conversations.standing.good.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.good.deed": {
+      "topic": "standing",
+      "say": "conversations.standing.good.deed",
+      "response_question": "conversations.topic.standing.good.followup",
+      "npc_act": "report",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:good",
+        "deed:named"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "practical_help",
+        "empathy",
+        "challenge",
+        "humor"
+      ]
+    },
+    "standing.good.deflect": {
+      "topic": "standing",
+      "say": "conversations.standing.good.deflect",
+      "response_question": "conversations.topic.standing.good.followup",
+      "npc_act": "qualify",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:good"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "practical_help",
+        "empathy",
+        "challenge",
+        "humor"
+      ]
+    },
+    "standing.good.dismissed": {
+      "topic": "standing",
+      "say": "conversations.standing.good.dismissed",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "standing.good",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.good.followup.back": {
+      "topic": "standing",
+      "say": "conversations.standing.good.followup.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.good.followup.keep_deserving": {
+      "topic": "standing",
+      "say": "conversations.standing.good.followup.keep_deserving",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.good.followup.thanks": {
+      "topic": "standing",
+      "say": "conversations.standing.good.followup.thanks",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.good.keep": {
+      "topic": "standing",
+      "say": "conversations.standing.good.keep",
+      "response_question": "conversations.topic.standing.good.followup",
+      "npc_act": "explain",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:good"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "practical_help",
+        "empathy",
+        "challenge",
+        "humor"
+      ]
+    },
+    "standing.good.open": {
+      "topic": "standing",
+      "say": "conversations.standing.good",
+      "response_question": "conversations.topic.standing.good.respond",
+      "npc_act": "report",
+      "subject": "standing.good",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "standing:good"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "self_disclosure",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "flirtation",
+        "boundary_push",
+        "challenge"
+      ],
+      "context": {
+        "integrations": [
+          "mcareputation"
+        ]
+      }
+    },
+    "standing.incident.back": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.incident",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.incident.deed": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.deed",
+      "response_question": "conversations.topic.standing.incident.followup",
+      "npc_act": "report",
+      "subject": "standing.incident",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:bad",
+        "incident:active",
+        "deed:named"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ]
+    },
+    "standing.incident.deny": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.deny",
+      "response_question": "conversations.topic.standing.incident.followup",
+      "npc_act": "resist",
+      "subject": "standing.incident",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "dismissal",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:bad",
+        "incident:active"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement",
+        "challenge"
+      ]
+    },
+    "standing.incident.dismissed": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.dismissed",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "standing.incident",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.incident.followup.back": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.followup.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.incident",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.incident.followup.brush": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.followup.brush",
+      "response_question": "conversations.cat.village",
+      "npc_act": "refuse",
+      "subject": "standing.incident",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "rebuffed",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.incident.followup.thanks": {
+      "topic": "standing",
+      "say": "conversations.standing.incident.followup.thanks",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.incident",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.incident.open": {
+      "topic": "standing",
+      "say": "conversations.standing.trouble",
+      "response_question": "conversations.topic.standing.incident.respond",
+      "npc_act": "disclose_problem",
+      "subject": "standing.incident",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "standing:bad",
+        "incident:active"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "respectful_disagreement",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor",
+        "boundary_push",
+        "encouragement"
+      ],
+      "context": {
+        "integrations": [
+          "mcareputation"
+        ]
+      }
+    },
+    "standing.neutral.back": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.neutral.dismissed": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.dismissed",
+      "response_question": "conversations.cat.village",
+      "npc_act": "resist",
+      "subject": "standing.neutral",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.neutral.followup.back": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.followup.back",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.neutral.followup.set_to_work": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.followup.set_to_work",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.neutral.followup.thanks": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.followup.thanks",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "standing.neutral.how": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.how",
+      "response_question": "conversations.topic.standing.neutral.followup",
+      "npc_act": "explain",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:unknown",
+        "advice:given"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "empathy",
+        "challenge",
+        "humor"
+      ]
+    },
+    "standing.neutral.mine": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.mine",
+      "response_question": "conversations.topic.standing.neutral.followup",
+      "npc_act": "disclose",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:unknown"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "empathy",
+        "challenge",
+        "humor"
+      ]
+    },
+    "standing.neutral.open": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral",
+      "response_question": "conversations.topic.standing.neutral.respond",
+      "npc_act": "report",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "facts": [
+        "standing:unknown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "restraint",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "flirtation",
+        "boundary_push",
+        "challenge"
+      ],
+      "context": {
+        "integrations": [
+          "mcareputation"
+        ]
+      }
+    },
+    "standing.neutral.suits_me": {
+      "topic": "standing",
+      "say": "conversations.standing.neutral.suits_me",
+      "response_question": "conversations.topic.standing.neutral.followup",
+      "npc_act": "qualify",
+      "subject": "standing.neutral",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "facts": [
+        "standing:unknown"
+      ],
+      "forbidden_stances": [
+        "dismissal",
+        "boundary_push",
+        "flirtation",
+        "empathy",
+        "challenge",
+        "humor"
+      ]
+    }
+  },
+  "replies": {
+    "conversations.topic.standing.again.respond/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.again.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.standing.again.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.again.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.again.respond/press": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.again.open"
+      ],
+      "requires_facts": [
+        "standing:asked_before"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.standing.bad.followup/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.bad.deed",
+        "standing.bad.mend",
+        "standing.bad.protest"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.bad.followup/brush": {
+      "stance": "dismissal",
+      "responds_to": [
+        "standing.bad.deed",
+        "standing.bad.mend",
+        "standing.bad.protest"
+      ],
+      "tone": "hostile",
+      "outcomes": [
+        "rebuffed"
+      ]
+    },
+    "conversations.topic.standing.bad.followup/thanks": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.bad.deed",
+        "standing.bad.mend",
+        "standing.bad.protest"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.standing.bad.respond/ask_deed": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.bad.open"
+      ],
+      "requires_facts": [
+        "standing:bad"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.bad.respond/ask_mend": {
+      "stance": "practical_help",
+      "responds_to": [
+        "standing.bad.open"
+      ],
+      "requires_facts": [
+        "standing:bad"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.bad.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.bad.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.bad.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "standing.bad.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "resisted"
+      ]
+    },
+    "conversations.topic.standing.bad.respond/protest": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "standing.bad.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.standing.good.followup/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.good.deed",
+        "standing.good.keep",
+        "standing.good.deflect"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.good.followup/keep_deserving": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.good.deed",
+        "standing.good.keep",
+        "standing.good.deflect"
+      ],
+      "requires_facts": [
+        "standing:good"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.standing.good.followup/thanks": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.good.deed",
+        "standing.good.keep",
+        "standing.good.deflect"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.standing.good.respond/ask_deed": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.good.open"
+      ],
+      "requires_facts": [
+        "standing:good"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.good.respond/ask_keep": {
+      "stance": "practical_help",
+      "responds_to": [
+        "standing.good.open"
+      ],
+      "requires_facts": [
+        "standing:good"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.good.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.good.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.good.respond/deflect": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "standing.good.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.standing.good.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "standing.good.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "resisted"
+      ]
+    },
+    "conversations.topic.standing.incident.followup/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.incident.deed",
+        "standing.amends.done",
+        "standing.incident.deny"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.incident.followup/brush": {
+      "stance": "dismissal",
+      "responds_to": [
+        "standing.incident.deed",
+        "standing.amends.done",
+        "standing.incident.deny"
+      ],
+      "tone": "hostile",
+      "outcomes": [
+        "rebuffed"
+      ]
+    },
+    "conversations.topic.standing.incident.followup/thanks": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.incident.deed",
+        "standing.amends.done",
+        "standing.incident.deny"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.standing.incident.respond/amends": {
+      "stance": "practical_help",
+      "responds_to": [
+        "standing.incident.open"
+      ],
+      "requires_facts": [
+        "incident:active"
+      ],
+      "introduces_facts": [
+        "player:apologized_publicly"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.standing.incident.respond/ask_deed": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.incident.open"
+      ],
+      "requires_facts": [
+        "incident:active"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.incident.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.incident.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.incident.respond/deny": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "standing.incident.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "resisted"
+      ]
+    },
+    "conversations.topic.standing.incident.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "standing.incident.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "resisted"
+      ]
+    },
+    "conversations.topic.standing.neutral.followup/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.neutral.how",
+        "standing.neutral.mine",
+        "standing.neutral.suits_me"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.neutral.followup/set_to_work": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.neutral.how",
+        "standing.neutral.mine",
+        "standing.neutral.suits_me"
+      ],
+      "requires_facts": [
+        "standing:unknown"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.standing.neutral.followup/thanks": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.neutral.how",
+        "standing.neutral.mine",
+        "standing.neutral.suits_me"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.standing.neutral.respond/ask_how": {
+      "stance": "practical_help",
+      "responds_to": [
+        "standing.neutral.open"
+      ],
+      "requires_facts": [
+        "standing:unknown"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.neutral.respond/ask_you": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.neutral.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "conversations.topic.standing.neutral.respond/back": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.neutral.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.standing.neutral.respond/content": {
+      "stance": "restraint",
+      "responds_to": [
+        "standing.neutral.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.standing.neutral.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "standing.neutral.open"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "resisted"
+      ]
+    }
+  }
+}

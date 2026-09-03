@@ -1,0 +1,1151 @@
+{
+  "_comment": [
+    "Engineer (More Villagers). An optional trade, and the one that proves the isolation rule: every",
+    "beat, reply and intent generated here lands in a file whose name ends '_morevillagers', and every",
+    "episode declares the integration, so with the mod absent none of it is reachable and the base",
+    "corpus is byte-for-byte what it was.",
+    "",
+    "§12.4 anchors: prototype, failure, automation, maintenance, iteration. All three situations here",
+    "are about a specific device doing a specific wrong thing, and she is genuinely interested in the",
+    "failures — which is the difference between an engineer and somebody who owns tools."
+  ],
+  "profession": "morevillagers:engineer",
+  "id": "engineer",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "prototypes",
+    "failures",
+    "automation",
+    "maintenance",
+    "skepticism",
+    "iteration"
+  ],
+  "leave_label": {
+    "en": "I'll leave you to the bench.",
+    "pt": "Vou deixar você com a bancada."
+  },
+  "slot_lang": {
+    "the_water_lift": {
+      "en": "the water lift",
+      "pt": "o elevador de água"
+    },
+    "the_grain_sorter": {
+      "en": "the grain sorter",
+      "pt": "o classificador de grãos"
+    },
+    "the_gate_counterweight": {
+      "en": "the gate counterweight",
+      "pt": "o contrapeso do portão"
+    },
+    "the_bellows_arm": {
+      "en": "the bellows arm",
+      "pt": "o braço do fole"
+    },
+    "it_binds_when_wet": {
+      "en": "binding when it gets wet",
+      "pt": "emperrar quando molha"
+    },
+    "the_third_lever": {
+      "en": "the third lever",
+      "pt": "a terceira alavanca"
+    },
+    "a_tooth_that_slips": {
+      "en": "a tooth that slips",
+      "pt": "um dente que escapa"
+    },
+    "the_timing": {
+      "en": "the timing",
+      "pt": "o compasso"
+    },
+    "the_mill_shaft": {
+      "en": "the mill shaft",
+      "pt": "o eixo do moinho"
+    },
+    "the_well_pulley": {
+      "en": "the well pulley",
+      "pt": "a roldana do poço"
+    },
+    "the_barn_door": {
+      "en": "the barn door",
+      "pt": "a porta do celeiro"
+    },
+    "the_bridge_hinge": {
+      "en": "the bridge hinge",
+      "pt": "a dobradiça da ponte"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.prototype_fault",
+      "subject": "work.engineer.prototypes",
+      "initial_state": "blocked",
+      "salience": 56,
+      "due_after_days": 6,
+      "expires_after_days": 24,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "device": [
+          "the_water_lift",
+          "the_grain_sorter",
+          "the_gate_counterweight",
+          "the_bellows_arm"
+        ],
+        "fault": [
+          "it_binds_when_wet",
+          "the_third_lever",
+          "a_tooth_that_slips",
+          "the_timing"
+        ]
+      },
+      "commitment": {
+        "id": "work.engineer.bring_iron",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:iron_ingot",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "device",
+            "fault"
+          ],
+          "identity_values": [
+            "precision",
+            "curiosity",
+            "ambition"
+          ],
+          "prompt": {
+            "en": "The bench.",
+            "pt": "A bancada."
+          },
+          "lines": {
+            "en": [
+              "%2$s works four times out of five and I have not found the fifth. It is %3$s, and I can make it happen, and I cannot make it stop.",
+              "Do not lean on the bench. %2$s is in pieces because of %3$s, and I have the pieces in the order I took them off.",
+              "I have been at %2$s since first light. %3$s. I know that much and I have known that much since Tuesday, which is the frustrating part."
+            ],
+            "pt": [
+              "%2$s funciona quatro vezes em cinco e eu não achei a quinta. É %3$s, e eu consigo reproduzir, e não consigo fazer parar.",
+              "Não encoste na bancada. %2$s está em pedaços por causa de %3$s, e eu tenho as peças na ordem em que tirei.",
+              "Estou n%2$s desde o raiar do dia. %3$s. Sei isso e sei isso desde terça, que é a parte frustrante."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_reproduce",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Can you make it fail on purpose?",
+                "pt": "Você consegue fazer falhar de propósito?"
+              },
+              "phrases": [
+                "can you reproduce the fault",
+                "does it fail when you want it to"
+              ],
+              "requires_any": [
+                "purpose",
+                "reproduce",
+                "fail"
+              ],
+              "disposition": {
+                "respect": 3,
+                "familiarity": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "teach_back",
+                "slots_used": [
+                  "fault"
+                ],
+                "lines": {
+                  "en": [
+                    "Every time, which is the only good news I have. A fault you can summon is a fault you can corner. %2$s only hides from people who are not looking properly.",
+                    "Now I can. It took two days to get there and everybody thinks those two days were wasted, and they were the entire job.",
+                    "That is the right question and almost nobody asks it. Yes — six times running this morning, same conditions, same failure. Now it is arithmetic."
+                  ],
+                  "pt": [
+                    "Toda vez, que é a única boa notícia que eu tenho. Falha que se consegue invocar é falha que se consegue encurralar. %2$s só se esconde de quem não olha direito.",
+                    "Agora consigo. Levei dois dias para chegar aí, e todo mundo acha que esses dois dias foram desperdiçados, e eram o trabalho inteiro.",
+                    "Essa é a pergunta certa e quase ninguém faz. Sim — seis vezes seguidas esta manhã, mesmas condições, mesma falha. Agora é aritmética."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_iron",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I can bring you iron for the part.",
+                "pt": "Posso trazer ferro para a peça."
+              },
+              "phrases": [
+                "let me bring you iron",
+                "i will fetch iron for it"
+              ],
+              "requires_any": [
+                "iron"
+              ],
+              "disposition": {
+                "trust": 3,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.engineer.prototype_fault.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "device"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I can cut the part properly instead of shimming it, and %2$s stops being a thing I apologise for.",
+                    "You have just moved this from next month to this week. I am going to be insufferable about %2$s when it works.",
+                    "Yes. Bring it and stay ten minutes — I would like somebody to watch the first run who will tell me if it looks wrong."
+                  ],
+                  "pt": [
+                    "Então posso usinar a peça direito em vez de calçar, e %2$s deixa de ser uma coisa pela qual eu peço desculpas.",
+                    "Você acabou de trazer isso do mês que vem para esta semana. Vou ser insuportável sobre %2$s quando funcionar.",
+                    "Sim. Traga e fique dez minutos — quero alguém assistindo à primeira volta que me diga se parecer errado."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_simpler",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "Build a simpler one that always works.",
+                "pt": "Faça um mais simples que sempre funcione."
+              },
+              "phrases": [
+                "make something simpler instead",
+                "a simple version that always works"
+              ],
+              "requires_any": [
+                "simpler",
+                "simple"
+              ],
+              "disposition": {
+                "respect": 2,
+                "tension": 1
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "device"
+                ],
+                "lines": {
+                  "en": [
+                    "The simple one exists. It is a rope and two people, and it costs the village two people every day for ever. %2$s costs me a fortnight once.",
+                    "You are describing giving up in a way that sounds like sense, and I have talked myself into it twice already this year.",
+                    "I will grant that the simple one would be working now. I will not grant that it would be better in five years, and I am building for five years."
+                  ],
+                  "pt": [
+                    "O simples existe. É uma corda e duas pessoas, e custa à vila duas pessoas por dia para sempre. %2$s me custa quinze dias uma vez.",
+                    "Você está descrevendo desistir de um jeito que soa como bom senso, e eu já me convenci disso duas vezes este ano.",
+                    "Admito que o simples estaria funcionando agora. Não admito que seria melhor em cinco anos, e eu construo para cinco anos."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "device"
+          ],
+          "prompt": {
+            "en": "It runs.",
+            "pt": "Está rodando."
+          },
+          "lines": {
+            "en": [
+              "%2$s has run forty times without stopping. I counted all forty. I am aware of what that says about me.",
+              "It works. Not because I was clever — because I was slow, and stayed with it after the point where being clever had stopped helping.",
+              "Fixed. And the fix was two lines of file work in a place I had looked at nine times, which is exactly how it always is."
+            ],
+            "pt": [
+              "%2$s rodou quarenta vezes sem parar. Contei as quarenta. Tenho noção do que isso diz sobre mim.",
+              "Funciona. Não porque eu fui esperta — porque fui lenta, e continuei depois do ponto em que ser esperta parou de ajudar.",
+              "Resolvido. E o conserto foram duas passadas de lima num lugar que eu já tinha olhado nove vezes, que é exatamente como sempre é."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_the_fix",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What was actually wrong with it?",
+                "pt": "O que estava errado de verdade?"
+              },
+              "phrases": [
+                "what was the real fault",
+                "what turned out to be wrong"
+              ],
+              "requires_any": [
+                "wrong",
+                "fault"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "taught",
+                "act": "explain",
+                "polarity": "positive",
+                "shape": "teach_back",
+                "slots_used": [
+                  "device"
+                ],
+                "lines": {
+                  "en": [
+                    "A gap the width of a hair that only opened when the wood swelled. So %2$s was fine in the workshop and wrong in the rain, and I test in the workshop.",
+                    "I had the load in the wrong place by about a thumb. Everything downstream of that was me solving problems I had made.",
+                    "Nothing clever. It was assembled in the wrong order, and it had been assembled in the wrong order since the first day, by me."
+                  ],
+                  "pt": [
+                    "Uma folga da largura de um fio de cabelo que só abria quando a madeira inchava. Então %2$s estava bom na oficina e errado na chuva, e eu testo na oficina.",
+                    "Eu tinha posto a carga fora de lugar por uns dois centímetros. Tudo depois disso era eu resolvendo problemas que eu mesma criei.",
+                    "Nada engenhoso. Estava montado na ordem errada, e estava na ordem errada desde o primeiro dia, por minha causa."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "credit_persistence",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You stayed with it after it stopped being interesting.",
+                "pt": "Você continuou depois de deixar de ser interessante."
+              },
+              "phrases": [
+                "you kept at it past the interesting part",
+                "staying with it was the skill"
+              ],
+              "requires_any": [
+                "stayed",
+                "kept",
+                "staying"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.engineer.prototype_fault.credit",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "credited",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "That is the whole trade and it is never what anybody praises. They praise the idea. The idea took an afternoon.",
+                    "I nearly did not. Day nine I put the tools down and went for a walk that lasted until dark.",
+                    "Thank you. Write that on my headstone rather than anything about being inventive."
+                  ],
+                  "pt": [
+                    "Isso é o ofício inteiro e nunca é o que elogiam. Elogiam a ideia. A ideia levou uma tarde.",
+                    "Quase não continuei. No nono dia larguei as ferramentas e fui caminhar até escurecer.",
+                    "Obrigada. Escreva isso na minha lápide, em vez de qualquer coisa sobre ser inventiva."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "act": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "device",
+            "fault"
+          ],
+          "prompt": {
+            "en": "You gave it up.",
+            "pt": "Você desistiu."
+          },
+          "lines": {
+            "en": [
+              "I have taken %2$s apart. %3$s was never going to be solved with what I have, and pretending otherwise was costing the village a working bench.",
+              "It is off the bench. I kept the drawings and the good bearings and I burned the rest, which was more satisfying than it should have been.",
+              "%2$s is finished, in the sense of stopped. I got two useful things out of it and neither is the thing I was trying to make."
+            ],
+            "pt": [
+              "Desmontei %2$s. %3$s nunca ia se resolver com o que eu tenho, e fingir o contrário custava à vila uma bancada funcionando.",
+              "Saiu da bancada. Guardei os desenhos e os bons mancais e queimei o resto, o que foi mais satisfatório do que deveria.",
+              "%2$s acabou, no sentido de parou. Tirei duas coisas úteis disso e nenhuma é a coisa que eu tentava fazer."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_kept",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did you keep out of it?",
+                "pt": "O que você aproveitou disso?"
+              },
+              "phrases": [
+                "what came out of it",
+                "what did you salvage"
+              ],
+              "requires_any": [
+                "keep",
+                "salvage",
+                "came"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "salvaged",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "teach_back",
+                "temporal": "past",
+                "lines": {
+                  "en": [
+                    "A way of holding two shafts true that I will use for the rest of my life, and a very clear sense of what I cannot do with wood.",
+                    "The knowledge that I will not try that again, which sounds like nothing and is worth a year.",
+                    "Two bearings and an apology I owe the miller. In that order of usefulness, sadly."
+                  ],
+                  "pt": [
+                    "Um jeito de manter dois eixos alinhados que vou usar pelo resto da vida, e uma noção bem clara do que eu não consigo fazer com madeira.",
+                    "A certeza de que não vou tentar aquilo de novo, o que parece nada e vale um ano.",
+                    "Dois mancais e um pedido de desculpas que devo ao moleiro. Nessa ordem de utilidade, infelizmente."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "respect_stopping",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Knowing when to walk away is a skill too.",
+                "pt": "Saber a hora de largar também é habilidade."
+              },
+              "phrases": [
+                "walking away is a skill as well",
+                "knowing when to abandon a thing takes judgement"
+              ],
+              "requires_any": [
+                "walking",
+                "abandon",
+                "skill"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.engineer.prototype_fault.stopping",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "received",
+                "act": "qualify",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is, and it is the one I am worst at. I have been stopping this for six weeks and only actually stopped on Tuesday.",
+                    "I would like to believe that. Some days I do. Today I mostly notice the bench being empty.",
+                    "The difficult bit is that stopping and giving up look identical from outside, and about eighty per cent identical from inside."
+                  ],
+                  "pt": [
+                    "É, e é a que eu faço pior. Venho parando isso há seis semanas e só parei de verdade na terça.",
+                    "Eu gostaria de acreditar nisso. Em alguns dias acredito. Hoje eu reparo principalmente na bancada vazia.",
+                    "A parte difícil é que parar e desistir são idênticos vistos de fora, e uns oitenta por cento idênticos vistos de dentro."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.maintenance_round",
+      "subject": "work.engineer.maintenance",
+      "initial_state": "active",
+      "salience": 40,
+      "expires_after_days": 20,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "fixture": [
+          "the_mill_shaft",
+          "the_well_pulley",
+          "the_barn_door",
+          "the_bridge_hinge"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "plan",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "fixture"
+          ],
+          "identity_styles": [
+            "methodical",
+            "pragmatic"
+          ],
+          "prompt": {
+            "en": "About the rounds.",
+            "pt": "Sobre as rondas."
+          },
+          "lines": {
+            "en": [
+              "%2$s wants greasing every eleven days and gets it every twenty, because nobody sends for me until it squeals.",
+              "I have a list. %2$s is on it three times, which means three times I went and it was fine, and the fourth time is the one I will miss.",
+              "Half my week is %2$s and the other three like it. It is not what anyone thinks I do and it is what keeps the village standing up."
+            ],
+            "pt": [
+              "%2$s precisa de graxa a cada onze dias e recebe a cada vinte, porque ninguém me chama até guinchar.",
+              "Tenho uma lista. %2$s aparece três vezes, o que significa três vezes que fui e estava bem, e a quarta é a que eu vou perder.",
+              "Metade da minha semana é %2$s e as outras três iguais a ele. Não é o que as pessoas acham que eu faço e é o que mantém a vila de pé."
+            ]
+          },
+          "replies": [
+            {
+              "name": "urge_schedule",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "advance": "succeeded",
+              "label": {
+                "en": "Set a fixed round and tell people it's fixed.",
+                "pt": "Faça uma ronda fixa e avise que é fixa."
+              },
+              "phrases": [
+                "set a regular round",
+                "make it a fixed schedule people know about"
+              ],
+              "requires_any": [
+                "round",
+                "fixed",
+                "schedule"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "adopted",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "fixture"
+                ],
+                "lines": {
+                  "en": [
+                    "Announced, so that it is theirs and not a favour. Yes. I have been treating %2$s as something I do quietly and that is why it gets forgotten.",
+                    "Every eleven days, on the same day, whether or not anything squeals. Written up at the well. I will feel ridiculous doing it and it will work.",
+                    "That takes the deciding out of it, which is the part that actually costs me. Right."
+                  ],
+                  "pt": [
+                    "Anunciada, para ser deles e não um favor. Sim. Venho tratando %2$s como coisa que faço em silêncio, e é por isso que esquecem.",
+                    "A cada onze dias, no mesmo dia, guinche ou não. Afixado no poço. Vou me sentir ridícula fazendo isso e vai funcionar.",
+                    "Isso tira o decidir do meio, que é a parte que de fato me custa. Certo."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_what_breaks",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What breaks first when you're late?",
+                "pt": "O que quebra primeiro quando você atrasa?"
+              },
+              "phrases": [
+                "what fails first if you are late",
+                "what goes wrong when it is overdue"
+              ],
+              "requires_any": [
+                "breaks",
+                "fails",
+                "late",
+                "overdue"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "teach_back",
+                "slots_used": [
+                  "fixture"
+                ],
+                "lines": {
+                  "en": [
+                    "Nothing, and then everything. %2$s runs dry for a week without complaint and then eats a bearing in an afternoon.",
+                    "The quiet parts go first — the ones nobody hears fail. By the time something squeals, the squealing is the second problem.",
+                    "Whatever is carrying the most load and getting the least attention, which in this village is almost always the same object."
+                  ],
+                  "pt": [
+                    "Nada, e depois tudo. %2$s roda seco uma semana sem reclamar e aí come um mancal numa tarde.",
+                    "As partes silenciosas vão primeiro — aquelas que ninguém ouve falhar. Quando algo guincha, o guincho já é o segundo problema.",
+                    "O que estiver carregando mais carga e recebendo menos atenção, que nesta vila é quase sempre o mesmo objeto."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "fixture"
+          ],
+          "prompt": {
+            "en": "The round is running.",
+            "pt": "A ronda está funcionando."
+          },
+          "lines": {
+            "en": [
+              "Three rounds in and nothing has squealed once. %2$s got its grease on the day, and I have started to enjoy the boredom of it.",
+              "It is written up at the well and two people have already asked me to add things to it, which I am counting as a triumph.",
+              "The round works. I fixed nothing this week. That is the whole point and it took me four years to understand it."
+            ],
+            "pt": [
+              "Três rondas e nada guinchou nenhuma vez. %2$s recebeu graxa no dia, e comecei a gostar do tédio disso.",
+              "Está afixado no poço e duas pessoas já me pediram para incluir coisas, o que estou contando como triunfo.",
+              "A ronda funciona. Não consertei nada esta semana. É esse o objetivo e levei quatro anos para entender."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_invisibility",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "The better it works, the less anyone sees you.",
+                "pt": "Quanto melhor funciona, menos te enxergam."
+              },
+              "phrases": [
+                "the better it works the less anyone sees",
+                "good maintenance stays invisible"
+              ],
+              "requires_any": [
+                "works",
+                "sees",
+                "invisible",
+                "maintenance"
+              ],
+              "disposition": {
+                "warmth": 2,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "wry",
+                "act": "qualify",
+                "polarity": "mixed",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "Not one. The better I am at this the less evidence there is that I exist, and I chose the trade knowing that, and it still stings on a Thursday.",
+                    "That is the arrangement. I get a village that works and they get to never think about me. On balance I would take it again.",
+                    "You noticed, which is annoying of you, because I had a whole speech about being unappreciated ready."
+                  ],
+                  "pt": [
+                    "Nem uma. Quanto melhor eu sou nisso, menos prova existe de que eu existo, e escolhi o ofício sabendo disso, e ainda arde numa quinta-feira.",
+                    "É o acordo. Eu fico com uma vila que funciona e eles ficam com nunca pensar em mim. No fim das contas, eu escolheria de novo.",
+                    "Você reparou, o que é chato da sua parte, porque eu tinha um discurso inteiro sobre não ser reconhecida pronto."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_add",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What else should be on the round?",
+                "pt": "O que mais deveria estar na ronda?"
+              },
+              "phrases": [
+                "what else belongs on the list",
+                "what should you add to it"
+              ],
+              "requires_any": [
+                "else",
+                "list",
+                "add"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "listed",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Everything with a hinge, eventually. I am adding one thing a month so that the round stays a round rather than becoming my whole life.",
+                    "The bell frame, which nobody has looked at since it was hung and which I think about at night.",
+                    "Ask me what should not be on it — that is the shorter list, and keeping it short is the actual discipline."
+                  ],
+                  "pt": [
+                    "Tudo que tem dobradiça, com o tempo. Estou acrescentando uma coisa por mês para que a ronda continue uma ronda e não vire a minha vida inteira.",
+                    "A estrutura do sino, que ninguém olha desde que foi pendurada e na qual eu penso à noite.",
+                    "Me pergunte o que não deveria estar nela — essa lista é mais curta, e mantê-la curta é a disciplina de verdade."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.doubted_idea",
+      "subject": "work.engineer.skepticism",
+      "initial_state": "blocked",
+      "salience": 36,
+      "expires_after_days": 22,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "device": [
+          "the_water_lift",
+          "the_grain_sorter",
+          "the_gate_counterweight",
+          "the_bellows_arm"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "debate",
+          "predicate": "opinion",
+          "temporal": "current",
+          "act": "complain",
+          "polarity": "negative",
+          "obligations": [
+            "decide",
+            "clarify"
+          ],
+          "slots_used": [
+            "device"
+          ],
+          "identity_values": [
+            "fairness",
+            "independence",
+            "curiosity"
+          ],
+          "prompt": {
+            "en": "About the doubters.",
+            "pt": "Sobre os que duvidam."
+          },
+          "lines": {
+            "en": [
+              "Half the village thinks %2$s is a toy. They are polite about it, which is worse than if they said so.",
+              "I asked for two days of help with %2$s and was told, kindly, that people have real work. I have been chewing on that for a week.",
+              "Nobody will use %2$s until it is finished and I cannot finish %2$s without somebody using it. That is the whole difficulty and it is not technical."
+            ],
+            "pt": [
+              "Metade da vila acha que %2$s é brinquedo. São educados quanto a isso, o que é pior do que se dissessem.",
+              "Pedi dois dias de ajuda com %2$s e me disseram, com gentileza, que as pessoas têm trabalho de verdade. Faz uma semana que eu remoo isso.",
+              "Ninguém vai usar %2$s até estar pronto, e eu não consigo terminar %2$s sem alguém usando. É essa a dificuldade inteira, e não é técnica."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_to_try_it",
+              "stance": "practical_help",
+              "answers": [
+                "decide"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "advance": "succeeded",
+              "label": {
+                "en": "Show me. I'll use it and tell you what's wrong.",
+                "pt": "Me mostre. Eu uso e digo o que está errado."
+              },
+              "phrases": [
+                "show me and ill use it",
+                "let me try it and report back"
+              ],
+              "requires_any": [
+                "show",
+                "use",
+                "try"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.engineer.doubted_idea.trial",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "device"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s has a user, and a thing with a user is not a toy. That is not flattery, it is the actual definition I have been failing to reach.",
+                    "Come at noon and I will not hover. Use it wrong. Please use it wrong — that is worth more to me than using it right.",
+                    "You will find three things I have stopped being able to see. Everybody does, in the first ten minutes, every time."
+                  ],
+                  "pt": [
+                    "Então %2$s tem um usuário, e uma coisa com usuário não é brinquedo. Não é lisonja, é a definição que eu venho falhando em alcançar.",
+                    "Venha ao meio-dia e eu não fico em cima. Use errado. Por favor, use errado — vale mais para mim do que usar certo.",
+                    "Você vai achar três coisas que eu já não consigo enxergar. Todo mundo acha, nos primeiros dez minutos, todas as vezes."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_what_convinces",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What would convince them?",
+                "pt": "O que os convenceria?"
+              },
+              "phrases": [
+                "what would change their minds",
+                "what convinces people around here"
+              ],
+              "requires_any": [
+                "convince",
+                "convinces",
+                "minds"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "debate",
+                "slots_used": [
+                  "device"
+                ],
+                "lines": {
+                  "en": [
+                    "One harvest where %2$s saves somebody a day. Not an argument, not a drawing. One person with a day back who tells somebody else.",
+                    "Nothing I say. That is the lesson of four years and I keep having to learn it again every time I have a good idea.",
+                    "Being wrong loudly, once, and admitting it. They do not distrust the machine. They distrust somebody who has never said 'that did not work'."
+                  ],
+                  "pt": [
+                    "Uma colheita em que %2$s poupe um dia de alguém. Não um argumento, não um desenho. Uma pessoa com um dia a mais que conte para outra.",
+                    "Nada que eu diga. É a lição de quatro anos e eu preciso reaprender toda vez que tenho uma boa ideia.",
+                    "Errar em voz alta, uma vez, e admitir. Eles não desconfiam da máquina. Desconfiam de quem nunca disse 'aquilo não deu certo'."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "device"
+          ],
+          "prompt": {
+            "en": "They came round.",
+            "pt": "Eles mudaram de ideia."
+          },
+          "lines": {
+            "en": [
+              "The miller used %2$s twice this week without being asked. He has not said anything about it, which is how you know it has worked.",
+              "Somebody else asked me to build one. Not admire one. Build one. I had to go and stand outside for a minute.",
+              "%2$s is on the list of things the village has, rather than the list of things I am doing. Those are very different lists."
+            ],
+            "pt": [
+              "O moleiro usou %2$s duas vezes esta semana sem que eu pedisse. Não comentou nada, que é como se sabe que funcionou.",
+              "Outra pessoa me pediu para construir um. Não admirar um. Construir. Tive de sair e ficar um minuto lá fora.",
+              "%2$s está na lista de coisas que a vila tem, em vez da lista de coisas que eu estou fazendo. São listas muito diferentes."
+            ]
+          },
+          "replies": [
+            {
+              "name": "congratulate",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You were right and you waited it out.",
+                "pt": "Você estava certa e soube esperar."
+              },
+              "phrases": [
+                "you were right all along",
+                "you waited them out and were right"
+              ],
+              "requires_any": [
+                "right",
+                "waited"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.engineer.doubted_idea.praise",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "I was right about the machine. I was wrong about how to convince anybody, for four years, and that cost more than the machine did.",
+                    "Waiting it out is a generous word for what I did, which was sulk in a workshop and occasionally file something.",
+                    "Say it once more and then let us never mention it, because I would like to still be liveable-with next month."
+                  ],
+                  "pt": [
+                    "Eu estava certa sobre a máquina. Estava errada sobre como convencer alguém, por quatro anos, e isso custou mais que a máquina.",
+                    "Esperar é uma palavra generosa para o que eu fiz, que foi emburrar numa oficina e vez ou outra limar alguma coisa.",
+                    "Diga mais uma vez e depois nunca mais falemos disso, porque eu gostaria de continuar suportável mês que vem."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_next_build",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What will you build next?",
+                "pt": "O que você vai construir agora?"
+              },
+              "phrases": [
+                "what is the next build",
+                "what comes next on the bench"
+              ],
+              "requires_any": [
+                "build",
+                "next"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "planned",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "Something small and dull that four people need, on purpose, before I am allowed anything interesting again.",
+                    "Nothing, for a month. I have a bench full of half-things and a reputation I would like to keep for more than a fortnight.",
+                    "There is a thing about water and winter that I am refusing to think about, and I have been refusing for six days, and I will lose."
+                  ],
+                  "pt": [
+                    "Algo pequeno e sem graça de que quatro pessoas precisem, de propósito, antes de eu ter direito a algo interessante de novo.",
+                    "Nada, por um mês. Tenho uma bancada cheia de meias-coisas e uma reputação que eu gostaria de manter por mais de quinze dias.",
+                    "Tem uma coisa sobre água e inverno que eu me recuso a pensar, e me recuso há seis dias, e eu vou perder."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of building something new?",
+        "pt": "Qual é a parte mais difícil de construir algo novo?"
+      },
+      "requires_any": [
+        "hardest",
+        "building",
+        "difficult"
+      ],
+      "phrases": [
+        "hardest part of building something",
+        "what is difficult about making new things"
+      ]
+    },
+    "leave": {
+      "en": "I'll let you get back to it.",
+      "pt": "Vou deixar você voltar ao trabalho."
+    }
+  }
+}

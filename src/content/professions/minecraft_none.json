@@ -1,0 +1,1148 @@
+{
+  "_comment": [
+    "Unemployed. The trade that is not one, and the pack that has to be most careful.",
+    "",
+    "§12.4 asks for between-trades, apprenticeship, a failed attempt, admiration and choice — and the",
+    "hard rule underneath it is that this villager has no worksite and no materials. Every situation",
+    "here is about deciding, being turned down, or being useful without a title, and not one line",
+    "assumes a bench, a tool or a shop.",
+    "",
+    "Dignity is the whole brief. Someone between trades is not a lesser person waiting to become a",
+    "real one, and nothing here treats them as a problem to be solved by the player."
+  ],
+  "profession": "minecraft:none",
+  "id": "none",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "between_trades",
+    "apprenticeship",
+    "failed_attempt",
+    "worry",
+    "freedom",
+    "admiration"
+  ],
+  "leave_label": {
+    "en": "I'll let you get on with your day.",
+    "pt": "Vou deixar você tocar o seu dia."
+  },
+  "slot_lang": {
+    "the_smithy": {
+      "en": "the smithy",
+      "pt": "a ferraria"
+    },
+    "the_library": {
+      "en": "the library",
+      "pt": "a biblioteca"
+    },
+    "the_fields": {
+      "en": "the fields",
+      "pt": "os campos"
+    },
+    "the_kitchen": {
+      "en": "the kitchen",
+      "pt": "a cozinha"
+    },
+    "the_tannery": {
+      "en": "the tannery",
+      "pt": "o curtume"
+    },
+    "too_old_to_start": {
+      "en": "being too old to start",
+      "pt": "ser velho demais para começar"
+    },
+    "no_one_to_teach_me": {
+      "en": "having nobody to teach me",
+      "pt": "não ter quem me ensine"
+    },
+    "the_hands_for_it": {
+      "en": "not having the hands for it",
+      "pt": "não ter jeito com as mãos"
+    },
+    "a_bad_first_week": {
+      "en": "a bad first week",
+      "pt": "uma primeira semana ruim"
+    },
+    "carrying_for_the_mason": {
+      "en": "carrying for the mason",
+      "pt": "carregar coisas para o pedreiro"
+    },
+    "minding_the_gate": {
+      "en": "minding the gate",
+      "pt": "cuidar do portão"
+    },
+    "watching_the_children": {
+      "en": "watching the children",
+      "pt": "cuidar das crianças"
+    },
+    "fetching_water": {
+      "en": "fetching water",
+      "pt": "buscar água"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.trade_decision",
+      "subject": "work.none.between_trades",
+      "initial_state": "blocked",
+      "salience": 50,
+      "due_after_days": 8,
+      "expires_after_days": 28,
+      "slots": {
+        "trade": [
+          "the_smithy",
+          "the_library",
+          "the_fields",
+          "the_kitchen",
+          "the_tannery"
+        ],
+        "doubt": [
+          "too_old_to_start",
+          "no_one_to_teach_me",
+          "the_hands_for_it",
+          "a_bad_first_week"
+        ]
+      },
+      "commitment": {
+        "id": "work.none.come_back_after",
+        "resolver": "visit_after_day",
+        "due_after_days": 4
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "act": "complain",
+          "polarity": "negative",
+          "obligations": [
+            "decide",
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "trade",
+            "doubt"
+          ],
+          "identity_values": [
+            "independence",
+            "curiosity",
+            "ambition"
+          ],
+          "prompt": {
+            "en": "About what's next.",
+            "pt": "Sobre o que vem depois."
+          },
+          "lines": {
+            "en": [
+              "I have been standing outside %2$s for three mornings now, working up to going in. %3$s is what stops me, and I know how thin that sounds.",
+              "Everyone here has a thing they are. I have %2$s in my head and %3$s in the way of it, and neither of them will move.",
+              "I could go to %2$s tomorrow. I have been able to go tomorrow for a month. %3$s keeps making tomorrow further off."
+            ],
+            "pt": [
+              "Faz três manhãs que fico parado na frente d%2$s, criando coragem para entrar. %3$s é o que me trava, e sei como isso soa frágil.",
+              "Todo mundo aqui é alguma coisa. Eu tenho %2$s na cabeça e %3$s no caminho, e nenhum dos dois sai do lugar.",
+              "Eu poderia ir a %2$s amanhã. Faz um mês que posso ir amanhã. %3$s vai empurrando o amanhã para mais longe."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_why_that_one",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Why that trade in particular?",
+                "pt": "Por que justamente esse ofício?"
+              },
+              "phrases": [
+                "what draws you to that one",
+                "why that trade and not another"
+              ],
+              "requires_any": [
+                "trade",
+                "draws",
+                "particular"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "confide",
+                "slots_used": [
+                  "trade"
+                ],
+                "lines": {
+                  "en": [
+                    "Because I have watched %2$s from outside for two years and I still have not got bored of watching, which seems like the only honest test I have.",
+                    "My aunt did that work. Not here — a long way from here — and she was the only adult who ever explained anything to me instead of telling me.",
+                    "Because it is the one where the useful part is visible at the end of the day. I would like a day I can point at."
+                  ],
+                  "pt": [
+                    "Porque venho olhando %2$s de fora há dois anos e ainda não me cansei de olhar, o que me parece o único teste honesto que eu tenho.",
+                    "Minha tia fazia esse trabalho. Não aqui — bem longe daqui — e foi a única adulta que me explicou as coisas em vez de mandar.",
+                    "Porque é aquele em que a parte útil aparece no fim do dia. Eu gostaria de ter um dia que eu possa apontar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_to_return",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "Go in this week. I'll come back and hear how it went.",
+                "pt": "Entre esta semana. Eu volto para saber como foi."
+              },
+              "phrases": [
+                "ill come back and ask how it went",
+                "go this week and tell me after"
+              ],
+              "requires_any": [
+                "come",
+                "week",
+                "went"
+              ],
+              "disposition": {
+                "trust": 3,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.none.trade_decision.support",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "trade"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I will have to, because you will ask. That is a cheap trick and I am grateful for it.",
+                    "Somebody expecting an answer is worth more than any amount of me deciding on my own. I will go to %2$s before you are back.",
+                    "All right. This week. And if it goes badly you get to hear that too, which is the part I am actually agreeing to."
+                  ],
+                  "pt": [
+                    "Então vou ter de ir, porque você vai perguntar. É um truque barato e eu agradeço por ele.",
+                    "Alguém esperando uma resposta vale mais do que qualquer quantidade de eu decidindo sozinho. Vou a %2$s antes de você voltar.",
+                    "Está bem. Esta semana. E se correr mal, você vai ouvir isso também, que é a parte com que eu de fato estou concordando."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "question_doubt",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "resisted",
+              "label": {
+                "en": "That reason sounds like fear wearing a coat.",
+                "pt": "Esse motivo parece medo de casaco."
+              },
+              "phrases": [
+                "that sounds like fear in a coat",
+                "i think that reason is fear"
+              ],
+              "requires_any": [
+                "fear",
+                "coat",
+                "reason"
+              ],
+              "disposition": {
+                "respect": 2,
+                "tension": 2
+              },
+              "reaction": {
+                "id": "resisted",
+                "act": "resist",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "debate",
+                "slots_used": [
+                  "doubt"
+                ],
+                "lines": {
+                  "en": [
+                    "It might be. It is also true. %2$s does not stop being real because I am also frightened of it.",
+                    "You say that from inside a life that worked out. I am not saying you are wrong. I am saying it is easy from there.",
+                    "Perhaps. And if I go in and it is not fear, if it is simply true, then I have spent the last thing I had to spend."
+                  ],
+                  "pt": [
+                    "Pode ser. E também é verdade. %2$s não deixa de ser real só porque eu também tenho medo.",
+                    "Você diz isso de dentro de uma vida que deu certo. Não estou dizendo que está errado. Estou dizendo que daí é fácil.",
+                    "Talvez. E se eu entrar e não for medo, se for simplesmente verdade, então gastei a última coisa que eu tinha para gastar."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trade"
+          ],
+          "prompt": {
+            "en": "You went.",
+            "pt": "Você foi."
+          },
+          "lines": {
+            "en": [
+              "I went to %2$s. They said come back Thursday, which is not yes and is a great deal more than I had on Monday.",
+              "I asked. Out loud, to a person, at %2$s. Whatever happens next I have done the part I had been calling impossible.",
+              "It is arranged. Three days a week to start, and I have already been told I hold things wrong, and I did not mind at all."
+            ],
+            "pt": [
+              "Fui a %2$s. Disseram para eu voltar quinta, o que não é um sim e é muito mais do que eu tinha na segunda.",
+              "Eu pedi. Em voz alta, para uma pessoa, n%2$s. Aconteça o que acontecer, já fiz a parte que eu vinha chamando de impossível.",
+              "Está combinado. Três dias por semana para começar, e já me disseram que seguro as coisas errado, e eu nem me importei."
+            ]
+          },
+          "replies": [
+            {
+              "name": "credit_them",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "You did the hard part yourself.",
+                "pt": "A parte difícil foi você que fez."
+              },
+              "phrases": [
+                "that was your doing not mine",
+                "you did the difficult bit alone"
+              ],
+              "requires_any": [
+                "hard",
+                "difficult",
+                "yourself",
+                "doing"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "affection": {
+                "decision": "work.none.trade_decision.credit",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "credited",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "I did it because somebody was going to ask. That is not doing it alone and I am not going to pretend otherwise.",
+                    "The hard part took about nine seconds. The four weeks before it were the difficult bit, and nobody sees those.",
+                    "Say that again in a month when I am bad at it and want to stop. I will need it more then than now."
+                  ],
+                  "pt": [
+                    "Eu fiz porque alguém ia perguntar. Isso não é fazer sozinho e não vou fingir que foi.",
+                    "A parte difícil levou uns nove segundos. As quatro semanas antes é que foram o duro, e essas ninguém vê.",
+                    "Repita isso daqui a um mês, quando eu estiver ruim nisso e quiser parar. Vou precisar mais lá do que agora."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_first_day",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What was the first day like?",
+                "pt": "Como foi o primeiro dia?"
+              },
+              "phrases": [
+                "how was the first day",
+                "what happened on your first day"
+              ],
+              "requires_any": [
+                "first",
+                "day"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "recounted",
+                "act": "reminisce",
+                "polarity": "mixed",
+                "temporal": "past",
+                "shape": "reminisce",
+                "slots_used": [
+                  "trade"
+                ],
+                "lines": {
+                  "en": [
+                    "Long, and I was in the way for most of it. At %2$s there is a way of standing that says you belong there and I have not learned it.",
+                    "Quiet. I had built it up into something enormous and it was mostly sweeping. I have never enjoyed sweeping so much.",
+                    "I made one mistake before noon and nobody made anything of it, which frightened me more than being shouted at would have."
+                  ],
+                  "pt": [
+                    "Longo, e passei quase todo ele atrapalhando. N%2$s existe um jeito de ficar de pé que diz que você pertence ali, e eu não aprendi.",
+                    "Calmo. Eu tinha transformado aquilo em algo enorme e era quase só varrer. Nunca gostei tanto de varrer.",
+                    "Cometi um erro antes do meio-dia e ninguém fez caso, o que me assustou mais do que se tivessem gritado."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "failed",
+          "shape": "reminisce",
+          "predicate": "status_change",
+          "temporal": "past",
+          "act": "complain",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trade",
+            "doubt"
+          ],
+          "prompt": {
+            "en": "It didn't take.",
+            "pt": "Não deu certo."
+          },
+          "lines": {
+            "en": [
+              "%2$s said no. Politely, and with a reason, and the reason was %3$s, so at least I was not imagining it.",
+              "I went and it did not take. Two weeks and then a conversation where we both agreed it was for the best, and only one of us meant it.",
+              "It is over. I am not going back to %2$s and I would rather talk about almost anything else, but you asked honestly so there it is."
+            ],
+            "pt": [
+              "%2$s disse não. Com educação, e com um motivo, e o motivo era %3$s, então pelo menos não era coisa da minha cabeça.",
+              "Eu fui e não deu certo. Duas semanas e depois uma conversa em que nós dois concordamos que era o melhor, e só um dos dois falava sério.",
+              "Acabou. Não vou voltar a %2$s e eu preferiria falar de quase qualquer outra coisa, mas você perguntou de verdade, então está aí."
+            ]
+          },
+          "replies": [
+            {
+              "name": "sit_with_it",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That took courage, and it still hurt. Both are true.",
+                "pt": "Foi corajoso, e doeu mesmo assim. As duas coisas são verdade."
+              },
+              "phrases": [
+                "it took courage and it still hurt",
+                "brave and painful at the same time"
+              ],
+              "requires_any": [
+                "courage",
+                "brave",
+                "hurt"
+              ],
+              "disposition": {
+                "warmth": 4,
+                "trust": 3
+              },
+              "affection": {
+                "decision": "work.none.trade_decision.mourn",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "received",
+                "act": "qualify",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "Both being true is the part I could not hold on my own. Everyone picks one and tells me that one.",
+                    "Thank you. I have had 'at least you tried' four times this week and it lands like a door closing.",
+                    "I would rather have gone and been turned down than still be standing outside working up to it. Some days I even believe that."
+                  ],
+                  "pt": [
+                    "As duas coisas serem verdade é a parte que eu não conseguia segurar sozinho. Todo mundo escolhe uma e me diz aquela.",
+                    "Obrigado. Já ouvi 'ao menos você tentou' quatro vezes esta semana e soa como uma porta se fechando.",
+                    "Prefiro ter ido e sido recusado a ainda estar parado do lado de fora criando coragem. Em alguns dias eu até acredito nisso."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_what_now",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What will you try instead?",
+                "pt": "O que você vai tentar em vez disso?"
+              },
+              "phrases": [
+                "what will you do now",
+                "where do you go from here"
+              ],
+              "requires_any": [
+                "instead",
+                "now",
+                "here"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "considered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "failed"
+                ],
+                "lines": {
+                  "en": [
+                    "Nothing, for a bit. I know that is not the answer people want. I have decided to be all right with not having one for a month.",
+                    "Something with fewer people watching me learn. That is the only thing I have worked out and it is more than I had.",
+                    "I have not got that far. Ask me at the turn of the season and I might have, and if I have not, ask me again."
+                  ],
+                  "pt": [
+                    "Nada, por um tempo. Sei que não é a resposta que as pessoas querem. Decidi ficar em paz com não ter uma por um mês.",
+                    "Algo com menos gente me olhando aprender. É a única coisa que eu concluí, e é mais do que eu tinha.",
+                    "Ainda não cheguei aí. Me pergunte na virada da estação e talvez eu tenha, e se não tiver, pergunte de novo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.quiet_usefulness",
+      "subject": "work.none.freedom",
+      "initial_state": "active",
+      "salience": 38,
+      "expires_after_days": 22,
+      "slots": {
+        "task": [
+          "carrying_for_the_mason",
+          "minding_the_gate",
+          "watching_the_children",
+          "fetching_water"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "observe",
+          "predicate": "observation",
+          "temporal": "habitual",
+          "obligations": [
+            "acknowledge",
+            "clarify"
+          ],
+          "slots_used": [
+            "task"
+          ],
+          "identity_values": [
+            "independence",
+            "hospitality",
+            "mercy"
+          ],
+          "prompt": {
+            "en": "About the days.",
+            "pt": "Sobre os dias."
+          },
+          "lines": {
+            "en": [
+              "I spend most mornings %2$s. Nobody pays me and nobody would notice if I stopped, and I have started to think that second part is the interesting one.",
+              "%2$s takes about two hours and it is the two hours I would keep if I had to give the rest away.",
+              "Ask anyone what I do and they will say nothing. Ask them who does %2$s and they will think for a moment and then look uncomfortable."
+            ],
+            "pt": [
+              "Passo quase todas as manhãs %2$s. Ninguém me paga e ninguém notaria se eu parasse, e comecei a achar que essa segunda parte é a interessante.",
+              "%2$s leva umas duas horas, e são as duas horas que eu manteria se tivesse de abrir mão do resto.",
+              "Pergunte a qualquer um o que eu faço e vão dizer nada. Pergunte quem faz %2$s e vão pensar um instante e depois ficar sem graça."
+            ]
+          },
+          "replies": [
+            {
+              "name": "name_it_work",
+              "stance": "candor",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's work. It just hasn't got a name.",
+                "pt": "Isso é trabalho. Só não tem nome."
+              },
+              "phrases": [
+                "that is work without a title",
+                "it is work even unpaid"
+              ],
+              "requires_any": [
+                "work",
+                "title",
+                "unpaid"
+              ],
+              "disposition": {
+                "respect": 3,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.none.quiet_usefulness.named",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "advance": "succeeded",
+              "reaction": {
+                "id": "named",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "shape": "observe",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "task"
+                ],
+                "lines": {
+                  "en": [
+                    "It has not, and I have spent a year deciding whether that matters. Hearing somebody else call %2$s work settles more than it should.",
+                    "Say that where the village can hear it and I will owe you something. I have been arguing it to myself in the dark for months.",
+                    "Then I have a trade and no title, which is an odd thing to be relieved about, and I am."
+                  ],
+                  "pt": [
+                    "Não tem, e passei um ano decidindo se isso importa. Ouvir outra pessoa chamar %2$s de trabalho resolve mais do que deveria.",
+                    "Diga isso onde a vila possa ouvir e eu vou lhe dever alguma coisa. Venho argumentando isso comigo mesmo no escuro há meses.",
+                    "Então tenho um ofício e nenhum título, o que é uma coisa estranha de aliviar, e alivia."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_who_asked",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Who asked you to start doing it?",
+                "pt": "Quem pediu para você começar a fazer isso?"
+              },
+              "phrases": [
+                "who asked you to do that",
+                "how did you start doing it"
+              ],
+              "requires_any": [
+                "asked",
+                "start",
+                "doing"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "temporal": "past",
+                "slots_used": [
+                  "task"
+                ],
+                "lines": {
+                  "en": [
+                    "No one. I did %2$s once because it needed doing and I was standing there, and then it was three weeks later and it was mine.",
+                    "An old woman who has since died. She asked once. I have kept it up out of a habit that started as a favour to somebody who cannot see it.",
+                    "It arrived the way these things arrive. Nobody decided. That is either the best or the worst thing about it, depending on the morning."
+                  ],
+                  "pt": [
+                    "Ninguém. Fiz %2$s uma vez porque precisava ser feito e eu estava ali, e de repente eram três semanas depois e já era meu.",
+                    "Uma senhora que já morreu. Ela pediu uma vez. Continuei por um hábito que começou como favor a alguém que não pode mais ver.",
+                    "Chegou do jeito que essas coisas chegam. Ninguém decidiu. É a melhor ou a pior coisa disso, dependendo da manhã."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "celebrate",
+          "predicate": "status_change",
+          "temporal": "past",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "task"
+          ],
+          "prompt": {
+            "en": "Somebody noticed.",
+            "pt": "Alguém reparou."
+          },
+          "lines": {
+            "en": [
+              "Two people thanked me this week for %2$s. Two. After a year. I have thought about it more than I would like to admit.",
+              "The mason called me by name in front of other people and said what I do. I went home and sat down.",
+              "Somebody asked who does %2$s and somebody else said my name straight away, without having to work it out. That was the whole thing."
+            ],
+            "pt": [
+              "Duas pessoas me agradeceram esta semana por %2$s. Duas. Depois de um ano. Pensei nisso mais do que gostaria de admitir.",
+              "O pedreiro me chamou pelo nome na frente dos outros e disse o que eu faço. Fui para casa e sentei.",
+              "Alguém perguntou quem faz %2$s e outra pessoa disse meu nome na hora, sem precisar pensar. Foi isso, inteiro."
+            ]
+          },
+          "replies": [
+            {
+              "name": "glad",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "About time somebody said it.",
+                "pt": "Já era hora de alguém dizer."
+              },
+              "phrases": [
+                "it was about time",
+                "long overdue that someone said so"
+              ],
+              "requires_any": [
+                "time",
+                "overdue"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "warmed",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "celebrate",
+                "lines": {
+                  "en": [
+                    "It was, and I am aware of how much I am making of two sentences. I am going to make a lot of them for a while yet.",
+                    "I had decided I did not need it. Turns out I had decided that because I was not getting it.",
+                    "You are the third to say so and I have counted all three, which tells you everything about how the year has gone."
+                  ],
+                  "pt": [
+                    "Era mesmo, e eu tenho noção do tanto que estou fazendo de duas frases. Vou fazer bastante delas ainda por um tempo.",
+                    "Eu tinha decidido que não precisava disso. Descobri que decidi isso porque não estava recebendo.",
+                    "Você é o terceiro a dizer, e eu contei os três, o que diz tudo sobre como foi o ano."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_change",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Does that change what you'll do next?",
+                "pt": "Isso muda o que você vai fazer depois?"
+              },
+              "phrases": [
+                "does that change anything for you",
+                "will you do something different now"
+              ],
+              "requires_any": [
+                "change",
+                "different"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "considered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "task"
+                ],
+                "lines": {
+                  "en": [
+                    "It might. Being seen doing %2$s is very different from doing it, and I am not sure yet which one I was actually short of.",
+                    "No. And that surprised me. I thought a title was what I wanted and it turns out I wanted somebody to say my name.",
+                    "Ask me in the spring. Everything I decide in a good week I unmake in a bad one, so I have stopped deciding in good weeks."
+                  ],
+                  "pt": [
+                    "Talvez. Ser visto fazendo %2$s é muito diferente de fazer, e ainda não sei de qual das duas eu estava carente.",
+                    "Não. E isso me surpreendeu. Achei que eu queria um título, e parece que eu queria alguém dizendo meu nome.",
+                    "Me pergunte na primavera. Tudo que decido numa boa semana eu desfaço numa ruim, então parei de decidir em boas semanas."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.old_admiration",
+      "subject": "work.none.admiration",
+      "initial_state": "blocked",
+      "salience": 32,
+      "expires_after_days": 20,
+      "slots": {
+        "trade": [
+          "the_smithy",
+          "the_library",
+          "the_fields",
+          "the_kitchen",
+          "the_tannery"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "reminisce",
+          "predicate": "memory",
+          "temporal": "past",
+          "act": "reminisce",
+          "obligations": [
+            "acknowledge",
+            "clarify"
+          ],
+          "slots_used": [
+            "trade"
+          ],
+          "identity_values": [
+            "tradition",
+            "curiosity"
+          ],
+          "prompt": {
+            "en": "About the old idea.",
+            "pt": "Sobre a ideia antiga."
+          },
+          "lines": {
+            "en": [
+              "When I was small I was going to work at %2$s. I have not thought about that in years and then somebody mentioned it and I have thought of nothing else for two days.",
+              "There was a version of me that ended up at %2$s. I can see him quite clearly. He is more certain than I am and I do not entirely like him.",
+              "I wanted %2$s before I knew what wanting a trade even was. That is either a sign or it is a child's idea, and I cannot tell from here."
+            ],
+            "pt": [
+              "Quando eu era pequeno, ia trabalhar n%2$s. Não pensava nisso há anos, e aí alguém mencionou e faz dois dias que não penso em outra coisa.",
+              "Houve uma versão de mim que foi parar n%2$s. Consigo vê-lo bem claramente. Ele é mais seguro do que eu e eu não gosto muito dele.",
+              "Eu queria %2$s antes de saber o que era querer um ofício. Isso é um sinal ou é ideia de criança, e daqui eu não consigo distinguir."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_changed",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What happened to that idea?",
+                "pt": "O que aconteceu com essa ideia?"
+              },
+              "phrases": [
+                "what happened to that plan",
+                "why did that idea stop"
+              ],
+              "requires_any": [
+                "happened",
+                "idea",
+                "plan"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "reminisce",
+                "temporal": "past",
+                "lines": {
+                  "en": [
+                    "Nothing dramatic. I was needed at home for two years and then the two years were over and the idea had gone quiet, and quiet ideas are very hard to wake.",
+                    "I told one person and they laughed. Not unkindly. That is the annoying part — it was not even cruelty, and it still did it.",
+                    "I got older and it got smaller, and one day I noticed I had stopped saying it out loud. I do not remember deciding to stop."
+                  ],
+                  "pt": [
+                    "Nada de dramático. Precisaram de mim em casa por dois anos, e quando os dois anos acabaram a ideia tinha ficado quieta, e ideia quieta é dificílima de acordar.",
+                    "Contei para uma pessoa e ela riu. Sem maldade. É essa a parte irritante — nem foi crueldade, e ainda assim resolveu.",
+                    "Fiquei mais velho e ela ficou menor, e um dia notei que tinha parado de dizer em voz alta. Não lembro de ter decidido parar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "encourage_again",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "A child's idea can still be a good one.",
+                "pt": "Uma ideia de criança ainda pode ser boa."
+              },
+              "phrases": [
+                "a childs idea can still be right",
+                "being young when you wanted it doesnt make it wrong"
+              ],
+              "requires_any": [
+                "childs",
+                "idea",
+                "young"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 1
+              },
+              "advance": "succeeded",
+              "reaction": {
+                "id": "stirred",
+                "act": "qualify",
+                "polarity": "positive",
+                "shape": "reminisce",
+                "episode_states": [
+                  "blocked",
+                  "succeeded"
+                ],
+                "slots_used": [
+                  "trade"
+                ],
+                "lines": {
+                  "en": [
+                    "That is a dangerous thing to say to somebody in my position and I am going to carry it around for a week.",
+                    "I have been calling it childish so that it would stop being an option. You have just taken that away from me, and I am not sure I forgive you.",
+                    "Then I have wanted the same thing for twenty years, which is either constancy or a failure to move on, and today I would like to call it constancy."
+                  ],
+                  "pt": [
+                    "Isso é uma coisa perigosa de se dizer a alguém na minha situação, e eu vou carregar isso por uma semana.",
+                    "Venho chamando de infantil para que deixasse de ser uma opção. Você acabou de me tirar isso, e não sei se te perdoo.",
+                    "Então quero a mesma coisa há vinte anos, o que é constância ou incapacidade de seguir em frente, e hoje eu gostaria de chamar de constância."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "plan",
+          "predicate": "plan",
+          "temporal": "future",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "trade"
+          ],
+          "prompt": {
+            "en": "So you're thinking about it.",
+            "pt": "Então você está pensando nisso."
+          },
+          "lines": {
+            "en": [
+              "I asked at %2$s. Only what the work is like — not for anything — and they talked to me for an hour like a person who might.",
+              "I have started paying attention again. That is all it is so far, and after twenty years of looking away it feels like a great deal.",
+              "I am going to ask properly at the turn of the season. I have said that out loud now, to you, which is the point of saying it."
+            ],
+            "pt": [
+              "Perguntei n%2$s. Só como é o trabalho — não pedi nada — e conversaram comigo uma hora como se eu fosse alguém que poderia.",
+              "Voltei a prestar atenção. É só isso, por enquanto, e depois de vinte anos desviando o olhar, parece muita coisa.",
+              "Vou pedir de verdade na virada da estação. Já falei em voz alta agora, para você, que é justamente para isso que se fala."
+            ]
+          },
+          "replies": [
+            {
+              "name": "hold_them_to_it",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "accepted",
+              "label": {
+                "en": "Then I'll remember you said it.",
+                "pt": "Então vou lembrar que você disse."
+              },
+              "phrases": [
+                "ill hold you to that",
+                "i will remember you said that"
+              ],
+              "requires_any": [
+                "remember",
+                "hold"
+              ],
+              "disposition": {
+                "trust": 3,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "held",
+                "act": "accept",
+                "polarity": "positive",
+                "shape": "plan",
+                "temporal": "future",
+                "lines": {
+                  "en": [
+                    "Good. That is why I said it to somebody instead of writing it down, and writing it down is what I have done every other time.",
+                    "Please do. And be a nuisance about it, because I am very good at making a season last two years.",
+                    "Then it is real, in the only way I have ever been able to make a thing real."
+                  ],
+                  "pt": [
+                    "Ótimo. Foi por isso que eu disse a alguém em vez de anotar, e anotar é o que eu fiz todas as outras vezes.",
+                    "Por favor, lembre. E seja chato quanto a isso, porque eu sou muito bom em fazer uma estação durar dois anos.",
+                    "Então é real, do único jeito que eu já consegui tornar alguma coisa real."
+                  ]
+                },
+                "predicate": "plan"
+              }
+            },
+            {
+              "name": "ask_what_they_said",
+              "stance": "curiosity",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What did they tell you about the work?",
+                "pt": "O que contaram sobre o trabalho?"
+              },
+              "phrases": [
+                "what did they tell you",
+                "what did you learn about it"
+              ],
+              "requires_any": [
+                "tell",
+                "told",
+                "learn"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "reported",
+                "act": "explain",
+                "polarity": "mixed",
+                "shape": "teach_back",
+                "slots_used": [
+                  "trade"
+                ],
+                "lines": {
+                  "en": [
+                    "That it is mostly waiting and then all at once, and that everybody who lasts is the sort who does not mind the waiting. I do not know yet if I am.",
+                    "The honest version, which I appreciated. Cold hands, long days, and one thing a month that makes it worth it.",
+                    "More than I expected. I think they had been waiting for somebody to ask about %2$s and nobody had for a long time."
+                  ],
+                  "pt": [
+                    "Que é quase só esperar e depois tudo de uma vez, e que quem aguenta é o tipo que não se incomoda de esperar. Ainda não sei se eu sou.",
+                    "A versão honesta, o que eu agradeci. Mãos frias, dias longos, e uma coisa por mês que faz valer a pena.",
+                    "Mais do que eu esperava. Acho que estavam esperando alguém perguntar sobre %2$s e fazia tempo que ninguém perguntava."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Anything else?",
+      "pt": "Mais alguma coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What do you spend your days on?",
+        "pt": "Com o que você passa os seus dias?"
+      },
+      "requires_any": [
+        "days",
+        "spend"
+      ],
+      "phrases": [
+        "how do you spend your days",
+        "what fills your days"
+      ]
+    },
+    "leave": {
+      "en": "I'll let you be.",
+      "pt": "Vou deixar você em paz."
+    }
+  }
+}

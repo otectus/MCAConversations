@@ -1,0 +1,50 @@
+{
+  "answers": [
+    {
+      "name": "note_the_change",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.armorer.bad_fit.succeeded.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.armorer.fitting",
+              "deltas": {
+                "respect": 3,
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.armorer.bad_fit"
+            },
+            "next": "conversations.scene.work.armorer.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.armorer.bad_fit.succeeded.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.armorer.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,825 @@
+{
+  "_comment": [
+    "Miner (MoreVillagers). Underground work, judged entirely by what comes up.",
+    "",
+    "The §12.4 anchors are the seam, air and water, props, the walk in, what the rock tells you and the",
+    "day it moved. These three take a seam that has run out, timber she needs and cannot get, and a",
+    "morning the roof shifted while she was under it.",
+    "",
+    "Miners talk about rock as something with intentions, and about the surface as another country.",
+    "Her lines are physical and unhurried, and she is unimpressed by danger described by people who",
+    "have only read about it.",
+    "",
+    "Every episode carries an integrations gate, because this profession only exists when MoreVillagers",
+    "is installed."
+  ],
+  "profession": "morevillagers:miner",
+  "id": "miner",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "the_seam",
+    "air_and_water",
+    "props",
+    "the_walk_in",
+    "what_the_rock_says",
+    "the_day_it_moved"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back down.",
+    "pt": "Vou deixar você voltar lá para baixo."
+  },
+  "slot_lang": {
+    "min_the_east_seam": {
+      "en": "the east seam",
+      "pt": "o veio leste"
+    },
+    "min_the_low_drift": {
+      "en": "the low drift",
+      "pt": "a galeria baixa"
+    },
+    "min_the_old_workings": {
+      "en": "the old workings",
+      "pt": "as escavações antigas"
+    },
+    "min_a_face_of_dead_rock": {
+      "en": "a face of dead rock",
+      "pt": "uma frente de rocha morta"
+    },
+    "min_water_coming_in": {
+      "en": "water coming in faster than we bail",
+      "pt": "água entrando mais rápido do que a gente esvazia"
+    },
+    "min_air_going_bad": {
+      "en": "air going bad at the end",
+      "pt": "ar ficando ruim no fundo"
+    },
+    "min_props_that_creak": {
+      "en": "props that have started to creak",
+      "pt": "escoras que começaram a ranger"
+    },
+    "min_a_sagging_roof": {
+      "en": "a roof that has begun to sag",
+      "pt": "um teto que começou a ceder"
+    },
+    "min_a_cracked_beam": {
+      "en": "a cracked beam",
+      "pt": "uma viga rachada"
+    },
+    "min_a_thump_and_then_dust": {
+      "en": "a thump and then dust",
+      "pt": "um baque e depois poeira"
+    },
+    "min_a_sound_like_a_sigh": {
+      "en": "a sound like a sigh",
+      "pt": "um som parecido com um suspiro"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.exhausted_seam",
+      "subject": "work.miner.the_seam",
+      "initial_state": "blocked",
+      "salience": 58,
+      "due_after_days": 4,
+      "expires_after_days": 26,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "place": [
+          "min_the_east_seam",
+          "min_the_low_drift",
+          "min_the_old_workings"
+        ],
+        "trouble": [
+          "min_a_face_of_dead_rock",
+          "min_water_coming_in",
+          "min_air_going_bad"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "place",
+            "trouble"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "independence"
+          ],
+          "prompt": {
+            "en": "The workings.",
+            "pt": "As escavações."
+          },
+          "lines": {
+            "en": [
+              "%2$s has given me %3$s, and I have been walking in every morning to look at it as if looking will change it.",
+              "%3$s at %2$s. Forty minutes of walking each way to stand in front of a wall that has nothing left to give.",
+              "%2$s fed this village for eleven years. It does not owe me anything and I am still taking it personally."
+            ],
+            "pt": [
+              "%2$s me deu %3$s, e eu venho descendo toda manhã para olhar aquilo como se olhar fosse mudar.",
+              "%3$s em %2$s. Quarenta minutos de caminhada de ida e volta para ficar diante de uma parede que não tem mais nada a dar.",
+              "%2$s alimentou esta vila por onze anos. Não me deve nada e eu continuo levando para o lado pessoal."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_she_knows",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you know it's finished?",
+                "pt": "Como você sabe que acabou?"
+              },
+              "phrases": [
+                "how do you know it is finished",
+                "what tells you the seam is done"
+              ],
+              "requires_any": [
+                "finished",
+                "seam",
+                "done"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "The rock changes colour and then it changes sound. The sound goes first if you are listening, and I was not listening in the autumn.",
+                    "You feel it in the pick. A live face bites and a dead one bounces, and your arm knows a week before your eyes agree.",
+                    "I have been wrong about this twice and right about it nine times, and I have stopped announcing which one I think it is until the third day."
+                  ],
+                  "pt": [
+                    "A rocha muda de cor e depois muda de som. O som vai primeiro, se você estiver ouvindo, e eu não estava ouvindo no outono.",
+                    "Você sente na picareta. Uma frente viva morde e uma morta rebate, e o braço sabe uma semana antes de os olhos concordarem.",
+                    "Já errei nisso duas vezes e acertei nove, e parei de anunciar qual acho que é antes do terceiro dia."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_new_ground",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Then open new ground.",
+                "pt": "Então abra terreno novo."
+              },
+              "phrases": [
+                "then open new ground",
+                "start a fresh working somewhere else"
+              ],
+              "requires_any": [
+                "ground",
+                "fresh",
+                "working"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Six weeks of digging before anything comes out, and six weeks of the village asking me daily what I have got. That is the real obstacle.",
+                    "Yes. There is ground I have had my eye on for two years and have not touched because touching it means admitting the east is over.",
+                    "I will start Monday. It is the right answer and it is also the frightening one, because a new working is a guess with a shovel in it."
+                  ],
+                  "pt": [
+                    "Seis semanas cavando antes de sair qualquer coisa, e seis semanas com a vila me perguntando todo dia o que eu consegui. É esse o obstáculo real.",
+                    "Sim. Tem um terreno que eu observo há dois anos e não toquei, porque tocar significa admitir que o leste acabou.",
+                    "Começo segunda. É a resposta certa e também a assustadora, porque uma escavação nova é um palpite com uma pá dentro."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "acknowledge_the_loss",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Eleven years is a long attachment.",
+                "pt": "Onze anos é um apego longo."
+              },
+              "phrases": [
+                "eleven years is a long attachment",
+                "you were attached to that seam"
+              ],
+              "requires_any": [
+                "attachment",
+                "attached",
+                "eleven"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "People laugh when I say it. It is a hole in the ground. I have spent more waking hours in it than in my own house.",
+                    "Thank you. There are corners down there I know better than the faces of my neighbours, and that is either sad or it is just what a trade is.",
+                    "I will go down once more with a lamp and no tools. Not for anything. Then I will board it and start somewhere else."
+                  ],
+                  "pt": [
+                    "As pessoas riem quando eu digo. É um buraco no chão. Passei mais horas acordada lá dentro do que na minha própria casa.",
+                    "Obrigada. Tem cantos lá embaixo que eu conheço melhor que o rosto dos meus vizinhos, e isso ou é triste ou é simplesmente o que um ofício é.",
+                    "Vou descer mais uma vez com uma lamparina e sem ferramenta. Sem motivo. Depois eu fecho com tábuas e começo em outro lugar."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "prompt": {
+            "en": "The new ground.",
+            "pt": "O terreno novo."
+          },
+          "lines": {
+            "en": [
+              "Seven weeks and then the pick bit. I sat down on the floor of the drift and laughed, alone, in the dark.",
+              "The new working is good. Better than the east ever was, which I would have found insulting a season ago and now simply find funny.",
+              "It came in. I have brought up more in a fortnight than the last six months of the old seam, and I have stopped walking past the boarded entrance."
+            ],
+            "pt": [
+              "Sete semanas e aí a picareta mordeu. Sentei no chão da galeria e ri, sozinha, no escuro.",
+              "A escavação nova é boa. Melhor do que o leste jamais foi, o que eu teria achado ofensivo uma estação atrás e agora só acho engraçado.",
+              "Rendeu. Trouxe mais em duas semanas do que nos últimos seis meses do veio antigo, e parei de passar em frente à entrada fechada."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_wait",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How did you stand the seven weeks?",
+                "pt": "Como você aguentou as sete semanas?"
+              },
+              "phrases": [
+                "how did you stand the seven weeks",
+                "what got you through the empty weeks"
+              ],
+              "requires_any": [
+                "weeks",
+                "stand",
+                "through"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "By measuring. Every day I wrote down how far in I was. Progress you can read is different from progress you can feel.",
+                    "Badly, for the first three. Then somebody stopped asking me what I had got and started asking how far in I was, and that changed everything.",
+                    "I told myself it was six weeks and prepared for ten. Seven was a relief instead of a disappointment, and that was entirely arithmetic rather than luck."
+                  ],
+                  "pt": [
+                    "Medindo. Todo dia eu anotava quanto tinha avançado. Progresso que se lê é diferente de progresso que se sente.",
+                    "Mal, nas três primeiras. Depois alguém parou de perguntar o que eu tinha conseguido e passou a perguntar quanto eu tinha avançado, e isso mudou tudo.",
+                    "Disse a mim mesma que eram seis semanas e me preparei para dez. Sete virou alívio em vez de decepção, e isso foi aritmética, não sorte."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.failing_props",
+      "subject": "work.miner.props",
+      "initial_state": "blocked",
+      "salience": 64,
+      "due_after_days": 3,
+      "expires_after_days": 20,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "fault": [
+          "min_props_that_creak",
+          "min_a_sagging_roof",
+          "min_a_cracked_beam"
+        ],
+        "place": [
+          "min_the_east_seam",
+          "min_the_low_drift",
+          "min_the_old_workings"
+        ]
+      },
+      "commitment": {
+        "id": "work.miner.bring_timber",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:oak_planks",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise",
+            "decide"
+          ],
+          "slots_used": [
+            "fault",
+            "place"
+          ],
+          "identity_values": [
+            "duty",
+            "precision"
+          ],
+          "prompt": {
+            "en": "The props.",
+            "pt": "As escoras."
+          },
+          "lines": {
+            "en": [
+              "There is %2$s at %3$s and I am still working under it, which I would tell anybody else to stop doing.",
+              "%2$s. I have shifted the working further out and that is a delay, not a fix, and I know the difference perfectly well.",
+              "%3$s needs new timber and there is none, so every morning I make the same bad decision and call it experience."
+            ],
+            "pt": [
+              "Tem %2$s em %3$s e eu continuo trabalhando embaixo, coisa que eu mandaria qualquer outra pessoa parar de fazer.",
+              "%2$s. Afastei a frente de trabalho mais para fora, e isso é adiamento, não conserto, e eu sei muito bem a diferença.",
+              "%3$s precisa de madeira nova e não tem nenhuma, então toda manhã eu tomo a mesma decisão ruim e chamo de experiência."
+            ]
+          },
+          "replies": [
+            {
+              "name": "offer_timber",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you planks for props.",
+                "pt": "Vou trazer tábuas para as escoras."
+              },
+              "phrases": [
+                "i can bring you planks for props",
+                "let me fetch timber for that"
+              ],
+              "requires_any": [
+                "planks",
+                "timber",
+                "props"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 3
+              },
+              "affection": {
+                "decision": "work.miner.props.offer",
+                "delta": 3,
+                "budget": "deep",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "slots_used": [
+                  "place"
+                ],
+                "lines": {
+                  "en": [
+                    "Then %2$s is safe by Thursday and I stop lying to myself on the walk in.",
+                    "Bring green if that is what there is. Green props creak before they go, and creaking is a warning, and dry ones simply break.",
+                    "Yes. And I want you to come down and see them set, because you should know exactly what you paid for."
+                  ],
+                  "pt": [
+                    "Então %2$s fica seguro até quinta e eu paro de mentir para mim mesma no caminho de descida.",
+                    "Traga verde se for o que tiver. Escora verde range antes de ceder, e ranger é aviso, e a seca simplesmente quebra.",
+                    "Sim. E quero que você desça e veja elas assentadas, porque você deve saber exatamente o que pagou."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "urge_stopping",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "blunt",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Stay out until it's propped.",
+                "pt": "Fique fora até escorar."
+              },
+              "phrases": [
+                "stay out until it is propped",
+                "keep clear of that face until the timber is in"
+              ],
+              "requires_any": [
+                "propped",
+                "clear",
+                "timber"
+              ],
+              "disposition": {
+                "respect": 4,
+                "warmth": 2
+              },
+              "reaction": {
+                "id": "conceded",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "You are right and I have known it for nine days. Somebody had to say it in a voice that was not mine.",
+                    "That costs the village a week of ore. It costs the village considerably more if the roof takes me with it.",
+                    "I will board the face this evening. Boarding is the part that makes it real — after that I cannot talk myself back in."
+                  ],
+                  "pt": [
+                    "Você tem razão e eu sei disso há nove dias. Alguém precisava dizer numa voz que não fosse a minha.",
+                    "Isso custa à vila uma semana de minério. Custa consideravelmente mais se o teto me levar junto.",
+                    "Vou fechar a frente com tábuas hoje à noite. Fechar é a parte que torna real — depois disso eu não consigo me convencer a voltar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_the_risk",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How much warning would you get?",
+                "pt": "Quanto aviso você teria?"
+              },
+              "phrases": [
+                "how much warning would you get",
+                "does a roof give any warning"
+              ],
+              "requires_any": [
+                "warning",
+                "roof"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Sometimes a week of creaking. Sometimes a second and a half. There is no way of telling which sort you are standing under.",
+                    "Dust first. Fine dust off the roof, no sound at all, and if you see it you have about the time it takes to say so.",
+                    "That is the whole argument for props. You do not prop the roofs that are going to fall; you prop all of them, because you cannot tell."
+                  ],
+                  "pt": [
+                    "Às vezes uma semana de rangido. Às vezes um segundo e meio. Não tem como saber embaixo de qual dos dois você está.",
+                    "Poeira primeiro. Poeira fina caindo do teto, sem som nenhum, e se você vir tem mais ou menos o tempo de dizer isso.",
+                    "É esse o argumento inteiro a favor das escoras. Você não escora os tetos que vão cair; escora todos, porque não dá para saber."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "integrations": [
+            "morevillagers"
+          ],
+          "slots_used": [
+            "place"
+          ],
+          "prompt": {
+            "en": "The props, since.",
+            "pt": "As escoras, depois disso."
+          },
+          "lines": {
+            "en": [
+              "%2$s is propped end to end. I set them myself and I have been back down twice just to look at them.",
+              "Timber in, roof quiet. The creaking stopped the same afternoon, which I had not expected to move me and did.",
+              "It is safe. I lost nine days of ore and I have been sleeping through the night for the first time since the autumn."
+            ],
+            "pt": [
+              "%2$s está escorado de ponta a ponta. Assentei tudo eu mesma e já desci duas vezes só para olhar.",
+              "Madeira posta, teto quieto. O rangido parou na mesma tarde, coisa que eu não esperava que me emocionasse e emocionou.",
+              "Está seguro. Perdi nove dias de minério e venho dormindo a noite inteira pela primeira vez desde o outono."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_sleep",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Sleeping through is worth nine days.",
+                "pt": "Dormir a noite vale nove dias."
+              },
+              "phrases": [
+                "sleeping through is worth nine days",
+                "the sleep alone was worth it"
+              ],
+              "requires_any": [
+                "sleeping",
+                "sleep",
+                "worth"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 2
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "I had not counted it as a cost, which is how it managed to run for nine days without me noticing what it was doing.",
+                    "Thank you. Nobody weighs the worrying. It does not go in the ledger and it takes about as much out of you as the digging.",
+                    "Nine days of ore and one winter of sleep. Written down like that, it was never a difficult decision, and I still took nine days over it."
+                  ],
+                  "pt": [
+                    "Eu não tinha contabilizado como custo, que é como aquilo conseguiu correr nove dias sem eu perceber o que estava fazendo comigo.",
+                    "Obrigada. Ninguém pesa a preocupação. Não entra no livro-caixa e tira de você mais ou menos tanto quanto a cavação.",
+                    "Nove dias de minério e um inverno de sono. Escrito assim, nunca foi decisão difícil, e ainda assim levei nove dias."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.the_day_it_moved",
+      "subject": "work.miner.the_day_it_moved",
+      "initial_state": "succeeded",
+      "salience": 46,
+      "due_after_days": 2,
+      "expires_after_days": 34,
+      "integrations": [
+        "morevillagers"
+      ],
+      "slots": {
+        "moment": [
+          "min_a_thump_and_then_dust",
+          "min_a_sound_like_a_sigh"
+        ]
+      },
+      "states": [
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "predicate": "memory",
+          "temporal": "past",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "moment"
+          ],
+          "identity_values": [
+            "duty",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The day it moved.",
+            "pt": "O dia em que se mexeu."
+          },
+          "lines": {
+            "en": [
+              "Four years ago there was %2$s and I walked out and I did not go back down for eleven days.",
+              "%2$s. That is all it was. Nothing fell on me. I have been more frightened by that than by things that did.",
+              "I remember %2$s and then being outside, and I do not remember the walk in between, which is the part I think about."
+            ],
+            "pt": [
+              "Quatro anos atrás teve %2$s e eu saí andando e não desci de novo por onze dias.",
+              "%2$s. Foi só isso. Nada caiu em cima de mim. Já me assustei mais com isso do que com coisas que caíram.",
+              "Lembro de %2$s e depois de estar do lado de fora, e não lembro da caminhada entre as duas, e é essa a parte em que eu penso."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_going_back",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "gentle",
+              "outcome": "engaged",
+              "label": {
+                "en": "How did you go back down?",
+                "pt": "Como você voltou a descer?"
+              },
+              "phrases": [
+                "how did you go back down",
+                "what got you underground again"
+              ],
+              "requires_any": [
+                "back",
+                "underground",
+                "again"
+              ],
+              "disposition": {
+                "familiarity": 3,
+                "trust": 1
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "With somebody else. I have never gone down alone on a first day since, and I tell every new miner the same thing.",
+                    "Ten feet at a time. Day one I stood at the mouth. Day four I got to the first bend. It was eleven days and it was not bravery, it was arithmetic.",
+                    "I went down and touched the face and came straight back up. That was the whole trip and it was the most useful hour of that year."
+                  ],
+                  "pt": [
+                    "Com outra pessoa. Desde então nunca desci sozinha num primeiro dia, e digo a mesma coisa a todo mineiro novo.",
+                    "Três metros por vez. No primeiro dia fiquei na boca. No quarto cheguei à primeira curva. Foram onze dias e não foi coragem, foi aritmética.",
+                    "Desci, toquei a frente e voltei direto. Foi a viagem inteira e foi a hora mais útil daquele ano."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_that_sounds_hard",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Eleven days is a long climb back.",
+                "pt": "Onze dias é uma volta longa."
+              },
+              "phrases": [
+                "eleven days is a long climb back",
+                "that was a long way back for you"
+              ],
+              "requires_any": [
+                "eleven",
+                "climb",
+                "long"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "trust": 2
+              },
+              "reaction": {
+                "id": "softened",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It was, and I got told at the time that eleven days was a lot, by people who had never stood under a roof that sighed.",
+                    "Thank you. The trade does not talk about this part. Everybody has a day like it and nobody mentions theirs, so everybody thinks they were the slow one.",
+                    "I say it out loud now, to the young ones especially. Eleven days, and I still went back, and both halves of that matter."
+                  ],
+                  "pt": [
+                    "Foi, e me disseram na época que onze dias era muito, gente que nunca esteve embaixo de um teto que suspirou.",
+                    "Obrigada. O ofício não fala dessa parte. Todo mundo tem um dia assim e ninguém menciona o seu, então todo mundo acha que foi o lento.",
+                    "Eu digo em voz alta agora, principalmente para os novos. Onze dias, e eu voltei mesmo assim, e as duas metades importam."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "More to ask?",
+      "pt": "Mais perguntas?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of a deep seam?",
+        "pt": "Qual é a parte mais difícil de um veio fundo?"
+      },
+      "requires_any": [
+        "hardest",
+        "seam"
+      ],
+      "phrases": [
+        "what is the hardest part of a deep seam",
+        "hardest thing about working a deep seam"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the seam.",
+      "pt": "Vou deixar você com o veio."
+    }
+  }
+}

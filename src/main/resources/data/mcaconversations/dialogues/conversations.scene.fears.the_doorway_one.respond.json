@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_that_one",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "fears.the_doorway_one.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.ordinary",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.fears.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.the_doorway_one.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "share_your_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "fears.the_doorway_one.open.delighted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "fears.ordinary",
+              "deltas": {
+                "warmth": 3,
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.fears.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.the_doorway_one.delighted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.fears.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

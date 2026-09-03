@@ -1,0 +1,87 @@
+{
+  "answers": [
+    {
+      "name": "take_it_seriously",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.i_noticed.active.reported"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.nitwit.noticed.believed",
+              "delta": 3,
+              "budget": "deep",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.what_i_notice",
+              "deltas": {
+                "trust": 4,
+                "respect": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.nitwit.i_noticed"
+            },
+            "next": "conversations.scene.work.nitwit.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.nitwit.i_noticed.active.reported",
+              "slots": [
+                "thing"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_who_to_tell",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.nitwit.i_noticed.active.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.nitwit.what_i_notice",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.nitwit.i_noticed"
+            },
+            "next": "conversations.scene.work.nitwit.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.nitwit.i_noticed.active.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.nitwit.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

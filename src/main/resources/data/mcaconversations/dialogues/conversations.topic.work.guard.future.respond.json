@@ -1,0 +1,103 @@
+{
+  "answers": [
+    {
+      "name": "ask_second_guard",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.future.ask_second_guard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.future.ask_second_guard",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.future.ask_second_guard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "encourage",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.future.encourage"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.guard.future.encourage",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.future.encourage",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "work",
+              "op": "advance"
+            },
+            "next": "conversations.topic.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.future.encourage"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_unnecessary",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.guard.future.ask_unnecessary"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.guard.future.ask_unnecessary",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.work.guard.followup",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.future.ask_unnecessary"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.guard.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

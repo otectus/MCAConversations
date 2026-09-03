@@ -1,0 +1,79 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_gives_her",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.the_quiet_place.succeeded.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.the_silence",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.enderian.the_quiet_place"
+            },
+            "next": "conversations.scene.work.enderian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.enderian.the_quiet_place.succeeded.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "let_it_be",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.enderian.the_quiet_place.succeeded.softened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.enderian.the_silence",
+              "deltas": {
+                "warmth": 3,
+                "trust": 3
+              }
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "work.enderian.the_quiet_place"
+            },
+            "next": "conversations.scene.work.enderian.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.enderian.the_quiet_place.succeeded.softened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.enderian.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

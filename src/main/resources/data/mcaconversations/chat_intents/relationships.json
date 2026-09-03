@@ -1,63 +1,336 @@
 {
   "synonyms": {
-    "parent": ["mother", "father", "mom", "dad", "mum", "mommy", "daddy", "parents"],
-    "child": ["kid", "kids", "children", "son", "daughter", "little"]
+    "parent": [
+      "mother",
+      "father",
+      "mom",
+      "dad",
+      "mum",
+      "mommy",
+      "daddy",
+      "parents"
+    ],
+    "child": [
+      "kid",
+      "kids",
+      "children",
+      "son",
+      "daughter",
+      "little"
+    ]
   },
   "intents": {
     "us.happy": {
       "question": "conversations.us",
       "answer": "happy",
-      "keywords": { "happy": 1.5, "content": 1.0, "glad": 0.8, "satisfied": 0.8 },
-      "requiresAny": ["happy", "content", "glad", "satisfied"],
-      "phrases": ["are you happy", "happy with us", "happy with me"],
+      "keywords": {
+        "happy": 1.5,
+        "content": 1.0,
+        "glad": 0.8,
+        "satisfied": 0.8
+      },
+      "requiresAny": [
+        "happy",
+        "content",
+        "glad",
+        "satisfied"
+      ],
+      "phrases": [
+        "are you happy",
+        "happy with us",
+        "happy with me"
+      ],
       "category": "topics"
     },
     "us.firstmet": {
       "question": "conversations.us",
       "answer": "firstmet",
-      "keywords": { "met": 1.5, "meet": 1.2, "remember": 1.0, "first": 0.6 },
-      "requiresAny": ["met", "meet", "remember"],
-      "phrases": ["when we met", "remember when we met", "first met", "how we met"],
+      "keywords": {
+        "met": 1.5,
+        "meet": 1.2,
+        "remember": 1.0,
+        "first": 0.6
+      },
+      "requiresAny": [
+        "met",
+        "meet",
+        "remember"
+      ],
+      "phrases": [
+        "when we met",
+        "remember when we met",
+        "first met",
+        "how we met"
+      ],
       "category": "topics"
     },
     "us.future": {
       "question": "conversations.us",
       "answer": "future",
-      "keywords": { "future": 1.5, "plan": 1.0, "tomorrow": 0.8, "ahead": 0.6 },
-      "requiresAny": ["future", "plan", "tomorrow", "ahead"],
-      "phrases": ["our future", "for the future", "future together"],
+      "keywords": {
+        "future": 1.5,
+        "plan": 1.0,
+        "tomorrow": 0.8,
+        "ahead": 0.6
+      },
+      "requiresAny": [
+        "future",
+        "plan",
+        "tomorrow",
+        "ahead"
+      ],
+      "phrases": [
+        "our future",
+        "for the future",
+        "future together"
+      ],
       "category": "topics"
     },
     "us.worries": {
       "question": "conversations.us",
       "answer": "worries",
-      "keywords": { "worry": 1.2, "weigh": 1.2, "bother": 1.0, "trouble": 0.8, "mind": 0.6 },
-      "requiresAny": ["worry", "weigh", "bother", "trouble"],
-      "phrases": ["weighing on you", "on your mind", "bothering you", "anything wrong"],
+      "keywords": {
+        "worry": 1.2,
+        "weigh": 1.2,
+        "bother": 1.0,
+        "trouble": 0.8,
+        "mind": 0.6
+      },
+      "requiresAny": [
+        "worry",
+        "weigh",
+        "bother",
+        "trouble"
+      ],
+      "phrases": [
+        "weighing on you",
+        "on your mind",
+        "bothering you",
+        "anything wrong"
+      ],
       "category": "topics"
     },
     "family.checkin_child": {
       "question": "conversations.family",
       "answer": "checkin_child",
-      "keywords": { "child": 1.4, "holding": 1.0, "okay": 0.6 },
-      "requiresAny": ["child", "holding"],
-      "phrases": ["holding up", "how are the kids", "little one", "how is your child"],
+      "keywords": {
+        "child": 1.4,
+        "holding": 1.0,
+        "okay": 0.6
+      },
+      "requiresAny": [
+        "child",
+        "holding"
+      ],
+      "phrases": [
+        "holding up",
+        "how are the kids",
+        "little one",
+        "how is your child"
+      ],
       "category": "topics"
     },
     "family.ask_parent": {
       "question": "conversations.family",
       "answer": "ask_parent",
-      "keywords": { "parent": 1.5, "raised": 0.8, "advice": 0.8 },
-      "requiresAny": ["parent", "raised"],
-      "phrases": ["your parents", "parent to child", "raised you"],
+      "keywords": {
+        "parent": 1.5,
+        "raised": 0.8,
+        "advice": 0.8
+      },
+      "requiresAny": [
+        "parent",
+        "raised"
+      ],
+      "phrases": [
+        "your parents",
+        "parent to child",
+        "raised you"
+      ],
       "category": "topics"
     },
     "family.memories": {
       "question": "conversations.family",
       "answer": "memories",
-      "keywords": { "memory": 1.2, "story": 1.2, "past": 0.8, "remember": 0.8 },
-      "requiresAny": ["memory", "story", "past"],
-      "phrases": ["family story", "a memory", "tell me a story", "family memories"],
+      "keywords": {
+        "memory": 1.2,
+        "story": 1.2,
+        "past": 0.8,
+        "remember": 0.8
+      },
+      "requiresAny": [
+        "memory",
+        "story",
+        "past"
+      ],
+      "phrases": [
+        "family story",
+        "a memory",
+        "tell me a story",
+        "family memories"
+      ],
+      "category": "topics"
+    },
+    "us.hurt.apologize": {
+      "question": "conversations.topic.us.hurt.close",
+      "answer": "apologize",
+      "context": "conversations.topic.us.hurt.close",
+      "keywords": {
+        "harder": 1.5,
+        "meant": 1.0,
+        "came": 0.8
+      },
+      "requiresAny": [
+        "harder",
+        "meant"
+      ],
+      "antiKeywords": [
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "that came out harder than i meant it"
+      ],
+      "category": "topics"
+    },
+    "us.hurt.soften": {
+      "question": "conversations.topic.us.hurt.close",
+      "answer": "soften",
+      "context": "conversations.topic.us.hurt.close",
+      "keywords": {
+        "matter": 1.5,
+        "true": 1.2,
+        "part": 0.6
+      },
+      "requiresAny": [
+        "matter",
+        "true"
+      ],
+      "phrases": [
+        "you matter to me. that part is true"
+      ],
+      "category": "topics"
+    },
+    "feelings.hurt.apologize": {
+      "question": "conversations.topic.feelings.hurt.close",
+      "answer": "apologize",
+      "context": "conversations.topic.feelings.hurt.close",
+      "keywords": {
+        "fault": 1.5,
+        "back": 0.8,
+        "retract": 1.5
+      },
+      "requiresAny": [
+        "fault",
+        "retract"
+      ],
+      "antiKeywords": [
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "no. don't take it back. that was my fault"
+      ],
+      "category": "topics"
+    },
+    "feelings.hurt.soften": {
+      "question": "conversations.topic.feelings.hurt.close",
+      "answer": "soften",
+      "context": "conversations.topic.feelings.hurt.close",
+      "keywords": {
+        "heard": 1.5,
+        "answer": 1.2,
+        "badly": 1.0
+      },
+      "requiresAny": [
+        "heard",
+        "answer",
+        "badly"
+      ],
+      "phrases": [
+        "i heard you. i just didn't answer well"
+      ],
+      "category": "topics"
+    },
+    "checkin_child.hurt.apologize": {
+      "question": "conversations.topic.family.scolded.close",
+      "answer": "apologize",
+      "context": "conversations.topic.family.scolded.close",
+      "keywords": {
+        "know": 1.0,
+        "them": 0.8,
+        "presume": 1.5
+      },
+      "requiresAny": [
+        "know",
+        "presume"
+      ],
+      "antiKeywords": [
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "you know them. i don't"
+      ],
+      "category": "topics"
+    },
+    "checkin_child.hurt.soften": {
+      "question": "conversations.topic.family.scolded.close",
+      "answer": "soften",
+      "context": "conversations.topic.family.scolded.close",
+      "keywords": {
+        "need": 1.5,
+        "instead": 1.2,
+        "then": 0.5
+      },
+      "requiresAny": [
+        "need",
+        "instead"
+      ],
+      "phrases": [
+        "what do they need, then"
+      ],
+      "category": "topics"
+    },
+    "secret.hurt.apologize": {
+      "question": "conversations.topic.secret.slighted.close",
+      "answer": "apologize",
+      "context": "conversations.topic.secret.slighted.close",
+      "keywords": {
+        "stupid": 1.5,
+        "nothing": 1.2,
+        "dismissive": 1.5
+      },
+      "requiresAny": [
+        "stupid",
+        "nothing",
+        "dismissive"
+      ],
+      "antiKeywords": [
+        "regret",
+        "regrets"
+      ],
+      "phrases": [
+        "that was a stupid thing to say. it wasn't nothing"
+      ],
+      "category": "topics"
+    },
+    "secret.hurt.soften": {
+      "question": "conversations.topic.secret.slighted.close",
+      "answer": "soften",
+      "context": "conversations.topic.secret.slighted.close",
+      "keywords": {
+        "safe": 1.5,
+        "keep": 1.0,
+        "still": 0.6
+      },
+      "requiresAny": [
+        "safe",
+        "keep"
+      ],
+      "phrases": [
+        "it's still safe with me"
+      ],
       "category": "topics"
     }
   }

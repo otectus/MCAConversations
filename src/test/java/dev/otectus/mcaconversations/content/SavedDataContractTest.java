@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The three world-global data files: their names, and that the gossip payload survives the move to
+ * The six world-global data files: their names, and that the gossip payload survives the move to
  * the 1.21.1 {@code SavedData.Factory} API.
  *
  * <p>The name check matters more than it looks. {@code DataStorage.computeIfAbsent} keys the file
@@ -40,6 +40,12 @@ class SavedDataContractTest {
                 dataName(GossipSavedData.class));
         assertEquals("mcaconversations_progress",
                 dataName(dev.otectus.mcaconversations.progress.ProgressSavedData.class));
+        assertEquals("mcaconversations_history",
+                dataName(dev.otectus.mcaconversations.history.ConversationHistorySavedData.class));
+        assertEquals("mcaconversations_identity",
+                dataName(dev.otectus.mcaconversations.identity.VillagerIdentitySavedData.class));
+        assertEquals("mcaconversations_culture",
+                dataName(dev.otectus.mcaconversations.village.VillageCultureSavedData.class));
     }
 
     @Test

@@ -19,7 +19,9 @@
               }
             },
             "next": "conversations.topic.day.good.followup",
-            "say": "conversations.day.good.celebrate"
+            "conversations_say": {
+              "phrase": "conversations.day.good.celebrate"
+            }
           }
         }
       ]
@@ -38,7 +40,9 @@
               }
             },
             "next": "conversations.topic.day.good.followup",
-            "say": "conversations.day.good.ask_more"
+            "conversations_say": {
+              "phrase": "conversations.day.good.ask_more"
+            }
           }
         }
       ]
@@ -49,6 +53,10 @@
         {
           "baseChance": 1,
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.good.deflated.open"
+            },
             "conversations_affection_apply": {
               "decision": "day.good.deflate",
               "delta": -1,
@@ -62,8 +70,10 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.day.good.followup",
-            "say": "conversations.day.good.deflate"
+            "next": "conversations.topic.day.good.deflated.followup",
+            "conversations_say": {
+              "phrase": "conversations.day.good.deflate"
+            }
           }
         }
       ]
@@ -78,7 +88,9 @@
               "op": "end"
             },
             "next": "conversations.cat.chitchat",
-            "say": "conversations.day.good.leave"
+            "conversations_say": {
+              "phrase": "conversations.day.good.leave"
+            }
           }
         }
       ]

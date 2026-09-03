@@ -1,0 +1,827 @@
+{
+  "_comment": [
+    "Mason. Work that is judged in centuries and paid for by the day.",
+    "",
+    "The §12.4 anchors are stone, the quarry, foundations, a wall that must stand, apprentices and the",
+    "building she will not live to see finished. These three take a foundation somebody wants rushed, a",
+    "delivery of bad stone, and an apprentice who is quick and careless.",
+    "",
+    "The mason argues in timescales. Her characteristic move is to answer a question about this week",
+    "with an answer about the next hundred years, and she is entirely aware that this makes her",
+    "difficult to employ."
+  ],
+  "profession": "minecraft:mason",
+  "id": "mason",
+  "ages": [
+    "adult"
+  ],
+  "subjects_any": [
+    "stone",
+    "the_quarry",
+    "foundations",
+    "a_wall_that_must_stand",
+    "apprentices",
+    "unfinished_work"
+  ],
+  "leave_label": {
+    "en": "I'll let you get back to the course.",
+    "pt": "Vou deixar você voltar à fiada."
+  },
+  "slot_lang": {
+    "mas_the_granary_wall": {
+      "en": "the granary wall",
+      "pt": "o muro do celeiro"
+    },
+    "mas_the_bridge_footing": {
+      "en": "the bridge footing",
+      "pt": "a fundação da ponte"
+    },
+    "mas_the_new_house": {
+      "en": "the new house",
+      "pt": "a casa nova"
+    },
+    "mas_soft_ground": {
+      "en": "ground that is softer than they think",
+      "pt": "terreno mais mole do que imaginam"
+    },
+    "mas_a_rushed_footing": {
+      "en": "a footing dug too shallow",
+      "pt": "uma sapata cavada rasa demais"
+    },
+    "mas_no_time_to_settle": {
+      "en": "no time given for it to settle",
+      "pt": "nenhum tempo dado para assentar"
+    },
+    "mas_shattered_blocks": {
+      "en": "blocks that shattered on the cart",
+      "pt": "blocos que se partiram na carroça"
+    },
+    "mas_a_bad_seam": {
+      "en": "stone from a bad seam",
+      "pt": "pedra de um veio ruim"
+    },
+    "mas_wet_stone": {
+      "en": "stone quarried wet",
+      "pt": "pedra extraída molhada"
+    },
+    "mas_a_quick_lad": {
+      "en": "a quick lad",
+      "pt": "um rapaz rápido"
+    },
+    "mas_a_careful_girl": {
+      "en": "a careful girl",
+      "pt": "uma menina cuidadosa"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "work.rushed_foundation",
+      "subject": "work.mason.foundations",
+      "initial_state": "blocked",
+      "salience": 62,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "build": [
+          "mas_the_granary_wall",
+          "mas_the_bridge_footing",
+          "mas_the_new_house"
+        ],
+        "fault": [
+          "mas_soft_ground",
+          "mas_a_rushed_footing",
+          "mas_no_time_to_settle"
+        ]
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "decide",
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "build",
+            "fault"
+          ],
+          "identity_values": [
+            "duty",
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The foundation.",
+            "pt": "A fundação."
+          },
+          "lines": {
+            "en": [
+              "They want %2$s up by the festival and there is %3$s, and I have said so twice in front of witnesses.",
+              "%3$s under %2$s. It will stand for four years and look perfect for three of them.",
+              "I can build %2$s fast or I can build it once. Everybody nods at that sentence and then asks about the festival again."
+            ],
+            "pt": [
+              "Querem %2$s de pé até a festa e existe %3$s, e eu já disse isso duas vezes diante de testemunhas.",
+              "%3$s embaixo de %2$s. Vai ficar de pé por quatro anos e parecer perfeito em três deles.",
+              "Posso construir %2$s rápido ou posso construir uma vez só. Todo mundo concorda com essa frase e depois pergunta da festa de novo."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_what_happens",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "What happens in four years?",
+                "pt": "O que acontece em quatro anos?"
+              },
+              "phrases": [
+                "what happens in four years",
+                "how does it fail later on"
+              ],
+              "requires_any": [
+                "years",
+                "fail"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "slots_used": [
+                  "build"
+                ],
+                "lines": {
+                  "en": [
+                    "A crack from the corner, thin as a hair, and then a wet winter, and then %2$s is a repair that costs four times the building.",
+                    "Nothing dramatic. One corner drops a finger's width. Doors stop shutting. Everybody blames the carpenter.",
+                    "I will be blamed, and I will deserve some of it, because a mason who builds what she was told to build is still the one who built it."
+                  ],
+                  "pt": [
+                    "Uma trinca no canto, fina como um fio, depois um inverno chuvoso, e aí %2$s vira um conserto que custa quatro vezes a obra.",
+                    "Nada dramático. Um canto cede a largura de um dedo. As portas param de fechar. Todo mundo culpa o carpinteiro.",
+                    "Vou ser culpada, e vou merecer parte, porque uma pedreira que constrói o que mandaram continua sendo quem construiu."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "back_her_judgement",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Refuse to build it that way.",
+                "pt": "Recuse construir assim."
+              },
+              "phrases": [
+                "refuse to build it that way",
+                "hold the line on the footing"
+              ],
+              "requires_any": [
+                "refuse",
+                "hold",
+                "footing"
+              ],
+              "disposition": {
+                "respect": 4,
+                "trust": 2
+              },
+              "affection": {
+                "decision": "work.mason.foundation.backed",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "steadied",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then I lose the work and somebody worse takes it, and the wall goes up anyway. I have thought about that a great deal.",
+                    "I will say it a third time, in writing, and I will build it properly or I will build nothing. That is the only version I can live in.",
+                    "Yes. And if they find another mason, at least the record will say I told them, and in six years the record is all anybody will have."
+                  ],
+                  "pt": [
+                    "Aí eu perco a obra e alguém pior pega, e o muro sobe do mesmo jeito. Pensei muito nisso.",
+                    "Vou dizer uma terceira vez, por escrito, e construo direito ou não construo nada. É a única versão em que eu consigo viver.",
+                    "Sim. E se acharem outro pedreiro, ao menos o registro vai dizer que eu avisei, e em seis anos o registro é tudo o que vai restar."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "sympathise",
+              "stance": "empathy",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's a rotten position to be in.",
+                "pt": "É uma posição horrível."
+              },
+              "phrases": [
+                "that is a rotten position to be in",
+                "you are stuck in a bad position"
+              ],
+              "requires_any": [
+                "position",
+                "rotten",
+                "stuck"
+              ],
+              "disposition": {
+                "warmth": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "shape": "observe",
+                "lines": {
+                  "en": [
+                    "It is the position of the trade. Everything I build is judged by people who will be dead before it is tested.",
+                    "Thank you. What I mind is not the argument. It is being treated as difficult for saying a thing that is simply true about soil.",
+                    "I have been in it four times and won twice. Those are honest odds, and I go into the fifth knowing them."
+                  ],
+                  "pt": [
+                    "É a posição do ofício. Tudo o que eu construo é julgado por gente que vai estar morta antes de ser testado.",
+                    "Obrigada. O que me incomoda não é a discussão. É ser tratada como difícil por dizer uma coisa que é simplesmente verdade sobre solo.",
+                    "Já estive nela quatro vezes e ganhei duas. São chances honestas, e vou para a quinta sabendo disso."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "clarify",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "build"
+          ],
+          "prompt": {
+            "en": "That foundation.",
+            "pt": "Aquela fundação."
+          },
+          "lines": {
+            "en": [
+              "They gave me the extra fortnight. %2$s is on proper footings and it will be standing when this village has forgotten my name.",
+              "I put it in writing and they read it and something changed. I have no idea which sentence did it.",
+              "Dug down another three feet. The festival happened around a hole in the ground, and nobody has mentioned it since."
+            ],
+            "pt": [
+              "Me deram as duas semanas extras. %2$s está sobre sapatas de verdade e vai estar de pé quando esta vila tiver esquecido meu nome.",
+              "Botei por escrito, eles leram e alguma coisa mudou. Não faço ideia de qual frase fez isso.",
+              "Cavamos mais um metro. A festa aconteceu em volta de um buraco no chão, e ninguém comentou desde então."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_the_long_view",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Does it bother you not to see them finished?",
+                "pt": "Incomoda não ver elas prontas?"
+              },
+              "phrases": [
+                "does it bother you not to see them finished",
+                "how do you feel about work you never see finished"
+              ],
+              "requires_any": [
+                "bother",
+                "finished",
+                "feel"
+              ],
+              "disposition": {
+                "familiarity": 3
+              },
+              "reaction": {
+                "id": "answered",
+                "act": "explain",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "It is the best part. I am one course in a wall that a dozen people will build, and being one course is a perfectly good thing to be.",
+                    "My grandmother laid the church footings. I have stood on them. That is as close to an answer as I have and it is enough.",
+                    "What bothers me is being hurried. Never the length. A hundred years is fine; a fortnight taken off the front of it is not."
+                  ],
+                  "pt": [
+                    "É a melhor parte. Sou uma fiada num muro que doze pessoas vão levantar, e ser uma fiada é uma coisa perfeitamente boa de se ser.",
+                    "Minha avó assentou as fundações da igreja. Já pisei nelas. É o mais perto de uma resposta que eu tenho, e basta.",
+                    "O que me incomoda é a pressa. Nunca o prazo. Cem anos está ótimo; duas semanas tiradas do começo, não."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.bad_stone",
+      "subject": "work.mason.the_quarry",
+      "initial_state": "blocked",
+      "salience": 54,
+      "due_after_days": 3,
+      "expires_after_days": 22,
+      "slots": {
+        "problem": [
+          "mas_shattered_blocks",
+          "mas_a_bad_seam",
+          "mas_wet_stone"
+        ]
+      },
+      "commitment": {
+        "id": "work.mason.bring_stone",
+        "resolver": "gift_tag_received",
+        "target": "registry_id:minecraft:stone",
+        "due_after_days": 3
+      },
+      "states": [
+        {
+          "state": "blocked",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "promise"
+          ],
+          "slots_used": [
+            "problem"
+          ],
+          "identity_values": [
+            "precision",
+            "fairness"
+          ],
+          "prompt": {
+            "en": "The delivery.",
+            "pt": "A entrega."
+          },
+          "lines": {
+            "en": [
+              "%2$s. Half a cartload of it, and half a cartload is exactly the amount that tempts you to use it anyway.",
+              "I have sorted through %2$s all morning and found enough for two courses out of six.",
+              "%2$s came in and the quarryman is four days away, so the wall stops until somebody rides out there."
+            ],
+            "pt": [
+              "%2$s. Meia carroça disso, e meia carroça é exatamente a quantidade que tenta você a usar assim mesmo.",
+              "Passei a manhã separando %2$s e achei o suficiente para duas fiadas de seis.",
+              "%2$s chegou e o pedreiro da pedreira está a quatro dias daqui, então o muro para até alguém cavalgar até lá."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_about_using_it",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Could you use it somewhere it matters less?",
+                "pt": "Dá para usar onde importa menos?"
+              },
+              "phrases": [
+                "could you use it somewhere it matters less",
+                "is there a place the weaker stone would do"
+              ],
+              "requires_any": [
+                "matters",
+                "weaker",
+                "place"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "Fill, yes. Facing, never. The trouble is that fill and facing look the same in a cart and only differ in ten years.",
+                    "There is always somewhere. That is exactly the reasoning that puts bad stone in a wall, one sensible decision at a time.",
+                    "A garden edge, a step. Nothing that carries. I keep a low wall behind the workshop entirely out of stone I refused."
+                  ],
+                  "pt": [
+                    "Enchimento, sim. Face, nunca. O problema é que enchimento e face parecem iguais numa carroça e só diferem em dez anos.",
+                    "Sempre tem um lugar. É exatamente esse raciocínio que põe pedra ruim num muro, uma decisão sensata por vez.",
+                    "Uma borda de horta, um degrau. Nada que sustente. Tenho um muro baixo atrás da oficina feito inteiro de pedra que recusei."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "offer_stone",
+              "stance": "practical_help",
+              "answers": [
+                "promise"
+              ],
+              "tone": "gentle",
+              "outcome": "accepted",
+              "commitment": true,
+              "advance": "active",
+              "label": {
+                "en": "I'll bring you good stone.",
+                "pt": "Vou te trazer pedra boa."
+              },
+              "phrases": [
+                "i can bring you good stone",
+                "let me fetch stone for that"
+              ],
+              "requires_any": [
+                "stone"
+              ],
+              "disposition": {
+                "trust": 4,
+                "warmth": 2
+              },
+              "affection": {
+                "decision": "work.mason.stone.offer",
+                "delta": 2,
+                "budget": "standard",
+                "policy": "once"
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "status_change",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "blocked",
+                  "active"
+                ],
+                "lines": {
+                  "en": [
+                    "Then the courses go up this week and I stop having the same argument with myself every morning.",
+                    "Bring it dry if you can. Wet stone splits in the first frost and the frost is six weeks out.",
+                    "Yes. And I will lay your stone at the corners, where it shows and where it works hardest."
+                  ],
+                  "pt": [
+                    "Então as fiadas sobem esta semana e eu paro de ter a mesma discussão comigo toda manhã.",
+                    "Traga seca, se puder. Pedra molhada racha na primeira geada, e a geada está a seis semanas.",
+                    "Sim. E vou assentar a sua pedra nos cantos, onde aparece e onde mais trabalha."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "prompt": {
+            "en": "The wall.",
+            "pt": "O muro."
+          },
+          "lines": {
+            "en": [
+              "Six courses up and true. I ran a line along the top this morning and it did not want correcting anywhere.",
+              "It went up in three days once the stone was right. The waiting was three weeks and the building was three days.",
+              "The corners are the ones you brought. I have not told anybody that and I know it every time I walk past."
+            ],
+            "pt": [
+              "Seis fiadas de pé e no prumo. Passei uma linha no topo hoje de manhã e não pediu correção em lugar nenhum.",
+              "Subiu em três dias depois que a pedra ficou certa. A espera foi três semanas e a obra foi três dias.",
+              "Os cantos são os que você trouxe. Não contei isso a ninguém e eu sei toda vez que passo por ali."
+            ]
+          },
+          "replies": [
+            {
+              "name": "admire_the_wall",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "It'll outlast all of us.",
+                "pt": "Vai durar mais que todos nós."
+              },
+              "phrases": [
+                "it will outlast all of us",
+                "that wall will outlast everyone here"
+              ],
+              "requires_any": [
+                "outlast"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "That is the plan, and it is a strange plan to hold, because success means never finding out.",
+                    "If it does, nobody will look at it once. A wall that lasts is invisible, and I have made my peace with being invisible.",
+                    "Thank you. My name is on nothing. There is a mason's mark on the third course from the bottom, and that is the whole of my monument."
+                  ],
+                  "pt": [
+                    "É o plano, e é um plano estranho de se ter, porque sucesso significa nunca descobrir.",
+                    "Se durar, ninguém vai olhar uma vez sequer. Um muro que dura é invisível, e eu fiz as pazes com ser invisível.",
+                    "Obrigada. Meu nome não está em nada. Tem uma marca de pedreira na terceira fiada de baixo, e é esse o meu monumento inteiro."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "work.quick_apprentice",
+      "subject": "work.mason.apprentices",
+      "initial_state": "active",
+      "salience": 46,
+      "due_after_days": 3,
+      "expires_after_days": 30,
+      "slots": {
+        "pupil": [
+          "mas_a_quick_lad",
+          "mas_a_careful_girl"
+        ]
+      },
+      "states": [
+        {
+          "state": "active",
+          "shape": "problem_solve",
+          "predicate": "work_problem",
+          "temporal": "current",
+          "obligations": [
+            "clarify",
+            "decide"
+          ],
+          "slots_used": [
+            "pupil"
+          ],
+          "identity_values": [
+            "precision",
+            "duty"
+          ],
+          "prompt": {
+            "en": "The apprentice.",
+            "pt": "O aprendiz."
+          },
+          "lines": {
+            "en": [
+              "I have %2$s who can lay twice what I can in a day and will not check a single course with a line.",
+              "%2$s is better with a chisel at seventeen than I was at thirty. That is the problem, not the good news.",
+              "Everything %2$s builds looks right. In eleven years half of it will still be right, and neither of us will know which half."
+            ],
+            "pt": [
+              "Tenho %2$s que assenta o dobro do que eu num dia e não confere uma fiada sequer com a linha.",
+              "%2$s é melhor com o cinzel aos dezessete do que eu era aos trinta. Esse é o problema, não a boa notícia.",
+              "Tudo o que %2$s constrói parece certo. Em onze anos metade ainda vai estar certa, e nenhum de nós vai saber qual metade."
+            ]
+          },
+          "replies": [
+            {
+              "name": "ask_how_to_teach_it",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "How do you teach patience?",
+                "pt": "Como se ensina paciência?"
+              },
+              "phrases": [
+                "how do you teach patience",
+                "can patience even be taught"
+              ],
+              "requires_any": [
+                "patience",
+                "teach"
+              ],
+              "disposition": {
+                "familiarity": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "explained",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "work_problem",
+                "shape": "problem_solve",
+                "lines": {
+                  "en": [
+                    "You cannot. You can only show somebody a failure, and failures in this trade arrive eleven years late.",
+                    "I take them to the granary and show them a crack and say who built it, and then I say she was quicker than me too.",
+                    "Slowly, and by making them pull down their own good work once. It is cruel and it is the only thing that has ever worked."
+                  ],
+                  "pt": [
+                    "Não se ensina. Só dá para mostrar um fracasso a alguém, e neste ofício os fracassos chegam onze anos atrasados.",
+                    "Levo ao celeiro, mostro uma trinca e digo quem construiu, e depois digo que ela também era mais rápida que eu.",
+                    "Devagar, e fazendo desmanchar o próprio bom trabalho uma vez. É cruel e é a única coisa que já funcionou."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "advise_letting_them_fail",
+              "stance": "candor",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "appreciated",
+              "label": {
+                "en": "Let them build one badly and see it.",
+                "pt": "Deixe construir um errado e ver."
+              },
+              "phrases": [
+                "let them build one badly and see it",
+                "let the apprentice see their own error"
+              ],
+              "requires_any": [
+                "badly",
+                "apprentice",
+                "error"
+              ],
+              "disposition": {
+                "respect": 3
+              },
+              "reaction": {
+                "id": "accepted",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "plan",
+                "temporal": "future",
+                "shape": "plan",
+                "episode_states": [
+                  "active",
+                  "succeeded"
+                ],
+                "lines": {
+                  "en": [
+                    "On the garden wall, where nothing depends on it. Then we take it down together in a month and I say nothing while we do.",
+                    "Yes. I have been correcting before the error lands, which protects the wall and teaches nobody anything.",
+                    "That is how I learned. I have been trying to spare them it, which is affection getting in the way of the trade."
+                  ],
+                  "pt": [
+                    "No muro da horta, onde nada depende disso. Aí desmanchamos juntos daqui a um mês e eu não digo nada enquanto isso.",
+                    "Sim. Eu venho corrigindo antes do erro acontecer, o que protege o muro e não ensina nada a ninguém.",
+                    "Foi assim que eu aprendi. Ando tentando poupar deles, o que é afeto atrapalhando o ofício."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "succeeded",
+          "shape": "reminisce",
+          "obligations": [
+            "acknowledge"
+          ],
+          "slots_used": [
+            "pupil"
+          ],
+          "prompt": {
+            "en": "Your apprentice.",
+            "pt": "Seu aprendiz."
+          },
+          "lines": {
+            "en": [
+              "We took the garden wall down together. %2$s did not say a word for an hour and now checks every course.",
+              "It worked, and it cost me a wall and a very quiet afternoon, and I would do it again tomorrow.",
+              "%2$s asked for the line before I offered it, last Tuesday. That is the whole of the trade passed on, in one gesture."
+            ],
+            "pt": [
+              "Desmanchamos o muro da horta juntos. %2$s não disse uma palavra por uma hora e agora confere cada fiada.",
+              "Funcionou, e custou um muro e uma tarde muito silenciosa, e eu faria de novo amanhã.",
+              "%2$s pediu a linha antes de eu oferecer, na terça passada. É o ofício inteiro passado adiante, num gesto só."
+            ]
+          },
+          "replies": [
+            {
+              "name": "note_the_teaching",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That's the trade passed on.",
+                "pt": "É o ofício passado adiante."
+              },
+              "phrases": [
+                "that is the trade passed on",
+                "you handed the craft over properly"
+              ],
+              "requires_any": [
+                "passed",
+                "handed"
+              ],
+              "disposition": {
+                "warmth": 3,
+                "respect": 3
+              },
+              "reaction": {
+                "id": "acknowledged",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "memory",
+                "temporal": "past",
+                "shape": "reminisce",
+                "lines": {
+                  "en": [
+                    "One gesture at a time. It took my own teacher nine years and I thought she was slow, and now I understand she was on schedule.",
+                    "Thank you. It is the only work I do that I will see finished, which is a strange consolation and I take it.",
+                    "The wall we pulled down was better than anything I built at that age. That is what made it a lesson rather than a punishment."
+                  ],
+                  "pt": [
+                    "Um gesto por vez. Minha mestra levou nove anos e eu achava que era lenta, e agora entendo que estava no prazo.",
+                    "Obrigada. É o único trabalho meu que vou ver terminado, o que é um consolo estranho e eu aceito.",
+                    "O muro que desmanchamos era melhor do que qualquer coisa que eu construí naquela idade. Foi isso que fez daquilo uma lição e não um castigo."
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "followup": {
+    "prompt": {
+      "en": "Was there anything else?",
+      "pt": "Tinha mais alguma outra coisa?"
+    },
+    "bridge": {
+      "label": {
+        "en": "What's the hardest part of laying a wall?",
+        "pt": "Qual é a parte mais difícil de levantar um muro?"
+      },
+      "requires_any": [
+        "hardest",
+        "wall"
+      ],
+      "phrases": [
+        "what is the hardest part of laying a wall",
+        "hardest thing about laying a wall"
+      ]
+    },
+    "leave": {
+      "en": "I'll leave you to the stone.",
+      "pt": "Vou deixar você com a pedra."
+    }
+  }
+}

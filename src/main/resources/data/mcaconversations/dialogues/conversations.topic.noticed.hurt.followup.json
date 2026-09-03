@@ -1,0 +1,86 @@
+{
+  "answers": [
+    {
+      "name": "check_tomorrow",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.hurt.followup.check"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.hurt.followup.check",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.hurt.followup.check",
+              "deltas": {
+                "familiarity": 1,
+                "warmth": 3
+              }
+            },
+            "conversations_progress_apply": {
+              "arc": "noticed",
+              "op": "advance"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.followup.check"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sit_with_you",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "noticed.hurt.followup.sit"
+            },
+            "conversations_affection_apply": {
+              "decision": "noticed.hurt.followup.sit",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "noticed.hurt.followup.sit",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.followup.sit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.noticed.hurt.followup.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
