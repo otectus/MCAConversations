@@ -63,4 +63,42 @@ class DialogueChoiceLayoutTest {
         assertEquals(9, pages.pages().get(0).size());
         assertEquals(9, pages.pages().get(1).size());
     }
+
+    @Test
+    void numberColumnHonoursStyleFloor() {
+        // The one-argument form is the responsive card and must keep answering exactly what it did
+        // in 1.5.1; the profile form lets a style ask for less, but never less than the digit and
+        // the padding around it actually occupy.
+        int numeralWidth = 8;
+        assertEquals(DialogueChoiceLayout.numberColumn(numeralWidth),
+                DialogueChoiceLayout.numberColumn(numeralWidth, DialogueStyleProfile.RESPONSIVE),
+                "the default profile is the responsive card");
+        int minimal = DialogueChoiceLayout.numberColumn(numeralWidth, DialogueStyleProfile.MINIMAL);
+        assertTrue(minimal < DialogueChoiceLayout.numberColumn(numeralWidth),
+                "a text-only badge must actually narrow the gutter");
+        assertEquals(4 + numeralWidth + 5, minimal,
+                "MINIMAL is the numeral between the card's own 4px and 5px gaps");
+        assertTrue(minimal >= DialogueStyleProfile.MINIMAL.numberColumnFloor(),
+                "the style floor is still a floor");
+    }
+
+    @Test
+    void badgeWidthFollowsTheStyleTheGutterWasMeasuredFor() {
+        // The gutter and the badge box are the same decision made twice. If they disagree, the
+        // numeral is drawn over the first word of the answer, which is exactly what the floor and
+        // the badge minimum exist to prevent.
+        DialogueChoiceLayout.Rect row = new DialogueChoiceLayout.Rect(0, 0, 200, 20);
+        for (DialogueStyleProfile profile :
+                new DialogueStyleProfile[]{DialogueStyleProfile.RESPONSIVE, DialogueStyleProfile.MINIMAL}) {
+            for (int numeralWidth : new int[]{1, 4, 8, 12, 20, 32}) {
+                DialogueChoiceLayout.Rect badge =
+                        DialogueChoiceLayout.badgeRect(row, 9, numeralWidth, profile);
+                assertTrue(badge.width() >= numeralWidth,
+                        "the badge must hold its own numeral");
+                assertTrue(badge.x() + badge.width()
+                                <= row.x() + DialogueChoiceLayout.numberColumn(numeralWidth, profile),
+                        "the badge must stay inside the gutter it was measured with");
+            }
+        }
+    }
 }

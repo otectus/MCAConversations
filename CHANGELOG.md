@@ -8,6 +8,37 @@ Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer de
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation,
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
+## [1.5.2] - unreleased
+
+Dialogue presentation expansion: three clearly differentiated interface choices (Current, Minimal, and Original MCA), explicit `dialogueMenuStyle` configuration, and improvements to motion control documentation.
+
+### Added
+
+- Three dialogue presentation choices: **Current** (the full responsive card), **Minimal** (responsive interaction with simpler graphics and no live portrait), and **Original MCA** (MCA Reborn's native interface).
+- Explicit `dialogueMenuStyle` client configuration option in `config/mcaconversations-client.toml`.
+- `MINIMAL` presentation layer: uses the same synchronized offer, keyboard navigation, paging, and accessibility systems as the responsive card, but with flat-panel graphics and no entity portrait rendering, reducing visual complexity and rendering overhead.
+
+### Changed
+
+- Original MCA presentation is now a first-class documented option (`dialogueMenuStyle = "MCA_ORIGINAL"`), rather than being discoverable only through the legacy `numberedResponses = false` setting.
+- `motionMode = OFF` is documented as the canonical way to disable every dialogue animation: card entrance, row cascading, focus transitions, page motion, exit fade, and question reveal.
+- Client presentation configuration is resolved centrally through `ClientChoiceController`, so the responsive card and MCA's native interface never disagree about input ownership.
+- `MINIMAL` presentation uses restrained motion under `motionMode = FULL`: no row cascade, no focus pop-out, and no selection press movement, with entrance and page transitions reduced to a short two-pixel slide.
+- Responsive card body now draws as a flat, translucent backing instead of tiling the vanilla options background; number badges and page buttons still use `widgets.png` and follow resource packs.
+
+### Fixed
+
+- The Conversations response card no longer disappears on the first click after a minute or so of reading, exposing MCA's own answer list underneath. A dialogue-screen offer used to age out with the conversation session timeout (`conversationSessionTimeoutTicks`, server config) and be dropped by the session's inactivity expiry, so the next selection was rejected as expired. A screen offer now lives for as long as MCA keeps the interaction screen open on that villager; chat-mode offers still expire with the session.
+
+### Compatibility
+
+- Existing `numberedResponses = false` configurations continue to restore MCA's native dialogue UI automatically.
+- Existing `motionMode` values (`FULL`, `REDUCED`, `OFF`) retain their exact meaning and behavior.
+- Network protocol remains `2` — no new packets.
+- Saves, datapacks, and server configuration are unchanged.
+
+---
+
 ## [1.5.1] - September 2nd, 2026
 
 One change: the conversation card stops carrying a look of its own and borrows the game's.

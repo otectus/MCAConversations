@@ -25,31 +25,68 @@ heading says which of its options went where.
 ## `[display]` (client)
 
 These options affect only the local player's dialogue presentation. Defaults provide the complete
-1.4.4 experience without configuration.
+1.5.1 experience without configuration.
 
 | Option | Default | Meaning |
 |---|---|---|
-| `numberedResponses` | `true` | replace supported dialogue choice areas with the responsive numbered list; disabling it preserves MCA/Townstead's native mouse UI |
-| `numericResponseShortcuts` | `true` | enable top-row and Numpad digits while a supported dialogue screen owns focus; automatically inert when numbering is hidden |
-| `chatNumericShortcuts` | `true` | let an unmodified `1`–`9` select a pending chat response only while the vanilla chat box is open and empty |
-| `showResponseControlHints` | `true` | show the compact selection/navigation footer below the base MCA response card |
-| `motionMode` | `FULL` | `FULL` adds short state-driven movement, `REDUCED` keeps fades but removes translation/pop-out/stagger, and `OFF` changes state immediately |
-| `uiSoundVolume` | `0.65` | scale focus, page, and confirmation cues from `0`–`1`; `0` disables them |
-| `speakerNameAccent` | `true` | style an unambiguous non-silent villager name in bold yellow; ambiguous and silent prompts retain their authored style |
-| `showSpeakerPortrait` | `true` | frame the speaking villager in the card header; dropped automatically on panels narrower than 260 pixels and on screens too short to spare the height |
-| `questionRevealMode` | `OFF` | `OFF` shows the villager's line at once; `FAST` reveals it over a few ticks. Ignored while `motionMode` is `OFF`, and any input completes it immediately |
+| `dialogueMenuStyle` | `RESPONSIVE` | `RESPONSIVE` uses the full MCA: Conversations responsive card with animations and a live speaker portrait. `MINIMAL` uses the responsive menu with simpler graphics and no portrait. `MCA_ORIGINAL` leaves the dialogue UI entirely to MCA Reborn |
+| `numberedResponses` | `true` | Legacy compatibility switch from 1.4.x/1.5.1. When `false`, always uses `MCA_ORIGINAL` regardless of `dialogueMenuStyle`. New installations should normally leave this `true` |
+| `numericResponseShortcuts` | `true` | Allow number keys (1–9) to select visible dialogue choices. Disabled automatically when the dialogue style is `MCA_ORIGINAL` |
+| `chatNumericShortcuts` | `true` | Let unmodified digits select a pending chat response when the chat input is empty |
+| `showResponseControlHints` | `true` | Show keyboard and paging hints below the response list (for `RESPONSIVE` and `MINIMAL` only) |
+| `motionMode` | `FULL` | Conversation motion: `FULL` uses short state-driven animation, `REDUCED` uses fades only, `OFF` disables every dialogue animation instantly (including question reveal). `OFF` is the canonical way to disable all animation |
+| `uiSoundVolume` | `0.65` | Volume multiplier for response focus, page turn, and confirmation sounds. Set to `0.0` to disable all UI sounds |
+| `speakerNameAccent` | `true` | Render the speaking villager's name in bold and accent color when that makes the speaker unambiguous (`RESPONSIVE` and `MINIMAL` only) |
+| `showSpeakerPortrait` | `true` | Show the speaking villager's portrait in the dialogue card header where the style supports it. The `MINIMAL` style intentionally omits the portrait; `RESPONSIVE` shows it when this is enabled and space allows; `MCA_ORIGINAL` follows MCA's own behavior |
+| `questionRevealMode` | `OFF` | How the villager's line appears: `OFF` shows it at once; `FAST` reveals it over a few ticks (ignored when `motionMode` is `OFF` and in `MCA_ORIGINAL` mode). Any input completes the reveal instantly |
 
-Digits are never captured during ordinary gameplay, so hotbar selection is unchanged. A non-empty
-chat field also keeps normal numeric typing. Mouse, arrows, Enter, Space, and typed free text remain
-available when shortcuts are disabled.
+#### Support: getting the exact MCA Reborn dialogue interface
 
-The card responds to config and resource-pack changes while it is open without changing the current
-offer, absolute focus, or selection lock. Colour is never used to predict whether an answer is kind,
-hostile, successful, or worth hearts; it identifies only the speaker and the active control.
+To use MCA Reborn's native dialogue menu instead of the Conversations card:
 
-There is no palette or opacity option, because the card has no palette of its own. It is painted with
-Minecraft's `options_background.png` and `widgets.png`, so a resource pack that reskins vanilla menus
-reskins the card with them.
+```toml
+dialogueMenuStyle = "MCA_ORIGINAL"
+```
+
+Existing users with `numberedResponses = false` from 1.5.1 automatically get this behavior.
+
+#### Support: keeping the new interface but removing animations
+
+To use either `RESPONSIVE` or `MINIMAL` without any animation:
+
+```toml
+motionMode = "OFF"
+```
+
+#### Interaction between `numberedResponses` and `dialogueMenuStyle`
+
+When `numberedResponses = false`, the effective dialogue style is always `MCA_ORIGINAL`, even if `dialogueMenuStyle` is set to `RESPONSIVE` or `MINIMAL`. This preserves compatibility for users who explicitly disabled numbered responses in 1.5.1 to restore MCA's native interface.
+
+#### Ignored settings by style
+
+**When using `MCA_ORIGINAL`:**
+
+The following options are ignored because MCA Reborn owns the dialogue presentation and input:
+- `motionMode`
+- `showResponseControlHints`
+- `showSpeakerPortrait`
+- `questionRevealMode`
+- `speakerNameAccent` (applied only by the Conversations renderer)
+- `numericResponseShortcuts` (GUI numeric shortcuts)
+
+Chat numeric shortcuts remain controlled by `chatNumericShortcuts`.
+
+**When using `MINIMAL`:**
+
+The live villager portrait is intentionally omitted regardless of `showSpeakerPortrait`. When `motionMode = FULL`, `MINIMAL` uses a restrained motion profile with no row cascade, no focus pop-out or lift, and no selection press movement, while entrance and page transitions keep a short 2-pixel slide. Other motion modes behave identically in both styles.
+
+#### Resource pack behavior
+
+**`RESPONSIVE`** draws the card body as a flat, translucent dark backing that resource packs do not change. Number badges and page buttons are drawn from the vanilla `widgets.png` texture and follow resource packs that retexture it. The selection frames and scrollbar are flat colours that resource packs do not change.
+
+**`MINIMAL`** uses flat primitives and is mostly independent of GUI textures. It still honors the active font, language, and text styling from resource packs.
+
+**`MCA_ORIGINAL`** displays whatever MCA Reborn and the active resource pack normally render for dialogue.
 
 ## `[features]`
 

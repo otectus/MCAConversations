@@ -187,6 +187,12 @@ public abstract class InteractScreenChoiceMixin {
         mcaconversations$speaker = null;
     }
 
+    /**
+     * The sole ownership gate: every injector above asks this, and it reads the effective dialogue
+     * style through the controller, so a style change takes effect atomically per frame and per
+     * event. Under MCA_ORIGINAL it answers false and MCA keeps its own question, answers, clicks,
+     * wheel and digits.
+     */
     @Unique
     private boolean mcaconversations$active() {
         if (!ClientChoiceController.numberingEnabled() || dialogQuestionText == null

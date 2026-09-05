@@ -3,11 +3,6 @@ package dev.otectus.mcaconversations.client.dialogue;
 /** Screen-local, client-clocked animation state; it never decides offer or selection truth. */
 public final class DialogueChoiceVisualState {
 
-    /** Pixels the locked row presses inward before settling. */
-    private static final float PRESS_DEPTH = 3.0F;
-    /** Pixels the locked row rises back out once the press completes. */
-    private static final float SETTLE_RISE = 2.0F;
-
     private long tick;
     private long revision = -1L;
     private float enterAt;
@@ -105,11 +100,12 @@ public final class DialogueChoiceVisualState {
         float elapsed = time(partialTick) - lockAt;
         if (elapsed <= press) {
             return spec.focusOutset()
-                    - ConversationMotionSpec.smoothStep(durationProgress(elapsed, press)) * PRESS_DEPTH;
+                    - ConversationMotionSpec.smoothStep(durationProgress(elapsed, press))
+                            * spec.selectionPressDepth();
         }
-        return Math.max(0.0F, spec.focusOutset() - PRESS_DEPTH)
+        return Math.max(0.0F, spec.focusOutset() - spec.selectionPressDepth())
                 + ConversationMotionSpec.easeOutCubic(
-                        durationProgress(elapsed - press, settle)) * SETTLE_RISE;
+                        durationProgress(elapsed - press, settle)) * spec.selectionSettleRise();
     }
 
     public void reset() {

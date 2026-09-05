@@ -17,6 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * <p>The viewport sizes below are {@code guiWidth}/{@code guiHeight} after scaling, which is what
  * the layout is handed: a 1920x1080 window at GUI scale 4 presents as 480x270.
+ *
+ * <p>Every case runs at both style gutter floors. A style that draws fewer graphics must not get
+ * weaker layout coverage for it: MINIMAL wraps the same answers, packs the same pages and shows the
+ * same nine shortcuts, and the floor is the only number it changes.
  */
 class DialogueRenderPlanTest {
 
@@ -39,12 +43,20 @@ class DialogueRenderPlanTest {
         return heights;
     }
 
+    /** The two styles that draw a card of their own. MCA_ORIGINAL has no geometry to check. */
+    private static final DialogueStyleProfile[] PROFILES = {
+            DialogueStyleProfile.RESPONSIVE,
+            DialogueStyleProfile.MINIMAL,
+    };
+
     private record Case(int width, int height, int fontLineHeight, int questionLines,
-                        int answers, int answerLines, boolean footer) {
+                        int answers, int answerLines, boolean footer, DialogueStyleProfile profile) {
         @Override
         public String toString() {
             return width + "x" + height + " font=" + fontLineHeight + " question=" + questionLines
-                    + " answers=" + answers + "x" + answerLines + " footer=" + footer;
+                    + " answers=" + answers + "x" + answerLines + " footer=" + footer
+                    + " floor=" + profile.numberColumnFloor()
+                    + " texturedBadges=" + profile.texturedBadges();
         }
     }
 
@@ -56,8 +68,10 @@ class DialogueRenderPlanTest {
                     for (int answers : new int[]{1, 3, 9, 18}) {
                         for (int answerLines : new int[]{1, 2, 5}) {
                             for (boolean footer : new boolean[]{true, false}) {
-                                cases.add(new Case(viewport[0], viewport[1], fontLineHeight,
-                                        questionLines, answers, answerLines, footer));
+                                for (DialogueStyleProfile profile : PROFILES) {
+                                    cases.add(new Case(viewport[0], viewport[1], fontLineHeight,
+                                            questionLines, answers, answerLines, footer, profile));
+                                }
                             }
                         }
                     }
@@ -146,9 +160,9 @@ class DialogueRenderPlanTest {
             for (DialogueChoiceLayout.Rect row : firstPage(c).rows()) {
                 // A wide font is the case that matters: the gutter has to grow with it.
                 int numeralWidth = c.fontLineHeight() * 2;
-                int column = DialogueChoiceLayout.numberColumn(numeralWidth);
-                DialogueChoiceLayout.Rect badge =
-                        DialogueChoiceLayout.badgeRect(row, c.fontLineHeight(), numeralWidth);
+                int column = DialogueChoiceLayout.numberColumn(numeralWidth, c.profile());
+                DialogueChoiceLayout.Rect badge = DialogueChoiceLayout.badgeRect(
+                        row, c.fontLineHeight(), numeralWidth, c.profile());
                 if (badge.x() + badge.width() > row.x() + column) {
                     problems.add(c + ": badge spills into the answer text column");
                 }
@@ -207,6 +221,30 @@ class DialogueRenderPlanTest {
             DialogueChoiceLayout.Layout layout = firstPage(c);
             if (layout.footerY() >= 0) {
                 problems.add(c + ": reserved a footer that was not requested");
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
+    }
+
+    @Test
+    void numberColumnNeverNarrowerThanTheNumeral() {
+        // A floor sets how narrow a style may be, not how narrow the digit may be drawn. If a floor
+        // could win over the numeral, a Unicode font would put the answer's first word on top of it.
+        List<String> problems = new ArrayList<>();
+        for (int fontLineHeight : FONT_LINE_HEIGHTS) {
+            for (int numeralWidth : new int[]{1, 4, 8, 12, 20, 32}) {
+                for (DialogueStyleProfile profile : PROFILES) {
+                    int floor = profile.numberColumnFloor();
+                    int column = DialogueChoiceLayout.numberColumn(numeralWidth, profile);
+                    if (column < numeralWidth) {
+                        problems.add("floor " + floor + " numeral " + numeralWidth
+                                + ": gutter " + column + " is narrower than the numeral");
+                    }
+                    if (column < floor) {
+                        problems.add("floor " + floor + " numeral " + numeralWidth
+                                + ": gutter " + column + " is below the style floor");
+                    }
+                }
             }
         }
         assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));

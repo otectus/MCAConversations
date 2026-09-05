@@ -3,7 +3,6 @@ package dev.otectus.mcaconversations.client.dialogue;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
  *
  * <h2>Vanilla textures, not synthetic ones</h2>
  *
- * <p>The panel is the options-screen dirt and the two things that genuinely are buttons -- the number
+ * <p>The panel is a flat translucent backing and the two things that genuinely are buttons -- the number
  * badge and the page controls -- are nine-sliced out of {@code widgets.png}. A resource pack that
  * reskins Minecraft's menus therefore reskins this card, and the card has no colour scheme of its own
  * to fall out of step with the rest of the game. Everything else is a fill, exactly as a vanilla list
@@ -31,13 +30,12 @@ import java.util.List;
  * <p>{@code GuiGraphics.setColor} is global state. Every tinted blit here resets it to white in a
  * {@code finally}, or MCA's screen and the entity portrait drawn over this card inherit the tint.
  */
-public final class DialogueCardSkin {
+public final class DialogueCardSkin implements DialogueSkin {
 
-    private static final ResourceLocation DIRT = Screen.BACKGROUND_LOCATION;
+    /** The one instance. The skin holds no state; it is an object only so a style can be chosen. */
+    public static final DialogueSkin INSTANCE = new DialogueCardSkin();
+
     private static final ResourceLocation WIDGETS = AbstractWidget.WIDGETS_LOCATION;
-
-    /** Edge length of one dirt tile in GUI units, matching {@code Screen.renderDirtBackground}. */
-    private static final int DIRT_TILE = 32;
 
     /** The button strip in {@code widgets.png}: 200x20 faces stacked from v=46. */
     private static final int BUTTON_WIDTH = 200;
@@ -61,11 +59,12 @@ public final class DialogueCardSkin {
      * The panel body, its darker list body, and the one-pixel border that separates both from the
      * world behind them. {@code listBody} may be null on a card with no rows to recess.
      */
-    public static void panel(GuiGraphics graphics, DialogueChoiceLayout.Rect panel,
+    @Override
+    public void panel(GuiGraphics graphics, DialogueChoiceLayout.Rect panel,
                              DialogueChoiceLayout.Rect listBody, float alpha) {
-        dirt(graphics, panel, ConversationPalette.PANEL_TINT, alpha);
+        fill(graphics, panel, ConversationPalette.withAlpha(ConversationPalette.PANEL_BACKING, alpha));
         if (listBody != null && listBody.width() > 0 && listBody.height() > 0) {
-            dirt(graphics, listBody, ConversationPalette.LIST_TINT, alpha);
+            fill(graphics, listBody, ConversationPalette.withAlpha(ConversationPalette.LIST_BACKING, alpha));
             // The two shading bands vanilla puts at the ends of a list, standing in for the divider
             // rule and the footer rule the card used to draw.
             int shade = ConversationPalette.withAlpha(ConversationPalette.SHADE, alpha);
@@ -82,7 +81,8 @@ public final class DialogueCardSkin {
      * One choice row. A resting row paints nothing at all -- a vanilla list entry is text on the list
      * body -- and a focused or locked one gets vanilla's two-tone selection frame.
      */
-    public static void row(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
+    @Override
+    public void row(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                            boolean focused, boolean locked) {
         if (!focused && !locked) {
             return;
@@ -94,20 +94,23 @@ public final class DialogueCardSkin {
     }
 
     /** The number badge behind a row's numeral: a small vanilla button face, on every row. */
-    public static void badge(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
+    @Override
+    public void badge(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                              boolean highlighted) {
         button(graphics, rect, alpha, highlighted ? BUTTON_V_HOVERED : BUTTON_V_REST);
     }
 
     /** A previous/next page button face, disabled when the direction is unavailable. */
-    public static void control(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
+    @Override
+    public void control(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                                boolean enabled, boolean hovered) {
         button(graphics, rect, alpha,
                 !enabled ? BUTTON_V_DISABLED : hovered ? BUTTON_V_HOVERED : BUTTON_V_REST);
     }
 
     /** The recessed well the speaking villager is drawn into. */
-    public static void portrait(GuiGraphics graphics, DialogueChoiceLayout.Rect frame, float alpha) {
+    @Override
+    public void portrait(GuiGraphics graphics, DialogueChoiceLayout.Rect frame, float alpha) {
         fill(graphics, frame, ConversationPalette.withAlpha(ConversationPalette.WELL, alpha));
         outline(graphics, frame,
                 ConversationPalette.withAlpha(ConversationPalette.WELL_EDGE, alpha), 1);
@@ -119,7 +122,8 @@ public final class DialogueCardSkin {
      * <p>Drawn only when there is something to scroll, so a row that happens to fit keeps its full
      * reading width.
      */
-    public static void scrollbar(GuiGraphics graphics, DialogueChoiceLayout.Rect row,
+    @Override
+    public void scrollbar(GuiGraphics graphics, DialogueChoiceLayout.Rect row,
                                  int firstLine, int visibleLines, int totalLines, float alpha) {
         if (visibleLines <= 0 || totalLines <= visibleLines) {
             return;
@@ -144,6 +148,20 @@ public final class DialogueCardSkin {
                 ConversationPalette.withAlpha(ConversationPalette.SCROLL_THUMB_FACE, alpha));
     }
 
+    /** The nine numerals the card can draw, so no frame concatenates one. */
+    private static final String[] NUMERALS =
+            {"1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9."};
+
+    /**
+     * The numeral exactly as the 1.5.1 card drew it: the visible number followed by a full stop. The
+     * badge art sits behind it, so the two must not disagree about how wide the string is.
+     */
+    @Override
+    public String badgeLabel(int visibleNumber) {
+        return visibleNumber >= 1 && visibleNumber <= NUMERALS.length
+                ? NUMERALS[visibleNumber - 1] : visibleNumber + ".";
+    }
+
     // ---------------------------------------------------------------------------------------------
     // Primitives
     // ---------------------------------------------------------------------------------------------
@@ -160,25 +178,6 @@ public final class DialogueCardSkin {
         graphics.fill(rect.x(), rect.y(), rect.x() + thickness, rect.y() + rect.height(), color);
         graphics.fill(rect.x() + rect.width() - thickness, rect.y(),
                 rect.x() + rect.width(), rect.y() + rect.height(), color);
-    }
-
-    /** Tiles the options-screen dirt over {@code rect}, tinted and faded, then restores the tint. */
-    private static void dirt(GuiGraphics graphics, DialogueChoiceLayout.Rect rect,
-                             float tint, float alpha) {
-        if (rect.width() <= 0 || rect.height() <= 0) {
-            return;
-        }
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        try {
-            graphics.setColor(tint, tint, tint, Math.max(0.0F, Math.min(1.0F, alpha)));
-            // Sampled one texel per GUI unit so the tiling matches vanilla's dirt at every GUI scale.
-            graphics.blit(DIRT, rect.x(), rect.y(), rect.width(), rect.height(), 0.0F, 0.0F,
-                    rect.width(), rect.height(), DIRT_TILE, DIRT_TILE);
-        } finally {
-            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.disableBlend();
-        }
     }
 
     private static void button(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,

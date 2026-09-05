@@ -69,7 +69,7 @@ public abstract class TownsteadChoicePanelMixin implements NumberedChoicePanelBr
                 if (rowY + rowHeight > y && rowY < y + height) {
                     int badgeY = Math.max(y + 1, rowY);
                     boolean selected = i == selectedIndex;
-                    DialogueCardSkin.badge(graphics, new DialogueChoiceLayout.Rect(x + 3, badgeY, 15,
+                    DialogueCardSkin.INSTANCE.badge(graphics, new DialogueChoiceLayout.Rect(x + 3, badgeY, 15,
                             Math.min(y + height, badgeY + 11) - badgeY), alpha, selected);
                     graphics.drawString(font, visibleNumber + ".", x + 5, badgeY + 1,
                             ConversationPalette.withAlpha(ConversationPalette.TEXT, alpha), false);

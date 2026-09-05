@@ -19,17 +19,21 @@ class DialogueChoiceVisualStateTest {
     private static final ConversationMotionSpec FULL = new ConversationMotionSpec(
             McaConversationsConfig.MotionMode.FULL,
             4.0F, 3.0F, 2.5F, 2.0F, 1.5F, 2.0F, 3.0F, 2.0F,
-            4, 4, 1, 3, 4, 0.35F);
+            4, 4, 1, 3, 4, 0.35F, 3.0F, 2.0F);
 
     private static final ConversationMotionSpec REDUCED = new ConversationMotionSpec(
             McaConversationsConfig.MotionMode.REDUCED,
             3.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 2.0F, 2.0F,
-            0, 0, 0, 0, 0, 0.0F);
+            0, 0, 0, 0, 0, 0.0F, 0.0F, 0.0F);
 
     private static final ConversationMotionSpec OFF = new ConversationMotionSpec(
             McaConversationsConfig.MotionMode.OFF,
             0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
-            0, 0, 0, 0, 0, 0.0F);
+            0, 0, 0, 0, 0, 0.0F, 0.0F, 0.0F);
+
+    private static final ConversationMotionSpec MINIMAL_FULL = ConversationMotionSpec.of(
+            McaConversationsConfig.MotionMode.FULL,
+            McaConversationsConfig.DialogueMenuStyle.MINIMAL);
 
     private static DialogueChoiceVisualState observing(ClientChoiceState state) {
         DialogueChoiceVisualState visual = new DialogueChoiceVisualState();
@@ -103,5 +107,45 @@ class DialogueChoiceVisualStateTest {
                 "reduced motion fades the whole card, it does not stagger rows");
         assertTrue(visual.cardProgress(0, REDUCED) < 1.0F, "the card itself still fades in");
         assertFalse(REDUCED.instant());
+    }
+
+    @Test
+    void minimalFullNeverExpandsFocus() {
+        // The whole point of the flat card is that a row stays where the layout put it. A focused
+        // row that grows would move its own hitbox out from under the pointer that is hovering it.
+        ClientChoiceState state = offered("a", "b");
+        DialogueChoiceVisualState visual = observing(state);
+        assertEquals(0, MINIMAL_FULL.focusOutset(), "no pop-out");
+        assertEquals(0, MINIMAL_FULL.focusLift(), "no lift");
+        state.lock(1);
+        visual.observe(state, 0);
+        assertEquals(0.0F, visual.lockedOutset(0, MINIMAL_FULL), 0.0001F,
+                "a locked row must not push out either");
+    }
+
+    @Test
+    void minimalFullDoesNotCascadeRows() {
+        DialogueChoiceVisualState visual = observing(offered("a", "b", "c"));
+        assertEquals(0.0F, MINIMAL_FULL.rowStagger(), 0.0001F);
+        assertEquals(0, MINIMAL_FULL.rowEntryDistance());
+        assertEquals(1.0F, visual.rowEntryProgress(2, 0, MINIMAL_FULL), 0.0001F,
+                "rows arrive with the card rather than one after another");
+        assertTrue(visual.cardProgress(0, MINIMAL_FULL) < 1.0F, "the card itself still fades in");
+    }
+
+    @Test
+    void minimalFullHasNoPressOrSettleMovement() {
+        ClientChoiceState state = offered("a", "b");
+        DialogueChoiceVisualState visual = observing(state);
+        state.lock(0);
+        visual.observe(state, 0);
+        assertEquals(0.0F, MINIMAL_FULL.selectionPressDepth(), 0.0001F);
+        assertEquals(0.0F, MINIMAL_FULL.selectionSettleRise(), 0.0001F);
+        for (int i = 0; i < 6; i++) {
+            assertEquals(0.0F, visual.lockedOutset(0, MINIMAL_FULL), 0.0001F,
+                    "confirmation is a colour change here, not a button press");
+            visual.tick();
+        }
+        assertFalse(MINIMAL_FULL.instant(), "restrained is not the same as switched off");
     }
 }

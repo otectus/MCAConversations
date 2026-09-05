@@ -15,12 +15,50 @@ public final class ClientChoiceController {
     private ClientChoiceController() {
     }
 
-    public static boolean numberingEnabled() {
-        try {
-            return McaConversationsConfig.CLIENT.numberedResponses.get();
-        } catch (Throwable ignored) {
-            return true;
+    /**
+     * The one authoritative reading of the presentation configuration. {@code numberedResponses=false}
+     * is the deprecated 1.4.x/1.5.1 compatibility override and always wins.
+     */
+    public static McaConversationsConfig.DialogueMenuStyle resolve(
+            boolean numberedResponses, McaConversationsConfig.DialogueMenuStyle configured) {
+        if (!numberedResponses) {
+            return McaConversationsConfig.DialogueMenuStyle.MCA_ORIGINAL;
         }
+        return configured == null ? McaConversationsConfig.DialogueMenuStyle.RESPONSIVE : configured;
+    }
+
+    public static McaConversationsConfig.DialogueMenuStyle dialogueMenuStyle() {
+        try {
+            return resolve(McaConversationsConfig.CLIENT.numberedResponses.get(),
+                    McaConversationsConfig.CLIENT.dialogueMenuStyle.get());
+        } catch (Throwable ignored) {
+            return McaConversationsConfig.DialogueMenuStyle.RESPONSIVE;
+        }
+    }
+
+    public static boolean responsiveDialogueEnabled() {
+        return dialogueMenuStyle() == McaConversationsConfig.DialogueMenuStyle.RESPONSIVE;
+    }
+
+    public static boolean minimalDialogueEnabled() {
+        return dialogueMenuStyle() == McaConversationsConfig.DialogueMenuStyle.MINIMAL;
+    }
+
+    public static boolean originalMcaDialogueEnabled() {
+        return dialogueMenuStyle() == McaConversationsConfig.DialogueMenuStyle.MCA_ORIGINAL;
+    }
+
+    /** True while MCA: Conversations owns the dialogue presentation, whichever card it draws. */
+    public static boolean conversationsDialogueEnabled() {
+        return dialogueMenuStyle() != McaConversationsConfig.DialogueMenuStyle.MCA_ORIGINAL;
+    }
+
+    /**
+     * Compatibility alias of {@link #conversationsDialogueEnabled()}: MINIMAL keeps the numbered
+     * list, its digit shortcuts and Townstead badges, so this is not a RESPONSIVE-only gate.
+     */
+    public static boolean numberingEnabled() {
+        return conversationsDialogueEnabled();
     }
 
     public static boolean numericShortcutsEnabled() {
@@ -31,9 +69,10 @@ public final class ClientChoiceController {
         }
     }
 
+    /** Chat replies are a separate frontend: the graphical dialogue style must not gate them. */
     public static boolean chatShortcutsEnabled() {
         try {
-            return numberingEnabled() && McaConversationsConfig.CLIENT.chatNumericShortcuts.get();
+            return McaConversationsConfig.CLIENT.chatNumericShortcuts.get();
         } catch (Throwable ignored) {
             return true;
         }

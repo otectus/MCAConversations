@@ -26,7 +26,7 @@ dev.otectus.mcaconversations.chat                    22 files
 dev.otectus.mcaconversations.chat.group              5 files
 dev.otectus.mcaconversations.check                   7 files
 dev.otectus.mcaconversations.client                  2 files
-dev.otectus.mcaconversations.client.dialogue         19 files
+dev.otectus.mcaconversations.client.dialogue         22 files
 dev.otectus.mcaconversations.client.dialogue.dev     3 files
 dev.otectus.mcaconversations.client.townstead        2 files
 dev.otectus.mcaconversations.command                 2 files
@@ -90,6 +90,7 @@ _No datagen providers detected — assets and data JSON are hand-written._
 Run `check_mod.py` for a full consistency check (missing models, lang keys, textures).
 
 <!-- MODMAP:AUTO:END — everything below is hand-maintained and preserved -->
+
 
 ## Current focus
 

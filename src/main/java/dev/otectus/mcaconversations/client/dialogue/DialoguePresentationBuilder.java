@@ -83,7 +83,8 @@ public final class DialoguePresentationBuilder {
                                 List<FormattedCharSequence> legacyQuestion,
                                 Component speakerName, boolean silent,
                                 ClientChoiceState.ClientChoiceOffer offer,
-                                boolean footer, boolean portrait) {
+                                boolean footer, boolean portrait,
+                                DialogueStyleProfile profile) {
         DialogueChoiceLayout.HeaderSpec header = DialogueChoiceLayout.headerFor(
                 screenWidth, screenHeight, font.lineHeight, portrait, footer, false);
         FormattedText question = exactQuestion != null ? exactQuestion
@@ -97,7 +98,7 @@ public final class DialoguePresentationBuilder {
 
         // The badge gutter follows the active font, so a wide font widens the column rather than
         // letting the badge sit underneath the first character of every answer.
-        int numberColumn = DialogueChoiceLayout.numberColumn(font.width("9."));
+        int numberColumn = DialogueChoiceLayout.numberColumn(font.width("9."), profile);
         int answerWidth = DialogueChoiceLayout.answerTextWidth(screenWidth, numberColumn);
         List<Component> answers = new ArrayList<>(offer.answerIds().size());
         List<List<FormattedCharSequence>> lines = new ArrayList<>(offer.answerIds().size());

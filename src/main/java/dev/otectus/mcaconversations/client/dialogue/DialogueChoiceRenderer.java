@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
+import dev.otectus.mcaconversations.McaConversationsConfig.DialogueMenuStyle;
 import dev.otectus.mcaconversations.client.ClientUiResourceGeneration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -28,6 +29,8 @@ public final class DialogueChoiceRenderer {
 
     private ModelKey modelKey;
     private DialoguePresentationBuilder.Model model;
+    /** The skin the prepared model was built for. Rebuilt with the model, so the two never disagree. */
+    private DialogueSkin skin;
     private int preparedPage = -1;
     private PreparedDialogueCard card;
     private Component footerHint;
@@ -47,7 +50,18 @@ public final class DialogueChoiceRenderer {
     private int renderedPageCount;
 
     public void tick() {
+        // The style can change between two frames of an open screen. When it changes to the one that
+        // hands presentation back to MCA, a card left prepared would keep answering
+        // hasOutgoingPresentation and keep MCA's question suppressed under its own native menu.
+        if (!ClientChoiceController.conversationsDialogueEnabled() && anythingPrepared()) {
+            reset();
+        }
         visual.tick();
+    }
+
+    /** Whether a model, a page or an exit animation is still holding presentation state. */
+    private boolean anythingPrepared() {
+        return modelKey != null || model != null || card != null || exiting;
     }
 
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick,
@@ -61,6 +75,19 @@ public final class DialogueChoiceRenderer {
                        FormattedText exactQuestion, long questionRevision, Component speakerName,
                        boolean silent, List<FormattedCharSequence> legacyQuestion,
                        LivingEntity speaker) {
+        // One reading of the presentation configuration for the whole frame: a style that changed
+        // between the model key and the drawing would leave geometry from one skin under another.
+        DialogueMenuStyle style = ClientChoiceController.dialogueMenuStyle();
+        DialogueStyleProfile profile = DialogueStyleProfile.of(style);
+        if (!profile.customRenderer()) {
+            // MCA Reborn owns the screen under this style. Dropping the prepared card here as well
+            // as in tick() means the switch can never leave one frame with both menus drawn, and no
+            // exit animation plays over the native one.
+            if (anythingPrepared()) {
+                reset();
+            }
+            return;
+        }
         ClientChoiceState state = ClientChoiceMessages.state();
         ClientChoiceState.ClientChoiceOffer offer = state.offer().orElse(null);
         if (offer == null) {
@@ -77,12 +104,14 @@ public final class DialogueChoiceRenderer {
         ModelKey wanted = new ModelKey(offer.revision(), questionRevision, width, height,
                 System.identityHashCode(font), font.lineHeight, ClientUiResourceGeneration.current(),
                 minecraft.getLanguageManager().getSelected(), configSignature, silent,
-                wantsPortrait(speaker));
+                wantsPortrait(speaker, profile), style);
         if (!wanted.equals(modelKey)) {
             modelKey = wanted;
+            skin = DialogueSkin.of(style);
             boolean footer = ClientChoiceController.showHints();
             model = DialoguePresentationBuilder.prepare(font, width, height, exactQuestion,
-                    legacyQuestion, speakerName, silent, offer, footer, wantsPortrait(speaker));
+                    legacyQuestion, speakerName, silent, offer, footer,
+                    wantsPortrait(speaker, profile), profile);
             if (!footer && model.pageMap().pages().size() > 1) {
                 // Hints are off, but a multi-page offer still needs the footer strip for its page
                 // controls. Only the page map changes, so re-pack rather than re-wrapping the text.
@@ -124,7 +153,7 @@ public final class DialogueChoiceRenderer {
             }
         }
 
-        ConversationMotionSpec motion = ConversationMotionSpec.current();
+        ConversationMotionSpec motion = ConversationMotionSpec.current(style);
         float cardProgress = ConversationMotionSpec.easeOutCubic(visual.cardProgress(partialTick, motion));
         float pageProgress = visual.pageProgress(partialTick, motion);
         float alpha = cardProgress;
@@ -138,7 +167,7 @@ public final class DialogueChoiceRenderer {
 
         graphics.pose().pushPose();
         graphics.pose().translate(translateX, translateY, 0.0F);
-        drawCard(graphics, font, motion, partialTick, alpha, mouseX, mouseY, speaker);
+        drawCard(graphics, font, motion, partialTick, alpha, mouseX, mouseY, speaker, profile);
         graphics.pose().popPose();
     }
 
@@ -154,8 +183,14 @@ public final class DialogueChoiceRenderer {
         return target;
     }
 
+    /**
+     * Whether an exit animation is still occupying the screen, which is the one case where the card
+     * outlives its offer. Gated on ownership: under MCA_ORIGINAL this must answer false whatever is
+     * left prepared, or the mixin goes on suppressing MCA's question over MCA's own menu.
+     */
     public boolean hasOutgoingPresentation() {
-        return card != null && ClientChoiceMessages.state().offer().isEmpty();
+        return ClientChoiceController.conversationsDialogueEnabled()
+                && card != null && ClientChoiceMessages.state().offer().isEmpty();
     }
 
     public boolean scroll(double mouseX, double mouseY, double delta) {
@@ -288,16 +323,19 @@ public final class DialogueChoiceRenderer {
     }
 
     /** A portrait needs both a villager to draw and the player's consent to draw it. */
-    private static boolean wantsPortrait(LivingEntity speaker) {
-        return speaker != null && ClientChoiceController.showSpeakerPortrait();
+    private static boolean wantsPortrait(LivingEntity speaker, DialogueStyleProfile profile) {
+        // Asked during preparation as well as during drawing, so a style with no portrait gives the
+        // question its width back rather than leaving a reserved column empty.
+        return speaker != null && profile.portrait() && ClientChoiceController.showSpeakerPortrait();
     }
 
     private void drawCard(GuiGraphics graphics, Font font,
                           ConversationMotionSpec motion, float partialTick, float alpha,
-                          int mouseX, int mouseY, LivingEntity speaker) {
+                          int mouseX, int mouseY, LivingEntity speaker,
+                          DialogueStyleProfile profile) {
         DialogueChoiceLayout.Rect panel = card.layout().panel();
-        DialogueCardSkin.panel(graphics, panel, listBody(panel), alpha);
-        drawPortrait(graphics, card.layout().portrait(), alpha, speaker);
+        skin.panel(graphics, panel, listBody(panel), alpha);
+        drawPortrait(graphics, card.layout().portrait(), alpha, speaker, skin, profile);
 
         int questionY = card.layout().questionY();
         int questionLines = Math.min(card.questionLines().size(), card.layout().questionLines());
@@ -329,12 +367,12 @@ public final class DialogueChoiceRenderer {
                     || (renderedLock < 0 && row.absoluteIndex() == renderedFocus)) {
                 elevated = row;
             } else {
-                drawRow(graphics, font, row, motion, partialTick, alpha, i);
+                drawRow(graphics, font, row, motion, partialTick, alpha, i, profile);
             }
         }
         if (elevated != null) {
             drawRow(graphics, font, elevated, motion, partialTick, alpha,
-                    elevated.visibleNumber() - 1);
+                    elevated.visibleNumber() - 1, profile);
         }
         drawFooter(graphics, font, alpha, mouseX, mouseY);
 
@@ -345,29 +383,34 @@ public final class DialogueChoiceRenderer {
 
     private void drawRow(GuiGraphics graphics, Font font, PreparedChoiceRow row,
                          ConversationMotionSpec motion, float partialTick,
-                         float cardAlpha, int visibleIndex) {
+                         float cardAlpha, int visibleIndex, DialogueStyleProfile profile) {
         float entry = visual.rowEntryProgress(visibleIndex, partialTick, motion);
         float focus = visual.focusProgress(row.absoluteIndex(), partialTick, motion);
         boolean locked = renderedLock == row.absoluteIndex();
         boolean focused = renderedFocus == row.absoluteIndex();
-        int outset = Math.round(focus * motion.focusOutset());
-        if (locked) {
-            outset = Math.round(visual.lockedOutset(partialTick, motion));
+        // A style without pop-out keeps the row exactly where the layout put it, so its hitbox and
+        // its painted edge stay the same rect however focus moves.
+        int outset = 0;
+        int lift = 0;
+        if (profile.focusPopout()) {
+            outset = locked
+                    ? Math.round(visual.lockedOutset(partialTick, motion))
+                    : Math.round(focus * motion.focusOutset());
+            lift = Math.round(focus * motion.focusLift());
         }
-        int lift = Math.round(focus * motion.focusLift());
         int entryX = Math.round((1.0F - entry) * -motion.rowEntryDistance());
         float alpha = cardAlpha * entry;
         DialogueChoiceLayout.Rect base = row.baseVisualRect();
         DialogueChoiceLayout.Rect rect = new DialogueChoiceLayout.Rect(
                 base.x() + entryX - outset, base.y() - lift,
                 base.width() + outset * 2, base.height() + lift * 2);
-        DialogueCardSkin.row(graphics, rect, alpha, focused, locked);
+        skin.row(graphics, rect, alpha, focused, locked);
 
-        String numeral = row.visibleNumber() + ".";
+        String numeral = skin.badgeLabel(row.visibleNumber());
         int numeralWidth = font.width(numeral);
         DialogueChoiceLayout.Rect badge =
-                DialogueChoiceLayout.badgeRect(rect, font.lineHeight, numeralWidth);
-        DialogueCardSkin.badge(graphics, badge, alpha, focused || locked);
+                DialogueChoiceLayout.badgeRect(rect, font.lineHeight, numeralWidth, profile);
+        skin.badge(graphics, badge, alpha, focused || locked);
         graphics.drawString(font, numeral,
                 badge.x() + Math.max(0, (badge.width() - numeralWidth) / 2),
                 DialogueChoiceLayout.centeredTextY(badge, font.lineHeight),
@@ -401,7 +444,7 @@ public final class DialogueChoiceRenderer {
             }
         }
         if (clipped) {
-            DialogueCardSkin.scrollbar(graphics, rect, firstLine, visibleLines,
+            skin.scrollbar(graphics, rect, firstLine, visibleLines,
                     row.lines().size(), alpha);
         }
     }
@@ -427,11 +470,12 @@ public final class DialogueChoiceRenderer {
      * depending on whether the render succeeded.
      */
     private static void drawPortrait(GuiGraphics graphics, DialogueChoiceLayout.Rect frame,
-                                     float alpha, LivingEntity speaker) {
-        if (frame == null) {
+                                     float alpha, LivingEntity speaker, DialogueSkin skin,
+                                     DialogueStyleProfile profile) {
+        if (frame == null || !profile.portrait()) {
             return;
         }
-        DialogueCardSkin.portrait(graphics, frame, alpha);
+        skin.portrait(graphics, frame, alpha);
         if (speaker == null) {
             return;
         }
@@ -500,9 +544,9 @@ public final class DialogueChoiceRenderer {
                     : firstControl.x() - 4 - pageWidth;
             graphics.drawString(font, pageText, pageX, footerY, muted, CARD_TEXT_SHADOW);
             drawPageButton(graphics, font, card.layout().previousPage(), "‹",
-                    renderedPage > 0, alpha, mouseX, mouseY);
+                    renderedPage > 0, alpha, mouseX, mouseY, skin);
             drawPageButton(graphics, font, card.layout().nextPage(), "›",
-                    renderedPage + 1 < renderedPageCount, alpha, mouseX, mouseY);
+                    renderedPage + 1 < renderedPageCount, alpha, mouseX, mouseY, skin);
         }
     }
 
@@ -513,12 +557,12 @@ public final class DialogueChoiceRenderer {
      */
     private static void drawPageButton(GuiGraphics graphics, Font font, DialogueChoiceLayout.Rect rect,
                                        String glyph, boolean enabled, float alpha,
-                                       int mouseX, int mouseY) {
+                                       int mouseX, int mouseY, DialogueSkin skin) {
         if (rect == null) {
             return;
         }
         boolean hovered = enabled && rect.contains(mouseX, mouseY);
-        DialogueCardSkin.control(graphics, rect, alpha, enabled, hovered);
+        skin.control(graphics, rect, alpha, enabled, hovered);
         graphics.drawString(font, glyph,
                 rect.x() + Math.max(0, (rect.width() - font.width(glyph)) / 2),
                 DialogueChoiceLayout.centeredTextY(rect, font.lineHeight),
@@ -530,6 +574,7 @@ public final class DialogueChoiceRenderer {
     private void clearPrepared() {
         modelKey = null;
         model = null;
+        skin = null;
         preparedPage = -1;
         card = null;
         footerHint = null;
@@ -545,14 +590,16 @@ public final class DialogueChoiceRenderer {
             exiting = true;
             exitAt = visual.time(partialTick);
         }
-        ConversationMotionSpec motion = ConversationMotionSpec.current();
+        ConversationMotionSpec motion = ConversationMotionSpec.current(
+                ClientChoiceController.dialogueMenuStyle());
         float progress = visual.exitProgress(exitAt, partialTick, motion);
         if (progress >= 1.0F) {
             clearPrepared();
             return;
         }
         drawCard(graphics, Minecraft.getInstance().font,
-                motion, partialTick, 1.0F - progress, mouseX, mouseY, null);
+                motion, partialTick, 1.0F - progress, mouseX, mouseY, null,
+                DialogueStyleProfile.of(ClientChoiceController.dialogueMenuStyle()));
     }
 
     private static int configSignature() {
@@ -565,6 +612,7 @@ public final class DialogueChoiceRenderer {
 
     private record ModelKey(long revision, long questionRevision, int width, int height,
                             int fontIdentity, int lineHeight, int resourceGeneration,
-                            String locale, int configSignature, boolean silent, boolean portrait) {
+                            String locale, int configSignature, boolean silent, boolean portrait,
+                            DialogueMenuStyle style) {
     }
 }

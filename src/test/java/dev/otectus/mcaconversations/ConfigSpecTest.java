@@ -179,4 +179,39 @@ class ConfigSpecTest {
         assertTrue(cooldown.test(300));
         assertFalse(cooldown.test(0), "there is no such thing as no cooldown at all");
     }
+
+    @Test
+    void clientSpecDeclaresDialogueMenuStyleDefaultingToResponsive() {
+        // The default is the whole migration promise: an install that never edits its client TOML
+        // keeps the 1.5.1 card it already has.
+        UnmodifiableConfig spec = McaConversationsConfig.CLIENT_SPEC.getSpec();
+        assertTrue(spec.contains("display.dialogueMenuStyle"), "display.dialogueMenuStyle");
+
+        ForgeConfigSpec.ValueSpec style = assertInstanceOf(
+                ForgeConfigSpec.ValueSpec.class, spec.get("display.dialogueMenuStyle"));
+        assertEquals(McaConversationsConfig.DialogueMenuStyle.RESPONSIVE, style.getDefault());
+        for (McaConversationsConfig.DialogueMenuStyle value
+                : McaConversationsConfig.DialogueMenuStyle.values()) {
+            assertTrue(style.test(value), value + " must be accepted by the spec");
+        }
+    }
+
+    @Test
+    void dialogueMenuStyleIsNotDeclaredInCommonOrServerSpec() {
+        // Presentation is a client decision. A server-side copy would be one more thing able to
+        // disagree with the client about a question the server never asks.
+        assertFalse(McaConversationsConfig.COMMON_SPEC.getSpec().contains("display.dialogueMenuStyle"));
+        assertFalse(McaConversationsConfig.SERVER_SPEC.getSpec().contains("display.dialogueMenuStyle"));
+    }
+
+    @Test
+    void numberedResponsesRemainsDeclaredWithDefaultTrue() {
+        // Deprecated, not removed: existing installs that set it false chose MCA's native UI on
+        // purpose and must keep it.
+        UnmodifiableConfig spec = McaConversationsConfig.CLIENT_SPEC.getSpec();
+        assertTrue(spec.contains("display.numberedResponses"));
+        ForgeConfigSpec.ValueSpec numbered = assertInstanceOf(
+                ForgeConfigSpec.ValueSpec.class, spec.get("display.numberedResponses"));
+        assertEquals(Boolean.TRUE, numbered.getDefault());
+    }
 }

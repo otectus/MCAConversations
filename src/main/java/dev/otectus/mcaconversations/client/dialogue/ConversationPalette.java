@@ -18,7 +18,7 @@ public final class ConversationPalette {
     private ConversationPalette() {
     }
 
-    /** Body text on dirt, always drawn with a shadow. */
+    /** Body text on the panel backing, always drawn with a shadow. */
     public static final int TEXT = 0xFFFFFFFF;
 
     /** Hints, page counters and disabled glyphs: vanilla's secondary label grey. */
@@ -58,11 +58,15 @@ public final class ConversationPalette {
     public static final int SPEAKER_NAME = 0xFF000000
             | (ChatFormatting.YELLOW.getColor() == null ? 0xFFFF55 : ChatFormatting.YELLOW.getColor());
 
-    /** Tint applied to the dirt behind the panel, matching {@code Screen.renderDirtBackground}. */
-    public static final float PANEL_TINT = 0.25F;
+    /**
+     * Flat backing for the responsive card body. 1.20.1 has no equivalent of the 1.21 menu texture
+     * the NeoForge build tints, so the body is a translucent dark fill that lands on the same
+     * darkness the tinted texture averages to, and the world stays visible through it.
+     */
+    public static final int PANEL_BACKING = 0xB0202020;
 
-    /** The darker tint of the list body, so the rows read as a recess in the panel. */
-    public static final float LIST_TINT = 0.125F;
+    /** Darker recess behind the answer list, the same step down the list tint gives the texture. */
+    public static final int LIST_BACKING = 0xCC0E0E0E;
 
     /** Scales an ARGB colour's existing alpha by {@code alpha}, never brightening it. */
     public static int withAlpha(int color, float alpha) {
