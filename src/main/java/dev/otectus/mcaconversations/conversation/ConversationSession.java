@@ -35,7 +35,7 @@ import java.util.UUID;
  */
 public final class ConversationSession {
 
-    /** Which frontend last drove this session. Diagnostics only — behaviour never branches on it. */
+    /** Which frontend an offer belongs to: a GUI offer lives with MCA's screen, a chat offer with the session. */
     public enum Frontend { GUI, CHAT }
 
     /** Immutable view of the exact ordered answer set MCA most recently offered this player. */
@@ -277,11 +277,22 @@ public final class ConversationSession {
     }
 
     /** Ends the current topic but keeps the session (the player is still standing there). */
+    /**
+     * Ends the topic on inactivity. An unanswered GUI offer outlives it: MCA's screen is still
+     * showing exactly those answers, so dropping the offer here would make the next click bounce
+     * as EXPIRED and hand the screen back to MCA's own list; the next dialogue packet replaces it
+     * regardless. A consumed offer has been answered and the re-offer or the next packet already
+     * supersedes it, and a chat offer has no screen keeping it alive, so both go with the topic.
+     */
     public void endTopic() {
-        resetTopic();
+        resetTopic(offerFrontend != Frontend.GUI || offerConsumed);
     }
 
     private void resetTopic() {
+        resetTopic(true);
+    }
+
+    private void resetTopic(boolean dropOffer) {
         // The plan and the snapshot belong to the exchange, not to the session object: carrying them
         // into the next topic would let one scene's pinned referents leak into another's.
         this.plan = null;
@@ -291,7 +302,9 @@ public final class ConversationSession {
         this.budget = DepthClass.QUICK;
         this.positiveApplied = 0;
         this.negativeApplied = 0;
-        clearOffer();
+        if (dropOffer) {
+            clearOffer();
+        }
         resetTurn();
     }
 

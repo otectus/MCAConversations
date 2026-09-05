@@ -30,7 +30,7 @@ public final class ChoiceSelectionService {
         ConversationSession.ChoiceOffer offer = session == null ? null : session.currentOffer().orElse(null);
         if (offer == null || offer.consumed() || offer.revision() != revision
                 || absoluteIndex < 0 || absoluteIndex >= offer.answerIds().size()
-                || now - offer.createdGameTime() > timeoutTicks()) {
+                || offerTimedOut(offer, now, timeoutTicks())) {
             rejectClient(player, revision);
             return false;
         }
@@ -99,6 +99,18 @@ public final class ChoiceSelectionService {
                 .filter(player.getUUID()::equals)
                 .map(ignored -> villager)
                 .orElse(null);
+    }
+
+    /**
+     * A chat offer ages out with the session: nothing on screen keeps it alive, and a numbered reply
+     * typed minutes later must not fire. A GUI offer is valid for exactly as long as MCA keeps its
+     * screen open on that villager, which {@link #resolveVillager} already checks, so time alone
+     * never expires it. Timing it out here used to reject the first click after a minute of reading
+     * and hand the screen back to MCA's own answer list.
+     */
+    static boolean offerTimedOut(ConversationSession.ChoiceOffer offer, long now, int timeoutTicks) {
+        return offer.frontend() == ConversationSession.Frontend.CHAT
+                && now - offer.createdGameTime() > timeoutTicks;
     }
 
     private static void rejectClient(ServerPlayer player, long revision) {
