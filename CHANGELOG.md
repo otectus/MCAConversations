@@ -26,6 +26,10 @@ Dialogue presentation expansion: three clearly differentiated interface choices 
 - Client presentation configuration is resolved centrally through `ClientChoiceController`, so the responsive card and MCA's native interface never disagree about input ownership.
 - `MINIMAL` presentation uses restrained motion under `motionMode = FULL`: no row cascade, no focus pop-out, and no selection press movement, with entrance and page transitions reduced to a short two-pixel slide.
 
+### Fixed
+
+- The Conversations response card no longer disappears on the first click after a minute or so of reading, exposing MCA's own answer list underneath. A dialogue-screen offer used to age out with the conversation session timeout (`conversationSessionTimeoutTicks`, server config) and be dropped by the session's inactivity expiry, so the next selection was rejected as expired. A screen offer now lives for as long as MCA keeps the interaction screen open on that villager; chat-mode offers still expire with the session.
+
 ### Compatibility
 
 - Existing `numberedResponses = false` configurations continue to restore MCA's native dialogue UI automatically.
