@@ -102,11 +102,30 @@ public final class DialogueChoiceLayout {
      * character of every answer.
      */
     public static int numberColumn(int numeralWidth) {
-        return Math.max(NUMBER_COLUMN, 4 + badgeWidth(numeralWidth) + 5);
+        return numberColumn(numeralWidth, DialogueStyleProfile.RESPONSIVE);
     }
 
-    private static int badgeWidth(int numeralWidth) {
-        return Math.max(numeralWidth + 5, NUMBER_COLUMN - 9);
+    /**
+     * The same gutter for a style. The 4-pixel left gap and the 5-pixel right gap are the card's,
+     * not the badge's, so both styles keep them; what a style changes is whether the space between
+     * them has to hold a button face or only a numeral. The numeral always wins over the floor, so a
+     * style that draws a plainer badge can never end up drawing its digit over the first word of the
+     * answer.
+     */
+    public static int numberColumn(int numeralWidth, DialogueStyleProfile profile) {
+        return Math.max(profile.numberColumnFloor(), 4 + badgeWidth(numeralWidth, profile) + 5);
+    }
+
+    /**
+     * Width of the badge itself. A textured badge is a vanilla button face, which needs padding
+     * around the numeral and a minimum that keeps nine small faces the same size; a text-only badge
+     * is exactly the numeral, and reserving button width for it would leave the gutter as wide as
+     * the responsive card's while drawing nothing in it.
+     */
+    public static int badgeWidth(int numeralWidth, DialogueStyleProfile profile) {
+        return profile.texturedBadges()
+                ? Math.max(numeralWidth + 5, NUMBER_COLUMN - 9)
+                : Math.max(0, numeralWidth);
     }
 
     public static int questionTextWidth(int screenWidth) {
@@ -155,9 +174,19 @@ public final class DialogueChoiceLayout {
      * the answer column.
      */
     public static Rect badgeRect(Rect row, int fontLineHeight, int numeralWidth) {
+        return badgeRect(row, fontLineHeight, numeralWidth, DialogueStyleProfile.RESPONSIVE);
+    }
+
+    /**
+     * The same box for a style, from the same {@link #badgeWidth} the gutter was measured with. The
+     * two must be asked the same question: a badge sized as a button inside a gutter sized for bare
+     * text is exactly the overlap this pair exists to prevent.
+     */
+    public static Rect badgeRect(Rect row, int fontLineHeight, int numeralWidth,
+                                 DialogueStyleProfile profile) {
         int height = Math.min(row.height(), lineStep(fontLineHeight) + 1);
         return new Rect(row.x() + 4, row.y() + Math.max(0, (row.height() - height) / 2),
-                badgeWidth(numeralWidth), height);
+                badgeWidth(numeralWidth, profile), height);
     }
 
     /** Top-left Y that vertically centres one line of the active font inside {@code box}. */

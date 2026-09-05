@@ -30,7 +30,10 @@ import java.util.List;
  * <p>{@code GuiGraphics.setColor} is global state. Every tinted blit here resets it to white in a
  * {@code finally}, or MCA's screen and the entity portrait drawn over this card inherit the tint.
  */
-public final class DialogueCardSkin {
+public final class DialogueCardSkin implements DialogueSkin {
+
+    /** The one instance. The skin holds no state; it is an object only so a style can be chosen. */
+    public static final DialogueSkin INSTANCE = new DialogueCardSkin();
 
     private static final ResourceLocation DIRT = Screen.MENU_BACKGROUND;
 
@@ -67,7 +70,8 @@ public final class DialogueCardSkin {
      * The panel body, its darker list body, and the one-pixel border that separates both from the
      * world behind them. {@code listBody} may be null on a card with no rows to recess.
      */
-    public static void panel(GuiGraphics graphics, DialogueChoiceLayout.Rect panel,
+    @Override
+    public void panel(GuiGraphics graphics, DialogueChoiceLayout.Rect panel,
                              DialogueChoiceLayout.Rect listBody, float alpha) {
         dirt(graphics, panel, ConversationPalette.PANEL_TINT, alpha);
         if (listBody != null && listBody.width() > 0 && listBody.height() > 0) {
@@ -88,7 +92,8 @@ public final class DialogueCardSkin {
      * One choice row. A resting row paints nothing at all -- a vanilla list entry is text on the list
      * body -- and a focused or locked one gets vanilla's two-tone selection frame.
      */
-    public static void row(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
+    @Override
+    public void row(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                            boolean focused, boolean locked) {
         if (!focused && !locked) {
             return;
@@ -100,20 +105,23 @@ public final class DialogueCardSkin {
     }
 
     /** The number badge behind a row's numeral: a small vanilla button face, on every row. */
-    public static void badge(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
+    @Override
+    public void badge(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                              boolean highlighted) {
         button(graphics, rect, alpha, highlighted ? BUTTON_V_HOVERED : BUTTON_V_REST);
     }
 
     /** A previous/next page button face, disabled when the direction is unavailable. */
-    public static void control(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
+    @Override
+    public void control(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                                boolean enabled, boolean hovered) {
         button(graphics, rect, alpha,
                 !enabled ? BUTTON_V_DISABLED : hovered ? BUTTON_V_HOVERED : BUTTON_V_REST);
     }
 
     /** The recessed well the speaking villager is drawn into. */
-    public static void portrait(GuiGraphics graphics, DialogueChoiceLayout.Rect frame, float alpha) {
+    @Override
+    public void portrait(GuiGraphics graphics, DialogueChoiceLayout.Rect frame, float alpha) {
         fill(graphics, frame, ConversationPalette.withAlpha(ConversationPalette.WELL, alpha));
         outline(graphics, frame,
                 ConversationPalette.withAlpha(ConversationPalette.WELL_EDGE, alpha), 1);
@@ -125,7 +133,8 @@ public final class DialogueCardSkin {
      * <p>Drawn only when there is something to scroll, so a row that happens to fit keeps its full
      * reading width.
      */
-    public static void scrollbar(GuiGraphics graphics, DialogueChoiceLayout.Rect row,
+    @Override
+    public void scrollbar(GuiGraphics graphics, DialogueChoiceLayout.Rect row,
                                  int firstLine, int visibleLines, int totalLines, float alpha) {
         if (visibleLines <= 0 || totalLines <= visibleLines) {
             return;
@@ -148,6 +157,20 @@ public final class DialogueCardSkin {
                 ConversationPalette.withAlpha(ConversationPalette.SCROLL_THUMB, alpha));
         graphics.fill(trackX, thumbY, trackX + SCROLLBAR_WIDTH - 1, thumbY + thumbHeight - 1,
                 ConversationPalette.withAlpha(ConversationPalette.SCROLL_THUMB_FACE, alpha));
+    }
+
+    /** The nine numerals the card can draw, so no frame concatenates one. */
+    private static final String[] NUMERALS =
+            {"1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9."};
+
+    /**
+     * The numeral exactly as the 1.5.1 card drew it: the visible number followed by a full stop. The
+     * badge art sits behind it, so the two must not disagree about how wide the string is.
+     */
+    @Override
+    public String badgeLabel(int visibleNumber) {
+        return visibleNumber >= 1 && visibleNumber <= NUMERALS.length
+                ? NUMERALS[visibleNumber - 1] : visibleNumber + ".";
     }
 
     // ---------------------------------------------------------------------------------------------

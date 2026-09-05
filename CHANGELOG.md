@@ -9,15 +9,37 @@ Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
 
-## [2.0.0] - unreleased
+## [1.5.2] - unreleased
+
+Dialogue presentation expansion: three clearly differentiated interface choices (Current, Minimal, and Original MCA), explicit `dialogueMenuStyle` configuration, and improvements to motion control documentation.
+
+### Added
+
+- Three dialogue presentation choices: **Current** (the full responsive card), **Minimal** (responsive interaction with simpler graphics and no live portrait), and **Original MCA** (MCA Reborn's native interface).
+- Explicit `dialogueMenuStyle` client configuration option in `config/mcaconversations-client.toml`.
+- `MINIMAL` presentation layer: uses the same synchronized offer, keyboard navigation, paging, and accessibility systems as the responsive card, but with flat-panel graphics and no entity portrait rendering, reducing visual complexity and rendering overhead.
+
+### Changed
+
+- Original MCA presentation is now a first-class documented option (`dialogueMenuStyle = "MCA_ORIGINAL"`), rather than being discoverable only through the legacy `numberedResponses = false` setting.
+- `motionMode = OFF` is documented as the canonical way to disable every dialogue animation: card entrance, row cascading, focus transitions, page motion, exit fade, and question reveal.
+- Client presentation configuration is resolved centrally through `ClientChoiceController`, so the responsive card and MCA's native interface never disagree about input ownership.
+- `MINIMAL` presentation uses restrained motion under `motionMode = FULL`: no row cascade, no focus pop-out, and no selection press movement, with entrance and page transitions reduced to a short two-pixel slide.
+
+### Compatibility
+
+- Existing `numberedResponses = false` configurations continue to restore MCA's native dialogue UI automatically.
+- Existing `motionMode` values (`FULL`, `REDUCED`, `OFF`) retain their exact meaning and behavior.
+- Network protocol remains `2` — no new packets.
+- Saves, datapacks, and server configuration are unchanged.
+
+---
+
+## [1.5.1] - unreleased
 
 The Minecraft 1.21.1 / NeoForge line. No feature was added, removed or redesigned: every topic,
 every line, every config key and every saved byte is what 1.2.1 shipped. What changed is the
 platform underneath, and two bugs that the port surfaced.
-
-The major version is about the artifact, not the content. `mcaconversations-neoforge-2.0.0+1.21.1.jar`
-and `mcaconversations-1.2.1.jar` are different files for different games and neither replaces the
-other.
 
 ### Fixed
 

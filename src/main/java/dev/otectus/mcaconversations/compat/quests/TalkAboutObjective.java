@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.compat.quests;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.otectus.mcaquests.api.ExternalSignalObjective;
 import dev.otectus.mcaquests.quest.objective.ObjectiveProgress;
@@ -26,7 +27,7 @@ import java.util.UUID;
  */
 public record TalkAboutObjective(String topic, int count) implements QuestObjective, ExternalSignalObjective {
 
-    public static final Codec<TalkAboutObjective> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<TalkAboutObjective> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("topic").forGetter(TalkAboutObjective::topic),
             ExtraCodecs.POSITIVE_INT.optionalFieldOf("count", 1).forGetter(TalkAboutObjective::count)
     ).apply(instance, TalkAboutObjective::new));

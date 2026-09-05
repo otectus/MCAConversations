@@ -16,6 +16,16 @@ public final class McaConversationsConfig {
         OFF
     }
 
+    /**
+     * Which dialogue menu the player sees. Kept here beside {@link MotionMode} so the enum stays
+     * free of client imports: the client package may not be referenced from common code.
+     */
+    public enum DialogueMenuStyle {
+        RESPONSIVE,
+        MINIMAL,
+        MCA_ORIGINAL
+    }
+
     /** How the villager's line is revealed. Opt-in: the base experience shows it at once. */
     public enum QuestionReveal { OFF, FAST }
 
@@ -917,6 +927,7 @@ public final class McaConversationsConfig {
 
     public static final class Client {
         public final ModConfigSpec.BooleanValue numberedResponses;
+        public final ModConfigSpec.EnumValue<DialogueMenuStyle> dialogueMenuStyle;
         public final ModConfigSpec.BooleanValue numericResponseShortcuts;
         public final ModConfigSpec.BooleanValue chatNumericShortcuts;
         public final ModConfigSpec.BooleanValue showResponseControlHints;
@@ -929,8 +940,16 @@ public final class McaConversationsConfig {
         Client(ModConfigSpec.Builder b) {
             b.push("display");
             numberedResponses = b.comment(
-                    "Render supported dialogue choices as a responsive numbered list.")
+                    "Legacy compatibility switch from 1.4.x/1.5.1. False always restores MCA's original",
+                    "dialogue UI. New installations should normally leave this true and use",
+                    "dialogueMenuStyle instead.")
                     .define("numberedResponses", true);
+            dialogueMenuStyle = b.comment(
+                    "Dialogue menu presentation.",
+                    "RESPONSIVE   - the full MCA: Conversations responsive card.",
+                    "MINIMAL      - the responsive menu with simpler, lower-overhead graphics.",
+                    "MCA_ORIGINAL - let MCA Reborn draw and control its original dialogue menu.")
+                    .defineEnum("dialogueMenuStyle", DialogueMenuStyle.RESPONSIVE);
             numericResponseShortcuts = b.comment(
                     "Allow number keys to select visible choices while a dialogue screen owns focus.",
                     "Disabled automatically when numberedResponses is false so invisible mappings never exist.")
@@ -943,7 +962,8 @@ public final class McaConversationsConfig {
                     .define("showResponseControlHints", true);
             motionMode = b.comment(
                     "Conversation motion: FULL uses short state-driven movement, REDUCED uses fades only,",
-                    "and OFF changes visual state immediately.")
+                    "and OFF changes visual state immediately. OFF is the canonical way to disable",
+                    "every dialogue animation.")
                     .defineEnum("motionMode", MotionMode.FULL);
             uiSoundVolume = b.comment(
                     "Volume multiplier for response focus, page and confirmation sounds. Zero disables them.")
@@ -953,11 +973,13 @@ public final class McaConversationsConfig {
                     .define("speakerNameAccent", true);
             showSpeakerPortrait = b.comment(
                     "Frame the speaking villager in the card header. Hidden automatically on panels",
-                    "too narrow to give up the reading width, and whenever the villager is unavailable.")
+                    "too narrow to give up the reading width, and whenever the villager is unavailable.",
+                    "Shown only where the style supports it; MINIMAL intentionally omits it.")
                     .define("showSpeakerPortrait", true);
             questionRevealMode = b.comment(
                     "How the villager's line appears: OFF shows it at once, FAST reveals it over a",
-                    "few ticks. Ignored when motionMode is OFF, and any input completes it immediately.")
+                    "few ticks. Ignored when motionMode is OFF and under MCA_ORIGINAL, and any input",
+                    "completes it immediately.")
                     .defineEnum("questionRevealMode", QuestionReveal.OFF);
             b.pop();
         }

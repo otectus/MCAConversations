@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.compat.quests;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.otectus.mcaquests.quest.reward.QuestReward;
 import dev.otectus.mcaquests.quest.reward.QuestRewardType;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
  */
 public record UnlockTopicReward(String topic) implements QuestReward {
 
-    public static final Codec<UnlockTopicReward> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<UnlockTopicReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("topic").forGetter(UnlockTopicReward::topic)
     ).apply(instance, UnlockTopicReward::new));
 

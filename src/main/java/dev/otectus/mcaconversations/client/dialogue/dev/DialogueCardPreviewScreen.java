@@ -1,12 +1,14 @@
 package dev.otectus.mcaconversations.client.dialogue.dev;
 
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.client.dialogue.ClientChoiceController;
 import dev.otectus.mcaconversations.client.dialogue.ClientChoiceMessages;
 import dev.otectus.mcaconversations.client.dialogue.ClientChoiceState;
 import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceInput;
 import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceRenderer;
 import dev.otectus.mcaconversations.client.dialogue.DialogueHitTarget;
 import dev.otectus.mcaconversations.client.dialogue.DialoguePresentationBuilder;
+import dev.otectus.mcaconversations.client.dialogue.DialogueStyleProfile;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,6 +19,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.OptionalInt;
 
 /**
@@ -72,6 +75,15 @@ public final class DialogueCardPreviewScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
+        if (!DialogueStyleProfile.of(ClientChoiceController.dialogueMenuStyle()).customRenderer()) {
+            // The style is real and the config really was changed, so say so rather than silently
+            // skipping it. MCA cannot load in a development runtime, and a fake MCA screen drawn
+            // here would be a lie about the one style whose whole point is that it is MCA's.
+            graphics.drawCenteredString(this.font, ORIGINAL_MCA_NOTICE,
+                    this.width / 2, this.height / 2, 0xFFFFFFFF);
+            drawLegend(graphics);
+            return;
+        }
         DialoguePreviewFixture fixture = fixture();
         DialoguePresentationBuilder.withAnswerText(
                 id -> fixture.answers().get(Integer.parseInt(id)),
@@ -83,6 +95,10 @@ public final class DialogueCardPreviewScreen extends Screen {
         drawLegend(graphics);
     }
 
+    /** Spelled out rather than translated: this harness is a development tool, not a shipped screen. */
+    private static final String ORIGINAL_MCA_NOTICE =
+            "MCA_ORIGINAL uses MCA's native screen and is not rendered by this preview.";
+
     private void drawLegend(GuiGraphics graphics) {
         int y = 4;
         for (String line : legend()) {
@@ -93,15 +109,39 @@ public final class DialogueCardPreviewScreen extends Screen {
 
     private List<String> legend() {
         double scale = this.minecraft == null ? 0.0D : this.minecraft.getWindow().getGuiScale();
+        McaConversationsConfig.DialogueMenuStyle style = ClientChoiceController.dialogueMenuStyle();
+        // The legacy override is worth naming: with numberedResponses off, S appears to do nothing,
+        // and the reason is a different key entirely.
+        String override = read(McaConversationsConfig.CLIENT.numberedResponses).equals("false")
+                ? "  (numberedResponses=false)" : "";
+        String portraitNote = style == McaConversationsConfig.DialogueMenuStyle.MINIMAL
+                ? "  (not shown in MINIMAL)" : "";
         return List.of(
                 "[ ] fixture " + (fixtureIndex + 1) + "/" + DialoguePreviewFixture.ALL.size()
                         + "  " + fixture().name(),
+                "S style " + styleName(style) + override,
                 "M motion " + read(McaConversationsConfig.CLIENT.motionMode)
-                        + "   H hints " + read(McaConversationsConfig.CLIENT.showResponseControlHints)
-                        + "   R reload fixture",
-                "arrows / Home / End / PgUp / PgDn / digits drive the card",
+                        + "   H hints " + onOff(McaConversationsConfig.CLIENT.showResponseControlHints)
+                        + "   P portrait " + onOff(McaConversationsConfig.CLIENT.showSpeakerPortrait)
+                        + portraitNote,
+                "R reset fixture   arrows / Home / End / PgUp / PgDn / digits drive the card",
                 "gui scale " + (scale <= 0.0D ? "?" : String.valueOf((int) scale))
                         + "   viewport " + this.width + "x" + this.height);
+    }
+
+    /** The style's own display name, so the preview shows what a config screen would show. */
+    private static String styleName(McaConversationsConfig.DialogueMenuStyle style) {
+        String translated = Component.translatable("gui.mcaconversations.responses.style."
+                + style.name().toLowerCase(Locale.ROOT)).getString();
+        return style.name() + " (" + translated + ")";
+    }
+
+    private static String onOff(ModConfigSpec.ConfigValue<Boolean> value) {
+        try {
+            return value.get() ? "ON" : "OFF";
+        } catch (Throwable ignored) {
+            return "unavailable";
+        }
     }
 
     private static String read(ModConfigSpec.ConfigValue<?> value) {
@@ -142,6 +182,15 @@ public final class DialogueCardPreviewScreen extends Screen {
             }
             case GLFW.GLFW_KEY_R -> {
                 loadFixture(0);
+                return true;
+            }
+            case GLFW.GLFW_KEY_S -> {
+                cycle(McaConversationsConfig.CLIENT.dialogueMenuStyle,
+                        List.of(McaConversationsConfig.DialogueMenuStyle.values()));
+                return true;
+            }
+            case GLFW.GLFW_KEY_P -> {
+                toggle(McaConversationsConfig.CLIENT.showSpeakerPortrait);
                 return true;
             }
             case GLFW.GLFW_KEY_M -> {
