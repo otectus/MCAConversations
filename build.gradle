@@ -339,6 +339,23 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Vendor'   : mod_authors
         ])
     }
+    // MixinGradle hands the refmap to this task from compileJava's own doLast, so a build whose
+    // compileJava was UP-TO-DATE packaged a jar with no mcaconversations.refmap.json and every
+    // client @Shadow failed at runtime (the 1.5.2 jar built on 2026-09-05). Pick the file up from
+    // where the annotation processor writes it whether or not compileJava ran in this invocation,
+    // and refuse to ship a jar without it. EXCLUDE keeps the copy MixinGradle adds from clashing.
+    from(tasks.named('compileJava').map { it.temporaryDir }) {
+        include 'mcaconversations.refmap.json'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    doLast {
+        def built = new File(destinationDirectory.get().asFile, archiveFileName.get())
+        def refmap = zipTree(built).matching { include 'mcaconversations.refmap.json' }
+        if (refmap.empty) {
+            throw new GradleException("${built.name} has no mcaconversations.refmap.json; " +
+                    "the mixins cannot resolve obfuscated names without it. Run './gradlew clean build'.")
+        }
+    }
     finalizedBy 'reobfJar'
 }
 
