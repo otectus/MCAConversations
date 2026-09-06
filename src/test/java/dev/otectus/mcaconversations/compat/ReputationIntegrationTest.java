@@ -34,6 +34,7 @@ class ReputationIntegrationTest {
     @AfterEach
     void reset() {
         ReputationBridge.setAvailableForTest(false, null);
+        ReputationBridge.clearPendingRemarksForTest();
     }
 
     // ------------------------------------------------------------------
@@ -312,6 +313,133 @@ class ReputationIntegrationTest {
                 "the bridge supplies a candidate list, filtered against the told-memory here");
         assertTrue(logic.contains("MemoryIds.gossipTold(gossip.toldId())"),
                 "external stories use the same once-per-teller memory as native ones");
+    }
+
+    // ------------------------------------------------------------------
+    // The per-villager opinion bias (0.4.0, additive to API v1)
+    // ------------------------------------------------------------------
+
+    /**
+     * A Reputation without the opinion method is a supported install, not a fault: the interface
+     * default says so without any of it being reachable, so the check keeps the village-level bias.
+     */
+    @Test
+    void anOlderReputationKeepsTheVillageLevelBias() {
+        ReputationBridge.ReputationQueries older = new StubQueries(5);
+        assertFalse(older.supportsOpinionBias(),
+                "a build with no getOpinionBias must not be asked for one");
+        assertEquals(5, older.opinionBias(null, null, "trust"),
+                "without the method the village-level bias is the answer");
+        assertEquals("", older.communityId(null));
+    }
+
+    /** The opinion bias is the same term, so it is held to the same two axes and the same ceiling. */
+    @Test
+    void theOpinionBiasObeysTheSameAxisGateAndClamp() {
+        assertEquals(8, ReputationBridge.clampStandingFit(40, "trust"));
+        assertEquals(-8, ReputationBridge.clampStandingFit(-40, "respect"));
+        for (String axis : List.of("warmth", "attraction", "tension", "familiarity")) {
+            assertEquals(0, ReputationBridge.clampStandingFit(40, axis),
+                    axis + " stays private whichever standing the term was read from");
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Standing remarks (0.4.0)
+    // ------------------------------------------------------------------
+
+    private static final java.util.UUID PLAYER = java.util.UUID.randomUUID();
+
+    @Test
+    void aCrossingIsHeldUntilSomebodyTakesIt() {
+        ReputationBridge.noteStandingChange(PLAYER, "minecraft:overworld/7", "honored", true, 1000L);
+        assertTrue(ReputationBridge.pendingRemark(PLAYER, 1000L).isPresent());
+
+        var taken = ReputationBridge.consumeStandingRemark(PLAYER, 1000L);
+        assertTrue(taken.isPresent());
+        assertEquals("honored", taken.get().tierId());
+        assertTrue(taken.get().upward());
+        assertTrue(ReputationBridge.consumeStandingRemark(PLAYER, 1000L).isEmpty(),
+                "one crossing is remarked on once, not by every villager the player walks past");
+    }
+
+    @Test
+    void aCrossingNobodyMentionedTimesOutOnItsOwn() {
+        ReputationBridge.noteStandingChange(PLAYER, "minecraft:overworld/7", "friend", true, 1000L);
+        long expiry = 1000L + ReputationBridge.REMARK_TIMEOUT_TICKS;
+        assertTrue(ReputationBridge.pendingRemark(PLAYER, expiry - 1).isPresent());
+        assertTrue(ReputationBridge.pendingRemark(PLAYER, expiry).isEmpty(),
+                "news older than the window is not news");
+        assertTrue(ReputationBridge.pendingRemark(PLAYER, expiry - 1).isEmpty(),
+                "and the timed-out entry is dropped rather than left to come back");
+    }
+
+    /** Pure, so the whole of the timeout rule can be pinned without a map or a clock. */
+    @Test
+    void freshnessRejectsAClockThatHasRunBackwards() {
+        var remark = new ReputationBridge.PendingRemark("minecraft:overworld/7", "friend", true, 1000L);
+        assertTrue(ReputationBridge.isFresh(remark, 1000L));
+        assertFalse(ReputationBridge.isFresh(remark, 999L),
+                "a crossing nobody can date must not be raised");
+        assertFalse(ReputationBridge.isFresh(null, 1000L));
+    }
+
+    @Test
+    void onlyTheNewestCrossingIsWaiting() {
+        ReputationBridge.noteStandingChange(PLAYER, "minecraft:overworld/7", "friend", true, 1000L);
+        ReputationBridge.noteStandingChange(PLAYER, "minecraft:overworld/7", "acquaintance", false, 1200L);
+        var pending = ReputationBridge.pendingRemark(PLAYER, 1200L).orElseThrow();
+        assertEquals("acquaintance", pending.tierId());
+        assertFalse(pending.upward(), "a fall is raised as readily as a rise, and replaces it");
+    }
+
+    @Test
+    void anUnusableCrossingIsNotRecordedAtAll() {
+        ReputationBridge.noteStandingChange(null, "minecraft:overworld/7", "friend", true, 1000L);
+        ReputationBridge.noteStandingChange(PLAYER, "", "friend", true, 1000L);
+        ReputationBridge.noteStandingChange(PLAYER, "minecraft:overworld/7", "", true, 1000L);
+        assertTrue(ReputationBridge.pendingRemark(PLAYER, 1000L).isEmpty());
+    }
+
+    /** With the mod absent nothing is ever raised, whatever is sitting in the map. */
+    @Test
+    void withoutReputationNoVillagerRaisesStanding() {
+        ReputationBridge.noteStandingChange(PLAYER, "minecraft:overworld/7", "friend", true, 1000L);
+        assertFalse(ReputationBridge.hasStandingRemark(null, null, 1000L));
+    }
+
+    /** The purpose exists, is an initiative, and names a bark pool the lang file actually ships. */
+    @Test
+    void theStandingRemarkPurposeHasALineToSay() throws IOException {
+        assertTrue(dev.otectus.mcaconversations.scene.ScenePurpose.STANDING_REMARK.isInitiative());
+        assertEquals(dev.otectus.mcaconversations.scene.ScenePurpose.REPAIR.interruptionCost(),
+                dev.otectus.mcaconversations.scene.ScenePurpose.STANDING_REMARK.interruptionCost());
+        for (String locale : List.of("en_us", "pt_br")) {
+            var lang = JsonParser.parseString(Files.readString(
+                    Paths.get("src/main/resources/assets/mca_dialogue/lang/" + locale + ".json"),
+                    StandardCharsets.UTF_8)).getAsJsonObject();
+            assertTrue(lang.has("dialogue."
+                            + dev.otectus.mcaconversations.scene.InitiativePlanner.PHRASE_PREFIX
+                            + dev.otectus.mcaconversations.scene.ScenePurpose.STANDING_REMARK.key() + "/1"),
+                    "missing " + locale + " line for the standing remark");
+        }
+    }
+
+    /** The event subscriber lives in the guarded package and is registered by hand, never annotated. */
+    @Test
+    void theTierChangeSubscriberIsGuardedAndManuallyRegistered() throws IOException {
+        String compat = Files.readString(
+                SOURCE_ROOT.resolve("compat/reputation/ConversationsReputationCompat.java"),
+                StandardCharsets.UTF_8);
+        assertTrue(compat.contains("MinecraftForge.EVENT_BUS.register(new ConversationsReputationEvents())"),
+                "the subscriber is registered only after the mod-present check");
+        String events = Files.readString(
+                SOURCE_ROOT.resolve("compat/reputation/ConversationsReputationEvents.java"),
+                StandardCharsets.UTF_8);
+        assertFalse(events.contains("\n@Mod."),
+                "the annotation would put a Reputation event type on a standalone install's classpath");
+        assertTrue(events.contains("ReputationBridge.noteStandingChange("),
+                "a crossing is left as a note for the planner, not spoken from the event");
     }
 
     // ------------------------------------------------------------------

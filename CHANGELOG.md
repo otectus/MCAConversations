@@ -17,6 +17,7 @@ Dialogue presentation expansion: three clearly differentiated interface choices 
 - Three dialogue presentation choices: **Current** (the full responsive card), **Minimal** (responsive interaction with simpler graphics and no live portrait), and **Original MCA** (MCA Reborn's native interface).
 - Explicit `dialogueMenuStyle` client configuration option in `config/mcaconversations-client.toml`.
 - `MINIMAL` presentation layer: uses the same synchronized offer, keyboard navigation, paging, and accessibility systems as the responsive card, but with flat-panel graphics and no entity portrait rendering, reducing visual complexity and rendering overhead.
+- Village-standing remark: with **MCA: Reputation** installed, a villager who knows a deed behind a standing change will raise it unprompted as a `standing_remark` initiative bark. It fires only from a recorded tier crossing and a deed that villager actually knows, is spent by the first resident to say it, and never appears without the optional mod.
 
 ### Changed
 

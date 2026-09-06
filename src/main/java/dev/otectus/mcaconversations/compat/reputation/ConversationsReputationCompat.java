@@ -14,12 +14,15 @@ import dev.otectus.mcareputation.incident.IncidentStatus;
 import dev.otectus.mcareputation.incident.IncidentVisibility;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The MCA: Reputation-backed implementation of {@link ReputationBridge.ReputationQueries} (spec §30).
@@ -36,6 +39,16 @@ import java.util.Set;
  */
 public final class ConversationsReputationCompat implements ReputationBridge.ReputationQueries {
 
+    /**
+     * Whether the installed Reputation carries the per-villager opinion bias.
+     *
+     * <p>Probed once, by name, because the method is additive to API version 1 and that version
+     * deliberately did not move for it: a build old enough not to have it still reports v1 and still
+     * passes the gate above. Asking {@code getMethod} once here is what keeps the per-check path free
+     * of both reflection and a {@code NoSuchMethodError} thrown in the middle of a conversation.
+     */
+    private static final boolean OPINION_BIAS_PRESENT = probeOpinionBias();
+
     private ConversationsReputationCompat() {
     }
 
@@ -48,6 +61,39 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
             return;
         }
         ReputationBridge.setQueries(new ConversationsReputationCompat());
+        // Not an @Mod.EventBusSubscriber, for the same reason ConversationsQuestsEvents is not one:
+        // the annotation would put a Reputation event type on the classpath of an install that has no
+        // Reputation. Registered here instead, where the mod is already known to be present.
+        MinecraftForge.EVENT_BUS.register(new ConversationsReputationEvents());
+    }
+
+    private static boolean probeOpinionBias() {
+        try {
+            McaReputationApi.class.getMethod("getOpinionBias", MinecraftServer.class, UUID.class,
+                    UUID.class, CommunityKey.class, String.class);
+            return true;
+        } catch (Throwable t) {
+            // Debug, once, and only here: an older Reputation is a supported configuration, not a
+            // fault. Villagers simply keep answering with the village's standing.
+            McaConversations.LOGGER.debug("[MCA: Conversations] MCA: Reputation has no getOpinionBias; "
+                    + "checks keep using village-level standing.", t);
+            return false;
+        }
+    }
+
+    /**
+     * The check bias from one villager's own opinion (§30.3 read per villager).
+     *
+     * <p>Guarded by the probe rather than by a try/catch on every call: with the method absent this is
+     * never reached, and with it present the API's own {@code catch (Throwable)} already answers 0.
+     */
+    static int opinionBias(MinecraftServer server, UUID villager, UUID player, CommunityKey community,
+                           String axis) {
+        if (!OPINION_BIAS_PRESENT || server == null || villager == null || player == null
+                || community == null) {
+            return 0;
+        }
+        return McaReputationApi.getOpinionBias(server, player, villager, community, axis);
     }
 
     /** The community a villager belongs to, or empty. */
@@ -83,6 +129,23 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
         return community(villager)
                 .map(key -> McaReputationApi.getCheckBias(player.server, player.getUUID(), key, axis))
                 .orElse(0);
+    }
+
+    @Override
+    public boolean supportsOpinionBias() {
+        return OPINION_BIAS_PRESENT;
+    }
+
+    @Override
+    public int opinionBias(ServerPlayer player, Entity villager, String axis) {
+        return community(villager)
+                .map(key -> opinionBias(player.server, villager.getUUID(), player.getUUID(), key, axis))
+                .orElse(0);
+    }
+
+    @Override
+    public String communityId(Entity villager) {
+        return community(villager).map(CommunityKey::asString).orElse("");
     }
 
     @Override
