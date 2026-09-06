@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The classloading gate in front of everything MCA: Reputation-shaped — the exact sibling of
@@ -99,6 +100,30 @@ public final class ReputationBridge {
 
         /** True when the player has an unresolved negative deed here that amends could address. */
         boolean hasUnresolvedNegativeIncident(ServerPlayer player, Entity villager);
+
+        /**
+         * Whether the installed MCA: Reputation answers the per-villager opinion question at all.
+         *
+         * <p>Defaults to {@code false} because an older Reputation has no such method: the compat
+         * class probes for it once and reports what it found, so an older server keeps the
+         * village-level bias instead of taking a {@code NoSuchMethodError} into a conversation.
+         */
+        default boolean supportsOpinionBias() {
+            return false;
+        }
+
+        /**
+         * The bounded check bias read from <em>this villager's own</em> opinion rather than from the
+         * village's standing. Same two axes and the same ceiling; safe default: {@link #checkBias}.
+         */
+        default int opinionBias(ServerPlayer player, Entity villager, String axis) {
+            return checkBias(player, villager, axis);
+        }
+
+        /** The stable id of this villager's community, or {@code ""} when they belong to none. */
+        default String communityId(Entity villager) {
+            return "";
+        }
     }
 
     /** An authored standing test (§30.2). All fields optional and ANDed. */
@@ -211,7 +236,14 @@ public final class ReputationBridge {
             return 0;
         }
         try {
-            return clampStandingFit(queries.checkBias(player, villager, normalized), normalized);
+            // A check always names a villager (the guard above), so whenever Reputation can answer the
+            // per-villager question that is the better answer: what the blacksmith who watched it
+            // happen makes of you, rather than what the village at large does. An older Reputation
+            // has no such method, reports false, and the village-level bias is used unchanged.
+            int raw = queries.supportsOpinionBias()
+                    ? queries.opinionBias(player, villager, normalized)
+                    : queries.checkBias(player, villager, normalized);
+            return clampStandingFit(raw, normalized);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("[MCA: Conversations] reputation check bias failed; using 0", t);
             return 0;
@@ -270,6 +302,119 @@ public final class ReputationBridge {
             McaConversations.LOGGER.debug("[MCA: Conversations] reputation tier failed; using \"\"", t);
             return "";
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Standing remarks: a tier crossing waiting to be mentioned
+    // ------------------------------------------------------------------
+
+    /**
+     * A tier crossing no villager has remarked on yet.
+     *
+     * @param communityId     the community whose opinion moved, as Reputation spells it
+     * @param tierId          the tier the player has crossed into
+     * @param upward          true when the village thinks better of them than it did
+     * @param noticedGameTime the tick the crossing was recorded, which the timeout is measured from
+     */
+    public record PendingRemark(String communityId, String tierId, boolean upward, long noticedGameTime) {
+    }
+
+    /** player -> the one crossing waiting to be mentioned. Newest wins; only ever one per player. */
+    private static final java.util.Map<UUID, PendingRemark> PENDING_REMARKS = new ConcurrentHashMap<>();
+
+    /**
+     * How long a crossing stays worth mentioning. A day: older than that it is not news, and a
+     * villager opening with it a week later reads as a bug rather than as memory.
+     */
+    public static final long REMARK_TIMEOUT_TICKS = 24_000L;
+
+    /** Bound on the map, so a long-running server cannot accumulate crossings forever. */
+    public static final int MAX_PENDING_REMARKS = 256;
+
+    /**
+     * Records that a player's standing with a community crossed a tier.
+     *
+     * <p>Called only from {@code compat.reputation}, the one package allowed to name the event this
+     * comes from. Everything held here is a string, a flag and a tick.
+     */
+    public static void noteStandingChange(UUID playerId, String communityId, String tierId,
+                                          boolean upward, long now) {
+        if (playerId == null || communityId == null || communityId.isEmpty()
+                || tierId == null || tierId.isEmpty()) {
+            return;
+        }
+        PENDING_REMARKS.values().removeIf(remark -> !isFresh(remark, now));
+        if (PENDING_REMARKS.size() >= MAX_PENDING_REMARKS) {
+            PENDING_REMARKS.clear();
+        }
+        PENDING_REMARKS.put(playerId, new PendingRemark(communityId, tierId, upward, now));
+    }
+
+    /**
+     * Whether a crossing is still recent enough to mention. Pure, and the whole of the timeout rule.
+     *
+     * <p>A clock that has run backwards expires the entry rather than holding it forever: a crossing
+     * nobody can date is one nobody should be greeted with.
+     */
+    public static boolean isFresh(PendingRemark remark, long now) {
+        if (remark == null) {
+            return false;
+        }
+        long age = now - remark.noticedGameTime();
+        return age >= 0 && age < REMARK_TIMEOUT_TICKS;
+    }
+
+    /** The crossing this player has waiting, dropping it once it has timed out. */
+    public static Optional<PendingRemark> pendingRemark(UUID playerId, long now) {
+        if (playerId == null) {
+            return Optional.empty();
+        }
+        PendingRemark remark = PENDING_REMARKS.get(playerId);
+        if (remark == null) {
+            return Optional.empty();
+        }
+        if (!isFresh(remark, now)) {
+            PENDING_REMARKS.remove(playerId, remark);
+            return Optional.empty();
+        }
+        return Optional.of(remark);
+    }
+
+    /** Takes the crossing, so the next villager the player meets does not raise it a second time. */
+    public static Optional<PendingRemark> consumeStandingRemark(UUID playerId, long now) {
+        Optional<PendingRemark> remark = pendingRemark(playerId, now);
+        remark.ifPresent(value -> PENDING_REMARKS.remove(playerId, value));
+        return remark;
+    }
+
+    /**
+     * Whether <em>this</em> villager is one to raise the player's new standing.
+     *
+     * <p>Three things have to hold at once: the player crossed a tier recently, this villager lives
+     * in the community that changed its mind, and they personally know a deed behind it. The last is
+     * what stops a stranger across the square congratulating somebody on something they never heard
+     * about.
+     */
+    public static boolean hasStandingRemark(ServerPlayer player, Entity villager, long now) {
+        if (!isAvailable() || player == null || villager == null) {
+            return false;
+        }
+        Optional<PendingRemark> pending = pendingRemark(player.getUUID(), now);
+        if (pending.isEmpty()) {
+            return false;
+        }
+        try {
+            return pending.get().communityId().equals(queries.communityId(villager))
+                    && queries.recentKnownDeed(player, villager).isPresent();
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("[MCA: Conversations] standing remark check failed; staying quiet", t);
+            return false;
+        }
+    }
+
+    /** Test seam: forgets every crossing waiting to be mentioned. */
+    public static void clearPendingRemarksForTest() {
+        PENDING_REMARKS.clear();
     }
 
     /** Test seam: install a stub façade without the real mod present. */

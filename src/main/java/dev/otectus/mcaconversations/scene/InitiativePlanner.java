@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.ChatDelivery;
 import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.compat.ReputationBridge;
 import dev.otectus.mcaconversations.history.CommitmentRecord;
 import dev.otectus.mcaconversations.history.EpisodeRecord;
 import dev.otectus.mcaconversations.history.History;
@@ -44,6 +45,11 @@ import java.util.Set;
  *   <li>a thread they left open and that is ready to pick up;</li>
  *   <li>their own situation having changed since the two of them last spoke.</li>
  * </ol>
+ *
+ * <p>A fifth is live only with MCA: Reputation installed: the village has just changed its mind about
+ * this player, and this resident knows a deed behind it. It is held to the same standard as the four
+ * above — a recorded crossing and a deed this villager actually knows, never a general sense that the
+ * player has been doing well.
  *
  * <p>{@code LOW_STAKES} is deliberately absent. With nothing else outstanding it would fire every
  * day, and unlike the four above there is no record behind it to make it true.
@@ -91,6 +97,19 @@ public final class InitiativePlanner {
      * how much interrupting somebody each class is worth.
      */
     static Set<ScenePurpose> candidates(PairHistory pair, List<EpisodeRecord> liveEpisodes, long today) {
+        return candidates(pair, liveEpisodes, today, false);
+    }
+
+    /**
+     * The same rule with the one thing that is not read from this pair's own records: whether the
+     * village has just changed its mind about this player and this villager is one to say so.
+     *
+     * <p>Passed in rather than looked up, so the detection rule stays pure and testable while the
+     * three conditions behind the flag ({@link dev.otectus.mcaconversations.compat.ReputationBridge
+     * #hasStandingRemark}) stay in the bridge that knows about the optional mod.
+     */
+    static Set<ScenePurpose> candidates(PairHistory pair, List<EpisodeRecord> liveEpisodes, long today,
+                                        boolean standingRemark) {
         Set<ScenePurpose> out = new LinkedHashSet<>();
         if (pair != null) {
             if (!pair.due(today).isEmpty()) {
@@ -105,6 +124,9 @@ public final class InitiativePlanner {
         }
         if (changedSinceTheyLastSpoke(pair, liveEpisodes)) {
             out.add(ScenePurpose.STATE_CHANGE);
+        }
+        if (standingRemark) {
+            out.add(ScenePurpose.STANDING_REMARK);
         }
         return out;
     }
@@ -146,7 +168,8 @@ public final class InitiativePlanner {
             List<EpisodeRecord> live = History.of(villager)
                     .map(history -> history.liveEpisodes(today))
                     .orElse(List.of());
-            Set<ScenePurpose> candidates = candidates(pair, live, today);
+            Set<ScenePurpose> candidates = candidates(pair, live, today,
+                    ReputationBridge.hasStandingRemark(player, villager, gameTime(villager)));
             return InitiativeGate.mostImportant(candidates)
                     .map(purpose -> new Opening(purpose, slotFor(purpose, pair, today)));
         } catch (Throwable t) {
@@ -178,6 +201,11 @@ public final class InitiativePlanner {
             if (!speak(villager, player, opening.get())) {
                 return false;
             }
+            if (purpose == ScenePurpose.STANDING_REMARK) {
+                // Spent the moment it is said, so the next resident the player walks past does not
+                // congratulate them on the same thing. Untaken notes time out on their own.
+                ReputationBridge.consumeStandingRemark(player.getUUID(), now);
+            }
             InitiativeGate.record(villager, player, purpose, InitiativeGate.Weight.FULL, today, now);
             attend(villager, player, now);
             return true;
@@ -206,6 +234,11 @@ public final class InitiativePlanner {
         }
         ChatDelivery.villagerSays(villager, player, line.get());
         return true;
+    }
+
+    /** The villager's own clock, which is the one the remark window is measured against. */
+    private static long gameTime(Entity villager) {
+        return villager.level() instanceof ServerLevel level ? level.getGameTime() : 0L;
     }
 
     /** Renders the one slot a bark can carry, falling back the way every other slot does. */

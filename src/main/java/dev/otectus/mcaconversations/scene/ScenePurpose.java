@@ -46,6 +46,16 @@ public enum ScenePurpose {
     /** Something is broken between them and has not been acknowledged. */
     REPAIR("repair", 3),
 
+    /**
+     * The player's standing with this village has just crossed a tier, and this resident knows a deed
+     * behind it.
+     *
+     * <p>Costs the same as {@link #REPAIR}: a village changing its mind about somebody is worth about
+     * as much of their attention as a rupture between the two of them, and no more. Only ever live
+     * with MCA: Reputation installed, which is what keeps it silent on an ordinary install.
+     */
+    STANDING_REMARK("standing_remark", 3),
+
     /** A comfort, an origin motif, a remark that costs nothing and means something. */
     LOW_STAKES("low_stakes", 8),
 
