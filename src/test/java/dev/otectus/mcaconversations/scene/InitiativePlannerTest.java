@@ -150,6 +150,35 @@ class InitiativePlannerTest {
     }
 
     @Test
+    void aCourtRemarkIsRaisedOnlyWhenItIsPassedIn() {
+        // The flag is the whole of the rule here: with MCA Capitals absent it is always false, and a
+        // villager with nothing else outstanding stays silent exactly as before.
+        PairHistory pair = pair(90);
+        assertFalse(InitiativePlanner.candidates(pair, List.of(), TODAY, false, false)
+                .contains(ScenePurpose.COURT_REMARK));
+        assertEquals(Set.of(ScenePurpose.COURT_REMARK),
+                InitiativePlanner.candidates(pair, List.of(), TODAY, false, true));
+    }
+
+    @Test
+    void aCourtRemarkAndAStandingRemarkAreDifferentThings() {
+        // One is what the village thinks of the player; the other is what happened to the villager.
+        // They can be live at once, and the ranking picks one, never both.
+        PairHistory pair = pair(90);
+        Set<ScenePurpose> candidates =
+                InitiativePlanner.candidates(pair, List.of(), TODAY, true, true);
+        assertTrue(candidates.contains(ScenePurpose.STANDING_REMARK));
+        assertTrue(candidates.contains(ScenePurpose.COURT_REMARK));
+        assertTrue(InitiativeGate.mostImportant(candidates).isPresent());
+    }
+
+    @Test
+    void aCourtRemarkNamesNothing() {
+        // Its line stands on its own; a slot it has no argument for would render as a raw specifier.
+        assertTrue(InitiativePlanner.slotFor(ScenePurpose.COURT_REMARK, pair(90), TODAY).isEmpty());
+    }
+
+    @Test
     void onlyOneThingIsEverRaised() {
         // The plan's rule: never more than one. Whatever is outstanding, the villager says one thing.
         PairHistory pair = pair(90);

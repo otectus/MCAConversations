@@ -219,6 +219,23 @@ Mixin targets:
 
 Shadow fields on ChoicePanel (TownsteadChoicePanelMixin.java:26–35): `displayEntries`, `visible`, `hoveredIndex`, `selectedIndex`, `scrollOffset`, `entryHeights` (declared `@Final`), `x`, `y`, `width`, `height`.
 
+## MCA Capitals 1.3.5 NeoForge 1.21.1
+
+Jar: `mcacapitals-1.3.5.jar` (MCA Capitals 1.3.5 for NeoForge 1.21.1, Modrinth project `tHmppiXj`,
+version `ZSqQbuHC`), 2,589,648 bytes, SHA-256
+`10ad0456d86d99fce36005cc504d395d893e295f4f164efb85cc455edd160e3c`.
+
+Its own `META-INF/neoforge.mods.toml` declares `modId="mcacapitals" version="1.3.5"` and requires
+`mca versionRange="[7.7.35-beta.3,7.8.0)"`. This port's pinned `mca_version`
+(`7.7.36-beta.3+1.21.1`, `gradle.properties`) sits inside that range; the other probe version in
+this repo's fleet, `7.7.33+1.21.1`, is below it.
+
+Command: `.\gradlew.bat capitalsProbeTest "-PcapitalsJar=<path to that jar>"`.
+
+Result: `[probe] MCA Capitals bound; capabilities = 9`, resolution status `FULL`, zero unresolved
+manifest rows (`CapitalsBindingProbeTest.manifestResolvesAgainstTheRealCapitalsJar`,
+src/test/java/dev/otectus/mcaconversations/compat/CapitalsBindingProbeTest.java:50–66).
+
 ## Test harness on 1.21.1
 
 Repository-path resolution (`TestPaths`, src/test/java/dev/otectus/mcaconversations/support/TestPaths.java): ModDevGradle's `unitTest` runner executes tests with `build/minecraft-junit` as the working directory. Bare relative paths no longer resolve; `build.gradle` injects `-Dmcaconversations.projectRoot`, and when absent, TestPaths walks up from the working directory to the first directory containing `settings.gradle`.

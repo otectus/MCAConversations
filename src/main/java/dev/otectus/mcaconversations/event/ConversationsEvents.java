@@ -14,6 +14,7 @@ import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.BeatContractLoader;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.court.CourtNewsPoller;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
 import dev.otectus.mcaconversations.interiority.Interiority;
 import dev.otectus.mcaconversations.profession.ProfessionProfileLoader;
@@ -230,6 +231,13 @@ public final class ConversationsEvents {
                 && (McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()
                         || McaConversationsConfig.maxInitiativesPerVillagerPlayerDay() > 0)) {
             GreetOnApproach.scan(event.getServer());
+        }
+
+        // Court news rides its own cadence, deliberately not the gossip sweep's: a capital's chronicle
+        // changes far less often than a village's marriages do, and the poll reads an optional mod.
+        int courtInterval = Math.max(1, McaConversationsConfig.COMMON.capitalNewsPollSeconds.get() * 20);
+        if (event.getServer().getTickCount() % courtInterval == 0) {
+            CourtNewsPoller.tick(event.getServer());
         }
 
         int interval = McaConversationsConfig.COMMON.gossipScanIntervalTicks.get();

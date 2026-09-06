@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_is_expected_of_a_stranger",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.a_village_in_black.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.capital_mourning",
+              "deltas": {
+                "respect": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.a_village_in_black.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_are_sorry_for_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.a_village_in_black.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.capital_mourning",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.a_village_in_black.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

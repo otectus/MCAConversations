@@ -76,6 +76,13 @@ public final class McaConversationsConfig {
             case "branching" -> COMMON.enableBranching.get();
             case "chat" -> COMMON.enableChatMode.get();
             case "townstead" -> COMMON.townsteadEnabled.get();
+            // MCA Capitals. Each sub-feature is gated by the master switch as well as its own, so
+            // capitals.enabled=false silences the whole layer without touching three other flags.
+            case "capitals" -> COMMON.capitalsEnabled.get();
+            case "capital_topics" -> COMMON.capitalsEnabled.get() && COMMON.capitalTopicsEnabled.get();
+            case "capital_news" -> COMMON.capitalsEnabled.get() && COMMON.capitalNewsEnabled.get();
+            case "capital_diplomacy" -> COMMON.capitalsEnabled.get()
+                    && COMMON.capitalDiplomacyTalkEnabled.get();
             // Living-histories features. Each is gated by the master switch as well as its own, so
             // dynamic.enabled=false silences the whole layer without touching seven other flags.
             case "dynamic" -> COMMON.dynamicEnabled.get();
@@ -376,6 +383,17 @@ public final class McaConversationsConfig {
         public final ModConfigSpec.IntValue townsteadNeedCrisisCooldownDays;
         public final ModConfigSpec.IntValue townsteadBuildingRemovalConfirmScans;
         public final ModConfigSpec.BooleanValue townsteadDebug;
+
+        public final ModConfigSpec.BooleanValue capitalsEnabled;
+        public final ModConfigSpec.BooleanValue capitalTopicsEnabled;
+        public final ModConfigSpec.BooleanValue capitalNewsEnabled;
+        public final ModConfigSpec.IntValue capitalNewsPollSeconds;
+        public final ModConfigSpec.IntValue capitalNewsMaxPerPoll;
+        public final ModConfigSpec.BooleanValue capitalDiplomacyTalkEnabled;
+        public final ModConfigSpec.BooleanValue capitalRoleRemarkEnabled;
+        public final ModConfigSpec.IntValue capitalRoleRemarkDays;
+        public final ModConfigSpec.IntValue capitalsContextCacheTicks;
+        public final ModConfigSpec.BooleanValue capitalsDebug;
 
         // --- Living histories (spec §22.5) ---------------------------------------------------------
         public final ModConfigSpec.BooleanValue dynamicEnabled;
@@ -686,6 +704,47 @@ public final class McaConversationsConfig {
                     "news. Guards against a reload or chunk-loading transient reading as a demolition.")
                     .defineInRange("buildingRemovalConfirmScans", 2, 1, 10);
             townsteadDebug = b.comment("Verbose logging for Townstead binding, context reads and reactions.")
+                    .define("debug", false);
+            b.pop();
+
+            b.push("capitals");
+            capitalsEnabled = b.comment(
+                    "Master switch for the optional MCA Capitals integration. With Capitals absent this",
+                    "changes nothing at all. With Capitals installed and this off, Conversations behaves",
+                    "exactly as though it were absent: every capital context field is unavailable, every",
+                    "capital topic self-hides, and no capital state is read.")
+                    .define("enabled", true);
+            capitalTopicsEnabled = b.comment(
+                    "Offer the capital conversation topics (the crown, the court, houses, the realm).")
+                    .define("topicsEnabled", true);
+            capitalNewsEnabled = b.comment(
+                    "Turn new chronicle entries and court changes into village gossip, so a coronation or",
+                    "a declaration of war is something villagers bring up on their own.")
+                    .define("newsEnabled", true);
+            capitalNewsPollSeconds = b.comment(
+                    "How often the chronicle is checked for new entries, in seconds. Independent of the",
+                    "gossip sweep's own cadence; a capital's chronicle changes far less often than a",
+                    "village does.")
+                    .defineInRange("newsPollSeconds", 30, 5, 600);
+            capitalNewsMaxPerPoll = b.comment(
+                    "How many chronicle entries one poll may turn into gossip. A capital that generated a",
+                    "burst of events while nobody was near should not flood the village with all of them.")
+                    .defineInRange("newsMaxPerPoll", 3, 1, 20);
+            capitalDiplomacyTalkEnabled = b.comment(
+                    "Let villagers speak about wars, truces and alliances between capitals. Off, the",
+                    "war and allied context fields stay unavailable and only domestic court talk remains.")
+                    .define("diplomacyTalkEnabled", true);
+            capitalRoleRemarkEnabled = b.comment(
+                    "Let a villager whose title just changed remark on it when approached, once.")
+                    .define("roleRemarkEnabled", true);
+            capitalRoleRemarkDays = b.comment(
+                    "How many days a title change stays fresh enough to be worth remarking on.")
+                    .defineInRange("roleRemarkDays", 7, 1, 60);
+            capitalsContextCacheTicks = b.comment(
+                    "How long a resolved villager-to-capital lookup is reused, in ticks. 0 re-resolves",
+                    "every read, which is correct but scans the capital registry far more often.")
+                    .defineInRange("contextCacheTicks", 200, 0, 6000);
+            capitalsDebug = b.comment("Verbose logging for the Capitals binding and context reads.")
                     .define("debug", false);
             b.pop();
 

@@ -145,6 +145,7 @@ final class TopicPackCompiler {
         String subject = definition.has("subject")
                 ? definition.get("subject").getAsString() : topic + "." + name;
         List<String> slotsUsed = ContentCompiler.strings(definition, "slots_used");
+        List<String> varsUsed = ContentCompiler.strings(definition, "vars_used");
         List<String> obligations = ContentCompiler.strings(definition, "obligations");
         if (obligations.isEmpty()) {
             obligations = List.of("acknowledge");
@@ -297,7 +298,7 @@ final class TopicPackCompiler {
                 ContentCompiler.require(ContentCompiler.object(source, "leave_label"), "pt", where));
 
         out.addEntryRoute(entryQuestion + "/" + entryAnswer,
-                entryRoute(sceneId, beatId, questionId, sayKey, slotsUsed));
+                entryRoute(sceneId, beatId, questionId, sayKey, varsUsed, slotsUsed));
     }
 
     private JsonObject compileReply(JsonObject reply, JsonObject scene, String sceneName,
@@ -357,6 +358,7 @@ final class TopicPackCompiler {
         String reactionBeat = inboundBeat + "." + reactionId;
         String reactionSay = sayKey + "." + reactionId;
         List<String> reactionSlots = ContentCompiler.strings(reaction, "slots_used");
+        List<String> reactionVars = ContentCompiler.strings(reaction, "vars_used");
 
         // A reaction that carries its own replies earns a page of its own, and the beat has to point
         // at it: the stance rules are contracted against whichever beat opened the page, so a third
@@ -466,7 +468,7 @@ final class TopicPackCompiler {
         // The page the beat says it opens and the page the result actually opens have to be the same
         // one, or the contract describes a route nothing plays.
         actions.addProperty("next", hasFollowOn ? followOnQuestion : followupQuestionId());
-        actions.add("conversations_say", sayAction(reactionSay, reactionSlots));
+        actions.add("conversations_say", sayAction(reactionSay, reactionVars, reactionSlots));
 
         JsonObject result = new JsonObject();
         result.addProperty("baseChance", 1);
@@ -918,7 +920,7 @@ final class TopicPackCompiler {
     }
 
     private JsonObject entryRoute(String sceneId, String beatId, String questionId, String sayKey,
-                                  List<String> slots) {
+                                  List<String> vars, List<String> slots) {
         JsonArray conditions = new JsonArray();
         JsonObject positive = new JsonObject();
         positive.addProperty("chance", 900);
@@ -958,7 +960,7 @@ final class TopicPackCompiler {
         actions.add("conversations_session", session);
         actions.add("conversations_record", record);
         actions.addProperty("next", questionId);
-        actions.add("conversations_say", sayAction(sayKey, slots));
+        actions.add("conversations_say", sayAction(sayKey, vars, slots));
 
         JsonObject route = new JsonObject();
         route.addProperty("baseChance", 0);
@@ -1102,8 +1104,22 @@ final class TopicPackCompiler {
      * JSON stays the smallest thing that says what it means.
      */
     private static JsonObject sayAction(String phrase, List<String> slots) {
+        return sayAction(phrase, List.of(), slots);
+    }
+
+    /**
+     * The same action for a line that also names template variables.
+     *
+     * <p>Vars fill the positional args before slots do, which is the ordering {@code SayDirective}
+     * documents and the locale files depend on: {@code %1$s} is the player, then one position per
+     * declared var, then one per declared slot.
+     */
+    private static JsonObject sayAction(String phrase, List<String> vars, List<String> slots) {
         JsonObject say = new JsonObject();
         say.addProperty("phrase", phrase);
+        if (!vars.isEmpty()) {
+            say.add("vars", ContentCompiler.array(vars));
+        }
         if (!slots.isEmpty()) {
             say.add("slots", ContentCompiler.array(slots));
         }

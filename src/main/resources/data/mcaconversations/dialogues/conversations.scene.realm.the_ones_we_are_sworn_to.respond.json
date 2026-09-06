@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_will_hold",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.the_ones_we_are_sworn_to.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.allied",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.the_ones_we_are_sworn_to.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_sounds_a_good_arrangement",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.the_ones_we_are_sworn_to.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.allied",
+              "deltas": {
+                "respect": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.the_ones_we_are_sworn_to.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

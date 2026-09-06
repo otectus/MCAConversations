@@ -1,9 +1,9 @@
-# PARITY.md — MCA: Conversations 1.20.1 Forge (v1.5.1) → 1.21.1 NeoForge
+# PARITY.md — MCA: Conversations 1.20.1 Forge (v1.6.0) → 1.21.1 NeoForge
 
-**Status:** Complete. Build green (991 tests). Identity diffs clean. 2026-09-03.
+**Status:** Complete. Documentation updated to 1.6.0. SOURCE commit includes MCA: Capitals integration (1.5.2 dialogue presentation styles + 1.6.0 Capitals features).
 
-SOURCE `C:\Projects\MCAConversations` @ `1ee78b7` (v1.5.1) is the spec. This checklist has one box per
-SOURCE entry, grouped by category in dependency order. Legend: `[x]` matches SOURCE HEAD; `[ ]` missing (not applicable to this port). "0 byte-diff" means the resource tree-hash compare in
+SOURCE `C:\Projects\MCAConversations` @ `7d5dc29` (SOURCE HEAD `7d5dc29` plus its uncommitted 1.6.0 working tree (2026-09-05)) is the spec. This checklist has one box per
+SOURCE entry, grouped by category in dependency order. Legend: `[x]` matches SOURCE; `[+]` new in 1.6.0; `[ ]` missing (not applicable to this port). "0 byte-diff" means the resource tree-hash compare in
 PORT_STATUS.md § Verification is empty for that directory. Paths are relative to
 `src/main/java/dev/otectus/mcaconversations/` unless they start with `src/`, `docs/`, or are root files.
 
@@ -19,8 +19,10 @@ PORT_STATUS.md § Verification is empty for that directory. Paths are relative t
 - [x] SavedData `mcaconversations_history` — `history/ConversationHistorySavedData.java` (Factory/HolderLookup pattern)
 - [x] SavedData `mcaconversations_identity` — `identity/VillagerIdentitySavedData.java` (Factory/HolderLookup pattern)
 - [x] SavedData `mcaconversations_culture` — `village/VillageCultureSavedData.java` (Factory/HolderLookup pattern)
+- [+] SavedData `mcaconversations_court` — `court/CourtMemorySavedData.java` (Factory/HolderLookup pattern, new in 1.6.0)
 - [x] `AddReloadListenerEvent` loaders: all 8 in SOURCE order (ChatIntentLoader, ConversationCatalogLoader, BeatContractLoader, ProfessionProfileLoader, Interiority, IdentityCatalogLoader, SceneCatalogLoader, VillageCultureCatalogLoader) + `NarrativeCatalogLoader.listeners()`; handler body character-identical to SOURCE
 - [x] `compat/TownsteadCapability` (plain enum, 15 constants in SOURCE order)
+- [+] `compat/CapitalsCompat`, `compat/capitals/*` — reflective Capitals binding (new in 1.6.0, matches SOURCE)
 
 ## C. Config (`McaConversationsConfig.java`, 111 define calls, three specs)
 - [x] COMMON spec sections `features`, `gift`, `states`, `world`, `gossip`, `rpg`, `conversation`, `chat`

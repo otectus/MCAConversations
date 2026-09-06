@@ -235,6 +235,25 @@ Ops can inspect matching live with `/conversations chat debug <message>`.
 | `chatModeTypingAttention` | `true` | | nearby villagers stop and face a player whose chat box is open |
 | `chatModeAttentionTicks` | `600` | 0–72000 | how long a conversation partner stays put facing you after the last exchange (0 disables) |
 
+## `[capitals]`
+
+The optional [MCA: Capitals](https://www.curseforge.com/minecraft/mc-mods/mca-capitals) monarchy integration (requires MCA Capitals 1.3+ (tested against 1.3.6)). **With MCA Capitals not installed, none of this does anything and nothing changes**: every capital context field is unavailable, every capital topic self-hides, all capital news is not seeded, and no Capitals class is ever loaded. Conversations reads capital names, rosters, chronicles and court states and never writes them — all court actions stay Capitals' to own. The integration is purely read-only: capital data is queried on server-side to seed gossip and fill context, and court news is polled on its own cadence (via `capitalNewsPollSeconds`, hooked in event handlers).
+
+Run `/conversations context capabilities` in game to see the live context fields this villager has access to.
+
+| Option | Default | Range | Meaning |
+|---|---|---|---|
+| `enabled` | `true` | | master switch. Off, Conversations behaves exactly as though Capitals were absent |
+| `topicsEnabled` | `true` | | offer the Capitals conversation topics (the crown, the court, houses, the realm) |
+| `newsEnabled` | `true` | | turn new chronicle entries and court changes into village gossip, so a coronation or a declaration of war is something villagers bring up on their own |
+| `newsPollSeconds` | `30` | 5–600 | how often the chronicle is checked for new entries, in seconds. Independent of the gossip sweep's own cadence; a capital's chronicle changes far less often than a village does |
+| `newsMaxPerPoll` | `3` | 1–20 | how many chronicle entries one poll may turn into gossip. A capital that generated a burst of events while nobody was near should not flood the village with all of them |
+| `diplomacyTalkEnabled` | `true` | | let villagers speak about wars, truces and alliances between capitals. Off, the `at_war` and `allied` context fields stay unavailable and only domestic court talk remains |
+| `roleRemarkEnabled` | `true` | | let a villager whose title just changed remark on it when approached, once |
+| `roleRemarkDays` | `7` | 1–60 | how many days a title change stays fresh enough to be worth remarking on |
+| `contextCacheTicks` | `200` | 0–6000 | how long a resolved villager-to-capital lookup is reused, in ticks. 0 re-resolves every read, which is correct but scans the capital registry far more often |
+| `debug` | `false` | | verbose logging for the Capitals binding and context reads |
+
 ## `[debug]`
 
 | Option | Default | Meaning |

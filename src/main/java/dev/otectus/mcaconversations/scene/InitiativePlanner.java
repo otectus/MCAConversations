@@ -5,7 +5,9 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.ChatDelivery;
 import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.compat.CapitalsCompat;
 import dev.otectus.mcaconversations.compat.ReputationBridge;
+import dev.otectus.mcaconversations.court.CourtMemorySavedData;
 import dev.otectus.mcaconversations.history.CommitmentRecord;
 import dev.otectus.mcaconversations.history.EpisodeRecord;
 import dev.otectus.mcaconversations.history.History;
@@ -97,7 +99,7 @@ public final class InitiativePlanner {
      * how much interrupting somebody each class is worth.
      */
     static Set<ScenePurpose> candidates(PairHistory pair, List<EpisodeRecord> liveEpisodes, long today) {
-        return candidates(pair, liveEpisodes, today, false);
+        return candidates(pair, liveEpisodes, today, false, false);
     }
 
     /**
@@ -110,6 +112,18 @@ public final class InitiativePlanner {
      */
     static Set<ScenePurpose> candidates(PairHistory pair, List<EpisodeRecord> liveEpisodes, long today,
                                         boolean standingRemark) {
+        return candidates(pair, liveEpisodes, today, standingRemark, false);
+    }
+
+    /**
+     * The same rule again with the second flag no pair record can supply: this villager's own place at
+     * court has just changed, and they have not mentioned it yet.
+     *
+     * <p>Passed in for the same reason {@code standingRemark} is — the detection rule stays pure, and
+     * the court memory and the optional mod behind it stay in {@link #hasCourtRemark}.
+     */
+    static Set<ScenePurpose> candidates(PairHistory pair, List<EpisodeRecord> liveEpisodes, long today,
+                                        boolean standingRemark, boolean courtRemark) {
         Set<ScenePurpose> out = new LinkedHashSet<>();
         if (pair != null) {
             if (!pair.due(today).isEmpty()) {
@@ -127,6 +141,9 @@ public final class InitiativePlanner {
         }
         if (standingRemark) {
             out.add(ScenePurpose.STANDING_REMARK);
+        }
+        if (courtRemark) {
+            out.add(ScenePurpose.COURT_REMARK);
         }
         return out;
     }
@@ -169,7 +186,8 @@ public final class InitiativePlanner {
                     .map(history -> history.liveEpisodes(today))
                     .orElse(List.of());
             Set<ScenePurpose> candidates = candidates(pair, live, today,
-                    ReputationBridge.hasStandingRemark(player, villager, gameTime(villager)));
+                    ReputationBridge.hasStandingRemark(player, villager, gameTime(villager)),
+                    hasCourtRemark(villager, today));
             return InitiativeGate.mostImportant(candidates)
                     .map(purpose -> new Opening(purpose, slotFor(purpose, pair, today)));
         } catch (Throwable t) {
@@ -200,6 +218,11 @@ public final class InitiativePlanner {
             }
             if (!speak(villager, player, opening.get())) {
                 return false;
+            }
+            if (purpose == ScenePurpose.COURT_REMARK) {
+                // Spent the moment it is said: one promotion is remarked on once, to whoever was
+                // there to hear it, and never again by the same villager.
+                markCourtRemarked(villager);
             }
             if (purpose == ScenePurpose.STANDING_REMARK) {
                 // Spent the moment it is said, so the next resident the player walks past does not
@@ -234,6 +257,41 @@ public final class InitiativePlanner {
         }
         ChatDelivery.villagerSays(villager, player, line.get());
         return true;
+    }
+
+    /**
+     * Whether this villager was given a court office recently enough to still be telling people.
+     *
+     * <p>Three gates, in the order that costs least: the switch, then the mod, then the memory. With
+     * MCA Capitals absent the memory is empty anyway, but a check that reaches storage on every
+     * approach scan of every villager is not one to leave to that.
+     */
+    private static boolean hasCourtRemark(Entity villager, long today) {
+        try {
+            if (!McaConversationsConfig.COMMON.capitalRoleRemarkEnabled.get()
+                    || !CapitalsCompat.isActive()
+                    || !(villager.level() instanceof ServerLevel level)
+                    || level.getServer() == null) {
+                return false;
+            }
+            return CourtMemorySavedData.get(level.getServer())
+                    .freshChange(villager.getUUID(), today,
+                            McaConversationsConfig.COMMON.capitalRoleRemarkDays.get())
+                    .isPresent();
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("court remark check failed; villager stays quiet", t);
+            return false;
+        }
+    }
+
+    private static void markCourtRemarked(Entity villager) {
+        try {
+            if (villager.level() instanceof ServerLevel level && level.getServer() != null) {
+                CourtMemorySavedData.get(level.getServer()).markRemarked(villager.getUUID());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("court remark could not be marked spoken", t);
+        }
     }
 
     /** The villager's own clock, which is the one the remark window is measured against. */

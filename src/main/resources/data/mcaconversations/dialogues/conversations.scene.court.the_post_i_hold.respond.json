@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_the_work_is",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_post_i_hold.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.my_office",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_post_i_hold.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_worth_doing",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_post_i_hold.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.my_office",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_post_i_hold.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_that_buys",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.one_of_our_own.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.our_own",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.one_of_our_own.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_are_glad_of_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.one_of_our_own.open.warmed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.our_own",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.one_of_our_own.warmed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

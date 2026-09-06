@@ -69,6 +69,16 @@ description='''${mod_description}'''
     ordering="AFTER"
     side="BOTH"
 
+# MCA Capitals - OPTIONAL. When absent, nothing changes: every capital context field is
+# unavailable, every capital topic self-hides, and no Capitals class is resolved. Ordered AFTER so
+# its capital registry exists before we read it.
+[[dependencies.${mod_id}]]
+    modId="mcacapitals"
+    type="optional"
+    versionRange="[1.3,)"
+    ordering="AFTER"
+    side="BOTH"
+
 # Townstead - OPTIONAL. When absent, nothing changes: every Townstead dialogue condition scores 0,
 # every Townstead template variable falls back, and no Townstead class is resolved. Ordered AFTER so
 # its registries and reaction data exist before we read them. Townstead 0.7.6 has a NeoForge 1.21.1

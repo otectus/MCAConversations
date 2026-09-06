@@ -35,7 +35,30 @@ public enum TemplateVariable {
     /** A recent deed this villager actually knows about. */
     REPUTATION_RECENT_DEED("mcaconversations.fallback.reputation_recent_deed"),
     /** A title the player holds with this village. */
-    REPUTATION_TITLE("mcaconversations.fallback.reputation_title");
+    REPUTATION_TITLE("mcaconversations.fallback.reputation_title"),
+
+    // --- MCA: Capitals ---
+    // A villager speaking about their court must never say a blank or a raw uuid, so every one of
+    // these falls back to something a person would actually say — "the capital", "our words" — when
+    // Capitals is absent, the villager is in no capital, or the office is simply vacant.
+    /** The capital's name, which is the MCA village name of the village it is seated at. */
+    CAPITAL_NAME("mcaconversations.fallback.capital_name"),
+    /** The reigning sovereign's name. */
+    SOVEREIGN_NAME("mcaconversations.fallback.sovereign_name"),
+    /** {@code King} or {@code Queen}, by the sovereign's gender rather than by the speaker's. */
+    SOVEREIGN_TITLE("mcaconversations.fallback.sovereign_title"),
+    /** The named heir. Falls back rather than inventing one when the succession is unsettled. */
+    HEIR_NAME("mcaconversations.fallback.heir_name"),
+    /** The speaker's house. */
+    HOUSE_NAME("mcaconversations.fallback.house_name"),
+    /** The speaker's house words. */
+    HOUSE_WORDS("mcaconversations.fallback.house_words"),
+    /** The speaker's own court title, localized. */
+    VILLAGER_TITLE("mcaconversations.fallback.villager_title"),
+    /** A capital this one is at war with. */
+    RIVAL_CAPITAL_NAME("mcaconversations.fallback.rival_capital_name"),
+    /** A capital this one is allied with. */
+    ALLY_CAPITAL_NAME("mcaconversations.fallback.ally_capital_name");
 
     private final String fallbackKey;
 

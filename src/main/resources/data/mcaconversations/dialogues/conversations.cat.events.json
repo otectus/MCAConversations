@@ -104,6 +104,159 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.news.word_from_the_capital"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.news.word_from_the_capital",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "news.word_from_the_capital.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.news.word_from_the_capital.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.word_from_the_capital",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.news.the_seat_changed_hands"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.news.the_seat_changed_hands",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "news.the_seat_changed_hands.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.news.the_seat_changed_hands.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.the_seat_changed_hands",
+              "vars": [
+                "sovereign_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.news.they_raised_me_up"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.news.they_raised_me_up",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "news",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "news.they_raised_me_up.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.news",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.news.they_raised_me_up.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.they_raised_me_up",
+              "vars": [
+                "villager_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 200,
               "conversations_progress": {
                 "arc": "news",

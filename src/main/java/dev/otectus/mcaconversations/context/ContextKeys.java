@@ -133,6 +133,47 @@ public final class ContextKeys {
     /** The most recent untold village event type for this speaker, from the gossip log. */
     public static final ContextKey<String> VILLAGE_RECENT_EVENT = ContextKey.of("village.recent_event", String.class);
 
+    // --- Capital (MCA Capitals; written only by CapitalContextSource) ---------------------------
+    // Every field here reads UNAVAILABLE when Capitals is absent or the capital layer is switched
+    // off, which is what lets a capital-gated scene self-hide rather than mis-fire on a false.
+    /** True when this villager belongs to a capital at all. The gate every capital scene opens with. */
+    public static final ContextKey<Boolean> CAPITAL_PRESENT = ContextKey.of("capital.present", Boolean.class);
+    /** The capital's name, which is the MCA village name of the village it is seated at. */
+    public static final ContextKey<String> CAPITAL_NAME = ContextKey.of("capital.name", String.class);
+    /** {@code pending}, {@code founded}, {@code active}, {@code unknown} — Capitals' own vocabulary. */
+    public static final ContextKey<String> CAPITAL_STATE = ContextKey.of("capital.state", String.class);
+    /** The speaker's resolved title id, {@code none} when they hold none. */
+    public static final ContextKey<String> CAPITAL_TITLE = ContextKey.of("capital.title", String.class);
+    /** Capitals' own rank value for that title, so content can gate on "knight or above". */
+    public static final ContextKey<Integer> CAPITAL_TITLE_RANK = ContextKey.of("capital.title_rank", Integer.class);
+    /** {@code none}, {@code master_of_laws}, {@code ambassador}. */
+    public static final ContextKey<String> CAPITAL_OFFICE = ContextKey.of("capital.office", String.class);
+    /** {@code friend}, {@code enemy}, {@code neutral}, or {@code unknown} when the service is unbound. */
+    public static final ContextKey<String> CAPITAL_CROWN_STANDING = ContextKey.of("capital.crown_standing", String.class);
+    public static final ContextKey<Boolean> CAPITAL_ROYAL_HOUSEHOLD = ContextKey.of("capital.royal_household", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_ROYAL_GUARD = ContextKey.of("capital.royal_guard", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_DISGRACED = ContextKey.of("capital.disgraced", Boolean.class);
+    /** The speaker's house name, empty-string-free: unknown rather than blank when they have none. */
+    public static final ContextKey<String> CAPITAL_HOUSE = ContextKey.of("capital.house", String.class);
+    /** {@code noble}, {@code great}, {@code royal}. */
+    public static final ContextKey<String> CAPITAL_HOUSE_TIER = ContextKey.of("capital.house_tier", String.class);
+    /** True when this capital is at war with any other. Unavailable when diplomacy talk is off. */
+    public static final ContextKey<Boolean> CAPITAL_AT_WAR = ContextKey.of("capital.at_war", Boolean.class);
+    /** True when this capital holds any alliance. Unavailable when diplomacy talk is off. */
+    public static final ContextKey<Boolean> CAPITAL_ALLIED = ContextKey.of("capital.allied", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_MOURNING = ContextKey.of("capital.mourning", Boolean.class);
+    /** True when <em>some</em> player holds the throne — not necessarily the one being spoken to. */
+    public static final ContextKey<Boolean> CAPITAL_SOVEREIGN_IS_PLAYER = ContextKey.of("capital.sovereign_is_player", Boolean.class);
+    /** True when the player in this conversation is the sovereign. */
+    public static final ContextKey<Boolean> CAPITAL_PLAYER_IS_SOVEREIGN = ContextKey.of("capital.player_is_sovereign", Boolean.class);
+    /** {@code same}, {@code foreign}, {@code none} — where the player has declared their allegiance. */
+    public static final ContextKey<String> CAPITAL_PLAYER_ALLEGIANCE = ContextKey.of("capital.player_allegiance", String.class);
+    public static final ContextKey<Boolean> CAPITAL_HEIR_NAMED = ContextKey.of("capital.heir_named", Boolean.class);
+    /** True while this villager's title change is recent and unremarked (see {@code CourtRoleMemory}). */
+    public static final ContextKey<Boolean> CAPITAL_TITLE_CHANGED = ContextKey.of("capital.title_changed", Boolean.class);
+    /** The title held before the recent change; unknown when there has not been one. */
+    public static final ContextKey<String> CAPITAL_PREVIOUS_TITLE = ContextKey.of("capital.previous_title", String.class);
+
     /**
      * Forces this class to initialise.
      *

@@ -1,0 +1,896 @@
+{
+  "_comment": [
+    "Noble houses, gated on MCA Capitals and on the house this villager actually belongs to.",
+    "",
+    "A house is a name, a set of words and a list of obligations, and which of the three a person",
+    "talks about first says more about them than the name does."
+  ],
+  "topic": "house",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "house"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "That is the house, then.",
+      "Right. That is the name and what it costs.",
+      "It will outlast the both of us."
+    ],
+    "pt": [
+      "É essa a casa, então.",
+      "Certo. É o nome e o que ele custa.",
+      "Vai durar mais que nós dois."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for saying it plainly.",
+    "pt": "Obrigado por dizer com franqueza."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the house?",
+      "pt": "Mais alguma coisa sobre a casa?"
+    },
+    "leave": {
+      "en": "That is the house, then.",
+      "pt": "É essa a casa, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_house_i_belong_to",
+      "subject": "house.mine",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.house_tier",
+          "any_of": [
+            "noble",
+            "great",
+            "royal"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "tradition"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "house_name"
+      ],
+      "prompt": {
+        "en": "The house I belong to.",
+        "pt": "A casa a que pertenço."
+      },
+      "lines": {
+        "en": [
+          "I am of %2$s. It means less at this end of the lane than it does at the other, and I prefer this end.",
+          "%2$s. Four households, one quarrel that is ninety years old, and a very good well.",
+          "Being of a house means you are never only yourself in an argument. Somebody is always counting for the name."
+        ],
+        "pt": [
+          "Sou de %2$s. Isso importa menos deste lado da viela do que do outro, e eu prefiro este lado.",
+          "%2$s. Quatro casas, uma briga que tem noventa anos, e um poço muito bom.",
+          "Pertencer a uma casa é nunca ser só você numa discussão. Alguém sempre está contando pelo nome."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_obliges",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does belonging oblige you to?",
+            "pt": "A que pertencer te obriga?"
+          },
+          "phrases": [
+            "what does belonging oblige you to",
+            "what is a house owed from you"
+          ],
+          "requires_any": [
+            "belonging",
+            "owed"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Show up. Weddings, burials, harvest, and any afternoon a cousin is being humiliated in public.",
+                "Nothing written. Everything expected. That is the arrangement and everybody pretends it is voluntary.",
+                "To not be the one people cite for a hundred years. That is the entire duty and it is heavier than it sounds."
+              ],
+              "pt": [
+                "Aparecer. Casamentos, enterros, colheita, e qualquer tarde em que um primo está sendo humilhado em público.",
+                "Nada escrito. Tudo esperado. É esse o arranjo e todo mundo finge que é voluntário.",
+                "Não ser aquele que as pessoas citam por cem anos. É esse o dever inteiro e pesa mais do que parece."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_steadying",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It sounds steadying, having that behind you.",
+            "pt": "Parece firme, ter isso atrás de você."
+          },
+          "phrases": [
+            "it sounds steadying having that behind you",
+            "having that behind you sounds steadying"
+          ],
+          "requires_any": [
+            "steadying"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, on the days it is not a rope. Both of those are the same length of rope.",
+                "It is. I have never once had to move a roof beam alone, and I have moved four.",
+                "You say that because you have not met my aunt. Come at midsummer and revise it."
+              ],
+              "pt": [
+                "É, nos dias em que não é uma corda. As duas coisas são o mesmo tamanho de corda.",
+                "É. Nunca precisei mover uma viga sozinho, e já movi quatro.",
+                "Você diz isso porque não conheceu minha tia. Venha no solstício e revise."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_words_we_say",
+      "subject": "house.words",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "habitual",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.house_tier",
+          "any_of": [
+            "noble",
+            "great",
+            "royal"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "tradition"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "house_words"
+      ],
+      "prompt": {
+        "en": "The words of my house.",
+        "pt": "As palavras da minha casa."
+      },
+      "lines": {
+        "en": [
+          "Our words are these: %2$s. My grandfather said them at every burial and never once explained them.",
+          "%2$s. A house's words are a promise the house makes to itself, and mostly it is a promise about behaving badly less often.",
+          "I did not understand our words until I was thirty. %2$s. Then a bad year explained them for me."
+        ],
+        "pt": [
+          "Nossas palavras são estas: %2$s. Meu avô as dizia em todo enterro e nunca explicou.",
+          "%2$s. As palavras de uma casa são uma promessa que a casa faz a si mesma, quase sempre sobre se comportar mal menos vezes.",
+          "Só entendi nossas palavras aos trinta. %2$s. Aí um ano ruim explicou por mim."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_mean",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What do those words actually mean?",
+            "pt": "O que essas palavras querem dizer de fato?"
+          },
+          "phrases": [
+            "what do those words actually mean",
+            "what is meant by those words"
+          ],
+          "requires_any": [
+            "words",
+            "meant"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Whatever the person saying them needs them to mean, which is either the flaw or the point.",
+                "They mean: we have been wrong before and we wrote it down so it would be harder to be wrong the same way.",
+                "Nobody agrees. My uncle reads them as a warning and I read them as a comfort, and we are both eldest sons."
+              ],
+              "pt": [
+                "O que quem as diz precisa que queiram dizer, o que é o defeito ou é justamente a graça.",
+                "Querem dizer: já erramos antes e escrevemos para ficar mais difícil errar do mesmo jeito.",
+                "Ninguém concorda. Meu tio lê como aviso e eu leio como conforto, e nós dois somos filhos mais velhos."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_they_are_good_words",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "They are good words to be handed.",
+            "pt": "São boas palavras para receber."
+          },
+          "phrases": [
+            "they are good words to be handed",
+            "a good thing to be handed"
+          ],
+          "requires_any": [
+            "handed"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They are. I did not choose them and I have decided to be glad of them anyway.",
+                "Better than the ones next door, which are about vengeance and have caused nothing but trouble.",
+                "You are the first outsider to hear them said properly and not as a joke. I shall remember that."
+              ],
+              "pt": [
+                "São. Não fui eu que escolhi e decidi gostar delas mesmo assim.",
+                "Melhores que as da casa ao lado, que falam de vingança e só deram problema.",
+                "Você é o primeiro de fora a ouvi-las ditas direito e não como piada. Vou lembrar disso."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a_great_house",
+      "subject": "house.great",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.house_tier",
+          "is": "great",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "house_name"
+      ],
+      "prompt": {
+        "en": "What a great house is like inside.",
+        "pt": "Como uma casa grande é por dentro."
+      },
+      "lines": {
+        "en": [
+          "%2$s is counted a great house. Mostly that means more people watching what I do with my hands at supper.",
+          "A great house has tenants, and tenants means that in a hard year my family are the ones people come to and blame.",
+          "Great is a word other people use about us. Inside it is just a large family with an unusually long memory."
+        ],
+        "pt": [
+          "%2$s é contada como uma casa grande. Na prática quer dizer mais gente reparando no que faço com as mãos no jantar.",
+          "Uma casa grande tem arrendatários, e arrendatários quer dizer que num ano difícil é a minha família que recebe e leva a culpa.",
+          "Grande é uma palavra que os outros usam sobre nós. Por dentro é só uma família enorme com uma memória longa demais."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_is_owed_downward",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What is owed downward, then?",
+            "pt": "E o que se deve para baixo, então?"
+          },
+          "phrases": [
+            "what is owed downward then",
+            "what does a great house owe its tenants"
+          ],
+          "requires_any": [
+            "downward",
+            "tenants"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "Grain in a bad winter and a fair hearing in any season. We manage the first more reliably than the second.",
+                "Everything, and nothing that can be written down, which is how it gets quietly stopped.",
+                "My father's answer was: the roof of anyone whose rent you take. I have kept to it and it is expensive."
+              ],
+              "pt": [
+                "Grão num inverno ruim e uma audiência justa em qualquer estação. A primeira a gente cumpre melhor que a segunda.",
+                "Tudo, e nada que possa ser escrito, que é como isso vai sendo cortado em silêncio.",
+                "A resposta do meu pai era: o telhado de quem paga aluguel a você. Mantive isso e é caro."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_a_real_burden",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is a real burden to be born into.",
+            "pt": "É um fardo de verdade nascer nisso."
+          },
+          "phrases": [
+            "that is a real burden to be born into",
+            "a heavy thing to be born into"
+          ],
+          "requires_any": [
+            "burden",
+            "heavy"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "softened",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It is, and I am careful about saying so, because from where you are standing it sounds like complaining in a warm room.",
+                "Thank you. My brother would say we are paid in respect and I would say respect does not mend a roof.",
+                "It is the only one I have been offered. I would not swap it. That is not the same as it being light."
+              ],
+              "pt": [
+                "É, e tomo cuidado ao dizer, porque de onde você está parece reclamação num quarto aquecido.",
+                "Obrigado. Meu irmão diria que somos pagos em respeito e eu diria que respeito não conserta telhado.",
+                "É o único que me ofereceram. Não trocaria. Isso não é o mesmo que ser leve."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "blood_of_the_seat",
+      "subject": "house.royal",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.house_tier",
+          "is": "royal",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "house_name"
+      ],
+      "prompt": {
+        "en": "What the royal name costs.",
+        "pt": "O que o nome real custa."
+      },
+      "lines": {
+        "en": [
+          "%2$s is the royal house, and I am in it, and that sentence has never once made a day easier.",
+          "I am of the blood. It means I am watched by people who would like me to fail politely.",
+          "Every kindness offered to me arrives with a question attached, and I have got worse at telling which is which."
+        ],
+        "pt": [
+          "%2$s é a casa real, e eu estou nela, e essa frase nunca deixou um dia mais fácil.",
+          "Sou do sangue. Quer dizer que sou observado por gente que gostaria que eu fracassasse com elegância.",
+          "Toda gentileza que me oferecem vem com uma pergunta junto, e piorei em distinguir uma da outra."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_they_wanted_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would you have chosen the blood if asked?",
+            "pt": "Você teria escolhido o sangue se perguntassem?"
+          },
+          "phrases": [
+            "would you have chosen the blood if asked",
+            "would you choose the blood again"
+          ],
+          "requires_any": [
+            "blood"
+          ],
+          "disposition": {
+            "trust": 3,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "No, and I have said that out loud twice in my life, and this is the second.",
+                "I would have chosen the house and not the seat. They do not come apart, which I learned late.",
+                "On a good day yes, and the good days are the ones where nobody needs anything from me."
+              ],
+              "pt": [
+                "Não, e disse isso em voz alta duas vezes na vida, e esta é a segunda.",
+                "Teria escolhido a casa e não o trono. Não se separam, o que aprendi tarde.",
+                "Num dia bom, sim, e os dias bons são aqueles em que ninguém precisa de nada de mim."
+              ]
+            }
+          }
+        },
+        {
+          "name": "promise_to_treat_them_plainly",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I will treat you as a person and not a name.",
+            "pt": "Vou te tratar como pessoa e não como nome."
+          },
+          "phrases": [
+            "i will treat you as a person and not a name",
+            "you will get treated as a person here"
+          ],
+          "requires_any": [
+            "person",
+            "treated"
+          ],
+          "disposition": {
+            "warmth": 4,
+            "trust": 3
+          },
+          "reaction": {
+            "id": "relieved",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Then you will be the third, and the other two are dead, so do not make a habit of dangerous kindness.",
+                "Please do. And when I forget how to be spoken to plainly, tell me, because I will.",
+                "That is worth more than a grant of land and considerably harder to arrange."
+              ],
+              "pt": [
+                "Então você será o terceiro, e os outros dois morreram, então não faça hábito de gentileza perigosa.",
+                "Por favor. E quando eu esquecer como se fala comigo com franqueza, me avise, porque vou esquecer.",
+                "Isso vale mais que uma concessão de terras e é bem mais difícil de arranjar."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "no_name_above_my_door",
+      "subject": "house.none",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.house_tier",
+          "any_of": [
+            "noble",
+            "great",
+            "royal"
+          ],
+          "not": true,
+          "unknown": "pass"
+        },
+        {
+          "field": "capital.title",
+          "any_of": [
+            "knight",
+            "lord",
+            "duke",
+            "dowager_duke"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "independence"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Rank without a house.",
+        "pt": "Posto sem casa."
+      },
+      "lines": {
+        "en": [
+          "I hold a rank and I hold no house. That combination confuses people at feasts and I have stopped explaining it.",
+          "There is a title over my door and no name behind it. Everything I have I got in one lifetime, which is rarer than it sounds.",
+          "No house means no cousins to disgrace me and none to lend me a horse. I have counted it and I am ahead."
+        ],
+        "pt": [
+          "Tenho um posto e não tenho casa. Essa combinação confunde as pessoas nos banquetes e parei de explicar.",
+          "Há um título sobre a minha porta e nenhum nome atrás. Tudo o que tenho consegui numa vida só, o que é mais raro do que parece.",
+          "Sem casa não há primos para me desonrar e nem para me emprestar um cavalo. Já fiz a conta e estou ganhando."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_it_is_lonelier",
+          "stance": "empathy",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is it a lonelier way to hold rank?",
+            "pt": "É um jeito mais solitário de ter posto?"
+          },
+          "phrases": [
+            "is it a lonelier way to hold rank",
+            "does rank without kin feel lonelier"
+          ],
+          "requires_any": [
+            "lonelier"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "At the table, yes. In the field, no. Most of my life happens in the field.",
+                "It was for nine years. Then I stopped waiting to be invited and it improved sharply.",
+                "Lonelier and cleaner. I have never had to defend anything I did not do myself."
+              ],
+              "pt": [
+                "À mesa, sim. No campo, não. Quase toda a minha vida acontece no campo.",
+                "Foi, por nove anos. Aí parei de esperar convite e melhorou bastante.",
+                "Mais solitário e mais limpo. Nunca tive que defender nada que eu mesmo não tenha feito."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_was_earned",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Everything you hold, you earned.",
+            "pt": "Tudo o que você tem, você conquistou."
+          },
+          "phrases": [
+            "everything you hold you earned",
+            "you earned all of it yourself"
+          ],
+          "requires_any": [
+            "earned"
+          ],
+          "disposition": {
+            "respect": 4
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I did, and I will not pretend the saying of it does not do something for me.",
+                "Earned, and partly lucky, and I have watched enough men forget the second half.",
+                "That is the sentence I would like read out when I go, and now somebody has said it early."
+              ],
+              "pt": [
+                "Conquistei, e não vou fingir que ouvir isso não me faz alguma coisa.",
+                "Conquistado, e em parte sorte, e já vi homens demais esquecerem a segunda metade.",
+                "É a frase que eu gostaria que lessem quando eu me for, e agora alguém disse cedo."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_surname_they_gave_me",
+      "subject": "house.surname",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.house_tier",
+          "any_of": [
+            "noble",
+            "great",
+            "royal"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_styles": [
+        "gradual"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "house_name"
+      ],
+      "prompt": {
+        "en": "The surname I carry.",
+        "pt": "O sobrenome que carrego."
+      },
+      "lines": {
+        "en": [
+          "I was not born to the name. I married into %2$s and the first year of signing it felt like a lie.",
+          "%2$s is written on everything I own now. My mother could not read it and I have never got past that.",
+          "A surname arrives with a village's worth of opinions already attached to it. You spend a decade correcting them."
+        ],
+        "pt": [
+          "Não nasci com o nome. Casei para dentro de %2$s e o primeiro ano assinando parecia mentira.",
+          "%2$s está escrito em tudo o que é meu agora. Minha mãe não sabia ler e eu nunca superei isso.",
+          "Um sobrenome chega com uma vila inteira de opiniões já grudadas. A gente passa uma década corrigindo."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_when_it_stopped_feeling_odd",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "When did it stop feeling borrowed?",
+            "pt": "Quando parou de parecer emprestado?"
+          },
+          "phrases": [
+            "when did it stop feeling borrowed",
+            "how long before it stopped feeling borrowed"
+          ],
+          "requires_any": [
+            "borrowed"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "recalled",
+            "act": "reminisce",
+            "polarity": "positive",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "The day I used it to get a debt forgiven for a neighbour. It became mine somewhere in that sentence.",
+                "It has not, entirely. I notice it in winter and never in summer, and I cannot tell you why.",
+                "When my son said it about himself, unprompted, at seven years old. That was the end of the question."
+              ],
+              "pt": [
+                "No dia em que usei para perdoarem uma dívida de um vizinho. Virou meu em algum ponto daquela frase.",
+                "Não parou de todo. Reparo no inverno e nunca no verão, e não sei dizer por quê.",
+                "Quando meu filho falou dele mesmo assim, sem ninguém pedir, aos sete anos. Aí acabou a pergunta."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_the_name_suits_them",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It sits well on you now.",
+            "pt": "Assenta bem em você agora."
+          },
+          "phrases": [
+            "it sits well on you now",
+            "the name sits well on you"
+          ],
+          "requires_any": [
+            "sits"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is a generous thing to say to somebody who still hears the old one first.",
+                "It had better. I have had it longer than I had the other one, as of last spring.",
+                "My husband says the same and I accuse him of being obliged to. You are not, so I shall keep yours."
+              ],
+              "pt": [
+                "É generoso dizer isso a alguém que ainda ouve o antigo primeiro.",
+                "É bom que sim. Desde a primavera passada já tenho este há mais tempo que o outro.",
+                "Meu marido diz o mesmo e eu o acuso de ser obrigado. Você não é, então guardo o seu."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

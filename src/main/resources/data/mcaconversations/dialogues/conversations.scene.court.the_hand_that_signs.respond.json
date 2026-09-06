@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_the_worst_of_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_hand_that_signs.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.hand",
+              "deltas": {
+                "trust": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_hand_that_signs.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_the_seat_would_frighten_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_hand_that_signs.open.levelled"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.hand",
+              "deltas": {
+                "respect": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_hand_that_signs.levelled"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

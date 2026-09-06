@@ -346,6 +346,11 @@ public final class McaCompat {
         return McaHandles.homeVillageName(villager);
     }
 
+    /** A village's name by id, for callers with no resident entity to hand. Safe default: empty. */
+    public static Optional<String> getVillageName(ServerLevel level, int villageId) {
+        return McaHandles.villageName(level, villageId);
+    }
+
     /**
      * MCA's own {@code Village} object for an id, handed back as an opaque {@link Object}.
      *

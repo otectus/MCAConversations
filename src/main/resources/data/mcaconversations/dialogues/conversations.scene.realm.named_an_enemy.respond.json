@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_they_will_do",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.named_an_enemy.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.enemy_of_crown",
+              "deltas": {
+                "trust": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.named_an_enemy.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "thank_them_for_the_warning",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.named_an_enemy.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.enemy_of_crown",
+              "deltas": {
+                "trust": 3,
+                "respect": 2
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.named_an_enemy.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

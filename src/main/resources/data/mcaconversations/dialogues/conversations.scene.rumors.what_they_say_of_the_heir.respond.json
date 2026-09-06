@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_the_talk_is",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.what_they_say_of_the_heir.open.reported"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.heir_talk",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.rumors.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.what_they_say_of_the_heir.reported"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_unfair_to_judge",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "rumors.what_they_say_of_the_heir.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "rumors.heir_talk",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.rumors.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.what_they_say_of_the_heir.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

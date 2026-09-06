@@ -303,6 +303,409 @@
           }
         }
       ]
+    },
+    {
+      "name": "word_from_the_capital",
+      "subject": "news.court",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_styles": [
+        "storyteller"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "What came down from the capital.",
+        "pt": "O que desceu da capital."
+      },
+      "lines": {
+        "en": [
+          "There was a reading at the well. Something out of %2$s, and half of it was names I have never had to learn before.",
+          "The court sent word this week. It was read out, everybody nodded, and then everybody asked their neighbour what it meant.",
+          "News from above comes in a particular voice. You can tell before the first sentence ends whether it will cost you anything."
+        ],
+        "pt": [
+          "Houve uma leitura no poço. Coisa vinda de %2$s, e metade eram nomes que eu nunca precisei aprender.",
+          "A corte mandou recado esta semana. Foi lido, todo mundo acenou, e depois todo mundo perguntou ao vizinho o que era.",
+          "Notícia de cima vem numa voz específica. Dá para saber antes da primeira frase acabar se vai te custar alguma coisa."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_the_reading_said",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What did the reading actually say?",
+            "pt": "O que a leitura dizia, afinal?"
+          },
+          "phrases": [
+            "what did the reading actually say",
+            "what was in the reading"
+          ],
+          "requires_any": [
+            "reading"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "An appointment and a date. Neither of them will change my week and both of them will change somebody's year.",
+                "I have it second hand, so take it as such: a name went up, and another name was not mentioned at all.",
+                "Half of it was thanks and the other half was a number, and the number is the part I wrote down."
+              ],
+              "pt": [
+                "Uma nomeação e uma data. Nenhuma muda a minha semana e as duas mudam o ano de alguém.",
+                "Sei de segunda mão, então leve assim: um nome subiu, e outro nome não foi mencionado.",
+                "Metade eram agradecimentos e a outra metade era um número, e o número é a parte que eu anotei."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_is_news_to_them",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is all new to me.",
+            "pt": "Isso é tudo novo para mim."
+          },
+          "phrases": [
+            "that is all new to me",
+            "all of that is new to me"
+          ],
+          "requires_any": [
+            "new"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Then you have had a better week than the rest of us, and I mean that as a compliment to your week.",
+                "You will. It travels the road slower than a cart and arrives twice as certain of itself.",
+                "Nobody tells travellers. You are outside the list and the list is how anything moves here."
+              ],
+              "pt": [
+                "Então você teve uma semana melhor que a nossa, e digo isso como elogio à sua semana.",
+                "Vai ouvir. Anda pela estrada mais devagar que carroça e chega duas vezes mais convicta.",
+                "Ninguém avisa viajantes. Você está fora da lista e a lista é como as coisas andam aqui."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_seat_changed_hands",
+      "subject": "news.coronation",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.state",
+          "is": "active",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "sovereign_name"
+      ],
+      "prompt": {
+        "en": "The change at the top.",
+        "pt": "A mudança lá em cima."
+      },
+      "lines": {
+        "en": [
+          "The seat changed hands and we found out from a rider, not a herald, which tells you how tidy it was.",
+          "%2$s holds it now. There was a day of bells and then everybody went back to the same fields.",
+          "A crowning is loud for one afternoon and then the whole thing becomes an ordinary fact you stop noticing."
+        ],
+        "pt": [
+          "O trono mudou de mãos e ficamos sabendo por um cavaleiro, não por um arauto, o que diz o quanto foi organizado.",
+          "%2$s tem o trono agora. Houve um dia de sinos e depois todo mundo voltou para os mesmos campos.",
+          "Uma coroação é barulhenta por uma tarde e depois a coisa toda vira um fato comum que você para de notar."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_the_village_took_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How did the village take the change?",
+            "pt": "Como a vila recebeu a mudança?"
+          },
+          "phrases": [
+            "how did the village take the change",
+            "what did the village make of the change"
+          ],
+          "requires_any": [
+            "change"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Quietly, and then loudly for three nights, and then quietly again and permanently.",
+                "The old ones cried and the young ones drank, and by the week after nobody could tell you which they had done.",
+                "Better than the last time. The last time there was a fight at the mill and two families still do not speak."
+              ],
+              "pt": [
+                "Em silêncio, depois em alto e bom som por três noites, e depois em silêncio de novo e para sempre.",
+                "Os velhos choraram e os jovens beberam, e uma semana depois ninguém sabia dizer quem fez o quê.",
+                "Melhor que da última vez. Da última vez houve briga no moinho e duas famílias ainda não se falam."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_hope_it_settles",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope it settles kindly for you all.",
+            "pt": "Espero que se acomode com bondade para vocês."
+          },
+          "phrases": [
+            "i hope it settles kindly for you all",
+            "may it settle kindly here"
+          ],
+          "requires_any": [
+            "settles",
+            "settle"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "So do I. Settling is the whole hope. Nobody here wants an interesting reign.",
+                "It usually does, within a year, and the year is the part people forget when they tell the story later.",
+                "That is kind. Everybody else asks who is on the seat. You asked what it does to us, which is the real question."
+              ],
+              "pt": [
+                "Eu também. Acomodar é toda a esperança. Ninguém aqui quer um reinado interessante.",
+                "Costuma acomodar, em um ano, e o ano é a parte que as pessoas esquecem quando contam a história depois.",
+                "Isso é gentil. Todo mundo pergunta quem está no trono. Você perguntou o que faz com a gente, que é a pergunta de verdade."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "they_raised_me_up",
+      "subject": "news.appointment",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "disclosure",
+      "temporal": "past",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title_changed",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 38,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "villager_title"
+      ],
+      "prompt": {
+        "en": "Something that happened to me.",
+        "pt": "Algo que aconteceu comigo."
+      },
+      "lines": {
+        "en": [
+          "They raised me. I am %2$s now, and I have not yet worked out how to say that without sounding pleased.",
+          "There was a letter with a seal on it and my name inside, and I read it four times before I told anybody.",
+          "%2$s. It happened last week. My hands still do the same work and everything around the work has changed."
+        ],
+        "pt": [
+          "Me elevaram. Sou %2$s agora, e ainda não descobri como dizer isso sem parecer contente.",
+          "Veio uma carta com selo e meu nome dentro, e eu li quatro vezes antes de contar a alguém.",
+          "%2$s. Foi semana passada. Minhas mãos fazem o mesmo trabalho e tudo em volta do trabalho mudou."
+        ]
+      },
+      "replies": [
+        {
+          "name": "congratulate_them",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is worth being pleased about.",
+            "pt": "Isso vale ficar contente."
+          },
+          "phrases": [
+            "that is worth being pleased about",
+            "you are allowed to be pleased"
+          ],
+          "requires_any": [
+            "pleased"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "delighted",
+            "act": "celebrate",
+            "polarity": "positive",
+            "shape": "celebrate",
+            "lines": {
+              "en": [
+                "Then I shall be, for one evening, and tomorrow I shall go back to pretending it is a burden.",
+                "Thank you. You are the first person to say it without adding a but afterwards.",
+                "I told my mother and she asked whether it paid better. It does not. She has stopped mentioning it."
+              ],
+              "pt": [
+                "Então vou ficar, por uma noite, e amanhã volto a fingir que é um fardo.",
+                "Obrigado. Você é a primeira pessoa a dizer isso sem emendar um mas depois.",
+                "Contei à minha mãe e ela perguntou se pagava melhor. Não paga. Ela parou de mencionar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_it_changes",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does it change day to day?",
+            "pt": "O que muda no dia a dia?"
+          },
+          "phrases": [
+            "what does it change day to day",
+            "what changes about your days now"
+          ],
+          "requires_any": [
+            "day",
+            "days"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "People finish their sentences differently around me. That is the whole of it so far and it is a lot.",
+                "Two more meetings and one fewer friend. I am told the second part is normal and I am watching to see.",
+                "Nothing yet. The letter arrived and the world did not. I expect it will, slowly, and I am dreading the slowly."
+              ],
+              "pt": [
+                "As pessoas terminam as frases diferente perto de mim. É tudo até agora e já é muita coisa.",
+                "Duas reuniões a mais e um amigo a menos. Dizem que a segunda parte é normal e estou observando.",
+                "Nada ainda. A carta chegou e o mundo não. Imagino que venha, devagar, e é o devagar que me assusta."
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

@@ -33,6 +33,7 @@ public final class ContextSources {
         register(new VillageContextSource());
         register(new HistoryContextSource());
         register(new IdentityContextSource());
+        register(new CapitalContextSource());
     }
 
     private ContextSources() {

@@ -7,6 +7,592 @@
     "and everything else is the rule for when the director should choose them."
   ],
   "scenes": {
+    "topic.court.from_the_bottom_of_the_hall": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title",
+            "any_of": [
+              "none",
+              "commoner"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 24,
+        "identity_styles": [
+          "direct"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.from_the_bottom_of_the_hall.respond",
+        "opening_beat": "court.from_the_bottom_of_the_hall.open"
+      }
+    },
+    "topic.court.the_cloak_they_took": {
+      "purpose": "topic:court",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.disgraced",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "identity_styles": [
+          "reluctant"
+        ],
+        "cooldown_days": 6,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.court.the_cloak_they_took.respond",
+        "opening_beat": "court.the_cloak_they_took.open"
+      }
+    },
+    "topic.court.the_hand_that_signs": {
+      "purpose": "topic:court",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title",
+            "is": "hand",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.court.the_hand_that_signs.respond",
+        "opening_beat": "court.the_hand_that_signs.open"
+      }
+    },
+    "topic.court.the_ones_i_command": {
+      "purpose": "topic:court",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title",
+            "is": "lord_commander",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.court.the_ones_i_command.respond",
+        "opening_beat": "court.the_ones_i_command.open"
+      }
+    },
+    "topic.court.the_post_i_hold": {
+      "purpose": "topic:court",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.office",
+            "any_of": [
+              "master_of_laws",
+              "ambassador"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.court.the_post_i_hold.respond",
+        "opening_beat": "court.the_post_i_hold.open"
+      }
+    },
+    "topic.court.the_watch_i_keep": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.royal_guard",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.the_watch_i_keep.respond",
+        "opening_beat": "court.the_watch_i_keep.open"
+      }
+    },
+    "topic.court.what_i_read_aloud": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title",
+            "is": "court_herald",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_styles": [
+          "storyteller"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.court.what_i_read_aloud.respond",
+        "opening_beat": "court.what_i_read_aloud.open"
+      }
+    },
+    "topic.court.what_the_books_say": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title",
+            "any_of": [
+              "maester",
+              "grand_maester"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_interests": [
+          "local_history"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.court.what_the_books_say.respond",
+        "opening_beat": "court.what_the_books_say.open"
+      }
+    },
+    "topic.crown.a_woman_on_the_seat": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title",
+            "is": "sovereign",
+            "not": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_values": [
+          "fairness"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.crown.a_woman_on_the_seat.respond",
+        "opening_beat": "crown.a_woman_on_the_seat.open"
+      }
+    },
+    "topic.crown.nobody_named_yet": {
+      "purpose": "topic:crown",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.heir_named",
+            "is": false,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 27,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.crown.nobody_named_yet.respond",
+        "opening_beat": "crown.nobody_named_yet.open"
+      }
+    },
+    "topic.crown.our_king_is_a_guest": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.royal_household",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.sovereign_is_player",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_styles": [
+          "reluctant"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.crown.our_king_is_a_guest.respond",
+        "opening_beat": "crown.our_king_is_a_guest.open"
+      }
+    },
+    "topic.crown.the_black_cloth": {
+      "purpose": "topic:crown",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.mourning",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 38,
+        "identity_values": [
+          "tradition"
+        ],
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.crown.the_black_cloth.respond",
+        "opening_beat": "crown.the_black_cloth.open"
+      }
+    },
+    "topic.crown.the_one_who_comes_after": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.heir_named",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 28,
+        "identity_styles": [
+          "observer"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.crown.the_one_who_comes_after.respond",
+        "opening_beat": "crown.the_one_who_comes_after.open"
+      }
+    },
+    "topic.crown.the_one_who_rules": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.crown.the_one_who_rules.respond",
+        "opening_beat": "crown.the_one_who_rules.open"
+      }
+    },
+    "topic.crown.the_one_who_stands_beside": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.state",
+            "is": "active",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 22,
+        "identity_styles": [
+          "observer"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.crown.the_one_who_stands_beside.respond",
+        "opening_beat": "crown.the_one_who_stands_beside.open"
+      }
+    },
+    "topic.crown.you_wear_it": {
+      "purpose": "topic:crown",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.player_is_sovereign",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "identity_values": [
+          "fairness"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.crown.you_wear_it.respond",
+        "opening_beat": "crown.you_wear_it.open"
+      }
+    },
     "topic.day.before_the_light": {
       "purpose": "topic:day",
       "shape": "observe",
@@ -638,6 +1224,249 @@
         "opening_beat": "hopes.the_long_one.open"
       }
     },
+    "topic.house.a_great_house": {
+      "purpose": "topic:house",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_tier",
+            "is": "great",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.house.a_great_house.respond",
+        "opening_beat": "house.a_great_house.open"
+      }
+    },
+    "topic.house.blood_of_the_seat": {
+      "purpose": "topic:house",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_tier",
+            "is": "royal",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "identity_styles": [
+          "reluctant"
+        ],
+        "cooldown_days": 6,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.house.blood_of_the_seat.respond",
+        "opening_beat": "house.blood_of_the_seat.open"
+      }
+    },
+    "topic.house.no_name_above_my_door": {
+      "purpose": "topic:house",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_tier",
+            "any_of": [
+              "noble",
+              "great",
+              "royal"
+            ],
+            "not": true,
+            "unknown": "pass"
+          },
+          {
+            "field": "capital.title",
+            "any_of": [
+              "knight",
+              "lord",
+              "duke",
+              "dowager_duke"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": [
+          "independence"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.house.no_name_above_my_door.respond",
+        "opening_beat": "house.no_name_above_my_door.open"
+      }
+    },
+    "topic.house.the_house_i_belong_to": {
+      "purpose": "topic:house",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_tier",
+            "any_of": [
+              "noble",
+              "great",
+              "royal"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": [
+          "tradition"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.house.the_house_i_belong_to.respond",
+        "opening_beat": "house.the_house_i_belong_to.open"
+      }
+    },
+    "topic.house.the_surname_they_gave_me": {
+      "purpose": "topic:house",
+      "shape": "reminisce",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_tier",
+            "any_of": [
+              "noble",
+              "great",
+              "royal"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_styles": [
+          "gradual"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.house.the_surname_they_gave_me.respond",
+        "opening_beat": "house.the_surname_they_gave_me.open"
+      }
+    },
+    "topic.house.the_words_we_say": {
+      "purpose": "topic:house",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_tier",
+            "any_of": [
+              "noble",
+              "great",
+              "royal"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 28,
+        "identity_values": [
+          "tradition"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.house.the_words_we_say.respond",
+        "opening_beat": "house.the_words_we_say.open"
+      }
+    },
     "topic.interests.the_hour_for_it": {
       "purpose": "topic:interests",
       "shape": "observe",
@@ -929,6 +1758,78 @@
         "opening_beat": "news.quiet_week.open"
       }
     },
+    "topic.news.the_seat_changed_hands": {
+      "purpose": "topic:news",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.state",
+            "is": "active",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_styles": [
+          "observer"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.news.the_seat_changed_hands.respond",
+        "opening_beat": "news.the_seat_changed_hands.open"
+      }
+    },
+    "topic.news.they_raised_me_up": {
+      "purpose": "topic:news",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title_changed",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 38,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.news.they_raised_me_up.respond",
+        "opening_beat": "news.they_raised_me_up.open"
+      }
+    },
     "topic.news.while_you_were_away": {
       "purpose": "topic:news",
       "shape": "observe",
@@ -958,6 +1859,37 @@
       "route": {
         "question": "conversations.scene.news.while_you_were_away.respond",
         "opening_beat": "news.while_you_were_away.open"
+      }
+    },
+    "topic.news.word_from_the_capital": {
+      "purpose": "topic:news",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_styles": [
+          "storyteller"
+        ],
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.news.word_from_the_capital.respond",
+        "opening_beat": "news.word_from_the_capital.open"
       }
     },
     "topic.noticed.something_about_the_room": {
@@ -1299,6 +2231,299 @@
         "opening_beat": "player.what_i_say_about_you.open"
       }
     },
+    "topic.realm.a_face_from_elsewhere": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.player_allegiance",
+            "is": "foreign",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_styles": [
+          "direct"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.a_face_from_elsewhere.respond",
+        "opening_beat": "realm.a_face_from_elsewhere.open"
+      }
+    },
+    "topic.realm.i_carry_the_letters": {
+      "purpose": "topic:realm",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.office",
+            "is": "ambassador",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.realm.i_carry_the_letters.respond",
+        "opening_beat": "realm.i_carry_the_letters.open"
+      }
+    },
+    "topic.realm.named_an_enemy": {
+      "purpose": "topic:realm",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.crown_standing",
+            "is": "enemy",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 42,
+        "identity_values": [
+          "fairness"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.realm.named_an_enemy.respond",
+        "opening_beat": "realm.named_an_enemy.open"
+      }
+    },
+    "topic.realm.one_of_our_own": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.player_allegiance",
+            "is": "same",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 28,
+        "identity_values": [
+          "hospitality"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.realm.one_of_our_own.respond",
+        "opening_beat": "realm.one_of_our_own.open"
+      }
+    },
+    "topic.realm.sworn_to_nobody": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.player_allegiance",
+            "is": "none",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_styles": [
+          "observer"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.realm.sworn_to_nobody.respond",
+        "opening_beat": "realm.sworn_to_nobody.open"
+      }
+    },
+    "topic.realm.the_ones_we_are_sworn_to": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.allied",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": [
+          "hospitality"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.realm.the_ones_we_are_sworn_to.respond",
+        "opening_beat": "realm.the_ones_we_are_sworn_to.open"
+      }
+    },
+    "topic.realm.the_quiet_years": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.at_war",
+            "is": false,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.allied",
+            "is": false,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 22,
+        "identity_styles": [
+          "observer"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.the_quiet_years.respond",
+        "opening_beat": "realm.the_quiet_years.open"
+      }
+    },
+    "topic.realm.we_are_at_war": {
+      "purpose": "topic:realm",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.at_war",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.we_are_at_war.respond",
+        "opening_beat": "realm.we_are_at_war.open"
+      }
+    },
     "topic.regrets.the_old_one": {
       "purpose": "topic:regrets",
       "shape": "confide",
@@ -1499,6 +2724,109 @@
       "route": {
         "question": "conversations.scene.rumors.the_correction.respond",
         "opening_beat": "rumors.the_correction.open"
+      }
+    },
+    "topic.rumors.what_the_servants_say": {
+      "purpose": "topic:rumors",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.royal_household",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": [
+          "privacy"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.rumors.what_the_servants_say.respond",
+        "opening_beat": "rumors.what_the_servants_say.open"
+      }
+    },
+    "topic.rumors.what_they_say_of_the_heir": {
+      "purpose": "topic:rumors",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.heir_named",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 28,
+        "identity_values": [
+          "fairness"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.rumors.what_they_say_of_the_heir.respond",
+        "opening_beat": "rumors.what_they_say_of_the_heir.open"
+      }
+    },
+    "topic.rumors.whispers_out_of_the_hall": {
+      "purpose": "topic:rumors",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_values": [
+          "privacy"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.rumors.whispers_out_of_the_hall.respond",
+        "opening_beat": "rumors.whispers_out_of_the_hall.open"
       }
     },
     "topic.season.deep_winter": {
@@ -1706,6 +3034,114 @@
         "opening_beat": "shared_history.the_thing_we_avoid.open"
       }
     },
+    "topic.standing.before_the_crown": {
+      "purpose": "topic:standing",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.player_is_sovereign",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 38,
+        "identity_values": [
+          "fairness"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.standing.before_the_crown.respond",
+        "opening_beat": "standing.before_the_crown.open"
+      }
+    },
+    "topic.standing.friend_of_the_crown": {
+      "purpose": "topic:standing",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.crown_standing",
+            "is": "friend",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "identity_values": [
+          "fairness"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.standing.friend_of_the_crown.respond",
+        "opening_beat": "standing.friend_of_the_crown.open"
+      }
+    },
+    "topic.standing.marked_against_you": {
+      "purpose": "topic:standing",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.crown_standing",
+            "is": "enemy",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "identity_values": [
+          "mercy"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.standing.marked_against_you.respond",
+        "opening_beat": "standing.marked_against_you.open"
+      }
+    },
     "topic.standing.settled_opinion": {
       "purpose": "topic:standing",
       "shape": "observe",
@@ -1843,6 +3279,42 @@
         "opening_beat": "values.what_it_cost_lately.open"
       }
     },
+    "topic.village.a_village_in_black": {
+      "purpose": "topic:village",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.mourning",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "identity_values": [
+          "tradition"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.village.a_village_in_black.respond",
+        "opening_beat": "village.a_village_in_black.open"
+      }
+    },
     "topic.village.after_something_happened": {
       "purpose": "topic:village",
       "shape": "observe",
@@ -1871,6 +3343,45 @@
       "route": {
         "question": "conversations.scene.village.after_something_happened.respond",
         "opening_beat": "village.after_something_happened.open"
+      }
+    },
+    "topic.village.before_the_hall_was_built": {
+      "purpose": "topic:village",
+      "shape": "reminisce",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.state",
+            "any_of": [
+              "pending",
+              "founded"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_styles": [
+          "storyteller"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.village.before_the_hall_was_built.respond",
+        "opening_beat": "village.before_the_hall_was_built.open"
       }
     },
     "topic.village.change_settled": {
@@ -1964,6 +3475,42 @@
       },
       "episode": {
         "thread": "village.change"
+      }
+    },
+    "topic.village.we_are_a_capital_now": {
+      "purpose": "topic:village",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.state",
+            "is": "active",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "identity_values": [
+          "tradition"
+        ],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.village.we_are_a_capital_now.respond",
+        "opening_beat": "village.we_are_a_capital_now.open"
       }
     },
     "topic.weather.the_long_dry": {

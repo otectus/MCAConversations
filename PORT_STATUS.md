@@ -1,9 +1,8 @@
 # PORT_STATUS.md — 1.21.1 NeoForge parity port
 
 Resume-from-here file. If you are a fresh session: read this, then `PARITY.md`, then the approved plan
-(`C:\Users\crims\.claude\plans\task-port-mca-lexical-thacker.md` if it still exists). SOURCE
-`C:\Projects\MCAConversations` @ `1ee78b7` (v1.5.1) is read-only truth. TARGET was cut from SOURCE
-`89edad2` (v1.2.1); the port is a re-sync of five SOURCE releases plus the loader migration.
+if one exists. SOURCE `C:\Projects\MCAConversations` @ SOURCE HEAD `7d5dc29` plus its uncommitted 1.6.0 working tree (2026-09-05) is read-only truth. TARGET was cut from SOURCE
+`89edad2` (v1.2.1); the port is a re-sync of six SOURCE releases plus the loader migration.
 
 ## Final state
 
@@ -176,6 +175,9 @@ must accept `keyPressed` instead of `m_7933_`.
 | 21 | Client UI on 1.21.1 GUI sprites: `DialogueCardSkin` draws the button nine-slice with `GuiGraphics.blitSprite("widget/button" / "widget/button_highlighted" / "widget/button_disabled")` instead of blitting `AbstractWidget.WIDGETS_LOCATION` (removed in 1.21); `DIRT = Screen.MENU_BACKGROUND`; `DialogueChoiceRenderer` calls the rect-based `InventoryScreen.renderEntityInInventoryFollowsAngle(x1,y1,x2,y2,scale,0.0625F,…)`; `DialogueCardPreviewScreen` drops its manual `renderBackground` (Screen.render already calls the 4-arg form) and takes 4-double `mouseScrolled`; `InteractScreenChoiceMixin` passes `Component` (not `MutableComponent`) for `setLastPhrase` and 4-double `mouseScrolled`. Method names, geometry constants, `BUTTON_V_*` offsets and `patches()` preserved. | Vanilla client API changes between 1.20.1 and 1.21.1; behaviour and layout unchanged. Acceptance: smoke item 2. |
 | 20 | Loader-descriptor tests adapted: `content/OptionalProfessionIsolationTest` reads `META-INF/neoforge.mods.toml`, matches `type="required"` instead of `mandatory=true`, and expects `neoforge` where SOURCE expects `forge`; `content/MixinsJsonLintTest` asserts `NetworkHandlerMixin` and no `VillagerMessageMixin`; `compat/ReputationIntegrationTest` scans `McaHandles.registerCondition/registerAction` and does not reject the `[0.2,)` range; `MixinTargetProbeTest` omits `VillagerMessageMixin` and expects `handleServer` (not `receive`) for `InteractionDialogueMessageMixin`; `content/ContentLintTest` validates `conversations_personality` values against `Personalities.overlayPrefixes()` (canonical + aliases + retained legacy `athletic`/`confident`/`peppy`) because 1.21.1 MCA's `CANONICAL` roster lacks `confident`/`peppy` (Deviation 17) while SOURCE content still names them | The assertions' intent is unchanged; only the loader's file name, TOML grammar, mixin roster, and MCA personality roster differ. |
 | 18 | `McaHandles.sendDialogueLine` constructs `InteractionDialogueQuestionResponse` as `(Component, boolean)`; SOURCE passes `(boolean, Component)` | 1.21.1 MCA turned the packet into a record with that component order; the arity-bound handle cannot express it, so the call site carries the swap. |
+| 22 | `CapitalsBindingProbeTest` uses `McaHidingClassLoader` parent like `TownsteadBindingProbeTest` | Capitals depends on MCA and probe isolation requires hiding MCA types. |
+| 23 | `SavedDataContractTest` lists seven SavedData names including `mcaconversations_court` | New SavedData added in 1.6.0 for Capitals court snapshots and chronicle cursors. |
+| 24 | `generateConversationContent` and `generateVoiceOverlays` Gradle tasks use `javaLauncher` for JDK 21 | ModDevGradle's `javaLauncher` property is set; these JavaExec tasks need JDK 21 where the project JDK is 17 or lower. |
 
 ## Verification recipe (run at each gate; full detail in the plan)
 

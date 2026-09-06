@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_is_lonelier",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "house.no_name_above_my_door.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "house.none",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.house.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.no_name_above_my_door.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_was_earned",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "house.no_name_above_my_door.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "house.none",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "conversations.scene.house.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.no_name_above_my_door.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -257,6 +257,43 @@ tasks.register('townsteadProbeTest', Test) {
     }
 }
 
+// Resolves CapitalsBinding's manifest against a real MCA Capitals jar, in its own JVM and its own
+// classloader. Separate from `test` for the same reason as townsteadProbeTest: Capitals is published
+// on CurseForge and Modrinth only, so the path is supplied by the person running it.
+//
+//     ./gradlew capitalsProbeTest -PcapitalsJar=/path/mcacapitals-1.3.6.jar
+//
+// MCA rides along on `mcaconversations.probe.jars` because Capitals is compiled against MCA, and a
+// Capitals class whose descriptors name an MCA type reads as unbound with MCA absent -- which is the
+// correct production degradation but would make this probe pass vacuously. The 7.7 probe jars are
+// used rather than the dev-runtime MCA, because Capitals requires 7.7.1-alpha.2 or newer.
+//
+// Never wired into `build` or `check`: it needs an operator-supplied jar.
+tasks.register('capitalsProbeTest', Test) {
+    group = 'verification'
+    description = 'Verifies the MCA Capitals binding manifest against a supplied Capitals jar.'
+    dependsOn unitTestPrepareTasks
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'dev.otectus.mcaconversations.compat.CapitalsBindingProbeTest'
+    }
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+    doFirst {
+        inheritUnitTestWiring(it)
+        systemProperty 'mcaconversations.capitals.probe.jar',
+                project.hasProperty('capitalsJar') ? project.property('capitalsJar').toString() : ''
+        systemProperty 'mcaconversations.probe.jars', mcaProbeVersions.indices
+                .findAll { i -> mcaProbeVersions[i].startsWith('7.7') }
+                .collect { i -> configurations.getByName("mcaProbe${i}").files }
+                .flatten()
+                .findAll { it.name.contains('mca-neoforge') }
+                .join(File.pathSeparator)
+    }
+}
+
 // The content compiler: expands src/content/ authoring sources into runtime resources (spec 19).
 //
 // Deliberately NOT wired into processResources. The compiler lives in the test source set - it is
@@ -303,6 +340,9 @@ tasks.register('generateConversationContent', JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     mainClass = 'dev.otectus.mcaconversations.authoring.ContentCompiler'
     args 'src/content', 'src/main/resources'
+    // The compiler classes are built for 21; without an explicit launcher JavaExec runs on
+    // JAVA_HOME (17 on the dev machines) and dies with a LinkageError before doing anything.
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
     outputs.upToDateWhen { false }
 }
 
@@ -338,6 +378,8 @@ tasks.register('generateVoiceOverlays', JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     mainClass = 'dev.otectus.mcaconversations.authoring.VoiceFamilyCompiler'
     args 'src/content/voices', 'src/main/resources/assets'
+    // Same JDK 21 launcher pin as generateConversationContent, for the same reason.
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
     outputs.upToDateWhen { false }
 }
 

@@ -115,13 +115,41 @@ Third-party packs building on these flags may read them freely; write your own i
 `smitten`), player strikes (`annoyed`), quest complete/fail (`proud`/`annoyed`, needs MCA: Quests), and
 village death/birth/marriage (`grieving`/`elated`). Durations are configurable; requires `enableStates`.
 
+### Capital context fields (MCA Capitals integration)
+
+Available only when MCA Capitals is installed and the `[capitals]` master switch is on. Usable as condition fields in `conversations_context`: `{"field": "capital.name", "is": "..."}` etc.
+
+| Field | Type | Values | Meaning |
+|---|---|---|---|
+| `capital.present` | boolean | — | Whether this villager belongs to a capital at all |
+| `capital.name` | string | capital village name | The capital's name (its MCA village name) |
+| `capital.state` | string | `pending`, `founded`, `active`, `unknown` | The capital's establishment state |
+| `capital.title` | string | 22 lowercase title ids | This villager's court title, or none if they have no office |
+| `capital.title_rank` | integer | 0–21 | Numeric rank of the title (for breadth comparisons) |
+| `capital.office` | string | `none`, `master_of_laws`, `ambassador` | Special court offices held at this capital |
+| `capital.crown_standing` | string | `friend`, `enemy`, `neutral`, `unknown` | This villager's standing with the crown |
+| `capital.royal_household` | boolean | — | Whether this villager is part of the royal family |
+| `capital.royal_guard` | boolean | — | Whether this villager is or was a royal guard |
+| `capital.disgraced` | boolean | — | Whether this villager has been disgraced |
+| `capital.house` | string | house name | The noble house this villager belongs to (if any) |
+| `capital.house_tier` | string | `noble`, `great`, `royal` | The tier of their house |
+| `capital.at_war` | boolean | — | Whether the capital is currently at war |
+| `capital.allied` | boolean | — | Whether the capital has active alliances (only when diplomacy talk enabled) |
+| `capital.mourning` | boolean | — | Whether the capital is mourning a death in the royal line |
+| `capital.sovereign_is_player` | boolean | — | Whether any player holds the throne (not necessarily this one) |
+| `capital.player_is_sovereign` | boolean | — | Whether the player in this conversation is the reigning sovereign |
+| `capital.player_allegiance` | string | `same`, `foreign`, `none` | This villager's allegiance relative to the player's capital |
+| `capital.heir_named` | boolean | — | Whether a clear heir has been designated |
+| `capital.title_changed` | boolean | — | Whether this villager's title just changed (within `roleRemarkDays`) |
+| `capital.previous_title` | string | former title id | The title they held before this one (when changed) |
+
 ## Custom conditions (usable in any dialogue/gift JSON once this mod is installed)
 
 | Key | Value | Meaning |
 |---|---|---|
-| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world" \| "dispositions" \| "checks" \| "chat"` | 1 when that config feature is on, else 0 |
+| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world" \| "dispositions" \| "checks" \| "chat" \| "capitals" \| "capital_topics" \| "capital_news" \| "capital_diplomacy"` | 1 when that config feature is on, else 0 |
 | `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch |
-| `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure","quest"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
+| `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure","quest","coronation","royal_marriage","royal_birth","royal_death","appointment","disgrace","war","peace","alliance","capital_founded","court_news"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
 | `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
 | `conversations_season` | `{"is": "spring" \| "summer" \| "autumn" \| "winter"}` | 1 when the current season matches — read from Serene Seasons if installed, else the calendar season from the world day; 0 when `enableSeasonLines` is off |
 | `conversations_holiday` | `{"is": "spring_bloom" \| "midsummer" \| "harvest_festival" \| "midwinter" \| "none"}` | 1 when the current calendar festival matches (`none` = an ordinary day); 0 when `enableHolidayLines` is off |
@@ -246,9 +274,37 @@ fill `%2$s`, `%3$s`, … in the order listed. Unresolvable vars fall back to neu
 | `weather` | "the clear sky" / "the rain" / "the storm" (current sky in the villager's level) |
 | `season` | "spring" / "the height of summer" / "autumn" / "the depths of winter" (Serene Seasons if installed, else calendar) |
 | `holiday` | "the spring bloom" / "midsummer" / "the harvest festival" / "midwinter" / "an ordinary day" |
+| `capital_name` | the capital's name (the MCA village name of the village it is seated at) |
+| `sovereign_name` | the reigning sovereign's name |
+| `sovereign_title` | "King" or "Queen", by the sovereign's gender |
+| `heir_name` | the named heir's name, or a neutral fallback when the succession is unsettled |
+| `house_name` | the speaker's house name |
+| `house_words` | the speaker's house words |
+| `villager_title` | the speaker's own court title, localized (e.g. "Hand of the King"), or a neutral fallback when they have no office |
+| `rival_capital_name` | a capital this one is at war with |
+| `ally_capital_name` | a capital this one is allied with |
 
-Gossip lines receive `%2$s` = subject A's name, `%3$s` = subject B's name (empty for
-single-subject events like deaths, births, arrivals, and departures).
+Gossip lines receive `%2$s` = subject A's name (e.g., a capital's village name), `%3$s` = subject B's name or event detail. For capital events: %3$s is the rendered chronicle line for court news; the new sovereign's or heir's name for coronations and royal births; for royal deaths the departed sovereign's name (or a chronicle line when the event came from the chronicle rather than the mourning-flag diff); a rival capital's name for wars and alliances. Empty only for deaths, births, arrivals, and departures (single-villager events not involving capitals).
+
+### Scene purposes
+
+**Purposes** (each costs interruption time; interruptions are one per villager per day unless the player initiates):
+- `topic:<id>` — a topic unprompted scene (general purpose)
+- `greeting` — proximity greeting when the player enters range
+- `state_change` — villager moved to a new state (moods, relationships)
+- `due_commitment` — a promise just came due
+- `acute` — sudden grief, fear, or injury
+- `shared_event` — a village event the villager wants to tell the player (cost: 4)
+- `opinion_request` — villager asks the player for their thoughts on something
+- `repair` — after a rupture or conflict
+- `standing_remark` (MCA: Reputation) — the player's standing with the village just changed tiers (cost: 3)
+- `court_remark` (MCA: Capitals) — this villager's court title just changed (cost: 3; only with MCA Capitals loaded)
+- `low_stakes` — a comfort, an origin motif, an easy conversation (cost: 8)
+- `resume` — picking a subject back up after time has passed (cost: 2)
+
+### vars_used
+
+`vars_used` is an optional, informational field on scenes, purely for documentation. It is an array of template variable names (e.g., `capital_name`, `season`, `profession_name`) that the scene's dialogue expects. Valid values are all vars listed in the *Template variables* section above, plus capital variables (`capital_name`, `sovereign_name`, `sovereign_title`, `heir_name`, `house_name`, `house_words`, `villager_title`, `rival_capital_name`, `ally_capital_name`). No enforcement: purely informational for content authors.
 
 ## The disposition vector & dialogue checks (v0.7.0)
 

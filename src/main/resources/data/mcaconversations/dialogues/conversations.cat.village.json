@@ -205,6 +205,153 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.village.we_are_a_capital_now"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.village.we_are_a_capital_now",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "village.we_are_a_capital_now.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.village.we_are_a_capital_now.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.we_are_a_capital_now",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.village.before_the_hall_was_built"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.village.before_the_hall_was_built",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "village.before_the_hall_was_built.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.village.before_the_hall_was_built.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.before_the_hall_was_built"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.village.a_village_in_black"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.village.a_village_in_black",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "village.a_village_in_black.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.village.a_village_in_black.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.a_village_in_black"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 200,
               "conversations_progress": {
                 "arc": "village",
@@ -1417,6 +1564,153 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.rumors.whispers_out_of_the_hall"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.rumors.whispers_out_of_the_hall",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "rumors",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "rumors.whispers_out_of_the_hall.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.rumors",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.rumors.whispers_out_of_the_hall.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.whispers_out_of_the_hall"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.rumors.what_the_servants_say"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.rumors.what_the_servants_say",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "rumors",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "rumors.what_the_servants_say.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.rumors",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.rumors.what_the_servants_say.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.what_the_servants_say"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.rumors.what_they_say_of_the_heir"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.rumors.what_they_say_of_the_heir",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "rumors",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "rumors.what_they_say_of_the_heir.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.rumors",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.rumors.what_they_say_of_the_heir.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.rumors.what_they_say_of_the_heir",
+              "vars": [
+                "heir_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 200,
               "conversations_progress": {
                 "arc": "rumors",
@@ -1824,6 +2118,150 @@
             "next": "conversations.scene.standing.settled_opinion.respond",
             "conversations_say": {
               "phrase": "conversations.scene.standing.settled_opinion"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.standing.before_the_crown"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.standing.before_the_crown",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "standing.before_the_crown.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.standing.before_the_crown.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.before_the_crown"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.standing.friend_of_the_crown"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.standing.friend_of_the_crown",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "standing.friend_of_the_crown.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.standing.friend_of_the_crown.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.friend_of_the_crown"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.standing.marked_against_you"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.standing.marked_against_you",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "standing.marked_against_you.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.standing.marked_against_you.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.marked_against_you"
             }
           }
         },
@@ -2884,6 +3322,1592 @@
             "next": "conversations.cat.village",
             "conversations_say": {
               "phrase": "conversations.place.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "crown",
+      "constraints": "!toddler,!baby,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.the_one_who_rules"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.the_one_who_rules",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.the_one_who_rules.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.the_one_who_rules.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.the_one_who_rules",
+              "vars": [
+                "sovereign_title",
+                "sovereign_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.a_woman_on_the_seat"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.a_woman_on_the_seat",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.a_woman_on_the_seat.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.a_woman_on_the_seat.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.a_woman_on_the_seat",
+              "vars": [
+                "sovereign_title",
+                "sovereign_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.the_one_who_comes_after"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.the_one_who_comes_after",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.the_one_who_comes_after.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.the_one_who_comes_after.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.the_one_who_comes_after",
+              "vars": [
+                "heir_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.nobody_named_yet"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.nobody_named_yet",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.nobody_named_yet.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.nobody_named_yet.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.nobody_named_yet"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.the_black_cloth"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.the_black_cloth",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.the_black_cloth.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.the_black_cloth.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.the_black_cloth",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.you_wear_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.you_wear_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.you_wear_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.you_wear_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.you_wear_it",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.our_king_is_a_guest"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.our_king_is_a_guest",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.our_king_is_a_guest.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.our_king_is_a_guest.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.our_king_is_a_guest",
+              "vars": [
+                "sovereign_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.crown.the_one_who_stands_beside"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.crown.the_one_who_stands_beside",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "crown",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "crown.the_one_who_stands_beside.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.crown",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.crown.the_one_who_stands_beside.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.the_one_who_stands_beside",
+              "vars": [
+                "sovereign_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.crown.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "court",
+      "constraints": "!toddler,!baby,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.the_post_i_hold"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.the_post_i_hold",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.the_post_i_hold.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.the_post_i_hold.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_post_i_hold",
+              "vars": [
+                "villager_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.the_hand_that_signs"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.the_hand_that_signs",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.the_hand_that_signs.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.the_hand_that_signs.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_hand_that_signs",
+              "vars": [
+                "sovereign_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.the_watch_i_keep"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.the_watch_i_keep",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.the_watch_i_keep.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.the_watch_i_keep.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_watch_i_keep"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.the_ones_i_command"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.the_ones_i_command",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.the_ones_i_command.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.the_ones_i_command.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_ones_i_command"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.what_i_read_aloud"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.what_i_read_aloud",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.what_i_read_aloud.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.what_i_read_aloud.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.what_i_read_aloud"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.what_the_books_say"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.what_the_books_say",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.what_the_books_say.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.what_the_books_say.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.what_the_books_say"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.the_cloak_they_took"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.the_cloak_they_took",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.the_cloak_they_took.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.the_cloak_they_took.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_cloak_they_took"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.court.from_the_bottom_of_the_hall"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.court.from_the_bottom_of_the_hall",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "court",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "court.from_the_bottom_of_the_hall.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.court",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.court.from_the_bottom_of_the_hall.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.from_the_bottom_of_the_hall",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.court.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "house",
+      "constraints": "!toddler,!baby,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.house.the_house_i_belong_to"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.house.the_house_i_belong_to",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "house",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "house.the_house_i_belong_to.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.house",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.house.the_house_i_belong_to.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.the_house_i_belong_to",
+              "vars": [
+                "house_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.house.the_words_we_say"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.house.the_words_we_say",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "house",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "house.the_words_we_say.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.house",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.house.the_words_we_say.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.the_words_we_say",
+              "vars": [
+                "house_words"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.house.a_great_house"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.house.a_great_house",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "house",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "house.a_great_house.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.house",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.house.a_great_house.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.a_great_house",
+              "vars": [
+                "house_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.house.blood_of_the_seat"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.house.blood_of_the_seat",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "house",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "house.blood_of_the_seat.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.house",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.house.blood_of_the_seat.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.blood_of_the_seat",
+              "vars": [
+                "house_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.house.no_name_above_my_door"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.house.no_name_above_my_door",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "house",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "house.no_name_above_my_door.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.house",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.house.no_name_above_my_door.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.no_name_above_my_door"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.house.the_surname_they_gave_me"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.house.the_surname_they_gave_me",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "house",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "house.the_surname_they_gave_me.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.house",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.house.the_surname_they_gave_me.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.the_surname_they_gave_me",
+              "vars": [
+                "house_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.house.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "realm",
+      "constraints": "!toddler,!baby,!child",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.we_are_at_war"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.we_are_at_war",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.we_are_at_war.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.we_are_at_war.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.we_are_at_war",
+              "vars": [
+                "rival_capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.the_ones_we_are_sworn_to"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.the_ones_we_are_sworn_to",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.the_ones_we_are_sworn_to.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.the_ones_we_are_sworn_to.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.the_ones_we_are_sworn_to",
+              "vars": [
+                "ally_capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.the_quiet_years"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.the_quiet_years",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.the_quiet_years.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.the_quiet_years.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.the_quiet_years"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.i_carry_the_letters"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.i_carry_the_letters",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.i_carry_the_letters.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.i_carry_the_letters.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.i_carry_the_letters"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.a_face_from_elsewhere"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.a_face_from_elsewhere",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.a_face_from_elsewhere.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.a_face_from_elsewhere.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.a_face_from_elsewhere",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.one_of_our_own"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.one_of_our_own",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.one_of_our_own.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.one_of_our_own.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.one_of_our_own",
+              "vars": [
+                "capital_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.sworn_to_nobody"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.sworn_to_nobody",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.sworn_to_nobody.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.sworn_to_nobody.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.sworn_to_nobody"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.realm.named_an_enemy"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.realm.named_an_enemy",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "realm",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "realm.named_an_enemy.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.realm",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.realm.named_an_enemy.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.named_an_enemy",
+              "vars": [
+                "sovereign_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.realm.legacy"
             }
           },
           "conditions": [

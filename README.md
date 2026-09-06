@@ -123,8 +123,9 @@ base dialogue pool, every personality overlay, the age voices and the whole chat
 `en_us` alone; a narrow client-only hook widens that gate to the locales this mod ships complete
 overlays for, while preserving MCA's voice-pack and online-TTS restrictions untouched.
 
-Optional: **MCA: Quests** (quest-aware lines) and **Serene Seasons** (real seasons; calendar
-fallback otherwise) — both soft dependencies; the mod works fully without them.
+Optional: **MCA: Quests** (quest-aware lines), **MCA: Capitals** (villages that are capitals speak
+about their sovereign, heirs and court; court changes seed village gossip), **Serene Seasons**
+(real seasons; calendar fallback otherwise), and **Townstead** (villager work in progress scenes) — all soft dependencies; the mod works fully without them.
 
 ## How it works
 
