@@ -1,17 +1,26 @@
 package dev.otectus.mcaconversations.template;
 
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.compat.CapitalCourtView;
+import dev.otectus.mcaconversations.compat.CapitalRelationView;
+import dev.otectus.mcaconversations.compat.CapitalStandingView;
+import dev.otectus.mcaconversations.compat.CapitalsBridge;
+import dev.otectus.mcaconversations.compat.CapitalsCompat;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.context.CapitalContextSource;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
 import dev.otectus.mcaconversations.season.SeasonContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Resolves template variables server-side. When the templates feature is disabled every variable
@@ -94,9 +103,95 @@ public final class TemplateContextFactory {
                         context.with(var, Component.translatable("mcareputation.tier." + tier));
                     }
                 }
+                // MCA: Capitals variables. Resolved together because they all need the same court,
+                // and every one of them is left unset when Capitals is absent, the villager belongs
+                // to no capital, or the office being named is vacant.
+                case CAPITAL_NAME, SOVEREIGN_NAME, SOVEREIGN_TITLE, HEIR_NAME, HOUSE_NAME,
+                        HOUSE_WORDS, VILLAGER_TITLE, RIVAL_CAPITAL_NAME, ALLY_CAPITAL_NAME ->
+                        capitalVariable(context, var, villager);
             }
         }
         return context;
+    }
+
+    /**
+     * One capital variable, resolved through {@link CapitalsBridge}.
+     *
+     * <p>Wrapped in a catch because this runs while a line is being built: a variable that cannot be
+     * resolved must degrade to its fallback text, never take the line with it.
+     */
+    private static void capitalVariable(TemplateContext context, TemplateVariable var,
+                                        Entity villager) {
+        if (villager == null || !CapitalsCompat.isActive()
+                || !(villager.level() instanceof ServerLevel level)) {
+            return;
+        }
+        try {
+            CapitalsBridge bridge = CapitalsBridge.Holder.get();
+            Optional<CapitalCourtView> resolved = CapitalContextSource.courtOf(bridge, level, villager);
+            if (resolved.isEmpty()) {
+                return;
+            }
+            CapitalCourtView court = resolved.get();
+            switch (var) {
+                case CAPITAL_NAME -> literal(context, var, court.name());
+                case SOVEREIGN_NAME -> court.sovereign()
+                        .ifPresent(id -> literal(context, var, bridge.displayName(level, court, id)));
+                case SOVEREIGN_TITLE -> {
+                    // By the sovereign's gender, not the speaker's — a queen is a queen to everyone.
+                    if (court.sovereign().isPresent() || court.playerSovereign()) {
+                        context.with(var, Component.translatable("mcaconversations.capital.title."
+                                + (court.sovereignFemale() ? "queen" : "king")));
+                    }
+                }
+                case HEIR_NAME -> court.heir()
+                        .ifPresent(id -> literal(context, var, bridge.displayName(level, court, id)));
+                case HOUSE_NAME -> literal(context, var,
+                        standing(bridge, level, court, villager).houseName());
+                case HOUSE_WORDS -> literal(context, var,
+                        standing(bridge, level, court, villager).houseWords());
+                case VILLAGER_TITLE -> {
+                    String titleId = standing(bridge, level, court, villager).titleId();
+                    if (!titleId.isBlank() && !"none".equals(titleId)) {
+                        context.with(var,
+                                Component.translatable("mcaconversations.capital.title." + titleId));
+                    }
+                }
+                case RIVAL_CAPITAL_NAME -> firstRelation(bridge, level, court,
+                        CapitalRelationView::atWar).ifPresent(name -> literal(context, var, name));
+                case ALLY_CAPITAL_NAME -> firstRelation(bridge, level, court,
+                        CapitalRelationView::allied).ifPresent(name -> literal(context, var, name));
+                default -> {
+                    // Unreachable: the caller only routes the nine capital variables here.
+                }
+            }
+        } catch (Throwable t) {
+            dev.otectus.mcaconversations.McaConversations.LOGGER.debug(
+                    "capital template variable {} failed; using the fallback", var.jsonName(), t);
+        }
+    }
+
+    private static CapitalStandingView standing(CapitalsBridge bridge, ServerLevel level,
+                                                CapitalCourtView court, Entity villager) {
+        return bridge.standingOf(level, court, villager.getUUID(), villager);
+    }
+
+    /** The first capital this one stands in the given relation to, by name. */
+    private static Optional<String> firstRelation(CapitalsBridge bridge, ServerLevel level,
+                                                  CapitalCourtView court,
+                                                  Predicate<CapitalRelationView> matches) {
+        return bridge.relationsOf(level, court).stream()
+                .filter(matches)
+                .map(CapitalRelationView::otherName)
+                .filter(name -> !name.isBlank())
+                .findFirst();
+    }
+
+    /** Sets a literal value, or leaves the variable unset so its fallback text is used. */
+    private static void literal(TemplateContext context, TemplateVariable var, String value) {
+        if (value != null && !value.isBlank()) {
+            context.with(var, Component.literal(value));
+        }
     }
 
     /** Day-tick bucket → lang key ({@code assets/mcaconversations/lang}). 0 = dawn, 6000 = noon, 13000 = nightfall. */

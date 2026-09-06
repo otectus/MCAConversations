@@ -1,0 +1,1143 @@
+{
+  "_comment": [
+    "The court, gated on MCA Capitals and on the post this particular villager holds in it.",
+    "",
+    "A court is not one subject: the Hand, the herald and the man who was stripped of his cloak are",
+    "describing three different buildings. The gate on each scene is the post, so the answer is theirs."
+  ],
+  "topic": "court",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "court"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "That is the court, from where I stand.",
+      "Right. That is the shape of it.",
+      "It runs on without me either way."
+    ],
+    "pt": [
+      "É a corte, de onde eu estou.",
+      "Certo. É esse o formato.",
+      "Segue sem mim de qualquer jeito."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for telling me.",
+    "pt": "Obrigado por contar."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the court?",
+      "pt": "Mais alguma coisa sobre a corte?"
+    },
+    "leave": {
+      "en": "That is the court, then.",
+      "pt": "É essa a corte, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_post_i_hold",
+      "subject": "court.my_office",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.office",
+          "any_of": [
+            "master_of_laws",
+            "ambassador"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "villager_title"
+      ],
+      "prompt": {
+        "en": "The post I hold.",
+        "pt": "O cargo que ocupo."
+      },
+      "lines": {
+        "en": [
+          "I hold a post at court. %2$s. It is mostly paper and patience and one difficult afternoon a month.",
+          "They call me %2$s, which sounds grander outdoors than it feels at the desk.",
+          "%2$s. I did not ask for it. I was the one who could read and did not want it, which is the usual qualification."
+        ],
+        "pt": [
+          "Ocupo um cargo na corte. %2$s. É quase só papel e paciência e uma tarde difícil por mês.",
+          "Me chamam de %2$s, o que soa mais grandioso lá fora do que parece na escrivaninha.",
+          "%2$s. Não pedi. Eu era quem sabia ler e não queria, que é a qualificação de sempre."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_the_work_is",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does the post actually involve?",
+            "pt": "O que o cargo envolve de fato?"
+          },
+          "phrases": [
+            "what does the post actually involve",
+            "what is the daily work of the post"
+          ],
+          "requires_any": [
+            "post",
+            "involve"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Reading what other people wrote badly, and writing it again so that nobody can pretend to misread it.",
+                "Three quarters of it is listening to two neighbours who are both right about different things.",
+                "Keeping a record. Everything hard about the job comes from somebody having failed to keep one before me."
+              ],
+              "pt": [
+                "Ler o que os outros escreveram mal, e escrever de novo para ninguém fingir que entendeu errado.",
+                "Três quartos é ouvir dois vizinhos que estão os dois certos sobre coisas diferentes.",
+                "Manter registro. Tudo o que é difícil no cargo vem de alguém não ter mantido registro antes de mim."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_is_worth_doing",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Somebody has to do it properly.",
+            "pt": "Alguém tem que fazer isso direito."
+          },
+          "phrases": [
+            "somebody has to do it properly",
+            "it is worth doing properly"
+          ],
+          "requires_any": [
+            "properly"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is the whole argument I make to myself at the end of a bad session, and it works about four times in five.",
+                "Properly is the word. Anyone can do it. Doing it the same way twice is the trick.",
+                "Thank you. Nobody thanks the desk. They thank the ruling and the desk is where the ruling was made survivable."
+              ],
+              "pt": [
+                "É esse o argumento que faço comigo no fim de uma sessão ruim, e funciona umas quatro em cinco vezes.",
+                "Direito é a palavra. Qualquer um faz. Fazer igual duas vezes é o truque.",
+                "Obrigado. Ninguém agradece a escrivaninha. Agradecem a sentença, e a escrivaninha é onde ela ficou suportável."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_hand_that_signs",
+      "subject": "court.hand",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title",
+          "is": "hand",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "sovereign_title"
+      ],
+      "prompt": {
+        "en": "What the Hand carries.",
+        "pt": "O que a Mão carrega."
+      },
+      "lines": {
+        "en": [
+          "I am the Hand of the Crown. Everything the %2$s does not have hours for arrives on my table instead.",
+          "Being the Hand means being blamed in public for decisions made in private, and agreeing to that in advance.",
+          "I sign in another person's name all day. You get used to it. What you do not get used to is being right alone."
+        ],
+        "pt": [
+          "Sou a Mão da Coroa. Tudo para o que o %2$s não tem horas chega na minha mesa.",
+          "Ser a Mão é levar a culpa em público por decisões tomadas em particular, e concordar com isso de antemão.",
+          "Assino em nome de outra pessoa o dia inteiro. A gente se acostuma. O que não se acostuma é ter razão sozinho."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_the_worst_of_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What is the worst part of carrying that?",
+            "pt": "Qual é a pior parte de carregar isso?"
+          },
+          "phrases": [
+            "what is the worst part of carrying that",
+            "which part of it weighs most"
+          ],
+          "requires_any": [
+            "worst",
+            "weighs"
+          ],
+          "disposition": {
+            "trust": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Knowing a thing three weeks before the village does, and buying bread from people it will hurt.",
+                "The letters I do not send. There is a drawer of them and it is the truest thing in the building.",
+                "That every friendship I have now has a question in it. Is this person my friend, or the Hand's."
+              ],
+              "pt": [
+                "Saber de algo três semanas antes da vila, e comprar pão de gente que aquilo vai machucar.",
+                "As cartas que eu não mando. Tem uma gaveta delas e é a coisa mais verdadeira do prédio.",
+                "Que toda amizade minha agora tem uma pergunta dentro. Essa pessoa é minha amiga, ou da Mão."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_the_seat_would_frighten_them",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That seat would frighten me.",
+            "pt": "Esse posto me daria medo."
+          },
+          "phrases": [
+            "that seat would frighten me",
+            "i would rather stand well clear of that seat"
+          ],
+          "requires_any": [
+            "seat"
+          ],
+          "disposition": {
+            "respect": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "levelled",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It frightens me most mornings, which is apparently the qualification they look for. Wanting it is treated as a symptom.",
+                "Good. The ones who want it are the ones the rest of us have to watch.",
+                "Say that again in a year when I am tired and it will be the kindest thing anybody has said to me."
+              ],
+              "pt": [
+                "Me dá medo quase toda manhã, o que ao que parece é a qualificação que procuram. Querer é tratado como sintoma.",
+                "Ótimo. Quem quer é quem o resto de nós precisa vigiar.",
+                "Diga de novo daqui a um ano quando eu estiver cansado e vai ser a coisa mais gentil que me disseram."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_watch_i_keep",
+      "subject": "court.royal_guard",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "disclosure",
+      "temporal": "habitual",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.royal_guard",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "The watch I keep.",
+        "pt": "A guarda que faço."
+      },
+      "lines": {
+        "en": [
+          "I stand the royal watch. Six hours of nothing happening is a good shift and I have learned to want a good shift.",
+          "The armour is heavier than it looks and the standing is the part nobody warns you about.",
+          "I guard a door. That is the whole of it. Everything else people say about the guard is said by people who are not on it."
+        ],
+        "pt": [
+          "Faço a guarda real. Seis horas de nada acontecendo é um bom turno e aprendi a querer um bom turno.",
+          "A armadura é mais pesada do que parece e ficar em pé é a parte de que ninguém avisa.",
+          "Eu guardo uma porta. É isso. Todo o resto que se fala da guarda é falado por quem não está nela."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_the_worst_night",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Has there been a night that went badly?",
+            "pt": "Houve alguma noite que correu mal?"
+          },
+          "phrases": [
+            "has there been a night that went badly",
+            "was there ever a bad night on watch"
+          ],
+          "requires_any": [
+            "night",
+            "badly"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "recounted",
+            "act": "reminisce",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "One. A drunk with a grievance and a bad knife, and it was over before I had finished being frightened.",
+                "Not the way you mean. The bad ones are the quiet ones where you realise afterwards how close it came.",
+                "There was a night with a fire in the stable. Nobody attacked anything. I have never been so useful."
+              ],
+              "pt": [
+                "Uma. Um bêbado com uma mágoa e uma faca ruim, e acabou antes de eu terminar de sentir medo.",
+                "Não do jeito que você pensa. As ruins são as caladas, em que você percebe depois o quanto foi perto.",
+                "Teve uma noite com fogo no estábulo. Ninguém atacou nada. Nunca fui tão útil."
+              ]
+            }
+          }
+        },
+        {
+          "name": "thank_them_for_standing",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Thank you for standing those hours.",
+            "pt": "Obrigado por ficar essas horas."
+          },
+          "phrases": [
+            "thank you for standing those hours",
+            "the hours you stand are worth thanking"
+          ],
+          "requires_any": [
+            "standing",
+            "hours"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is not something I get said to me. The court walks past. You are meant to be furniture.",
+                "Tell the cook instead. She is the reason anybody on that door can still feel their feet.",
+                "Thank you. I shall carry that through tonight, which is a long one."
+              ],
+              "pt": [
+                "Não é coisa que me digam. A corte passa por mim. A gente deve ser móvel.",
+                "Diga à cozinheira. É por causa dela que alguém naquela porta ainda sente os pés.",
+                "Obrigado. Vou levar isso comigo esta noite, que é longa."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_ones_i_command",
+      "subject": "court.lord_commander",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title",
+          "is": "lord_commander",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The ones under my command.",
+        "pt": "Os que estão sob meu comando."
+      },
+      "lines": {
+        "en": [
+          "I command the guard. Which means I know which of them has a new baby and which of them should not be given a night gate.",
+          "Twenty-one names. I can tell you every one and what each of them is bad at, and that is the job.",
+          "Commanding is mostly rota and boots. The parts that look like commanding happen twice a year at most."
+        ],
+        "pt": [
+          "Comando a guarda. O que quer dizer que sei qual deles teve um filho e qual não deve pegar portão de noite.",
+          "Vinte e um nomes. Sei todos e sei no que cada um é ruim, e o trabalho é esse.",
+          "Comandar é quase só escala e botas. As partes que parecem comando acontecem duas vezes por ano, no máximo."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_they_choose",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How do you choose who takes a gate?",
+            "pt": "Como você escolhe quem fica num portão?"
+          },
+          "phrases": [
+            "how do you choose who takes a gate",
+            "who gets given a gate and why"
+          ],
+          "requires_any": [
+            "gate"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "By who is sleeping well. A tired guard is not a slower guard, a tired guard is a guard who invents things.",
+                "I put the two who argue on the same watch. They watch each other harder than either watches the road.",
+                "Never the keen one. The keen one is the one who will open a gate to prove something."
+              ],
+              "pt": [
+                "Por quem está dormindo bem. Um guarda cansado não é mais lento, é um guarda que inventa coisas.",
+                "Ponho os dois que brigam no mesmo turno. Vigiam um ao outro mais do que vigiam a estrada.",
+                "Nunca o animado. O animado é o que abre um portão para provar alguma coisa."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_good_command",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That sounds like sound command.",
+            "pt": "Isso parece um comando sensato."
+          },
+          "phrases": [
+            "that sounds like sound command",
+            "it sounds like sound command to me"
+          ],
+          "requires_any": [
+            "command",
+            "sound"
+          ],
+          "disposition": {
+            "respect": 3
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is dull command, which is the same thing said honestly.",
+                "It is what I was taught by a woman who is dead now and never got a title for any of it.",
+                "We shall see. I have had it eleven months and nothing has gone properly wrong yet, so I know nothing."
+              ],
+              "pt": [
+                "É um comando sem graça, que é a mesma coisa dita com honestidade.",
+                "É o que me ensinou uma mulher que já morreu e nunca ganhou título por nada disso.",
+                "Vamos ver. Estou nisso há onze meses e nada deu errado de verdade ainda, então não sei nada."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_i_read_aloud",
+      "subject": "court.herald",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "habitual",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title",
+          "is": "court_herald",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_styles": [
+        "storyteller"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What I read aloud.",
+        "pt": "O que eu leio em voz alta."
+      },
+      "lines": {
+        "en": [
+          "I am the herald. I read out the things that change people's lives in a voice I have practised to keep flat.",
+          "The worst part of heralding is the pause after. You have finished and nobody moves and you have to walk out through it.",
+          "I read a proclamation at the well and then buy turnips from the people I just read it to. That is the post."
+        ],
+        "pt": [
+          "Sou o arauto. Leio em voz alta as coisas que mudam a vida das pessoas com uma voz que treinei para ficar plana.",
+          "A pior parte de anunciar é a pausa depois. Você termina, ninguém se mexe, e você tem que sair andando por dentro daquilo.",
+          "Leio uma proclamação no poço e depois compro nabos de quem acabei de ler. É esse o cargo."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_about_a_hard_reading",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which reading was hardest to get through?",
+            "pt": "Qual leitura foi a mais difícil de terminar?"
+          },
+          "phrases": [
+            "which reading was hardest to get through",
+            "what was the hardest reading"
+          ],
+          "requires_any": [
+            "reading",
+            "hardest"
+          ],
+          "disposition": {
+            "trust": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "recounted",
+            "act": "reminisce",
+            "polarity": "mixed",
+            "temporal": "past",
+            "privacy": "discreet",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "A death. Not the sovereign's, a boy's, and I knew his mother was standing in the third row.",
+                "The one that raised the tithe. Nobody shouted. That is what made it hard.",
+                "A pardon, oddly. I had rehearsed it as bad news and it came out wrong and everyone forgave me."
+              ],
+              "pt": [
+                "Uma morte. Não a do soberano, a de um menino, e eu sabia que a mãe dele estava na terceira fila.",
+                "A que aumentou o dízimo. Ninguém gritou. Foi isso que tornou difícil.",
+                "Um perdão, estranhamente. Eu tinha ensaiado como má notícia, saiu errado e todos me perdoaram."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_the_voice_matters",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "The way it is read matters to people.",
+            "pt": "O jeito de ler importa para as pessoas."
+          },
+          "phrases": [
+            "the way it is read matters to people",
+            "how a thing is read matters"
+          ],
+          "requires_any": [
+            "read"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "moved",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It does, and I have never had anybody outside the post say so. Thank you.",
+                "That is the whole of what I control. The words are theirs. The pace is mine.",
+                "I slow down for the bad ones. You are the first to have noticed that out loud."
+              ],
+              "pt": [
+                "Importa, e nunca ouvi ninguém de fora do cargo dizer isso. Obrigado.",
+                "É tudo o que eu controlo. As palavras são deles. O ritmo é meu.",
+                "Eu leio mais devagar as ruins. Você é o primeiro a notar isso em voz alta."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_the_books_say",
+      "subject": "court.maester",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title",
+          "any_of": [
+            "maester",
+            "grand_maester"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_interests": [
+        "local_history"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What the books say.",
+        "pt": "O que os livros dizem."
+      },
+      "lines": {
+        "en": [
+          "I keep the records. Somebody has to remember what we agreed forty years ago, because nobody else does.",
+          "A maester's real work is being boring on purpose. The moment a chronicle becomes a good story it has become a lie.",
+          "I have three shelves of what happened and one shelf of what people would prefer had happened. I keep them apart."
+        ],
+        "pt": [
+          "Eu guardo os registros. Alguém tem que lembrar o que combinamos há quarenta anos, porque mais ninguém lembra.",
+          "O trabalho de verdade de um meistre é ser chato de propósito. Quando uma crônica vira boa história, virou mentira.",
+          "Tenho três prateleiras do que aconteceu e uma do que preferiam que tivesse acontecido. Mantenho separadas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_for_an_old_entry",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Read me something old from the record.",
+            "pt": "Me leia algo antigo do registro."
+          },
+          "phrases": [
+            "read me something old from the record",
+            "what does the oldest record say"
+          ],
+          "requires_any": [
+            "record"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "recited",
+            "act": "reminisce",
+            "polarity": "mixed",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "The oldest entry is a complaint about a pig. Not a war, not a founding. A pig, and it is signed by four people.",
+                "Twelve winters back: the year the river moved. Two lines. Somebody was too tired to write more.",
+                "There is an entry that just reads no more of this. Nobody knows what it means and I refuse to guess in ink."
+              ],
+              "pt": [
+                "A entrada mais antiga é uma queixa sobre um porco. Não uma guerra, não uma fundação. Um porco, assinado por quatro pessoas.",
+                "Doze invernos atrás: o ano em que o rio mudou. Duas linhas. Alguém estava cansado demais para escrever mais.",
+                "Tem uma entrada que só diz chega disso. Ninguém sabe o que significa e me recuso a adivinhar a tinta."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_the_keeping_matters",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "The keeping of it is worth more than the reading.",
+            "pt": "Guardar vale mais do que ler."
+          },
+          "phrases": [
+            "the keeping of it is worth more than the reading",
+            "keeping the record is the valuable part"
+          ],
+          "requires_any": [
+            "keeping"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and it is the half nobody funds. Ink costs money and memory does not shout.",
+                "You would make a poor courtier and a very good clerk, and I mean both kindly.",
+                "Say that to the treasurer. Slowly. Twice."
+              ],
+              "pt": [
+                "É, e é a metade que ninguém financia. Tinta custa dinheiro e memória não grita.",
+                "Você daria um cortesão ruim e um escrivão muito bom, e digo as duas coisas com carinho.",
+                "Diga isso ao tesoureiro. Devagar. Duas vezes."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_cloak_they_took",
+      "subject": "court.disgraced",
+      "shape": "confide",
+      "act": "complain",
+      "polarity": "negative",
+      "predicate": "disclosure",
+      "temporal": "past",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.disgraced",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The cloak they took.",
+        "pt": "O manto que tiraram."
+      },
+      "lines": {
+        "en": [
+          "I was of the guard. I am not now. They took the cloak in the yard where everybody could count the buttons.",
+          "Disgraced is the word they used. It is a tidy word for a long afternoon.",
+          "I still wake at the hour of the watch. The body does not know it has been dismissed."
+        ],
+        "pt": [
+          "Eu era da guarda. Não sou mais. Tiraram o manto no pátio onde todo mundo pôde contar os botões.",
+          "Desonrado foi a palavra que usaram. É uma palavra arrumadinha para uma tarde longa.",
+          "Ainda acordo na hora do turno. O corpo não sabe que foi dispensado."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_whether_it_was_just",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Was the judgement a just one?",
+            "pt": "O julgamento foi justo?"
+          },
+          "phrases": [
+            "was the judgement a just one",
+            "did the judgement fit what happened"
+          ],
+          "requires_any": [
+            "judgement"
+          ],
+          "disposition": {
+            "trust": 3,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Half. I did the thing. The reason I did it never got read out, and that is the part I mind.",
+                "It was just and it was also convenient for somebody, and I have had a year to decide which mattered more.",
+                "No. But saying so to you costs me nothing and saying so up there would cost me the rest."
+              ],
+              "pt": [
+                "Metade. Eu fiz aquilo. O motivo nunca foi lido em voz alta, e é essa parte que me incomoda.",
+                "Foi justo e também foi conveniente para alguém, e tive um ano para decidir o que pesou mais.",
+                "Não. Mas dizer isso a você não me custa nada e dizer lá em cima me custaria o resto."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_they_are_more_than_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "You are more than one afternoon.",
+            "pt": "Você é mais do que uma tarde."
+          },
+          "phrases": [
+            "you are more than one afternoon",
+            "one afternoon is not the whole of you"
+          ],
+          "requires_any": [
+            "afternoon"
+          ],
+          "disposition": {
+            "warmth": 4,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "softened",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "My daughter says the same and I believe her about as often as I believe you, which is rising.",
+                "Some days. On the others I am a man in the yard with his buttons being counted.",
+                "Thank you. The rest of this lane chooses to speak about the weather instead, which I understand and do not forgive."
+              ],
+              "pt": [
+                "Minha filha diz o mesmo e eu acredito nela mais ou menos tanto quanto em você, o que está subindo.",
+                "Em alguns dias. Nos outros sou um homem no pátio com os botões sendo contados.",
+                "Obrigado. O resto desta viela prefere falar do tempo, o que eu entendo e não perdoo."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "from_the_bottom_of_the_hall",
+      "subject": "court.commoner_view",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title",
+          "any_of": [
+            "none",
+            "commoner"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "What the court looks like from here.",
+        "pt": "Como a corte parece daqui."
+      },
+      "lines": {
+        "en": [
+          "There is a court in %2$s and I have never been inside it. I have delivered to the kitchen door twice, which is not the same.",
+          "The court is a thing that happens to us, like weather. You dress for it and you do not argue with it.",
+          "I know four of them by sight and none of them by name, and all four of them know my roof needs work."
+        ],
+        "pt": [
+          "Existe uma corte em %2$s e eu nunca entrei nela. Já entreguei na porta da cozinha duas vezes, o que não é a mesma coisa.",
+          "A corte é uma coisa que acontece com a gente, feito tempo. Você se veste para ela e não discute com ela.",
+          "Conheço quatro deles de vista e nenhum pelo nome, e os quatro sabem que meu telhado precisa de conserto."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_it_bothers_them",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Does being outside it bother you?",
+            "pt": "Estar de fora te incomoda?"
+          },
+          "phrases": [
+            "does being outside it bother you",
+            "are you bothered by being outside it"
+          ],
+          "requires_any": [
+            "bother",
+            "bothered"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Less than I expected. What bothers me is being outside it and still being counted in the tithe.",
+                "Not on a good year. On a bad one I would like one of them to have carried water once.",
+                "It bothers my brother, and he is angrier and no better off, so I have decided against it."
+              ],
+              "pt": [
+                "Menos do que eu esperava. O que me incomoda é ficar de fora e ainda ser contado no dízimo.",
+                "Num ano bom, não. Num ruim, eu gostaria que um deles tivesse carregado água uma vez.",
+                "Incomoda meu irmão, e ele está mais bravo e nem por isso melhor, então decidi que não."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_the_outside_has_its_own",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "The outside keeps its own kind of peace.",
+            "pt": "Quem está fora tem a sua própria paz."
+          },
+          "phrases": [
+            "the outside keeps its own kind of peace",
+            "there is peace in being outside it"
+          ],
+          "requires_any": [
+            "outside",
+            "peace"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It does. No one has been poisoned at this table in living memory and I intend to keep that record.",
+                "That is what my wife says when I sulk, and she is right, and I hate the way she is right.",
+                "True. I sleep. I am told that up there sleeping is regarded as a strategy."
+              ],
+              "pt": [
+                "Tem. Ninguém foi envenenado nesta mesa que se lembre, e pretendo manter esse histórico.",
+                "É o que minha esposa diz quando eu fico emburrado, e ela tem razão, e eu odeio o jeito como ela tem.",
+                "Verdade. Eu durmo. Me dizem que lá em cima dormir é considerado estratégia."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

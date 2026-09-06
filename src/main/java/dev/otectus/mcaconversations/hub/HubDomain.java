@@ -84,6 +84,12 @@ public enum HubDomain {
             Map.entry("place", VILLAGE),
             Map.entry("origin", VILLAGE),
 
+            // Only ever live with MCA Capitals installed; the scenes behind them gate on capital.present.
+            Map.entry("crown", VILLAGE),
+            Map.entry("court", VILLAGE),
+            Map.entry("house", VILLAGE),
+            Map.entry("realm", VILLAGE),
+
             Map.entry("life", PERSONAL),
             Map.entry("dreams", PERSONAL),
             Map.entry("fears", PERSONAL),

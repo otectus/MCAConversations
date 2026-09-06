@@ -314,6 +314,416 @@
           }
         }
       ]
+    },
+    {
+      "name": "whispers_out_of_the_hall",
+      "subject": "rumors.court_whispers",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "epistemic": "rumoured",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "decide"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_values": [
+        "privacy"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "What the hall is whispering.",
+        "pt": "O que o salão está sussurrando."
+      },
+      "lines": {
+        "en": [
+          "There is a thing going round about the court that I have heard from three people and believe from none of them.",
+          "The hall leaks. Not documents, just tone: you can tell when something has gone wrong up there by how the servants shop.",
+          "Court talk reaches us bent. By the time it gets to this lane somebody has improved it twice."
+        ],
+        "pt": [
+          "Tem uma coisa circulando sobre a corte que ouvi de três pessoas e não acredito em nenhuma delas.",
+          "O salão vaza. Não documentos, só o tom: dá para saber que algo deu errado lá em cima pelo jeito que os criados compram.",
+          "Conversa de corte chega aqui torta. Quando alcança esta viela alguém já melhorou duas vezes."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_for_the_whisper",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What is the whisper, then?",
+            "pt": "Qual é o sussurro, então?"
+          },
+          "phrases": [
+            "what is the whisper then",
+            "tell me the whisper"
+          ],
+          "requires_any": [
+            "whisper"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "hedged",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "That somebody up there has been sent away and it is being called a journey. Journeys of that kind do not return.",
+                "That a warrant was drawn and then not used, which is worse than either, because it is still on a desk.",
+                "I will give you the shape and not the name. Somebody has fallen and nobody has said the word yet."
+              ],
+              "pt": [
+                "Que alguém lá em cima foi mandado embora e estão chamando de viagem. Viagens desse tipo não voltam.",
+                "Que um mandado foi escrito e não usado, o que é pior que as duas coisas, porque continua numa mesa.",
+                "Vou te dar o formato e não o nome. Alguém caiu e ninguém disse a palavra ainda."
+              ]
+            }
+          }
+        },
+        {
+          "name": "tell_them_to_let_it_lie",
+          "stance": "candor",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Let that one die where it is.",
+            "pt": "Deixe essa morrer onde está."
+          },
+          "phrases": [
+            "let that one die where it is",
+            "better to let it die where it stands"
+          ],
+          "requires_any": [
+            "die"
+          ],
+          "disposition": {
+            "respect": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is what I had decided and I wanted somebody to say it out loud so it would count.",
+                "Court rumours have a way of finding the mouth that repeated them. I have no intention of being that mouth.",
+                "Agreed. I shall carry it as far as my own doorstep and no further, and I shall be a bore about it."
+              ],
+              "pt": [
+                "Foi o que eu tinha decidido e queria que alguém dissesse em voz alta para valer.",
+                "Boato de corte tem o hábito de achar a boca que repetiu. Não pretendo ser essa boca.",
+                "De acordo. Levo isso até a minha porta e nem um passo além, e vou ser chato quanto a isso."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_the_servants_say",
+      "subject": "rumors.household_talk",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "epistemic": "rumoured",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.royal_household",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "privacy"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What we hear indoors.",
+        "pt": "O que se ouve lá dentro."
+      },
+      "lines": {
+        "en": [
+          "I work in the household, which means I hear everything and am supposed to have heard nothing.",
+          "The rule indoors is simple. You may carry a story out of the kitchen and never out of the door.",
+          "People speak in front of us the way they speak in front of a chair. It is insulting and it is very informative."
+        ],
+        "pt": [
+          "Trabalho na casa, o que quer dizer que ouço tudo e deveria não ter ouvido nada.",
+          "A regra lá dentro é simples. Você pode tirar uma história da cozinha e nunca da porta para fora.",
+          "As pessoas falam na nossa frente como falam na frente de uma cadeira. É ofensivo e é muito informativo."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_they_keep_it",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "How do you keep all of it in?",
+            "pt": "Como você guarda tudo isso?"
+          },
+          "phrases": [
+            "how do you keep all of it in",
+            "how is all of it kept in"
+          ],
+          "requires_any": [
+            "keep",
+            "kept"
+          ],
+          "disposition": {
+            "trust": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "By deciding once, years ago, and never re-deciding. If you weigh it each time you will eventually weigh it wrong.",
+                "Badly, with my husband, at night. He has heard things that could hang us both and he forgets them on purpose.",
+                "It is easier than you think. Most of it is dull. The interesting part is one sentence a year."
+              ],
+              "pt": [
+                "Decidindo uma vez, anos atrás, e nunca redecidindo. Se você pesar toda vez, uma hora pesa errado.",
+                "Mal, com meu marido, de noite. Ele ouviu coisas que enforcariam nós dois e esquece de propósito.",
+                "É mais fácil do que parece. Quase tudo é sem graça. A parte interessante é uma frase por ano."
+              ]
+            }
+          }
+        },
+        {
+          "name": "respect_the_silence",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Then I will leave that where it belongs.",
+            "pt": "Então vou deixar isso onde está."
+          },
+          "phrases": [
+            "then i will leave that where it belongs",
+            "i shall leave that where it belongs"
+          ],
+          "requires_any": [
+            "leave",
+            "belongs"
+          ],
+          "disposition": {
+            "respect": 4,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "relieved",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Thank you. Three people this month have asked and all three thought they were being charming.",
+                "That is the only kindness anybody in my position wants and almost nobody thinks to offer it.",
+                "Good. Now I can talk to you about anything else at all, which is a great relief."
+              ],
+              "pt": [
+                "Obrigado. Três pessoas este mês pediram e as três achavam que estavam sendo charmosas.",
+                "É a única gentileza que alguém na minha posição quer e quase ninguém pensa em oferecer.",
+                "Ótimo. Agora posso falar com você de qualquer outra coisa, o que é um alívio enorme."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_they_say_of_the_heir",
+      "subject": "rumors.heir_talk",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "epistemic": "rumoured",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.heir_named",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "heir_name"
+      ],
+      "prompt": {
+        "en": "What people say about the heir.",
+        "pt": "O que dizem sobre o herdeiro."
+      },
+      "lines": {
+        "en": [
+          "There is a great deal said about %2$s and almost none of it by anybody who has been in the same room.",
+          "The talk about the heir changes with the price of grain, which should tell you what the talk is really about.",
+          "%2$s is being described in this village by people who would not recognise that face in a market."
+        ],
+        "pt": [
+          "Fala-se muita coisa sobre %2$s e quase nada por quem já esteve na mesma sala.",
+          "A conversa sobre o herdeiro muda com o preço do grão, o que deveria dizer sobre o que a conversa é de verdade.",
+          "%2$s está sendo descrito nesta vila por gente que não reconheceria esse rosto num mercado."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_the_talk_is",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What sort of thing is being said?",
+            "pt": "Que tipo de coisa andam dizendo?"
+          },
+          "phrases": [
+            "what sort of thing is being said",
+            "what are people saying about them"
+          ],
+          "requires_any": [
+            "saying",
+            "said"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "reported",
+            "act": "report",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Too soft, from the ones who want a war. Too hard, from the ones who owe money. Nobody is describing a person.",
+                "That there was an argument with the Hand. There is always an argument with the Hand. It is the Hand's job.",
+                "Good things, mostly, and I distrust that more. Villages are not usually generous about people they have not met."
+              ],
+              "pt": [
+                "Mole demais, dizem os que querem guerra. Duro demais, dizem os que devem dinheiro. Ninguém está descrevendo uma pessoa.",
+                "Que houve uma discussão com a Mão. Sempre há discussão com a Mão. É o trabalho da Mão.",
+                "Coisas boas, na maioria, e disso eu desconfio mais. Vila não costuma ser generosa com quem não conheceu."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_is_unfair_to_judge",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Hard to judge somebody from that far off.",
+            "pt": "Difícil julgar alguém de tão longe."
+          },
+          "phrases": [
+            "hard to judge somebody from that far off",
+            "judging from that far off is hard"
+          ],
+          "requires_any": [
+            "judge",
+            "judging"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and everybody here does it anyway, and I include myself in that at least twice a week.",
+                "That is what I say at the well and it ends the conversation every time, which I have decided to enjoy.",
+                "True. I shall know something real about that one in about ten years, and so will everybody who is still here."
+              ],
+              "pt": [
+                "É, e todo mundo aqui julga assim mesmo, e me incluo nisso pelo menos duas vezes por semana.",
+                "É o que eu digo no poço e acaba com a conversa toda vez, o que eu decidi apreciar.",
+                "Verdade. Vou saber algo real sobre essa pessoa daqui a uns dez anos, e todo mundo que ainda estiver aqui também."
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

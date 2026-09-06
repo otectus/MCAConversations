@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_costs",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.friend_of_the_crown.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.crown_friend",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.friend_of_the_crown.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_you_will_keep_clear_of_leaning",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.friend_of_the_crown.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.crown_friend",
+              "deltas": {
+                "respect": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.friend_of_the_crown.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1143,8 +1143,14 @@ class TopicPathSimulationTest {
      * tier names through as opaque strings. Modelling it would mean inventing a ranking this
      * codebase does not own, which is exactly the guessing the simulator refuses to do elsewhere.
      * Its branches are covered by {@code ReputationIntegrationTest} instead.
+     *
+     * <p>{@code crown}, {@code court}, {@code house} and {@code realm} are the same case one step
+     * further out: every scene on them gates on {@code capital.present}, so with MCA Capitals absent
+     * the buttons carry nothing but their off-state legacy line and there is no branching tree to
+     * walk. Modelling them would mean inventing a court this codebase does not own.
      */
-    private static final Set<String> NOT_SIMULATABLE = Set.of("standing");
+    private static final Set<String> NOT_SIMULATABLE =
+            Set.of("standing", "crown", "court", "house", "realm");
 
     /**
      * The world a topic's ordinary adult branch expects.

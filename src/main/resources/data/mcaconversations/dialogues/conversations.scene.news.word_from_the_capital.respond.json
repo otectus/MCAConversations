@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_the_reading_said",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.word_from_the_capital.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.court",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.news.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.word_from_the_capital.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_news_to_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "news.word_from_the_capital.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "news.court",
+              "deltas": {
+                "familiarity": 2,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.news.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.word_from_the_capital.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.news.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

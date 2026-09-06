@@ -722,6 +722,416 @@
           }
         }
       ]
+    },
+    {
+      "name": "we_are_a_capital_now",
+      "subject": "village.capital",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.state",
+          "is": "active",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_values": [
+        "tradition"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "What this place has become.",
+        "pt": "No que este lugar se tornou."
+      },
+      "lines": {
+        "en": [
+          "%2$s is a capital now. I still call it the village when I am not thinking, and so does everybody over forty.",
+          "We are a seat of rule. There is a hall where there used to be a long field and I miss the field about once a month.",
+          "Being a capital means strangers arrive with business rather than with mud, and you notice the difference immediately."
+        ],
+        "pt": [
+          "%2$s é uma capital agora. Ainda chamo de vila quando não estou prestando atenção, e todo mundo acima dos quarenta também.",
+          "Somos uma sede de governo. Tem um salão onde havia um campo comprido e eu sinto falta do campo umas vezes por mês.",
+          "Ser capital quer dizer que estranhos chegam com negócios em vez de lama, e a diferença se nota na hora."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_it_is_better_now",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is it a better place to live now?",
+            "pt": "É um lugar melhor de se viver agora?"
+          },
+          "phrases": [
+            "is it a better place to live now",
+            "has living here improved since"
+          ],
+          "requires_any": [
+            "live",
+            "living"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "debate",
+            "lines": {
+              "en": [
+                "Richer and less patient. Those two came in the same cart and nobody was asked whether they wanted both.",
+                "Better if you sell anything. Worse if you liked knowing every face, and I did like that.",
+                "Ask the children. They have never known it any other way and they are the only honest witnesses left."
+              ],
+              "pt": [
+                "Mais rico e menos paciente. As duas coisas vieram na mesma carroça e ninguém perguntou se a gente queria as duas.",
+                "Melhor se você vende alguma coisa. Pior se você gostava de conhecer todos os rostos, e eu gostava.",
+                "Pergunte às crianças. Nunca conheceram de outro jeito e são as únicas testemunhas honestas que sobraram."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_still_feels_like_a_village",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It still feels like a village to me.",
+            "pt": "Para mim ainda parece uma vila."
+          },
+          "phrases": [
+            "it still feels like a village to me",
+            "it has the feel of a village yet"
+          ],
+          "requires_any": [
+            "village",
+            "feel"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Say that where the older ones can hear it. You would make three people very happy and one of them would cry.",
+                "It does, on a wet Tuesday. On a market day it is somewhere else entirely and I go home early.",
+                "Good. That is what we are trying to keep, and mostly we are trying to keep it by not mentioning it."
+              ],
+              "pt": [
+                "Diga isso onde os mais velhos ouçam. Você deixaria três pessoas muito felizes e uma delas choraria.",
+                "Parece, numa terça chuvosa. Em dia de feira é outro lugar completamente e eu vou para casa cedo.",
+                "Ótimo. É isso que a gente tenta manter, e em geral tentamos manter não falando disso."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "before_the_hall_was_built",
+      "subject": "village.capital_founded",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "mixed",
+      "predicate": "memory",
+      "temporal": "past",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.state",
+          "any_of": [
+            "pending",
+            "founded"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_styles": [
+        "storyteller"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What this place was before.",
+        "pt": "O que este lugar era antes."
+      },
+      "lines": {
+        "en": [
+          "It is being made a capital and it has not finished being one. You can stand in the square and see both versions at once.",
+          "They have surveyed the ground twice and moved the marker once. Nobody has told us what happens to the common after.",
+          "This was a village with a good well, and now it is a village with a good well and a plan drawn on it."
+        ],
+        "pt": [
+          "Está virando capital e ainda não terminou de virar. Dá para ficar na praça e ver as duas versões ao mesmo tempo.",
+          "Já mediram o terreno duas vezes e mudaram o marco uma. Ninguém nos disse o que acontece com o pasto comum depois.",
+          "Isto era uma vila com um poço bom, e agora é uma vila com um poço bom e uma planta desenhada por cima."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_will_lose",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What do you stand to lose in it?",
+            "pt": "O que vocês podem perder nisso?"
+          },
+          "phrases": [
+            "what do you stand to lose in it",
+            "what might be lost in the building"
+          ],
+          "requires_any": [
+            "lose",
+            "lost"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "The common, probably. Nobody has said so, which is how I know somebody has thought about it.",
+                "The quiet. That is not a thing you can put on a survey and it is the only thing I would have argued for.",
+                "Nothing I can name, which is exactly why I keep going to look at the marker."
+              ],
+              "pt": [
+                "O pasto comum, provavelmente. Ninguém disse, e é assim que eu sei que alguém já pensou nisso.",
+                "O sossego. Não é coisa que se ponha numa medição e é a única pela qual eu teria discutido.",
+                "Nada que eu saiba nomear, que é justamente por que eu continuo indo olhar o marco."
+              ]
+            }
+          }
+        },
+        {
+          "name": "offer_to_watch_the_marker",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Tell me if the marker moves again.",
+            "pt": "Me avise se o marco se mexer de novo."
+          },
+          "phrases": [
+            "tell me if the marker moves again",
+            "let me know if the marker moves"
+          ],
+          "requires_any": [
+            "marker"
+          ],
+          "disposition": {
+            "trust": 3,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "accepted",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "I will, and I will be insufferable about the exact distance, because I have paced it.",
+                "That is the first useful sentence anybody has said to me about this. Everyone else congratulates us.",
+                "Two of us watch it already. Three is a habit and a habit is harder to argue with."
+              ],
+              "pt": [
+                "Aviso, e vou ser insuportável quanto à distância exata, porque eu já medi a passos.",
+                "É a primeira frase útil que alguém me disse sobre isso. Todos os outros nos parabenizam.",
+                "Dois de nós já vigiam. Três é um costume e um costume é mais difícil de contestar."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a_village_in_black",
+      "subject": "village.capital_mourning",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.mourning",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 36,
+      "identity_values": [
+        "tradition"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Why the place is so quiet.",
+        "pt": "Por que o lugar está tão quieto."
+      },
+      "lines": {
+        "en": [
+          "You will have noticed the quiet. We are in mourning and the whole village is behaving like a house with a body in it.",
+          "The market ran at half voice this morning. Nobody agreed to that. It simply happened at every stall at once.",
+          "There is no singing at the mill. It is the mill I notice most, because I have never heard it without singing."
+        ],
+        "pt": [
+          "Você deve ter notado o silêncio. Estamos de luto e a vila inteira se comporta como casa com um corpo dentro.",
+          "A feira funcionou em meia voz esta manhã. Ninguém combinou isso. Simplesmente aconteceu em todas as barracas de uma vez.",
+          "Não tem canto no moinho. É o moinho que mais me chama atenção, porque nunca o ouvi sem canto."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_is_expected_of_a_stranger",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What is expected of a stranger in this?",
+            "pt": "O que se espera de um estranho nisso?"
+          },
+          "phrases": [
+            "what is expected of a stranger in this",
+            "what should a stranger do in mourning"
+          ],
+          "requires_any": [
+            "stranger"
+          ],
+          "disposition": {
+            "respect": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "Nothing, honestly. Do not sing, do not haggle loudly, and you will have done better than most.",
+                "Buy what you need and go quietly. Grief here is not a ceremony you are asked to join.",
+                "Wear nothing bright at the well. That is the only rule and half of us have forgotten why it exists."
+              ],
+              "pt": [
+                "Nada, honestamente. Não cante, não pechinche alto, e você já terá se saído melhor que a maioria.",
+                "Compre o que precisa e vá em silêncio. Luto aqui não é cerimônia para a qual você é convidado.",
+                "Não use nada berrante no poço. É a única regra e metade de nós já esqueceu por que existe."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_are_sorry_for_it",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I am sorry for the village's loss.",
+            "pt": "Sinto muito pela perda da vila."
+          },
+          "phrases": [
+            "i am sorry for the village loss",
+            "sorry for what the village has lost"
+          ],
+          "requires_any": [
+            "sorry"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Thank you. It is not my loss exactly, and it is somehow everyone's, and that is what mourning days are for.",
+                "That was said properly and not for show. I can tell the difference by now, and so can everybody here.",
+                "You are the second person from outside to say it. I remembered the first one for eleven years."
+              ],
+              "pt": [
+                "Obrigado. Não é bem a minha perda, e de algum jeito é de todos, e é para isso que servem os dias de luto.",
+                "Isso foi dito direito e não para impressionar. Já sei a diferença, e todo mundo aqui também.",
+                "Você é a segunda pessoa de fora a dizer. Lembrei da primeira por onze anos."
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "slot_lang": {

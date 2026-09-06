@@ -56,6 +56,15 @@ public enum ScenePurpose {
      */
     STANDING_REMARK("standing_remark", 3),
 
+    /**
+     * This villager's own place at court has just changed, and the player has not heard it from them.
+     *
+     * <p>Costs the same as {@link #STANDING_REMARK}: being made Hand is exactly the kind of news
+     * somebody stops what they are doing to tell you, and exactly as easily overdone. Only ever live
+     * with MCA Capitals installed, which is what keeps it silent on an ordinary install.
+     */
+    COURT_REMARK("court_remark", 3),
+
     /** A comfort, an origin motif, a remark that costs nothing and means something. */
     LOW_STAKES("low_stakes", 8),
 

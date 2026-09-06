@@ -587,6 +587,16 @@ public final class McaHandles {
         return ref(H_VILLAGE_NAME, homeVillage(villager)) instanceof String s ? Optional.of(s) : Optional.empty();
     }
 
+    /**
+     * A village's name by id, for callers that never hold one of its residents. MCA Capitals names a
+     * capital for its village, and the poller reads that for villages whose every resident is
+     * unloaded. Safe default: empty.
+     */
+    public static Optional<String> villageName(ServerLevel level, int villageId) {
+        return ref(H_VILLAGE_NAME, village(level, villageId)) instanceof String s ? Optional.of(s)
+                : Optional.empty();
+    }
+
     /** MCA's own {@code Village} object, handed back opaquely for the Townstead binding. */
     public static Optional<Object> villageHandle(ServerLevel level, int villageId) {
         return Optional.ofNullable(village(level, villageId));

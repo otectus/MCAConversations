@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_it_obliges",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "house.the_house_i_belong_to.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "house.mine",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.house.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.the_house_i_belong_to.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_sounds_steadying",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "house.the_house_i_belong_to.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "house.mine",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.house.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.the_house_i_belong_to.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

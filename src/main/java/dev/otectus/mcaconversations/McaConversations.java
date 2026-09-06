@@ -66,5 +66,8 @@ public final class McaConversations {
         // Townstead class resolves on the many installs that do not have it. Must follow
         // McaBridge, because the spirit read needs an MCA village that only McaCompat produces.
         event.enqueueWork(dev.otectus.mcaconversations.compat.TownsteadCompat::init);
+        // And MCA Capitals, by name for the same reason. Must follow McaBridge too: a capital is
+        // named for its MCA village, and only McaCompat can answer that.
+        event.enqueueWork(dev.otectus.mcaconversations.compat.CapitalsCompat::init);
     }
 }

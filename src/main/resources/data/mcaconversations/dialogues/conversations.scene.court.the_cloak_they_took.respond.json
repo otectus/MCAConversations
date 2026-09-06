@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_whether_it_was_just",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_cloak_they_took.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.disgraced",
+              "deltas": {
+                "trust": 3,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_cloak_they_took.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_they_are_more_than_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_cloak_they_took.open.softened"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.disgraced",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_cloak_they_took.softened"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

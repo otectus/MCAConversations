@@ -204,9 +204,10 @@ client-only hook widens that gate to the locales this mod ships complete overlay
 preserving MCA's voice-pack and online-TTS restrictions untouched.
 
 Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public standing, and villagers
-telling each other what you have done), **Townstead** `[0.7.5,0.8)` (its schedules, buildings and
-village culture) and **Serene Seasons** (real seasons; calendar fallback otherwise) — all soft
-dependencies; the mod works fully without any of them.
+telling each other what you have done), **MCA: Capitals** `[1.3,)` (villages that are capitals speak
+about their sovereign, heirs and court; court changes seed village gossip), **Townstead** `[0.7.5,0.8)` (its
+schedules, buildings and village culture) and **Serene Seasons** (real seasons; calendar fallback
+otherwise) — all soft dependencies; the mod works fully without any of them.
 
 ## How it works
 

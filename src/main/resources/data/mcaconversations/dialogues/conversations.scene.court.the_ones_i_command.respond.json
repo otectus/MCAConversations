@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_they_choose",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_ones_i_command.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.lord_commander",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_ones_i_command.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_is_good_command",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.the_ones_i_command.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.lord_commander",
+              "deltas": {
+                "respect": 3
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.the_ones_i_command.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_bothers_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.from_the_bottom_of_the_hall.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.commoner_view",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.from_the_bottom_of_the_hall.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_the_outside_has_its_own",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.from_the_bottom_of_the_hall.open.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.commoner_view",
+              "deltas": {
+                "warmth": 2,
+                "respect": 2
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.from_the_bottom_of_the_hall.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

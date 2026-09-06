@@ -1,0 +1,1146 @@
+{
+  "_comment": [
+    "The crown, gated on MCA Capitals being installed and on what this villager can actually see of it.",
+    "",
+    "A villager has no view of the throne. They have a view of what the throne changed about the lane",
+    "they live in, and every scene here is that view rather than a chronicle entry read aloud."
+  ],
+  "topic": "crown",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "crown"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "That is the crown, as far as I see it.",
+      "Right. That is what reaches us.",
+      "It goes on above us either way."
+    ],
+    "pt": [
+      "É a coroa, até onde eu vejo.",
+      "Certo. É o que chega até nós.",
+      "Segue acima de nós de qualquer jeito."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for the plain view.",
+    "pt": "Obrigado pela visão franca."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the crown?",
+      "pt": "Mais alguma coisa sobre a coroa?"
+    },
+    "leave": {
+      "en": "That is the crown, then.",
+      "pt": "É essa a coroa, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "the_one_who_rules",
+      "subject": "crown.sovereign",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "sovereign_title",
+        "sovereign_name"
+      ],
+      "prompt": {
+        "en": "What the crown is like from here.",
+        "pt": "Como a coroa parece daqui."
+      },
+      "lines": {
+        "en": [
+          "We have a %2$s now, and the word still sits oddly in my mouth. %3$s. That is who it is.",
+          "%3$s rules here. I have seen the face twice and neither time was I close enough to judge it.",
+          "A %2$s changes what a place is for. We are not only a village any more, we are somewhere that answers to somebody."
+        ],
+        "pt": [
+          "Temos um %2$s agora, e a palavra ainda soa estranha na minha boca. %3$s. É quem é.",
+          "%3$s governa aqui. Vi o rosto duas vezes e nenhuma delas de perto o bastante para julgar.",
+          "Um %2$s muda o que um lugar serve. Não somos só uma vila agora, somos um lugar que responde a alguém."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_changed",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What changed when the crown came?",
+            "pt": "O que mudou quando a coroa chegou?"
+          },
+          "phrases": [
+            "what changed when the crown came",
+            "how did the crown change this place"
+          ],
+          "requires_any": [
+            "crown",
+            "changed"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The roads got mended and the arguments got longer. Both of those came from the same decision.",
+                "People stand differently at the well. That is the honest answer and it sounds like nothing until you watch it.",
+                "We used to settle a dispute over a fence between the two households. Now it goes up, and comes back down with a ruling."
+              ],
+              "pt": [
+                "As estradas foram consertadas e as discussões ficaram mais longas. As duas coisas vieram da mesma decisão.",
+                "As pessoas se portam diferente no poço. É a resposta honesta e parece pouca coisa até você reparar.",
+                "Antes uma briga de cerca se resolvia entre as duas casas. Agora sobe, e volta com uma sentença."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_suits_the_place",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It seems to suit this place.",
+            "pt": "Parece combinar com este lugar."
+          },
+          "phrases": [
+            "it seems to suit this place",
+            "the place wears it well"
+          ],
+          "requires_any": [
+            "suit",
+            "wears"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Give it a winter. Anything suits a place in summer, when there is enough of everything.",
+                "I hope so. I have lived through one lord who did not fit and it was a long four years.",
+                "It might. My mother would have hated it and she would have said so loudly, which I miss."
+              ],
+              "pt": [
+                "Espere um inverno. Tudo combina com um lugar no verão, quando há de tudo o bastante.",
+                "Espero que sim. Vivi sob um senhor que não servia e foram quatro anos longos.",
+                "Pode ser. Minha mãe teria odiado e teria dito bem alto, o que me faz falta."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a_woman_on_the_seat",
+      "subject": "crown.queen_regnant",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.title",
+          "is": "sovereign",
+          "not": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "sovereign_title",
+        "sovereign_name"
+      ],
+      "prompt": {
+        "en": "Who sits the seat.",
+        "pt": "Quem ocupa o assento."
+      },
+      "lines": {
+        "en": [
+          "Our %2$s is %3$s, and half the arguments I hear about the throne are really arguments about that.",
+          "I was asked once whether a %2$s could hold a realm together. I said I had never seen my mother drop anything.",
+          "%3$s took the seat and the complaining lasted eleven days. Then the grain came in and everyone found something else."
+        ],
+        "pt": [
+          "Nossa %2$s é %3$s, e metade das discussões que ouço sobre o trono são na verdade sobre isso.",
+          "Uma vez me perguntaram se uma %2$s poderia segurar um reino. Eu disse que nunca vi minha mãe deixar nada cair.",
+          "%3$s assumiu o assento e a reclamação durou onze dias. Aí o grão entrou e todo mundo achou outro assunto."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_who_objected",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Who objected, and are they quieter now?",
+            "pt": "Quem se opôs, e estão mais calados agora?"
+          },
+          "phrases": [
+            "who objected and are they quieter now",
+            "which households objected to her"
+          ],
+          "requires_any": [
+            "objected"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Two households and a cousin of theirs. Silent is not the word. Careful is the word.",
+                "The ones who objected loudest are the ones being most useful now, which tells you what the objection was worth.",
+                "One old man, and he objects to weather as well, so nobody counts him."
+              ],
+              "pt": [
+                "Duas casas e um primo delas. Calados não é a palavra. Cuidadosos é a palavra.",
+                "Quem reclamou mais alto é quem está mais prestativo agora, o que diz o quanto valia a reclamação.",
+                "Um velho, e ele reclama do tempo também, então ninguém o conta."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_makes_no_odds",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "A ruler is a ruler. That is all.",
+            "pt": "Quem governa, governa. É só isso."
+          },
+          "phrases": [
+            "a ruler is a ruler that is all",
+            "it makes little odds to me who rules"
+          ],
+          "requires_any": [
+            "ruler",
+            "rules"
+          ],
+          "disposition": {
+            "respect": 3
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is what I say too, and I have said it often enough that people have stopped bringing it up with me.",
+                "Good. There is real work in a season and none of it cares who is sitting anywhere.",
+                "It should be all. It is not, yet, but a village learns a thing like that in about a generation."
+              ],
+              "pt": [
+                "É o que eu digo também, e já disse tantas vezes que pararam de trazer o assunto para mim.",
+                "Ótimo. Há trabalho de verdade numa estação e nada disso liga para quem está sentado onde.",
+                "Deveria ser só isso. Ainda não é, mas uma vila aprende uma coisa dessas em umas duas gerações."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_one_who_comes_after",
+      "subject": "crown.heir",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "future",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.heir_named",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "heir_name"
+      ],
+      "prompt": {
+        "en": "Who comes after.",
+        "pt": "Quem vem depois."
+      },
+      "lines": {
+        "en": [
+          "%2$s is named to follow, and the whole village has an opinion about that which it will not say out loud.",
+          "There is an heir now. It is a strange comfort. It means somebody has thought past next winter.",
+          "%2$s. Young. I taught that one to tie a knot and now I am told to bow, which I do, and it costs me nothing."
+        ],
+        "pt": [
+          "%2$s foi nomeado para suceder, e a vila inteira tem uma opinião sobre isso que não diz em voz alta.",
+          "Há um herdeiro agora. É um conforto estranho. Quer dizer que alguém pensou além do próximo inverno.",
+          "%2$s. Jovem. Ensinei essa criança a dar um nó e agora me mandam curvar, e eu curvo, e não me custa nada."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_they_are_ready",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is the heir ready for it?",
+            "pt": "O herdeiro está pronto para isso?"
+          },
+          "phrases": [
+            "is the heir ready for it",
+            "will the heir be ready in time"
+          ],
+          "requires_any": [
+            "heir",
+            "ready"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Nobody is ready. You are ready afterwards, if you are lucky and somebody honest stands near you.",
+                "Readier than the last one was, and the last one managed. That is the measure I use.",
+                "Ask me in three years. Anything I say now is either flattery or spite and I would rather not."
+              ],
+              "pt": [
+                "Ninguém está pronto. A gente fica pronto depois, com sorte e com alguém honesto por perto.",
+                "Mais pronto do que o anterior estava, e o anterior deu conta. É essa a medida que uso.",
+                "Me pergunte daqui a três anos. Qualquer coisa que eu diga agora é bajulação ou rancor e prefiro não."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_them_well",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope it goes gently for them.",
+            "pt": "Espero que corra com calma para ele."
+          },
+          "phrases": [
+            "i hope it goes gently for them",
+            "may it go gently"
+          ],
+          "requires_any": [
+            "gently"
+          ],
+          "disposition": {
+            "warmth": 3
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "So do I. It rarely does, and saying it anyway is most of what a village can offer.",
+                "That is a kind thing to want for somebody you have never spoken to.",
+                "I shall pass that on. Not the words, the fact of it. Somebody outside wished it well."
+              ],
+              "pt": [
+                "Eu também. Raramente corre, e dizer mesmo assim é quase tudo o que uma vila pode oferecer.",
+                "É uma coisa gentil de se querer para alguém com quem você nunca falou.",
+                "Vou passar adiante. Não as palavras, o fato. Alguém de fora desejou bem."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "nobody_named_yet",
+      "subject": "crown.no_heir",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "future",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.heir_named",
+          "is": false,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 27,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What happens after.",
+        "pt": "O que acontece depois."
+      },
+      "lines": {
+        "en": [
+          "No successor has been named, and every household here has quietly worked out what that would mean.",
+          "There is nobody named to follow. We do not discuss it at the well. We discuss it indoors, which is worse.",
+          "An unnamed succession is a very quiet kind of danger. Nothing happens for years and then everything happens in a week."
+        ],
+        "pt": [
+          "Nenhum sucessor foi nomeado, e toda casa daqui já calculou em silêncio o que isso significaria.",
+          "Não há ninguém nomeado para suceder. Não falamos disso no poço. Falamos dentro de casa, o que é pior.",
+          "Uma sucessão sem nome é um perigo bem silencioso. Nada acontece por anos e aí tudo acontece numa semana."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_who_would_claim",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Who would claim it if it came to that?",
+            "pt": "Quem reivindicaria se chegasse a isso?"
+          },
+          "phrases": [
+            "who would claim it if it came to that",
+            "who has a claim on the seat"
+          ],
+          "requires_any": [
+            "claim"
+          ],
+          "disposition": {
+            "trust": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "named",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Three could, and two of them would, and one of those is the reason the other two sleep badly.",
+                "I will not put names in your mouth. I will say the number is more than one and fewer than four.",
+                "The one nobody names is usually the one who wins. That is not wisdom, it is just what I have watched."
+              ],
+              "pt": [
+                "Três poderiam, dois fariam, e um desses é o motivo de os outros dois dormirem mal.",
+                "Não vou colocar nomes na sua boca. Digo que o número é mais de um e menos de quatro.",
+                "Quem ninguém nomeia é geralmente quem ganha. Não é sabedoria, é só o que eu vi."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_may_still_be_fine",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "There is time yet for a naming.",
+            "pt": "Ainda há tempo para uma nomeação."
+          },
+          "phrases": [
+            "there is time yet for a naming",
+            "the naming can still happen"
+          ],
+          "requires_any": [
+            "naming"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "There is. I would rather borrow your confidence than lend you my worry.",
+                "Time, and somebody sensible in the room when it is decided. That second one is the harder to arrange.",
+                "You are right and I shall stop chewing it. It is a thing I do instead of sleeping."
+              ],
+              "pt": [
+                "Há. Prefiro pegar emprestada a sua confiança do que te emprestar a minha preocupação.",
+                "Tempo, e alguém sensato na sala quando se decidir. Essa segunda parte é a mais difícil.",
+                "Você tem razão e vou parar de remoer. É uma coisa que faço em vez de dormir."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_black_cloth",
+      "subject": "crown.mourning",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.mourning",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 38,
+      "identity_values": [
+        "tradition"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "Why the cloth is black.",
+        "pt": "Por que o pano está preto."
+      },
+      "lines": {
+        "en": [
+          "%2$s is in mourning, so nobody sings at work and the mill runs at half. It is not law. It is just what we do.",
+          "We are in the mourning days. I have hung the black cloth twice in my life and I remember both.",
+          "There will be no music until the days are counted out. I find I mind that less than I expected to."
+        ],
+        "pt": [
+          "%2$s está de luto, então ninguém canta no trabalho e o moinho roda pela metade. Não é lei. É só o que se faz.",
+          "Estamos nos dias de luto. Pendurei o pano preto duas vezes na vida e me lembro das duas.",
+          "Não vai haver música até os dias serem contados. Acho que isso me incomoda menos do que eu esperava."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_long_it_lasts",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "How long do the mourning days last?",
+            "pt": "Quanto duram os dias de luto?"
+          },
+          "phrases": [
+            "how long do the mourning days last",
+            "how many days of mourning are there"
+          ],
+          "requires_any": [
+            "mourning"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Long enough that the shock wears off and short enough that the fields do not fail. Somebody worked that out centuries back.",
+                "Until the herald says otherwise. Nobody here has ever needed to know the exact number.",
+                "My grandmother said the count was chosen by farmers, not priests, and you can tell."
+              ],
+              "pt": [
+                "O bastante para o choque passar e pouco para os campos não se perderem. Alguém calculou isso séculos atrás.",
+                "Até o arauto dizer o contrário. Ninguém aqui nunca precisou saber o número exato.",
+                "Minha avó dizia que a conta foi feita por lavradores, não por padres, e dá para perceber."
+              ]
+            }
+          }
+        },
+        {
+          "name": "offer_quiet",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Then I will keep my voice down.",
+            "pt": "Então vou falar baixo."
+          },
+          "phrases": [
+            "then i will keep my voice down",
+            "i will lower my voice while it lasts"
+          ],
+          "requires_any": [
+            "voice"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Thank you. Most travellers do not, and it is the sort of thing a village notices and remembers.",
+                "You need not. It is our grief, not yours. But I will not pretend I did not like hearing it.",
+                "That is all anyone asks in these days. Nobody wants speeches. Everyone wants the noise to stop."
+              ],
+              "pt": [
+                "Obrigado. A maioria dos viajantes não faz isso, e é o tipo de coisa que uma vila nota e lembra.",
+                "Não precisa. O luto é nosso, não seu. Mas não vou fingir que não gostei de ouvir.",
+                "É tudo o que se pede nesses dias. Ninguém quer discursos. Todo mundo quer o barulho parar."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "you_wear_it",
+      "subject": "crown.player_sovereign",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.player_is_sovereign",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 40,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "What it is like having you above us.",
+        "pt": "Como é ter você acima de nós."
+      },
+      "lines": {
+        "en": [
+          "You rule %2$s, and I have decided to keep speaking to you the way I did before. Tell me if that becomes a problem.",
+          "It is a strange thing to weed a row and know the person who owns the ruling on it is standing in it with me.",
+          "I had never had a word with a crowned head before you. I have found it is mostly the same words."
+        ],
+        "pt": [
+          "Você governa %2$s, e decidi continuar falando com você como falava antes. Me avise se isso virar problema.",
+          "É estranho capinar uma fileira sabendo que quem manda na sentença sobre ela está aqui dentro comigo.",
+          "Nunca tinha trocado palavra com uma cabeça coroada antes de você. Descobri que são quase as mesmas palavras."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_for_the_honest_version",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Give me the honest version, not the polite one.",
+            "pt": "Me dê a versão honesta, não a educada."
+          },
+          "phrases": [
+            "give me the honest version",
+            "i want the honest version of it"
+          ],
+          "requires_any": [
+            "honest",
+            "version"
+          ],
+          "disposition": {
+            "respect": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "levelled",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Then: the rulings are good and the waiting is bad. A month for an answer is a month a fence stays broken.",
+                "Honestly, most of us have not noticed a difference, and that is a compliment, though it will not feel like one.",
+                "You are fair and you are far away. Only one of those is a thing you can fix."
+              ],
+              "pt": [
+                "Então: as sentenças são boas e a espera é ruim. Um mês por uma resposta é um mês de cerca quebrada.",
+                "Honestamente, a maioria de nós não notou diferença, e isso é um elogio, embora não pareça.",
+                "Você é justo e você é distante. Só uma dessas duas coisas dá para consertar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "promise_to_stay_ordinary",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Keep speaking to me plainly. I would rather that.",
+            "pt": "Continue falando comigo com franqueza. Prefiro assim."
+          },
+          "phrases": [
+            "keep speaking to me plainly",
+            "i would rather be spoken to plainly"
+          ],
+          "requires_any": [
+            "plainly"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 3
+          },
+          "reaction": {
+            "id": "relieved",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Good, because I was going to anyway and I was working out how to survive it.",
+                "Then you will hear things nobody at your table will tell you, and some of them will be wrong, and that is the price.",
+                "I shall. And when I bow, in front of the others, understand that it is for them and not for you."
+              ],
+              "pt": [
+                "Ótimo, porque eu ia continuar de qualquer jeito e estava pensando em como sobreviver a isso.",
+                "Então você vai ouvir coisas que ninguém na sua mesa te diz, e algumas serão erradas, e é esse o preço.",
+                "Vou. E quando eu me curvar, diante dos outros, entenda que é por eles e não por você."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "our_king_is_a_guest",
+      "subject": "crown.player_is_our_king",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.royal_household",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.sovereign_is_player",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_styles": [
+        "reluctant"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "sovereign_title"
+      ],
+      "prompt": {
+        "en": "What the household makes of it.",
+        "pt": "O que a casa acha disso."
+      },
+      "lines": {
+        "en": [
+          "I serve in the household, and our %2$s is a wanderer who turns up muddy. We have all had to learn a new manner.",
+          "The kitchen has stopped laying the high place every night. There was a fortnight of laying it and clearing it untouched.",
+          "It is an odd service, serving somebody who might be three valleys away or might be behind you carrying wood."
+        ],
+        "pt": [
+          "Sirvo na casa, e nosso %2$s é um andarilho que aparece enlameado. Todos tivemos que aprender maneiras novas.",
+          "A cozinha parou de pôr o lugar de honra toda noite. Foram duas semanas pondo e tirando sem ninguém sentar.",
+          "É um serviço estranho, servir alguém que pode estar a três vales ou pode estar atrás de você carregando lenha."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_it_is_hard",
+          "stance": "empathy",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is that a hard way to serve?",
+            "pt": "É difícil servir assim?"
+          },
+          "phrases": [
+            "is that a hard way to serve",
+            "does it make the service harder"
+          ],
+          "requires_any": [
+            "serve",
+            "service"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Not hard. Unsettled. A household runs on knowing what tomorrow looks like and we have given that up.",
+                "It is easier than the last arrangement, and the last arrangement had a man who shouted.",
+                "Hard on the older ones. They trained for a court and got a farm with a title over it."
+              ],
+              "pt": [
+                "Difícil não. Instável. Uma casa funciona sabendo como é o amanhã e nós abrimos mão disso.",
+                "É mais fácil que o arranjo anterior, e o arranjo anterior tinha um homem que gritava.",
+                "Difícil para os mais velhos. Treinaram para uma corte e ganharam uma fazenda com um título em cima."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_better",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Better than a court that never goes outdoors.",
+            "pt": "Melhor que uma corte que nunca sai de casa."
+          },
+          "phrases": [
+            "better than a court that never goes outdoors",
+            "better than a court kept indoors"
+          ],
+          "requires_any": [
+            "court",
+            "better"
+          ],
+          "disposition": {
+            "respect": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is. I would not go back. I only wish somebody had told us it was going to happen.",
+                "Say that to the steward. He has been waiting two years for one person to say it.",
+                "Better, yes. Stranger too. Both of those can be true at once and usually are."
+              ],
+              "pt": [
+                "É. Eu não voltaria atrás. Só queria que alguém tivesse nos avisado que ia acontecer.",
+                "Diga isso ao mordomo. Ele espera há dois anos que uma pessoa diga isso.",
+                "Melhor, sim. E mais estranho. As duas coisas podem ser verdade ao mesmo tempo e geralmente são."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_one_who_stands_beside",
+      "subject": "crown.consort",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.state",
+          "is": "active",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "sovereign_title"
+      ],
+      "prompt": {
+        "en": "The one who stands beside.",
+        "pt": "Quem fica ao lado."
+      },
+      "lines": {
+        "en": [
+          "Everyone watches the %2$s. I watch the one standing a pace behind, because that is where the real answer usually is.",
+          "The consort settles more matters in a corridor than the whole court settles in a hall, and is thanked for none of it.",
+          "A seat holds one person. A rule needs two, and the second one never gets a chair."
+        ],
+        "pt": [
+          "Todo mundo olha o %2$s. Eu olho quem está um passo atrás, porque é ali que costuma estar a resposta.",
+          "O consorte resolve mais coisas num corredor do que a corte inteira num salão, e não é agradecido por nenhuma.",
+          "Um assento cabe uma pessoa. Um governo precisa de duas, e a segunda nunca ganha cadeira."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_how_they_know",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How would a villager know a thing like that?",
+            "pt": "Como um aldeão saberia uma coisa dessas?"
+          },
+          "phrases": [
+            "how would a villager know a thing like that",
+            "how do you learn what happens in a corridor"
+          ],
+          "requires_any": [
+            "villager",
+            "corridor"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "My cousin carries linen up there. Linen goes everywhere and nobody stops speaking when it walks in.",
+                "You do not know. You infer. A ruling arrives softened and you learn to guess who softened it.",
+                "Because the petitions that get answered are the ones somebody remembered to mention at supper."
+              ],
+              "pt": [
+                "Minha prima leva roupa de cama lá para cima. Roupa vai a todo lugar e ninguém para de falar quando ela entra.",
+                "Você não sabe. Você deduz. Uma sentença chega mais macia e você aprende a adivinhar quem amaciou.",
+                "Porque os pedidos que são respondidos são os que alguém lembrou de mencionar no jantar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_true_everywhere",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is true of every household I have known.",
+            "pt": "Isso vale para toda casa que conheci."
+          },
+          "phrases": [
+            "that is true of every household i have known",
+            "every household i knew worked that way"
+          ],
+          "requires_any": [
+            "household"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "recognised",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Then you have paid attention somewhere, which is rarer than travelling far.",
+                "It is. A crown only makes it larger, and larger is the only thing a crown reliably does.",
+                "Say that where the court can hear it and you will be either promoted or removed. There is no third outcome."
+              ],
+              "pt": [
+                "Então você prestou atenção em algum lugar, o que é mais raro do que viajar longe.",
+                "É verdade. A coroa só deixa maior, e maior é a única coisa que uma coroa faz sem falhar.",
+                "Diga isso onde a corte ouça e você vai ser promovido ou removido. Não existe terceiro fim."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

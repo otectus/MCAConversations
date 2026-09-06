@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_it_is_better_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.we_are_a_capital_now.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.capital",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.we_are_a_capital_now.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_still_feels_like_a_village",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.we_are_a_capital_now.open.warmed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.capital",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.we_are_a_capital_now.warmed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

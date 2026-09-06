@@ -30,6 +30,23 @@ class GossipNbtRoundTripTest {
     }
 
     @Test
+    void theCapitalsTypesRoundTripLikeAnyOther() {
+        // Court news carries the capital as its subject and the rendered chronicle line as bName, so
+        // the round trip has to survive a whole sentence in a name field.
+        for (GossipEventType type : new GossipEventType[] {GossipEventType.CORONATION,
+                GossipEventType.ROYAL_MARRIAGE, GossipEventType.ROYAL_BIRTH,
+                GossipEventType.ROYAL_DEATH, GossipEventType.APPOINTMENT, GossipEventType.DISGRACE,
+                GossipEventType.WAR, GossipEventType.PEACE, GossipEventType.ALLIANCE,
+                GossipEventType.CAPITAL_FOUNDED, GossipEventType.COURT_NEWS}) {
+            GossipEvent news = new GossipEvent(UUID.randomUUID(), type, 9, 4321L,
+                    UUID.randomUUID(), "Highhold", Optional.of(UUID.randomUUID()),
+                    "The herald read it out at the well.");
+            assertEquals(news, GossipEvent.fromNbt(news.toNbt()).orElseThrow(), type.toString());
+            assertEquals(type, GossipEventType.byJsonName(type.jsonName()).orElseThrow());
+        }
+    }
+
+    @Test
     void malformedEventTagIsSkippedNotFatal() {
         CompoundTag bad = new CompoundTag();
         bad.putString("type", "not_a_type");

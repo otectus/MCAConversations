@@ -1,0 +1,1144 @@
+{
+  "_comment": [
+    "The realm beyond the walls, gated on MCA Capitals and on the diplomacy this capital is actually in.",
+    "",
+    "War, alliance and where the player's own oath lies are all the same question asked from different",
+    "sides of a border, and a villager answers it in carts and harvests rather than in treaties."
+  ],
+  "topic": "realm",
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "realm"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "That is how it stands beyond the walls.",
+      "Right. That is the wider picture.",
+      "It will look different by spring."
+    ],
+    "pt": [
+      "É assim que estão as coisas para além dos muros.",
+      "Certo. É esse o quadro maior.",
+      "Vai parecer diferente na primavera."
+    ]
+  },
+  "ages": [
+    "teen",
+    "adult"
+  ],
+  "leave_label": {
+    "en": "Thank you for the wider view.",
+    "pt": "Obrigado pela visão mais ampla."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the realm?",
+      "pt": "Mais alguma coisa sobre o reino?"
+    },
+    "leave": {
+      "en": "That is the realm, then.",
+      "pt": "É esse o reino, então."
+    }
+  },
+  "scenes": [
+    {
+      "name": "we_are_at_war",
+      "subject": "realm.at_war",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.at_war",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 40,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 2,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "rival_capital_name"
+      ],
+      "prompt": {
+        "en": "The war we are in.",
+        "pt": "A guerra em que estamos."
+      },
+      "lines": {
+        "en": [
+          "We are at war with %2$s. Nobody here has seen a soldier yet, and that is the only good sentence I have about it.",
+          "War with %2$s. The word arrived before anything else did, and the word alone has already changed the market.",
+          "Two of ours went east last month. That is what a war is here: a smaller number of people at the well."
+        ],
+        "pt": [
+          "Estamos em guerra com %2$s. Ninguém aqui viu um soldado ainda, e é a única frase boa que tenho sobre isso.",
+          "Guerra com %2$s. A palavra chegou antes de qualquer outra coisa, e só a palavra já mudou o mercado.",
+          "Dois dos nossos foram para o leste mês passado. É isso que uma guerra é aqui: menos gente no poço."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_is_over",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What is the war actually over?",
+            "pt": "A guerra é sobre o quê, de fato?"
+          },
+          "phrases": [
+            "what is the war actually over",
+            "what started the war"
+          ],
+          "requires_any": [
+            "war",
+            "started"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "A river crossing and an insult, and if you asked ten people you would get the two in different orders.",
+                "Nobody has told us. We are told to be ready and not told what for, which is the ordinary arrangement.",
+                "Grain, underneath. It is always grain underneath, whatever the herald reads out at the well."
+              ],
+              "pt": [
+                "Uma travessia de rio e um insulto, e se você perguntar a dez pessoas ouve as duas em ordens diferentes.",
+                "Ninguém nos contou. Mandam ficar prontos e não dizem para quê, que é o arranjo de sempre.",
+                "Grão, no fundo. É sempre grão no fundo, seja lá o que o arauto leia no poço."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_hope_it_ends",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope it ends before harvest.",
+            "pt": "Espero que acabe antes da colheita."
+          },
+          "phrases": [
+            "i hope it ends before harvest",
+            "may it end before harvest"
+          ],
+          "requires_any": [
+            "harvest"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "temporal": "future",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "So does everyone who has to bring one in. That is the whole village and none of the court.",
+                "If it does not, we will have a bad year and a quiet one, and I know which of those I mind more.",
+                "Thank you. People here have stopped saying it out loud because saying it started to sound like begging."
+              ],
+              "pt": [
+                "É o que espera todo mundo que tem que colher. É a vila inteira e ninguém da corte.",
+                "Se não acabar, vamos ter um ano ruim e calado, e eu sei qual dos dois me incomoda mais.",
+                "Obrigado. Aqui pararam de dizer isso em voz alta porque começou a soar como súplica."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_ones_we_are_sworn_to",
+      "subject": "realm.allied",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.allied",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 30,
+      "identity_values": [
+        "hospitality"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "ally_capital_name"
+      ],
+      "prompt": {
+        "en": "Who we are sworn beside.",
+        "pt": "Com quem estamos jurados."
+      },
+      "lines": {
+        "en": [
+          "We are allied with %2$s. The practical result is that their carts come through unsearched and ours go the same the other way.",
+          "%2$s stands with us. My father fought them once, so I take a certain pleasure in selling them cheese.",
+          "An alliance is a promise about a bad day neither side has had yet, and until then it is mostly good trade."
+        ],
+        "pt": [
+          "Somos aliados de %2$s. Na prática, as carroças deles passam sem revista e as nossas fazem o mesmo do outro lado.",
+          "%2$s está conosco. Meu pai lutou contra eles uma vez, então tenho certo prazer em vender queijo para eles.",
+          "Uma aliança é uma promessa sobre um dia ruim que nenhum dos dois teve ainda, e até lá é quase só bom comércio."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_it_will_hold",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Do you think the alliance will hold?",
+            "pt": "Você acha que a aliança se sustenta?"
+          },
+          "phrases": [
+            "do you think the alliance will hold",
+            "will the alliance hold"
+          ],
+          "requires_any": [
+            "alliance",
+            "hold"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Until one of us has a bad harvest and the other one has two. Then we shall find out what was signed.",
+                "It will hold as long as the people who signed it are alive. That is the honest length of any of them.",
+                "It has held eleven years, which is longer than my marriage and involves fewer letters."
+              ],
+              "pt": [
+                "Até um de nós ter uma colheita ruim e o outro ter duas. Aí a gente descobre o que foi assinado.",
+                "Se sustenta enquanto quem assinou estiver vivo. É esse o prazo honesto de qualquer uma delas.",
+                "Já durou onze anos, mais que meu casamento e com menos cartas."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_sounds_a_good_arrangement",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That sounds like a sane arrangement.",
+            "pt": "Parece um arranjo sensato."
+          },
+          "phrases": [
+            "that sounds like a sane arrangement",
+            "a sane arrangement between neighbours"
+          ],
+          "requires_any": [
+            "sane",
+            "arrangement"
+          ],
+          "disposition": {
+            "respect": 2,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and sane arrangements are rare enough that people distrust them on principle.",
+                "It is dull, which is the highest compliment you can pay a treaty.",
+                "Say that at the border post. The men there have been waiting years for somebody to notice."
+              ],
+              "pt": [
+                "É, e arranjos sensatos são tão raros que as pessoas desconfiam por princípio.",
+                "É sem graça, que é o maior elogio que se pode fazer a um tratado.",
+                "Diga isso no posto de fronteira. Os homens de lá esperam há anos que alguém repare."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_quiet_years",
+      "subject": "realm.peace",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.at_war",
+          "is": false,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.allied",
+          "is": false,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "How things stand abroad.",
+        "pt": "Como estão as coisas lá fora."
+      },
+      "lines": {
+        "en": [
+          "We are at peace with everybody and sworn to nobody, which is the arrangement I would choose if anyone asked me.",
+          "No war, no alliance. The roads are open and the tolls are honest, and that is a decade most places do not get.",
+          "Nothing is happening between us and anyone, and I have lived long enough to know that is the good news."
+        ],
+        "pt": [
+          "Estamos em paz com todos e jurados a ninguém, que é o arranjo que eu escolheria se me perguntassem.",
+          "Sem guerra, sem aliança. As estradas abertas e os pedágios honestos, e é uma década que a maioria dos lugares não tem.",
+          "Nada está acontecendo entre nós e ninguém, e vivi o bastante para saber que essa é a boa notícia."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_that_can_last",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Can standing apart last?",
+            "pt": "Dá para continuar apartado assim?"
+          },
+          "phrases": [
+            "can standing apart last",
+            "how long can standing apart last"
+          ],
+          "requires_any": [
+            "apart"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "As long as we are neither rich enough to rob nor weak enough to bother with. It is a narrow road.",
+                "It lasts until somebody needs a friend badly, and then you find out what standing apart cost.",
+                "It lasted for my grandmother's whole life. She thought that was normal and she was wrong and happy."
+              ],
+              "pt": [
+                "Enquanto não formos ricos demais para roubar nem fracos demais para valer o trabalho. É um caminho estreito.",
+                "Dura até alguém precisar muito de um amigo, e aí você descobre o preço de ter ficado apartado.",
+                "Durou a vida inteira da minha avó. Ela achava normal e estava errada e feliz."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_quiet_is_underrated",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Uneventful years are underrated.",
+            "pt": "Anos sem acontecimentos são subestimados."
+          },
+          "phrases": [
+            "uneventful years are underrated",
+            "an uneventful year is worth a lot"
+          ],
+          "requires_any": [
+            "uneventful"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "agreed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "They are. Nobody writes a song about a decade in which the bridge stayed up.",
+                "Say that to a young one and watch the face. They want a story. I have had two and would return both.",
+                "That is the sort of thing you only hear from somebody who has seen the other kind."
+              ],
+              "pt": [
+                "São. Ninguém faz canção sobre uma década em que a ponte ficou de pé.",
+                "Diga isso a um jovem e olhe a cara. Eles querem história. Já tive duas e devolveria as duas.",
+                "É o tipo de coisa que só se ouve de quem já viu o outro tipo."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "i_carry_the_letters",
+      "subject": "realm.ambassador",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "disclosure",
+      "temporal": "habitual",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.office",
+          "is": "ambassador",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 34,
+      "identity_values": [
+        "duty"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The letters I carry.",
+        "pt": "As cartas que eu levo."
+      },
+      "lines": {
+        "en": [
+          "I carry our word abroad. Half of the work is travelling and the other half is not saying the wrong thing while tired.",
+          "An ambassador is a person paid to be liked by people who are not obliged to like them.",
+          "I have eaten at four foreign tables this year and learned more from the seating than from anything anybody said."
+        ],
+        "pt": [
+          "Eu levo nossa palavra para fora. Metade do trabalho é viajar e a outra metade é não dizer besteira estando cansado.",
+          "Um embaixador é uma pessoa paga para ser bem-quista por gente que não é obrigada a gostar dela.",
+          "Comi em quatro mesas estrangeiras este ano e aprendi mais com os lugares à mesa do que com qualquer coisa dita."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_learned",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What did the seating teach you?",
+            "pt": "O que os lugares à mesa te ensinaram?"
+          },
+          "phrases": [
+            "what did the seating teach you",
+            "what does the seating tell an envoy"
+          ],
+          "requires_any": [
+            "seating"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "Who is out of favour. They put the one they have decided against at the end, near the door, every time.",
+                "That a place set for somebody who does not come is a message, and it is a loud one.",
+                "Where the interpreter sits tells you whether they intend to understand you or to have understood you later."
+              ],
+              "pt": [
+                "Quem está em desgraça. Põem quem já decidiram descartar na ponta, perto da porta, sempre.",
+                "Que um lugar posto para quem não vem é um recado, e é um recado alto.",
+                "Onde o intérprete senta diz se pretendem te entender ou ter te entendido depois."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_a_hard_trade",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is a wearing trade to be in.",
+            "pt": "É um ofício desgastante."
+          },
+          "phrases": [
+            "that is a wearing trade to be in",
+            "a wearing trade for anybody"
+          ],
+          "requires_any": [
+            "wearing",
+            "trade"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "softened",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It is. I am home eleven weeks a year and my daughter measures me against a door frame each time.",
+                "It wears in a particular place. You stop being able to speak without arranging it first.",
+                "Thank you for saying so. At home they think it is banquets. It is roads."
+              ],
+              "pt": [
+                "É. Fico em casa onze semanas por ano e minha filha me mede no batente toda vez.",
+                "Desgasta num lugar específico. Você perde a capacidade de falar sem antes arrumar a frase.",
+                "Obrigado por dizer. Em casa acham que são banquetes. São estradas."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a_face_from_elsewhere",
+      "subject": "realm.foreign_visitor",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.player_allegiance",
+          "is": "foreign",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "Where your loyalty lies.",
+        "pt": "Onde está a sua lealdade."
+      },
+      "lines": {
+        "en": [
+          "You are sworn elsewhere. I know it, everybody at this well knows it, and I would rather say so than have it sit there.",
+          "You belong to another seat. That is not an accusation. It is only a thing I would want said out loud if it were me.",
+          "A foreign oath is not a crime in %2$s. It does mean people will finish a sentence differently when you walk up."
+        ],
+        "pt": [
+          "Você é jurado a outro lugar. Eu sei, todo mundo neste poço sabe, e prefiro dizer a deixar isso pairando.",
+          "Você pertence a outro trono. Não é acusação. É só uma coisa que eu ia querer dita em voz alta se fosse comigo.",
+          "Um juramento estrangeiro não é crime em %2$s. Mas quer dizer que as pessoas terminam a frase diferente quando você chega."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_that_is_a_problem",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Is my foreign oath a problem for you?",
+            "pt": "Meu juramento estrangeiro é problema para você?"
+          },
+          "phrases": [
+            "is my foreign oath a problem for you",
+            "does my foreign oath trouble you"
+          ],
+          "requires_any": [
+            "oath"
+          ],
+          "disposition": {
+            "respect": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Not to me. To the man who keeps the gate ledger, yes, and he writes down more than he needs to.",
+                "Only if there is trouble. Then everybody remembers where everybody is sworn, all at once.",
+                "It is a problem the way rain is a problem. You plan around it and stop calling it unfair."
+              ],
+              "pt": [
+                "Para mim, não. Para o homem que cuida do livro do portão, sim, e ele anota mais do que precisa.",
+                "Só se houver encrenca. Aí todo mundo lembra de uma vez onde cada um jurou.",
+                "É problema do jeito que chuva é problema. Você planeja em volta e para de chamar de injusto."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_your_intentions_are_good",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I intend this place only good.",
+            "pt": "Só quero o bem deste lugar."
+          },
+          "phrases": [
+            "i intend this place only good",
+            "my intentions here are good"
+          ],
+          "requires_any": [
+            "intend",
+            "intentions"
+          ],
+          "disposition": {
+            "trust": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "accepted",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I believe you, and belief is cheap, and what will actually settle it is two years of nothing going wrong.",
+                "Good. Say it to the gate ledger man as well. He will write that down too and it will help.",
+                "Somebody set on mischief would have said it more prettily. That is not proof but it is something."
+              ],
+              "pt": [
+                "Acredito em você, e acreditar é barato, e o que vai resolver mesmo são dois anos sem nada dar errado.",
+                "Ótimo. Diga também ao homem do livro do portão. Ele vai anotar e isso ajuda.",
+                "Quem estivesse com má intenção teria dito de forma mais bonita. Não é prova, mas é alguma coisa."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "one_of_our_own",
+      "subject": "realm.our_own",
+      "shape": "observe",
+      "act": "celebrate",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.player_allegiance",
+          "is": "same",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 28,
+      "identity_values": [
+        "hospitality"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "capital_name"
+      ],
+      "prompt": {
+        "en": "That you are sworn here.",
+        "pt": "Que você é jurado aqui."
+      },
+      "lines": {
+        "en": [
+          "You are sworn to %2$s, same as me. That makes this a shorter conversation and a warmer one.",
+          "You took the oath here. It changed how the ledger keeper greets you and I doubt anybody told you that.",
+          "One of ours. I have stopped explaining you to people at the well, which is the highest honour this lane gives."
+        ],
+        "pt": [
+          "Você é jurado a %2$s, como eu. Isso deixa esta conversa mais curta e mais quente.",
+          "Você fez o juramento aqui. Mudou o jeito que o escrivão do portão te cumprimenta e duvido que alguém tenha te contado.",
+          "Um dos nossos. Parei de te explicar para as pessoas no poço, que é a maior honra que esta viela dá."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_that_buys",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does swearing here actually buy me?",
+            "pt": "O que jurar aqui de fato me garante?"
+          },
+          "phrases": [
+            "what does swearing here actually buy me",
+            "what does the oath buy in practice"
+          ],
+          "requires_any": [
+            "swearing",
+            "buy"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "A hearing. Not a favourable one, but a hearing, and you would be amazed how many people never get that.",
+                "The gate at night, the grain in a bad winter, and somebody arguing your side when you are not in the room.",
+                "Very little on paper. A great deal on the day something goes wrong, which is the only day it is measured."
+              ],
+              "pt": [
+                "Uma audiência. Não favorável, mas uma audiência, e você se espantaria com quanta gente nunca consegue isso.",
+                "O portão de noite, o grão num inverno ruim, e alguém defendendo você quando você não está na sala.",
+                "Muito pouco no papel. Muita coisa no dia em que algo dá errado, que é o único dia em que se mede."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_are_glad_of_it",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I am glad to be sworn here.",
+            "pt": "Fico contente de ser jurado aqui."
+          },
+          "phrases": [
+            "i am glad to be sworn here",
+            "being sworn here suits me"
+          ],
+          "requires_any": [
+            "sworn"
+          ],
+          "disposition": {
+            "warmth": 3,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "warmed",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Then you have said the thing that gets repeated, and it will be at three tables by supper.",
+                "Good. Half the people who swear here do it for the gate and never mean the rest of it.",
+                "So am I. I said the same words in this square when I was seventeen and I have never regretted it twice."
+              ],
+              "pt": [
+                "Então você disse a coisa que se repete, e vai estar em três mesas até o jantar.",
+                "Ótimo. Metade de quem jura aqui faz pelo portão e nunca quis dizer o resto.",
+                "Eu também. Disse as mesmas palavras nesta praça aos dezessete e nunca me arrependi duas vezes."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sworn_to_nobody",
+      "subject": "realm.unsworn",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.player_allegiance",
+          "is": "none",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "identity_styles": [
+        "observer"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "That you are sworn nowhere.",
+        "pt": "Que você não é jurado a lugar nenhum."
+      },
+      "lines": {
+        "en": [
+          "You are sworn nowhere at all. That is rarer than a foreign oath and people here find it harder to file.",
+          "No seat holds your word. I do not say that as a fault. I say it because you should know we have noticed.",
+          "An unsworn traveller is welcome and is watched, and both of those happen without anybody deciding to."
+        ],
+        "pt": [
+          "Você não é jurado a lugar nenhum. Isso é mais raro que juramento estrangeiro e aqui é mais difícil de classificar.",
+          "Nenhum trono tem a sua palavra. Não digo como defeito. Digo porque você deve saber que a gente reparou.",
+          "Um viajante sem juramento é bem-vindo e é observado, e as duas coisas acontecem sem ninguém decidir."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_if_they_advise_swearing",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would you advise me to swear somewhere?",
+            "pt": "Você me aconselharia a jurar em algum lugar?"
+          },
+          "phrases": [
+            "would you advise me to swear somewhere",
+            "should i take an oath somewhere"
+          ],
+          "requires_any": [
+            "advise",
+            "oath"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "Not until you know where you would want to be buried. That is the honest test and it works.",
+                "Yes, eventually, and not this year. An oath taken while you are still moving is an oath you will break.",
+                "I would advise nothing. I have watched two people swear on my advice and only one of them thanks me."
+              ],
+              "pt": [
+                "Não até você saber onde ia querer ser enterrado. É esse o teste honesto e ele funciona.",
+                "Sim, com o tempo, e não este ano. Juramento feito em movimento é juramento que se quebra.",
+                "Eu não aconselharia nada. Vi duas pessoas jurarem por conselho meu e só uma me agradece."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_prefer_it_open",
+          "stance": "self_disclosure",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I would rather keep my word unpromised.",
+            "pt": "Prefiro manter minha palavra sem promessa."
+          },
+          "phrases": [
+            "i would rather keep my word unpromised",
+            "my word stays unpromised for now"
+          ],
+          "requires_any": [
+            "unpromised"
+          ],
+          "disposition": {
+            "respect": 2,
+            "trust": 1
+          },
+          "reaction": {
+            "id": "accepted",
+            "act": "accept",
+            "polarity": "neutral",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is a defensible way to live and a lonely one, and you clearly already know both halves.",
+                "Then keep it clean. The unsworn who take favours anyway are the ones who make it hard for the rest.",
+                "Fair. My brother lived that way for thirty years and I have stopped arguing with either of you."
+              ],
+              "pt": [
+                "É um jeito defensável de viver e um jeito solitário, e você claramente já sabe as duas metades.",
+                "Então mantenha limpo. Os sem juramento que aceitam favores são os que complicam para os outros.",
+                "Justo. Meu irmão viveu assim por trinta anos e eu parei de discutir com vocês dois."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "named_an_enemy",
+      "subject": "realm.enemy_of_crown",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.crown_standing",
+          "is": "enemy",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 42,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "vars_used": [
+        "sovereign_title"
+      ],
+      "prompt": {
+        "en": "What the Crown has said of you.",
+        "pt": "O que a Coroa disse de você."
+      },
+      "lines": {
+        "en": [
+          "The %2$s has named you an enemy. I am telling you where I stand before you hear it read out by somebody colder.",
+          "You are down as an enemy of the Crown. That is a piece of paper. I am deciding what it is worth on my own time.",
+          "There is a warrant word next to your name up there. I would not repeat it, and I would not have you walk in blind either."
+        ],
+        "pt": [
+          "O %2$s te declarou inimigo. Estou te dizendo onde eu estou antes que você ouça isso lido por alguém mais frio.",
+          "Você está anotado como inimigo da Coroa. É um pedaço de papel. Estou decidindo quanto vale no meu próprio tempo.",
+          "Tem uma palavra de mandado ao lado do seu nome lá em cima. Eu não repetiria, e também não te deixaria entrar às cegas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_will_do",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What will you do about what is written?",
+            "pt": "O que você vai fazer sobre o que está escrito?"
+          },
+          "phrases": [
+            "what will you do about what is written",
+            "what happens now that it is written"
+          ],
+          "requires_any": [
+            "written"
+          ],
+          "disposition": {
+            "trust": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Nothing today. I am not paid to be the Crown's eyes and I have never enjoyed people who volunteer for it.",
+                "Keep my door shut and my mouth shut, in that order. Do not ask me for more than that yet.",
+                "Watch. If the word turns out to be true I will change my mind loudly, and you should expect that."
+              ],
+              "pt": [
+                "Nada hoje. Não me pagam para ser os olhos da Coroa e nunca gostei de quem se oferece para isso.",
+                "Manter minha porta fechada e minha boca fechada, nessa ordem. Não me peça mais que isso por ora.",
+                "Observar. Se a palavra se mostrar verdadeira eu mudo de ideia em voz alta, e você deve contar com isso."
+              ]
+            }
+          }
+        },
+        {
+          "name": "thank_them_for_the_warning",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Thank you for the warning.",
+            "pt": "Obrigado pelo aviso."
+          },
+          "phrases": [
+            "thank you for the warning",
+            "the warning is worth having"
+          ],
+          "requires_any": [
+            "warning"
+          ],
+          "disposition": {
+            "trust": 3,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "It cost me nothing and it may cost me something later, and I have decided in advance not to mind.",
+                "Do not thank me where anybody can hear it. That is the only condition I am setting.",
+                "Somebody warned my father once, and he lived, so I am paying an old debt to a stranger."
+              ],
+              "pt": [
+                "Não me custou nada e pode me custar algo depois, e decidi de antemão não me importar.",
+                "Não me agradeça onde alguém possa ouvir. É a única condição que eu ponho.",
+                "Alguém avisou meu pai uma vez, e ele viveu, então estou pagando uma dívida velha a um estranho."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

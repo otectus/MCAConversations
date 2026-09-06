@@ -5,19 +5,30 @@ All notable changes to this project will be documented in this file. Format foll
 
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
 Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
-asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation,
+asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
-## [1.5.2] - unreleased
+## [1.6.0] - unreleased
 
-Dialogue presentation expansion: three clearly differentiated interface choices (Current, Minimal, and Original MCA), explicit `dialogueMenuStyle` configuration, and improvements to motion control documentation.
+Integration with the optional MCA: Capitals monarchy add-on, plus the unreleased 1.5.2 dialogue presentation expansion. Version 1.6.0 supersedes the unreleased 1.5.2; the presentation work is included here unchanged.
 
 ### Added
+
+- **MCA: Capitals integration** — villages that are capitals carry court news as gossip, villagers speak about their sovereign, heirs, houses, rivals and allies, and a villager whose title just changed remarks on it unprompted. Chronicle diffs and court snapshots are polled server-side and seeded into the village gossip sweep. Requires MCA Capitals 1.3+ (tested against 1.3.6). The integration is read-only and requires only MCA; the Capitals mod is entirely optional.
+- Eleven new gossip event types seeded from Capitals: `coronation`, `royal_marriage`, `royal_birth`, `royal_death`, `appointment`, `disgrace`, `war`, `peace`, `alliance`, `capital_founded`, `court_news`.
+- Four new conversation topics gated by `capital_topics`: the crown, the court, houses, the realm (authored inside the topics pack; enable/disable per-capital via the `capitals` master switch).
+- Twenty-one `capital.*` context fields: capital name, sovereign/heir details, court office, house and house tier, at-war/allied state, mourning status, player allegiance, and whether this villager just got a title change.
+- Nine new template variables for dialogue lines speaking about court: `capital_name`, `sovereign_name`, `sovereign_title`, `heir_name`, `house_name`, `house_words`, `villager_title`, `rival_capital_name`, `ally_capital_name`. All fall back to neutral text when the capital is absent or a detail is vacant.
+- `COURT_REMARK` scene purpose: a villager opens unprompted when their court title changes, with the same interruption cost as `STANDING_REMARK`.
+- `STANDING_REMARK` scene purpose for the optional Reputation integration (unreleased, part of this release): a villager remarks when the player's village standing crosses a tier.
+- `vars_used` optional field on scenes and reactions in the topic pack compiler, documenting which template variables a scene expects. Purely informational; no enforcement.
+- `[capitals]` config section (10 keys): master switch, topic and news toggles, poll cadence and per-poll caps, diplomacy talk, role remarks, context cache, and debug logging.
+- `mcaconversations_court` SavedData: persists capital names, their sovereign/heir/mourning state, and the chronicle cursor for news polling, per world.
+- `capitalsProbeTest` Gradle task: verifies binding against the actual MCA Capitals jar when `-PcapitalsJar=...` is supplied.
 
 - Three dialogue presentation choices: **Current** (the full responsive card), **Minimal** (responsive interaction with simpler graphics and no live portrait), and **Original MCA** (MCA Reborn's native interface).
 - Explicit `dialogueMenuStyle` client configuration option in `config/mcaconversations-client.toml`.
 - `MINIMAL` presentation layer: uses the same synchronized offer, keyboard navigation, paging, and accessibility systems as the responsive card, but with flat-panel graphics and no entity portrait rendering, reducing visual complexity and rendering overhead.
-- Village-standing remark: with **MCA: Reputation** installed, a villager who knows a deed behind a standing change will raise it unprompted as a `standing_remark` initiative bark. It fires only from a recorded tier crossing and a deed that villager actually knows, is spent by the first resident to say it, and never appears without the optional mod.
 
 ### Changed
 
@@ -31,12 +42,16 @@ Dialogue presentation expansion: three clearly differentiated interface choices 
 
 - The Conversations response card no longer disappears on the first click after a minute or so of reading, exposing MCA's own answer list underneath. A dialogue-screen offer used to age out with the conversation session timeout (`conversationSessionTimeoutTicks`, server config) and be dropped by the session's inactivity expiry, so the next selection was rejected as expired. A screen offer now lives for as long as MCA keeps the interaction screen open on that villager; chat-mode offers still expire with the session.
 
+### Known limitations
+
+- Chronicle text quoted in gossip renders in the server's locale, not the player's. The same reflective manifest also binds FULL, with all capabilities resolved, against MCA Capitals on the NeoForge 1.21.1 line.
+
 ### Compatibility
 
 - Existing `numberedResponses = false` configurations continue to restore MCA's native dialogue UI automatically.
 - Existing `motionMode` values (`FULL`, `REDUCED`, `OFF`) retain their exact meaning and behavior.
 - Network protocol remains `2` — no new packets.
-- Saves, datapacks, and server configuration are unchanged.
+- Saves: new `mcaconversations_court` SavedData holds capital snapshots and chronicle cursors. Datapacks and server configuration gain a `[capitals]` section with documented defaults.
 
 ---
 

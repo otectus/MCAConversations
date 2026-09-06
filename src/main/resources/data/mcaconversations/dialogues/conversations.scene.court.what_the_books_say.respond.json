@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_for_an_old_entry",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.what_the_books_say.open.recited"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.maester",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.what_the_books_say.recited"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_the_keeping_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.what_the_books_say.open.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.maester",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.what_the_books_say.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

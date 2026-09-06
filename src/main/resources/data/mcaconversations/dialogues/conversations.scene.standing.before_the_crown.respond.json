@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_them_to_forget_the_rank",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.before_the_crown.open.levelled"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.before_the_crown",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.before_the_crown.levelled"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "accept_the_awkwardness",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "standing.before_the_crown.open.relieved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "standing.before_the_crown",
+              "deltas": {
+                "respect": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.standing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.before_the_crown.relieved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_that_is_a_problem",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.a_face_from_elsewhere.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.foreign_visitor",
+              "deltas": {
+                "respect": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.a_face_from_elsewhere.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_your_intentions_are_good",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.a_face_from_elsewhere.open.accepted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.foreign_visitor",
+              "deltas": {
+                "trust": 3,
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.a_face_from_elsewhere.accepted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

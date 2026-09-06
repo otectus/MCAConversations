@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_if_they_wanted_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "house.blood_of_the_seat.open.answered"
+            },
+            "conversations_disposition_apply": {
+              "topic": "house.royal",
+              "deltas": {
+                "trust": 3,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.house.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.blood_of_the_seat.answered"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "promise_to_treat_them_plainly",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "house.blood_of_the_seat.open.relieved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "house.royal",
+              "deltas": {
+                "warmth": 4,
+                "trust": 3
+              }
+            },
+            "next": "conversations.scene.house.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.blood_of_the_seat.relieved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.house.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

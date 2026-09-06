@@ -1,0 +1,71 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_a_hard_reading",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.what_i_read_aloud.open.recounted"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.herald",
+              "deltas": {
+                "trust": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.what_i_read_aloud.recounted"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_the_voice_matters",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.what_i_read_aloud.open.moved"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.herald",
+              "deltas": {
+                "warmth": 3,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.what_i_read_aloud.moved"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

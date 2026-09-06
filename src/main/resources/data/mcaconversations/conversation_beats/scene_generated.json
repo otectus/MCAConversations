@@ -8,6 +8,2286 @@
     "is what lets the build refuse a page where the villager asks and nothing answers."
   ],
   "beats": {
+    "court.from_the_bottom_of_the_hall.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.from_the_bottom_of_the_hall",
+      "response_question": "conversations.scene.court.from_the_bottom_of_the_hall.respond",
+      "npc_act": "report",
+      "subject": "court.commoner_view",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.from_the_bottom_of_the_hall.open.agreed": {
+      "topic": "court",
+      "say": "conversations.scene.court.from_the_bottom_of_the_hall.agreed",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.commoner_view",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.from_the_bottom_of_the_hall.open.explained": {
+      "topic": "court",
+      "say": "conversations.scene.court.from_the_bottom_of_the_hall.explained",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "explain",
+      "subject": "court.commoner_view",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.scene.leaving": {
+      "topic": "court",
+      "say": "conversations.scene.court.leaving",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "court.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "court.the_cloak_they_took.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_cloak_they_took",
+      "response_question": "conversations.scene.court.the_cloak_they_took.respond",
+      "npc_act": "complain",
+      "subject": "court.disgraced",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_cloak_they_took.open.answered": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_cloak_they_took.answered",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "explain",
+      "subject": "court.disgraced",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_cloak_they_took.open.softened": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_cloak_they_took.softened",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.disgraced",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_hand_that_signs.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_hand_that_signs",
+      "response_question": "conversations.scene.court.the_hand_that_signs.respond",
+      "npc_act": "report",
+      "subject": "court.hand",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_hand_that_signs.open.answered": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_hand_that_signs.answered",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "explain",
+      "subject": "court.hand",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_hand_that_signs.open.levelled": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_hand_that_signs.levelled",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.hand",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_ones_i_command.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_ones_i_command",
+      "response_question": "conversations.scene.court.the_ones_i_command.respond",
+      "npc_act": "report",
+      "subject": "court.lord_commander",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_ones_i_command.open.acknowledged": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_ones_i_command.acknowledged",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.lord_commander",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.the_ones_i_command.open.explained": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_ones_i_command.explained",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "explain",
+      "subject": "court.lord_commander",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "court.the_post_i_hold.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_post_i_hold",
+      "response_question": "conversations.scene.court.the_post_i_hold.respond",
+      "npc_act": "report",
+      "subject": "court.my_office",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.the_post_i_hold.open.acknowledged": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_post_i_hold.acknowledged",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.my_office",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.the_post_i_hold.open.explained": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_post_i_hold.explained",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "explain",
+      "subject": "court.my_office",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.the_watch_i_keep.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_watch_i_keep",
+      "response_question": "conversations.scene.court.the_watch_i_keep.respond",
+      "npc_act": "report",
+      "subject": "court.royal_guard",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.the_watch_i_keep.open.recounted": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_watch_i_keep.recounted",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "reminisce",
+      "subject": "court.royal_guard",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "court.the_watch_i_keep.open.warmed": {
+      "topic": "court",
+      "say": "conversations.scene.court.the_watch_i_keep.warmed",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.royal_guard",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.what_i_read_aloud.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.what_i_read_aloud",
+      "response_question": "conversations.scene.court.what_i_read_aloud.respond",
+      "npc_act": "report",
+      "subject": "court.herald",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.what_i_read_aloud.open.moved": {
+      "topic": "court",
+      "say": "conversations.scene.court.what_i_read_aloud.moved",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.herald",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "court.what_i_read_aloud.open.recounted": {
+      "topic": "court",
+      "say": "conversations.scene.court.what_i_read_aloud.recounted",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "reminisce",
+      "subject": "court.herald",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "court.what_the_books_say.open": {
+      "topic": "court",
+      "say": "conversations.scene.court.what_the_books_say",
+      "response_question": "conversations.scene.court.what_the_books_say.respond",
+      "npc_act": "report",
+      "subject": "court.maester",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.what_the_books_say.open.acknowledged": {
+      "topic": "court",
+      "say": "conversations.scene.court.what_the_books_say.acknowledged",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "accept",
+      "subject": "court.maester",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "court.what_the_books_say.open.recited": {
+      "topic": "court",
+      "say": "conversations.scene.court.what_the_books_say.recited",
+      "response_question": "conversations.scene.court.followup",
+      "npc_act": "reminisce",
+      "subject": "court.maester",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:court"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "crown.a_woman_on_the_seat.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.a_woman_on_the_seat",
+      "response_question": "conversations.scene.crown.a_woman_on_the_seat.respond",
+      "npc_act": "report",
+      "subject": "crown.queen_regnant",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.a_woman_on_the_seat.open.agreed": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.a_woman_on_the_seat.agreed",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.queen_regnant",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.a_woman_on_the_seat.open.answered": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.a_woman_on_the_seat.answered",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.queen_regnant",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.nobody_named_yet.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.nobody_named_yet",
+      "response_question": "conversations.scene.crown.nobody_named_yet.respond",
+      "npc_act": "report",
+      "subject": "crown.no_heir",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.nobody_named_yet.open.named": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.nobody_named_yet.named",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.no_heir",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.nobody_named_yet.open.steadied": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.nobody_named_yet.steadied",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.no_heir",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.our_king_is_a_guest.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.our_king_is_a_guest",
+      "response_question": "conversations.scene.crown.our_king_is_a_guest.respond",
+      "npc_act": "report",
+      "subject": "crown.player_is_our_king",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "empathy",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "curiosity",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.our_king_is_a_guest.open.agreed": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.our_king_is_a_guest.agreed",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.player_is_our_king",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.our_king_is_a_guest.open.explained": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.our_king_is_a_guest.explained",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.player_is_our_king",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.scene.leaving": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.leaving",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "crown.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "crown.the_black_cloth.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_black_cloth",
+      "response_question": "conversations.scene.crown.the_black_cloth.respond",
+      "npc_act": "report",
+      "subject": "crown.mourning",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.the_black_cloth.open.explained": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_black_cloth.explained",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.mourning",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_black_cloth.open.thanked": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_black_cloth.thanked",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.mourning",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.the_one_who_comes_after.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_comes_after",
+      "response_question": "conversations.scene.crown.the_one_who_comes_after.respond",
+      "npc_act": "report",
+      "subject": "crown.heir",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_comes_after.open.explained": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_comes_after.explained",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.heir",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_comes_after.open.warmed": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_comes_after.warmed",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.heir",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_rules.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_rules",
+      "response_question": "conversations.scene.crown.the_one_who_rules.respond",
+      "npc_act": "report",
+      "subject": "crown.sovereign",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_rules.open.acknowledged": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_rules.acknowledged",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.sovereign",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_rules.open.explained": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_rules.explained",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.sovereign",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_stands_beside.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_stands_beside",
+      "response_question": "conversations.scene.crown.the_one_who_stands_beside.respond",
+      "npc_act": "report",
+      "subject": "crown.consort",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_stands_beside.open.explained": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_stands_beside.explained",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.consort",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.the_one_who_stands_beside.open.recognised": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.the_one_who_stands_beside.recognised",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.consort",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "crown.you_wear_it.open": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.you_wear_it",
+      "response_question": "conversations.scene.crown.you_wear_it.respond",
+      "npc_act": "report",
+      "subject": "crown.player_sovereign",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.you_wear_it.open.levelled": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.you_wear_it.levelled",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "explain",
+      "subject": "crown.player_sovereign",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "crown.you_wear_it.open.relieved": {
+      "topic": "crown",
+      "say": "conversations.scene.crown.you_wear_it.relieved",
+      "response_question": "conversations.scene.crown.followup",
+      "npc_act": "accept",
+      "subject": "crown.player_sovereign",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:crown"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
     "day.before_the_light.open": {
       "topic": "day",
       "say": "conversations.scene.day.before_the_light",
@@ -2696,6 +4976,864 @@
         "shape": "confide"
       }
     },
+    "house.a_great_house.open": {
+      "topic": "house",
+      "say": "conversations.scene.house.a_great_house",
+      "response_question": "conversations.scene.house.a_great_house.respond",
+      "npc_act": "report",
+      "subject": "house.great",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.a_great_house.open.explained": {
+      "topic": "house",
+      "say": "conversations.scene.house.a_great_house.explained",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "explain",
+      "subject": "house.great",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "house.a_great_house.open.softened": {
+      "topic": "house",
+      "say": "conversations.scene.house.a_great_house.softened",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "accept",
+      "subject": "house.great",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "house.blood_of_the_seat.open": {
+      "topic": "house",
+      "say": "conversations.scene.house.blood_of_the_seat",
+      "response_question": "conversations.scene.house.blood_of_the_seat.respond",
+      "npc_act": "report",
+      "subject": "house.royal",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "house.blood_of_the_seat.open.answered": {
+      "topic": "house",
+      "say": "conversations.scene.house.blood_of_the_seat.answered",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "explain",
+      "subject": "house.royal",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "house.blood_of_the_seat.open.relieved": {
+      "topic": "house",
+      "say": "conversations.scene.house.blood_of_the_seat.relieved",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "accept",
+      "subject": "house.royal",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "house.no_name_above_my_door.open": {
+      "topic": "house",
+      "say": "conversations.scene.house.no_name_above_my_door",
+      "response_question": "conversations.scene.house.no_name_above_my_door.respond",
+      "npc_act": "report",
+      "subject": "house.none",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "empathy",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "curiosity",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.no_name_above_my_door.open.acknowledged": {
+      "topic": "house",
+      "say": "conversations.scene.house.no_name_above_my_door.acknowledged",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "accept",
+      "subject": "house.none",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.no_name_above_my_door.open.explained": {
+      "topic": "house",
+      "say": "conversations.scene.house.no_name_above_my_door.explained",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "explain",
+      "subject": "house.none",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "house.scene.leaving": {
+      "topic": "house",
+      "say": "conversations.scene.house.leaving",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "house.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "house.the_house_i_belong_to.open": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_house_i_belong_to",
+      "response_question": "conversations.scene.house.the_house_i_belong_to.respond",
+      "npc_act": "report",
+      "subject": "house.mine",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.the_house_i_belong_to.open.acknowledged": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_house_i_belong_to.acknowledged",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "accept",
+      "subject": "house.mine",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.the_house_i_belong_to.open.explained": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_house_i_belong_to.explained",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "explain",
+      "subject": "house.mine",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.the_surname_they_gave_me.open": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_surname_they_gave_me",
+      "response_question": "conversations.scene.house.the_surname_they_gave_me.respond",
+      "npc_act": "reminisce",
+      "subject": "house.surname",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "memory",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "house.the_surname_they_gave_me.open.recalled": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_surname_they_gave_me.recalled",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "reminisce",
+      "subject": "house.surname",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "house.the_surname_they_gave_me.open.warmed": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_surname_they_gave_me.warmed",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "accept",
+      "subject": "house.surname",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.the_words_we_say.open": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_words_we_say",
+      "response_question": "conversations.scene.house.the_words_we_say.respond",
+      "npc_act": "report",
+      "subject": "house.words",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "house.the_words_we_say.open.explained": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_words_we_say.explained",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "explain",
+      "subject": "house.words",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "house.the_words_we_say.open.warmed": {
+      "topic": "house",
+      "say": "conversations.scene.house.the_words_we_say.warmed",
+      "response_question": "conversations.scene.house.followup",
+      "npc_act": "accept",
+      "subject": "house.words",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:house"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
     "interests.legacy": {
       "topic": "interests",
       "say": "conversations.interests.legacy",
@@ -4356,6 +7494,288 @@
         "exit"
       ]
     },
+    "news.the_seat_changed_hands.open": {
+      "topic": "news",
+      "say": "conversations.scene.news.the_seat_changed_hands",
+      "response_question": "conversations.scene.news.the_seat_changed_hands.respond",
+      "npc_act": "report",
+      "subject": "news.coronation",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "news.the_seat_changed_hands.open.explained": {
+      "topic": "news",
+      "say": "conversations.scene.news.the_seat_changed_hands.explained",
+      "response_question": "conversations.scene.news.followup",
+      "npc_act": "explain",
+      "subject": "news.coronation",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "news.the_seat_changed_hands.open.warmed": {
+      "topic": "news",
+      "say": "conversations.scene.news.the_seat_changed_hands.warmed",
+      "response_question": "conversations.scene.news.followup",
+      "npc_act": "accept",
+      "subject": "news.coronation",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "news.they_raised_me_up.open": {
+      "topic": "news",
+      "say": "conversations.scene.news.they_raised_me_up",
+      "response_question": "conversations.scene.news.they_raised_me_up.respond",
+      "npc_act": "report",
+      "subject": "news.appointment",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "news.they_raised_me_up.open.delighted": {
+      "topic": "news",
+      "say": "conversations.scene.news.they_raised_me_up.delighted",
+      "response_question": "conversations.scene.news.followup",
+      "npc_act": "celebrate",
+      "subject": "news.appointment",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "celebrate"
+      }
+    },
+    "news.they_raised_me_up.open.explained": {
+      "topic": "news",
+      "say": "conversations.scene.news.they_raised_me_up.explained",
+      "response_question": "conversations.scene.news.followup",
+      "npc_act": "explain",
+      "subject": "news.appointment",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
     "news.while_you_were_away.open": {
       "topic": "news",
       "say": "conversations.scene.news.while_you_were_away",
@@ -4489,6 +7909,147 @@
       "frame": {
         "predicate": "observation",
         "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "news.word_from_the_capital.open": {
+      "topic": "news",
+      "say": "conversations.scene.news.word_from_the_capital",
+      "response_question": "conversations.scene.news.word_from_the_capital.respond",
+      "npc_act": "report",
+      "subject": "news.court",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "news.word_from_the_capital.open.acknowledged": {
+      "topic": "news",
+      "say": "conversations.scene.news.word_from_the_capital.acknowledged",
+      "response_question": "conversations.scene.news.followup",
+      "npc_act": "accept",
+      "subject": "news.court",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "news.word_from_the_capital.open.explained": {
+      "topic": "news",
+      "say": "conversations.scene.news.word_from_the_capital.explained",
+      "response_question": "conversations.scene.news.followup",
+      "npc_act": "explain",
+      "subject": "news.court",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:news"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
         "epistemic": "observed",
         "privacy": "ordinary",
         "obligations": [
@@ -6996,6 +10557,1146 @@
         "shape": "confide"
       }
     },
+    "realm.a_face_from_elsewhere.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.a_face_from_elsewhere",
+      "response_question": "conversations.scene.realm.a_face_from_elsewhere.respond",
+      "npc_act": "report",
+      "subject": "realm.foreign_visitor",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.a_face_from_elsewhere.open.accepted": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.a_face_from_elsewhere.accepted",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.foreign_visitor",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.a_face_from_elsewhere.open.explained": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.a_face_from_elsewhere.explained",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.foreign_visitor",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.i_carry_the_letters.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.i_carry_the_letters",
+      "response_question": "conversations.scene.realm.i_carry_the_letters.respond",
+      "npc_act": "report",
+      "subject": "realm.ambassador",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.i_carry_the_letters.open.explained": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.i_carry_the_letters.explained",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.ambassador",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "teach_back"
+      }
+    },
+    "realm.i_carry_the_letters.open.softened": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.i_carry_the_letters.softened",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.ambassador",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.named_an_enemy.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.named_an_enemy",
+      "response_question": "conversations.scene.realm.named_an_enemy.respond",
+      "npc_act": "report",
+      "subject": "realm.enemy_of_crown",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.named_an_enemy.open.acknowledged": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.named_an_enemy.acknowledged",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.enemy_of_crown",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.named_an_enemy.open.answered": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.named_an_enemy.answered",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.enemy_of_crown",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.one_of_our_own.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.one_of_our_own",
+      "response_question": "conversations.scene.realm.one_of_our_own.respond",
+      "npc_act": "celebrate",
+      "subject": "realm.our_own",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.one_of_our_own.open.explained": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.one_of_our_own.explained",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.our_own",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.one_of_our_own.open.warmed": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.one_of_our_own.warmed",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.our_own",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.scene.leaving": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.leaving",
+      "response_question": "conversations.cat.village",
+      "npc_act": "accept",
+      "subject": "realm.talk",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ]
+    },
+    "realm.sworn_to_nobody.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.sworn_to_nobody",
+      "response_question": "conversations.scene.realm.sworn_to_nobody.respond",
+      "npc_act": "report",
+      "subject": "realm.unsworn",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.sworn_to_nobody.open.accepted": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.sworn_to_nobody.accepted",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.unsworn",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.sworn_to_nobody.open.answered": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.sworn_to_nobody.answered",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.unsworn",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "realm.the_ones_we_are_sworn_to.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.the_ones_we_are_sworn_to",
+      "response_question": "conversations.scene.realm.the_ones_we_are_sworn_to.respond",
+      "npc_act": "report",
+      "subject": "realm.allied",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.the_ones_we_are_sworn_to.open.acknowledged": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.the_ones_we_are_sworn_to.acknowledged",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.allied",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.the_ones_we_are_sworn_to.open.answered": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.the_ones_we_are_sworn_to.answered",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.allied",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.the_quiet_years.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.the_quiet_years",
+      "response_question": "conversations.scene.realm.the_quiet_years.respond",
+      "npc_act": "report",
+      "subject": "realm.peace",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.the_quiet_years.open.agreed": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.the_quiet_years.agreed",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.peace",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.the_quiet_years.open.explained": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.the_quiet_years.explained",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.peace",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.we_are_at_war.open": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.we_are_at_war",
+      "response_question": "conversations.scene.realm.we_are_at_war.respond",
+      "npc_act": "report",
+      "subject": "realm.at_war",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "realm.we_are_at_war.open.explained": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.we_are_at_war.explained",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "explain",
+      "subject": "realm.at_war",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "realm.we_are_at_war.open.steadied": {
+      "topic": "realm",
+      "say": "conversations.scene.realm.we_are_at_war.steadied",
+      "response_question": "conversations.scene.realm.followup",
+      "npc_act": "accept",
+      "subject": "realm.at_war",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:realm"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
     "regrets.scene.leaving": {
       "topic": "regrets",
       "say": "conversations.scene.regrets.leaving",
@@ -8217,6 +12918,432 @@
         "shape": "observe"
       }
     },
+    "rumors.what_the_servants_say.open": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.what_the_servants_say",
+      "response_question": "conversations.scene.rumors.what_the_servants_say.respond",
+      "npc_act": "report",
+      "subject": "rumors.household_talk",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "rumoured",
+        "privacy": "confidential",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe",
+        "source": "anonymous"
+      }
+    },
+    "rumors.what_the_servants_say.open.explained": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.what_the_servants_say.explained",
+      "response_question": "conversations.scene.rumors.followup",
+      "npc_act": "explain",
+      "subject": "rumors.household_talk",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "rumors.what_the_servants_say.open.relieved": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.what_the_servants_say.relieved",
+      "response_question": "conversations.scene.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.household_talk",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "rumors.what_they_say_of_the_heir.open": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.what_they_say_of_the_heir",
+      "response_question": "conversations.scene.rumors.what_they_say_of_the_heir.respond",
+      "npc_act": "report",
+      "subject": "rumors.heir_talk",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "rumoured",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe",
+        "source": "anonymous"
+      }
+    },
+    "rumors.what_they_say_of_the_heir.open.agreed": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.what_they_say_of_the_heir.agreed",
+      "response_question": "conversations.scene.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.heir_talk",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "rumors.what_they_say_of_the_heir.open.reported": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.what_they_say_of_the_heir.reported",
+      "response_question": "conversations.scene.rumors.followup",
+      "npc_act": "report",
+      "subject": "rumors.heir_talk",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "rumors.whispers_out_of_the_hall.open": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.whispers_out_of_the_hall",
+      "response_question": "conversations.scene.rumors.whispers_out_of_the_hall.respond",
+      "npc_act": "report",
+      "subject": "rumors.court_whispers",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "rumoured",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "decide"
+        ],
+        "shape": "observe",
+        "source": "anonymous"
+      }
+    },
+    "rumors.whispers_out_of_the_hall.open.hedged": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.whispers_out_of_the_hall.hedged",
+      "response_question": "conversations.scene.rumors.followup",
+      "npc_act": "explain",
+      "subject": "rumors.court_whispers",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "rumors.whispers_out_of_the_hall.open.steadied": {
+      "topic": "rumors",
+      "say": "conversations.scene.rumors.whispers_out_of_the_hall.steadied",
+      "response_question": "conversations.scene.rumors.followup",
+      "npc_act": "accept",
+      "subject": "rumors.court_whispers",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:rumors"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
     "season.deep_winter.open": {
       "topic": "season",
       "say": "conversations.scene.season.deep_winter",
@@ -9423,6 +14550,429 @@
         "shape": "confide"
       }
     },
+    "standing.before_the_crown.open": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.before_the_crown",
+      "response_question": "conversations.scene.standing.before_the_crown.respond",
+      "npc_act": "report",
+      "subject": "standing.before_the_crown",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "candor",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "standing.before_the_crown.open.levelled": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.before_the_crown.levelled",
+      "response_question": "conversations.scene.standing.followup",
+      "npc_act": "explain",
+      "subject": "standing.before_the_crown",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "standing.before_the_crown.open.relieved": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.before_the_crown.relieved",
+      "response_question": "conversations.scene.standing.followup",
+      "npc_act": "accept",
+      "subject": "standing.before_the_crown",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "standing.friend_of_the_crown.open": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.friend_of_the_crown",
+      "response_question": "conversations.scene.standing.friend_of_the_crown.respond",
+      "npc_act": "report",
+      "subject": "standing.crown_friend",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "standing.friend_of_the_crown.open.acknowledged": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.friend_of_the_crown.acknowledged",
+      "response_question": "conversations.scene.standing.followup",
+      "npc_act": "accept",
+      "subject": "standing.crown_friend",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "standing.friend_of_the_crown.open.explained": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.friend_of_the_crown.explained",
+      "response_question": "conversations.scene.standing.followup",
+      "npc_act": "explain",
+      "subject": "standing.crown_friend",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "standing.marked_against_you.open": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.marked_against_you",
+      "response_question": "conversations.scene.standing.marked_against_you.respond",
+      "npc_act": "report",
+      "subject": "standing.crown_enemy",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "standing.marked_against_you.open.answered": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.marked_against_you.answered",
+      "response_question": "conversations.scene.standing.followup",
+      "npc_act": "explain",
+      "subject": "standing.crown_enemy",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "confidential",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
+    "standing.marked_against_you.open.steadied": {
+      "topic": "standing",
+      "say": "conversations.scene.standing.marked_against_you.steadied",
+      "response_question": "conversations.scene.standing.followup",
+      "npc_act": "accept",
+      "subject": "standing.crown_enemy",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:standing"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
     "standing.scene.leaving": {
       "topic": "standing",
       "say": "conversations.scene.standing.leaving",
@@ -10341,6 +15891,147 @@
         "shape": "confide"
       }
     },
+    "village.a_village_in_black.open": {
+      "topic": "village",
+      "say": "conversations.scene.village.a_village_in_black",
+      "response_question": "conversations.scene.village.a_village_in_black.respond",
+      "npc_act": "report",
+      "subject": "village.capital_mourning",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "candor",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "village.a_village_in_black.open.explained": {
+      "topic": "village",
+      "say": "conversations.scene.village.a_village_in_black.explained",
+      "response_question": "conversations.scene.village.followup",
+      "npc_act": "explain",
+      "subject": "village.capital_mourning",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "teach_back"
+      }
+    },
+    "village.a_village_in_black.open.thanked": {
+      "topic": "village",
+      "say": "conversations.scene.village.a_village_in_black.thanked",
+      "response_question": "conversations.scene.village.followup",
+      "npc_act": "accept",
+      "subject": "village.capital_mourning",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "confide"
+      }
+    },
     "village.after_something_happened.open": {
       "topic": "village",
       "say": "conversations.scene.village.after_something_happened",
@@ -10474,6 +16165,147 @@
       "frame": {
         "predicate": "observation",
         "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "village.before_the_hall_was_built.open": {
+      "topic": "village",
+      "say": "conversations.scene.village.before_the_hall_was_built",
+      "response_question": "conversations.scene.village.before_the_hall_was_built.respond",
+      "npc_act": "reminisce",
+      "subject": "village.capital_founded",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "memory",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "village.before_the_hall_was_built.open.accepted": {
+      "topic": "village",
+      "say": "conversations.scene.village.before_the_hall_was_built.accepted",
+      "response_question": "conversations.scene.village.followup",
+      "npc_act": "accept",
+      "subject": "village.capital_founded",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "plan"
+      }
+    },
+    "village.before_the_hall_was_built.open.answered": {
+      "topic": "village",
+      "say": "conversations.scene.village.before_the_hall_was_built.answered",
+      "response_question": "conversations.scene.village.followup",
+      "npc_act": "explain",
+      "subject": "village.capital_founded",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "future",
         "epistemic": "observed",
         "privacy": "ordinary",
         "obligations": [
@@ -11103,6 +16935,147 @@
           "active"
         ],
         "shape": "plan"
+      }
+    },
+    "village.we_are_a_capital_now.open": {
+      "topic": "village",
+      "say": "conversations.scene.village.we_are_a_capital_now",
+      "response_question": "conversations.scene.village.we_are_a_capital_now.respond",
+      "npc_act": "report",
+      "subject": "village.capital",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "village.we_are_a_capital_now.open.explained": {
+      "topic": "village",
+      "say": "conversations.scene.village.we_are_a_capital_now.explained",
+      "response_question": "conversations.scene.village.followup",
+      "npc_act": "explain",
+      "subject": "village.capital",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "debate"
+      }
+    },
+    "village.we_are_a_capital_now.open.warmed": {
+      "topic": "village",
+      "say": "conversations.scene.village.we_are_a_capital_now.warmed",
+      "response_question": "conversations.scene.village.followup",
+      "npc_act": "accept",
+      "subject": "village.capital",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "topic:village"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
       }
     },
     "weather.scene.leaving": {
@@ -31422,6 +37395,566 @@
     }
   },
   "replies": {
+    "conversations.scene.court.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "subject:court.*"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.from_the_bottom_of_the_hall.respond/ask_if_it_bothers_them": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.from_the_bottom_of_the_hall.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.from_the_bottom_of_the_hall.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.from_the_bottom_of_the_hall.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.from_the_bottom_of_the_hall.respond/say_the_outside_has_its_own": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "court.from_the_bottom_of_the_hall.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.the_cloak_they_took.respond/ask_whether_it_was_just": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.the_cloak_they_took.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.the_cloak_they_took.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.the_cloak_they_took.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.the_cloak_they_took.respond/say_they_are_more_than_it": {
+      "stance": "empathy",
+      "responds_to": [
+        "court.the_cloak_they_took.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.the_hand_that_signs.respond/ask_the_worst_of_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.the_hand_that_signs.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.the_hand_that_signs.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.the_hand_that_signs.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.the_hand_that_signs.respond/say_the_seat_would_frighten_them": {
+      "stance": "candor",
+      "responds_to": [
+        "court.the_hand_that_signs.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.the_ones_i_command.respond/ask_how_they_choose": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.the_ones_i_command.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.the_ones_i_command.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.the_ones_i_command.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.the_ones_i_command.respond/say_that_is_good_command": {
+      "stance": "encouragement",
+      "responds_to": [
+        "court.the_ones_i_command.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.the_post_i_hold.respond/ask_what_the_work_is": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.the_post_i_hold.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.the_post_i_hold.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.the_post_i_hold.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.the_post_i_hold.respond/say_it_is_worth_doing": {
+      "stance": "encouragement",
+      "responds_to": [
+        "court.the_post_i_hold.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.the_watch_i_keep.respond/ask_about_the_worst_night": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.the_watch_i_keep.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.the_watch_i_keep.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.the_watch_i_keep.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.the_watch_i_keep.respond/thank_them_for_standing": {
+      "stance": "encouragement",
+      "responds_to": [
+        "court.the_watch_i_keep.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.what_i_read_aloud.respond/ask_about_a_hard_reading": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.what_i_read_aloud.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.what_i_read_aloud.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.what_i_read_aloud.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.what_i_read_aloud.respond/say_the_voice_matters": {
+      "stance": "empathy",
+      "responds_to": [
+        "court.what_i_read_aloud.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.court.what_the_books_say.respond/ask_for_an_old_entry": {
+      "stance": "curiosity",
+      "responds_to": [
+        "court.what_the_books_say.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.court.what_the_books_say.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "court.what_the_books_say.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.court.what_the_books_say.respond/say_the_keeping_matters": {
+      "stance": "encouragement",
+      "responds_to": [
+        "court.what_the_books_say.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.a_woman_on_the_seat.respond/ask_who_objected": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.a_woman_on_the_seat.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.a_woman_on_the_seat.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.a_woman_on_the_seat.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.a_woman_on_the_seat.respond/say_it_makes_no_odds": {
+      "stance": "candor",
+      "responds_to": [
+        "crown.a_woman_on_the_seat.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "subject:crown.*"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.nobody_named_yet.respond/ask_who_would_claim": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.nobody_named_yet.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.nobody_named_yet.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.nobody_named_yet.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.nobody_named_yet.respond/say_it_may_still_be_fine": {
+      "stance": "encouragement",
+      "responds_to": [
+        "crown.nobody_named_yet.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.our_king_is_a_guest.respond/ask_if_it_is_hard": {
+      "stance": "empathy",
+      "responds_to": [
+        "crown.our_king_is_a_guest.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.our_king_is_a_guest.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.our_king_is_a_guest.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.our_king_is_a_guest.respond/say_it_sounds_better": {
+      "stance": "encouragement",
+      "responds_to": [
+        "crown.our_king_is_a_guest.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.the_black_cloth.respond/ask_how_long_it_lasts": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.the_black_cloth.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.the_black_cloth.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.the_black_cloth.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.the_black_cloth.respond/offer_quiet": {
+      "stance": "empathy",
+      "responds_to": [
+        "crown.the_black_cloth.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.the_one_who_comes_after.respond/ask_if_they_are_ready": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.the_one_who_comes_after.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.the_one_who_comes_after.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.the_one_who_comes_after.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.the_one_who_comes_after.respond/wish_them_well": {
+      "stance": "encouragement",
+      "responds_to": [
+        "crown.the_one_who_comes_after.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.the_one_who_rules.respond/ask_what_changed": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.the_one_who_rules.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.the_one_who_rules.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.the_one_who_rules.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.the_one_who_rules.respond/say_it_suits_the_place": {
+      "stance": "encouragement",
+      "responds_to": [
+        "crown.the_one_who_rules.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.the_one_who_stands_beside.respond/ask_how_they_know": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.the_one_who_stands_beside.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.the_one_who_stands_beside.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.the_one_who_stands_beside.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.the_one_who_stands_beside.respond/say_that_is_true_everywhere": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "crown.the_one_who_stands_beside.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.crown.you_wear_it.respond/ask_for_the_honest_version": {
+      "stance": "curiosity",
+      "responds_to": [
+        "crown.you_wear_it.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.crown.you_wear_it.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "crown.you_wear_it.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.crown.you_wear_it.respond/promise_to_stay_ordinary": {
+      "stance": "candor",
+      "responds_to": [
+        "crown.you_wear_it.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
     "conversations.scene.day.before_the_light.respond/ask_the_first_hour": {
       "stance": "curiosity",
       "responds_to": [
@@ -32119,6 +38652,218 @@
       "tone": "plain",
       "exit": true
     },
+    "conversations.scene.house.a_great_house.respond/ask_what_is_owed_downward": {
+      "stance": "curiosity",
+      "responds_to": [
+        "house.a_great_house.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.house.a_great_house.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "house.a_great_house.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.a_great_house.respond/say_that_is_a_real_burden": {
+      "stance": "empathy",
+      "responds_to": [
+        "house.a_great_house.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.house.blood_of_the_seat.respond/ask_if_they_wanted_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "house.blood_of_the_seat.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.house.blood_of_the_seat.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "house.blood_of_the_seat.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.blood_of_the_seat.respond/promise_to_treat_them_plainly": {
+      "stance": "candor",
+      "responds_to": [
+        "house.blood_of_the_seat.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.house.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "subject:house.*"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.no_name_above_my_door.respond/ask_if_it_is_lonelier": {
+      "stance": "empathy",
+      "responds_to": [
+        "house.no_name_above_my_door.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.house.no_name_above_my_door.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "house.no_name_above_my_door.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.no_name_above_my_door.respond/say_it_was_earned": {
+      "stance": "encouragement",
+      "responds_to": [
+        "house.no_name_above_my_door.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.house.the_house_i_belong_to.respond/ask_what_it_obliges": {
+      "stance": "curiosity",
+      "responds_to": [
+        "house.the_house_i_belong_to.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.house.the_house_i_belong_to.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "house.the_house_i_belong_to.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.the_house_i_belong_to.respond/say_it_sounds_steadying": {
+      "stance": "encouragement",
+      "responds_to": [
+        "house.the_house_i_belong_to.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.house.the_surname_they_gave_me.respond/ask_when_it_stopped_feeling_odd": {
+      "stance": "curiosity",
+      "responds_to": [
+        "house.the_surname_they_gave_me.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.house.the_surname_they_gave_me.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "house.the_surname_they_gave_me.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.the_surname_they_gave_me.respond/say_the_name_suits_them": {
+      "stance": "encouragement",
+      "responds_to": [
+        "house.the_surname_they_gave_me.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.house.the_words_we_say.respond/ask_what_they_mean": {
+      "stance": "curiosity",
+      "responds_to": [
+        "house.the_words_we_say.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.house.the_words_we_say.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "house.the_words_we_say.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.house.the_words_we_say.respond/say_they_are_good_words": {
+      "stance": "encouragement",
+      "responds_to": [
+        "house.the_words_we_say.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
     "conversations.scene.interests.followup/leave": {
       "stance": "exit",
       "responds_to": [
@@ -32465,6 +39210,74 @@
       "tone": "plain",
       "exit": true
     },
+    "conversations.scene.news.the_seat_changed_hands.respond/ask_how_the_village_took_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "news.the_seat_changed_hands.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.news.the_seat_changed_hands.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.the_seat_changed_hands.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.news.the_seat_changed_hands.respond/say_you_hope_it_settles": {
+      "stance": "encouragement",
+      "responds_to": [
+        "news.the_seat_changed_hands.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.news.they_raised_me_up.respond/ask_what_it_changes": {
+      "stance": "curiosity",
+      "responds_to": [
+        "news.they_raised_me_up.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.news.they_raised_me_up.respond/congratulate_them": {
+      "stance": "encouragement",
+      "responds_to": [
+        "news.they_raised_me_up.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.news.they_raised_me_up.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.they_raised_me_up.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
     "conversations.scene.news.while_you_were_away.respond/ask_the_two_things": {
       "stance": "curiosity",
       "responds_to": [
@@ -32490,6 +39303,40 @@
       "stance": "empathy",
       "responds_to": [
         "news.while_you_were_away.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.news.word_from_the_capital.respond/ask_what_the_reading_said": {
+      "stance": "curiosity",
+      "responds_to": [
+        "news.word_from_the_capital.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.news.word_from_the_capital.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "news.word_from_the_capital.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.news.word_from_the_capital.respond/say_it_is_news_to_them": {
+      "stance": "encouragement",
+      "responds_to": [
+        "news.word_from_the_capital.open"
       ],
       "tone": "gentle",
       "outcomes": [
@@ -32879,6 +39726,286 @@
         "acknowledge"
       ]
     },
+    "conversations.scene.realm.a_face_from_elsewhere.respond/ask_if_that_is_a_problem": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.a_face_from_elsewhere.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.a_face_from_elsewhere.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.a_face_from_elsewhere.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.a_face_from_elsewhere.respond/say_your_intentions_are_good": {
+      "stance": "candor",
+      "responds_to": [
+        "realm.a_face_from_elsewhere.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "subject:realm.*"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.i_carry_the_letters.respond/ask_what_they_learned": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.i_carry_the_letters.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.i_carry_the_letters.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.i_carry_the_letters.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.i_carry_the_letters.respond/say_that_is_a_hard_trade": {
+      "stance": "empathy",
+      "responds_to": [
+        "realm.i_carry_the_letters.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.named_an_enemy.respond/ask_what_they_will_do": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.named_an_enemy.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.named_an_enemy.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.named_an_enemy.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.named_an_enemy.respond/thank_them_for_the_warning": {
+      "stance": "candor",
+      "responds_to": [
+        "realm.named_an_enemy.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.one_of_our_own.respond/ask_what_that_buys": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.one_of_our_own.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.one_of_our_own.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.one_of_our_own.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.one_of_our_own.respond/say_you_are_glad_of_it": {
+      "stance": "encouragement",
+      "responds_to": [
+        "realm.one_of_our_own.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.sworn_to_nobody.respond/ask_if_they_advise_swearing": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.sworn_to_nobody.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.sworn_to_nobody.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.sworn_to_nobody.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.sworn_to_nobody.respond/say_you_prefer_it_open": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "realm.sworn_to_nobody.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.the_ones_we_are_sworn_to.respond/ask_if_it_will_hold": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.the_ones_we_are_sworn_to.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.the_ones_we_are_sworn_to.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.the_ones_we_are_sworn_to.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.the_ones_we_are_sworn_to.respond/say_it_sounds_a_good_arrangement": {
+      "stance": "encouragement",
+      "responds_to": [
+        "realm.the_ones_we_are_sworn_to.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.the_quiet_years.respond/ask_if_that_can_last": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.the_quiet_years.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.the_quiet_years.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.the_quiet_years.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.the_quiet_years.respond/say_quiet_is_underrated": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "realm.the_quiet_years.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.realm.we_are_at_war.respond/ask_what_it_is_over": {
+      "stance": "curiosity",
+      "responds_to": [
+        "realm.we_are_at_war.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.realm.we_are_at_war.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "realm.we_are_at_war.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.realm.we_are_at_war.respond/say_you_hope_it_ends": {
+      "stance": "empathy",
+      "responds_to": [
+        "realm.we_are_at_war.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
     "conversations.scene.regrets.followup/leave": {
       "stance": "exit",
       "responds_to": [
@@ -33105,6 +40232,108 @@
       ],
       "answers_obligation": [
         "acknowledge"
+      ]
+    },
+    "conversations.scene.rumors.what_the_servants_say.respond/ask_how_they_keep_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.what_the_servants_say.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.rumors.what_the_servants_say.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.what_the_servants_say.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.rumors.what_the_servants_say.respond/respect_the_silence": {
+      "stance": "restraint",
+      "responds_to": [
+        "rumors.what_the_servants_say.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.rumors.what_they_say_of_the_heir.respond/ask_what_the_talk_is": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.what_they_say_of_the_heir.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.rumors.what_they_say_of_the_heir.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.what_they_say_of_the_heir.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.rumors.what_they_say_of_the_heir.respond/say_it_is_unfair_to_judge": {
+      "stance": "restraint",
+      "responds_to": [
+        "rumors.what_they_say_of_the_heir.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.rumors.whispers_out_of_the_hall.respond/ask_for_the_whisper": {
+      "stance": "curiosity",
+      "responds_to": [
+        "rumors.whispers_out_of_the_hall.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.rumors.whispers_out_of_the_hall.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "rumors.whispers_out_of_the_hall.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.rumors.whispers_out_of_the_hall.respond/tell_them_to_let_it_lie": {
+      "stance": "candor",
+      "responds_to": [
+        "rumors.whispers_out_of_the_hall.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "decide"
       ]
     },
     "conversations.scene.season.deep_winter.respond/ask_about_the_stores": {
@@ -33335,6 +40564,40 @@
         "acknowledge"
       ]
     },
+    "conversations.scene.standing.before_the_crown.respond/accept_the_awkwardness": {
+      "stance": "restraint",
+      "responds_to": [
+        "standing.before_the_crown.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.standing.before_the_crown.respond/ask_them_to_forget_the_rank": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.before_the_crown.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.standing.before_the_crown.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.before_the_crown.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
     "conversations.scene.standing.followup/leave": {
       "stance": "exit",
       "responds_to": [
@@ -33342,6 +40605,74 @@
       ],
       "tone": "plain",
       "exit": true
+    },
+    "conversations.scene.standing.friend_of_the_crown.respond/ask_what_it_costs": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.friend_of_the_crown.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.standing.friend_of_the_crown.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.friend_of_the_crown.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.standing.friend_of_the_crown.respond/say_you_will_keep_clear_of_leaning": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.friend_of_the_crown.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "conversations.scene.standing.marked_against_you.respond/ask_where_it_came_from": {
+      "stance": "curiosity",
+      "responds_to": [
+        "standing.marked_against_you.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.standing.marked_against_you.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "standing.marked_against_you.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.standing.marked_against_you.respond/say_you_will_keep_it_away": {
+      "stance": "candor",
+      "responds_to": [
+        "standing.marked_against_you.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
     },
     "conversations.scene.standing.settled_opinion.respond/ask_about_the_household": {
       "stance": "curiosity",
@@ -33487,6 +40818,40 @@
         "acknowledge"
       ]
     },
+    "conversations.scene.village.a_village_in_black.respond/ask_what_is_expected_of_a_stranger": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.a_village_in_black.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.village.a_village_in_black.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.a_village_in_black.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.village.a_village_in_black.respond/say_you_are_sorry_for_it": {
+      "stance": "empathy",
+      "responds_to": [
+        "village.a_village_in_black.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
     "conversations.scene.village.after_something_happened.respond/acknowledge_it": {
       "stance": "empathy",
       "responds_to": [
@@ -33520,6 +40885,40 @@
       ],
       "tone": "plain",
       "exit": true
+    },
+    "conversations.scene.village.before_the_hall_was_built.respond/ask_what_they_will_lose": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.before_the_hall_was_built.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.village.before_the_hall_was_built.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.before_the_hall_was_built.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.village.before_the_hall_was_built.respond/offer_to_watch_the_marker": {
+      "stance": "practical_help",
+      "responds_to": [
+        "village.before_the_hall_was_built.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
     },
     "conversations.scene.village.change_settled.respond/ask_what_helped": {
       "stance": "curiosity",
@@ -33697,6 +41096,40 @@
       ],
       "uses_referents": [
         "change"
+      ]
+    },
+    "conversations.scene.village.we_are_a_capital_now.respond/ask_if_it_is_better_now": {
+      "stance": "curiosity",
+      "responds_to": [
+        "village.we_are_a_capital_now.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "conversations.scene.village.we_are_a_capital_now.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "village.we_are_a_capital_now.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.scene.village.we_are_a_capital_now.respond/say_it_still_feels_like_a_village": {
+      "stance": "encouragement",
+      "responds_to": [
+        "village.we_are_a_capital_now.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
       ]
     },
     "conversations.scene.weather.followup/leave": {

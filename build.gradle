@@ -236,6 +236,39 @@ tasks.register('townsteadProbeTest', Test) {
     }
 }
 
+// Resolves CapitalsBinding's manifest against a real MCA Capitals jar, in its own JVM and its own
+// classloader. Separate from `test` for the same reason as townsteadProbeTest: Capitals is published
+// on CurseForge and Modrinth only, so the path is supplied by the person running it.
+//
+//     ./gradlew capitalsProbeTest -PcapitalsJar=/path/mcacapitals-1.3.6.jar
+//
+// MCA rides along on `mcaconversations.probe.jars` because Capitals is compiled against MCA, and a
+// Capitals class whose descriptors name an MCA type reads as unbound with MCA absent -- which is the
+// correct production degradation but would make this probe pass vacuously. The 7.7 probe jars are
+// used rather than the dev-runtime MCA, because Capitals requires 7.7.1-alpha.2 or newer.
+tasks.register('capitalsProbeTest', Test) {
+    group = 'verification'
+    description = 'Verifies the MCA Capitals binding manifest against a supplied Capitals jar.'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'dev.otectus.mcaconversations.compat.CapitalsBindingProbeTest'
+    }
+    outputs.upToDateWhen { false }
+    testLogging { showStandardStreams = true }
+    doFirst {
+        systemProperty 'mcaconversations.capitals.probe.jar',
+                project.hasProperty('capitalsJar') ? project.property('capitalsJar').toString() : ''
+        systemProperty 'mcaconversations.probe.jars', mcaProbeVersions.indices
+                .findAll { i -> mcaProbeVersions[i].startsWith('7.7') }
+                .collect { i -> configurations.getByName("mcaProbe${i}").files }
+                .flatten()
+                .findAll { it.name.contains('minecraft-comes-alive') }
+                .join(File.pathSeparator)
+    }
+}
+
 // The content compiler: expands src/content/ authoring sources into runtime resources (spec 19).
 //
 // Deliberately NOT wired into processResources. The compiler lives in the test source set - it is

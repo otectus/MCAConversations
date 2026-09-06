@@ -310,6 +310,412 @@
           }
         }
       ]
+    },
+    {
+      "name": "before_the_crown",
+      "subject": "standing.before_the_crown",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.player_is_sovereign",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 38,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "How I am supposed to stand with you.",
+        "pt": "Como eu deveria me portar diante de você."
+      },
+      "lines": {
+        "en": [
+          "You are the one on the seat, so my standing with you is not a friendship question any more. It is a rank question and I hate that.",
+          "I do not know how to reckon where I stand with a crowned head. Nobody in this lane has ever had to.",
+          "Half the village now watches how I speak to you, and half of what I say is said for them and not for you."
+        ],
+        "pt": [
+          "Você é quem está no trono, então minha posição com você não é mais questão de amizade. É questão de posto e eu odeio isso.",
+          "Não sei como calcular onde estou diante de uma cabeça coroada. Ninguém nesta viela precisou disso antes.",
+          "Metade da vila agora repara em como eu falo com você, e metade do que digo é dito para eles e não para você."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_them_to_forget_the_rank",
+          "stance": "candor",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "Reckon it the way you did before.",
+            "pt": "Calcule como você calculava antes."
+          },
+          "phrases": [
+            "reckon it the way you did before",
+            "reckon me the way you did before"
+          ],
+          "requires_any": [
+            "reckon"
+          ],
+          "disposition": {
+            "trust": 3,
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "levelled",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "I can try, and I shall fail in public and manage it in private, and I would ask you to accept that split.",
+                "Then here it is, reckoned the old way: you are well thought of, and slightly feared, and the fear is new.",
+                "Before, you were somebody who returned a borrowed spade. That has not stopped counting. It has stopped being all of it."
+              ],
+              "pt": [
+                "Posso tentar, e vou falhar em público e conseguir em particular, e peço que você aceite essa divisão.",
+                "Então lá vai, calculado do jeito antigo: você é bem visto, e um pouco temido, e o medo é novo.",
+                "Antes você era alguém que devolvia uma pá emprestada. Isso não deixou de contar. Deixou de ser tudo."
+              ]
+            }
+          }
+        },
+        {
+          "name": "accept_the_awkwardness",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It is awkward for both of us. That is fair.",
+            "pt": "É constrangedor para nós dois. É justo."
+          },
+          "phrases": [
+            "it is awkward for both of us",
+            "the awkwardness is fair enough"
+          ],
+          "requires_any": [
+            "awkward",
+            "awkwardness"
+          ],
+          "disposition": {
+            "respect": 3,
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "relieved",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is, and saying so has taken most of it out of the room already.",
+                "Thank you for not pretending otherwise. The pretending is what makes it unbearable.",
+                "Give it two years. Awkward things become ordinary things if nobody keeps poking them."
+              ],
+              "pt": [
+                "É, e dizer isso já tirou boa parte do peso da sala.",
+                "Obrigado por não fingir o contrário. É o fingimento que torna insuportável.",
+                "Dê dois anos. Coisas constrangedoras viram coisas comuns se ninguém ficar cutucando."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "friend_of_the_crown",
+      "subject": "standing.crown_friend",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.crown_standing",
+          "is": "friend",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 32,
+      "identity_values": [
+        "fairness"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "How the Crown has you down.",
+        "pt": "Como a Coroa te tem anotado."
+      },
+      "lines": {
+        "en": [
+          "You are written down as a friend of the Crown. That is a real thing here, and it opens a gate at an hour it should not.",
+          "The word came down that you are counted a friend. People here adjusted their manner within a day, which I found instructive.",
+          "You will find the toll man vague about the toll. That is what being a friend of the Crown buys, and it is worth more than it sounds."
+        ],
+        "pt": [
+          "Você está anotado como amigo da Coroa. Isso é coisa real aqui, e abre um portão numa hora em que não deveria.",
+          "Veio a notícia de que você é contado como amigo. As pessoas ajustaram os modos em um dia, o que achei instrutivo.",
+          "Você vai achar o cobrador vago quanto ao pedágio. É isso que ser amigo da Coroa compra, e vale mais do que parece."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_it_costs",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does that standing cost me later?",
+            "pt": "O que essa posição me custa depois?"
+          },
+          "phrases": [
+            "what does that standing cost me later",
+            "what will that standing cost in time"
+          ],
+          "requires_any": [
+            "cost"
+          ],
+          "disposition": {
+            "familiarity": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "temporal": "future",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Whatever they ask for once, and they will ask once, and it will be phrased as a favour to you.",
+                "Nothing until the seat changes hands. Then every friend of the old Crown is a question to the new one.",
+                "It costs you the ability to say you had nothing to do with them. That is the whole bill and it arrives late."
+              ],
+              "pt": [
+                "O que pedirem uma vez, e vão pedir uma vez, e vai ser formulado como um favor a você.",
+                "Nada até o trono mudar de mãos. Aí todo amigo da Coroa velha é uma pergunta para a nova.",
+                "Custa a você a chance de dizer que não teve nada a ver com eles. É essa a conta inteira e ela chega tarde."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_will_keep_clear_of_leaning",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I will keep clear of leaning on it.",
+            "pt": "Vou evitar me apoiar nisso."
+          },
+          "phrases": [
+            "i will keep clear of leaning on it",
+            "leaning on it here would be wrong"
+          ],
+          "requires_any": [
+            "leaning"
+          ],
+          "disposition": {
+            "respect": 4,
+            "trust": 2
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Then you will keep it longer. The ones who lean on it wear it out inside two years.",
+                "That is the right answer and I did not expect it, and I shall say so at the well, which is worth something.",
+                "Good. This lane forgives a friend of the Crown. It does not forgive somebody who says so out loud."
+              ],
+              "pt": [
+                "Então você mantém por mais tempo. Quem se apoia nisso gasta a coisa em dois anos.",
+                "É a resposta certa e eu não esperava, e vou dizer isso no poço, o que já vale alguma coisa.",
+                "Ótimo. Esta viela perdoa um amigo da Coroa. Não perdoa quem diz isso em voz alta."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "marked_against_you",
+      "subject": "standing.crown_enemy",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.crown_standing",
+          "is": "enemy",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 40,
+      "identity_values": [
+        "mercy"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What is written against my name.",
+        "pt": "O que está escrito contra o meu nome."
+      },
+      "lines": {
+        "en": [
+          "You are marked against the Crown. I am telling you because you would rather know it from a friendly mouth.",
+          "There is a line about you in the wrong ledger. It has not been acted on. Lines like that sit for years and then do not.",
+          "People here have been told what you are. Some of them believed it immediately and I am not going to name those."
+        ],
+        "pt": [
+          "Você está marcado contra a Coroa. Estou te contando porque você prefere saber por uma boca amiga.",
+          "Tem uma linha sobre você no livro errado. Não foi executada. Linhas assim ficam anos paradas e um dia deixam de ficar.",
+          "Aqui já disseram às pessoas o que você é. Algumas acreditaram na hora e eu não vou dar nomes."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_where_it_came_from",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Where did that mark come from?",
+            "pt": "De onde veio essa marca?"
+          },
+          "phrases": [
+            "where did that mark come from",
+            "who put the mark there"
+          ],
+          "requires_any": [
+            "mark"
+          ],
+          "disposition": {
+            "trust": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "A report from somebody who profits by it. That is true of most marks and impossible to prove about any of them.",
+                "I do not know and I have asked, which was itself a small risk, so take the asking as the answer.",
+                "Something you did in another village that arrived here in a worse shape than it left."
+              ],
+              "pt": [
+                "Um relato de alguém que lucra com isso. Vale para quase toda marca e é impossível provar em qualquer uma.",
+                "Não sei e eu perguntei, o que já foi um pequeno risco, então tome a pergunta como resposta.",
+                "Algo que você fez em outra vila e que chegou aqui em pior estado do que saiu."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_you_will_keep_it_away",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Whatever it is, I will keep it away from here.",
+            "pt": "Seja o que for, vou manter isso longe daqui."
+          },
+          "phrases": [
+            "whatever it is i will keep it away from here",
+            "i will keep that trouble away from this village"
+          ],
+          "requires_any": [
+            "away"
+          ],
+          "disposition": {
+            "trust": 3,
+            "respect": 2
+          },
+          "reaction": {
+            "id": "steadied",
+            "act": "accept",
+            "polarity": "positive",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Then we understand each other, and I shall keep speaking to you in daylight, which is the only signal I can send.",
+                "That is all I wanted said. I did not need it to be true. I needed you to be willing to say it.",
+                "Good. Do not thank me for the warning where the ledger man drinks. He remembers who was standing where."
+              ],
+              "pt": [
+                "Então nos entendemos, e vou continuar falando com você à luz do dia, que é o único sinal que posso dar.",
+                "É tudo o que eu queria ouvir. Não precisava ser verdade. Precisava que você estivesse disposto a dizer.",
+                "Ótimo. Não me agradeça pelo aviso onde o escrivão bebe. Ele lembra quem estava onde."
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
