@@ -1,0 +1,330 @@
+{
+  "answers": [
+    {
+      "name": "commons",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "commons.borrowed_tool.active"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "commons.borrowed_tool.active",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "commons.borrowed_tool.active.open"
+            },
+            "conversations_record": {
+              "id": "sample_commons.cooldown.commons",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "commons.scene.borrowed_tool.active.respond",
+            "conversations_say": {
+              "phrase": "commons.scene.borrowed_tool.active",
+              "slots": [
+                "neighbour",
+                "tool"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "commons.borrowed_tool.settled"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "commons.borrowed_tool.settled",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "commons.borrowed_tool.settled.open"
+            },
+            "conversations_record": {
+              "id": "sample_commons.cooldown.commons",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "commons.scene.borrowed_tool.settled.respond",
+            "conversations_say": {
+              "phrase": "commons.scene.borrowed_tool.settled",
+              "slots": [
+                "neighbour",
+                "tool"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "commons.supper.endorsed"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "commons.supper.endorsed",
+                "not": true
+              }
+            },
+            {
+              "chance": 60,
+              "conversations_culture": {
+                "token": "commons_the_shearing_supper"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "commons.supper.endorsed.open"
+            },
+            "conversations_record": {
+              "id": "sample_commons.cooldown.commons",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "commons.scene.supper.endorsed.respond",
+            "conversations_say": {
+              "phrase": "commons.scene.supper.endorsed"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "commons.supper.questioned"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "commons.supper.questioned",
+                "not": true
+              }
+            },
+            {
+              "chance": 60,
+              "conversations_culture": {
+                "token": "commons_the_shearing_supper",
+                "family": "festival",
+                "stance": "question"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "commons.supper.questioned.open"
+            },
+            "conversations_record": {
+              "id": "sample_commons.cooldown.commons",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "commons.scene.supper.questioned.respond",
+            "conversations_say": {
+              "phrase": "commons.scene.supper.questioned"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "commons.mill.hearsay"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "commons.mill.hearsay",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "commons.mill.hearsay.open"
+            },
+            "conversations_record": {
+              "id": "sample_commons.cooldown.commons",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "commons.scene.mill.hearsay.respond",
+            "conversations_say": {
+              "phrase": "commons.scene.mill.hearsay",
+              "slots": [
+                "teller",
+                "what"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "commons.village.evergreen"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "commons.village.evergreen",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "quick",
+              "branch": "scene",
+              "beat": "commons.village.evergreen.open"
+            },
+            "next": "commons.scene.village.evergreen.respond",
+            "conversations_say": {
+              "phrase": "commons.scene.village.evergreen"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "dynamic"
+            }
+          ],
+          "actions": {
+            "next": "commons.plain.respond"
+          }
+        }
+      ]
+    }
+  ]
+}

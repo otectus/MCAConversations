@@ -74,7 +74,7 @@ class QuickRepliesTest {
     @DisplayName("nothing worth numbering is not numbered")
     void staysQuietWhenThereIsNoChoice() {
         assertTrue(QuickReplies.optionsBlock("conversations.topic.day.rough.respond", List.of()).isEmpty());
-        assertTrue(QuickReplies.optionsBlock("conversations.topic.day.rough.respond", List.of("leave")).isEmpty());
+        assertTrue(QuickReplies.optionsBlock("conversations.topic.day.rough.respond", List.of("leave")).isPresent());
         assertTrue(QuickReplies.optionsBlock(null, List.of("a", "b")).isEmpty());
     }
 
@@ -87,5 +87,18 @@ class QuickRepliesTest {
         assertTrue(flat.contains("6."), flat);
         assertTrue(flat.contains("8."), flat);
         assertFalse(flat.contains("9."), flat);
+    }
+
+    @Test
+    void negativeNumbersAreNotPositiveChoices() {
+        assertTrue(QuickReplies.parse("-1", 3).isEmpty());
+        assertTrue(QuickReplies.parse("(-2)", 3).isEmpty());
+    }
+
+    @Test
+    void aSingleContinuationIsDiscoverableAndNumbered() {
+        String line = QuickReplies.optionsBlock("conversations.q", List.of("leave")).orElseThrow().getString();
+        assertTrue(line.contains("1."));
+        assertTrue(line.contains("dialogue.conversations.q.leave"));
     }
 }

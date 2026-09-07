@@ -60,11 +60,11 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
                     McaReputationApi.getApiVersion());
             return;
         }
-        ReputationBridge.setQueries(new ConversationsReputationCompat());
         // Not an @Mod.EventBusSubscriber, for the same reason ConversationsQuestsEvents is not one:
         // the annotation would put a Reputation event type on the classpath of an install that has no
         // Reputation. Registered here instead, where the mod is already known to be present.
         MinecraftForge.EVENT_BUS.register(new ConversationsReputationEvents());
+        ReputationBridge.setQueries(new ConversationsReputationCompat());
     }
 
     private static boolean probeOpinionBias() {
@@ -188,12 +188,17 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
                 .newestOnly(false);
         for (String type : query.types()) {
             ResourceLocation parsed = ResourceLocation.tryParse(type);
-            if (parsed != null) {
-                builder.type(parsed);
+            if (parsed == null) {
+                return false;
             }
+            builder.type(parsed);
         }
         for (String status : query.statuses()) {
-            IncidentStatus.byName(status).ifPresent(builder::status);
+            Optional<IncidentStatus> parsed = IncidentStatus.byName(status);
+            if (parsed.isEmpty()) {
+                return false;
+            }
+            builder.status(parsed.get());
         }
         List<ReputationIncidentView> matches =
                 McaReputationApi.selectIncidents(player.server, player.getUUID(), key.get(), builder.build());
@@ -235,9 +240,10 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
         if (types != null) {
             for (String type : types) {
                 ResourceLocation parsed = ResourceLocation.tryParse(type);
-                if (parsed != null) {
-                    builder.type(parsed);
+                if (parsed == null) {
+                    return List.of();
                 }
+                builder.type(parsed);
             }
         }
         List<ReputationIncidentView> views =
@@ -290,7 +296,11 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
                         villager.getDisplayName().getString(), "subject"))
                 .context("decision", decisionId);
         if (visibility != null) {
-            IncidentVisibility.byName(visibility).ifPresent(request::visibility);
+            Optional<IncidentVisibility> parsed = IncidentVisibility.byName(visibility);
+            if (parsed.isEmpty()) {
+                return false; // A misspelled private visibility must never inherit the public default.
+            }
+            request.visibility(parsed.get());
         }
         return McaReputationApi.record(request.build()).applied();
     }

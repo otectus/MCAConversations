@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "examine_loyalty_with_questions",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.loyalty_with_questions.open.ask_loyalty_with_questions_answer.examine_loyalty_with_questions_answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.loyalty_with_questions",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.loyalty_with_questions.ask_loyalty_with_questions_answer.examine_loyalty_with_questions_answer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "weigh_loyalty_with_questions",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "realm.loyalty_with_questions.open.ask_loyalty_with_questions_answer.weigh_loyalty_with_questions_answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "realm.loyalty_with_questions",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.realm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.loyalty_with_questions.ask_loyalty_with_questions_answer.weigh_loyalty_with_questions_answer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.realm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

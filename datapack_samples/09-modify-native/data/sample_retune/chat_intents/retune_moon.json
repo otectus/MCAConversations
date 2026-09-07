@@ -1,0 +1,67 @@
+{
+  "_comment": [
+    "Intents for this pack's own added answer. Every non-exit answer wants an intent bound to its",
+    "exact question and answer name, or chat mode cannot reach it."
+  ],
+  "intents": {
+    "retune.chitchat.moon": {
+      "question": "conversations.cat.chitchat",
+      "answer": "moon",
+      "keywords": {
+        "moon": 1.5,
+        "stars": 1.0,
+        "night": 0.8,
+        "sky": 0.6
+      },
+      "requiresAny": [
+        "moon",
+        "stars"
+      ],
+      "phrases": [
+        "do you watch the moon",
+        "look at the moon",
+        "what about the moon"
+      ],
+      "category": "topics"
+    },
+    "retune.moon.agree": {
+      "question": "retune.moon.respond",
+      "answer": "agree",
+      "keywords": {
+        "watch": 1.2,
+        "nights": 1.0,
+        "look": 0.8
+      },
+      "requiresAny": [
+        "watch",
+        "look",
+        "nights"
+      ],
+      "phrases": [
+        "i watch it too",
+        "i look at it most nights"
+      ],
+      "context": "retune.moon.respond",
+      "category": "topics"
+    },
+    "retune.moon.stories": {
+      "question": "retune.moon.respond",
+      "answer": "ask_stories",
+      "keywords": {
+        "story": 1.5,
+        "tale": 1.2,
+        "old": 0.6
+      },
+      "requiresAny": [
+        "story",
+        "tale"
+      ],
+      "phrases": [
+        "are there stories about it",
+        "any old tales about the moon"
+      ],
+      "context": "retune.moon.respond",
+      "category": "topics"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "_comment": "One intent per non-exit button, named after the supplying mod like the profile and the beats. Nothing here mentions a chandler-specific keyword that would also drag an unrelated trade's page into range.",
+  "intents": {
+    "work.chandler.ask_hard": {
+      "question": "chandler.respond",
+      "answer": "ask_hard",
+      "context": "chandler.respond",
+      "keywords": {
+        "hard": 1.5,
+        "difficult": 1.2,
+        "tricky": 1.0
+      },
+      "requiresAny": [
+        "hard",
+        "difficult",
+        "tricky"
+      ],
+      "phrases": [
+        "what is the hard part",
+        "what is difficult about it",
+        "which bit is tricky"
+      ],
+      "category": "topics"
+    },
+    "work.chandler.value": {
+      "question": "chandler.respond",
+      "answer": "value",
+      "context": "chandler.respond",
+      "keywords": {
+        "notice": 1.5,
+        "stopped": 1.5,
+        "needed": 1.0
+      },
+      "requiresAny": [
+        "notice",
+        "stopped",
+        "needed"
+      ],
+      "phrases": [
+        "the lane would notice if you stopped",
+        "people would notice if you stopped",
+        "this place needs what you make"
+      ],
+      "category": "topics"
+    },
+    "work.chandler.challenge": {
+      "question": "chandler.respond",
+      "answer": "challenge",
+      "context": "chandler.respond",
+      "keywords": {
+        "smoke": 1.5,
+        "stink": 1.5,
+        "cheap": 1.0
+      },
+      "requiresAny": [
+        "smoke",
+        "stink",
+        "cheap"
+      ],
+      "phrases": [
+        "tallow smokes and stinks",
+        "your candles smoke",
+        "that is cheap work"
+      ],
+      "category": "topics"
+    },
+    "work.chandler.more": {
+      "question": "chandler.followup",
+      "answer": "ask_more",
+      "context": "chandler.followup",
+      "keywords": {
+        "refuse": 1.5,
+        "wont": 1.2,
+        "turn": 0.8
+      },
+      "requiresAny": [
+        "refuse",
+        "wont",
+        "turn"
+      ],
+      "phrases": [
+        "is there anything you refuse to make",
+        "anything you will not pour",
+        "do you ever turn work down"
+      ],
+      "category": "topics"
+    },
+    "work.chandler.thanks": {
+      "question": "chandler.followup",
+      "answer": "thanks",
+      "context": "chandler.followup",
+      "keywords": {
+        "thought": 1.5,
+        "way": 0.8,
+        "never": 1.0
+      },
+      "requiresAny": [
+        "thought",
+        "never"
+      ],
+      "phrases": [
+        "i had not thought of it that way",
+        "i never thought about it like that",
+        "that is a new way to look at it"
+      ],
+      "category": "topics"
+    }
+  }
+}

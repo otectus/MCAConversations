@@ -41,15 +41,16 @@ public final class ChronicleEventMapper {
         String type = coarseType == null ? "" : coarseType.trim().toLowerCase(Locale.ROOT);
         return switch (type) {
             case "capital_founded" -> GossipEventType.CAPITAL_FOUNDED;
-            case "heir_apparent_named", "crown_child_born", "royal_birth" -> GossipEventType.ROYAL_BIRTH;
+            case "crown_child_born", "royal_birth" -> GossipEventType.ROYAL_BIRTH;
+            case "heir_apparent_named" -> GossipEventType.COURT_NEWS;
             case "royal_marriage" -> GossipEventType.ROYAL_MARRIAGE;
             case "sovereign_death" -> GossipEventType.ROYAL_DEATH;
-            case "throne_seized", "peaceful_transfer", "abdication" -> GossipEventType.CORONATION;
+            case "throne_seized", "peaceful_transfer" -> GossipEventType.CORONATION;
             case "disinherited" -> GossipEventType.DISGRACE;
             case "legitimized", "new_duke_or_duchess", "lord_commander_appointed", "hand_appointed",
                  "grand_maester_appointed", "royal_guard_appointed", "court_herald_appointed" ->
                     GossipEventType.APPOINTMENT;
-            case "mourning_ended", "legacy" -> GossipEventType.COURT_NEWS;
+            case "mourning_ended", "abdication", "legacy" -> GossipEventType.COURT_NEWS;
             default -> byTranslationKey(translationKey);
         };
     }
@@ -83,7 +84,8 @@ public final class ChronicleEventMapper {
 
     private static boolean contains(String key, String... needles) {
         for (String needle : needles) {
-            if (key.contains(needle)) {
+            if (java.util.Arrays.stream(key.split("[._:/-]+"))
+                    .anyMatch(token -> "war".equals(needle) ? token.equals("war") || token.equals("wars") : token.startsWith(needle))) {
                 return true;
             }
         }

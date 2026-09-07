@@ -142,6 +142,12 @@ public final class ContextKeys {
     public static final ContextKey<String> CAPITAL_NAME = ContextKey.of("capital.name", String.class);
     /** {@code pending}, {@code founded}, {@code active}, {@code unknown} — Capitals' own vocabulary. */
     public static final ContextKey<String> CAPITAL_STATE = ContextKey.of("capital.state", String.class);
+    /** Public court facts; absence must never be inferred from a failed COURT binding. */
+    public static final ContextKey<Boolean> CAPITAL_SOVEREIGN_NAMED = ContextKey.of("capital.sovereign_named", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_SOVEREIGN_FEMALE = ContextKey.of("capital.sovereign_female", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_CONSORT_NAMED = ContextKey.of("capital.consort_named", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_HOUSE_PRESENT = ContextKey.of("capital.house_present", Boolean.class);
+    public static final ContextKey<Boolean> CAPITAL_HOUSE_WORDS_PRESENT = ContextKey.of("capital.house_words_present", Boolean.class);
     /** The speaker's resolved title id, {@code none} when they hold none. */
     public static final ContextKey<String> CAPITAL_TITLE = ContextKey.of("capital.title", String.class);
     /** Capitals' own rank value for that title, so content can gate on "knight or above". */

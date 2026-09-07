@@ -1,0 +1,879 @@
+{
+  "_comment": "Sample 06. Six opening beats, ten turn beats, and the replies that connect them. The rumour beats carry a rumoured or reported frame, which must name a source referent - here the teller slot - so a rumour can never be spoken as an observation.",
+  "beats": {
+    "commons.supper.endorsed.open": {
+      "topic": "village",
+      "say": "commons.scene.supper.endorsed",
+      "response_question": "commons.scene.supper.endorsed.respond",
+      "npc_act": "invite",
+      "subject": "village.commons.supper",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "public",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "celebrate"
+      }
+    },
+    "commons.supper.endorsed.explained": {
+      "topic": "village",
+      "say": "commons.scene.supper.endorsed.explained",
+      "response_question": "commons.followup",
+      "npc_act": "explain",
+      "subject": "village.commons.supper",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "public",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "celebrate"
+      }
+    },
+    "commons.supper.endorsed.welcomed": {
+      "topic": "village",
+      "say": "commons.scene.supper.endorsed.welcomed",
+      "response_question": "commons.followup",
+      "npc_act": "accept",
+      "subject": "village.commons.supper",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "plan",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "public",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "celebrate"
+      }
+    },
+    "commons.supper.questioned.open": {
+      "topic": "village",
+      "say": "commons.scene.supper.questioned",
+      "response_question": "commons.scene.supper.questioned.respond",
+      "npc_act": "qualify",
+      "subject": "village.commons.supper",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "curiosity",
+        "respectful_disagreement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "shape": "debate"
+      }
+    },
+    "commons.supper.questioned.explained": {
+      "topic": "village",
+      "say": "commons.scene.supper.questioned.explained",
+      "response_question": "commons.followup",
+      "npc_act": "explain",
+      "subject": "village.commons.supper",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "debate"
+      }
+    },
+    "commons.supper.questioned.agreed": {
+      "topic": "village",
+      "say": "commons.scene.supper.questioned.agreed",
+      "response_question": "commons.followup",
+      "npc_act": "accept",
+      "subject": "village.commons.supper",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "debate"
+      }
+    },
+    "commons.borrowed_tool.active.open": {
+      "topic": "village",
+      "say": "commons.scene.borrowed_tool.active",
+      "response_question": "commons.scene.borrowed_tool.active.respond",
+      "npc_act": "report",
+      "subject": "village.commons.borrowed_tool",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "clarify",
+          "decide"
+        ],
+        "referents": {
+          "neighbour": "slot:neighbour",
+          "tool": "slot:tool"
+        },
+        "slots": [
+          "neighbour",
+          "tool"
+        ],
+        "episode_states": [
+          "active"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "commons.borrowed_tool.active.vouched": {
+      "topic": "village",
+      "say": "commons.scene.borrowed_tool.active.vouched",
+      "response_question": "commons.followup",
+      "npc_act": "accept",
+      "subject": "village.commons.borrowed_tool",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "referents": {
+          "neighbour": "slot:neighbour"
+        },
+        "slots": [
+          "neighbour"
+        ],
+        "episode_states": [
+          "active"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "commons.borrowed_tool.active.named": {
+      "topic": "village",
+      "say": "commons.scene.borrowed_tool.active.named",
+      "response_question": "commons.followup",
+      "npc_act": "explain",
+      "subject": "village.commons.borrowed_tool",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "referents": {
+          "neighbour": "slot:neighbour",
+          "tool": "slot:tool"
+        },
+        "slots": [
+          "neighbour",
+          "tool"
+        ],
+        "episode_states": [
+          "active"
+        ],
+        "shape": "problem_solve"
+      }
+    },
+    "commons.borrowed_tool.settled.open": {
+      "topic": "village",
+      "say": "commons.scene.borrowed_tool.settled",
+      "response_question": "commons.scene.borrowed_tool.settled.respond",
+      "npc_act": "report",
+      "subject": "village.commons.borrowed_tool",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "status_change",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "referents": {
+          "neighbour": "slot:neighbour",
+          "tool": "slot:tool"
+        },
+        "slots": [
+          "neighbour",
+          "tool"
+        ],
+        "episode_states": [
+          "succeeded"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "commons.borrowed_tool.settled.closed": {
+      "topic": "village",
+      "say": "commons.scene.borrowed_tool.settled.closed",
+      "response_question": "commons.followup",
+      "npc_act": "accept",
+      "subject": "village.commons.borrowed_tool",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "accepted",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "status_change",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "referents": {
+          "tool": "slot:tool"
+        },
+        "slots": [
+          "tool"
+        ],
+        "episode_states": [
+          "succeeded"
+        ],
+        "shape": "reminisce"
+      }
+    },
+    "commons.mill.hearsay.open": {
+      "topic": "village",
+      "say": "commons.scene.mill.hearsay",
+      "response_question": "commons.scene.mill.hearsay.respond",
+      "npc_act": "disclose",
+      "subject": "village.commons.mill",
+      "polarity": "mixed",
+      "openness": "guarded",
+      "allowed_stances": [
+        "curiosity",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "rumoured",
+        "privacy": "discreet",
+        "obligations": [
+          "clarify",
+          "acknowledge"
+        ],
+        "referents": {
+          "teller": "slot:teller",
+          "what": "slot:what"
+        },
+        "slots": [
+          "teller",
+          "what"
+        ],
+        "episode_states": [
+          "active"
+        ],
+        "shape": "confide"
+      }
+    },
+    "commons.mill.hearsay.sourced": {
+      "topic": "village",
+      "say": "commons.scene.mill.hearsay.sourced",
+      "response_question": "commons.followup",
+      "npc_act": "qualify",
+      "subject": "village.commons.mill",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "reported",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "referents": {
+          "teller": "slot:teller"
+        },
+        "slots": [
+          "teller"
+        ],
+        "episode_states": [
+          "active"
+        ],
+        "shape": "confide"
+      }
+    },
+    "commons.mill.hearsay.kept": {
+      "topic": "village",
+      "say": "commons.scene.mill.hearsay.kept",
+      "response_question": "commons.followup",
+      "npc_act": "accept",
+      "subject": "village.commons.mill",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "social_report",
+        "temporal": "current",
+        "epistemic": "rumoured",
+        "privacy": "discreet",
+        "obligations": [
+          "acknowledge"
+        ],
+        "referents": {
+          "teller": "slot:teller"
+        },
+        "episode_states": [
+          "active"
+        ],
+        "shape": "confide"
+      }
+    },
+    "commons.village.evergreen.open": {
+      "topic": "village",
+      "say": "commons.scene.village.evergreen",
+      "response_question": "commons.scene.village.evergreen.respond",
+      "npc_act": "report",
+      "subject": "village.commons.place",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "curiosity",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    },
+    "commons.village.evergreen.answered": {
+      "topic": "village",
+      "say": "commons.scene.village.evergreen.answered",
+      "response_question": "commons.followup",
+      "npc_act": "explain",
+      "subject": "village.commons.place",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": [
+          "acknowledge"
+        ],
+        "shape": "observe"
+      }
+    }
+  },
+  "replies": {
+    "commons.scene.supper.endorsed.respond/ask_what_happens": {
+      "stance": "curiosity",
+      "responds_to": [
+        "commons.supper.endorsed.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "commons.scene.supper.endorsed.respond/say_you_will_come": {
+      "stance": "encouragement",
+      "responds_to": [
+        "commons.supper.endorsed.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ]
+    },
+    "commons.scene.supper.endorsed.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.supper.endorsed.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "commons.scene.supper.questioned.respond/ask_why_not": {
+      "stance": "curiosity",
+      "responds_to": [
+        "commons.supper.questioned.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ]
+    },
+    "commons.scene.supper.questioned.respond/agree_it_is_a_lot": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "commons.supper.questioned.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ],
+      "move": "reciprocate"
+    },
+    "commons.scene.supper.questioned.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.supper.questioned.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "commons.scene.borrowed_tool.active.respond/vouch_for_them": {
+      "stance": "candor",
+      "responds_to": [
+        "commons.borrowed_tool.active.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ],
+      "answers_obligation": [
+        "decide"
+      ],
+      "uses_referents": [
+        "neighbour"
+      ]
+    },
+    "commons.scene.borrowed_tool.active.respond/ask_who_it_was": {
+      "stance": "curiosity",
+      "responds_to": [
+        "commons.borrowed_tool.active.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ],
+      "uses_referents": [
+        "neighbour",
+        "tool"
+      ]
+    },
+    "commons.scene.borrowed_tool.active.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.borrowed_tool.active.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "commons.scene.borrowed_tool.settled.respond/say_it_is_squared_away": {
+      "stance": "candor",
+      "responds_to": [
+        "commons.borrowed_tool.settled.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ],
+      "uses_referents": [
+        "tool"
+      ]
+    },
+    "commons.scene.borrowed_tool.settled.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.borrowed_tool.settled.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "commons.scene.mill.hearsay.respond/ask_where_they_heard_it": {
+      "stance": "curiosity",
+      "responds_to": [
+        "commons.mill.hearsay.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "clarify"
+      ],
+      "uses_referents": [
+        "teller"
+      ],
+      "epistemic_move": "ask_source"
+    },
+    "commons.scene.mill.hearsay.respond/keep_it_between_us": {
+      "stance": "restraint",
+      "responds_to": [
+        "commons.mill.hearsay.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ],
+      "privacy_move": "keep_private",
+      "move": "boundary"
+    },
+    "commons.scene.mill.hearsay.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.mill.hearsay.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "commons.scene.village.evergreen.respond/ask_what_it_is_like": {
+      "stance": "curiosity",
+      "responds_to": [
+        "commons.village.evergreen.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ],
+      "move": "bridge"
+    },
+    "commons.scene.village.evergreen.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.village.evergreen.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "commons.followup/say_thanks": {
+      "stance": "encouragement",
+      "responds_to": [
+        "commons.supper.endorsed.explained",
+        "commons.supper.endorsed.welcomed",
+        "commons.supper.questioned.explained",
+        "commons.supper.questioned.agreed",
+        "commons.borrowed_tool.active.vouched",
+        "commons.borrowed_tool.active.named",
+        "commons.borrowed_tool.settled.closed",
+        "commons.mill.hearsay.sourced",
+        "commons.mill.hearsay.kept",
+        "commons.village.evergreen.answered"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "answers_obligation": [
+        "acknowledge"
+      ],
+      "move": "reciprocate"
+    },
+    "commons.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "commons.supper.endorsed.explained",
+        "commons.supper.endorsed.welcomed",
+        "commons.supper.questioned.explained",
+        "commons.supper.questioned.agreed",
+        "commons.borrowed_tool.active.vouched",
+        "commons.borrowed_tool.active.named",
+        "commons.borrowed_tool.settled.closed",
+        "commons.mill.hearsay.sourced",
+        "commons.mill.hearsay.kept",
+        "commons.village.evergreen.answered"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

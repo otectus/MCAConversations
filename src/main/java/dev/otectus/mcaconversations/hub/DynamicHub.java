@@ -97,6 +97,11 @@ public final class DynamicHub {
         }
     }
 
+    /** Drops menus owned by the server that just stopped. */
+    public static void reset() {
+        SHOWING.clear();
+    }
+
     /** Test seam: publish a hub without a world. */
     public static void showForTesting(UUID playerId, HubPlan plan) {
         remember(playerId, plan == null ? HubPlan.EMPTY : plan);

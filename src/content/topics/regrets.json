@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "Regrets, gated on trust and on how long they have known each other.",
-    "",
-    "A regret told early is a performance. One scene needs years behind it; the other is the small,",
-    "sayable kind that anybody will admit to and that is still true."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "regrets",
   "entry": {
@@ -48,7 +45,7 @@
       "act": "report",
       "polarity": "negative",
       "predicate": "disclosure",
-      "temporal": "past",
+      "temporal": "current",
       "privacy": "confidential",
       "obligations": [
         "clarify",
@@ -56,17 +53,28 @@
       ],
       "conditions": [
         {
-          "field": "time.days_since_first_met",
-          "min": 30,
+          "field": "social.nearby",
+          "max": 0,
           "unknown": "fail"
         },
         {
           "field": "player.relationship_band",
           "any_of": [
             "confidant",
-            "partner",
-            "family"
+            "family",
+            "partner"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 30,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -82,14 +90,14 @@
       },
       "lines": {
         "en": [
-          "One conversation, about nine years ago, that I ended too well. Ending it badly would have left a door.",
-          "I let somebody go and told myself it was respect. It was that I did not want to be told no.",
-          "It is not a thing I did. It is four years of not doing a thing, which is the sort that does not have a date on it."
+          "The kind of regret that bothers me is leaving something important unsaid.",
+          "I worry more about the honest words we hold back than the awkward ones we stumble through.",
+          "I think leaving important words unsaid can become a regret of its own."
         ],
         "pt": [
-          "Uma conversa, uns nove anos atrás, que eu encerrei bem demais. Encerrar mal teria deixado uma porta.",
-          "Deixei alguém ir e disse a mim mesma que era respeito. Era que eu não queria ouvir um não.",
-          "Não é uma coisa que eu fiz. São quatro anos sem fazer uma coisa, do tipo que não tem data."
+          "O tipo de arrependimento que me incomoda é deixar algo importante por dizer.",
+          "Penso mais nas palavras honestas que guardamos do que nas palavras atrapalhadas que conseguimos dizer.",
+          "Acho que deixar palavras importantes por dizer pode virar um arrependimento."
         ]
       },
       "replies": [
@@ -102,17 +110,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "That's a heavy one to carry.",
-            "pt": "Essa é pesada de carregar."
+            "en": "Silence can cost a lot.",
+            "pt": "O silêncio pode custar caro."
           },
           "phrases": [
-            "that is a heavy one to carry",
-            "that has weight to it"
+            "silence can cost a lot"
           ],
           "requires_any": [
-            "heavy",
-            "weight",
-            "carry"
+            "cost",
+            "lot"
           ],
           "disposition": {
             "trust": 4,
@@ -132,16 +138,18 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It is, and it has got lighter about twice, both times because somebody heard it and left it where it was.",
-                "Thank you. The version where you tell me it was for the best is the version I have had four times.",
-                "I do not want it fixed. I want it to have been said in a room with somebody else in it, and now it has."
+                "It can. Though that doesn't mean every thought needs to be said immediately.",
+                "Yes. Knowing when to speak is the difficult part.",
+                "It can. So can careless words. That's why I'd take some care."
               ],
               "pt": [
-                "É, e ficou mais leve umas duas vezes, as duas porque alguém ouviu e deixou onde estava.",
-                "Obrigada. A versão em que você me diz que foi melhor assim é a versão que eu já ouvi quatro vezes.",
-                "Não quero que seja consertado. Quero que tenha sido dito numa sala com outra pessoa dentro, e agora foi."
+                "Pode sim. Mas isso não quer dizer que todo pensamento precise ser dito na hora.",
+                "Sim. Saber quando falar é a parte difícil.",
+                "Pode. Palavras descuidadas também. Por isso eu teria cuidado."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -153,16 +161,15 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "What would you do differently?",
-            "pt": "O que você faria diferente?"
+            "en": "What would you try to do differently?",
+            "pt": "O que você tentaria fazer diferente?"
           },
           "phrases": [
-            "what would you do differently",
-            "how would you do it now"
+            "what would you try to do differently"
           ],
           "requires_any": [
-            "differently",
-            "now"
+            "try",
+            "differently"
           ],
           "disposition": {
             "familiarity": 3
@@ -171,24 +178,26 @@
             "id": "answered",
             "act": "explain",
             "polarity": "mixed",
-            "temporal": "past",
+            "temporal": "current",
             "privacy": "confidential",
             "shape": "reminisce",
             "lines": {
               "en": [
-                "Stay in the room four minutes longer. That is the whole of it and I have run it about a thousand times.",
-                "Ask one question instead of assuming the answer. I was twenty-nine and I thought assuming was the same as knowing.",
-                "Nothing, honestly. I would do it again with the same information and that is the part that is actually hard to hold."
+                "Ask a plain question before assuming I know the answer.",
+                "Say what I mean while there's still a chance to hear the other person's side.",
+                "Try asking before deciding what the other person must think."
               ],
               "pt": [
-                "Ficar na sala mais quatro minutos. É tudo, e eu já refiz isso umas mil vezes.",
-                "Fazer uma pergunta em vez de supor a resposta. Eu tinha vinte e nove anos e achava que supor era o mesmo que saber.",
-                "Nada, sinceramente. Eu faria de novo com a mesma informação, e é essa a parte de fato difícil de segurar."
+                "Fazer uma pergunta direta antes de presumir que sei a resposta.",
+                "Dizer o que penso enquanto ainda há chance de ouvir o outro lado.",
+                "Tentar perguntar antes de decidir o que a outra pessoa deve pensar."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "the_small_one",
@@ -197,7 +206,7 @@
       "act": "report",
       "polarity": "mixed",
       "predicate": "opinion",
-      "temporal": "past",
+      "temporal": "current",
       "privacy": "ordinary",
       "obligations": [
         "clarify",
@@ -210,6 +219,12 @@
             "acquaintance",
             "friend"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -225,14 +240,14 @@
       },
       "lines": {
         "en": [
-          "I should have learned to swim. Everybody in this village can and I made a joke of it at fifteen and here we are.",
-          "Selling a good tool to pay for a bad week. I have replaced it twice and neither replacement was the same.",
-          "One argument I won that I should have lost on purpose. It cost me a friendship worth more than the point."
+          "Winning an argument isn't always worth it. I'd rather keep a friendship than collect the last word.",
+          "I think a small disagreement can get expensive if you treat it like a contest.",
+          "I'd be careful about winning a point at a friend's expense."
         ],
         "pt": [
-          "Eu deveria ter aprendido a nadar. Todo mundo nesta vila sabe, e eu fiz piada disso aos quinze, e aqui estamos.",
-          "Vender uma boa ferramenta para pagar uma semana ruim. Já substituí duas vezes e nenhuma substituta foi a mesma coisa.",
-          "Uma discussão que eu ganhei e deveria ter perdido de propósito. Me custou uma amizade que valia mais que o ponto."
+          "Ganhar uma discussão nem sempre vale a pena. Prefiro manter uma amizade a ficar com a última palavra.",
+          "Acho que uma discordância pequena pode sair caro se virar competição.",
+          "Eu teria cuidado antes de ganhar um argumento à custa de uma amizade."
         ]
       },
       "replies": [
@@ -245,17 +260,18 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "Some of that is still fixable.",
-            "pt": "Parte disso ainda tem conserto."
+            "en": "There's room to put things right.",
+            "pt": "Dá para tentar consertar as coisas."
           },
           "phrases": [
-            "some of that is still fixable",
-            "you could still put that right"
+            "theres room to put things right"
           ],
           "requires_any": [
-            "fixable",
-            "right",
-            "still"
+            "theres",
+            "room",
+            "put",
+            "things",
+            "right"
           ],
           "disposition": {
             "warmth": 2,
@@ -265,20 +281,21 @@
             "id": "considered",
             "act": "accept",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "The swimming is. I have thought that every summer for twenty years and this is the first time anybody has said it to me.",
-                "One of the three, maybe. That is a better ratio than I usually give myself credit for.",
-                "You are right and I would rather you were wrong, because being right makes it a thing I have to do something about."
+                "Often, yes. An apology has a better chance than pretending nothing happened.",
+                "Sometimes. The other person still gets to decide what they can forgive.",
+                "There can be. Trying honestly is better than assuming it's too late."
               ],
               "pt": [
-                "A natação tem. Eu penso isso todo verão há vinte anos e é a primeira vez que alguém me diz.",
-                "Uma das três, talvez. É uma proporção melhor do que eu costumo me dar crédito.",
-                "Você tem razão e eu preferia que estivesse errada, porque estar certa transforma isso em coisa que eu tenho que resolver."
+                "Muitas vezes, sim. Um pedido de desculpas tem mais chance que fingir que nada aconteceu.",
+                "Às vezes. A outra pessoa ainda decide o que consegue perdoar.",
+                "Pode haver. Tentar com honestidade é melhor que presumir que é tarde demais."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         },
         {
@@ -290,17 +307,15 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "Could you mend the friendship?",
-            "pt": "Dá para remendar a amizade?"
+            "en": "How would you mend a friendship?",
+            "pt": "Como você tentaria recuperar uma amizade?"
           },
           "phrases": [
-            "could you mend the friendship",
-            "is the friendship recoverable"
+            "how would you mend a friendship"
           ],
           "requires_any": [
-            "friendship",
             "mend",
-            "recoverable"
+            "friendship"
           ],
           "disposition": {
             "familiarity": 2
@@ -313,19 +328,112 @@
             "shape": "problem_solve",
             "lines": {
               "en": [
-                "We speak. We speak about weather and prices and we have not spoken about anything else in six years.",
-                "It would take one of us saying so, and both of us are waiting for the other, and I know that and still wait.",
-                "Probably. The awkwardness of trying is four minutes and the awkwardness of the last six years is six years, so the arithmetic is embarrassing."
+                "I'd start with what I did wrong, without adding a list of what they did.",
+                "Ask if they're willing to talk. Then listen to the answer, even if it's no.",
+                "Own my part, then give the other person room to answer."
               ],
               "pt": [
-                "A gente se fala. Falamos de tempo e de preços e não falamos de mais nada há seis anos.",
-                "Bastaria um de nós dizer, e nós dois esperamos o outro, e eu sei disso e ainda espero.",
-                "Provavelmente. O constrangimento de tentar são quatro minutos e o constrangimento dos últimos seis anos são seis anos, então a conta é vergonhosa."
+                "Começaria pelo que eu fiz de errado, sem emendar uma lista dos erros da outra pessoa.",
+                "Perguntaria se a pessoa quer conversar. Depois ouviria a resposta, mesmo que fosse não.",
+                "Assumir minha parte, depois dar espaço para a outra pessoa responder."
               ]
-            }
+            },
+            "prompt": {
+              "en": "Trying to put things right.",
+              "pt": "Tentar acertar as coisas."
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "follow_1",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "reaction": {
+                  "id": "follow_answer_1",
+                  "act": "explain",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Then I'd give them space. Wanting to apologise doesn't entitle me to their time.",
+                      "Respect that answer. I'd need to change my behaviour even if they never heard the speech.",
+                      "I'd wait rather than turn the apology into another demand."
+                    ],
+                    "pt": [
+                      "Aí eu daria espaço. Querer pedir desculpas não me dá direito ao tempo dela.",
+                      "Respeitaria a resposta. Precisaria mudar meu comportamento mesmo que ela nunca ouvisse o discurso.",
+                      "Eu esperaria, em vez de transformar o pedido de desculpas em outra cobrança."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "How would you handle someone refusing an apology?",
+                  "pt": "Como você lidaria com alguém recusando um pedido de desculpas?"
+                },
+                "phrases": [
+                  "how would you handle someone refusing an apology"
+                ],
+                "requires_any": [
+                  "handle",
+                  "refusing"
+                ]
+              },
+              {
+                "name": "follow_2",
+                "stance": "respectful_disagreement",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "qualified",
+                "reaction": {
+                  "id": "follow_answer_2",
+                  "act": "qualify",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Yes. Otherwise it's a request to go back to the same problem.",
+                      "I agree. Words matter, but so does what happens after them.",
+                      "That's fair. I should be able to say what I intend to do differently."
+                    ],
+                    "pt": [
+                      "Sim. Senão é um pedido para voltar ao mesmo problema.",
+                      "Concordo. As palavras importam, mas o que vem depois também.",
+                      "É justo. Devo conseguir dizer o que pretendo fazer diferente."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "An apology ought to include a change.",
+                  "pt": "Um pedido de desculpas deve vir com uma mudança."
+                },
+                "phrases": [
+                  "an apology ought to include a change"
+                ],
+                "requires_any": [
+                  "ought",
+                  "include",
+                  "change"
+                ]
+              }
+            ],
+            "epistemic": "inferred"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

@@ -86,6 +86,10 @@ class ConversationSessionTest {
         assertEquals(1, session.negativeApplied());
 
         ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 200);
+        assertEquals(2, session.positiveApplied(), "reopening the same topic cannot refill its reward budget");
+        assertEquals(1, session.negativeApplied());
+        assertEquals(100, session.startedGameTime());
+        ConversationSessions.beginTopic(PLAYER, VILLAGER, "weather", DepthClass.QUICK, 300);
         assertEquals(0, session.positiveApplied());
         assertEquals(0, session.negativeApplied());
     }
@@ -140,9 +144,9 @@ class ConversationSessionTest {
     }
 
     @Test
-    @DisplayName("with no recorded offer the guard fails open rather than breaking a click")
-    void failsOpenWithoutAnOffer() {
-        assertFalse(ConversationGuard.rejectSubmission(PLAYER, VILLAGER,
+    @DisplayName("owned answers require a recorded offer even after session recreation")
+    void rejectsWithoutAnOffer() {
+        assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER,
                 "conversations.cat.chitchat", "day", false, 100));
     }
 
@@ -175,5 +179,56 @@ class ConversationSessionTest {
                 List.of("empathize"), 100);
         assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER,
                 "conversations.topic.day.rough.respond", "empathize", true, 100));
+    }
+
+    @Test
+    void offersNeverReuseARevisionAfterSessionRecreation() {
+        var first = ConversationSessions.recordOffer(PLAYER, "conversations.q", List.of("first"), 100);
+        ConversationSessions.clear(PLAYER);
+        var second = ConversationSessions.recordOffer(PLAYER, "conversations.q", List.of("second"), 200);
+        assertTrue(second.revision() > first.revision());
+        assertTrue(ConversationSessions.consumeOffer(PLAYER, first.revision(), 0, 200).isEmpty());
+        assertEquals("second", ConversationSessions.consumeOffer(PLAYER, second.revision(), 0, 200).orElseThrow());
+    }
+
+    @Test
+    void nativePacketsCannotClaimChatOffersOrAnotherVillagersOffer() {
+        ConversationSessions.recordOffer(PLAYER, VILLAGER, "conversations.q", List.of("yes"),
+                ConversationSession.Frontend.CHAT, 100);
+        assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER, "conversations.q", "yes", false, 101));
+        ConversationSessions.recordOffer(PLAYER, VILLAGER, "conversations.q", List.of("yes"),
+                ConversationSession.Frontend.GUI, 102);
+        assertTrue(ConversationGuard.rejectSubmission(PLAYER, OTHER_VILLAGER, "conversations.q", "yes", false, 103));
+        assertFalse(ConversationGuard.rejectSubmission(PLAYER, VILLAGER, "conversations.q", "yes", false, 104));
+    }
+
+    @Test
+    void similarlyPrefixedOtherModsQuestionsRemainOutsideTheGuard() {
+        assertFalse(ConversationGuard.isOurQuestion("conversations_extra.topic"));
+        assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER, "conversations.q", null, false, 100));
+    }
+
+    @Test
+    void consumingAnOfferByTextMakesItsWordsAndNumbersUnavailable() {
+        var offer = ConversationSessions.recordOffer(PLAYER, VILLAGER, "conversations.q", List.of("yes", "no"),
+                ConversationSession.Frontend.CHAT, 100);
+        assertEquals("conversations.q", dev.otectus.mcaconversations.chat.ChatModeSession.currentQuestion(PLAYER));
+        var session = ConversationSessions.raw(PLAYER).orElseThrow();
+        assertTrue(session.consumeOfferedAnswer("conversations.q", "yes"));
+        assertNull(dev.otectus.mcaconversations.chat.ChatModeSession.currentQuestion(PLAYER));
+        assertTrue(dev.otectus.mcaconversations.chat.ChatModeSession.currentAnswers(PLAYER).isEmpty());
+        assertFalse(session.consumeOfferedAnswer("conversations.q", "no"));
+        assertTrue(session.consumeOffer(offer.revision(), 0).isEmpty());
+    }
+
+
+    @Test
+    void anExplicitlyEndedTopicMayStartANewExchange() {
+        ConversationSession session = ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 100);
+        session.recordApplied(2);
+        session.endTopic();
+        session.beginTopic("day", DepthClass.QUICK, 200);
+        assertEquals(0, session.positiveApplied());
+        assertEquals(200, session.startedGameTime());
     }
 }

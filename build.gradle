@@ -153,7 +153,7 @@ dependencies {
     // never bundled. Build MCA: Quests first (`../MCAQuests: ./gradlew compileJava`) so these exist; when
     // absent the compat.quests classes simply won't compile, which is why the integration is gated at
     // runtime by QuestsBridge (ModList "mcaquests") and this optional mods.toml dependency.
-    def mcaQuestsClasses = file("${projectDir}/../MCAQuests/build/classes/java/main")
+    def mcaQuestsClasses = file(project.findProperty("mcaQuestsApiPath") ?: "${projectDir}/../MCAQuests/build/classes/java/main")
     if (mcaQuestsClasses.exists()) {
         compileOnly files(mcaQuestsClasses)
     } else {
@@ -165,7 +165,7 @@ dependencies {
     // compat.reputation package cannot compile, which is a loud failure rather than a silently
     // integration-less jar (spec 9.2). Never bundled: the real mod supplies these classes at runtime
     // and everything that touches them is gated behind ReputationBridge's ModList check.
-    def mcaReputationClasses = file("${projectDir}/../MCAReputation/build/classes/java/main")
+    def mcaReputationClasses = file(project.findProperty("mcaReputationApiPath") ?: "${projectDir}/../MCAReputation/build/classes/java/main")
     if (mcaReputationClasses.exists()) {
         compileOnly files(mcaReputationClasses)
     } else {
@@ -347,6 +347,7 @@ mixin {
 
 // Expand metadata placeholders into mods.toml / pack.mcmeta at build time.
 tasks.named('processResources', ProcessResources).configure {
+    filteringCharset = 'UTF-8'
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version: forge_version, forge_version_range: forge_version_range,

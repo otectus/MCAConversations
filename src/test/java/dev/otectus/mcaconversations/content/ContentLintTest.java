@@ -685,7 +685,7 @@ class ContentLintTest {
      * the sirben easter egg (1 is the joke).
      */
     @Test
-    void sayKeyPoolsMeetTheVariantFloor() {
+    void sayKeyPoolsMeetTheVariantFloor() throws IOException {
         // A say key earns the relaxed floor by being a check tier, which is a property of the RESULT
         // that speaks it, not of how the key is spelled. Keying off the name let
         // conversations.fears.{challenge,press}.success take the relaxed floor while also serving as
@@ -717,6 +717,21 @@ class ContentLintTest {
         }));
         alwaysChecked.removeAll(spokenUnchecked);
 
+        Map<String, Integer> authoredMinimums = new HashMap<>();
+        try (var files = Files.list(ContentFixture.BEATS)) {
+            for (Path file : files.filter(p -> p.toString().endsWith(".json")).toList()) {
+                JsonObject root = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+                if (!root.has("beats")) continue;
+                for (JsonElement value : root.getAsJsonObject("beats").asMap().values()) {
+                    JsonObject beat = value.getAsJsonObject();
+                    if (beat.has("min_variants")) {
+                        int minimum = beat.get("min_variants").getAsInt();
+                        assertTrue(minimum >= 1 && minimum <= 3, "invalid authored pool minimum");
+                        authoredMinimums.put(beat.get("say").getAsString(), minimum);
+                    }
+                }
+            }
+        }
         List<String> problems = new ArrayList<>();
         for (String key : sayKeys) {
             if (key.equals("conversations.food.trait.sirben")) {
@@ -726,6 +741,7 @@ class ContentLintTest {
                     || key.endsWith(".child") || key.endsWith(".teen")
                     // Check-tier and guard lines are precision-targeted (one tier of one stance).
                     || alwaysChecked.contains(key) || key.endsWith(".guard") ? 2 : 3;
+            floor = authoredMinimums.getOrDefault(key, floor);
             String base = "dialogue." + key;
             // Count only the /N entries. MCA's PooledTranslationStorage indexes nothing else, and
             // mca$onGet always draws from the pool when one exists, so a plain base sentence sitting

@@ -406,7 +406,8 @@ final class TopicPackCompiler {
                 reaction.has("predicate") ? reaction.get("predicate").getAsString() : "observation",
                 reaction.has("temporal") ? reaction.get("temporal").getAsString() : "current",
                 reaction.has("epistemic") ? reaction.get("epistemic").getAsString() : "observed",
-                reaction.has("privacy") ? reaction.get("privacy").getAsString() : "ordinary",
+                reaction.has("privacy") ? reaction.get("privacy").getAsString()
+                        : scene.has("privacy") ? scene.get("privacy").getAsString() : "ordinary",
                 reactionObligations, reactionSlots,
                 scene.has("episode_state") ? ContentCompiler.strings(scene, "episode_state") : List.of(),
                 reaction.has("shape") ? reaction.get("shape").getAsString() : "observe"));
@@ -505,6 +506,21 @@ final class TopicPackCompiler {
                 keywords.putIfAbsent(word, 0.8);
             }
         }
+        // Localised response-card text is an exact authored phrase in chat too. Keep
+        // translated phrases out of the English anchor/keyword bag: common Portuguese
+        // function words must not weaken unrelated controls or sibling responses.
+        String portuguese = ContentCompiler.normalizePhrase(
+                ContentCompiler.require(label, "pt", where + " label"));
+        if (!phrases.contains(portuguese)) {
+            phrases.add(portuguese);
+        }
+        for (String translated : ContentCompiler.strings(reply, "phrases_pt")) {
+            String normalized = ContentCompiler.normalizePhrase(translated);
+            if (!phrases.contains(normalized)) {
+                phrases.add(normalized);
+            }
+        }
+
         JsonObject intent = new JsonObject();
         intent.addProperty("question", questionId);
         intent.addProperty("answer", name);
@@ -518,6 +534,7 @@ final class TopicPackCompiler {
         String intentId = "scene." + topic + "." + sceneName + "." + name;
         out.addIntent(intentId, intent);
         out.addMatcherFixture(phrases.get(0), questionId, intentId);
+        out.addMatcherFixture(portuguese, questionId, intentId, "pt_br");
         if (phrases.size() > 1) {
             out.addMatcherFixture(phrases.get(1), questionId, intentId);
         }
@@ -1022,9 +1039,11 @@ final class TopicPackCompiler {
         }
         List<String> en = ContentCompiler.strings(lines, "en");
         List<String> pt = ContentCompiler.strings(lines, "pt");
-        if (en.size() < 3 || pt.size() != en.size()) {
+        int minimum = holder.has("min_variants") ? holder.get("min_variants").getAsInt() : 3;
+        out.minimumVariants(sayKey, minimum);
+        if (minimum < 1 || minimum > 3 || en.size() < minimum || pt.size() != en.size()) {
             throw new IllegalStateException(where + " '" + sayKey + "' has " + en.size() + " English and "
-                    + pt.size() + " Portuguese variants; the floor is three, matched");
+                    + pt.size() + " Portuguese variants; the declared floor is " + minimum + ", matched");
         }
         for (int i = 0; i < en.size(); i++) {
             out.addLang("dialogue." + sayKey + "/" + (i + 1), en.get(i), pt.get(i));

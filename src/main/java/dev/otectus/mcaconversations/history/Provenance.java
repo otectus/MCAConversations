@@ -144,8 +144,8 @@ public record Provenance(KnowledgeSource source,
      * <p>One hop costs one step of confidence and re-sources the fact to whoever passed it on.
      * Permission narrows and never widens, and privacy is carried across unchanged: a confidential
      * thing does not become ordinary by being repeated, it becomes a confidential thing that has
-     * been repeated. Nothing here invents detail — a distortion may only be authored, so the hop
-     * carries {@link Distortion#NONE} regardless of what the source account said.
+     * been repeated. Nothing here invents detail: an authored distortion survives the hop until an explicit
+     * correction removes it. Retelling an omission does not magically fill in the missing facts.
      *
      * @param teller who is passing it on, or null when the receiver could not say
      */
@@ -156,7 +156,7 @@ public record Provenance(KnowledgeSource source,
                 confidence.weakened(),
                 privacy,
                 share.atMost(SharePermission.impliedBy(privacy)),
-                Distortion.NONE,
+                distortion,
                 hops + 1);
     }
 

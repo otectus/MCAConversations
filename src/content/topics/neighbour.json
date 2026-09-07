@@ -1,10 +1,6 @@
 {
   "_comment": [
-    "Neighbours, gated on how full the village is and on whether she is the sort to mediate.",
-    "",
-    "One scene is a disagreement two doors down that she is deciding whether to step into; the other is",
-    "the small kindness nobody has acknowledged, which is the more common village event and the one",
-    "nobody tells stories about."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "neighbour",
   "entry": {
@@ -75,14 +71,14 @@
       },
       "lines": {
         "en": [
-          "Two of them have stopped speaking over something neither will name, and the lane has quietly picked sides.",
-          "It started over a fence and it is not about the fence, and everybody knows that and everybody keeps saying fence.",
-          "I am being asked to agree with both of them separately, which is a request I have refused four times this week."
+          "If neighbours fall out, I'd rather hear both sides before taking one.",
+          "An argument over a fence can be about a fence. I'd be wary of guessing more than that.",
+          "With a neighbour's disagreement, I'd want facts before joining in."
         ],
         "pt": [
-          "Dois deles pararam de se falar por causa de algo que nenhum quer nomear, e a viela silenciosamente tomou partido.",
-          "Começou por uma cerca e não é sobre a cerca, e todo mundo sabe disso e todo mundo continua dizendo cerca.",
-          "Estão me pedindo para concordar com os dois em separado, um pedido que eu recusei quatro vezes esta semana."
+          "Se vizinhos brigam, prefiro ouvir os dois lados antes de escolher um.",
+          "Uma briga por causa de uma cerca pode ser só por causa da cerca. Eu teria cuidado antes de imaginar mais.",
+          "Numa briga de vizinhos, eu procuraria os fatos antes de me envolver."
         ]
       },
       "replies": [
@@ -115,20 +111,21 @@
             "id": "steadied",
             "act": "accept",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "That is the plan and it costs me something with both of them, and it will cost me less than the alternative.",
-                "Yes. The person who agrees with both is trusted by neither the day they find out, and they always find out.",
-                "I shall keep saying I do not know, which happens to be true, and which nobody in this lane believes."
+                "Until I know enough, yes. Staying fair takes more than agreeing with whoever speaks first.",
+                "That's sensible. Though if someone is being hurt, I'd want to help rather than merely stand aside.",
+                "Yes, unless there's a reason to step in. I'd want to know what help is needed."
               ],
               "pt": [
-                "É o plano e me custa alguma coisa com os dois, e vai custar menos que a alternativa.",
-                "Sim. Quem concorda com os dois não é confiado por nenhum no dia em que descobrem, e eles sempre descobrem.",
-                "Vou continuar dizendo que não sei, o que por acaso é verdade, e em que ninguém nesta viela acredita."
+                "Até saber o suficiente, sim. Ser justo exige mais que concordar com quem fala primeiro.",
+                "É sensato. Mas, se alguém estiver se machucando, eu gostaria de ajudar em vez de só ficar de fora.",
+                "Sim, a menos que haja motivo para intervir. Quero saber que ajuda é necessária."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         },
         {
@@ -140,16 +137,17 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What's it really about?",
-            "pt": "Sobre o que é de verdade?"
+            "en": "How would you find out what's behind it?",
+            "pt": "Como você descobriria o que está por trás da briga?"
           },
           "phrases": [
-            "what is it really about",
-            "what lies under the fence"
+            "how would you find out whats behind it"
           ],
           "requires_any": [
-            "really",
-            "under"
+            "find",
+            "out",
+            "whats",
+            "behind"
           ],
           "disposition": {
             "familiarity": 2
@@ -162,19 +160,118 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "I have a fair idea and I am going to keep it, because a guess repeated becomes the official version by Thursday.",
-                "Something from before I lived here. That is as much as I will say and it is more than I should have.",
-                "If either of them wants it known they will say it. Me saying it for them is how a fence becomes a feud."
+                "Ask the people involved, if they're willing to talk. I wouldn't start with the audience.",
+                "Carefully. They may not want me involved, and knowing isn't always my right.",
+                "Let the people concerned speak. The crowd can wait."
               ],
               "pt": [
-                "Tenho uma boa ideia e vou guardar, porque um palpite repetido vira a versão oficial até quinta.",
-                "Alguma coisa de antes de eu morar aqui. É tudo o que eu vou dizer e já é mais do que eu deveria.",
-                "Se um dos dois quiser que se saiba, vai dizer. Eu dizer por eles é como uma cerca vira uma rixa."
+                "Perguntaria aos envolvidos, se quisessem conversar. Não começaria pela plateia.",
+                "Com cuidado. Talvez não queiram minha participação, e nem sempre tenho direito de saber.",
+                "Deixaria os envolvidos falarem. A plateia pode esperar."
               ]
-            }
+            },
+            "prompt": {
+              "en": "Hearing the people involved.",
+              "pt": "Ouvir os envolvidos."
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "follow_1",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "reaction": {
+                  "id": "follow_answer_1",
+                  "act": "explain",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "I'd say listening isn't a promise to take their side.",
+                      "Then I'd be clear about what I know and what I don't. Agreement shouldn't be the price of listening.",
+                      "I can hear both without making two incompatible promises."
+                    ],
+                    "pt": [
+                      "Eu diria que ouvir não é prometer ficar do lado de alguém.",
+                      "Eu deixaria claro o que sei e o que não sei. Concordar não deve ser o preço de ouvir.",
+                      "Posso ouvir os dois sem fazer duas promessas incompatíveis."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "What if both sides ask you to agree?",
+                  "pt": "E se os dois lados pedirem que você concorde?"
+                },
+                "phrases": [
+                  "what if both sides ask you to agree"
+                ],
+                "requires_any": [
+                  "both",
+                  "sides",
+                  "ask",
+                  "agree"
+                ]
+              },
+              {
+                "name": "follow_2",
+                "stance": "respectful_disagreement",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "qualified",
+                "reaction": {
+                  "id": "follow_answer_2",
+                  "act": "qualify",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "They can. Being fair doesn't mean pretending every account is equally sound.",
+                      "True. I'd want to be careful, not determined to ignore evidence.",
+                      "I agree with that. Hearing both sides shouldn't erase what actually happened."
+                    ],
+                    "pt": [
+                      "Podem sim. Ser justo não é fingir que todas as versões têm o mesmo fundamento.",
+                      "É verdade. Quero ter cuidado, não insistir em ignorar as provas.",
+                      "Concordo nisso. Ouvir os dois lados não deve apagar o que realmente aconteceu."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "Sometimes the facts already favour one side.",
+                  "pt": "Às vezes os fatos já favorecem um lado."
+                },
+                "phrases": [
+                  "sometimes the facts already favour one side"
+                ],
+                "requires_any": [
+                  "sometimes",
+                  "facts",
+                  "already",
+                  "favour",
+                  "one",
+                  "side"
+                ]
+              }
+            ],
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "the_unthanked_kindness",
@@ -183,7 +280,7 @@
       "act": "report",
       "polarity": "positive",
       "predicate": "social_report",
-      "temporal": "past",
+      "temporal": "current",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -207,14 +304,14 @@
       },
       "lines": {
         "en": [
-          "Somebody has been leaving firewood at a door and has told nobody, and I have decided to let them get away with it.",
-          "A neighbour walked a mile in the rain to tell me a thing that could have waited until Thursday, and it could not, and they were right.",
-          "The house at the end got its roof mended by four people in an afternoon and nobody has mentioned it since."
+          "Helping a neighbour doesn't always need an audience. I'd rather ask what's useful first.",
+          "A quiet offer of help can mean a lot. Especially one that leaves room to decline.",
+          "I'd like offers of help to be useful and easy to refuse."
         ],
         "pt": [
-          "Alguém vem deixando lenha numa porta e não contou a ninguém, e eu decidi deixar essa pessoa escapar com isso.",
-          "Um vizinho caminhou um quilômetro na chuva para me contar uma coisa que podia esperar até quinta, e não podia, e ele tinha razão.",
-          "A casa do fim teve o telhado consertado por quatro pessoas numa tarde e ninguém comentou desde então."
+          "Ajudar um vizinho nem sempre precisa de plateia. Prefiro perguntar primeiro o que é útil.",
+          "Uma oferta discreta de ajuda pode valer muito. Ainda mais se deixar espaço para recusar.",
+          "Quero que ofertas de ajuda sejam úteis e fáceis de recusar."
         ]
       },
       "replies": [
@@ -227,15 +324,17 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Do you know who it was?",
-            "pt": "Você sabe quem foi?"
+            "en": "How would you offer without making a fuss?",
+            "pt": "Como você ofereceria ajuda sem fazer alarde?"
           },
           "phrases": [
-            "do you know who it was",
-            "who did that"
+            "how would you offer without making a fuss"
           ],
           "requires_any": [
-            "who"
+            "offer",
+            "without",
+            "making",
+            "fuss"
           ],
           "disposition": {
             "familiarity": 2
@@ -248,16 +347,18 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "I do, and they have gone to some trouble not to be known, so I am going to respect the trouble.",
-                "I have a suspicion and one boot print, which is more evidence than I usually have about anything.",
-                "It does not matter. That is the whole point of doing it that way and I would spoil it by naming them."
+                "Ask plainly, then accept the answer. There's no need to announce their troubles.",
+                "Something like: is there a job I can lend a hand with? Then let them choose.",
+                "A plain question, without a crowd listening. That seems a decent start."
               ],
               "pt": [
-                "Sei, e essa pessoa se deu ao trabalho de não ser identificada, então eu vou respeitar o trabalho.",
-                "Tenho uma suspeita e uma pegada de bota, o que é mais prova do que eu costumo ter sobre qualquer coisa.",
-                "Não importa. É esse o objetivo de fazer assim, e eu estragaria nomeando."
+                "Perguntaria diretamente e aceitaria a resposta. Não precisa anunciar os problemas da pessoa.",
+                "Algo como: tem alguma tarefa em que eu possa ajudar? Depois deixaria a pessoa escolher.",
+                "Uma pergunta direta, sem uma multidão ouvindo. Parece um bom começo."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -291,19 +392,22 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "It is, and it happens about four times a week and nobody counts, and the arguments happen once a season and everybody does.",
-                "Yes. If you wrote down only the good ones you would get a very strange and much more accurate history of this lane.",
-                "Thank you for saying it out loud. That sort of thing needs saying occasionally or it stops happening."
+                "I think so. A village ought to make asking easier, not more embarrassing.",
+                "Yes. And receiving help shouldn't mean owing the whole village an explanation.",
+                "It should be. Kindness works better when it leaves people their dignity."
               ],
               "pt": [
-                "É, e acontece umas quatro vezes por semana e ninguém conta, e as brigas acontecem uma vez por estação e todo mundo conta.",
-                "Sim. Se você anotasse só as boas, teria uma história muito estranha e bem mais exata desta viela.",
-                "Obrigada por dizer em voz alta. Esse tipo de coisa precisa ser dito de vez em quando ou para de acontecer."
+                "Também acho. A vila deveria facilitar o pedido de ajuda, não aumentar a vergonha.",
+                "Sim. E receber ajuda não deveria exigir uma explicação para a vila inteira.",
+                "Deveria ser. A gentileza funciona melhor quando preserva a dignidade."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

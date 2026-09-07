@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "Feelings, gated on her actual mood rather than on a fixed script.",
-    "",
-    "One scene only exists while something is genuinely wrong, and it is careful about saying so. The",
-    "other is the ordinary answer, which is allowed to be boring, because most days are."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "feelings",
   "entry": {
@@ -57,18 +54,38 @@
       ],
       "conditions": [
         {
+          "field": "speaker.mood",
+          "any_of": [
+            "unhappy",
+            "sad",
+            "depressed"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
           "field": "player.relationship_band",
           "any_of": [
-            "friend",
             "confidant",
-            "partner",
-            "family"
+            "family",
+            "friend",
+            "partner"
           ],
           "unknown": "fail"
         },
         {
           "field": "time.days_since_first_met",
           "min": 14,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -84,14 +101,14 @@
       },
       "lines": {
         "en": [
-          "Flat. Not sad, which people always want it to be, because sad has a shape and this does not.",
-          "I am doing everything and enjoying none of it, and I have been like that for about eleven days.",
-          "Fine in the sense that nothing is wrong, and something is wrong, and both of those are accurate."
+          "I'm not feeling great. I'd rather keep the conversation gentle.",
+          "A bit low, honestly. I haven't got a neat explanation for it.",
+          "Not my brightest mood. Something gentle would suit me."
         ],
         "pt": [
-          "Chata. Não triste, que é o que as pessoas sempre querem que seja, porque triste tem formato e isso não tem.",
-          "Estou fazendo tudo e não estou gostando de nada, e estou assim há uns onze dias.",
-          "Bem no sentido de que nada está errado, e alguma coisa está errada, e as duas afirmações são exatas."
+          "Não estou muito bem. Prefiro conversar com calma.",
+          "Um pouco para baixo, para falar a verdade. Não tenho uma explicação pronta.",
+          "Não estou no melhor humor. Algo tranquilo me cairia bem."
         ]
       },
       "replies": [
@@ -133,16 +150,18 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It is, and you are the first person to call it wearing rather than ask what is wrong, and there is a large difference.",
-                "Thank you. I did not want a solution and I did want somebody to know the number of days.",
-                "That helps more than it should. I have said it four times this fortnight and this is the first time it has landed anywhere."
+                "It is. A bit of company is welcome, though.",
+                "Yes. We can talk without making a whole project of it.",
+                "Yes. I'd welcome a conversation without a lot of demands."
               ],
               "pt": [
-                "É, e você é a primeira pessoa a chamar de desgastante em vez de perguntar o que há de errado, e a diferença é enorme.",
-                "Obrigada. Eu não queria solução e queria que alguém soubesse o número de dias.",
-                "Isso ajuda mais do que deveria. Já disse quatro vezes nestas duas semanas e é a primeira vez que aterrissa em algum lugar."
+                "É cansativo. Mas um pouco de companhia é bem-vindo.",
+                "É. Podemos conversar sem transformar isso numa grande tarefa.",
+                "Sim. Uma conversa sem muita cobrança seria bem-vinda."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -177,19 +196,22 @@
             "shape": "problem_solve",
             "lines": {
               "en": [
-                "Work, oddly. Not rest. Rest gives it room. Something with my hands and a clear end to it.",
-                "Being outside before the light. It has never once failed and I forget it every single time.",
-                "Somebody talking about something else entirely. Ask me about your week and it will do more than asking about mine."
+                "Something simple. A quiet chat, or a change of subject.",
+                "I'd rather talk about something ordinary for a bit. Food, perhaps.",
+                "A lighter subject, I think. We could start there."
               ],
               "pt": [
-                "Trabalho, curiosamente. Não descanso. O descanso dá espaço para isso. Alguma coisa com as mãos e com um fim claro.",
-                "Ficar do lado de fora antes de clarear. Nunca falhou uma vez e eu esqueço todas as vezes.",
-                "Alguém falando de outra coisa completamente. Me pergunte sobre a sua semana e vai fazer mais do que perguntar sobre a minha."
+                "Algo simples. Uma conversa tranquila, ou mudar de assunto.",
+                "Prefiro falar de algo comum por um tempo. Comida, talvez.",
+                "Um assunto mais leve, eu acho. Podemos começar por aí."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "ordinary_answer",
@@ -212,6 +234,22 @@
             "friend"
           ],
           "unknown": "fail"
+        },
+        {
+          "field": "speaker.mood",
+          "any_of": [
+            "passive",
+            "fine",
+            "happy",
+            "overjoyed"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
         }
       ],
       "base_priority": 18,
@@ -226,14 +264,14 @@
       },
       "lines": {
         "en": [
-          "Middling, which is where I like to be. The interesting weeks have all been the bad ones.",
-          "Well enough. Ask me on a day when something has happened and you will get a longer answer.",
-          "Good, and I checked before I said it, which is more than that question usually gets."
+          "I'm all right. A quiet conversation suits me.",
+          "Well enough. Happy to talk for a little while.",
+          "I'm doing all right. Happy to have a little company."
         ],
         "pt": [
-          "Mediana, que é onde eu gosto de estar. As semanas interessantes foram todas as ruins.",
-          "Bem o bastante. Me pergunte num dia em que algo aconteceu e você recebe uma resposta mais longa.",
-          "Bem, e eu conferi antes de dizer, o que já é mais do que essa pergunta costuma receber."
+          "Estou bem. Uma conversa tranquila me agrada.",
+          "Estou bem. Podemos conversar um pouco.",
+          "Estou bem. É bom ter um pouco de companhia."
         ]
       },
       "replies": [
@@ -246,16 +284,17 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What made today good?",
-            "pt": "O que fez hoje ser bom?"
+            "en": "What makes an ordinary day pleasant?",
+            "pt": "O que torna um dia comum agradável?"
           },
           "phrases": [
-            "what made today good",
-            "what was good about today"
+            "what makes an ordinary day pleasant"
           ],
           "requires_any": [
-            "today",
-            "good"
+            "makes",
+            "ordinary",
+            "day",
+            "pleasant"
           ],
           "disposition": {
             "familiarity": 2,
@@ -268,16 +307,18 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "One thing went right early and the whole day arranged itself around that, which is how it usually works.",
-                "Nothing did. That is what good means most of the time and it took me years to stop expecting more from the word.",
-                "Somebody asked me a real question instead of the polite one, which has now happened twice today counting you."
+                "A little room to breathe between things. And a meal that doesn't need rescuing.",
+                "Finishing something small, perhaps. It doesn't have to impress anyone.",
+                "A little peace and something enjoyable to do. That's enough for me."
               ],
               "pt": [
-                "Uma coisa deu certo cedo e o dia inteiro se organizou em volta disso, que é como costuma funcionar.",
-                "Nada fez. É isso que bom significa na maioria das vezes, e levei anos para parar de esperar mais da palavra.",
-                "Alguém me fez uma pergunta de verdade em vez da educada, o que já aconteceu duas vezes hoje contando você."
+                "Um pouco de folga entre as tarefas. E uma refeição que não precise ser salva.",
+                "Talvez terminar uma coisa pequena. Não precisa impressionar ninguém.",
+                "Um pouco de paz e algo agradável para fazer. Para mim, basta."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -310,19 +351,22 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Good. That is the whole of that exchange and there is nothing wrong with it.",
-                "And you. I mean it as more than the formula, though I accept it sounds exactly like the formula.",
-                "Right. Off you go, then, and mind the puddle by the gate."
+                "Thank you. I hope you're doing all right too.",
+                "It's nice to be asked. We can leave it at that if you like.",
+                "I appreciate you asking. How's your side of things?"
               ],
               "pt": [
-                "Ótimo. É a troca inteira e não há nada de errado com ela.",
-                "Você também. Digo com mais peso que a fórmula, embora eu aceite que soa exatamente como a fórmula.",
-                "Certo. Pode ir, então, e cuidado com a poça perto do portão."
+                "Valeu. Espero que você também esteja bem.",
+                "É bom que você pergunte. Podemos ficar por aí, se quiser.",
+                "Agradeço por perguntar. E como vão as coisas por aí?"
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

@@ -8,16 +8,57 @@ Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer de
 asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
+## [1.6.1] - unreleased
+
+Stabilization, dialogue refinement and content expansion for Minecraft 1.20.1 Forge and 1.21.1 NeoForge.
+
+### Stabilization and bilingual narrative pass (2026-09)
+
+- Rewrote all 60 ordinary dynamic topic scenes in English and Brazilian Portuguese, repaired seven shared follow-up funnels, and added eight deeper reply pages. Responses, conditions, memories and callbacks now refer to supported state; unrelated branch details no longer converge into contradictory follow-ups.
+- Expanded Capitals to 55 contextual scenes, including 13 new scenes with multi-turn continuations about law, petitions, hearings, ceremonies, civic work, loyalty, disagreement and diplomacy. Existing succession, court, house, news and standing scenes now use explicit knowledge, trust and privacy gates. Added all four Capitals menu routes to free-text chat.
+- Corrected Portuguese negation and reply matching, made complete offered phrases choose their exact response, and expanded generated bilingual intent fixtures. Strengthened source/graph/translation/claim contract validation; see the review reports for exact coverage and remaining in-game checks.
+- Unified server offer consumption across GUI, numbered chat and text; rejected stale/replayed or wrong-target replies; kept budgets and bound scene plans when reopening an active exchange; corrected connection and lifecycle cleanup.
+- Preserved delayed reply order and group privacy, stopped ambient responders from overwriting an unanswered exchange, and restricted bystander statements to knowledge they actually hold. Added substantive personality coverage and corrected older voice/legacy claims about specific weekdays, recent events, and future content.
+- Fixed bounded-store eviction/save loss, first-write disposition baselines, clamped daily accounting, daily rewards consuming lifetime memory, and untrackable one-time rewards. Existing saves retain their earned history.
+- Corrected exact quest-promise outcomes, unavailable resolver behavior, lapsed-thread/abandoned-episode persistence and receiver-aware rumor delivery. Anonymous retellings remove entity-reference payloads.
+- Made partial Capitals capability failures unknown, corrected heir/abdication news classification, and retained real court titles. Verified reflection probes against actual matching Capitals and Townstead jars on both loaders.
+- Added optional Gradle API-path properties for reproducible builds against sibling integrations. Documented reproduction, compatibility evidence, review boundaries and production checks in `docs/STABILIZATION-2026-09.md` and `docs/MCA_CAPITALS_SUPPORT.md`.
+
+### Documentation
+
+- Added `datapack_samples/` — ten worked example datapacks covering the documented vocabulary end to
+  end: a first topic, a new hub category, checked stances and the disposition vector, arcs,
+  milestones and observable promises, the living-histories layer, village culture, world and
+  optional-mod compatibility, a third-party profession, and two packs on modifying and removing
+  shipped content. Each carries a file-by-file walkthrough explaining why it is written as it is.
+  Authored against the shipped schemas and verified against the MCA jars; not yet played in a
+  production instance.
+- Two vocabulary facts confirmed against MCA and recorded in the samples, because both fail silently:
+  MCA's constraint registry has no `child` token and drops unrecognised tokens without logging, and
+  `isFeatureEnabled` returns `true` for an unknown feature id, so a misspelt
+  `conversations_disabled` sink never fires.
+- Moved the loose specifications at the repository root (`chat-mode-spec.md`,
+  `mca-conversations.md`, `MCA_CONVERSATION_UPDATE.md`) into `docs/`, leaving `README`, `CHANGELOG`,
+  `CONFIG`, `DATAPACK`, `MODMAP`, `CURSEFORGE` and `LICENSE` at the top level.
+
+### Compatibility
+
+- Forge artifact version: `1.6.1`; NeoForge artifact version: `1.6.1+1.21.1`.
+- Existing saves and configuration remain supported. Network protocol remains `2`.
+- Full builds and content validation passed on both loaders. Production gameplay checks are listed in `docs/STABILIZATION-2026-09.md`.
+
+---
+
 ## [1.6.0] - unreleased
 
-Integration with the optional MCA: Capitals monarchy add-on, plus the unreleased 1.5.2 dialogue presentation expansion. Version 1.6.0 supersedes the unreleased 1.5.2; the presentation work is included here unchanged.
+Integration with the optional MCA: Capitals monarchy add-on, plus the unreleased 1.5.2 dialogue presentation expansion. Version 1.6.0 supersedes the unreleased 1.5.2; the presentation work is included here. The subsequent stabilization and content pass is recorded under 1.6.1.
 
 ### Added
 
 - **MCA: Capitals integration** — villages that are capitals carry court news as gossip, villagers speak about their sovereign, heirs, houses, rivals and allies, and a villager whose title just changed remarks on it unprompted. Chronicle diffs and court snapshots are polled server-side and seeded into the village gossip sweep. Requires MCA Capitals 1.3+ (tested against 1.3.6). The integration is read-only and requires only MCA; the Capitals mod is entirely optional.
 - Eleven new gossip event types seeded from Capitals: `coronation`, `royal_marriage`, `royal_birth`, `royal_death`, `appointment`, `disgrace`, `war`, `peace`, `alliance`, `capital_founded`, `court_news`.
 - Four new conversation topics gated by `capital_topics`: the crown, the court, houses, the realm (authored inside the topics pack; enable/disable per-capital via the `capitals` master switch).
-- Twenty-one `capital.*` context fields: capital name, sovereign/heir details, court office, house and house tier, at-war/allied state, mourning status, player allegiance, and whether this villager just got a title change.
+- Twenty-six `capital.*` context fields: capital name, sovereign/heir details, court office, house and house tier, at-war/allied state, mourning status, player allegiance, and whether this villager just got a title change.
 - Nine new template variables for dialogue lines speaking about court: `capital_name`, `sovereign_name`, `sovereign_title`, `heir_name`, `house_name`, `house_words`, `villager_title`, `rival_capital_name`, `ally_capital_name`. All fall back to neutral text when the capital is absent or a detail is vacant.
 - `COURT_REMARK` scene purpose: a villager opens unprompted when their court title changes, with the same interruption cost as `STANDING_REMARK`.
 - `STANDING_REMARK` scene purpose for the optional Reputation integration (unreleased, part of this release): a villager remarks when the player's village standing crosses a tier.

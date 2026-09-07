@@ -197,7 +197,12 @@ class IntentMatcherTest {
             contextCases4(),
             contextCases5(),
             contextCases6(),
-            contextCases7());
+            contextCases7(), new String[][] {
+                {"who rules here now", "conversations.cat.village", "capitals.crown"},
+                {"what is the court like", "conversations.cat.village", "capitals.court"},
+                {"do you belong to a house", "conversations.cat.village", "capitals.house"},
+                {"how do things stand beyond the walls", "conversations.cat.village", "capitals.realm"}
+            });
 
 
     /** phrase, question, intent id, comma-separated answers offered on that page. */
@@ -213,8 +218,10 @@ class IntentMatcherTest {
                     continue;
                 }
                 String[] parts = line.split("\t", -1);
-                if (parts.length == 4) {
+                if (parts.length == 4 || parts.length == 5) {
                     rows.add(parts);
+                } else {
+                    throw new IllegalStateException("Malformed generated matcher fixture: " + line);
                 }
             }
         } catch (IOException e) {
@@ -241,7 +248,8 @@ class IntentMatcherTest {
             String expected = fixture[2];
             List<String> offered = fixture[3].isBlank()
                     ? List.of() : List.of(fixture[3].split(","));
-            NormalizedMessage message = Normalizer.normalize(phrase, index.synonyms());
+            String locale = fixture.length >= 5 ? fixture[4] : "en_us";
+            NormalizedMessage message = Normalizer.normalize(phrase, index.synonyms(), locale);
             List<Scored> ranked = IntentMatcher.rank(index, message, question, offered);
             Decision decision = IntentMatcher.decide(ranked, true, MIN, AMBIENT);
             if (decision.outcome() != Outcome.MATCH
@@ -3710,4 +3718,51 @@ class IntentMatcherTest {
     private static String ids(List<Scored> scored) {
         return scored.stream().map(Scored::id).toList().toString();
     }
+
+    @Test
+    void oppositeRepliesToOneQuestionRequireClarification() {
+        List<Scored> ranked = List.of(
+                new Scored("reply.yes", 0.95, "same.question", "yes", null, "topics", true),
+                new Scored("reply.no", 0.94, "same.question", "no", null, "topics", true));
+        assertEquals(Outcome.AMBIGUOUS, IntentMatcher.decide(ranked, true, MIN, AMBIENT).outcome());
+        assertEquals(Outcome.NONE, IntentMatcher.decide(ranked, false, MIN, AMBIENT).outcome());
+    }
+
+    @Test
+    void aliasesCannotHideAnAmbiguousAlternative() {
+        List<Scored> ranked = List.of(
+                new Scored("reply.yes", 0.95, "same.question", "yes", null, "topics", true),
+                new Scored("reply.yes.alias", 0.94, "same.question", "yes", null, "topics", true),
+                new Scored("reply.no", 0.93, "same.question", "no", null, "topics", true));
+        var decision = IntentMatcher.decide(ranked, true, MIN, AMBIENT);
+        assertEquals(Outcome.AMBIGUOUS, decision.outcome());
+        assertEquals("no", decision.alternative().answer());
+        assertEquals(Outcome.MATCH, IntentMatcher.decide(ranked.subList(0, 2), true, MIN, AMBIENT).outcome());
+    }
+
+    @Test
+    void wholeOfferedPhrasesSeparateOppositeRepliesWithoutGuessingPartialReplies() {
+        JsonObject yes = new Gson().fromJson("{\"question\":\"test.reply\",\"context\":\"test.reply\",\"answer\":\"yes\","
+                + "\"keywords\":{\"record\":2},\"phrases\":[\"keeping the record matters\"]}", JsonObject.class);
+        JsonObject no = yes.deepCopy();
+        no.addProperty("answer", "no");
+        no.add("phrases", new Gson().toJsonTree(List.of("keeping the record is pointless")));
+        IntentIndex idx = IntentIndex.build(List.of(IntentBinding.fromJson("test.yes", yes),
+                IntentBinding.fromJson("test.no", no)), SynonymTable.EMPTY);
+        for (String[] row : List.of(new String[]{"keeping the record matters", "yes"},
+                new String[]{"keeping the record is pointless", "no"})) {
+            var ranked = IntentMatcher.rank(idx, Normalizer.normalize(row[0], SynonymTable.EMPTY),
+                    "test.reply", List.of("yes", "no"));
+            var decision = IntentMatcher.decide(ranked, true, MIN, AMBIENT);
+            assertEquals(Outcome.MATCH, decision.outcome());
+            assertEquals(row[1], decision.chosen().answer());
+        }
+        var partial = IntentMatcher.rank(idx, Normalizer.normalize("record", SynonymTable.EMPTY),
+                "test.reply", List.of("yes", "no"));
+        assertEquals(Outcome.AMBIGUOUS, IntentMatcher.decide(partial, true, MIN, AMBIENT).outcome());
+        var disabled = IntentMatcher.rank(idx, Normalizer.normalize("keeping the record is pointless", SynonymTable.EMPTY),
+                "test.reply", List.of("yes"));
+        assertTrue(disabled.stream().noneMatch(candidate -> candidate.answer().equals("no")));
+    }
+
 }

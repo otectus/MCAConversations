@@ -21,14 +21,14 @@ class ChronicleEventMapperTest {
     /** The twenty constants of {@code CapitalChronicleEventType}, lower-cased as they cross. */
     private static final Map<String, GossipEventType> COARSE = Map.ofEntries(
             Map.entry("capital_founded", GossipEventType.CAPITAL_FOUNDED),
-            Map.entry("heir_apparent_named", GossipEventType.ROYAL_BIRTH),
+            Map.entry("heir_apparent_named", GossipEventType.COURT_NEWS),
             Map.entry("crown_child_born", GossipEventType.ROYAL_BIRTH),
             Map.entry("royal_birth", GossipEventType.ROYAL_BIRTH),
             Map.entry("royal_marriage", GossipEventType.ROYAL_MARRIAGE),
             Map.entry("sovereign_death", GossipEventType.ROYAL_DEATH),
             Map.entry("throne_seized", GossipEventType.CORONATION),
             Map.entry("peaceful_transfer", GossipEventType.CORONATION),
-            Map.entry("abdication", GossipEventType.CORONATION),
+            Map.entry("abdication", GossipEventType.COURT_NEWS),
             Map.entry("disinherited", GossipEventType.DISGRACE),
             Map.entry("legitimized", GossipEventType.APPOINTMENT),
             Map.entry("new_duke_or_duchess", GossipEventType.APPOINTMENT),
@@ -90,8 +90,18 @@ class ChronicleEventMapperTest {
 
     @Test
     void theTypeNameIsReadCaseInsensitively() {
-        assertEquals(GossipEventType.CORONATION, ChronicleEventMapper.map("ABDICATION", ""));
-        assertEquals(GossipEventType.CORONATION, ChronicleEventMapper.map(" Abdication ", ""));
+        assertEquals(GossipEventType.COURT_NEWS, ChronicleEventMapper.map("ABDICATION", ""));
+        assertEquals(GossipEventType.COURT_NEWS, ChronicleEventMapper.map(" Abdication ", ""));
+    }
+
+    @Test
+    void embeddedWordsDoNotInventWarOrPeace() {
+        assertEquals(GossipEventType.DISGRACE,
+                ChronicleEventMapper.map("none", "capitals.chronicle.warrant_issued"));
+        assertEquals(GossipEventType.COURT_NEWS,
+                ChronicleEventMapper.map("none", "capitals.chronicle.reward_issued"));
+        assertEquals(GossipEventType.COURT_NEWS,
+                ChronicleEventMapper.map("none", "capitals.chronicle.research_completed"));
     }
 
     @Test

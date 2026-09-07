@@ -106,4 +106,33 @@ class CommitmentObserverTest {
         assertNull(CommitmentObserver.promisedId(NarrativeValue.EMPTY));
         assertNull(CommitmentObserver.promisedId(null));
     }
+
+    @Test
+    void playerVisitCannotKeepOrBreakAPromiseMadeByTheVillager() {
+        CommitmentRecord owed = CommitmentRecord.made("owed", CommitmentResolver.VISIT_AFTER_DAY,
+                NarrativeValue.day(4), CommitmentRecord.Party.VILLAGER, 1,
+                OptionalLong.of(4), Optional.empty());
+        assertNull(CommitmentObserver.outcomeOnMeeting(owed, 900));
+    }
+
+    @Test
+    void reservedEventResolverCannotFalselyJudgeAPromise() {
+        org.junit.jupiter.api.Assertions.assertFalse(CommitmentResolver.EVENT_OBSERVED.isAvailable());
+        assertNull(CommitmentObserver.outcomeOnMeeting(promise(CommitmentResolver.EVENT_OBSERVED, 1, 2L), 900));
+    }
+
+    @Test
+    void questOutcomeMatchesThePromisedQuestAndActualResult() {
+        CommitmentRecord quest = CommitmentRecord.made("quest.promise", CommitmentResolver.QUEST_STATE,
+                NarrativeValue.registryId("quests:delivery"), CommitmentRecord.Party.PLAYER,
+                4, OptionalLong.of(7), Optional.empty());
+        assertNull(CommitmentObserver.outcomeOnQuest(quest, "quests:another", true, 5));
+        assertNull(CommitmentObserver.outcomeOnQuest(quest, "quests:delivery", true, 3));
+        assertEquals(CommitmentRecord.State.KEPT,
+                CommitmentObserver.outcomeOnQuest(quest, "quests:delivery", true, 5));
+        assertEquals(CommitmentRecord.State.BROKEN,
+                CommitmentObserver.outcomeOnQuest(quest, "quests:delivery", false, 5));
+        assertNull(CommitmentObserver.outcomeOnQuest(quest.resolved(CommitmentRecord.State.KEPT, 5),
+                "quests:delivery", false, 6));
+    }
 }

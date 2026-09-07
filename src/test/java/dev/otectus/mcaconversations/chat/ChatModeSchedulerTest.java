@@ -73,4 +73,29 @@ class ChatModeSchedulerTest {
         ChatModeScheduler.drain(10);
         assertEquals(List.of("survivor"), fired);
     }
+
+    @Test
+    void aShortInterjectionCannotOvertakeItsLongOpeningLine() {
+        List<String> fired = new ArrayList<>();
+        var player = java.util.UUID.randomUUID();
+        ChatModeScheduler.scheduleOrdered(player, 60, () -> fired.add("opening"));
+        ChatModeScheduler.scheduleOrdered(player, 30, () -> fired.add("interjection"));
+        ChatModeScheduler.scheduleOrdered(player, 40, () -> fired.add("followup"));
+        ChatModeScheduler.drain(59);
+        assertEquals(List.of(), fired);
+        ChatModeScheduler.drain(62);
+        assertEquals(List.of("opening", "interjection", "followup"), fired);
+    }
+
+    @Test
+    void anotherPlayersConversationDoesNotWaitForTheFirst() {
+        List<String> fired = new ArrayList<>();
+        ChatModeScheduler.scheduleOrdered(java.util.UUID.randomUUID(), 60, () -> fired.add("slow"));
+        ChatModeScheduler.scheduleOrdered(java.util.UUID.randomUUID(), 10, () -> fired.add("quick"));
+        ChatModeScheduler.drain(10);
+        assertEquals(List.of("quick"), fired);
+        ChatModeScheduler.drain(60);
+        assertEquals(List.of("quick", "slow"), fired);
+    }
+
 }

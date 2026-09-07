@@ -1,0 +1,80 @@
+{
+  "answers": [
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "pastimes.close.agree",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once_per_day"
+            },
+            "conversations_disposition_apply": {
+              "topic": "pastimes.close.agree",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "pastimes.cat",
+            "conversations_say": {
+              "phrase": "sample_pastimes.close.agree"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "share",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_affection_apply": {
+              "decision": "pastimes.close.share",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once_per_day"
+            },
+            "conversations_disposition_apply": {
+              "topic": "pastimes.close.share",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 2
+              }
+            },
+            "next": "pastimes.cat",
+            "conversations_say": {
+              "phrase": "sample_pastimes.close.share"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "pastimes.cat",
+            "conversations_say": {
+              "phrase": "sample_pastimes.close.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "_comment": [
+    "One intent per non-exit button, each bound to its exact question+answer and",
+    "scoped to the page it lives on. Exits are deliberately unbound: 'goodbye' is a",
+    "dispatcher system intent, not a topic one."
+  ],
+  "synonyms": {
+    "undone": [
+      "unfinished",
+      "outstanding"
+    ]
+  },
+  "intents": {
+    "courage.starter": {
+      "question": "conversations.cat.personal",
+      "answer": "courage",
+      "context": "conversations.cat.personal",
+      "keywords": {
+        "putting": 1.5,
+        "off": 1.0,
+        "meaning": 1.2,
+        "avoiding": 1.5,
+        "undone": 1.4
+      },
+      "requiresAny": [
+        "putting",
+        "meaning",
+        "avoiding",
+        "undone"
+      ],
+      "phrases": [
+        "is there something you keep putting off",
+        "anything you have been meaning to do",
+        "what are you avoiding",
+        "something you keep not doing"
+      ],
+      "category": "topics"
+    },
+    "courage.steady": {
+      "question": "courage.respond",
+      "answer": "steady",
+      "context": "courage.respond",
+      "keywords": {
+        "could": 1.2,
+        "alone": 1.5,
+        "with": 0.8,
+        "help": 1.0,
+        "believe": 1.2
+      },
+      "requiresAny": [
+        "could",
+        "alone",
+        "help",
+        "believe"
+      ],
+      "phrases": [
+        "you could do it",
+        "i would come with you",
+        "you would not be alone",
+        "i believe you can",
+        "let me help you with it"
+      ],
+      "category": "topics"
+    },
+    "courage.ask": {
+      "question": "courage.respond",
+      "answer": "ask_what_stops_you",
+      "context": "courage.respond",
+      "keywords": {
+        "stops": 1.8,
+        "stopping": 1.6,
+        "why": 1.0,
+        "reason": 1.2
+      },
+      "requiresAny": [
+        "stops",
+        "stopping",
+        "why",
+        "reason"
+      ],
+      "phrases": [
+        "what stops you",
+        "what is stopping you",
+        "why have you not done it",
+        "what is the reason"
+      ],
+      "category": "topics"
+    },
+    "courage.admit": {
+      "question": "courage.respond",
+      "answer": "admit_i_wouldnt",
+      "context": "courage.respond",
+      "keywords": {
+        "same": 1.2,
+        "myself": 1.5,
+        "too": 1.0,
+        "list": 1.4
+      },
+      "requiresAny": [
+        "same",
+        "myself",
+        "too",
+        "list"
+      ],
+      "phrases": [
+        "i have a list like that myself",
+        "i am the same",
+        "me too",
+        "i put things off as well"
+      ],
+      "category": "topics"
+    },
+    "courage.landed.hold": {
+      "question": "courage.close.landed",
+      "answer": "hold_you_to_it",
+      "context": "courage.close.landed",
+      "keywords": {
+        "ask": 1.4,
+        "week": 1.2,
+        "remind": 1.5,
+        "again": 0.8
+      },
+      "requiresAny": [
+        "ask",
+        "week",
+        "remind"
+      ],
+      "phrases": [
+        "i will ask you next week",
+        "remind me to ask",
+        "i will hold you to it",
+        "i will check in with you"
+      ],
+      "category": "topics"
+    },
+    "courage.landed.easy": {
+      "question": "courage.close.landed",
+      "answer": "no_pressure",
+      "context": "courage.close.landed",
+      "keywords": {
+        "clock": 1.6,
+        "rush": 1.5,
+        "pressure": 1.6,
+        "time": 0.8
+      },
+      "requiresAny": [
+        "clock",
+        "rush",
+        "pressure",
+        "time"
+      ],
+      "phrases": [
+        "there is no rush",
+        "take your time",
+        "no pressure from me",
+        "there is no clock on it"
+      ],
+      "category": "topics"
+    },
+    "courage.rebuffed.apologize": {
+      "question": "courage.close.rebuffed",
+      "answer": "apologize",
+      "context": "courage.close.rebuffed",
+      "keywords": {
+        "sorry": 1.8,
+        "clumsy": 1.5,
+        "apologise": 1.6,
+        "apologize": 1.6
+      },
+      "requiresAny": [
+        "sorry",
+        "clumsy",
+        "apologise",
+        "apologize"
+      ],
+      "phrases": [
+        "i am sorry",
+        "that was clumsy of me",
+        "i should not have pushed",
+        "my apologies"
+      ],
+      "category": "topics"
+    },
+    "courage.rebuffed.drop": {
+      "question": "courage.close.rebuffed",
+      "answer": "drop_it",
+      "context": "courage.close.rebuffed",
+      "keywords": {
+        "drop": 1.6,
+        "understood": 1.5,
+        "bring": 1.0,
+        "leave": 1.0
+      },
+      "requiresAny": [
+        "drop",
+        "understood",
+        "bring",
+        "leave"
+      ],
+      "phrases": [
+        "understood",
+        "i will not bring it up",
+        "consider it dropped",
+        "i will leave it alone"
+      ],
+      "category": "topics"
+    }
+  }
+}

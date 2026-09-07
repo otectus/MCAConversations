@@ -1,0 +1,564 @@
+{
+  "_comment": "Openers plus one terminal beat per reply. The gossip page's replies use the wildcard responds_to because conversations_gossip_say picks its line at runtime.",
+  "beats": {
+    "almanac.court.open": {
+      "topic": "almanac",
+      "say": "almanac.court.title_changed",
+      "response_question": "almanac.court.respond",
+      "npc_act": "report",
+      "subject": "almanac.court",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.standing.high.open": {
+      "topic": "almanac",
+      "say": "almanac.standing.honored",
+      "response_question": "almanac.standing.respond",
+      "npc_act": "report",
+      "subject": "almanac.standing",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.standing.low.open": {
+      "topic": "almanac",
+      "say": "almanac.standing.wary",
+      "response_question": "almanac.standing.wary.respond",
+      "npc_act": "disclose_problem",
+      "subject": "almanac.standing.wary",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.quest.open": {
+      "topic": "almanac",
+      "say": "almanac.quest.ready",
+      "response_question": "almanac.quest.respond",
+      "npc_act": "ask",
+      "subject": "almanac.quest",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.world.weather.open": {
+      "topic": "almanac",
+      "say": "almanac.weather",
+      "response_question": "almanac.world.respond",
+      "npc_act": "report",
+      "subject": "almanac.world",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.world.season.open": {
+      "topic": "almanac",
+      "say": "almanac.season",
+      "response_question": "almanac.world.respond",
+      "npc_act": "report",
+      "subject": "almanac.world",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.world.holiday.open": {
+      "topic": "almanac",
+      "say": "almanac.holiday",
+      "response_question": "almanac.world.respond",
+      "npc_act": "report",
+      "subject": "almanac.world",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.plain.open": {
+      "topic": "almanac",
+      "say": "almanac.plain",
+      "response_question": "almanac.plain.respond",
+      "npc_act": "report",
+      "subject": "almanac.plain",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ]
+    },
+    "almanac.court.ask_title.answer": {
+      "topic": "almanac",
+      "say": "almanac.court.ask_title",
+      "response_question": "conversations.cat.events",
+      "npc_act": "explain",
+      "subject": "almanac.court",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.court.congratulate.answer": {
+      "topic": "almanac",
+      "say": "almanac.court.congratulate",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "almanac.court",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "almanac.standing.ask_more.answer": {
+      "topic": "almanac",
+      "say": "almanac.standing.ask_more",
+      "response_question": "conversations.cat.events",
+      "npc_act": "report",
+      "subject": "almanac.standing",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.standing.thank_them.answer": {
+      "topic": "almanac",
+      "say": "almanac.standing.thank_them",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "almanac.standing",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "almanac.standing.wary.ask_what_happened.answer": {
+      "topic": "almanac",
+      "say": "almanac.standing.wary.ask_what_happened",
+      "response_question": "conversations.cat.events",
+      "npc_act": "report",
+      "subject": "almanac.standing.wary",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.standing.wary.own_it.answer": {
+      "topic": "almanac",
+      "say": "almanac.standing.wary.own_it",
+      "response_question": "conversations.cat.events",
+      "npc_act": "qualify",
+      "subject": "almanac.standing.wary",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "almanac.quest.ask_task.answer": {
+      "topic": "almanac",
+      "say": "almanac.quest.ask_task",
+      "response_question": "conversations.cat.events",
+      "npc_act": "explain",
+      "subject": "almanac.quest",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.quest.offer_help.answer": {
+      "topic": "almanac",
+      "say": "almanac.quest.offer_help",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "almanac.quest",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted"
+    },
+    "almanac.gossip.reply.ask_who.answer": {
+      "topic": "almanac",
+      "say": "almanac.gossip.reply.ask_who",
+      "response_question": "conversations.cat.events",
+      "npc_act": "qualify",
+      "subject": "almanac.gossip.reply",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.gossip.reply.take_it_in.answer": {
+      "topic": "almanac",
+      "say": "almanac.gossip.reply.take_it_in",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "almanac.gossip.reply",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "almanac.world.agree.answer": {
+      "topic": "almanac",
+      "say": "almanac.world.agree",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "almanac.world",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted"
+    },
+    "almanac.world.ask_plans.answer": {
+      "topic": "almanac",
+      "say": "almanac.world.ask_plans",
+      "response_question": "conversations.cat.events",
+      "npc_act": "explain",
+      "subject": "almanac.world",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.plain.ask_more.answer": {
+      "topic": "almanac",
+      "say": "almanac.plain.ask_more",
+      "response_question": "conversations.cat.events",
+      "npc_act": "report",
+      "subject": "almanac.plain",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged"
+    },
+    "almanac.plain.steady_on.answer": {
+      "topic": "almanac",
+      "say": "almanac.plain.steady_on",
+      "response_question": "conversations.cat.events",
+      "npc_act": "accept",
+      "subject": "almanac.plain",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    }
+  },
+  "replies": {
+    "almanac.court.respond/ask_title": {
+      "stance": "curiosity",
+      "responds_to": [
+        "almanac.court.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.court.respond/congratulate": {
+      "stance": "encouragement",
+      "responds_to": [
+        "almanac.court.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "almanac.court.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "almanac.court.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "almanac.standing.respond/ask_more": {
+      "stance": "curiosity",
+      "responds_to": [
+        "almanac.standing.high.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.standing.respond/thank_them": {
+      "stance": "encouragement",
+      "responds_to": [
+        "almanac.standing.high.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "almanac.standing.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "almanac.standing.high.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "almanac.standing.wary.respond/ask_what_happened": {
+      "stance": "curiosity",
+      "responds_to": [
+        "almanac.standing.low.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.standing.wary.respond/own_it": {
+      "stance": "candor",
+      "responds_to": [
+        "almanac.standing.low.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "almanac.standing.wary.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "almanac.standing.low.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "almanac.quest.respond/ask_task": {
+      "stance": "curiosity",
+      "responds_to": [
+        "almanac.quest.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.quest.respond/offer_help": {
+      "stance": "practical_help",
+      "responds_to": [
+        "almanac.quest.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "almanac.quest.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "almanac.quest.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "almanac.gossip.respond/ask_who": {
+      "stance": "curiosity",
+      "responds_to": [
+        "*"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.gossip.respond/take_it_in": {
+      "stance": "restraint",
+      "responds_to": [
+        "*"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "almanac.gossip.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "*"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "almanac.world.respond/agree": {
+      "stance": "encouragement",
+      "responds_to": [
+        "almanac.world.weather.open",
+        "almanac.world.season.open",
+        "almanac.world.holiday.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "almanac.world.respond/ask_plans": {
+      "stance": "curiosity",
+      "responds_to": [
+        "almanac.world.weather.open",
+        "almanac.world.season.open",
+        "almanac.world.holiday.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.world.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "almanac.world.weather.open",
+        "almanac.world.season.open",
+        "almanac.world.holiday.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "almanac.plain.respond/ask_more": {
+      "stance": "curiosity",
+      "responds_to": [
+        "almanac.plain.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "almanac.plain.respond/steady_on": {
+      "stance": "encouragement",
+      "responds_to": [
+        "almanac.plain.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "almanac.plain.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "almanac.plain.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

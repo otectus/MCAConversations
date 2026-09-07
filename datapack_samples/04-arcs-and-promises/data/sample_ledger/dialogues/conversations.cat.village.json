@@ -1,0 +1,137 @@
+{
+  "answers": [
+    {
+      "name": "ledger",
+      "constraints": "!baby,!toddler",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_commitment": {
+                "id": "ledger.cover_the_debt",
+                "state": [
+                  "pending",
+                  "overdue"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "ledger",
+              "budget": "standard",
+              "branch": "promise",
+              "beat": "ledger.promise.open.to.ledger.followup"
+            },
+            "next": "ledger.followup",
+            "conversations_say": {
+              "phrase": "ledger.promise.open"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_progress": {
+                "arc": "ledger",
+                "min": 1
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_commitment": {
+                "id": "ledger.cover_the_debt",
+                "state": [
+                  "pending",
+                  "overdue"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "ledger",
+              "budget": "standard",
+              "branch": "again",
+              "beat": "ledger.again.open.to.ledger.followup"
+            },
+            "next": "ledger.followup",
+            "conversations_say": {
+              "phrase": "ledger.again.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -1000,
+              "conversations_commitment": {
+                "id": "ledger.cover_the_debt",
+                "state": [
+                  "pending",
+                  "overdue"
+                ]
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_progress": {
+                "arc": "ledger",
+                "min": 1
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "ledger",
+              "budget": "standard",
+              "branch": "open",
+              "beat": "ledger.open.to.ledger.respond"
+            },
+            "conversations_record": {
+              "id": "sample_ledger.cooldown.ledger",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "ledger.respond",
+            "conversations_say": {
+              "phrase": "ledger.open"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

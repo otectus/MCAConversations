@@ -66,7 +66,8 @@ public final class CommitmentObserver {
         try {
             List<CommitmentRecord> settled = new ArrayList<>();
             for (CommitmentRecord commitment : outstanding(villager, player)) {
-                if (commitment.resolver() == CommitmentResolver.GIFT_TAG_RECEIVED
+                if (commitment.madeBy() == CommitmentRecord.Party.PLAYER
+                        && commitment.resolver() == CommitmentResolver.GIFT_TAG_RECEIVED
                         && satisfies(commitment.target(), stack)) {
                     History.settle(villager, player, commitment.id(),
                                     CommitmentRecord.State.KEPT, today)
@@ -121,7 +122,8 @@ public final class CommitmentObserver {
      * <p>Pure, so the rule can be read and tested without a world.
      */
     static CommitmentRecord.State outcomeOnMeeting(CommitmentRecord commitment, long today) {
-        if (commitment == null || !commitment.isOutstanding()) {
+        if (commitment == null || !commitment.isOutstanding()
+                || commitment.madeBy() != CommitmentRecord.Party.PLAYER || today < commitment.createdDay()) {
             return null;
         }
         if (!commitment.resolver().isAvailable()) {
@@ -138,6 +140,33 @@ public final class CommitmentObserver {
         return today > commitment.dueDay().getAsLong() + BROKEN_AFTER_GRACE_DAYS
                 ? CommitmentRecord.State.BROKEN
                 : null;
+    }
+
+    /** Observes the exact quest named by a player's promise, at the quest lifecycle event. */
+    public static void onQuestOutcome(Entity villager, ServerPlayer player, ResourceLocation questId,
+                                      boolean completed, long today) {
+        if (villager == null || player == null || questId == null) {
+            return;
+        }
+        for (CommitmentRecord commitment : outstanding(villager, player)) {
+            CommitmentRecord.State outcome = outcomeOnQuest(commitment, questId.toString(), completed, today);
+            if (outcome != null) {
+                History.settle(villager, player, commitment.id(), outcome, today);
+            }
+        }
+    }
+
+    static CommitmentRecord.State outcomeOnQuest(CommitmentRecord commitment, String questId,
+                                                  boolean completed, long today) {
+        if (commitment == null || !commitment.isOutstanding()
+                || commitment.madeBy() != CommitmentRecord.Party.PLAYER
+                || commitment.resolver() != CommitmentResolver.QUEST_STATE
+                || today < commitment.createdDay()
+                || commitment.target().kind() != NarrativeValue.Kind.REGISTRY_ID
+                || !commitment.target().raw().equals(questId)) {
+            return null;
+        }
+        return completed ? CommitmentRecord.State.KEPT : CommitmentRecord.State.BROKEN;
     }
 
     /**

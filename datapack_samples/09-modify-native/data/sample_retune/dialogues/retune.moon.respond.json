@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "agree",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "retune.moon.agree"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "retune.moon.plain"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_stories",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "retune.moon.stories"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "retune.moon.plain"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "retune.moon.leave"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat"
+          }
+        }
+      ]
+    }
+  ]
+}

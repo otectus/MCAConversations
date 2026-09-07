@@ -1,0 +1,30 @@
+{
+  "_comment": [
+    "Technique 3: redefining a shipped interiority profile. 'gloomy' is declared by",
+    "data/mcaconversations/interiority/personalities.json. Redefining the id replaces the whole",
+    "profile object - baselines and stance_bias together - so every axis the shipped profile set",
+    "has to be restated here or it silently reverts to 0.",
+    "This version is a dry-humoured gloomy: a joke lands on them instead of bouncing off, and",
+    "they hold back a little less. Everything else is the shipped profile, unchanged.",
+    "Baselines clamp to +/-15 and stance bias to +/-12, both less than one check-tier margin."
+  ],
+  "profiles": {
+    "gloomy": {
+      "baselines": {
+        "warmth": -4,
+        "tension": 5,
+        "respect": -2
+      },
+      "stance_bias": {
+        "empathy": 8,
+        "restraint": 3,
+        "self_disclosure": 4,
+        "encouragement": -6,
+        "humor": 4,
+        "dismissal": -8,
+        "curiosity": -3,
+        "candor": 5
+      }
+    }
+  }
+}

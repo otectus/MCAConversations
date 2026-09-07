@@ -202,7 +202,9 @@ public final class ChatModeDispatcher {
         }
         int stickyIndex = stickyIndex(existing, candidates, now);
         if (existing != null && stickyIndex < 0) {
-            existing.clearQuestion(); // no in-range/in-window sticky partner → drop stale context
+            ConversationSessions.raw(player.getUUID()).flatMap(ConversationSession::currentOffer)
+                    .filter(offer -> offer.frontend() == ConversationSession.Frontend.CHAT)
+                    .ifPresent(offer -> existing.clearQuestion());
         }
         double lookConeCos = lookConeCos(McaConversationsConfig.COMMON.chatModeLookConeDegrees.get());
         Address address = Addressing.resolve(rawMessage, names, lookDots, stickyIndex, lookConeCos,
@@ -254,6 +256,8 @@ public final class ChatModeDispatcher {
             return;
         }
 
+        // Expire stale chat offers before either numbers or natural-language replies read them.
+        ConversationSessions.peek(player.getUUID(), now);
         IntentIndex index = ChatIntentLoader.active();
         String currentQuestion = contextFor(existing, target);
         List<String> offered = currentQuestion == null
@@ -292,7 +296,7 @@ public final class ChatModeDispatcher {
             }
         }
 
-        NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
+        NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms(), player.getLanguage());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
             // "Hey Anna" strips to nothing, but the greeting itself is the message — answer it.
             if (address.named() && address.greeting()) {
@@ -358,7 +362,9 @@ public final class ChatModeDispatcher {
      * question ({@code ?} or a leading question word) or uses second person ({@code you}/{@code your}).
      */
     static boolean looksEngaged(NormalizedMessage msg) {
-        return msg.interrogative || msg.contentStems.contains("you") || msg.contentStems.contains("your");
+        return msg.interrogative || msg.contentStems.contains("you") || msg.contentStems.contains("your")
+                || msg.contentStems.contains("voce") || msg.contentStems.contains("seu")
+                || msg.contentStems.contains("sua");
     }
 
     /**
@@ -369,7 +375,7 @@ public final class ChatModeDispatcher {
     private static void handleAmbient(ServerPlayer player, String message, List<VillagerCandidate> candidates,
                                       double ambientRadius, long now) {
         IntentIndex index = ChatIntentLoader.active();
-        NormalizedMessage normalized = Normalizer.normalize(message, index.synonyms());
+        NormalizedMessage normalized = Normalizer.normalize(message, index.synonyms(), player.getLanguage());
         if (normalized.contentStems.isEmpty() && normalized.tokens.isEmpty()) {
             return;
         }
@@ -433,7 +439,18 @@ public final class ChatModeDispatcher {
             int stagger = AmbientSelection.staggerOffsetTicks(c.entity().getUUID(), rank);
             respondAmbient(c, player, chosen, now, stagger, rank == 0);
             ChatModeSession.markAmbient(c.entity().getUUID(), now);
+            if (!canAnotherAmbientResponderSpeak(ConversationSessions.raw(player.getUUID()).orElse(null))) {
+                // One player can answer one live exchange. A later terminal-only voice may speak,
+                // but it must never replace this villager's question, budget or frozen context.
+                ChatModeSession.recordExchange(player.getUUID(), c.entity().getUUID(), now);
+                break;
+            }
         }
+    }
+
+    static boolean canAnotherAmbientResponderSpeak(ConversationSession session) {
+        return session == null || session.topicId().isEmpty()
+                && session.currentOffer().filter(offer -> !offer.consumed() && !offer.answerIds().isEmpty()).isEmpty();
     }
 
     /** Topic and greeting intents are shoutable to a crowd; directed controls (farewell/mute/decline/insult) are not. */
@@ -544,6 +561,22 @@ public final class ChatModeDispatcher {
             routeSystem(target, player, chosen.system(), now);
             return;
         }
+        if (chosen.contextScoped()) {
+            ConversationSession session = ConversationSessions.raw(player.getUUID()).orElse(null);
+            ConversationSession.ChoiceOffer offer = session == null ? null : session.currentOffer().orElse(null);
+            if (offer == null || offer.villagerId() != null
+                    && !offer.villagerId().equals(target.entity().getUUID())
+                    || !session.consumeOfferedAnswer(chosen.question(), chosen.answer())) {
+                return;
+            }
+            try {
+                drive(target, player, chosen.question(), chosen.answer(), now);
+            } finally {
+                dev.otectus.mcaconversations.network.ConversationsNetwork.clearOffer(player,
+                        offer.revision(), dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason.CONSUMED);
+            }
+            return;
+        }
         drive(target, player, chosen.question(), chosen.answer(), now);
     }
 
@@ -603,9 +636,29 @@ public final class ChatModeDispatcher {
         driveStaggered(target, player, question, answer, now, 0, true);
     }
 
+    /** The same live gates apply to packet shortcuts as to text typed into chat. */
+    public static boolean canSelectOfferedChoice(Entity villager, ServerPlayer player, long now) {
+        if (!McaConversationsConfig.COMMON.enableChatMode.get() || !isOptedIn(player)
+                || McaCompat.isBaby(villager)
+                || villager instanceof net.minecraft.world.entity.LivingEntity living && living.isSleeping()
+                || McaCompat.isInteractingWith(villager)
+                        .filter(id -> !id.equals(player.getUUID())).isPresent()) {
+            return false;
+        }
+        Session session = ChatModeSession.peek(player.getUUID());
+        if (session == null) {
+            return true;
+        }
+        int cooldown = McaConversationsConfig.COMMON.chatModeCooldownTicks.get();
+        return !session.isMuted(villager.getUUID(), now)
+                && (cooldown <= 0 || session.lastProcessedGameTime == 0
+                        || now - session.lastProcessedGameTime >= cooldown);
+    }
+
     /** Entry used after the numbered packet service has atomically consumed a CHAT offer. */
     public static void selectOfferedChoice(Entity villager, ServerPlayer player,
                                            String question, String answer, long now) {
+        markProcessed(player, now);
         VillagerCandidate target = new VillagerCandidate(villager,
                 McaCompat.getVillagerName(villager).orElse(""),
                 villager.distanceToSqr(player), 1.0D);
@@ -619,6 +672,15 @@ public final class ChatModeDispatcher {
      */
     private static void driveStaggered(VillagerCandidate target, ServerPlayer player, String question,
                                        String answer, long now, int stagger, boolean makeSticky) {
+        // Every exchange replaces the old decision, including a subject change whose result only
+        // says a line and never sends a follow-up menu. Keep both frontend views synchronized.
+        ConversationSessions.raw(player.getUUID()).flatMap(ConversationSession::currentOffer)
+                .ifPresent(offer -> dev.otectus.mcaconversations.network.ConversationsNetwork.clearOffer(player,
+                        offer.revision(), dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason.CONSUMED));
+        ConversationSession shared = ConversationSessions.get(player.getUUID(), now);
+        shared.setVillagerId(target.entity().getUUID());
+        shared.setFrontend(ConversationSession.Frontend.CHAT);
+        shared.clearOffer();
         boolean showHearts = McaConversationsConfig.COMMON.chatModeShowHeartChanges.get();
         int heartsBefore = showHearts ? McaCompat.getHearts(player, target.entity()) : 0;
         // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
@@ -640,7 +702,12 @@ public final class ChatModeDispatcher {
                 String nextQuestion = ChatModeSession.currentQuestion(player.getUUID());
                 if (nextQuestion != null && !isHubQuestion(nextQuestion)) {
                     QuickReplies.optionsBlock(nextQuestion, ChatModeSession.currentAnswers(player.getUUID()))
-                            .ifPresent(line -> scope.options = line);
+                            .ifPresent(line -> {
+                                scope.options = line;
+                                scope.optionsRevision = ConversationSessions.raw(player.getUUID())
+                                        .flatMap(ConversationSession::currentOffer)
+                                        .map(ConversationSession.ChoiceOffer::revision).orElse(-1L);
+                            });
                 }
             }
         }
@@ -815,7 +882,10 @@ public final class ChatModeDispatcher {
         return Component.translatable("dialogue." + aged, fallback);
     }
 
-    private static Component topicName(Scored s) {
+    static Component topicName(Scored s) {
+        if (s.contextScoped() && s.question() != null && s.answer() != null) {
+            return Component.translatable("dialogue." + s.question() + "." + s.answer());
+        }
         String answer = s.answer() != null ? s.answer() : (s.system() != null ? s.system() : s.id());
         // Topic names are shown to the player (clarify prompts, debug output), so they get a
         // translatable label; the raw answer id remains the fallback for un-localized topics.
@@ -853,6 +923,14 @@ public final class ChatModeDispatcher {
             return null;
         }
         if (!session.villagerId.equals(target.entity().getUUID())) {
+            return null;
+        }
+        ConversationSession.ChoiceOffer offer = ConversationSessions.raw(session.playerId)
+                .flatMap(ConversationSession::currentOffer).orElse(null);
+        if (offer == null || offer.villagerId() != null
+                && !offer.villagerId().equals(target.entity().getUUID())
+                || offer.villagerId() == null && !McaCompat.isInteractingWith(target.entity())
+                        .filter(session.playerId::equals).isPresent()) {
             return null;
         }
         // Category hubs (menus in the GUI) are meaningless as chat context — treat them as no context.
@@ -998,12 +1076,14 @@ public final class ChatModeDispatcher {
                 : address.targetIndex() == stickyIndex ? "2 (sticky)"
                 : address.directed() ? "3 (look-at)" : "4 (ambient/nearest)";
 
+        // Expire stale chat offers before either numbers or natural-language replies read them.
+        ConversationSessions.peek(player.getUUID(), now);
         IntentIndex index = ChatIntentLoader.active();
         String currentQuestion = contextFor(existing, target);
         List<String> offered = currentQuestion == null
                 ? List.of() : ChatModeSession.currentAnswers(player.getUUID());
 
-        NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms());
+        NormalizedMessage normalized = Normalizer.normalize(address.message(), index.synonyms(), player.getLanguage());
         List<Scored> ranked = IntentMatcher.rank(index, normalized, currentQuestion, offered);
         Set<String> eligibleIds = new HashSet<>();
         List<Scored> eligible = new ArrayList<>();

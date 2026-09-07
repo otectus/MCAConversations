@@ -1,0 +1,39 @@
+{
+  "_comment": [
+    "Technique 4: redefining a shipped scene id. 'work.librarian.current_task.evergreen' is",
+    "declared by data/mcaconversations/conversation_scenes/generated.json. SceneCatalogLoader is",
+    "the one catalog that sorts its files by ResourceLocation before folding them, so",
+    "'sample_retune' (s) is read after 'mcaconversations' (m) and this definition wins, every time,",
+    "on every install. That is a namespace-sort-order guarantee, not a pack-priority one.",
+    "The change: the shipped scene is an always-available filler at base_priority 6 with no",
+    "cooldown. This one keeps the same route but makes the librarian mention their current task",
+    "less often - a real cooldown, a weekly cap, and a lean toward villagers who value precision.",
+    "Every field of the shipped scene is restated: a redefinition replaces, it does not merge."
+  ],
+  "scenes": {
+    "work.librarian.current_task.evergreen": {
+      "purpose": "topic:work",
+      "shape": "observe",
+      "profile": {
+        "profession": [
+          "minecraft:librarian"
+        ],
+        "ages": [
+          "adult"
+        ]
+      },
+      "selection": {
+        "base_priority": 6,
+        "identity_values": [
+          "precision"
+        ],
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.topic.work.librarian.task.respond",
+        "opening_beat": "work.librarian.task"
+      }
+    }
+  }
+}

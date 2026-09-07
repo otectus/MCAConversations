@@ -72,7 +72,7 @@ public final class QuickReplies {
     }
 
     private static boolean isWrapper(char c) {
-        return c == '.' || c == ')' || c == '(' || c == '#' || c == '-' || c == ':' || Character.isWhitespace(c);
+        return c == '.' || c == ')' || c == '(' || c == '#' || c == ':' || Character.isWhitespace(c);
     }
 
     /**
@@ -92,11 +92,11 @@ public final class QuickReplies {
      * same {@code dialogue.<question>.<answer>} keys the buttons use — so a player reads exactly the
      * words the GUI would have shown them, in their own language.
      *
-     * <p>Returns empty when there is nothing worth numbering: no question, no answers, or only a
-     * single option (a list of one is noise, and the player can just say it).
+     * <p>Even a single continuation is shown: the player must be able to discover and select the
+     * same exit or follow-up they would have seen in the GUI.
      */
     public static java.util.Optional<Component> optionsBlock(String question, List<String> offered) {
-        if (question == null || offered == null || offered.size() < 2) {
+        if (question == null || offered == null || offered.isEmpty()) {
             return java.util.Optional.empty();
         }
         MutableComponent out = Component.empty();
@@ -124,7 +124,7 @@ public final class QuickReplies {
         out.append(Component.literal("\n"));
         out.append(Component.translatable("chat.mcaconversations.responses.hint")
                 .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-        return shown < 2 ? java.util.Optional.empty() : java.util.Optional.of(out);
+        return java.util.Optional.of(out);
     }
 
     /** Source-compatible alias for integrations compiled against the pre-1.4.3 helper name. */

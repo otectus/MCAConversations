@@ -1,0 +1,195 @@
+{
+  "_comment": "Sample 05. One intent per non-exit answer, each bound to the exact question+answer it presses. Intent ids merge last-wins across datapacks, so every id here carries the pack prefix.",
+  "synonyms": {
+    "hive": ["skep", "hives"],
+    "bees": ["bee"]
+  },
+  "intents": {
+    "bees.starter": {
+      "question": "conversations.cat.profession",
+      "answer": "bees",
+      "keywords": {
+        "bees": 1.5,
+        "hive": 1.4,
+        "honey": 1.2,
+        "wax": 1.0,
+        "swarm": 1.0
+      },
+      "requiresAny": ["bees", "hive", "honey", "wax", "swarm"],
+      "phrases": [
+        "how are the bees",
+        "how are your hives",
+        "tell me about the bees",
+        "any honey this year",
+        "how is the hive doing"
+      ],
+      "bigrams": ["the bees"],
+      "category": "topics"
+    },
+    "bees.blocked.offer": {
+      "question": "bees.scene.wet_hive.blocked.respond",
+      "answer": "offer_to_lift_it",
+      "keywords": {
+        "help": 1.5,
+        "hand": 1.2,
+        "lift": 1.2,
+        "carry": 1.0,
+        "together": 0.8
+      },
+      "requiresAny": ["help", "hand", "lift", "carry"],
+      "phrases": [
+        "i can help you move it",
+        "let me give you a hand",
+        "i will help lift it",
+        "want a hand with that"
+      ],
+      "category": "topics"
+    },
+    "bees.blocked.ask": {
+      "question": "bees.scene.wet_hive.blocked.respond",
+      "answer": "ask_what_went_wrong",
+      "keywords": {
+        "what": 1.0,
+        "wrong": 1.5,
+        "happened": 1.2,
+        "why": 1.0,
+        "cause": 0.8
+      },
+      "requiresAny": ["wrong", "happened", "why", "cause"],
+      "phrases": [
+        "what went wrong",
+        "what happened to it",
+        "why did that happen",
+        "what caused it"
+      ],
+      "category": "topics"
+    },
+    "bees.recovered.ask": {
+      "question": "bees.scene.wet_hive.recovered.respond",
+      "answer": "ask_what_fixed_it",
+      "keywords": {
+        "fixed": 1.5,
+        "worked": 1.2,
+        "how": 1.0,
+        "mend": 1.0,
+        "did": 0.6
+      },
+      "requiresAny": ["fixed", "worked", "how", "mend"],
+      "phrases": [
+        "what fixed it",
+        "how did you sort it",
+        "what ended up working",
+        "how did you mend it"
+      ],
+      "category": "topics"
+    },
+    "bees.recovered.glad": {
+      "question": "bees.scene.wet_hive.recovered.respond",
+      "answer": "say_glad",
+      "keywords": {
+        "glad": 1.5,
+        "good": 1.2,
+        "pleased": 1.0,
+        "relieved": 1.0,
+        "news": 0.8
+      },
+      "requiresAny": ["glad", "good", "pleased", "relieved"],
+      "phrases": [
+        "i am glad to hear it",
+        "that is good news",
+        "glad it came right",
+        "pleased for you"
+      ],
+      "category": "topics"
+    },
+    "bees.season.ask": {
+      "question": "bees.scene.hives.season_ahead.respond",
+      "answer": "ask_the_plan",
+      "keywords": {
+        "plan": 1.5,
+        "next": 1.2,
+        "season": 1.2,
+        "doing": 0.8,
+        "then": 0.6
+      },
+      "requiresAny": ["plan", "next", "season"],
+      "phrases": [
+        "what is the plan",
+        "what happens next",
+        "what will you do this season",
+        "how are you planning it"
+      ],
+      "category": "topics"
+    },
+    "bees.season.offer": {
+      "question": "bees.scene.hives.season_ahead.respond",
+      "answer": "offer_a_hand",
+      "keywords": {
+        "help": 1.5,
+        "hand": 1.2,
+        "spare": 1.0,
+        "assist": 1.0
+      },
+      "requiresAny": ["help", "hand", "spare", "assist"],
+      "phrases": [
+        "i can spare a day",
+        "let me help with that",
+        "i will lend a hand",
+        "call on me when you start"
+      ],
+      "category": "topics"
+    },
+    "bees.evergreen.ask": {
+      "question": "bees.scene.hives.evergreen.respond",
+      "answer": "ask_after_them",
+      "keywords": {
+        "how": 1.0,
+        "bees": 1.5,
+        "doing": 1.0,
+        "keeping": 1.0
+      },
+      "requiresAny": ["bees", "doing", "keeping"],
+      "phrases": [
+        "how are they keeping",
+        "how are the bees doing",
+        "are they doing well",
+        "tell me more about them"
+      ],
+      "category": "topics"
+    },
+    "bees.followup.wish": {
+      "question": "bees.followup",
+      "answer": "wish_them_luck",
+      "keywords": {
+        "luck": 1.5,
+        "hope": 1.2,
+        "well": 1.0,
+        "goes": 0.8
+      },
+      "requiresAny": ["luck", "hope", "well"],
+      "phrases": [
+        "good luck with it",
+        "i hope it goes well",
+        "best of luck",
+        "hope it works out"
+      ],
+      "category": "topics"
+    },
+    "bees.plain.good": {
+      "question": "bees.plain.respond",
+      "answer": "thats_good_to_hear",
+      "keywords": {
+        "good": 1.5,
+        "hear": 1.0,
+        "nice": 0.8
+      },
+      "requiresAny": ["good", "hear", "nice"],
+      "phrases": [
+        "that is good to hear",
+        "good to hear",
+        "nice one"
+      ],
+      "category": "topics"
+    }
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "answers": [
+    {
+      "name": "music",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "sample_pastimes.cooldown.music",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "pastimes.music",
+              "budget": "quick",
+              "branch": "again",
+              "beat": "pastimes.music.again"
+            },
+            "next": "pastimes.music.respond",
+            "conversations_say": {
+              "phrase": "sample_pastimes.music.again"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_pastimes.cooldown.music",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "pastimes.music",
+              "budget": "quick",
+              "branch": "open",
+              "beat": "pastimes.music.open"
+            },
+            "conversations_record": {
+              "id": "sample_pastimes.cooldown.music",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "pastimes.music.respond",
+            "conversations_say": {
+              "phrase": "sample_pastimes.music.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_pastimes.cooldown.music",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "conversations_record": {
+              "id": "sample_pastimes.cooldown.music",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "pastimes.cat",
+            "conversations_say": {
+              "phrase": "sample_pastimes.music.open"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "games",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "sample_pastimes.cooldown.games",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "pastimes.games",
+              "budget": "quick",
+              "branch": "again",
+              "beat": "pastimes.games.again"
+            },
+            "next": "pastimes.games.respond",
+            "conversations_say": {
+              "phrase": "sample_pastimes.games.again"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_pastimes.cooldown.games",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "pastimes.games",
+              "budget": "quick",
+              "branch": "open",
+              "beat": "pastimes.games.open"
+            },
+            "conversations_record": {
+              "id": "sample_pastimes.cooldown.games",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "pastimes.games.respond",
+            "conversations_say": {
+              "phrase": "sample_pastimes.games.open"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_pastimes.cooldown.games",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "conversations_record": {
+              "id": "sample_pastimes.cooldown.games",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "pastimes.cat",
+            "conversations_say": {
+              "phrase": "sample_pastimes.games.open"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "_comment": [
+    "Technique 2: redefining a shipped intent id. 'chitchat.weather' is declared by",
+    "data/mcaconversations/chat_intents/chitchat.json; declaring the same id here replaces the",
+    "whole binding, because ChatIntentLoader folds every file into one map keyed by id and the",
+    "last file it happens to read wins. That order is HashMap order, not pack order - see the",
+    "README before relying on this."
+  ],
+  "intents": {
+    "chitchat.weather": {
+      "question": "conversations.cat.chitchat",
+      "answer": "weather",
+      "keywords": {
+        "weather": 1.5,
+        "rain": 1.2,
+        "storm": 1.2,
+        "sunny": 1.0,
+        "snow": 1.0,
+        "sky": 0.8,
+        "cold": 0.6,
+        "hot": 0.6,
+        "wind": 1.0,
+        "fog": 1.0,
+        "cloud": 0.8,
+        "forecast": 1.0
+      },
+      "requiresAny": [
+        "weather",
+        "rain",
+        "storm",
+        "sunny",
+        "snow",
+        "sky",
+        "wind",
+        "fog",
+        "forecast"
+      ],
+      "phrases": [
+        "what is the weather like",
+        "how is the weather",
+        "nice weather",
+        "is it going to rain",
+        "is the wind getting up",
+        "what is the sky doing"
+      ],
+      "antiKeywords": [
+        "weathered"
+      ],
+      "category": "topics"
+    }
+  }
+}

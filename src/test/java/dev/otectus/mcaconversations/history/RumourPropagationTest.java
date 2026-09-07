@@ -157,4 +157,122 @@ class RumourPropagationTest {
         assertEquals(Optional.empty(),
                 Optional.ofNullable(known.isKnownTo(listener) ? null : known));
     }
+
+    @Test
+    void receiverMemoryStopsRepeatedTransmissionFromUnchangedSender() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord heard = RumourPropagation.asHeardBy(original, TELLER, listener, 2);
+        assertFalse(original.isKnownTo(listener), "sender record was never updated by the hop");
+        assertFalse(RumourPropagation.shouldTell(original, heard, listener, 3));
+        assertTrue(RumourPropagation.shouldTell(original, null, listener, 3));
+        assertFalse(RumourPropagation.shouldTell(original, null, listener, 0));
+    }
+
+    @Test
+    void anonymousRetellingDropsEntityReferencesInPayloadToo() {
+        EpisodeRecord original = episode(PrivacyLevel.DISCREET, 90)
+                .withSlot("neighbour", NarrativeValue.uuid(SUBJECT));
+        EpisodeRecord heard = RumourPropagation.asHeardBy(original, TELLER, null, 2);
+        assertTrue(heard.slot("neighbour").isEmpty());
+        assertTrue(original.slot("neighbour").isPresent());
+    }
+
+    @Test
+    void sameDayResolutionReachesSomeoneWhoHeardTheOpening() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord heard = RumourPropagation.asHeardBy(original, TELLER, listener, 1);
+        EpisodeRecord resolved = original.witnessedBy(listener).transitioned(EpisodeState.SUCCEEDED, 1);
+        assertEquals(heard.updatedDay(), resolved.updatedDay());
+        assertTrue(RumourPropagation.shouldTell(resolved, heard, listener, 1));
+        EpisodeRecord heardResolution = RumourPropagation.asHeardBy(resolved, TELLER, listener, 1);
+        assertFalse(RumourPropagation.shouldTell(resolved, heardResolution, listener, 1));
+        assertFalse(RumourPropagation.shouldTell(original, heardResolution, listener, 1));
+    }
+
+    @Test
+    void sameDayExplicitCorrectionTravelsOnceWithoutLaunderingAnotherDistortion() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord doubted = RumourPropagation.asHeardBy(original, TELLER, listener, 1)
+                .withProvenance(new Provenance(KnowledgeSource.TOLD_BY, Optional.of(TELLER),
+                        Confidence.DOUBTED, PrivacyLevel.PUBLIC, null, Distortion.NONE, 1));
+        EpisodeRecord corrected = original.withProvenance(Provenance.told(TELLER, PrivacyLevel.PUBLIC)
+                .corrected(Confidence.CERTAIN));
+        assertTrue(RumourPropagation.shouldTell(corrected, doubted, listener, 1));
+        EpisodeRecord received = RumourPropagation.asHeardBy(corrected, TELLER, listener, 1);
+        assertFalse(RumourPropagation.shouldTell(corrected, received, listener, 1));
+        assertFalse(RumourPropagation.shouldTell(doubted, received, listener, 1));
+    }
+
+    @Test
+    void ambiguousSameDayReversibleChangesCannotOscillate() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord blocked = original.transitioned(EpisodeState.BLOCKED, 1);
+        EpisodeRecord known = RumourPropagation.asHeardBy(original, TELLER, listener, 1);
+        assertFalse(RumourPropagation.shouldTell(blocked, known, listener, 1),
+                "a day timestamp cannot order ACTIVE and BLOCKED within that day");
+        assertTrue(RumourPropagation.shouldTell(original.transitioned(EpisodeState.BLOCKED, 2), known, listener, 2));
+    }
+
+    @Test
+    void hearsayCannotOverwriteFirsthandEvidenceOrTerminalFacts() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord futureRumour = original.transitioned(EpisodeState.BLOCKED, 3).asToldBy(TELLER);
+        assertFalse(RumourPropagation.shouldTell(futureRumour, original, listener, 3));
+        EpisodeRecord success = original.transitioned(EpisodeState.SUCCEEDED, 1);
+        EpisodeRecord heardSuccess = RumourPropagation.asHeardBy(success, TELLER, listener, 1);
+        assertFalse(RumourPropagation.shouldTell(futureRumour, heardSuccess, listener, 3));
+        assertFalse(RumourPropagation.shouldTell(original.transitioned(EpisodeState.FAILED, 3), heardSuccess, listener, 3));
+    }
+
+    @Test
+    void staleDatesAndFutureDatesDoNotReplaceReceiverKnowledge() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord blocked = original.transitioned(EpisodeState.BLOCKED, 3);
+        EpisodeRecord known = RumourPropagation.asHeardBy(blocked, TELLER, listener, 3);
+        assertFalse(RumourPropagation.shouldTell(original, known, listener, 3));
+        assertFalse(RumourPropagation.shouldTell(blocked, null, listener, 2));
+    }
+
+    @Test
+    void listenerSpecificSelectionSkipsKnownOpeningAndIncludesResolvedNews() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord headline = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord resolution = episode(PrivacyLevel.PUBLIC, 60).transitioned(EpisodeState.SUCCEEDED, 1);
+        EpisodeRecord expired = episode(PrivacyLevel.PUBLIC, 100)
+                .withDeadline(null, java.util.OptionalLong.of(1));
+        VillagerHistory sender = new VillagerHistory();
+        sender.putEpisode(headline, 2);
+        sender.putEpisode(resolution, 2);
+        sender.putEpisode(expired, 2);
+        VillagerHistory receiver = new VillagerHistory();
+        receiver.putEpisode(RumourPropagation.asHeardBy(headline, TELLER, listener, 2), 2);
+        java.util.List<EpisodeRecord> candidates = RumourPropagation.tellableStories(sender, 2);
+        assertEquals(java.util.List.of(headline.id(), resolution.id()), candidates.stream().map(EpisodeRecord::id).toList());
+        assertEquals(Optional.of(resolution), RumourPropagation.nextForListener(candidates, receiver, listener, 2));
+        receiver.putEpisode(RumourPropagation.asHeardBy(resolution, TELLER, listener, 2), 2);
+        assertTrue(RumourPropagation.nextForListener(candidates, receiver, listener, 2).isEmpty());
+    }
+
+    @Test
+    void retellingPreservesAnAuthoredOmissionUntilItIsActuallyCorrected() {
+        UUID listener = UUID.randomUUID();
+        EpisodeRecord original = episode(PrivacyLevel.PUBLIC, 90);
+        EpisodeRecord omitted = original.withProvenance(new Provenance(KnowledgeSource.TOLD_BY,
+                Optional.of(TELLER), Confidence.LIKELY, PrivacyLevel.PUBLIC, null,
+                Distortion.OMITTED_DETAIL, 1));
+        EpisodeRecord heard = RumourPropagation.asHeardBy(omitted, TELLER, listener, 1);
+        assertEquals(Distortion.OMITTED_DETAIL, heard.provenance().distortion());
+        assertFalse(RumourPropagation.shouldTell(omitted, heard, listener, 1));
+        assertTrue(RumourPropagation.shouldTell(original, heard, listener, 1));
+        EpisodeRecord corrected = RumourPropagation.asHeardBy(original, TELLER, listener, 1);
+        assertEquals(Distortion.NONE, corrected.provenance().distortion());
+        assertFalse(RumourPropagation.shouldTell(omitted, corrected, listener, 1));
+    }
+
 }

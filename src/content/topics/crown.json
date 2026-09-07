@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "The crown, gated on MCA Capitals being installed and on what this villager can actually see of it.",
-    "",
-    "A villager has no view of the throne. They have a view of what the throne changed about the lane",
-    "they live in, and every scene here is that view rather than a chronicle entry read aloud."
+    "Capitals public-state conversations. Current roles and relations are gated; unobserved history, private events, tax rates and promised game actions must not be invented."
   ],
   "topic": "crown",
   "entry": {
@@ -13,14 +10,14 @@
   "return_question": "conversations.cat.village",
   "leave_lines": {
     "en": [
-      "That is the crown, as far as I see it.",
-      "Right. That is what reaches us.",
-      "It goes on above us either way."
+      "We can leave it there.",
+      "That gives us something to think about.",
+      "All right. Let's get back to the day."
     ],
     "pt": [
-      "É a coroa, até onde eu vejo.",
-      "Certo. É o que chega até nós.",
-      "Segue acima de nós de qualquer jeito."
+      "Podemos deixar por aqui.",
+      "Já temos algo em que pensar.",
+      "Certo. Vamos voltar ao nosso dia."
     ]
   },
   "ages": [
@@ -28,8 +25,8 @@
     "adult"
   ],
   "leave_label": {
-    "en": "Thank you for the plain view.",
-    "pt": "Obrigado pela visão franca."
+    "en": "Thanks for the conversation.",
+    "pt": "Agradeço a conversa."
   },
   "followup": {
     "prompt": {
@@ -48,7 +45,7 @@
       "shape": "observe",
       "act": "report",
       "polarity": "mixed",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
       "obligations": [
         "clarify",
@@ -57,6 +54,11 @@
       "conditions": [
         {
           "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.sovereign_named",
           "is": true,
           "unknown": "fail"
         }
@@ -77,14 +79,12 @@
       },
       "lines": {
         "en": [
-          "We have a %2$s now, and the word still sits oddly in my mouth. %3$s. That is who it is.",
-          "%3$s rules here. I have seen the face twice and neither time was I close enough to judge it.",
-          "A %2$s changes what a place is for. We are not only a village any more, we are somewhere that answers to somebody."
+          "%3$s holds the crown here. I care more about what a ruler does with it than how brightly it shines.",
+          "Our %2$s is %3$s. A title tells you who rules; it doesn't tell you whether you'll agree."
         ],
         "pt": [
-          "Temos um %2$s agora, e a palavra ainda soa estranha na minha boca. %3$s. É quem é.",
-          "%3$s governa aqui. Vi o rosto duas vezes e nenhuma delas de perto o bastante para julgar.",
-          "Um %2$s muda o que um lugar serve. Não somos só uma vila agora, somos um lugar que responde a alguém."
+          "%3$s ocupa o trono daqui. O que alguém faz com a coroa me interessa mais que o brilho dela.",
+          "%3$s tem o título de %2$s. Isso diz quem governa; não diz se você vai concordar."
         ]
       },
       "replies": [
@@ -97,19 +97,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What changed when the crown came?",
-            "pt": "O que mudou quando a coroa chegou?"
+            "en": "What would you judge a ruler by?",
+            "pt": "Como você avaliaria um governante?"
           },
           "phrases": [
-            "what changed when the crown came",
-            "how did the crown change this place"
-          ],
-          "requires_any": [
-            "crown",
-            "changed"
+            "what would you judge a ruler by",
+            "como voce avaliaria um governante"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -118,17 +114,26 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "The roads got mended and the arguments got longer. Both of those came from the same decision.",
-                "People stand differently at the well. That is the honest answer and it sounds like nothing until you watch it.",
-                "We used to settle a dispute over a fence between the two households. Now it goes up, and comes back down with a ruling."
+                "Whether an ordinary person can finish a complaint without being interrupted. Start there.",
+                "Clear answers. Even an answer I dislike is better than being sent round in circles."
               ],
               "pt": [
-                "As estradas foram consertadas e as discussões ficaram mais longas. As duas coisas vieram da mesma decisão.",
-                "As pessoas se portam diferente no poço. É a resposta honesta e parece pouca coisa até você reparar.",
-                "Antes uma briga de cerca se resolvia entre as duas casas. Agora sobe, e volta com uma sentença."
+                "Se uma pessoa comum consegue terminar uma reclamação sem ser interrompida. Eu começaria por aí.",
+                "Respostas claras. Até uma resposta que me desagrade é melhor que ficar dando voltas."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "judge",
+            "ruler",
+            "como",
+            "voce",
+            "avaliaria",
+            "governante"
+          ]
         },
         {
           "name": "say_it_suits_the_place",
@@ -139,20 +144,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "It seems to suit this place.",
-            "pt": "Parece combinar com este lugar."
+            "en": "The crown seems to suit this place.",
+            "pt": "A coroa parece combinar com este lugar."
           },
           "phrases": [
-            "it seems to suit this place",
-            "the place wears it well"
-          ],
-          "requires_any": [
-            "suit",
-            "wears"
+            "the crown seems to suit this place",
+            "a coroa parece combinar com este lugar"
           ],
           "disposition": {
-            "warmth": 2,
-            "respect": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "acknowledged",
@@ -161,19 +161,34 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Give it a winter. Anything suits a place in summer, when there is enough of everything.",
-                "I hope so. I have lived through one lord who did not fit and it was a long four years.",
-                "It might. My mother would have hated it and she would have said so loudly, which I miss."
+                "I hope it does. I still want room to say when something is wrong.",
+                "It can belong here without being the only thing that matters here."
               ],
               "pt": [
-                "Espere um inverno. Tudo combina com um lugar no verão, quando há de tudo o bastante.",
-                "Espero que sim. Vivi sob um senhor que não servia e foram quatro anos longos.",
-                "Pode ser. Minha mãe teria odiado e teria dito bem alto, o que me faz falta."
+                "Tomara. Ainda quero poder dizer quando algo estiver errado.",
+                "Ela pode fazer parte daqui sem ser a única coisa que importa."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "crown",
+            "suit",
+            "this",
+            "place",
+            "coroa",
+            "parece",
+            "combinar",
+            "este",
+            "lugar"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "a_woman_on_the_seat",
@@ -198,6 +213,16 @@
           "is": "sovereign",
           "not": true,
           "unknown": "fail"
+        },
+        {
+          "field": "capital.sovereign_female",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.sovereign_named",
+          "is": true,
+          "unknown": "fail"
         }
       ],
       "base_priority": 26,
@@ -206,24 +231,19 @@
       ],
       "cooldown_days": 4,
       "max_mentions_per_7_days": 1,
-      "vars_used": [
-        "sovereign_title",
-        "sovereign_name"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "Who sits the seat.",
         "pt": "Quem ocupa o assento."
       },
       "lines": {
         "en": [
-          "Our %2$s is %3$s, and half the arguments I hear about the throne are really arguments about that.",
-          "I was asked once whether a %2$s could hold a realm together. I said I had never seen my mother drop anything.",
-          "%3$s took the seat and the complaining lasted eleven days. Then the grain came in and everyone found something else."
+          "A queen deserves the same questions as any ruler. What will she do, and who will she listen to?",
+          "I don't think a crown becomes harder to carry just because a woman puts it on."
         ],
         "pt": [
-          "Nossa %2$s é %3$s, e metade das discussões que ouço sobre o trono são na verdade sobre isso.",
-          "Uma vez me perguntaram se uma %2$s poderia segurar um reino. Eu disse que nunca vi minha mãe deixar nada cair.",
-          "%3$s assumiu o assento e a reclamação durou onze dias. Aí o grão entrou e todo mundo achou outro assunto."
+          "Uma rainha merece as mesmas perguntas que qualquer governante. O que vai fazer e quem vai ouvir?",
+          "Não acho que a coroa fique mais pesada só porque uma mulher a colocou."
         ]
       },
       "replies": [
@@ -236,19 +256,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Who objected, and are they quieter now?",
-            "pt": "Quem se opôs, e estão mais calados agora?"
+            "en": "Do you think anyone should be able to rule?",
+            "pt": "Você acha que qualquer pessoa deveria poder governar?"
           },
           "phrases": [
-            "who objected and are they quieter now",
-            "which households objected to her"
-          ],
-          "requires_any": [
-            "objected"
+            "do you think anyone should be able to rule",
+            "voce acha que qualquer pessoa deveria poder governar"
           ],
           "disposition": {
-            "familiarity": 2,
-            "trust": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "answered",
@@ -258,17 +274,28 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Two households and a cousin of theirs. Silent is not the word. Careful is the word.",
-                "The ones who objected loudest are the ones being most useful now, which tells you what the objection was worth.",
-                "One old man, and he objects to weather as well, so nobody counts him."
+                "Able to learn, able to listen, willing to be corrected. Those are better tests than guessing from a face."
               ],
               "pt": [
-                "Duas casas e um primo delas. Calados não é a palavra. Cuidadosos é a palavra.",
-                "Quem reclamou mais alto é quem está mais prestativo agora, o que diz o quanto valia a reclamação.",
-                "Um velho, e ele reclama do tempo também, então ninguém o conta."
+                "Capaz de aprender, de ouvir e de aceitar uma correção. Isso vale mais que julgar pela aparência."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "anyone",
+            "able",
+            "rule",
+            "voce",
+            "acha",
+            "qualquer",
+            "pessoa",
+            "deveria",
+            "poder",
+            "governar"
+          ]
         },
         {
           "name": "say_it_makes_no_odds",
@@ -279,19 +306,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "A ruler is a ruler. That is all.",
-            "pt": "Quem governa, governa. É só isso."
+            "en": "I would judge her by her decisions.",
+            "pt": "Eu julgaria pelas decisões dela."
           },
           "phrases": [
-            "a ruler is a ruler that is all",
-            "it makes little odds to me who rules"
-          ],
-          "requires_any": [
-            "ruler",
-            "rules"
+            "i would judge her by her decisions",
+            "eu julgaria pelas decisoes dela"
           ],
           "disposition": {
-            "respect": 3
+            "familiarity": 1
           },
           "reaction": {
             "id": "agreed",
@@ -300,19 +323,29 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "That is what I say too, and I have said it often enough that people have stopped bringing it up with me.",
-                "Good. There is real work in a season and none of it cares who is sitting anywhere.",
-                "It should be all. It is not, yet, but a village learns a thing like that in about a generation."
+                "So would I. And I'd rather hear the decision before making up my mind."
               ],
               "pt": [
-                "É o que eu digo também, e já disse tantas vezes que pararam de trazer o assunto para mim.",
-                "Ótimo. Há trabalho de verdade numa estação e nada disso liga para quem está sentado onde.",
-                "Deveria ser só isso. Ainda não é, mas uma vila aprende uma coisa dessas em umas duas gerações."
+                "Eu também. E prefiro ouvir a decisão antes de formar opinião."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "judge",
+            "decisions",
+            "julgaria",
+            "pelas",
+            "decisoes",
+            "dela"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "the_one_who_comes_after",
@@ -321,7 +354,7 @@
       "act": "report",
       "polarity": "mixed",
       "predicate": "opinion",
-      "temporal": "future",
+      "temporal": "current",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -353,14 +386,12 @@
       },
       "lines": {
         "en": [
-          "%2$s is named to follow, and the whole village has an opinion about that which it will not say out loud.",
-          "There is an heir now. It is a strange comfort. It means somebody has thought past next winter.",
-          "%2$s. Young. I taught that one to tie a knot and now I am told to bow, which I do, and it costs me nothing."
+          "%2$s is the named heir. Knowing the name is useful; knowing whether someone is ready is harder.",
+          "There is an heir: %2$s. I hope there's room to learn before the crown becomes a duty."
         ],
         "pt": [
-          "%2$s foi nomeado para suceder, e a vila inteira tem uma opinião sobre isso que não diz em voz alta.",
-          "Há um herdeiro agora. É um conforto estranho. Quer dizer que alguém pensou além do próximo inverno.",
-          "%2$s. Jovem. Ensinei essa criança a dar um nó e agora me mandam curvar, e eu curvo, e não me custa nada."
+          "%2$s é o nome indicado para a sucessão. Saber o nome ajuda; saber se a pessoa está pronta é mais difícil.",
+          "A sucessão tem um nome: %2$s. Espero que haja tempo de aprender antes de assumir a coroa."
         ]
       },
       "replies": [
@@ -374,18 +405,14 @@
           "outcome": "engaged",
           "label": {
             "en": "Is the heir ready for it?",
-            "pt": "O herdeiro está pronto para isso?"
+            "pt": "Essa pessoa está pronta para assumir?"
           },
           "phrases": [
             "is the heir ready for it",
-            "will the heir be ready in time"
-          ],
-          "requires_any": [
-            "heir",
-            "ready"
+            "essa pessoa esta pronta para assumir"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -395,17 +422,26 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Nobody is ready. You are ready afterwards, if you are lucky and somebody honest stands near you.",
-                "Readier than the last one was, and the last one managed. That is the measure I use.",
-                "Ask me in three years. Anything I say now is either flattery or spite and I would rather not."
+                "I can't judge that from a title. I'd want to hear how they handle a question they can't answer."
               ],
               "pt": [
-                "Ninguém está pronto. A gente fica pronto depois, com sorte e com alguém honesto por perto.",
-                "Mais pronto do que o anterior estava, e o anterior deu conta. É essa a medida que uso.",
-                "Me pergunte daqui a três anos. Qualquer coisa que eu diga agora é bajulação ou rancor e prefiro não."
+                "Não dá para saber pelo título. Eu gostaria de ver como lida com uma pergunta que não sabe responder."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "heir",
+            "ready",
+            "essa",
+            "pessoa",
+            "esta",
+            "pronta",
+            "para",
+            "assumir"
+          ]
         },
         {
           "name": "wish_them_well",
@@ -416,18 +452,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "I hope it goes gently for them.",
-            "pt": "Espero que corra com calma para ele."
+            "en": "I hope they get a fair chance.",
+            "pt": "Espero que tenha uma chance justa."
           },
           "phrases": [
-            "i hope it goes gently for them",
-            "may it go gently"
-          ],
-          "requires_any": [
-            "gently"
+            "i hope they get a fair chance",
+            "espero que tenha uma chance justa"
           ],
           "disposition": {
-            "warmth": 3
+            "familiarity": 1
           },
           "reaction": {
             "id": "warmed",
@@ -436,19 +469,30 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "So do I. It rarely does, and saying it anyway is most of what a village can offer.",
-                "That is a kind thing to want for somebody you have never spoken to.",
-                "I shall pass that on. Not the words, the fact of it. Somebody outside wished it well."
+                "Me too. A chance to learn, and people willing to say when something needs fixing."
               ],
               "pt": [
-                "Eu também. Raramente corre, e dizer mesmo assim é quase tudo o que uma vila pode oferecer.",
-                "É uma coisa gentil de se querer para alguém com quem você nunca falou.",
-                "Vou passar adiante. Não as palavras, o fato. Alguém de fora desejou bem."
+                "Eu também. Uma chance de aprender e gente disposta a apontar o que precisa melhorar."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "hope",
+            "they",
+            "fair",
+            "chance",
+            "espero",
+            "tenha",
+            "justa"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "nobody_named_yet",
@@ -456,9 +500,9 @@
       "shape": "confide",
       "act": "report",
       "polarity": "mixed",
-      "predicate": "observation",
-      "temporal": "future",
-      "privacy": "discreet",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -487,14 +531,12 @@
       },
       "lines": {
         "en": [
-          "No successor has been named, and every household here has quietly worked out what that would mean.",
-          "There is nobody named to follow. We do not discuss it at the well. We discuss it indoors, which is worse.",
-          "An unnamed succession is a very quiet kind of danger. Nothing happens for years and then everything happens in a week."
+          "No heir is named at the moment. I'd feel easier with the next step clear.",
+          "There's no named successor. That leaves a question; it doesn't tell us how the question will be settled."
         ],
         "pt": [
-          "Nenhum sucessor foi nomeado, e toda casa daqui já calculou em silêncio o que isso significaria.",
-          "Não há ninguém nomeado para suceder. Não falamos disso no poço. Falamos dentro de casa, o que é pior.",
-          "Uma sucessão sem nome é um perigo bem silencioso. Nada acontece por anos e aí tudo acontece numa semana."
+          "Não há ninguém indicado para a sucessão no momento. Eu ficaria mais tranquilo sabendo o próximo passo.",
+          "A sucessão ainda está sem nome. Isso deixa uma dúvida; não diz como ela vai ser resolvida."
         ]
       },
       "replies": [
@@ -507,18 +549,14 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Who would claim it if it came to that?",
-            "pt": "Quem reivindicaria se chegasse a isso?"
+            "en": "Who might take the crown?",
+            "pt": "Quem poderia assumir a coroa?"
           },
           "phrases": [
-            "who would claim it if it came to that",
-            "who has a claim on the seat"
-          ],
-          "requires_any": [
-            "claim"
+            "who might take the crown",
+            "quem poderia assumir a coroa"
           ],
           "disposition": {
-            "trust": 2,
             "familiarity": 1
           },
           "reaction": {
@@ -529,17 +567,25 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Three could, and two of them would, and one of those is the reason the other two sleep badly.",
-                "I will not put names in your mouth. I will say the number is more than one and fewer than four.",
-                "The one nobody names is usually the one who wins. That is not wisdom, it is just what I have watched."
+                "I don't have a confirmed name. I won't turn a guess into someone's claim to the throne."
               ],
               "pt": [
-                "Três poderiam, dois fariam, e um desses é o motivo de os outros dois dormirem mal.",
-                "Não vou colocar nomes na sua boca. Digo que o número é mais de um e menos de quatro.",
-                "Quem ninguém nomeia é geralmente quem ganha. Não é sabedoria, é só o que eu vi."
+                "Não tenho um nome confirmado. Não vou transformar um palpite numa pretensão ao trono."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "might",
+            "take",
+            "crown",
+            "quem",
+            "poderia",
+            "assumir",
+            "coroa"
+          ]
         },
         {
           "name": "say_it_may_still_be_fine",
@@ -550,19 +596,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "There is time yet for a naming.",
-            "pt": "Ainda há tempo para uma nomeação."
+            "en": "There is time to make a careful choice.",
+            "pt": "Ainda dá para escolher com cuidado."
           },
           "phrases": [
-            "there is time yet for a naming",
-            "the naming can still happen"
-          ],
-          "requires_any": [
-            "naming"
+            "there is time to make a careful choice",
+            "ainda da para escolher com cuidado"
           ],
           "disposition": {
-            "warmth": 2,
-            "trust": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "steadied",
@@ -571,19 +613,31 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "There is. I would rather borrow your confidence than lend you my worry.",
-                "Time, and somebody sensible in the room when it is decided. That second one is the harder to arrange.",
-                "You are right and I shall stop chewing it. It is a thing I do instead of sleeping."
+                "Yes. I'd rather have a careful choice than a quick name offered just to quiet us."
               ],
               "pt": [
-                "Há. Prefiro pegar emprestada a sua confiança do que te emprestar a minha preocupação.",
-                "Tempo, e alguém sensato na sala quando se decidir. Essa segunda parte é a mais difícil.",
-                "Você tem razão e vou parar de remoer. É uma coisa que faço em vez de dormir."
+                "Sim. Prefiro uma escolha cuidadosa a um nome dado às pressas só para nos calar."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "time",
+            "make",
+            "careful",
+            "choice",
+            "ainda",
+            "para",
+            "escolher",
+            "cuidado"
+          ]
         }
-      ]
+      ],
+      "vars_used": [],
+      "epistemic": "inferred",
+      "min_variants": 1
     },
     {
       "name": "the_black_cloth",
@@ -591,9 +645,9 @@
       "shape": "confide",
       "act": "report",
       "polarity": "negative",
-      "predicate": "observation",
+      "predicate": "opinion",
       "temporal": "current",
-      "privacy": "discreet",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -616,23 +670,19 @@
       ],
       "cooldown_days": 2,
       "max_mentions_per_7_days": 2,
-      "vars_used": [
-        "capital_name"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "Why the cloth is black.",
         "pt": "Por que o pano está preto."
       },
       "lines": {
         "en": [
-          "%2$s is in mourning, so nobody sings at work and the mill runs at half. It is not law. It is just what we do.",
-          "We are in the mourning days. I have hung the black cloth twice in my life and I remember both.",
-          "There will be no music until the days are counted out. I find I mind that less than I expected to."
+          "The capital is in mourning. I'd rather keep this conversation gentle.",
+          "These are mourning days here. People can have very different feelings about the same crown."
         ],
         "pt": [
-          "%2$s está de luto, então ninguém canta no trabalho e o moinho roda pela metade. Não é lei. É só o que se faz.",
-          "Estamos nos dias de luto. Pendurei o pano preto duas vezes na vida e me lembro das duas.",
-          "Não vai haver música até os dias serem contados. Acho que isso me incomoda menos do que eu esperava."
+          "A capital está de luto. Prefiro conversar com um pouco de calma.",
+          "Estamos nos dias de luto por aqui. As pessoas podem sentir coisas bem diferentes pela mesma coroa."
         ]
       },
       "replies": [
@@ -645,18 +695,15 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "How long do the mourning days last?",
-            "pt": "Quanto duram os dias de luto?"
+            "en": "When will the mourning end?",
+            "pt": "Quando o luto vai terminar?"
           },
           "phrases": [
-            "how long do the mourning days last",
-            "how many days of mourning are there"
-          ],
-          "requires_any": [
-            "mourning"
+            "when will the mourning end",
+            "quando o luto vai terminar"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -665,17 +712,23 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Long enough that the shock wears off and short enough that the fields do not fail. Somebody worked that out centuries back.",
-                "Until the herald says otherwise. Nobody here has ever needed to know the exact number.",
-                "My grandmother said the count was chosen by farmers, not priests, and you can tell."
+                "I don't have the end date to hand. For today, I'd leave people room to be quiet if they need it."
               ],
               "pt": [
-                "O bastante para o choque passar e pouco para os campos não se perderem. Alguém calculou isso séculos atrás.",
-                "Até o arauto dizer o contrário. Ninguém aqui nunca precisou saber o número exato.",
-                "Minha avó dizia que a conta foi feita por lavradores, não por padres, e dá para perceber."
+                "Não tenho a data de término aqui. Por hoje, eu deixaria as pessoas em paz se precisarem de silêncio."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "when",
+            "mourning",
+            "quando",
+            "luto",
+            "terminar"
+          ]
         },
         {
           "name": "offer_quiet",
@@ -686,19 +739,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "Then I will keep my voice down.",
-            "pt": "Então vou falar baixo."
+            "en": "I will keep my voice down.",
+            "pt": "Vou falar mais baixo."
           },
           "phrases": [
-            "then i will keep my voice down",
-            "i will lower my voice while it lasts"
-          ],
-          "requires_any": [
-            "voice"
+            "i will keep my voice down",
+            "vou falar mais baixo"
           ],
           "disposition": {
-            "warmth": 3,
-            "respect": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "thanked",
@@ -708,19 +757,28 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Thank you. Most travellers do not, and it is the sort of thing a village notices and remembers.",
-                "You need not. It is our grief, not yours. But I will not pretend I did not like hearing it.",
-                "That is all anyone asks in these days. Nobody wants speeches. Everyone wants the noise to stop."
+                "Thank you. You can still talk to me; a little care is enough."
               ],
               "pt": [
-                "Obrigado. A maioria dos viajantes não faz isso, e é o tipo de coisa que uma vila nota e lembra.",
-                "Não precisa. O luto é nosso, não seu. Mas não vou fingir que não gostei de ouvir.",
-                "É tudo o que se pede nesses dias. Ninguém quer discursos. Todo mundo quer o barulho parar."
+                "Agradeço. Pode continuar falando comigo; um pouco de cuidado já basta."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "keep",
+            "voice",
+            "down",
+            "falar",
+            "mais",
+            "baixo"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "min_variants": 1
     },
     {
       "name": "you_wear_it",
@@ -730,7 +788,7 @@
       "polarity": "mixed",
       "predicate": "opinion",
       "temporal": "current",
-      "privacy": "discreet",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -753,23 +811,19 @@
       ],
       "cooldown_days": 4,
       "max_mentions_per_7_days": 1,
-      "vars_used": [
-        "capital_name"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "What it is like having you above us.",
         "pt": "Como é ter você acima de nós."
       },
       "lines": {
         "en": [
-          "You rule %2$s, and I have decided to keep speaking to you the way I did before. Tell me if that becomes a problem.",
-          "It is a strange thing to weed a row and know the person who owns the ruling on it is standing in it with me.",
-          "I had never had a word with a crowned head before you. I have found it is mostly the same words."
+          "You hold the crown here. I'd like to be able to ask you an ordinary question without turning it into a ceremony.",
+          "You're our ruler. Does that still leave room for a plain conversation?"
         ],
         "pt": [
-          "Você governa %2$s, e decidi continuar falando com você como falava antes. Me avise se isso virar problema.",
-          "É estranho capinar uma fileira sabendo que quem manda na sentença sobre ela está aqui dentro comigo.",
-          "Nunca tinha trocado palavra com uma cabeça coroada antes de você. Descobri que são quase as mesmas palavras."
+          "Você ocupa o trono daqui. Queria poder fazer uma pergunta comum sem transformar isso numa cerimônia.",
+          "Você governa aqui. Ainda cabe uma conversa sem formalidade?"
         ]
       },
       "replies": [
@@ -782,20 +836,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Give me the honest version, not the polite one.",
-            "pt": "Me dê a versão honesta, não a educada."
+            "en": "What would you want me to hear?",
+            "pt": "O que você gostaria que eu ouvisse?"
           },
           "phrases": [
-            "give me the honest version",
-            "i want the honest version of it"
-          ],
-          "requires_any": [
-            "honest",
-            "version"
+            "what would you want me to hear",
+            "o que voce gostaria que eu ouvisse"
           ],
           "disposition": {
-            "respect": 3,
-            "trust": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "levelled",
@@ -805,17 +854,23 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Then: the rulings are good and the waiting is bad. A month for an answer is a month a fence stays broken.",
-                "Honestly, most of us have not noticed a difference, and that is a compliment, though it will not feel like one.",
-                "You are fair and you are far away. Only one of those is a thing you can fix."
+                "The question before the compliment. I'd rather you hear what someone needs than how splendid they say you are."
               ],
               "pt": [
-                "Então: as sentenças são boas e a espera é ruim. Um mês por uma resposta é um mês de cerca quebrada.",
-                "Honestamente, a maioria de nós não notou diferença, e isso é um elogio, embora não pareça.",
-                "Você é justo e você é distante. Só uma dessas duas coisas dá para consertar."
+                "A pergunta antes do elogio. Prefiro que você ouça o que alguém precisa, não como essa pessoa diz que você é maravilhoso."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "want",
+            "hear",
+            "voce",
+            "gostaria",
+            "ouvisse"
+          ]
         },
         {
           "name": "promise_to_stay_ordinary",
@@ -826,19 +881,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "Keep speaking to me plainly. I would rather that.",
-            "pt": "Continue falando comigo com franqueza. Prefiro assim."
+            "en": "You can speak plainly with me.",
+            "pt": "Pode falar sem cerimônia comigo."
           },
           "phrases": [
-            "keep speaking to me plainly",
-            "i would rather be spoken to plainly"
-          ],
-          "requires_any": [
-            "plainly"
+            "you can speak plainly with me",
+            "pode falar sem cerimonia comigo"
           ],
           "disposition": {
-            "warmth": 3,
-            "trust": 3
+            "familiarity": 1
           },
           "reaction": {
             "id": "relieved",
@@ -847,19 +898,29 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Good, because I was going to anyway and I was working out how to survive it.",
-                "Then you will hear things nobody at your table will tell you, and some of them will be wrong, and that is the price.",
-                "I shall. And when I bow, in front of the others, understand that it is for them and not for you."
+                "Then I will. Starting with this: you don't have to agree with me to hear me out."
               ],
               "pt": [
-                "Ótimo, porque eu ia continuar de qualquer jeito e estava pensando em como sobreviver a isso.",
-                "Então você vai ouvir coisas que ninguém na sua mesa te diz, e algumas serão erradas, e é esse o preço.",
-                "Vou. E quando eu me curvar, diante dos outros, entenda que é por eles e não por você."
+                "Então vou falar. Começando por isto: você não precisa concordar para me ouvir até o fim."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "speak",
+            "plainly",
+            "with",
+            "pode",
+            "falar",
+            "cerimonia",
+            "comigo"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "min_variants": 1
     },
     {
       "name": "our_king_is_a_guest",
@@ -867,9 +928,9 @@
       "shape": "observe",
       "act": "report",
       "polarity": "mixed",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
-      "privacy": "discreet",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -897,23 +958,19 @@
       ],
       "cooldown_days": 4,
       "max_mentions_per_7_days": 1,
-      "vars_used": [
-        "sovereign_title"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "What the household makes of it.",
         "pt": "O que a casa acha disso."
       },
       "lines": {
         "en": [
-          "I serve in the household, and our %2$s is a wanderer who turns up muddy. We have all had to learn a new manner.",
-          "The kitchen has stopped laying the high place every night. There was a fortnight of laying it and clearing it untouched.",
-          "It is an odd service, serving somebody who might be three valleys away or might be behind you carrying wood."
+          "Even in a royal household, I'd rather ask what someone needs than guess.",
+          "A crown doesn't make arrangements any clearer. I still prefer being told what's needed."
         ],
         "pt": [
-          "Sirvo na casa, e nosso %2$s é um andarilho que aparece enlameado. Todos tivemos que aprender maneiras novas.",
-          "A cozinha parou de pôr o lugar de honra toda noite. Foram duas semanas pondo e tirando sem ninguém sentar.",
-          "É um serviço estranho, servir alguém que pode estar a três vales ou pode estar atrás de você carregando lenha."
+          "Mesmo numa casa real, prefiro perguntar do que alguém precisa a adivinhar.",
+          "Uma coroa não deixa os acordos mais claros. Ainda prefiro que me digam o que é necessário."
         ]
       },
       "replies": [
@@ -926,19 +983,14 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "Is that a hard way to serve?",
-            "pt": "É difícil servir assim?"
+            "en": "What arrangement would help?",
+            "pt": "Que tipo de acordo ajudaria?"
           },
           "phrases": [
-            "is that a hard way to serve",
-            "does it make the service harder"
-          ],
-          "requires_any": [
-            "serve",
-            "service"
+            "what arrangement would help",
+            "que tipo de acordo ajudaria"
           ],
           "disposition": {
-            "warmth": 2,
             "familiarity": 1
           },
           "reaction": {
@@ -949,17 +1001,23 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Not hard. Unsettled. A household runs on knowing what tomorrow looks like and we have given that up.",
-                "It is easier than the last arrangement, and the last arrangement had a man who shouted.",
-                "Hard on the older ones. They trained for a court and got a farm with a title over it."
+                "Knowing what needs attention, and what can wait. I can't work from a guessed intention."
               ],
               "pt": [
-                "Difícil não. Instável. Uma casa funciona sabendo como é o amanhã e nós abrimos mão disso.",
-                "É mais fácil que o arranjo anterior, e o arranjo anterior tinha um homem que gritava.",
-                "Difícil para os mais velhos. Treinaram para uma corte e ganharam uma fazenda com um título em cima."
+                "Saber o que precisa de atenção e o que pode esperar. Não dá para trabalhar adivinhando intenções."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "arrangement",
+            "help",
+            "tipo",
+            "acordo",
+            "ajudaria"
+          ]
         },
         {
           "name": "say_it_sounds_better",
@@ -970,20 +1028,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "Better than a court that never goes outdoors.",
-            "pt": "Melhor que uma corte que nunca sai de casa."
+            "en": "A ruler should get out into the village.",
+            "pt": "Quem governa deveria andar pela vila."
           },
           "phrases": [
-            "better than a court that never goes outdoors",
-            "better than a court kept indoors"
-          ],
-          "requires_any": [
-            "court",
-            "better"
+            "a ruler should get out into the village",
+            "quem governa deveria andar pela vila"
           ],
           "disposition": {
-            "respect": 2,
-            "warmth": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "agreed",
@@ -992,19 +1045,31 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "It is. I would not go back. I only wish somebody had told us it was going to happen.",
-                "Say that to the steward. He has been waiting two years for one person to say it.",
-                "Better, yes. Stranger too. Both of those can be true at once and usually are."
+                "I agree. Being seen is useful; stopping long enough to listen is better."
               ],
               "pt": [
-                "É. Eu não voltaria atrás. Só queria que alguém tivesse nos avisado que ia acontecer.",
-                "Diga isso ao mordomo. Ele espera há dois anos que uma pessoa diga isso.",
-                "Melhor, sim. E mais estranho. As duas coisas podem ser verdade ao mesmo tempo e geralmente são."
+                "Concordo. Aparecer ajuda; parar para ouvir ajuda mais."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "ruler",
+            "into",
+            "village",
+            "quem",
+            "governa",
+            "deveria",
+            "andar",
+            "pela",
+            "vila"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "min_variants": 1
     },
     {
       "name": "the_one_who_stands_beside",
@@ -1012,7 +1077,7 @@
       "shape": "observe",
       "act": "report",
       "polarity": "positive",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
       "obligations": [
         "clarify",
@@ -1028,6 +1093,11 @@
           "field": "capital.state",
           "is": "active",
           "unknown": "fail"
+        },
+        {
+          "field": "capital.consort_named",
+          "is": true,
+          "unknown": "fail"
         }
       ],
       "base_priority": 22,
@@ -1036,23 +1106,19 @@
       ],
       "cooldown_days": 4,
       "max_mentions_per_7_days": 1,
-      "vars_used": [
-        "sovereign_title"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "The one who stands beside.",
         "pt": "Quem fica ao lado."
       },
       "lines": {
         "en": [
-          "Everyone watches the %2$s. I watch the one standing a pace behind, because that is where the real answer usually is.",
-          "The consort settles more matters in a corridor than the whole court settles in a hall, and is thanked for none of it.",
-          "A seat holds one person. A rule needs two, and the second one never gets a chair."
+          "There is a consort at court. I wouldn't assume I know what happens between two people because I know their titles.",
+          "A consort has a name and a life beyond standing beside a crown. That's easy to forget."
         ],
         "pt": [
-          "Todo mundo olha o %2$s. Eu olho quem está um passo atrás, porque é ali que costuma estar a resposta.",
-          "O consorte resolve mais coisas num corredor do que a corte inteira num salão, e não é agradecido por nenhuma.",
-          "Um assento cabe uma pessoa. Um governo precisa de duas, e a segunda nunca ganha cadeira."
+          "Há uma pessoa como consorte na corte. Saber dois títulos não me diz o que acontece entre essas pessoas.",
+          "Quem é consorte tem nome e vida além de ficar ao lado da coroa. É fácil esquecer disso."
         ]
       },
       "replies": [
@@ -1065,19 +1131,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "How would a villager know a thing like that?",
-            "pt": "Como um aldeão saberia uma coisa dessas?"
+            "en": "How much influence does the consort have?",
+            "pt": "Quanta influência tem quem é consorte?"
           },
           "phrases": [
-            "how would a villager know a thing like that",
-            "how do you learn what happens in a corridor"
-          ],
-          "requires_any": [
-            "villager",
-            "corridor"
+            "how much influence does the consort have",
+            "quanta influencia tem quem e consorte"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -1086,17 +1148,27 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "My cousin carries linen up there. Linen goes everywhere and nobody stops speaking when it walks in.",
-                "You do not know. You infer. A ruling arrives softened and you learn to guess who softened it.",
-                "Because the petitions that get answered are the ones somebody remembered to mention at supper."
+                "I can't see their private conversations. I'd judge by what they actually say and do in public."
               ],
               "pt": [
-                "Minha prima leva roupa de cama lá para cima. Roupa vai a todo lugar e ninguém para de falar quando ela entra.",
-                "Você não sabe. Você deduz. Uma sentença chega mais macia e você aprende a adivinhar quem amaciou.",
-                "Porque os pedidos que são respondidos são os que alguém lembrou de mencionar no jantar."
+                "Não acompanho as conversas particulares. Eu avaliaria pelo que diz e faz em público."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "much",
+            "influence",
+            "does",
+            "consort",
+            "have",
+            "quanta",
+            "influencia",
+            "quem",
+            "consorte"
+          ]
         },
         {
           "name": "say_that_is_true_everywhere",
@@ -1107,19 +1179,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "That is true of every household I have known.",
-            "pt": "Isso vale para toda casa que conheci."
+            "en": "It is still a relationship between people.",
+            "pt": "Ainda é uma relação entre pessoas."
           },
           "phrases": [
-            "that is true of every household i have known",
-            "every household i knew worked that way"
-          ],
-          "requires_any": [
-            "household"
+            "it is still a relationship between people",
+            "ainda e uma relacao entre pessoas"
           ],
           "disposition": {
-            "warmth": 2,
-            "respect": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "recognised",
@@ -1128,19 +1196,773 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Then you have paid attention somewhere, which is rarer than travelling far.",
-                "It is. A crown only makes it larger, and larger is the only thing a crown reliably does.",
-                "Say that where the court can hear it and you will be either promoted or removed. There is no third outcome."
+                "Exactly. The titles don't give the rest of us a right to every detail."
               ],
               "pt": [
-                "Então você prestou atenção em algum lugar, o que é mais raro do que viajar longe.",
-                "É verdade. A coroa só deixa maior, e maior é a única coisa que uma coroa faz sem falhar.",
-                "Diga isso onde a corte ouça e você vai ser promovido ou removido. Não existe terceiro fim."
+                "Exatamente. Os títulos não dão ao resto de nós direito a todos os detalhes."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "relationship",
+            "between",
+            "people",
+            "ainda",
+            "relacao",
+            "entre",
+            "pessoas"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
+    },
+    {
+      "name": "a_ceremony_for_everyone",
+      "subject": "crown.a_ceremony_for_everyone",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.state",
+          "is": "active",
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.mourning",
+          "is": false,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "What makes a ceremony matter.",
+        "pt": "O que dá sentido a uma cerimônia."
+      },
+      "lines": {
+        "en": [
+          "I like the idea of a ceremony people can follow without knowing every title by heart.",
+          "If we celebrate the crown, I'd want there to be room for people who came for their neighbours rather than the speeches."
+        ],
+        "pt": [
+          "Gosto da ideia de uma cerimônia que as pessoas consigam acompanhar sem decorar cada título.",
+          "Se celebrarmos a coroa, eu gostaria que houvesse espaço para quem veio pelos vizinhos, não pelos discursos."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_a_ceremony_for_everyone",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What part would you keep simple?",
+            "pt": "Que parte você manteria simples?"
+          },
+          "phrases": [
+            "what part would you keep simple",
+            "que parte voce manteria simples"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_a_ceremony_for_everyone_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "The welcome. Nobody should have to worry that standing in the wrong place ruins the whole day."
+              ],
+              "pt": [
+                "A recepção. Ninguém deveria ter medo de estragar o dia inteiro por ficar no lugar errado."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_a_ceremony_for_everyone",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Would children need a different explanation?",
+                  "pt": "As crianças precisariam de outra explicação?"
+                },
+                "phrases": [
+                  "would children need a different explanation",
+                  "as criancas precisariam de outra explicacao"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_a_ceremony_for_everyone_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "A shorter one, probably. What is happening, why people care, and when they can move about again."
+                    ],
+                    "pt": [
+                      "Uma mais curta, provavelmente. O que está acontecendo, por que as pessoas se importam e quando podem voltar a andar."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "children",
+                  "need",
+                  "different",
+                  "explanation",
+                  "criancas",
+                  "precisariam",
+                  "outra",
+                  "explicacao"
+                ]
+              },
+              {
+                "name": "weigh_a_ceremony_for_everyone",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I would come for the food.",
+                  "pt": "Eu iria pela comida."
+                },
+                "phrases": [
+                  "i would come for the food",
+                  "eu iria pela comida"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_a_ceremony_for_everyone_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "An honest answer. If anyone serves food, I hope they planned for honest answers like yours."
+                    ],
+                    "pt": [
+                      "Uma resposta sincera. Se alguém servir comida, espero que tenha se preparado para respostas como a sua."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "come",
+                  "food",
+                  "iria",
+                  "pela",
+                  "comida"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "What would make the ceremony welcoming?",
+              "pt": "O que tornaria a cerimônia acolhedora?"
+            }
+          },
+          "requires_any": [
+            "keep",
+            "simple",
+            "voce",
+            "manteria",
+            "simples"
+          ]
+        },
+        {
+          "name": "consider_a_ceremony_for_everyone",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Some grandeur is part of the occasion.",
+            "pt": "Um pouco de grandiosidade faz parte da ocasião."
+          },
+          "phrases": [
+            "some grandeur is part of the occasion",
+            "um pouco de grandiosidade faz parte da ocasiao"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_a_ceremony_for_everyone_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "I don't object to grandeur. I object to a welcome that feels like an examination."
+              ],
+              "pt": [
+                "Não sou contra a grandiosidade. Sou contra uma recepção que parece uma prova."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "some",
+            "grandeur",
+            "occasion",
+            "pouco",
+            "grandiosidade",
+            "ocasiao"
+          ]
+        }
+      ],
+      "identity_styles": [
+        "observer"
+      ],
+      "min_variants": 1
+    },
+    {
+      "name": "growing_up_beside_a_crown",
+      "subject": "crown.growing_up_beside_a_crown",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "speaker.age",
+          "is": "teen",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "A younger view of the crown.",
+        "pt": "Um olhar jovem sobre a coroa."
+      },
+      "lines": {
+        "en": [
+          "I can learn the court titles. I'd also like to know whether there's a place here for what I might become."
+        ],
+        "pt": [
+          "Posso aprender os títulos da corte. Também gostaria de saber se há lugar aqui para o que posso vir a ser."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_growing_up_beside_a_crown",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Would you want a title yourself?",
+            "pt": "Você gostaria de ter um título?"
+          },
+          "phrases": [
+            "would you want a title yourself",
+            "voce gostaria de ter um titulo"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_growing_up_beside_a_crown_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Maybe. I'd want to try the work before deciding the name sounded like me."
+              ],
+              "pt": [
+                "Talvez. Gostaria de experimentar o trabalho antes de decidir se o nome combina comigo."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_growing_up_beside_a_crown",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "What would you try first?",
+                  "pt": "O que você tentaria primeiro?"
+                },
+                "phrases": [
+                  "what would you try first",
+                  "o que voce tentaria primeiro"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_growing_up_beside_a_crown_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Something small enough to learn from. Being trusted with one real task sounds better than being praised for a future nobody knows."
+                    ],
+                    "pt": [
+                      "Algo pequeno o bastante para aprender. Receber uma tarefa de verdade parece melhor que elogios por um futuro que ninguém conhece."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "first",
+                  "voce",
+                  "tentaria",
+                  "primeiro"
+                ]
+              },
+              {
+                "name": "weigh_growing_up_beside_a_crown",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I would ask for a task with someone to teach me.",
+                  "pt": "Eu pediria uma tarefa com alguém para ensinar."
+                },
+                "phrases": [
+                  "i would ask for a task with someone to teach me",
+                  "eu pediria uma tarefa com alguem para ensinar"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_growing_up_beside_a_crown_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Yes. Someone who explains the mistake instead of just taking the tools away."
+                    ],
+                    "pt": [
+                      "Sim. Alguém que explique o erro em vez de só tirar as ferramentas."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "task",
+                  "with",
+                  "someone",
+                  "teach",
+                  "pediria",
+                  "tarefa",
+                  "alguem",
+                  "para",
+                  "ensinar"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "Where would you begin learning?",
+              "pt": "Por onde você começaria a aprender?"
+            }
+          },
+          "requires_any": [
+            "want",
+            "title",
+            "yourself",
+            "gostaria",
+            "titulo"
+          ]
+        },
+        {
+          "name": "consider_growing_up_beside_a_crown",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "You have time to choose.",
+            "pt": "Você tem tempo para escolher."
+          },
+          "phrases": [
+            "you have time to choose",
+            "voce tem tempo para escolher"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_growing_up_beside_a_crown_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "I hope so. I'd like time to mean a chance to try things, not just being told to wait."
+              ],
+              "pt": [
+                "Espero que sim. Gostaria que ter tempo significasse poder experimentar, não só ouvir que preciso esperar."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "have",
+            "time",
+            "choose",
+            "tempo",
+            "para",
+            "escolher"
+          ]
+        }
+      ],
+      "ages": [
+        "teen"
+      ],
+      "min_variants": 1
+    },
+    {
+      "name": "a_question_in_private",
+      "subject": "crown.a_question_in_private",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "confidential",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "confidant",
+            "partner",
+            "family"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 14,
+          "unknown": "fail"
+        },
+        {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 7,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "A private political question.",
+        "pt": "Uma pergunta política em particular."
+      },
+      "lines": {
+        "en": [
+          "Since we know each other well enough, I'll say this: I'd worry about any court where agreeing feels like the price of belonging. That's a worry, not an accusation about ours."
+        ],
+        "pt": [
+          "Já que nos conhecemos bem, vou dizer: eu me preocuparia com uma corte em que concordar parecesse o preço de pertencer. É uma preocupação, não uma acusação sobre a nossa."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_a_question_in_private",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What would reassure you?",
+            "pt": "O que tranquilizaria você?"
+          },
+          "phrases": [
+            "what would reassure you",
+            "o que tranquilizaria voce"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_a_question_in_private_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Someone being able to ask a fair question and still be welcome afterward. I'd rather watch for that than guess what everyone secretly fears."
+              ],
+              "pt": [
+                "Alguém poder fazer uma pergunta justa e continuar sendo bem-vindo depois. Prefiro observar isso a adivinhar o medo secreto de cada um."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_a_question_in_private",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Would you want this repeated to the court?",
+                  "pt": "Você gostaria que isso fosse repetido à corte?"
+                },
+                "phrases": [
+                  "would you want this repeated to the court",
+                  "voce gostaria que isso fosse repetido a corte"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_a_question_in_private_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Not as something you've been asked to carry. This was a private conversation, not a petition."
+                    ],
+                    "pt": [
+                      "Não como algo que pedi para você levar. Esta foi uma conversa particular, não uma petição."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "want",
+                  "repeated",
+                  "court",
+                  "voce",
+                  "gostaria",
+                  "isso",
+                  "fosse",
+                  "repetido",
+                  "corte"
+                ]
+              },
+              {
+                "name": "weigh_a_question_in_private",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I will keep this conversation private.",
+                  "pt": "Vou manter esta conversa em particular."
+                },
+                "phrases": [
+                  "i will keep this conversation private",
+                  "vou manter esta conversa em particular"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_a_question_in_private_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Thank you. We can leave the larger question open without sending it round the village."
+                    ],
+                    "pt": [
+                      "Agradeço. Podemos deixar a questão em aberto sem fazê-la circular pela vila."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "will",
+                  "keep",
+                  "conversation",
+                  "private",
+                  "manter",
+                  "esta",
+                  "conversa",
+                  "particular"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "Shall we keep this between us?",
+              "pt": "Vamos manter isso entre nós?"
+            }
+          },
+          "requires_any": [
+            "reassure",
+            "tranquilizaria",
+            "voce"
+          ]
+        },
+        {
+          "name": "consider_a_question_in_private",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "A court also needs people willing to cooperate.",
+            "pt": "Uma corte também precisa de gente disposta a cooperar."
+          },
+          "phrases": [
+            "a court also needs people willing to cooperate",
+            "uma corte tambem precisa de gente disposta a cooperar"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_a_question_in_private_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "I agree. I'd just like cooperation to leave room for an honest warning."
+              ],
+              "pt": [
+                "Concordo. Só gostaria que a cooperação deixasse espaço para um aviso sincero."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "court",
+            "also",
+            "needs",
+            "people",
+            "willing",
+            "cooperate",
+            "corte",
+            "tambem",
+            "precisa",
+            "gente",
+            "disposta",
+            "cooperar"
+          ]
+        }
+      ],
+      "identity_styles": [
+        "gradual"
+      ],
+      "min_variants": 1
     }
   ]
 }

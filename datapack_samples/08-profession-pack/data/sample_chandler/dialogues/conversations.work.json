@@ -1,0 +1,56 @@
+{
+  "auto": true,
+  "silent": true,
+  "_comment": "Extension of the mod's conversations.work router. Same basename, so MCA merges; the two top-level flags mirror the shipped file exactly, because MCA keeps the flags of whichever same-named file loads last and that order is undefined. The chandler result is scored on profession and routes to the chandler's own page; the last result is the generic templated fallback every unheard-of trade gets.",
+  "answers": [
+    {
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "profession": "examplemod:chandler"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.identity"
+            },
+            "conversations_record": {
+              "id": "sample_chandler.cooldown.work",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "chandler.respond",
+            "conversations_say": {
+              "phrase": "chandler.work.identity"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.pride.templated"
+            },
+            "conversations_record": {
+              "id": "sample_chandler.cooldown.work",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "conversations.topic.work.pride.respond",
+            "conversations_say": {
+              "phrase": "conversations.work.generic",
+              "vars": [
+                "profession_name"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

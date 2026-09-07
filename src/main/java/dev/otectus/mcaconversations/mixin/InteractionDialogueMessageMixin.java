@@ -30,8 +30,8 @@ import java.util.UUID;
  *
  * <p>{@code remap = false}: MCA's own method. {@code require = 0} (config default): if MCA ever
  * reshapes this class the injection silently no-ops and submissions behave exactly as they do
- * without this mod. Any runtime failure likewise falls through to normal handling — the guarded
- * affection and progress actions enforce their own idempotency and caps regardless.
+ * without this mod. When the hook is installed, validation failures reject owned submissions;
+ * the affection and progress actions also enforce their own idempotency and caps.
  *
  * <p><b>Two targets, one jar</b> — see {@link NetworkHandlerMixin} for why both MCA package roots are
  * listed and why {@link org.spongepowered.asm.mixin.Pseudo} is set. No {@code @Coerce} is needed
@@ -60,19 +60,27 @@ public abstract class InteractionDialogueMessageMixin {
     @Inject(method = "receive", at = @At("HEAD"), cancellable = true, require = 0)
     private void mcaconversations$validateSubmission(ServerPlayer player, CallbackInfo ci) {
         try {
-            if (player == null || !ConversationGuard.isOurQuestion(question)) {
+            if (!ConversationGuard.isOurQuestion(question)) {
+                return;
+            }
+            if (player == null || player.hasDisconnected() || !player.isAlive() || player.isSpectator()
+                    || villagerUUID == null) {
+                ci.cancel();
                 return;
             }
             boolean otherPlayerInteracting = false;
             Entity villager = player.serverLevel().getEntity(villagerUUID);
             if (villager != null) {
-                // Fail open on an empty answer: MCA's interacting-player state is authoritative when
-                // it names someone, but an unset value must never break a legitimate click.
+                // Resolve busy ownership once; an active interaction with this player is also
+                // required below before a GUI packet may drive the dialogue engine.
                 otherPlayerInteracting = McaCompat.isInteractingWith(villager)
                         .filter(uuid -> !uuid.equals(player.getUUID()))
                         .isPresent();
             }
-            if (villager == null || !McaCompat.checkConstraints(villager, player, question, answer)) {
+            if (villager == null || !villager.isAlive() || !McaCompat.isMcaVillager(villager)
+                    || player.distanceToSqr(villager) > 64.0D
+                    || !McaCompat.isInteractingWith(villager).filter(player.getUUID()::equals).isPresent()
+                    || !McaCompat.checkConstraints(villager, player, question, answer)) {
                 ci.cancel();
                 return;
             }
@@ -87,7 +95,8 @@ public abstract class InteractionDialogueMessageMixin {
             dev.otectus.mcaconversations.scene.ConversationPlanner
                     .onAnswerSubmitted(villager, player, question, answer);
         } catch (Throwable t) {
-            McaConversations.LOGGER.debug("dialogue submission validation failed; passing through", t);
+            ci.cancel();
+            McaConversations.LOGGER.warn("dialogue submission validation failed; rejecting submission", t);
         }
     }
 }

@@ -344,7 +344,7 @@ public final class PairHistory {
         List<String> lapsed = new ArrayList<>();
         for (Map.Entry<String, SharedThreadRecord> entry : threads.entrySet()) {
             SharedThreadRecord thread = entry.getValue();
-            if (thread.status() == ThreadStatus.RUPTURED || thread.hasObligation()) {
+            if (!thread.status().isLive() || thread.hasObligation()) {
                 continue;
             }
             if (thread.hasLapsed(today)) {
@@ -355,6 +355,7 @@ public final class PairHistory {
             SharedThreadRecord thread = threads.get(key);
             // Lapsing is a status change, not a deletion: "we never finished that" is content.
             threads.put(key, thread.withStatus(ThreadStatus.LAPSED, today));
+            removed++; // A state transition also needs a dirty save, even without a deletion.
         }
         List<String> settled = new ArrayList<>();
         for (Map.Entry<String, CommitmentRecord> entry : commitments.entrySet()) {

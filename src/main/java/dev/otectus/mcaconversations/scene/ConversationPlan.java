@@ -11,8 +11,9 @@ import java.util.UUID;
  * A frozen decision: this scene, this route, these bound facts (spec §10.5).
  *
  * <p>The plan is what makes reroll resistance real. Once it exists, closing and reopening the screen,
- * switching between the GUI and chat, changing language, or reconnecting all reuse it — none of them
- * re-runs selection, so none of them can quietly produce a different conversation (spec §9.3).
+ * switching between the GUI and chat, and changing language reuse it during the same active exchange
+ * while its bound facts remain valid. Reconnecting clears the transient session; persistent
+ * recency and reward guards still apply to the new exchange.
  *
  * <p>It is also what pins referents. The slots bound here are the ones the whole exchange uses; a
  * later turn never re-binds them, so a named person cannot become a different named person between

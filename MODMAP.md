@@ -1,5 +1,4 @@
-Wrote C:\Projects\MCAConversations\MODMAP.md � mod 'mcaconversations', 0 registered entries.
-conversations`
+# MCA: Conversations
 
 Machine-generated map of this mod. Read this first when picking the project up.
 

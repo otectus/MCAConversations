@@ -37,13 +37,13 @@ public final class ConversationsQuestsCompat implements QuestsBridge.QuestQuerie
      * events for gossip/memory.
      */
     public static void register() {
-        QuestsBridge.setQueries(new ConversationsQuestsCompat());
         TalkAboutObjective.TYPE = McaQuestsApi.registerObjective(
                 new ResourceLocation("mcaconversations", "talk_about"), TalkAboutObjective.CODEC);
         UnlockTopicReward.TYPE = McaQuestsApi.registerReward(
                 new ResourceLocation("mcaconversations", "unlock_topic"), UnlockTopicReward.CODEC);
         QuestDialogueHooks.setResolver(new QuestVoiceResolver());
         MinecraftForge.EVENT_BUS.register(new ConversationsQuestsEvents());
+        QuestsBridge.setQueries(new ConversationsQuestsCompat());
         McaConversations.LOGGER.info("MCA: Quests integration: registered talk_about objective, unlock_topic reward, "
                 + "voice resolver, and quest-event subscriber.");
     }

@@ -987,8 +987,8 @@ Statuses: `open`, `waiting_on_world`, `waiting_on_player`, `ready_to_resume`, `r
 }
 ```
 
-Resolvers: `gift_tag_received`, `quest_state` (MCA: Quests only), `visit_after_day`,
-`conversation_choice`, `event_observed`, `manual_neutral`.
+Resolvers: `gift_tag_received`, `quest_state` (matching MCA: Quests completion/failure events),
+`visit_after_day`, `conversation_choice`, `manual_neutral`. `event_observed` is reserved but unavailable: no generic event observer is installed. It never judges a promise kept or broken. Gift, visit and quest observers settle player-made promises only.
 
 **A promise must name a resolver, and a judging resolver must name a target.** This is enforced at
 parse and again by `SceneCatalogLintTest`. If nothing in the running game can observe the thing, the
@@ -1402,3 +1402,10 @@ conventions this mod's own content now follows, and which its lints will hold a 
 - Don't add answers to MCA's `auto` questions (`root`, `chat`, `rumors`) — auto questions pick a
   random answer, so merging in a new one changes MCA's own behavior odds.
 - Extension files must mirror the original question's top-level flags (see `main.json`).
+
+
+### Stabilization behavior
+
+See [the stabilization report](docs/STABILIZATION-2026-09.md) for response-offer validation, bounded reward accounting, promise observers, language authoring, and the production verification matrix. A full replay ledger returns `HISTORY_CAPACITY` and grants no affection; daily decisions do not consume lifetime one-shot entries.
+
+Authored topic pools normally require three bilingual variants. An explicit `min_variants` of 1 or 2 is reserved for deliberately infrequent scenes and their precise reactions; source lint rejects it on high-frequency scenes. The compiler carries this policy into beat metadata for independent resource validation. It does not change runtime selection weights or bypass cooldowns.

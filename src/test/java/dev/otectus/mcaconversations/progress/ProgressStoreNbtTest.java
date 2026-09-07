@@ -155,4 +155,32 @@ class ProgressStoreNbtTest {
         }
         assertTrue(record.claimTransaction("tx-1"), "the ring is bounded, so ancient ids are forgotten");
     }
+
+    @Test
+    void evictingLastPairOfSameVillagerKeepsReplacementThroughSave() {
+        ProgressStore store = new ProgressStore(1);
+        store.getOrCreate(VILLAGER, PLAYER, 100);
+        UUID replacement = UUID.randomUUID();
+        store.getOrCreate(VILLAGER, replacement, 200);
+        assertEquals(1, store.pairCount());
+        assertTrue(store.get(VILLAGER, PLAYER).isEmpty());
+        assertTrue(ProgressStore.load(store.save(new CompoundTag())).get(VILLAGER, replacement).isPresent());
+    }
+
+    @Test
+    void maximumTimestampCanStillBeEvicted() {
+        ProgressStore store = new ProgressStore(1);
+        store.getOrCreate(VILLAGER, PLAYER, Long.MAX_VALUE);
+        UUID replacement = UUID.randomUUID();
+        org.junit.jupiter.api.Assertions.assertTimeoutPreemptively(java.time.Duration.ofSeconds(2),
+                () -> store.getOrCreate(VILLAGER, replacement, Long.MAX_VALUE));
+        assertEquals(1, store.pairCount());
+        assertTrue(store.get(VILLAGER, replacement).isPresent());
+    }
+
+    @Test
+    void nonpositiveCapacityIsRejected() {
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> new ProgressStore(0));
+    }
+
 }

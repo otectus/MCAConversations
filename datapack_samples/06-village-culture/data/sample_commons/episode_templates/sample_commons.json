@@ -1,0 +1,52 @@
+{
+  "_comment": "Sample 06. Two episodes with deliberately different provenance. commons.borrowed_tool is something the speaker did herself and may name people about; commons.mill_hearsay is something she was told, holds discreetly, and may only pass on without naming anybody. Confidence is derived from the source and is not a field.",
+  "episodes": {
+    "commons.borrowed_tool": {
+      "subject": "village.commons.borrowed_tool",
+      "initial_state": "active",
+      "states": ["active", "succeeded", "abandoned", "remembered"],
+      "transitions": [
+        "active->succeeded",
+        "active->abandoned",
+        "succeeded->remembered",
+        "abandoned->remembered"
+      ],
+      "required_slots": ["neighbour", "tool"],
+      "slot_options": {
+        "tool": ["commons_a_borrowed_scythe", "commons_a_borrowed_ladder", "commons_the_good_blade"]
+      },
+      "knowledge": "participant",
+      "privacy": "ordinary",
+      "share": "may_name",
+      "distortion": "none",
+      "salience": 50,
+      "due_after_days": 5,
+      "expires_after_days": 21
+    },
+    "commons.mill_hearsay": {
+      "subject": "village.commons.mill",
+      "initial_state": "active",
+      "states": ["active", "succeeded", "abandoned", "remembered"],
+      "transitions": [
+        "active->succeeded",
+        "active->abandoned",
+        "succeeded->remembered",
+        "abandoned->remembered"
+      ],
+      "required_slots": ["teller", "what"],
+      "slot_options": {
+        "what": [
+          "commons_a_shift_nobody_covered",
+          "commons_a_load_that_never_came",
+          "commons_a_lad_who_left_at_harvest"
+        ]
+      },
+      "knowledge": "told_by",
+      "privacy": "discreet",
+      "share": "may_describe_anonymously",
+      "distortion": "omitted_detail",
+      "salience": 40,
+      "expires_after_days": 14
+    }
+  }
+}

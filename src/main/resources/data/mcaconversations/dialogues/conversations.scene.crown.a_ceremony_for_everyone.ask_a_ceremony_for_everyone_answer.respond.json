@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "examine_a_ceremony_for_everyone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "crown.a_ceremony_for_everyone.open.ask_a_ceremony_for_everyone_answer.examine_a_ceremony_for_everyone_answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "crown.a_ceremony_for_everyone",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.crown.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.a_ceremony_for_everyone.ask_a_ceremony_for_everyone_answer.examine_a_ceremony_for_everyone_answer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "weigh_a_ceremony_for_everyone",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "crown.a_ceremony_for_everyone.open.ask_a_ceremony_for_everyone_answer.weigh_a_ceremony_for_everyone_answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "crown.a_ceremony_for_everyone",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.crown.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.a_ceremony_for_everyone.ask_a_ceremony_for_everyone_answer.weigh_a_ceremony_for_everyone_answer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.crown.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

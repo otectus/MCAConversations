@@ -45,6 +45,12 @@ public final class ChoiceSelectionService {
             return false;
         }
 
+        if (offer.frontend() == ConversationSession.Frontend.CHAT
+                && !ChatModeDispatcher.canSelectOfferedChoice(villager, player, now)) {
+            rejectClient(player, revision);
+            return false;
+        }
+
         String question = offer.questionId();
         String answer = offer.answerIds().get(absoluteIndex);
         if (!McaCompat.checkConstraints(villager, player, question, answer)) {

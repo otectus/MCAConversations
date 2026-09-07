@@ -90,12 +90,14 @@ public final class VillagerHistory {
      * a villager who has taken on more than they can hold has given something up, and that is a state
      * a scene can honestly speak from. Only past the resolved cap is anything actually forgotten.
      */
-    private void enforceEpisodeCaps(long today) {
+    private int enforceEpisodeCaps(long today) {
+        int changed = 0;
         int liveCap = HistoryCaps.activeEpisodes();
         List<EpisodeRecord> live = liveEpisodes(today);
         for (int i = liveCap; i < live.size(); i++) {
             EpisodeRecord victim = live.get(i);
             episodes.put(victim.id(), victim.transitioned(EpisodeState.ABANDONED, today));
+            changed++;
         }
 
         int resolvedCap = HistoryCaps.resolvedEpisodes();
@@ -106,7 +108,7 @@ public final class VillagerHistory {
             }
         }
         if (past.size() <= resolvedCap) {
-            return;
+            return changed;
         }
         // Lowest salience first, then oldest update: exactly the plan's pruning order, so two servers
         // with the same history prune the same records.
@@ -114,7 +116,9 @@ public final class VillagerHistory {
                 .thenComparing(Comparator.comparingLong(EpisodeRecord::updatedDay)));
         for (int i = 0; i < past.size() - resolvedCap; i++) {
             episodes.remove(past.get(i).id());
+            changed++;
         }
+        return changed;
     }
 
     public boolean removeEpisode(UUID id) {
@@ -317,6 +321,7 @@ public final class VillagerHistory {
                 expiredEpisodes.add(episode.id());
             } else if (episode.hasExpired(today) && episode.state().isLive()) {
                 episodes.put(episode.id(), episode.transitioned(EpisodeState.ABANDONED, today));
+                removed++;
             }
         }
         for (UUID id : expiredEpisodes) {
@@ -353,7 +358,7 @@ public final class VillagerHistory {
         for (UUID player : emptyPairs) {
             pairs.remove(player);
         }
-        enforceEpisodeCaps(today);
+        removed += enforceEpisodeCaps(today);
         return removed;
     }
 

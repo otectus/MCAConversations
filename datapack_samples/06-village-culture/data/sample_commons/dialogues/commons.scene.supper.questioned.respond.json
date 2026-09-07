@@ -1,0 +1,125 @@
+{
+  "answers": [
+    {
+      "name": "ask_why_not",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "commons.supper.questioned.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.commons.supper",
+              "deltas": {
+                "familiarity": 2,
+                "trust": 1
+              }
+            },
+            "next": "commons.followup",
+            "conversations_say": {
+              "phrase": "commons.scene.supper.questioned.explained"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "commons.plain.respond"
+          }
+        }
+      ]
+    },
+    {
+      "name": "agree_it_is_a_lot",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "commons.supper.questioned.agreed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.commons.supper",
+              "deltas": {
+                "warmth": 1,
+                "respect": 1
+              }
+            },
+            "next": "commons.followup",
+            "conversations_say": {
+              "phrase": "commons.scene.supper.questioned.agreed"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "commons.plain.respond"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "commons.leaving"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village"
+          }
+        }
+      ]
+    }
+  ]
+}

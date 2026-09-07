@@ -29,7 +29,7 @@ public final class ConversationSessions {
     /** The player's session, creating one if needed. */
     public static ConversationSession get(UUID playerId, long now) {
         ConversationSession session = SESSIONS.computeIfAbsent(playerId, id -> new ConversationSession(id, now));
-        if (session.isExpired(now, timeoutTicks())) {
+        if (session.isExpired(now, timeoutTicks()) && !session.hasPendingGuiOffer()) {
             session.endTopic();
         }
         session.touch(now);
@@ -42,7 +42,7 @@ public final class ConversationSessions {
         if (session == null) {
             return Optional.empty();
         }
-        if (session.isExpired(now, timeoutTicks())) {
+        if (session.isExpired(now, timeoutTicks()) && !session.hasPendingGuiOffer()) {
             session.endTopic();
         }
         return Optional.of(session);
@@ -114,7 +114,8 @@ public final class ConversationSessions {
         long hardTimeout = (long) timeoutTicks() * 4L;
         int removed = 0;
         for (Map.Entry<UUID, ConversationSession> entry : SESSIONS.entrySet()) {
-            if (now - entry.getValue().lastActivityGameTime() > hardTimeout) {
+            if (!entry.getValue().hasPendingGuiOffer()
+                    && now - entry.getValue().lastActivityGameTime() > hardTimeout) {
                 SESSIONS.remove(entry.getKey());
                 removed++;
             }
@@ -126,9 +127,14 @@ public final class ConversationSessions {
         return SESSIONS.size();
     }
 
+    /** Forget transient state when the server stops. */
+    public static void clearAll() {
+        SESSIONS.clear();
+    }
+
     /** Test seam: forget every session. */
     public static void clearAllForTesting() {
-        SESSIONS.clear();
+        clearAll();
     }
 
     private static int timeoutTicks() {

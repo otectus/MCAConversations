@@ -1,0 +1,57 @@
+{
+  "answers": [
+    {
+      "name": "follow_1",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "future.the_decision_between_us.open.answered.follow_answer_1"
+            },
+            "next": "conversations.scene.future.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.future.the_decision_between_us.answered.follow_answer_1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "follow_2",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "future.the_decision_between_us.open.answered.follow_answer_2"
+            },
+            "next": "conversations.scene.future.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.future.the_decision_between_us.answered.follow_answer_2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.us",
+            "conversations_say": {
+              "phrase": "conversations.scene.future.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

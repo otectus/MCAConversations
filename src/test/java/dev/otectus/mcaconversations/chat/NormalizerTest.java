@@ -88,6 +88,39 @@ class NormalizerTest {
         assertTrue(m.contentStems.contains("sad"), "conjunction ends the window before 'sad'");
     }
 
+    @Test
+    void portugueseNoIsAPrepositionAndNaoIsNegation() {
+        NormalizedMessage positive = Normalizer.normalize("no trabalho da vila", SynonymTable.EMPTY, "pt_br");
+        assertTrue(positive.contentStems.contains("trabalho"));
+        assertTrue(positive.contentStems.contains("vila"));
+        assertTrue(positive.negatedStems.isEmpty());
+        assertFalse(positive.contentStems.contains("no"), "the preposition is a stopword");
+        for (String raw : List.of("não quero esse trabalho", "nao quero esse trabalho")) {
+            NormalizedMessage negative = Normalizer.normalize(raw, SynonymTable.EMPTY, "pt_br");
+            assertTrue(negative.negatedStems.contains("trabalho"));
+            assertFalse(negative.contentStems.contains("trabalho"));
+        }
+    }
+
+    @Test
+    void portugueseConjunctionsEndNegationAndQuestionsKeepTheirShape() {
+        NormalizedMessage message = Normalizer.normalize("não quero chuva mas gosto do sol", SynonymTable.EMPTY, "PT-BR");
+        assertTrue(message.negatedStems.contains("chuva"));
+        assertTrue(message.contentStems.contains("sol"));
+        assertTrue(Normalizer.normalize("como vai o trabalho", SynonymTable.EMPTY, "pt_br").interrogative);
+        assertFalse(Normalizer.normalize("vou no mercado", SynonymTable.EMPTY, "pt_br").interrogative);
+        assertTrue(ChatModeDispatcher.looksEngaged(Normalizer.normalize("você parece cansado", SynonymTable.EMPTY, "pt_br")));
+    }
+
+    @Test
+    void englishNoStillNegatesAndLocaleDoesNotChangePhraseStems() {
+        assertTrue(Normalizer.normalize("no work today", SynonymTable.EMPTY, "en_us").negatedStems.contains("work"));
+        assertTrue(Normalizer.normalize("no work today", SynonymTable.EMPTY, null).negatedStems.contains("work"));
+        String reply = "Não vou no mercado";
+        assertEquals(Normalizer.canonicalStems(reply, SynonymTable.EMPTY),
+                Normalizer.normalize(reply, SynonymTable.EMPTY, "pt_br").tokens.stream().map(t -> t.stem).toList());
+    }
+
     // --- Bigrams & interrogative ----------------------------------------------
 
     @Test

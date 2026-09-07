@@ -1,0 +1,99 @@
+{
+  "_comment": [
+    "Technique 3: a complete replacement of data/mcaconversations/dialogues/conversations.json,",
+    "byte-for-byte the mod's file with the single \"events\" answer removed. MCA's dialogue loader",
+    "resolves one resource per exact ResourceLocation and the top-most pack wins, so this file is",
+    "read and the mod's copy is not read at all. Everything the mod's copy contains that is not",
+    "restated here is gone - which is why all seven other answers are still here in their original",
+    "order with their original constraints.",
+    "This file is now yours to maintain: a mod update that adds a hub category will not reach you."
+  ],
+  "answers": [
+    {
+      "name": "chitchat",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.chitchat"
+          }
+        }
+      ]
+    },
+    {
+      "name": "profession",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.profession"
+          }
+        }
+      ]
+    },
+    {
+      "name": "village",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village"
+          }
+        }
+      ]
+    },
+    {
+      "name": "personal",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.personal"
+          }
+        }
+      ]
+    },
+    {
+      "name": "relationships",
+      "constraints": "family,!baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.relationships"
+          }
+        }
+      ]
+    },
+    {
+      "name": "babble",
+      "constraints": "baby",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.babble.baby"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "back",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "main"
+          }
+        }
+      ]
+    }
+  ]
+}

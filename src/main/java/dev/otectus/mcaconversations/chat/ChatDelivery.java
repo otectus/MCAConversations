@@ -61,22 +61,37 @@ public final class ChatDelivery {
         long now = server != null ? server.overworld().getGameTime() : 0L;
         int delay = ChatModeScheduler.computeDelayTicks(cfg.chatModeReplyDelayTicks.get(), voiced.length());
         delay += Math.max(0, extraDelayTicks);
-        boolean publicReplies = cfg.chatModePublicReplies.get();
+        dev.otectus.mcaconversations.conversation.ConversationSession conversation =
+                dev.otectus.mcaconversations.conversation.ConversationSessions.raw(player.getUUID()).orElse(null);
+        dev.otectus.mcaconversations.history.PrivacyLevel privacy = conversation == null ? null
+                : conversation.plan().flatMap(dev.otectus.mcaconversations.scene.ConversationPlan::episodeId)
+                        .flatMap(id -> dev.otectus.mcaconversations.history.History.of(villager)
+                                .flatMap(history -> history.episode(id)))
+                        .map(dev.otectus.mcaconversations.history.EpisodeRecord::privacy).orElse(null);
+        boolean publicReplies = cfg.chatModePublicReplies.get() && mayBroadcast(privacy,
+                conversation == null ? null : conversation.lastNpcAct().orElse(null));
         // Public replies travel as far as an overheard player message (the addressed radius), so a
         // bystander hears whole conversations — not the question without the answer.
         double radius = McaConversationsConfig.chatModeAddressedRadius();
 
-        ChatModeScheduler.schedule(now + delay,
-                () -> deliver(villager, player, rendered, publicReplies, radius, feedback));
+        int lineIndex = feedback == null ? 0 : ++feedback.linesScheduled;
+        ChatModeScheduler.scheduleOrdered(player.getUUID(), now + delay,
+                () -> deliver(villager, player, rendered, publicReplies, radius, feedback, lineIndex));
     }
 
     private static void deliver(Entity villager, ServerPlayer speaker, Component rendered,
-                                boolean publicReplies, double radius, ChatModeSession.Scope feedback) {
-        if (speaker.hasDisconnected()) {
+                                boolean publicReplies, double radius, ChatModeSession.Scope feedback,
+                                int lineIndex) {
+        if (speaker.hasDisconnected() || !speaker.isAlive() || !villager.isAlive()
+                || speaker.level() != villager.level() || speaker.distanceToSqr(villager) > radius * radius) {
             return;
         }
-        String suffix = feedback == null ? "" : heartsSuffix(feedback.heartsDelta);
-        boolean hasOptions = feedback != null && feedback.options != null;
+        boolean lastLine = feedback != null && lineIndex == feedback.linesScheduled;
+        String suffix = lastLine ? heartsSuffix(feedback.heartsDelta) : "";
+        boolean hasOptions = lastLine && feedback.options != null
+                && dev.otectus.mcaconversations.conversation.ConversationSessions.raw(speaker.getUUID())
+                        .flatMap(dev.otectus.mcaconversations.conversation.ConversationSession::currentOffer)
+                        .filter(offer -> !offer.consumed() && offer.revision() == feedback.optionsRevision).isPresent();
         Component forSpeaker = rendered;
         if (!suffix.isEmpty() || hasOptions) {
             MutableComponent personal = rendered.copy();
@@ -102,6 +117,14 @@ public final class ChatDelivery {
                 }
             }
         }
+    }
+
+    /** Public-chat configuration never promotes a recorded confidence or personal disclosure. */
+    static boolean mayBroadcast(dev.otectus.mcaconversations.history.PrivacyLevel privacy,
+                                dev.otectus.mcaconversations.conversation.NpcSpeechAct act) {
+        return (privacy == null || privacy == dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC)
+                && act != dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE
+                && act != dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE_PROBLEM;
     }
 
     /**

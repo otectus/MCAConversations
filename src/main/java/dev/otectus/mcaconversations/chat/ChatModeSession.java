@@ -99,12 +99,14 @@ public final class ChatModeSession {
 
     /** The question this player was last offered by either frontend, or null. */
     public static String currentQuestion(UUID playerId) {
-        return ConversationSessions.raw(playerId).map(ConversationSession::currentQuestion).orElse(null);
+        return ConversationSessions.raw(playerId).flatMap(ConversationSession::currentOffer)
+                .filter(offer -> !offer.consumed()).map(ConversationSession.ChoiceOffer::questionId).orElse(null);
     }
 
     /** The answers offered with it; empty when there is no open question. */
     public static List<String> currentAnswers(UUID playerId) {
-        return ConversationSessions.raw(playerId).map(ConversationSession::currentAnswers).orElse(List.of());
+        return ConversationSessions.raw(playerId).flatMap(ConversationSession::currentOffer)
+                .filter(offer -> !offer.consumed()).map(ConversationSession.ChoiceOffer::answerIds).orElse(List.of());
     }
 
     /** Drops the open question — a subject change, "never mind", a farewell, or a stale sticky target. */
@@ -129,6 +131,14 @@ public final class ChatModeSession {
     public static void clear(UUID playerId) {
         SESSIONS.remove(playerId);
         ConversationSessions.clear(playerId);
+    }
+
+    /** Release server-owned references before an integrated server is stopped or replaced. */
+    public static void reset() {
+        SESSIONS.clear();
+        LAST_AMBIENT.clear();
+        activeScope = null;
+        ConversationSessions.clearAll();
     }
 
     // --- Ambient per-villager rate limit (spec §12) ---------------------------
@@ -256,6 +266,8 @@ public final class ChatModeSession {
          * during it) and read by the deferred delivery closure.
          */
         public net.minecraft.network.chat.Component options;
+        public long optionsRevision;
+        int linesScheduled;
         private final Scope previous;
 
         private Scope(ServerPlayer player, Entity villager, int extraDelayTicks, Scope previous) {

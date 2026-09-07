@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "The realm beyond the walls, gated on MCA Capitals and on the diplomacy this capital is actually in.",
-    "",
-    "War, alliance and where the player's own oath lies are all the same question asked from different",
-    "sides of a border, and a villager answers it in carts and harvests rather than in treaties."
+    "Capitals public-state conversations. Current roles and relations are gated; unobserved history, private events, tax rates and promised game actions must not be invented."
   ],
   "topic": "realm",
   "entry": {
@@ -13,14 +10,14 @@
   "return_question": "conversations.cat.village",
   "leave_lines": {
     "en": [
-      "That is how it stands beyond the walls.",
-      "Right. That is the wider picture.",
-      "It will look different by spring."
+      "We can leave it there.",
+      "That gives us something to think about.",
+      "All right. Let's get back to the day."
     ],
     "pt": [
-      "É assim que estão as coisas para além dos muros.",
-      "Certo. É esse o quadro maior.",
-      "Vai parecer diferente na primavera."
+      "Podemos deixar por aqui.",
+      "Já temos algo em que pensar.",
+      "Certo. Vamos voltar ao nosso dia."
     ]
   },
   "ages": [
@@ -28,8 +25,8 @@
     "adult"
   ],
   "leave_label": {
-    "en": "Thank you for the wider view.",
-    "pt": "Obrigado pela visão mais ampla."
+    "en": "Thanks for the conversation.",
+    "pt": "Agradeço a conversa."
   },
   "followup": {
     "prompt": {
@@ -48,9 +45,9 @@
       "shape": "confide",
       "act": "report",
       "polarity": "negative",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
-      "privacy": "discreet",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -82,14 +79,12 @@
       },
       "lines": {
         "en": [
-          "We are at war with %2$s. Nobody here has seen a soldier yet, and that is the only good sentence I have about it.",
-          "War with %2$s. The word arrived before anything else did, and the word alone has already changed the market.",
-          "Two of ours went east last month. That is what a war is here: a smaller number of people at the well."
+          "We're at war with %2$s. I'd rather hear a careful account than a brave-sounding guess.",
+          "The relation with %2$s is war. That tells us the state of things, not what has happened on every road."
         ],
         "pt": [
-          "Estamos em guerra com %2$s. Ninguém aqui viu um soldado ainda, e é a única frase boa que tenho sobre isso.",
-          "Guerra com %2$s. A palavra chegou antes de qualquer outra coisa, e só a palavra já mudou o mercado.",
-          "Dois dos nossos foram para o leste mês passado. É isso que uma guerra é aqui: menos gente no poço."
+          "Estamos em guerra com %2$s. Prefiro um relato cuidadoso a um palpite que pareça corajoso.",
+          "A relação com %2$s é de guerra. Isso diz como as coisas estão, não o que aconteceu em cada estrada."
         ]
       },
       "replies": [
@@ -102,19 +97,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What is the war actually over?",
-            "pt": "A guerra é sobre o quê, de fato?"
+            "en": "What started the war?",
+            "pt": "O que começou a guerra?"
           },
           "phrases": [
-            "what is the war actually over",
-            "what started the war"
-          ],
-          "requires_any": [
-            "war",
-            "started"
+            "what started the war",
+            "o que comecou a guerra"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -123,17 +114,21 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "A river crossing and an insult, and if you asked ten people you would get the two in different orders.",
-                "Nobody has told us. We are told to be ready and not told what for, which is the ordinary arrangement.",
-                "Grain, underneath. It is always grain underneath, whatever the herald reads out at the well."
+                "I don't have a confirmed cause. I won't invent an insult or a battle to make the answer sound complete."
               ],
               "pt": [
-                "Uma travessia de rio e um insulto, e se você perguntar a dez pessoas ouve as duas em ordens diferentes.",
-                "Ninguém nos contou. Mandam ficar prontos e não dizem para quê, que é o arranjo de sempre.",
-                "Grão, no fundo. É sempre grão no fundo, seja lá o que o arauto leia no poço."
+                "Não tenho uma causa confirmada. Não vou inventar uma ofensa ou uma batalha só para completar a resposta."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "started",
+            "comecou",
+            "guerra"
+          ]
         },
         {
           "name": "say_you_hope_it_ends",
@@ -144,19 +139,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "I hope it ends before harvest.",
-            "pt": "Espero que acabe antes da colheita."
+            "en": "I hope it ends soon.",
+            "pt": "Espero que termine logo."
           },
           "phrases": [
-            "i hope it ends before harvest",
-            "may it end before harvest"
-          ],
-          "requires_any": [
-            "harvest"
+            "i hope it ends soon",
+            "espero que termine logo"
           ],
           "disposition": {
-            "warmth": 3,
-            "trust": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "steadied",
@@ -167,19 +158,28 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "So does everyone who has to bring one in. That is the whole village and none of the court.",
-                "If it does not, we will have a bad year and a quiet one, and I know which of those I mind more.",
-                "Thank you. People here have stopped saying it out loud because saying it started to sound like begging."
+                "So do I. I'd welcome a real peace, even if the talks to reach it were painfully dull."
               ],
               "pt": [
-                "É o que espera todo mundo que tem que colher. É a vila inteira e ninguém da corte.",
-                "Se não acabar, vamos ter um ano ruim e calado, e eu sei qual dos dois me incomoda mais.",
-                "Obrigado. Aqui pararam de dizer isso em voz alta porque começou a soar como súplica."
+                "Eu também. Uma paz de verdade seria bem-vinda, mesmo que as negociações fossem tediosas."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "hope",
+            "ends",
+            "soon",
+            "espero",
+            "termine",
+            "logo"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "min_variants": 1
     },
     {
       "name": "the_ones_we_are_sworn_to",
@@ -187,7 +187,7 @@
       "shape": "observe",
       "act": "report",
       "polarity": "positive",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
       "obligations": [
         "clarify",
@@ -220,14 +220,12 @@
       },
       "lines": {
         "en": [
-          "We are allied with %2$s. The practical result is that their carts come through unsearched and ours go the same the other way.",
-          "%2$s stands with us. My father fought them once, so I take a certain pleasure in selling them cheese.",
-          "An alliance is a promise about a bad day neither side has had yet, and until then it is mostly good trade."
+          "We have an alliance with %2$s. I hope it gives both sides a reason to keep talking.",
+          "%2$s is an ally. I'd still ask what a particular agreement says before promising anyone a benefit."
         ],
         "pt": [
-          "Somos aliados de %2$s. Na prática, as carroças deles passam sem revista e as nossas fazem o mesmo do outro lado.",
-          "%2$s está conosco. Meu pai lutou contra eles uma vez, então tenho certo prazer em vender queijo para eles.",
-          "Uma aliança é uma promessa sobre um dia ruim que nenhum dos dois teve ainda, e até lá é quase só bom comércio."
+          "Temos uma aliança com %2$s. Espero que isso dê aos dois lados um motivo para continuar conversando.",
+          "%2$s é uma capital aliada. Ainda assim, eu conferiria os termos antes de prometer alguma vantagem."
         ]
       },
       "replies": [
@@ -240,19 +238,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Do you think the alliance will hold?",
-            "pt": "Você acha que a aliança se sustenta?"
+            "en": "Does the alliance make us safe?",
+            "pt": "A aliança nos deixa em segurança?"
           },
           "phrases": [
-            "do you think the alliance will hold",
-            "will the alliance hold"
-          ],
-          "requires_any": [
-            "alliance",
-            "hold"
+            "does the alliance make us safe",
+            "a alianca nos deixa em seguranca"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "answered",
@@ -262,17 +256,25 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Until one of us has a bad harvest and the other one has two. Then we shall find out what was signed.",
-                "It will hold as long as the people who signed it are alive. That is the honest length of any of them.",
-                "It has held eleven years, which is longer than my marriage and involves fewer letters."
+                "It gives us an ally. Safety is a bigger promise than I can make from that alone."
               ],
               "pt": [
-                "Até um de nós ter uma colheita ruim e o outro ter duas. Aí a gente descobre o que foi assinado.",
-                "Se sustenta enquanto quem assinou estiver vivo. É esse o prazo honesto de qualquer uma delas.",
-                "Já durou onze anos, mais que meu casamento e com menos cartas."
+                "Ela nos dá uma capital aliada. Segurança é uma promessa maior do que posso fazer só com isso."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "does",
+            "alliance",
+            "make",
+            "safe",
+            "alianca",
+            "deixa",
+            "seguranca"
+          ]
         },
         {
           "name": "say_it_sounds_a_good_arrangement",
@@ -283,20 +285,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "That sounds like a sane arrangement.",
-            "pt": "Parece um arranjo sensato."
+            "en": "It is worth keeping the friendship.",
+            "pt": "Vale a pena manter a amizade."
           },
           "phrases": [
-            "that sounds like a sane arrangement",
-            "a sane arrangement between neighbours"
-          ],
-          "requires_any": [
-            "sane",
-            "arrangement"
+            "it is worth keeping the friendship",
+            "vale a pena manter a amizade"
           ],
           "disposition": {
-            "respect": 2,
-            "warmth": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "acknowledged",
@@ -305,19 +302,30 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "It is, and sane arrangements are rare enough that people distrust them on principle.",
-                "It is dull, which is the highest compliment you can pay a treaty.",
-                "Say that at the border post. The men there have been waiting years for somebody to notice."
+                "I think so. Being able to disagree without ending every conversation seems like a useful start."
               ],
               "pt": [
-                "É, e arranjos sensatos são tão raros que as pessoas desconfiam por princípio.",
-                "É sem graça, que é o maior elogio que se pode fazer a um tratado.",
-                "Diga isso no posto de fronteira. Os homens de lá esperam há anos que alguém repare."
+                "Acho que sim. Poder discordar sem encerrar toda conversa me parece um bom começo."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "worth",
+            "keeping",
+            "friendship",
+            "vale",
+            "pena",
+            "manter",
+            "amizade"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "the_quiet_years",
@@ -360,14 +368,12 @@
       },
       "lines": {
         "en": [
-          "We are at peace with everybody and sworn to nobody, which is the arrangement I would choose if anyone asked me.",
-          "No war, no alliance. The roads are open and the tolls are honest, and that is a decade most places do not get.",
-          "Nothing is happening between us and anyone, and I have lived long enough to know that is the good news."
+          "We're not at war with another capital at the moment. I'd like that to last.",
+          "No current war between our capital and another. That's welcome, even if it doesn't answer every worry."
         ],
         "pt": [
-          "Estamos em paz com todos e jurados a ninguém, que é o arranjo que eu escolheria se me perguntassem.",
-          "Sem guerra, sem aliança. As estradas abertas e os pedágios honestos, e é uma década que a maioria dos lugares não tem.",
-          "Nada está acontecendo entre nós e ninguém, e vivi o bastante para saber que essa é a boa notícia."
+          "No momento, não estamos em guerra com outra capital. Gostaria que continuasse assim.",
+          "Não há guerra atual entre nossa capital e outra. Isso é bom, mesmo sem resolver toda preocupação."
         ]
       },
       "replies": [
@@ -380,18 +386,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Can standing apart last?",
-            "pt": "Dá para continuar apartado assim?"
+            "en": "What helps keep it that way?",
+            "pt": "O que ajuda a manter isso?"
           },
           "phrases": [
-            "can standing apart last",
-            "how long can standing apart last"
-          ],
-          "requires_any": [
-            "apart"
+            "what helps keep it that way",
+            "o que ajuda a manter isso"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -401,17 +404,24 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "As long as we are neither rich enough to rob nor weak enough to bother with. It is a narrow road.",
-                "It lasts until somebody needs a friend badly, and then you find out what standing apart cost.",
-                "It lasted for my grandmother's whole life. She thought that was normal and she was wrong and happy."
+                "I'd start with asking what the other side actually said. It's hard to mend an argument built around a guess."
               ],
               "pt": [
-                "Enquanto não formos ricos demais para roubar nem fracos demais para valer o trabalho. É um caminho estreito.",
-                "Dura até alguém precisar muito de um amigo, e aí você descobre o preço de ter ficado apartado.",
-                "Durou a vida inteira da minha avó. Ela achava normal e estava errada e feliz."
+                "Eu começaria conferindo o que o outro lado disse de verdade. É difícil resolver uma briga construída sobre um palpite."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "helps",
+            "keep",
+            "that",
+            "ajuda",
+            "manter",
+            "isso"
+          ]
         },
         {
           "name": "say_quiet_is_underrated",
@@ -422,19 +432,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "Uneventful years are underrated.",
-            "pt": "Anos sem acontecimentos são subestimados."
+            "en": "A dull peace sounds good to me.",
+            "pt": "Uma paz sem novidades me parece boa."
           },
           "phrases": [
-            "uneventful years are underrated",
-            "an uneventful year is worth a lot"
-          ],
-          "requires_any": [
-            "uneventful"
+            "a dull peace sounds good to me",
+            "uma paz sem novidades me parece boa"
           ],
           "disposition": {
-            "warmth": 2,
-            "respect": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "agreed",
@@ -443,19 +449,30 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "They are. Nobody writes a song about a decade in which the bridge stayed up.",
-                "Say that to a young one and watch the face. They want a story. I have had two and would return both.",
-                "That is the sort of thing you only hear from somebody who has seen the other kind."
+                "To me too. I'd happily find something less dramatic to complain about."
               ],
               "pt": [
-                "São. Ninguém faz canção sobre uma década em que a ponte ficou de pé.",
-                "Diga isso a um jovem e olhe a cara. Eles querem história. Já tive duas e devolveria as duas.",
-                "É o tipo de coisa que só se ouve de quem já viu o outro tipo."
+                "Para mim também. Eu acharia com prazer algo menos dramático para reclamar."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "dull",
+            "peace",
+            "sounds",
+            "good",
+            "novidades",
+            "parece"
+          ]
         }
-      ]
+      ],
+      "vars_used": [],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "i_carry_the_letters",
@@ -463,9 +480,9 @@
       "shape": "confide",
       "act": "report",
       "polarity": "mixed",
-      "predicate": "disclosure",
-      "temporal": "habitual",
-      "privacy": "discreet",
+      "predicate": "opinion",
+      "temporal": "current",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -494,14 +511,12 @@
       },
       "lines": {
         "en": [
-          "I carry our word abroad. Half of the work is travelling and the other half is not saying the wrong thing while tired.",
-          "An ambassador is a person paid to be liked by people who are not obliged to like them.",
-          "I have eaten at four foreign tables this year and learned more from the seating than from anything anybody said."
+          "I'm an ambassador. I'd rather ask an awkward question than come home with a comfortable misunderstanding.",
+          "Being an ambassador means the distinction between my opinion and my capital's position matters."
         ],
         "pt": [
-          "Eu levo nossa palavra para fora. Metade do trabalho é viajar e a outra metade é não dizer besteira estando cansado.",
-          "Um embaixador é uma pessoa paga para ser bem-quista por gente que não é obrigada a gostar dela.",
-          "Comi em quatro mesas estrangeiras este ano e aprendi mais com os lugares à mesa do que com qualquer coisa dita."
+          "Sou embaixador. Prefiro fazer uma pergunta incômoda a voltar com um mal-entendido confortável.",
+          "Como embaixador, preciso distinguir bem a minha opinião da posição da minha capital."
         ]
       },
       "replies": [
@@ -514,19 +529,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What did the seating teach you?",
-            "pt": "O que os lugares à mesa te ensinaram?"
+            "en": "How do you avoid misunderstandings?",
+            "pt": "Como você evita mal-entendidos?"
           },
           "phrases": [
-            "what did the seating teach you",
-            "what does the seating tell an envoy"
-          ],
-          "requires_any": [
-            "seating"
+            "how do you avoid misunderstandings",
+            "como voce evita malentendidos"
           ],
           "disposition": {
-            "familiarity": 2,
-            "trust": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -535,17 +546,24 @@
             "shape": "teach_back",
             "lines": {
               "en": [
-                "Who is out of favour. They put the one they have decided against at the end, near the door, every time.",
-                "That a place set for somebody who does not come is a message, and it is a loud one.",
-                "Where the interpreter sits tells you whether they intend to understand you or to have understood you later."
+                "Ask them to say what they mean, then check I've understood. Guessing from the seating plan isn't diplomacy."
               ],
               "pt": [
-                "Quem está em desgraça. Põem quem já decidiram descartar na ponta, perto da porta, sempre.",
-                "Que um lugar posto para quem não vem é um recado, e é um recado alto.",
-                "Onde o intérprete senta diz se pretendem te entender ou ter te entendido depois."
+                "Peço que expliquem e depois confiro se entendi. Adivinhar pelo lugar de cada um à mesa não é diplomacia."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "avoid",
+            "misunderstandings",
+            "como",
+            "voce",
+            "evita",
+            "malentendidos"
+          ]
         },
         {
           "name": "say_that_is_a_hard_trade",
@@ -556,20 +574,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "That is a wearing trade to be in.",
-            "pt": "É um ofício desgastante."
+            "en": "That sounds like patient work.",
+            "pt": "Parece um trabalho que exige paciência."
           },
           "phrases": [
-            "that is a wearing trade to be in",
-            "a wearing trade for anybody"
-          ],
-          "requires_any": [
-            "wearing",
-            "trade"
+            "that sounds like patient work",
+            "parece um trabalho que exige paciencia"
           ],
           "disposition": {
-            "warmth": 3,
-            "respect": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "softened",
@@ -579,19 +592,32 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It is. I am home eleven weeks a year and my daughter measures me against a door frame each time.",
-                "It wears in a particular place. You stop being able to speak without arranging it first.",
-                "Thank you for saying so. At home they think it is banquets. It is roads."
+                "It is the sort of work where one useful question can beat a very fine speech."
               ],
               "pt": [
-                "É. Fico em casa onze semanas por ano e minha filha me mede no batente toda vez.",
-                "Desgasta num lugar específico. Você perde a capacidade de falar sem antes arrumar a frase.",
-                "Obrigado por dizer. Em casa acham que são banquetes. São estradas."
+                "É o tipo de trabalho em que uma pergunta útil pode valer mais que um discurso muito bonito."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "that",
+            "sounds",
+            "like",
+            "patient",
+            "work",
+            "parece",
+            "trabalho",
+            "exige",
+            "paciencia"
+          ]
         }
-      ]
+      ],
+      "vars_used": [],
+      "epistemic": "inferred",
+      "min_variants": 1
     },
     {
       "name": "a_face_from_elsewhere",
@@ -623,23 +649,19 @@
       ],
       "cooldown_days": 3,
       "max_mentions_per_7_days": 2,
-      "vars_used": [
-        "capital_name"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "Where your loyalty lies.",
         "pt": "Onde está a sua lealdade."
       },
       "lines": {
         "en": [
-          "You are sworn elsewhere. I know it, everybody at this well knows it, and I would rather say so than have it sit there.",
-          "You belong to another seat. That is not an accusation. It is only a thing I would want said out loud if it were me.",
-          "A foreign oath is not a crime in %2$s. It does mean people will finish a sentence differently when you walk up."
+          "Your declared allegiance is to another capital. I'm interested in what you think, if you want to talk.",
+          "You've declared for somewhere else. I don't take that as an answer to every question about you."
         ],
         "pt": [
-          "Você é jurado a outro lugar. Eu sei, todo mundo neste poço sabe, e prefiro dizer a deixar isso pairando.",
-          "Você pertence a outro trono. Não é acusação. É só uma coisa que eu ia querer dita em voz alta se fosse comigo.",
-          "Um juramento estrangeiro não é crime em %2$s. Mas quer dizer que as pessoas terminam a frase diferente quando você chega."
+          "Sua lealdade declarada é a outra capital. Tenho interesse no que você pensa, se quiser conversar.",
+          "Você declarou apoio a outro lugar. Não acho que isso responda a toda pergunta sobre você."
         ]
       },
       "replies": [
@@ -652,18 +674,14 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Is my foreign oath a problem for you?",
-            "pt": "Meu juramento estrangeiro é problema para você?"
+            "en": "Is that a problem for you?",
+            "pt": "Isso é um problema para você?"
           },
           "phrases": [
-            "is my foreign oath a problem for you",
-            "does my foreign oath trouble you"
-          ],
-          "requires_any": [
-            "oath"
+            "is that a problem for you",
+            "isso e um problema para voce"
           ],
           "disposition": {
-            "respect": 2,
             "familiarity": 1
           },
           "reaction": {
@@ -673,17 +691,24 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Not to me. To the man who keeps the gate ledger, yes, and he writes down more than he needs to.",
-                "Only if there is trouble. Then everybody remembers where everybody is sworn, all at once.",
-                "It is a problem the way rain is a problem. You plan around it and stop calling it unfair."
+                "Not by itself. I'd rather judge this conversation by what we actually say to each other."
               ],
               "pt": [
-                "Para mim, não. Para o homem que cuida do livro do portão, sim, e ele anota mais do que precisa.",
-                "Só se houver encrenca. Aí todo mundo lembra de uma vez onde cada um jurou.",
-                "É problema do jeito que chuva é problema. Você planeja em volta e para de chamar de injusto."
+                "Por si só, não. Prefiro avaliar esta conversa pelo que dissermos um ao outro."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "that",
+            "problem",
+            "isso",
+            "problema",
+            "para",
+            "voce"
+          ]
         },
         {
           "name": "say_your_intentions_are_good",
@@ -694,20 +719,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "I intend this place only good.",
-            "pt": "Só quero o bem deste lugar."
+            "en": "I want this village to do well.",
+            "pt": "Quero que esta vila vá bem."
           },
           "phrases": [
-            "i intend this place only good",
-            "my intentions here are good"
-          ],
-          "requires_any": [
-            "intend",
-            "intentions"
+            "i want this village to do well",
+            "quero que esta vila va bem"
           ],
           "disposition": {
-            "trust": 3,
-            "warmth": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "accepted",
@@ -716,19 +736,30 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "I believe you, and belief is cheap, and what will actually settle it is two years of nothing going wrong.",
-                "Good. Say it to the gate ledger man as well. He will write that down too and it will help.",
-                "Somebody set on mischief would have said it more prettily. That is not proof but it is something."
+                "Then we have something to talk about. Caring about one place needn't mean wishing another harm."
               ],
               "pt": [
-                "Acredito em você, e acreditar é barato, e o que vai resolver mesmo são dois anos sem nada dar errado.",
-                "Ótimo. Diga também ao homem do livro do portão. Ele vai anotar e isso ajuda.",
-                "Quem estivesse com má intenção teria dito de forma mais bonita. Não é prova, mas é alguma coisa."
+                "Então temos assunto. Gostar de um lugar não precisa significar desejar mal a outro."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "want",
+            "this",
+            "village",
+            "well",
+            "quero",
+            "esta",
+            "vila"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "one_of_our_own",
@@ -736,7 +767,7 @@
       "shape": "observe",
       "act": "celebrate",
       "polarity": "positive",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
       "obligations": [
         "clarify",
@@ -760,23 +791,19 @@
       ],
       "cooldown_days": 4,
       "max_mentions_per_7_days": 1,
-      "vars_used": [
-        "capital_name"
-      ],
+      "vars_used": [],
       "prompt": {
         "en": "That you are sworn here.",
         "pt": "Que você é jurado aqui."
       },
       "lines": {
         "en": [
-          "You are sworn to %2$s, same as me. That makes this a shorter conversation and a warmer one.",
-          "You took the oath here. It changed how the ledger keeper greets you and I doubt anybody told you that.",
-          "One of ours. I have stopped explaining you to people at the well, which is the highest honour this lane gives."
+          "You've declared for this capital. What made you choose it?",
+          "Your allegiance is here. I'd be interested in the reason, beyond the name on the declaration."
         ],
         "pt": [
-          "Você é jurado a %2$s, como eu. Isso deixa esta conversa mais curta e mais quente.",
-          "Você fez o juramento aqui. Mudou o jeito que o escrivão do portão te cumprimenta e duvido que alguém tenha te contado.",
-          "Um dos nossos. Parei de te explicar para as pessoas no poço, que é a maior honra que esta viela dá."
+          "Você declarou apoio a esta capital. O que fez você escolher?",
+          "Sua lealdade é daqui. Gostaria de saber o motivo, além do nome na declaração."
         ]
       },
       "replies": [
@@ -789,19 +816,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What does swearing here actually buy me?",
-            "pt": "O que jurar aqui de fato me garante?"
+            "en": "What does that declaration give me?",
+            "pt": "O que essa declaração me dá?"
           },
           "phrases": [
-            "what does swearing here actually buy me",
-            "what does the oath buy in practice"
-          ],
-          "requires_any": [
-            "swearing",
-            "buy"
+            "what does that declaration give me",
+            "o que essa declaracao me da"
           ],
           "disposition": {
-            "familiarity": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "explained",
@@ -810,17 +833,24 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "A hearing. Not a favourable one, but a hearing, and you would be amazed how many people never get that.",
-                "The gate at night, the grain in a bad winter, and somebody arguing your side when you are not in the room.",
-                "Very little on paper. A great deal on the day something goes wrong, which is the only day it is measured."
+                "It records which capital you've chosen. I won't promise free grain, open gates, or a title on the strength of it."
               ],
               "pt": [
-                "Uma audiência. Não favorável, mas uma audiência, e você se espantaria com quanta gente nunca consegue isso.",
-                "O portão de noite, o grão num inverno ruim, e alguém defendendo você quando você não está na sala.",
-                "Muito pouco no papel. Muita coisa no dia em que algo dá errado, que é o único dia em que se mede."
+                "Ela registra a capital que você escolheu. Não vou prometer comida de graça, portões abertos ou um título só por isso."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "does",
+            "that",
+            "declaration",
+            "give",
+            "essa",
+            "declaracao"
+          ]
         },
         {
           "name": "say_you_are_glad_of_it",
@@ -831,19 +861,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "I am glad to be sworn here.",
-            "pt": "Fico contente de ser jurado aqui."
+            "en": "I like the people here.",
+            "pt": "Gosto das pessoas daqui."
           },
           "phrases": [
-            "i am glad to be sworn here",
-            "being sworn here suits me"
-          ],
-          "requires_any": [
-            "sworn"
+            "i like the people here",
+            "gosto das pessoas daqui"
           ],
           "disposition": {
-            "warmth": 3,
-            "trust": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "warmed",
@@ -852,19 +878,29 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Then you have said the thing that gets repeated, and it will be at three tables by supper.",
-                "Good. Half the people who swear here do it for the gate and never mean the rest of it.",
-                "So am I. I said the same words in this square when I was seventeen and I have never regretted it twice."
+                "That's a reason I understand. A capital is easier to care about when it has faces, not just a crown."
               ],
               "pt": [
-                "Então você disse a coisa que se repete, e vai estar em três mesas até o jantar.",
-                "Ótimo. Metade de quem jura aqui faz pelo portão e nunca quis dizer o resto.",
-                "Eu também. Disse as mesmas palavras nesta praça aos dezessete e nunca me arrependi duas vezes."
+                "Esse motivo eu entendo. É mais fácil gostar de uma capital quando ela tem rostos, não só uma coroa."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "like",
+            "people",
+            "here",
+            "gosto",
+            "pessoas",
+            "daqui"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "sworn_to_nobody",
@@ -872,7 +908,7 @@
       "shape": "observe",
       "act": "report",
       "polarity": "mixed",
-      "predicate": "observation",
+      "predicate": "opinion",
       "temporal": "current",
       "obligations": [
         "clarify",
@@ -902,14 +938,12 @@
       },
       "lines": {
         "en": [
-          "You are sworn nowhere at all. That is rarer than a foreign oath and people here find it harder to file.",
-          "No seat holds your word. I do not say that as a fault. I say it because you should know we have noticed.",
-          "An unsworn traveller is welcome and is watched, and both of those happen without anybody deciding to."
+          "You haven't declared for a capital. Taking your time seems sensible to me.",
+          "No declared allegiance, then. You don't owe me a hurried decision."
         ],
         "pt": [
-          "Você não é jurado a lugar nenhum. Isso é mais raro que juramento estrangeiro e aqui é mais difícil de classificar.",
-          "Nenhum trono tem a sua palavra. Não digo como defeito. Digo porque você deve saber que a gente reparou.",
-          "Um viajante sem juramento é bem-vindo e é observado, e as duas coisas acontecem sem ninguém decidir."
+          "Você não declarou apoio a uma capital. Ir com calma me parece sensato.",
+          "Então, sem lealdade declarada. Você não me deve uma decisão apressada."
         ]
       },
       "replies": [
@@ -922,20 +956,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "Would you advise me to swear somewhere?",
-            "pt": "Você me aconselharia a jurar em algum lugar?"
+            "en": "Would you advise choosing a capital?",
+            "pt": "Você aconselharia escolher uma capital?"
           },
           "phrases": [
-            "would you advise me to swear somewhere",
-            "should i take an oath somewhere"
-          ],
-          "requires_any": [
-            "advise",
-            "oath"
+            "would you advise choosing a capital",
+            "voce aconselharia escolher uma capital"
           ],
           "disposition": {
-            "familiarity": 2,
-            "respect": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "answered",
@@ -945,17 +974,24 @@
             "shape": "problem_solve",
             "lines": {
               "en": [
-                "Not until you know where you would want to be buried. That is the honest test and it works.",
-                "Yes, eventually, and not this year. An oath taken while you are still moving is an oath you will break.",
-                "I would advise nothing. I have watched two people swear on my advice and only one of them thanks me."
+                "I'd advise getting to know the place first. A declaration should follow a reason, not replace one."
               ],
               "pt": [
-                "Não até você saber onde ia querer ser enterrado. É esse o teste honesto e ele funciona.",
-                "Sim, com o tempo, e não este ano. Juramento feito em movimento é juramento que se quebra.",
-                "Eu não aconselharia nada. Vi duas pessoas jurarem por conselho meu e só uma me agradece."
+                "Eu aconselharia conhecer o lugar primeiro. Uma declaração deveria ter um motivo, não substituir um."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "advise",
+            "choosing",
+            "capital",
+            "voce",
+            "aconselharia",
+            "escolher"
+          ]
         },
         {
           "name": "say_you_prefer_it_open",
@@ -966,19 +1002,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "I would rather keep my word unpromised.",
-            "pt": "Prefiro manter minha palavra sem promessa."
+            "en": "I would rather wait.",
+            "pt": "Prefiro esperar."
           },
           "phrases": [
-            "i would rather keep my word unpromised",
-            "my word stays unpromised for now"
-          ],
-          "requires_any": [
-            "unpromised"
+            "i would rather wait",
+            "prefiro esperar"
           ],
           "disposition": {
-            "respect": 2,
-            "trust": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "accepted",
@@ -987,19 +1019,28 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "That is a defensible way to live and a lonely one, and you clearly already know both halves.",
-                "Then keep it clean. The unsworn who take favours anyway are the ones who make it hard for the rest.",
-                "Fair. My brother lived that way for thirty years and I have stopped arguing with either of you."
+                "Fair enough. We can have a perfectly good conversation while you think about it."
               ],
               "pt": [
-                "É um jeito defensável de viver e um jeito solitário, e você claramente já sabe as duas metades.",
-                "Então mantenha limpo. Os sem juramento que aceitam favores são os que complicam para os outros.",
-                "Justo. Meu irmão viveu assim por trinta anos e eu parei de discutir com vocês dois."
+                "Tudo bem. Podemos conversar normalmente enquanto você pensa nisso."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "rather",
+            "wait",
+            "prefiro",
+            "esperar"
+          ]
         }
-      ]
+      ],
+      "vars_used": [],
+      "epistemic": "inferred",
+      "privacy": "ordinary",
+      "min_variants": 1
     },
     {
       "name": "named_an_enemy",
@@ -1007,9 +1048,9 @@
       "shape": "confide",
       "act": "report",
       "polarity": "negative",
-      "predicate": "social_report",
+      "predicate": "opinion",
       "temporal": "current",
-      "privacy": "discreet",
+      "privacy": "ordinary",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -1032,23 +1073,19 @@
       ],
       "cooldown_days": 5,
       "max_mentions_per_7_days": 1,
-      "vars_used": [
-        "sovereign_title"
-      ],
+      "vars_used": [],
       "prompt": {
-        "en": "What the Crown has said of you.",
-        "pt": "O que a Coroa disse de você."
+        "en": "Your standing with the Crown.",
+        "pt": "Sua situação com a Coroa."
       },
       "lines": {
         "en": [
-          "The %2$s has named you an enemy. I am telling you where I stand before you hear it read out by somebody colder.",
-          "You are down as an enemy of the Crown. That is a piece of paper. I am deciding what it is worth on my own time.",
-          "There is a warrant word next to your name up there. I would not repeat it, and I would not have you walk in blind either."
+          "I'm marked as an enemy of the Crown. That's my standing, not a judgment I get to make about you.",
+          "The Crown counts me an enemy. I'd rather we didn't turn that into a story about things neither of us knows."
         ],
         "pt": [
-          "O %2$s te declarou inimigo. Estou te dizendo onde eu estou antes que você ouça isso lido por alguém mais frio.",
-          "Você está anotado como inimigo da Coroa. É um pedaço de papel. Estou decidindo quanto vale no meu próprio tempo.",
-          "Tem uma palavra de mandado ao lado do seu nome lá em cima. Eu não repetiria, e também não te deixaria entrar às cegas."
+          "Estou marcado como inimigo da Coroa. É a minha situação, não um julgamento que me cabe fazer sobre você.",
+          "A Coroa me considera inimigo. Prefiro que não inventemos uma história sobre coisas que não sabemos."
         ]
       },
       "replies": [
@@ -1061,19 +1098,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What will you do about what is written?",
-            "pt": "O que você vai fazer sobre o que está escrito?"
+            "en": "How do you want me to treat you?",
+            "pt": "Como você quer que eu trate você?"
           },
           "phrases": [
-            "what will you do about what is written",
-            "what happens now that it is written"
-          ],
-          "requires_any": [
-            "written"
+            "how do you want me to treat you",
+            "como voce quer que eu trate voce"
           ],
           "disposition": {
-            "trust": 2,
-            "respect": 1
+            "familiarity": 1
           },
           "reaction": {
             "id": "answered",
@@ -1083,17 +1116,24 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Nothing today. I am not paid to be the Crown's eyes and I have never enjoyed people who volunteer for it.",
-                "Keep my door shut and my mouth shut, in that order. Do not ask me for more than that yet.",
-                "Watch. If the word turns out to be true I will change my mind loudly, and you should expect that."
+                "As someone you can ask a question. If I don't want to answer, I'll say so."
               ],
               "pt": [
-                "Nada hoje. Não me pagam para ser os olhos da Coroa e nunca gostei de quem se oferece para isso.",
-                "Manter minha porta fechada e minha boca fechada, nessa ordem. Não me peça mais que isso por ora.",
-                "Observar. Se a palavra se mostrar verdadeira eu mudo de ideia em voz alta, e você deve contar com isso."
+                "Como alguém a quem pode fazer uma pergunta. Se eu não quiser responder, vou dizer."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "want",
+            "treat",
+            "como",
+            "voce",
+            "quer",
+            "trate"
+          ]
         },
         {
           "name": "thank_them_for_the_warning",
@@ -1104,19 +1144,15 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "Thank you for the warning.",
-            "pt": "Obrigado pelo aviso."
+            "en": "I will make up my own mind.",
+            "pt": "Vou formar minha própria opinião."
           },
           "phrases": [
-            "thank you for the warning",
-            "the warning is worth having"
-          ],
-          "requires_any": [
-            "warning"
+            "i will make up my own mind",
+            "vou formar minha propria opiniao"
           ],
           "disposition": {
-            "trust": 3,
-            "respect": 2
+            "familiarity": 1
           },
           "reaction": {
             "id": "acknowledged",
@@ -1126,19 +1162,1257 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It cost me nothing and it may cost me something later, and I have decided in advance not to mind.",
-                "Do not thank me where anybody can hear it. That is the only condition I am setting.",
-                "Somebody warned my father once, and he lived, so I am paying an old debt to a stranger."
+                "That's all I can fairly ask. You don't have to borrow the Crown's opinion, or mine."
               ],
               "pt": [
-                "Não me custou nada e pode me custar algo depois, e decidi de antemão não me importar.",
-                "Não me agradeça onde alguém possa ouvir. É a única condição que eu ponho.",
-                "Alguém avisou meu pai uma vez, e ele viveu, então estou pagando uma dívida velha a um estranho."
+                "É o que posso pedir. Você não precisa adotar a opinião da Coroa, nem a minha."
               ]
-            }
-          }
+            },
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "will",
+            "make",
+            "formar",
+            "minha",
+            "propria",
+            "opiniao"
+          ]
         }
-      ]
+      ],
+      "epistemic": "inferred",
+      "min_variants": 1
+    },
+    {
+      "name": "a_capital_still_needs_fields",
+      "subject": "realm.a_capital_still_needs_fields",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.profession_id",
+          "is": "minecraft:farmer",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "A farmer's capital.",
+        "pt": "A capital de quem planta."
+      },
+      "lines": {
+        "en": [
+          "A capital still needs feeding. I'd want any grand plan to leave room for the work that gets food onto a table."
+        ],
+        "pt": [
+          "Uma capital ainda precisa comer. Eu gostaria que qualquer grande plano reservasse espaço ao trabalho que põe comida na mesa."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_a_capital_still_needs_fields",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What would you put first in a plan?",
+            "pt": "O que você colocaria primeiro num plano?"
+          },
+          "phrases": [
+            "what would you put first in a plan",
+            "o que voce colocaria primeiro num plano"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_a_capital_still_needs_fields_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Access to the work, enough room to do it, and someone willing to ask the people doing it. I'd start with those questions."
+              ],
+              "pt": [
+                "Acesso ao trabalho, espaço para fazê-lo e disposição para perguntar a quem trabalha. Eu começaria por essas questões."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_a_capital_still_needs_fields",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Should a celebration wait for the work?",
+                  "pt": "Uma celebração deveria esperar o trabalho?"
+                },
+                "phrases": [
+                  "should a celebration wait for the work",
+                  "uma celebracao deveria esperar o trabalho"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_a_capital_still_needs_fields_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "I'd ask what work needs doing before picking a day. A calendar can look clear from one end of a village and full from the other."
+                    ],
+                    "pt": [
+                      "Eu perguntaria que trabalho precisa ser feito antes de escolher o dia. O calendário pode parecer vazio num lado da vila e cheio no outro."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "celebration",
+                  "wait",
+                  "work",
+                  "celebracao",
+                  "deveria",
+                  "esperar",
+                  "trabalho"
+                ]
+              },
+              {
+                "name": "weigh_a_capital_still_needs_fields",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I would ask the farmers before setting the date.",
+                  "pt": "Eu perguntaria a quem planta antes de marcar a data."
+                },
+                "phrases": [
+                  "i would ask the farmers before setting the date",
+                  "eu perguntaria a quem planta antes de marcar a data"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_a_capital_still_needs_fields_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Then you'd get a useful answer, even if it isn't the convenient one."
+                    ],
+                    "pt": [
+                      "Assim você teria uma resposta útil, mesmo que não fosse a mais conveniente."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "farmers",
+                  "before",
+                  "setting",
+                  "date",
+                  "perguntaria",
+                  "quem",
+                  "planta",
+                  "antes",
+                  "marcar",
+                  "data"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "How would you fit village work into the plans?",
+              "pt": "Como você incluiria o trabalho da vila nos planos?"
+            }
+          },
+          "requires_any": [
+            "first",
+            "plan",
+            "voce",
+            "colocaria",
+            "primeiro",
+            "plano"
+          ]
+        },
+        {
+          "name": "consider_a_capital_still_needs_fields",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "A fine capital can make people proud.",
+            "pt": "Uma bela capital pode dar orgulho às pessoas."
+          },
+          "phrases": [
+            "a fine capital can make people proud",
+            "uma bela capital pode dar orgulho as pessoas"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_a_capital_still_needs_fields_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "It can. I'd like the pride to include the fields as well as the entrance."
+              ],
+              "pt": [
+                "Pode. Eu gostaria que esse orgulho incluísse os campos, além da entrada."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "fine",
+            "capital",
+            "make",
+            "people",
+            "proud",
+            "bela",
+            "pode",
+            "orgulho",
+            "pessoas"
+          ]
+        }
+      ],
+      "min_variants": 1
+    },
+    {
+      "name": "stone_before_statues",
+      "subject": "realm.stone_before_statues",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.profession_id",
+          "is": "minecraft:mason",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Building a useful capital.",
+        "pt": "Construir uma capital útil."
+      },
+      "lines": {
+        "en": [
+          "As a mason, I'd rather be asked what a building needs to do before being told how impressive it must look."
+        ],
+        "pt": [
+          "Como pedreiro, prefiro ouvir para que um prédio precisa servir antes de saber o quanto ele deve impressionar."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_stone_before_statues",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Can a useful building still be beautiful?",
+            "pt": "Um prédio útil ainda pode ser bonito?"
+          },
+          "phrases": [
+            "can a useful building still be beautiful",
+            "um predio util ainda pode ser bonito"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_stone_before_statues_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Of course. A good doorway can be handsome and easy to use. Beauty doesn't require making every errand difficult."
+              ],
+              "pt": [
+                "Claro. Uma boa entrada pode ser bonita e fácil de usar. Beleza não exige tornar cada tarefa difícil."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_stone_before_statues",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Would you ask ordinary residents about the design?",
+                  "pt": "Você perguntaria aos moradores sobre o projeto?"
+                },
+                "phrases": [
+                  "would you ask ordinary residents about the design",
+                  "voce perguntaria aos moradores sobre o projeto"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_stone_before_statues_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Especially the ones who would use it every day. They may notice something a fine drawing leaves out."
+                    ],
+                    "pt": [
+                      "Principalmente a quem usaria o lugar todo dia. Essas pessoas podem notar algo que um desenho bonito deixou de fora."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "ordinary",
+                  "residents",
+                  "design",
+                  "voce",
+                  "perguntaria",
+                  "moradores",
+                  "sobre",
+                  "projeto"
+                ]
+              },
+              {
+                "name": "weigh_stone_before_statues",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I still want a place that looks like a capital.",
+                  "pt": "Ainda quero um lugar com aparência de capital."
+                },
+                "phrases": [
+                  "i still want a place that looks like a capital",
+                  "ainda quero um lugar com aparencia de capital"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_stone_before_statues_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Fair. Give it a good shape and a reason to be there. Those ambitions can fit together."
+                    ],
+                    "pt": [
+                      "Justo. Dê a ele uma boa forma e uma razão para existir. Essas vontades podem combinar."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "want",
+                  "place",
+                  "that",
+                  "looks",
+                  "like",
+                  "capital",
+                  "ainda",
+                  "quero",
+                  "lugar",
+                  "aparencia"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "Who should help shape the building?",
+              "pt": "Quem deveria ajudar a planejar o prédio?"
+            }
+          },
+          "requires_any": [
+            "useful",
+            "building",
+            "beautiful",
+            "predio",
+            "util",
+            "ainda",
+            "pode",
+            "bonito"
+          ]
+        },
+        {
+          "name": "consider_stone_before_statues",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "I would start with something the village needs.",
+            "pt": "Eu começaria por algo de que a vila precisa."
+          },
+          "phrases": [
+            "i would start with something the village needs",
+            "eu comecaria por algo de que a vila precisa"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_stone_before_statues_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Then ask people what that is before choosing the stone. Plans are cheaper to change than walls."
+              ],
+              "pt": [
+                "Então pergunte às pessoas o que seria isso antes de escolher a pedra. É mais barato mudar planos que paredes."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "start",
+            "with",
+            "village",
+            "needs",
+            "comecaria",
+            "algo",
+            "vila",
+            "precisa"
+          ]
+        }
+      ],
+      "min_variants": 1
+    },
+    {
+      "name": "loyalty_with_questions",
+      "subject": "realm.loyalty_with_questions",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Loyalty and disagreement.",
+        "pt": "Lealdade e discordância."
+      },
+      "lines": {
+        "en": [
+          "I think loyalty can include an awkward question. Caring about a capital ought to give you a reason to speak when something seems wrong."
+        ],
+        "pt": [
+          "Acho que lealdade pode incluir uma pergunta incômoda. Gostar de uma capital deveria dar motivo para falar quando algo parece errado."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_loyalty_with_questions",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Where would you draw the line?",
+            "pt": "Onde você colocaria o limite?"
+          },
+          "phrases": [
+            "where would you draw the line",
+            "onde voce colocaria o limite"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_loyalty_with_questions_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "At inventing a charge, or treating a neighbour as an enemy because they disagree. Criticism should have something real to point to."
+              ],
+              "pt": [
+                "Em inventar uma acusação ou tratar um vizinho como inimigo por discordar. A crítica deveria apontar para algo real."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_loyalty_with_questions",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Would you say that in front of the sovereign?",
+                  "pt": "Você diria isso diante de quem governa?"
+                },
+                "phrases": [
+                  "would you say that in front of the sovereign",
+                  "voce diria isso diante de quem governa"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_loyalty_with_questions_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "I'd try to choose a useful moment and a clear question. I can't promise courage for every situation before I'm in it."
+                    ],
+                    "pt": [
+                      "Tentaria escolher um momento útil e uma pergunta clara. Não posso prometer coragem em toda situação antes de vivê-la."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "that",
+                  "front",
+                  "sovereign",
+                  "voce",
+                  "diria",
+                  "isso",
+                  "diante",
+                  "quem",
+                  "governa"
+                ]
+              },
+              {
+                "name": "weigh_loyalty_with_questions",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I prefer practical criticism to insults.",
+                  "pt": "Prefiro críticas práticas a insultos."
+                },
+                "phrases": [
+                  "i prefer practical criticism to insults",
+                  "prefiro criticas praticas a insultos"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_loyalty_with_questions_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "So do I. 'This needs fixing' gives someone work to do. An insult usually just gives them an insult back."
+                    ],
+                    "pt": [
+                      "Eu também. “Isto precisa de conserto” dá trabalho para alguém fazer. Um insulto costuma render só outro insulto."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "prefer",
+                  "practical",
+                  "criticism",
+                  "insults",
+                  "prefiro",
+                  "criticas",
+                  "praticas",
+                  "insultos"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "How would you raise the concern?",
+              "pt": "Como você levantaria essa preocupação?"
+            }
+          },
+          "requires_any": [
+            "draw",
+            "line",
+            "onde",
+            "voce",
+            "colocaria",
+            "limite"
+          ]
+        },
+        {
+          "name": "consider_loyalty_with_questions",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Loyalty also means sticking around when things are difficult.",
+            "pt": "Lealdade também é ficar quando as coisas ficam difíceis."
+          },
+          "phrases": [
+            "loyalty also means sticking around when things are difficult",
+            "lealdade tambem e ficar quando as coisas ficam dificeis"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_loyalty_with_questions_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Yes. Staying and asking for better can belong in the same sentence."
+              ],
+              "pt": [
+                "Sim. Ficar e cobrar melhorias podem caber na mesma frase."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "loyalty",
+            "also",
+            "means",
+            "sticking",
+            "around",
+            "when",
+            "things",
+            "difficult",
+            "lealdade",
+            "tambem",
+            "ficar",
+            "quando",
+            "coisas",
+            "ficam",
+            "dificeis"
+          ]
+        }
+      ],
+      "identity_values": [
+        "duty"
+      ],
+      "min_variants": 1
+    },
+    {
+      "name": "an_ally_can_disagree",
+      "subject": "realm.an_ally_can_disagree",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.allied",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "Disagreeing with an ally.",
+        "pt": "Discordar de uma capital aliada."
+      },
+      "lines": {
+        "en": [
+          "We have an alliance. I'd like it to be strong enough for an honest disagreement, not just pleasant words."
+        ],
+        "pt": [
+          "Temos uma aliança. Gostaria que fosse forte o bastante para uma discordância sincera, não só palavras agradáveis."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_an_ally_can_disagree",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What if the other capital asks too much?",
+            "pt": "E se a outra capital pedir demais?"
+          },
+          "phrases": [
+            "what if the other capital asks too much",
+            "e se a outra capital pedir demais"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_an_ally_can_disagree_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Then I'd want a clear answer about what we can offer. An impossible promise doesn't become kinder because it's made to an ally."
+              ],
+              "pt": [
+                "Eu gostaria de uma resposta clara sobre o que podemos oferecer. Uma promessa impossível não fica mais gentil por ser feita a uma capital aliada."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_an_ally_can_disagree",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Would refusing one request end the alliance?",
+                  "pt": "Recusar um pedido encerraria a aliança?"
+                },
+                "phrases": [
+                  "would refusing one request end the alliance",
+                  "recusar um pedido encerraria a alianca"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_an_ally_can_disagree_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "I can't predict another capital's decision. I'd hope an honest limit would be better than a broken promise."
+                    ],
+                    "pt": [
+                      "Não posso prever a decisão de outra capital. Esperaria que um limite sincero fosse melhor que uma promessa quebrada."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "refusing",
+                  "request",
+                  "alliance",
+                  "recusar",
+                  "pedido",
+                  "encerraria",
+                  "alianca"
+                ]
+              },
+              {
+                "name": "weigh_an_ally_can_disagree",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "I would explain the limit before offering help.",
+                  "pt": "Eu explicaria o limite antes de oferecer ajuda."
+                },
+                "phrases": [
+                  "i would explain the limit before offering help",
+                  "eu explicaria o limite antes de oferecer ajuda"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_an_ally_can_disagree_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "That gives the other side something real to work with. It's less grand, and more useful."
+                    ],
+                    "pt": [
+                      "Isso dá ao outro lado algo concreto com que trabalhar. É menos grandioso e mais útil."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "explain",
+                  "limit",
+                  "before",
+                  "offering",
+                  "help",
+                  "explicaria",
+                  "limite",
+                  "antes",
+                  "oferecer",
+                  "ajuda"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "How would you explain a limit to an ally?",
+              "pt": "Como você explicaria um limite a uma capital aliada?"
+            }
+          },
+          "requires_any": [
+            "other",
+            "capital",
+            "asks",
+            "much",
+            "outra",
+            "pedir",
+            "demais"
+          ]
+        },
+        {
+          "name": "consider_an_ally_can_disagree",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Sometimes you help first and argue later.",
+            "pt": "Às vezes é melhor ajudar e discutir depois."
+          },
+          "phrases": [
+            "sometimes you help first and argue later",
+            "as vezes e melhor ajudar e discutir depois"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_an_ally_can_disagree_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Sometimes. I'd still want us to know what we're agreeing to, especially if others will do the work."
+              ],
+              "pt": [
+                "Às vezes. Ainda gostaria que soubéssemos com o que concordamos, principalmente se outras pessoas farão o trabalho."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "sometimes",
+            "help",
+            "first",
+            "argue",
+            "vezes",
+            "melhor",
+            "ajudar",
+            "discutir",
+            "depois"
+          ]
+        }
+      ],
+      "min_variants": 1
+    },
+    {
+      "name": "after_word_of_peace",
+      "subject": "realm.after_word_of_peace",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "epistemic": "inferred",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "capital.present",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "capital.at_war",
+          "is": false,
+          "unknown": "fail"
+        },
+        {
+          "field": "village.recent_event",
+          "is": "peace",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 26,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 2,
+      "prompt": {
+        "en": "After news of peace.",
+        "pt": "Depois da notícia de paz."
+      },
+      "lines": {
+        "en": [
+          "There's word of peace. I welcome that, but I wouldn't pretend one announcement settles how every neighbour feels."
+        ],
+        "pt": [
+          "Há notícia de paz. Fico contente, mas não fingiria que um anúncio resolve o que cada vizinho sente."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_after_word_of_peace",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What would help after the announcement?",
+            "pt": "O que ajudaria depois do anúncio?"
+          },
+          "phrases": [
+            "what would help after the announcement",
+            "o que ajudaria depois do anuncio"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "ask_after_word_of_peace_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "Clear information and ordinary, dependable contact. I'd rather have small promises kept than a speech promising we all trust each other now."
+              ],
+              "pt": [
+                "Informações claras e contato comum, confiável. Prefiro pequenas promessas cumpridas a um discurso dizendo que agora todos confiam em todos."
+              ]
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "examine_after_word_of_peace",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Does caution mean you doubt the peace?",
+                  "pt": "Ter cautela significa duvidar da paz?"
+                },
+                "phrases": [
+                  "does caution mean you doubt the peace",
+                  "ter cautela significa duvidar da paz"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "examine_after_word_of_peace_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "It means I want it to last. Hoping for something and paying attention to it aren't opposites."
+                    ],
+                    "pt": [
+                      "Significa que quero que dure. Ter esperança e prestar atenção não são coisas opostas."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "does",
+                  "caution",
+                  "mean",
+                  "doubt",
+                  "peace",
+                  "cautela",
+                  "significa",
+                  "duvidar"
+                ]
+              },
+              {
+                "name": "weigh_after_word_of_peace",
+                "stance": "candor",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "label": {
+                  "en": "Small promises sound like a useful beginning.",
+                  "pt": "Pequenas promessas parecem um começo útil."
+                },
+                "phrases": [
+                  "small promises sound like a useful beginning",
+                  "pequenas promessas parecem um comeco util"
+                ],
+                "disposition": {
+                  "familiarity": 1
+                },
+                "reaction": {
+                  "id": "weigh_after_word_of_peace_answer",
+                  "act": "explain",
+                  "polarity": "neutral",
+                  "shape": "observe",
+                  "predicate": "opinion",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "They give people something they can actually check. That's a beginning I can take seriously."
+                    ],
+                    "pt": [
+                      "Elas dão às pessoas algo que dá para conferir. É um começo que levo a sério."
+                    ]
+                  },
+                  "min_variants": 1
+                },
+                "requires_any": [
+                  "small",
+                  "promises",
+                  "sound",
+                  "like",
+                  "useful",
+                  "beginning",
+                  "pequenas",
+                  "promessas",
+                  "parecem",
+                  "comeco",
+                  "util"
+                ]
+              }
+            ],
+            "min_variants": 1,
+            "prompt": {
+              "en": "What would make the peace feel dependable?",
+              "pt": "O que faria a paz parecer confiável?"
+            }
+          },
+          "requires_any": [
+            "help",
+            "after",
+            "announcement",
+            "ajudaria",
+            "depois",
+            "anuncio"
+          ]
+        },
+        {
+          "name": "consider_after_word_of_peace",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "I would rather celebrate the good news first.",
+            "pt": "Prefiro celebrar a boa notícia primeiro."
+          },
+          "phrases": [
+            "i would rather celebrate the good news first",
+            "prefiro celebrar a boa noticia primeiro"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "consider_after_word_of_peace_answer",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "predicate": "opinion",
+            "epistemic": "inferred",
+            "lines": {
+              "en": [
+                "I can understand that. Relief deserves some room, too."
+              ],
+              "pt": [
+                "Entendo. O alívio também merece um espaço."
+              ]
+            },
+            "min_variants": 1
+          },
+          "requires_any": [
+            "rather",
+            "celebrate",
+            "good",
+            "news",
+            "first",
+            "prefiro",
+            "celebrar",
+            "noticia",
+            "primeiro"
+          ]
+        }
+      ],
+      "min_variants": 1
     }
   ]
 }

@@ -1,0 +1,42 @@
+{
+  "_comment": [
+    "Sample 04. The arc, the milestone and the exclusive group are declared here and",
+    "nowhere else, so a typo in a dialogue file is a condition that never matches",
+    "rather than a second, silent ledger."
+  ],
+  "topics": {
+    "ledger": {
+      "entry": {
+        "question": "conversations.cat.village",
+        "answer": "ledger"
+      },
+      "depth": "standard",
+      "return_question": "conversations.cat.village",
+      "ages": [
+        "teen",
+        "adult"
+      ],
+      "required_stance_families": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "respectful_disagreement",
+        "exit"
+      ],
+      "chat_required": true,
+      "arc": {
+        "id": "ledger",
+        "max_stage": 2
+      },
+      "milestones": [
+        "ledger.acknowledged"
+      ],
+      "exclusive_groups": {
+        "ledger.settlement": [
+          "forgive",
+          "collect"
+        ]
+      }
+    }
+  }
+}

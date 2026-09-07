@@ -1,0 +1,30 @@
+{
+  "_comment": "Sample 05. One episode kind: a hive that has gone wrong and may or may not come back. slot_options are pools; the pick is seeded on world + villager + kind and NOT on the day, so the hive she is worrying about is the same hive tomorrow.",
+  "episodes": {
+    "bees.wet_hive": {
+      "subject": "work.beekeeper.hive",
+      "professions": ["minecraft:farmer"],
+      "initial_state": "blocked",
+      "states": ["blocked", "active", "succeeded", "abandoned", "remembered"],
+      "transitions": [
+        "blocked->active",
+        "active->succeeded",
+        "active->abandoned",
+        "succeeded->remembered",
+        "abandoned->remembered"
+      ],
+      "required_slots": ["hive", "trouble"],
+      "slot_options": {
+        "hive": ["bees_the_far_hive", "bees_the_hive_by_the_wall", "bees_the_split_skep"],
+        "trouble": ["bees_damp_in_the_boards", "bees_wax_moth", "bees_a_queen_that_stopped_laying"]
+      },
+      "knowledge": "participant",
+      "privacy": "ordinary",
+      "share": "may_describe_anonymously",
+      "distortion": "none",
+      "salience": 55,
+      "due_after_days": 4,
+      "expires_after_days": 20
+    }
+  }
+}

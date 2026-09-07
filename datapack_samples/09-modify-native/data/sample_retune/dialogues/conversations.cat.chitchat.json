@@ -1,0 +1,60 @@
+{
+  "answers": [
+    {
+      "name": "moon",
+      "priority": -1,
+      "constraints": "!baby,!toddler",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "time_min": 13000
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "retune.moon.respond",
+            "conversations_say": {
+              "phrase": "retune.moon.night"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "retune.moon.respond",
+            "conversations_say": {
+              "phrase": "retune.moon.day"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "topics"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "retune.moon.plain"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

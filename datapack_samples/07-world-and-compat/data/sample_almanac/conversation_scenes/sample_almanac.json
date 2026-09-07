@@ -1,0 +1,74 @@
+{
+  "_comment": "Two unprompted routes. Both name a question and an opening beat that already exist in this pack; a scene is never dialogue of its own.",
+  "scenes": {
+    "sample_almanac.court.title_changed": {
+      "purpose": "court_remark",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.title_changed",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 24,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "almanac.court.respond",
+        "opening_beat": "almanac.court.open"
+      },
+      "vars_used": [
+        "capital_name",
+        "sovereign_title"
+      ]
+    },
+    "sample_almanac.standing.tier_changed": {
+      "purpose": "standing_remark",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "child",
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "place.village_name",
+            "has": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 22,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "almanac.standing.respond",
+        "opening_beat": "almanac.standing.high.open"
+      },
+      "vars_used": [
+        "village_name"
+      ]
+    }
+  }
+}

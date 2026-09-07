@@ -1,0 +1,278 @@
+{
+  "_comment": "Named work_<owner>.json, after the mod that supplies the profession, exactly as the mod names its own optional-trade files. The loader folds every file in this directory together, so the filename changes nothing at runtime and everything when examplemod renames or drops the trade.",
+  "beats": {
+    "work.chandler.identity": {
+      "topic": "work",
+      "say": "chandler.work.identity",
+      "response_question": "chandler.respond",
+      "npc_act": "explain",
+      "subject": "work.chandler.identity",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "work:chandler"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "challenge",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "empathy",
+        "practical_help"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "work.chandler.hard": {
+      "topic": "work",
+      "say": "chandler.work.hard",
+      "response_question": "chandler.followup",
+      "npc_act": "disclose",
+      "subject": "work.chandler.identity",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "work:chandler"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "work.chandler.value": {
+      "topic": "work",
+      "say": "chandler.work.value",
+      "response_question": "chandler.followup",
+      "npc_act": "accept",
+      "subject": "work.chandler.identity",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "work:chandler"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "work.chandler.challenge.landed": {
+      "topic": "work",
+      "say": "chandler.work.challenge.landed",
+      "response_question": "chandler.followup",
+      "npc_act": "qualify",
+      "subject": "work.chandler.identity",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "work:chandler"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "work.chandler.challenge.stung": {
+      "topic": "work",
+      "say": "chandler.work.challenge.stung",
+      "response_question": "chandler.followup",
+      "npc_act": "resist",
+      "subject": "work.chandler.identity",
+      "polarity": "negative",
+      "openness": "guarded",
+      "facts": [
+        "work:chandler"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "boundary_push",
+        "dismissal",
+        "challenge"
+      ],
+      "outcome": "resisted",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "work.chandler.more": {
+      "topic": "work",
+      "say": "chandler.work.more",
+      "response_question": "conversations.cat.profession",
+      "npc_act": "disclose",
+      "subject": "work.chandler.identity",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "engaged",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "work.chandler.thanks": {
+      "topic": "work",
+      "say": "chandler.work.thanks",
+      "response_question": "conversations.cat.profession",
+      "npc_act": "accept",
+      "subject": "work.chandler.identity",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    }
+  },
+  "replies": {
+    "chandler.respond/ask_hard": {
+      "stance": "curiosity",
+      "responds_to": [
+        "work.chandler.identity"
+      ],
+      "requires_facts": [
+        "work:chandler"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "chandler.respond/value": {
+      "stance": "encouragement",
+      "responds_to": [
+        "work.chandler.identity"
+      ],
+      "requires_facts": [
+        "work:chandler"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "chandler.respond/challenge": {
+      "stance": "challenge",
+      "responds_to": [
+        "work.chandler.identity"
+      ],
+      "requires_facts": [
+        "work:chandler"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "qualified",
+        "resisted"
+      ]
+    },
+    "chandler.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "work.chandler.identity"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "chandler.followup/ask_more": {
+      "stance": "curiosity",
+      "responds_to": [
+        "work.chandler.hard",
+        "work.chandler.value",
+        "work.chandler.challenge.landed",
+        "work.chandler.challenge.stung"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "chandler.followup/thanks": {
+      "stance": "encouragement",
+      "responds_to": [
+        "work.chandler.hard",
+        "work.chandler.value",
+        "work.chandler.challenge.landed",
+        "work.chandler.challenge.stung"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "chandler.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "work.chandler.hard",
+        "work.chandler.value",
+        "work.chandler.challenge.landed",
+        "work.chandler.challenge.stung"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    }
+  }
+}

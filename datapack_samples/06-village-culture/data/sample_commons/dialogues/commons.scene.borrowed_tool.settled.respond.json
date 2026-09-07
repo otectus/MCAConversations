@@ -1,0 +1,99 @@
+{
+  "answers": [
+    {
+      "name": "say_it_is_squared_away",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "commons.borrowed_tool.settled.closed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.commons.borrowed_tool",
+              "deltas": {
+                "warmth": 1,
+                "familiarity": 1
+              }
+            },
+            "conversations_role": {
+              "role": "supply_dependency",
+              "target": "neighbour",
+              "withdraw": true
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "commons.borrowed_tool",
+              "state": "remembered"
+            },
+            "conversations_thread": {
+              "op": "resolve",
+              "template": "commons.borrowed_tool"
+            },
+            "next": "commons.followup",
+            "conversations_say": {
+              "phrase": "commons.scene.borrowed_tool.settled.closed",
+              "slots": [
+                "tool"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "commons.plain.respond"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "commons.leaving"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.village"
+          }
+        }
+      ]
+    }
+  ]
+}

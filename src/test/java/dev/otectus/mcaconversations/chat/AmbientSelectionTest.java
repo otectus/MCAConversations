@@ -51,4 +51,25 @@ class AmbientSelectionTest {
         // Different villagers may (but need not) differ; the value must be stable for each.
         assertEquals(AmbientSelection.staggerOffsetTicks(B, 3), AmbientSelection.staggerOffsetTicks(B, 3));
     }
+
+    @Test
+    void aCrowdStopsWhenOneVillagerStartsAnExchangeOrOffersChoices() {
+        var player = UUID.randomUUID();
+        var session = dev.otectus.mcaconversations.conversation.ConversationSessions.beginTopic(
+                player, A, "day", dev.otectus.mcaconversations.conversation.DepthClass.QUICK, 100);
+        try {
+            org.junit.jupiter.api.Assertions.assertFalse(ChatModeDispatcher.canAnotherAmbientResponderSpeak(session));
+            session.endTopic();
+            assertTrue(ChatModeDispatcher.canAnotherAmbientResponderSpeak(session));
+            var offer = session.setOffer("conversations.q", List.of("yes", "no"),
+                    dev.otectus.mcaconversations.conversation.ConversationSession.Frontend.CHAT, A, 101);
+            org.junit.jupiter.api.Assertions.assertFalse(ChatModeDispatcher.canAnotherAmbientResponderSpeak(session));
+            assertEquals(A, session.villagerId());
+            assertEquals(offer.revision(), session.currentOffer().orElseThrow().revision());
+            session.consumeOffer(offer.revision(), 0);
+            assertTrue(ChatModeDispatcher.canAnotherAmbientResponderSpeak(session));
+        } finally {
+            dev.otectus.mcaconversations.conversation.ConversationSessions.clear(player);
+        }
+    }
 }

@@ -189,6 +189,8 @@ public final class ReputationBridge {
      * Conversations runs exactly as it does without the mod (§35.1).
      */
     public static void tryRegister() {
+        available = false;
+        queries = null;
         if (!ModList.get().isLoaded("mcareputation")) {
             McaConversations.LOGGER.info("[MCA: Conversations] MCA: Reputation is not installed; "
                     + "reputation-aware dialogue, the standing check term, and external gossip are off.");
@@ -210,6 +212,7 @@ public final class ReputationBridge {
             }
         } catch (Throwable t) {
             available = false;
+            queries = null;
             McaConversations.LOGGER.error("[MCA: Conversations] MCA: Reputation is installed but the "
                     + "integration could not start; dialogue continues without it.", t);
         }
@@ -412,9 +415,14 @@ public final class ReputationBridge {
         }
     }
 
-    /** Test seam: forgets every crossing waiting to be mentioned. */
-    public static void clearPendingRemarksForTest() {
+    /** Clears world-specific, transient remarks when the server stops. */
+    public static void clearPendingRemarks() {
         PENDING_REMARKS.clear();
+    }
+
+    /** Compatibility alias for existing tests. */
+    public static void clearPendingRemarksForTest() {
+        clearPendingRemarks();
     }
 
     /** Test seam: install a stub façade without the real mod present. */

@@ -1,0 +1,354 @@
+{
+  "_comment": "Both starters and both of their repeat lines open a respond page each; every reaction line funnels into one shared close page, so the close page's three buttons must make sense after any of the five inbound beats.",
+  "beats": {
+    "pastimes.music.open": {
+      "topic": "pastimes.music",
+      "say": "sample_pastimes.music.open",
+      "response_question": "pastimes.music.respond",
+      "npc_act": "report",
+      "subject": "pastimes.music",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "pastimes:music_here"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    },
+    "pastimes.music.again": {
+      "topic": "pastimes.music",
+      "say": "sample_pastimes.music.again",
+      "response_question": "pastimes.music.respond",
+      "npc_act": "qualify",
+      "subject": "pastimes.music.repeat",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "facts": [
+        "pastimes:music_here"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    },
+    "pastimes.music.ask_more": {
+      "topic": "pastimes.music",
+      "say": "sample_pastimes.music.ask_more",
+      "response_question": "pastimes.close",
+      "npc_act": "explain",
+      "subject": "pastimes.music",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "pastimes:music_here"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged"
+    },
+    "pastimes.music.praise": {
+      "topic": "pastimes.music",
+      "say": "sample_pastimes.music.praise",
+      "response_question": "pastimes.close",
+      "npc_act": "accept",
+      "subject": "pastimes.music",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "pastimes:music_here"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated"
+    },
+    "pastimes.games.open": {
+      "topic": "pastimes.games",
+      "say": "sample_pastimes.games.open",
+      "response_question": "pastimes.games.respond",
+      "npc_act": "report",
+      "subject": "pastimes.games",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "facts": [
+        "pastimes:game_here"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "toddler",
+          "child",
+          "teen",
+          "adult"
+        ]
+      }
+    },
+    "pastimes.games.again": {
+      "topic": "pastimes.games",
+      "say": "sample_pastimes.games.again",
+      "response_question": "pastimes.games.respond",
+      "npc_act": "qualify",
+      "subject": "pastimes.games.repeat",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "facts": [
+        "pastimes:game_here"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    },
+    "pastimes.games.ask_more": {
+      "topic": "pastimes.games",
+      "say": "sample_pastimes.games.ask_more",
+      "response_question": "pastimes.close",
+      "npc_act": "explain",
+      "subject": "pastimes.games",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "pastimes:game_here"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged"
+    },
+    "pastimes.games.challenge": {
+      "topic": "pastimes.games",
+      "say": "sample_pastimes.games.challenge",
+      "response_question": "pastimes.close",
+      "npc_act": "accept",
+      "subject": "pastimes.games",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "pastimes:game_here"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged"
+    },
+    "pastimes.games.challenge.flat": {
+      "topic": "pastimes.games",
+      "say": "sample_pastimes.games.challenge.flat",
+      "response_question": "pastimes.close",
+      "npc_act": "qualify",
+      "subject": "pastimes.games",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "pastimes:game_here"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "qualified"
+    }
+  },
+  "replies": {
+    "pastimes.music.respond/ask_more": {
+      "stance": "curiosity",
+      "responds_to": [
+        "pastimes.music.open",
+        "pastimes.music.again"
+      ],
+      "requires_facts": [
+        "pastimes:music_here"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "exit": false
+    },
+    "pastimes.music.respond/praise": {
+      "stance": "encouragement",
+      "responds_to": [
+        "pastimes.music.open",
+        "pastimes.music.again"
+      ],
+      "requires_facts": [
+        "pastimes:music_here"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "exit": false
+    },
+    "pastimes.music.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "pastimes.music.open",
+        "pastimes.music.again"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "pastimes.games.respond/ask_more": {
+      "stance": "curiosity",
+      "responds_to": [
+        "pastimes.games.open",
+        "pastimes.games.again"
+      ],
+      "requires_facts": [
+        "pastimes:game_here"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "exit": false
+    },
+    "pastimes.games.respond/challenge_them": {
+      "stance": "humor",
+      "responds_to": [
+        "pastimes.games.open",
+        "pastimes.games.again"
+      ],
+      "requires_facts": [
+        "pastimes:game_here"
+      ],
+      "tone": "playful",
+      "outcomes": [
+        "engaged",
+        "qualified"
+      ],
+      "exit": false
+    },
+    "pastimes.games.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "pastimes.games.open",
+        "pastimes.games.again"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "pastimes.close/agree": {
+      "stance": "encouragement",
+      "responds_to": [
+        "pastimes.music.ask_more",
+        "pastimes.music.praise",
+        "pastimes.games.ask_more",
+        "pastimes.games.challenge",
+        "pastimes.games.challenge.flat"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "exit": false
+    },
+    "pastimes.close/share": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "pastimes.music.ask_more",
+        "pastimes.music.praise",
+        "pastimes.games.ask_more",
+        "pastimes.games.challenge",
+        "pastimes.games.challenge.flat"
+      ],
+      "tone": "gentle",
+      "introduces_facts": [
+        "pastimes:player_joins_in"
+      ],
+      "outcomes": [
+        "appreciated"
+      ],
+      "exit": false
+    },
+    "pastimes.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "pastimes.music.ask_more",
+        "pastimes.music.praise",
+        "pastimes.games.ask_more",
+        "pastimes.games.challenge",
+        "pastimes.games.challenge.flat"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

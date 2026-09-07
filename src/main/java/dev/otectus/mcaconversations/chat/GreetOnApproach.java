@@ -178,6 +178,11 @@ public final class GreetOnApproach {
         return entered;
     }
 
+    /** Forgets proximity edges when the server stops. */
+    public static void reset() {
+        INSIDE_LAST_SCAN.clear();
+    }
+
     /** Drops a player's tracking on logout (mirrors {@code ChatModeSession.clear}). */
     public static void clear(UUID playerId) {
         INSIDE_LAST_SCAN.remove(playerId);

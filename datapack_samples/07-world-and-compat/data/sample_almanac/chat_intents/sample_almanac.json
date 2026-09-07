@@ -1,0 +1,319 @@
+{
+  "_comment": "One intent per non-exit button, bound to its exact question and answer. 'leave' needs none: never mind is chat mode's own way out.",
+  "intents": {
+    "sample_almanac.starter": {
+      "question": "conversations.cat.events",
+      "answer": "almanac",
+      "keywords": {
+        "almanac": 1.5,
+        "news": 1.0,
+        "marking": 1.2,
+        "worth": 0.8
+      },
+      "requiresAny": [
+        "almanac",
+        "marking",
+        "news"
+      ],
+      "phrases": [
+        "anything worth marking down",
+        "anything for the almanac",
+        "anything worth writing down"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.court.ask_title": {
+      "question": "almanac.court.respond",
+      "answer": "ask_title",
+      "context": "almanac.court.respond",
+      "keywords": {
+        "title": 1.5,
+        "office": 1.2,
+        "get": 0.8
+      },
+      "requiresAny": [
+        "title",
+        "office"
+      ],
+      "phrases": [
+        "what does the title get you",
+        "what is the office worth",
+        "what does that office mean"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.court.congratulate": {
+      "question": "almanac.court.respond",
+      "answer": "congratulate",
+      "context": "almanac.court.respond",
+      "keywords": {
+        "worth": 1.5,
+        "deserved": 1.2,
+        "earned": 1.2
+      },
+      "requiresAny": [
+        "worth",
+        "deserved",
+        "earned"
+      ],
+      "phrases": [
+        "that is worth having",
+        "you earned that",
+        "well deserved"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.standing.ask_more": {
+      "question": "almanac.standing.respond",
+      "answer": "ask_more",
+      "context": "almanac.standing.respond",
+      "keywords": {
+        "saying": 1.5,
+        "who": 1.2,
+        "talk": 1.0
+      },
+      "requiresAny": [
+        "saying",
+        "who",
+        "talk"
+      ],
+      "phrases": [
+        "who is saying so",
+        "who has been talking",
+        "who says that"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.standing.thank_them": {
+      "question": "almanac.standing.respond",
+      "answer": "thank_them",
+      "context": "almanac.standing.respond",
+      "keywords": {
+        "kind": 1.5,
+        "track": 1.2,
+        "notice": 1.2
+      },
+      "requiresAny": [
+        "kind",
+        "track",
+        "notice"
+      ],
+      "phrases": [
+        "kind of you to keep track",
+        "good of you to notice",
+        "thank you for noticing"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.standing.wary.ask_what_happened": {
+      "question": "almanac.standing.wary.respond",
+      "answer": "ask_what_happened",
+      "context": "almanac.standing.wary.respond",
+      "keywords": {
+        "happened": 1.5,
+        "accuse": 1.2,
+        "rumour": 1.0
+      },
+      "requiresAny": [
+        "happened",
+        "accuse",
+        "rumour"
+      ],
+      "phrases": [
+        "what are people saying",
+        "what happened exactly",
+        "what am i accused of"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.standing.wary.own_it": {
+      "question": "almanac.standing.wary.respond",
+      "answer": "own_it",
+      "context": "almanac.standing.wary.respond",
+      "keywords": {
+        "wrong": 1.5,
+        "true": 1.2,
+        "admit": 1.5
+      },
+      "requiresAny": [
+        "wrong",
+        "true",
+        "admit"
+      ],
+      "phrases": [
+        "they are not wrong",
+        "it is true",
+        "i admit it"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.quest.ask_task": {
+      "question": "almanac.quest.respond",
+      "answer": "ask_task",
+      "context": "almanac.quest.respond",
+      "keywords": {
+        "remind": 1.5,
+        "wanted": 1.2,
+        "errand": 1.2
+      },
+      "requiresAny": [
+        "remind",
+        "wanted",
+        "errand"
+      ],
+      "phrases": [
+        "remind me what you wanted",
+        "what was the errand",
+        "what did you ask for"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.quest.offer_help": {
+      "question": "almanac.quest.respond",
+      "answer": "offer_help",
+      "context": "almanac.quest.respond",
+      "keywords": {
+        "finish": 1.5,
+        "today": 1.2,
+        "bring": 1.0
+      },
+      "requiresAny": [
+        "finish",
+        "today",
+        "bring"
+      ],
+      "phrases": [
+        "i will finish it today",
+        "i will bring it today",
+        "let me finish that"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.gossip.ask_who": {
+      "question": "almanac.gossip.respond",
+      "answer": "ask_who",
+      "context": "almanac.gossip.respond",
+      "keywords": {
+        "told": 1.5,
+        "heard": 1.2,
+        "source": 1.2
+      },
+      "requiresAny": [
+        "told",
+        "heard",
+        "source"
+      ],
+      "phrases": [
+        "who told you",
+        "where did you hear that",
+        "who said so"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.gossip.take_it_in": {
+      "question": "almanac.gossip.respond",
+      "answer": "take_it_in",
+      "context": "almanac.gossip.respond",
+      "keywords": {
+        "quiet": 1.5,
+        "myself": 1.5,
+        "repeat": 1.2
+      },
+      "requiresAny": [
+        "quiet",
+        "myself",
+        "repeat"
+      ],
+      "phrases": [
+        "i will keep that to myself",
+        "i will not repeat it",
+        "that stays with me"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.world.agree": {
+      "question": "almanac.world.respond",
+      "answer": "agree",
+      "context": "almanac.world.respond",
+      "keywords": {
+        "agree": 1.5,
+        "same": 1.2,
+        "too": 0.8
+      },
+      "requiresAny": [
+        "agree",
+        "same",
+        "too"
+      ],
+      "phrases": [
+        "feels that way to me too",
+        "i thought the same",
+        "you are right about that"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.world.ask_plans": {
+      "question": "almanac.world.respond",
+      "answer": "ask_plans",
+      "context": "almanac.world.respond",
+      "keywords": {
+        "plan": 1.5,
+        "do": 1.0,
+        "instead": 1.0
+      },
+      "requiresAny": [
+        "plan",
+        "do",
+        "instead"
+      ],
+      "phrases": [
+        "what will you do about it",
+        "what is the plan",
+        "how will you work around it"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.plain.ask_more": {
+      "question": "almanac.plain.respond",
+      "answer": "ask_more",
+      "context": "almanac.plain.respond",
+      "keywords": {
+        "nothing": 1.5,
+        "sure": 1.0,
+        "really": 1.0
+      },
+      "requiresAny": [
+        "nothing",
+        "sure",
+        "really"
+      ],
+      "phrases": [
+        "nothing at all",
+        "really nothing",
+        "are you sure nothing happened"
+      ],
+      "category": "topics"
+    },
+    "sample_almanac.plain.steady_on": {
+      "question": "almanac.plain.respond",
+      "answer": "steady_on",
+      "context": "almanac.plain.respond",
+      "keywords": {
+        "suits": 1.5,
+        "peace": 1.2,
+        "prefer": 1.2
+      },
+      "requiresAny": [
+        "suits",
+        "peace",
+        "prefer"
+      ],
+      "phrases": [
+        "quiet suits me",
+        "i prefer it quiet",
+        "peace is welcome"
+      ],
+      "category": "topics"
+    }
+  }
+}

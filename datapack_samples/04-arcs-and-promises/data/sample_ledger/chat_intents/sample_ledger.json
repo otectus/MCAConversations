@@ -1,0 +1,203 @@
+{
+  "_comment": [
+    "Every non-exit button on every page of this pack, bound to its exact",
+    "question+answer and scoped to the page it sits on."
+  ],
+  "synonyms": {
+    "debt": [
+      "iou",
+      "arrears"
+    ]
+  },
+  "intents": {
+    "ledger.starter": {
+      "question": "conversations.cat.village",
+      "answer": "ledger",
+      "context": "conversations.cat.village",
+      "keywords": {
+        "owed": 1.8,
+        "owes": 1.8,
+        "debt": 1.6,
+        "behind": 1.0,
+        "unpaid": 1.5
+      },
+      "requiresAny": [
+        "owed",
+        "owes",
+        "debt",
+        "unpaid",
+        "behind"
+      ],
+      "phrases": [
+        "does anyone owe you",
+        "is somebody behind with you",
+        "are you owed anything",
+        "tell me about the debt"
+      ],
+      "bigrams": [
+        "owes you"
+      ],
+      "category": "topics"
+    },
+    "ledger.who": {
+      "question": "ledger.respond",
+      "answer": "ask_who",
+      "context": "ledger.respond",
+      "keywords": {
+        "who": 1.8,
+        "name": 1.4,
+        "which": 1.0
+      },
+      "requiresAny": [
+        "who",
+        "name",
+        "which"
+      ],
+      "phrases": [
+        "who is it",
+        "who owes you",
+        "what is their name",
+        "which neighbour"
+      ],
+      "category": "topics"
+    },
+    "ledger.forgive": {
+      "question": "ledger.respond",
+      "answer": "urge_forgive",
+      "context": "ledger.respond",
+      "keywords": {
+        "forgive": 1.8,
+        "forget": 1.4,
+        "drop": 1.2,
+        "worth": 1.2
+      },
+      "requiresAny": [
+        "forgive",
+        "forget",
+        "drop",
+        "worth"
+      ],
+      "phrases": [
+        "let it go",
+        "forgive the debt",
+        "it is not worth chasing",
+        "write it off"
+      ],
+      "category": "topics"
+    },
+    "ledger.collect": {
+      "question": "ledger.respond",
+      "answer": "urge_collect",
+      "context": "ledger.respond",
+      "keywords": {
+        "ask": 1.4,
+        "collect": 1.8,
+        "demand": 1.4,
+        "owed": 1.0
+      },
+      "requiresAny": [
+        "ask",
+        "collect",
+        "demand"
+      ],
+      "phrases": [
+        "ask them for it",
+        "go and collect it",
+        "make them pay",
+        "say it plainly to them"
+      ],
+      "category": "topics"
+    },
+    "ledger.cover": {
+      "question": "ledger.respond",
+      "answer": "offer_to_cover",
+      "context": "ledger.respond",
+      "keywords": {
+        "cover": 1.8,
+        "pay": 1.5,
+        "myself": 1.2,
+        "emerald": 1.4
+      },
+      "requiresAny": [
+        "cover",
+        "pay",
+        "emerald"
+      ],
+      "phrases": [
+        "i will cover it",
+        "let me pay it",
+        "i will pay the difference",
+        "i will settle it myself"
+      ],
+      "category": "topics"
+    },
+    "ledger.how_it_went": {
+      "question": "ledger.followup",
+      "answer": "ask_how_it_went",
+      "context": "ledger.followup",
+      "keywords": {
+        "went": 1.6,
+        "leave": 1.0,
+        "things": 0.8,
+        "happened": 1.4
+      },
+      "requiresAny": [
+        "went",
+        "happened",
+        "things"
+      ],
+      "phrases": [
+        "how did that go",
+        "how did that leave things",
+        "what happened in the end"
+      ],
+      "category": "topics"
+    },
+    "ledger.remind": {
+      "question": "ledger.followup",
+      "answer": "remind_promise",
+      "context": "ledger.followup",
+      "keywords": {
+        "outstanding": 1.6,
+        "promise": 1.8,
+        "owe": 1.2,
+        "still": 0.8
+      },
+      "requiresAny": [
+        "outstanding",
+        "promise",
+        "owe"
+      ],
+      "phrases": [
+        "is there anything outstanding",
+        "did i promise you something",
+        "do i still owe you",
+        "what about my promise"
+      ],
+      "category": "topics"
+    },
+    "ledger.recall": {
+      "question": "ledger.followup",
+      "answer": "mention_last_time",
+      "context": "ledger.followup",
+      "keywords": {
+        "settled": 1.8,
+        "before": 1.0,
+        "already": 1.2,
+        "once": 1.2
+      },
+      "requiresAny": [
+        "settled",
+        "already",
+        "once",
+        "before"
+      ],
+      "phrases": [
+        "we settled this once",
+        "did we not sort this already",
+        "i thought this was settled"
+      ],
+      "category": "topics"
+    }
+  }
+}

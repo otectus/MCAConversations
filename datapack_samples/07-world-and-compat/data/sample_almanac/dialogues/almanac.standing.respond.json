@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "almanac.standing.ask_more.answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "almanac.standing.ask_more",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "almanac.standing.ask_more"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "thank_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "almanac.standing.thank_them.answer"
+            },
+            "conversations_affection_apply": {
+              "decision": "almanac.standing.thank_them",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "almanac.standing.thank_them",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "almanac.standing.thank_them"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "almanac.standing.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

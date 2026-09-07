@@ -76,6 +76,7 @@ public abstract class NetworkHandlerMixin {
                         ConversationsNetwork.sendOffer(player, ChoiceOfferS2C.from(offer));
                     }
                 } else {
+                    ConversationsNetwork.clearOffer(player, offer.revision(), ChoiceClearS2C.Reason.NONE);
                     ConversationsNetwork.warnOversizedOffer(offer.questionId(), offer.answerIds().size());
                 }
                 if (chat) {

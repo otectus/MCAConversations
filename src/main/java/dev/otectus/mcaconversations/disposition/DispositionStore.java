@@ -33,6 +33,9 @@ public final class DispositionStore {
     }
 
     DispositionStore(int maxPairs) {
+        if (maxPairs < 1) {
+            throw new IllegalArgumentException("maxPairs must be positive");
+        }
         this.maxPairs = maxPairs;
     }
 
@@ -42,8 +45,7 @@ public final class DispositionStore {
     }
 
     public DispositionRecord getOrCreate(UUID villager, UUID player, long now) {
-        Map<UUID, DispositionRecord> players = villagers.computeIfAbsent(villager, v -> new HashMap<>());
-        DispositionRecord existing = players.get(player);
+        DispositionRecord existing = get(villager, player).orElse(null);
         if (existing != null) {
             return existing;
         }
@@ -51,7 +53,8 @@ public final class DispositionStore {
             evictOldest();
         }
         DispositionRecord record = new DispositionRecord(now);
-        players.put(player, record);
+        // Eviction may remove this villager's last pair and its map. Reacquire after eviction.
+        villagers.computeIfAbsent(villager, v -> new HashMap<>()).put(player, record);
         return record;
     }
 
@@ -77,7 +80,13 @@ public final class DispositionStore {
                                                Map<DispositionAxis, Integer> deltas,
                                                ToIntFunction<DispositionAxis> baselines, long now,
                                                int dailyCap, double gainMultiplier, double decayMultiplier) {
+        boolean newPair = get(villager, player).isEmpty();
         DispositionRecord record = getOrCreate(villager, player, now);
+        if (newPair) {
+            for (DispositionAxis axis : DispositionAxis.values()) {
+                record.setAxis(axis, baselines.applyAsInt(axis));
+            }
+        }
         long elapsed = now - record.lastUpdated();
         for (DispositionAxis axis : DispositionAxis.values()) {
             record.setAxis(axis, DispositionMath.decayed(axis, record.axisRaw(axis),
@@ -91,9 +100,11 @@ public final class DispositionStore {
             DispositionAxis axis = entry.getKey();
             int guarded = FarmingGuard.guardedDelta(entry.getValue(),
                     record.gainedToday(axis, day), dailyCap, repeat, gainMultiplier);
-            record.setAxis(axis, record.axisRaw(axis) + guarded);
-            record.addGained(axis, day, Math.abs(guarded));
-            applied.put(axis, guarded);
+            int before = record.axisRaw(axis);
+            record.setAxis(axis, before + guarded);
+            int actual = record.axisRaw(axis) - before;
+            record.addGained(axis, day, Math.abs(actual));
+            applied.put(axis, actual);
         }
         record.recordStance(topic, day);
         record.touch(now);
@@ -139,7 +150,7 @@ public final class DispositionStore {
         long oldestTime = Long.MAX_VALUE;
         for (Map.Entry<UUID, Map<UUID, DispositionRecord>> villagerEntry : villagers.entrySet()) {
             for (Map.Entry<UUID, DispositionRecord> playerEntry : villagerEntry.getValue().entrySet()) {
-                if (playerEntry.getValue().lastUpdated() < oldestTime) {
+                if (oldestVillager == null || playerEntry.getValue().lastUpdated() < oldestTime) {
                     oldestTime = playerEntry.getValue().lastUpdated();
                     oldestVillager = villagerEntry.getKey();
                     oldestPlayer = playerEntry.getKey();

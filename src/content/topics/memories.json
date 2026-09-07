@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "Family, gated on whether she has one nearby and on how long the player has known her.",
-    "",
-    "One scene is about the people in the house; the other is about the one who is not here, which is",
-    "the harder half and needs some standing before it will be raised at all."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "memories",
   "entry": {
@@ -48,7 +45,7 @@
       "act": "reminisce",
       "polarity": "mixed",
       "predicate": "memory",
-      "temporal": "past",
+      "temporal": "current",
       "privacy": "ordinary",
       "obligations": [
         "clarify",
@@ -57,6 +54,13 @@
       "conditions": [
         {
           "field": "social.family_names",
+          "min": 1,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -72,14 +76,14 @@
       },
       "lines": {
         "en": [
-          "It was loud in the morning and asleep by nine, and I complained about both and would take either back tomorrow.",
-          "We were all in each other's way, and I did not know at the time that it was the arrangement I would miss.",
-          "Everybody was well and nobody was easy, which is the ordinary state of a house and nobody puts it in songs."
+          "Family life can be a mixture of company and getting in each other's way.",
+          "With family, even ordinary routines can mean a lot. They can also be noisy.",
+          "Family routines can be full of small comforts and small frictions."
         ],
         "pt": [
-          "Era barulhenta de manhã e dormia às nove, e eu reclamava das duas coisas e aceitaria qualquer uma de volta amanhã.",
-          "Estávamos todos no caminho uns dos outros, e eu não sabia na época que era o arranjo de que eu sentiria falta.",
-          "Todo mundo estava bem e ninguém era fácil, que é o estado comum de uma casa e ninguém põe isso em canção."
+          "A vida em família pode misturar companhia e um atrapalhando o outro.",
+          "Com a família, até a rotina pode significar muito. E também pode fazer bastante barulho.",
+          "As rotinas familiares podem ter pequenos confortos e pequenos atritos."
         ]
       },
       "replies": [
@@ -92,16 +96,17 @@
           "tone": "playful",
           "outcome": "engaged",
           "label": {
-            "en": "What are the mornings like?",
-            "pt": "Como são as manhãs?"
+            "en": "What makes family mornings easier?",
+            "pt": "O que facilita as manhãs em família?"
           },
           "phrases": [
-            "what are the mornings like",
-            "describe a morning in that house"
+            "what makes family mornings easier"
           ],
           "requires_any": [
+            "makes",
+            "family",
             "mornings",
-            "morning"
+            "easier"
           ],
           "disposition": {
             "familiarity": 2,
@@ -114,16 +119,18 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "Four people and one kettle. Everything else about our household follows from that single fact.",
-                "Somebody is always looking for a thing that is exactly where they left it, and it is never the same somebody twice.",
-                "Very fast and then very empty. The house at half past seven is the best room I know and I get about four minutes of it."
+                "A little patience, I'd say. And room for someone who wakes up slowly.",
+                "Taking turns. It helps if breakfast doesn't feel like a contest.",
+                "Sharing the space without expecting everyone to wake at the same speed."
               ],
               "pt": [
-                "Quatro pessoas e uma chaleira. Todo o resto da nossa casa decorre desse único fato.",
-                "Sempre tem alguém procurando uma coisa que está exatamente onde deixou, e nunca é a mesma pessoa duas vezes.",
-                "Muito rápida e depois muito vazia. A casa às sete e meia é o melhor cômodo que eu conheço e eu tenho uns quatro minutos disso."
+                "Um pouco de paciência, eu diria. E espaço para quem demora a despertar.",
+                "Esperar a vez. Ajuda se o café da manhã não parecer uma competição.",
+                "Dividir o espaço sem esperar que todo mundo desperte no mesmo ritmo."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -135,17 +142,16 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "Sounds like a full house.",
-            "pt": "Parece uma casa cheia."
+            "en": "Company and a little space, then.",
+            "pt": "Companhia e um pouco de espaço, então."
           },
           "phrases": [
-            "sounds like a full house",
-            "that is a full household"
+            "company and a little space then"
           ],
           "requires_any": [
-            "full",
-            "house",
-            "household"
+            "company",
+            "little",
+            "space"
           ],
           "disposition": {
             "warmth": 3
@@ -157,19 +163,22 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "It is, and I lived alone for four years before it and I remember exactly how quiet a kettle can be.",
-                "Full and small, which is the combination people warn you about and then never explain the good half of.",
-                "Come by some evening. There is always a chair and you will be handed something to hold within a minute."
+                "That's a fair balance. Being close doesn't mean wanting company every moment.",
+                "Yes. I'd call both of those important.",
+                "Exactly. Both company and a little privacy have their place."
               ],
               "pt": [
-                "É, e eu morei sozinha por quatro anos antes disso e lembro exatamente o quanto uma chaleira pode ser silenciosa.",
-                "Cheia e pequena, que é a combinação sobre a qual as pessoas avisam e depois nunca explicam a metade boa.",
-                "Apareça uma noite dessas. Sempre tem cadeira e você vai receber alguma coisa para segurar em menos de um minuto."
+                "É uma boa medida. Ter intimidade não é querer companhia a cada instante.",
+                "Sim. Eu diria que os dois são importantes.",
+                "Exatamente. Tanto a companhia quanto um pouco de privacidade têm seu lugar."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "the_one_who_is_not_here",
@@ -178,7 +187,7 @@
       "act": "report",
       "polarity": "mixed",
       "predicate": "disclosure",
-      "temporal": "past",
+      "temporal": "current",
       "privacy": "discreet",
       "obligations": [
         "clarify",
@@ -186,17 +195,28 @@
       ],
       "conditions": [
         {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
           "field": "player.relationship_band",
           "any_of": [
             "confidant",
-            "partner",
-            "family"
+            "family",
+            "partner"
           ],
           "unknown": "fail"
         },
         {
           "field": "time.days_since_first_met",
           "min": 21,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -212,14 +232,14 @@
       },
       "lines": {
         "en": [
-          "There is a chair at our table that has been nobody's for six years and is still that chair.",
-          "One of us left and the leaving was reasonable, and I have spent six years being reasonable about it in public.",
-          "We do not talk about them at the table. We talk about them one at a time, outside, to different people."
+          "I think about what it's like to miss someone. You can't decide for them when to return.",
+          "Missing someone and wanting them to have their own life can sit side by side.",
+          "I think missing someone needn't mean wishing to choose their life for them."
         ],
         "pt": [
-          "Existe uma cadeira na nossa mesa que não é de ninguém há seis anos e continua sendo aquela cadeira.",
-          "Um de nós foi embora e a partida foi razoável, e eu passei seis anos sendo razoável a respeito em público.",
-          "A gente não fala deles à mesa. A gente fala deles um por vez, do lado de fora, para pessoas diferentes."
+          "Penso em como é sentir falta de alguém. Não dá para decidir pela pessoa quando ela deve voltar.",
+          "Sentir saudade e querer que a pessoa tenha a própria vida podem andar juntos.",
+          "Acho que sentir saudade não precisa significar querer escolher a vida de alguém."
         ]
       },
       "replies": [
@@ -232,17 +252,17 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "Six years is a long chair.",
-            "pt": "Seis anos é uma cadeira longa."
+            "en": "Both of those feelings can be true.",
+            "pt": "Os dois sentimentos podem ser verdadeiros."
           },
           "phrases": [
-            "six years is a long time for that",
-            "that chair has been empty a long while"
+            "both of those feelings can be true"
           ],
           "requires_any": [
-            "years",
-            "chair",
-            "empty"
+            "both",
+            "those",
+            "feelings",
+            "true"
           ],
           "disposition": {
             "trust": 4,
@@ -262,16 +282,18 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It is, and nobody has said the number back to me before, and hearing it out loud is oddly steadying.",
-                "Thank you for not asking why they went. Everybody asks why and the why has never once helped.",
-                "We could move the chair. We have discussed moving the chair four times and the chair is still there."
+                "Yes. I don't think one makes the other dishonest.",
+                "That's how I see it. Care doesn't have to come with a demand.",
+                "That's how I see it. Affection can leave room."
               ],
               "pt": [
-                "É, e ninguém tinha me devolvido o número antes, e ouvir em voz alta é estranhamente firmador.",
-                "Obrigada por não perguntar por que foram embora. Todo mundo pergunta o porquê e o porquê nunca ajudou uma vez.",
-                "A gente podia tirar a cadeira. Já discutimos tirar a cadeira quatro vezes e a cadeira continua lá."
+                "Sim. Não acho que um torne o outro falso.",
+                "É assim que vejo. Carinho não precisa vir com uma cobrança.",
+                "É assim que vejo. O carinho pode dar espaço."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -283,16 +305,16 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "Do you hear from them?",
-            "pt": "Você tem notícias deles?"
+            "en": "Would keeping in touch help?",
+            "pt": "Manter contato ajudaria?"
           },
           "phrases": [
-            "do you hear from them",
-            "is there any word from them"
+            "would keeping in touch help"
           ],
           "requires_any": [
-            "hear",
-            "word"
+            "keeping",
+            "touch",
+            "help"
           ],
           "disposition": {
             "familiarity": 3,
@@ -307,19 +329,21 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Twice a year, and the letters are about weather, and I read them about nine times each.",
-                "Through somebody else, which is worse than nothing and better than nothing, and I could not tell you which more often.",
-                "No. And I check anyway, every time a carter comes through, and I have stopped pretending that I do not."
+                "It might, if both people want it. A message shouldn't become a test.",
+                "Often, I think. But I'd ask what suits them rather than set a rule.",
+                "Perhaps. I'd let the people involved choose what contact suits them."
               ],
               "pt": [
-                "Duas vezes por ano, e as cartas são sobre o tempo, e eu leio cada uma umas nove vezes.",
-                "Por intermédio de outra pessoa, o que é pior que nada e melhor que nada, e eu não saberia dizer qual com mais frequência.",
-                "Não. E eu confiro mesmo assim, toda vez que passa um carroceiro, e parei de fingir que não confiro."
+                "Pode ajudar, se os dois quiserem. Uma mensagem não deve virar uma prova.",
+                "Muitas vezes, eu acho. Mas perguntaria o que funciona para a pessoa em vez de impor uma regra.",
+                "Talvez. Eu deixaria os envolvidos escolherem o contato que funciona para eles."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

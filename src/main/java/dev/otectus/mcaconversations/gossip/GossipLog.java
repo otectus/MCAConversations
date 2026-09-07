@@ -33,6 +33,9 @@ public final class GossipLog {
      * cap by dropping the oldest first. Returns true when added.
      */
     public boolean add(GossipEvent event, int maxPerVillage) {
+        if (event == null || maxPerVillage <= 0) {
+            return false;
+        }
         boolean duplicate = events.stream().anyMatch(e ->
                 e.type() == event.type()
                         && e.villageId() == event.villageId()
@@ -58,7 +61,7 @@ public final class GossipLog {
     }
 
     private static Set<UUID> subjectSet(GossipEvent e) {
-        return e.bUuid().map(bu -> Set.of(e.aUuid(), bu)).orElseGet(() -> Set.of(e.aUuid()));
+        return e.bUuid().filter(bu -> !bu.equals(e.aUuid())).map(bu -> Set.of(e.aUuid(), bu)).orElseGet(() -> Set.of(e.aUuid()));
     }
 
     /** Drops events older than {@code retentionTicks}. Returns how many were removed. */
@@ -81,7 +84,7 @@ public final class GossipLog {
         return events.stream()
                 .filter(e -> e.villageId() == villageId)
                 .filter(e -> types.isEmpty() || types.contains(e.type()))
-                .filter(e -> now - e.created() <= maxAgeTicks)
+                .filter(e -> e.created() <= now && now - e.created() <= maxAgeTicks)
                 .filter(e -> !e.involves(tellerUuid))
                 .filter(e -> !alreadyTold.test(e))
                 .max(Comparator.comparingLong(GossipEvent::created)

@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "Food, gated on the hour and on the season rather than on a fixed opinion.",
-    "",
-    "One scene is the midday question — what is actually on today — and the other is the winter one,",
-    "which is about eating the same thing for the fourteenth time and how a cook makes that bearable."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "food",
   "entry": {
@@ -76,14 +73,14 @@
       },
       "lines": {
         "en": [
-          "Something with the last of the roots in it, which is a polite way of describing what it is.",
-          "Bread and whatever was nearest. I have made peace with the middle of the week.",
-          "Good, actually. I got the timing right for once and nobody was waiting, which is half of a meal."
+          "For an easy meal, I'd choose bread and a bowl of soup.",
+          "Bread with a bowl of soup sounds good about now. Nothing fancy.",
+          "A bowl of soup with bread would do me nicely."
         ],
         "pt": [
-          "Alguma coisa com o resto das raízes, que é um jeito educado de descrever o que é.",
-          "Pão e o que estava mais perto. Já fiz as pazes com o meio da semana.",
-          "Boa, na verdade. Acertei o tempo pela primeira vez e ninguém ficou esperando, e isso já é metade de uma refeição."
+          "Para uma refeição simples, eu escolheria pão e uma tigela de sopa.",
+          "Pão com uma tigela de sopa parece uma boa agora. Nada complicado.",
+          "Uma tigela de sopa com pão me cairia muito bem."
         ]
       },
       "replies": [
@@ -96,16 +93,15 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "How do you make that?",
-            "pt": "Como você faz isso?"
+            "en": "How would you make the soup?",
+            "pt": "Como você faria a sopa?"
           },
           "phrases": [
-            "how do you make that",
-            "what goes into it"
+            "how would you make the soup"
           ],
           "requires_any": [
             "make",
-            "goes"
+            "soup"
           ],
           "disposition": {
             "familiarity": 2
@@ -117,16 +113,113 @@
             "shape": "teach_back",
             "lines": {
               "en": [
-                "Slowly, and with less in it than people expect. Four things done properly beats eleven things thrown in.",
-                "The trick is salting it at the start and again at the end, and nobody believes me until they have eaten both versions.",
-                "Badly, by anybody's standard but mine. It tastes like my mother's, which is the only measure I actually use."
+                "I'd start with water and vegetables, cook them until tender, then taste before adding more salt.",
+                "Slowly enough for the vegetables to soften. A simple soup doesn't need a long list of ingredients.",
+                "Keep it simple, let it cook, and taste it. The tasting matters."
               ],
               "pt": [
-                "Devagar, e com menos coisas do que as pessoas imaginam. Quatro ingredientes bem feitos vencem onze jogados dentro.",
-                "O truque é salgar no começo e de novo no fim, e ninguém acredita em mim até ter comido as duas versões.",
-                "Mal, pelo padrão de qualquer um menos o meu. Tem o gosto da comida da minha mãe, e é a única medida que eu de fato uso."
+                "Começaria com água e legumes, deixaria cozinhar até amaciar e provaria antes de pôr mais sal.",
+                "Sem pressa, até os legumes amaciarem. Uma sopa simples não precisa de uma lista enorme de ingredientes.",
+                "Simplicidade, tempo de cozimento e provar. Provar faz diferença."
               ]
-            }
+            },
+            "prompt": {
+              "en": "A simple soup.",
+              "pt": "Uma sopa simples."
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "follow_1",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "reaction": {
+                  "id": "follow_answer_1",
+                  "act": "explain",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Taste a spoonful before adding anything. A little seasoning can help; a whole handful can ruin it.",
+                      "Try a small change, then taste again. It's easier to add more than to take it out.",
+                      "Give the flavour a chance to settle before reaching for another ingredient."
+                    ],
+                    "pt": [
+                      "Prove uma colherada antes de acrescentar algo. Um pouco de tempero ajuda; um punhado pode estragar.",
+                      "Faça uma mudança pequena e prove de novo. É mais fácil acrescentar que tirar.",
+                      "Dê tempo para o sabor assentar antes de buscar outro ingrediente."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "What if the soup tastes too plain?",
+                  "pt": "E se a sopa ficar sem graça?"
+                },
+                "phrases": [
+                  "what if the soup tastes too plain"
+                ],
+                "requires_any": [
+                  "soup",
+                  "tastes",
+                  "too",
+                  "plain"
+                ]
+              },
+              {
+                "name": "follow_2",
+                "stance": "respectful_disagreement",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "qualified",
+                "reaction": {
+                  "id": "follow_answer_2",
+                  "act": "qualify",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Fair enough. Keep the base simple and season your own bowl more boldly.",
+                      "Then make your portion livelier. We needn't agree over every spoonful.",
+                      "That's a good reason to keep the seasoning within reach at the table."
+                    ],
+                    "pt": [
+                      "Justo. Deixe a base simples e capriche mais no tempero da sua tigela.",
+                      "Então dê mais vida à sua porção. Não precisamos concordar em cada colherada.",
+                      "É um bom motivo para deixar o tempero à mão na mesa."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "I like food with a bit more bite.",
+                  "pt": "Gosto de comida com um sabor mais forte."
+                },
+                "phrases": [
+                  "i like food with a bit more bite"
+                ],
+                "requires_any": [
+                  "like",
+                  "food",
+                  "bit",
+                  "more",
+                  "bite"
+                ]
+              }
+            ],
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -159,19 +252,30 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "It is better than it sounds, which is the correct direction for a meal to surprise you in.",
-                "Come by at the hour and there is always more than one person's worth. There always is, whatever I intend.",
-                "Thank you. Nobody says anything about food unless it is wrong, so that is genuinely unusual."
+                "It does, doesn't it? Especially with bread for the last bit in the bowl.",
+                "A simple meal can be plenty. I wouldn't complain about a second helping.",
+                "It sounds like the sort of meal I'd happily take my time over."
               ],
               "pt": [
-                "É melhor do que parece, que é a direção certa para uma refeição surpreender.",
-                "Passe na hora e sempre tem mais do que dá para uma pessoa. Sempre tem, por mais que eu planeje.",
-                "Obrigada. Ninguém comenta comida a não ser que esteja errada, então isso é genuinamente incomum."
+                "Parece boa mesmo, né? Ainda mais com pão para aproveitar o fundo da tigela.",
+                "Uma refeição simples pode ser suficiente. Mas eu aceitaria repetir.",
+                "Parece o tipo de refeição que eu comeria com calma."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "reply_referents": {
+        "en": [
+          "soup"
+        ],
+        "pt": [
+          "sopa"
+        ]
+      },
+      "epistemic": "inferred"
     },
     {
       "name": "the_fourteenth_time",
@@ -206,14 +310,14 @@
       },
       "lines": {
         "en": [
-          "The same four things in a different order, which after a while stops being a different order.",
-          "I could tell you exactly what is left in the store and exactly which week it runs out. That is winter.",
-          "It is enough and it is dull, and I have started to think the dullness is the harder half."
+          "Winter makes me think about ways to keep simple meals interesting.",
+          "For winter food, I like a little variety. Even a different herb can help.",
+          "I'd want winter meals to have a little variety, however modest."
         ],
         "pt": [
-          "As mesmas quatro coisas em outra ordem, o que depois de um tempo deixa de ser outra ordem.",
-          "Eu poderia dizer exatamente o que resta na despensa e exatamente em que semana acaba. É isso o inverno.",
-          "É suficiente e é monótono, e comecei a achar que a monotonia é a metade mais difícil."
+          "O inverno me faz pensar em jeitos de variar as refeições simples.",
+          "Na comida de inverno, gosto de variar um pouco. Até uma erva diferente ajuda.",
+          "Eu gostaria de variar um pouco as refeições de inverno, mesmo sem grandes coisas."
         ]
       },
       "replies": [
@@ -248,16 +352,18 @@
             "shape": "problem_solve",
             "lines": {
               "en": [
-                "One new thing a week, however small. A different herb, a different shape of the same bread. It is a trick and it works.",
-                "I stopped trying. Instead I made one day a week better than the others, and the other six became a wait rather than a slog.",
-                "Company. The same food eaten with somebody is not the same food, and I would not have believed that at twenty."
+                "Change one thing at a time. A different seasoning is easier than a whole new recipe.",
+                "Try it roasted instead of boiled. Same ingredients, a different meal.",
+                "A different texture helps. Crisp edges can make familiar ingredients feel new."
               ],
               "pt": [
-                "Uma coisa nova por semana, por menor que seja. Outra erva, outro formato do mesmo pão. É um truque e funciona.",
-                "Parei de tentar. Em vez disso, fiz um dia da semana melhor que os outros, e os outros seis viraram espera em vez de arrasto.",
-                "Companhia. A mesma comida comida com alguém não é a mesma comida, e eu não acreditaria nisso aos vinte."
+                "Mude uma coisa de cada vez. Um tempero diferente é mais fácil que uma receita inteira.",
+                "Experimente assar em vez de cozinhar na água. São os mesmos ingredientes, mas a refeição muda.",
+                "Uma textura diferente ajuda. Bordas crocantes dão outra cara a ingredientes conhecidos."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -269,17 +375,18 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "I'll eat with you one evening.",
-            "pt": "Eu janto com você uma noite dessas."
+            "en": "Company helps a plain meal too.",
+            "pt": "Companhia também melhora uma refeição simples."
           },
           "phrases": [
-            "i will eat with you one evening",
-            "let me join you for a meal"
+            "company helps a plain meal too"
           ],
           "requires_any": [
-            "eat",
-            "join",
-            "meal"
+            "company",
+            "helps",
+            "plain",
+            "meal",
+            "too"
           ],
           "disposition": {
             "warmth": 3,
@@ -295,23 +402,25 @@
             "id": "accepted",
             "act": "accept",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "Then I shall make the better version, and you will have to pretend the ordinary one is what I usually manage.",
-                "Yes. Bring nothing. People always bring something and then the evening is about the something.",
-                "That is the best offer I have had this month, and I want you to know that says more about the month than about the offer."
+                "It does. So long as everyone gets a turn to talk and something to eat.",
+                "Yes. Though good company still deserves properly cooked potatoes.",
+                "Good company helps. It should get a chair as well as a compliment."
               ],
               "pt": [
-                "Então eu faço a versão melhor, e você vai ter que fingir que a comum é o que eu costumo conseguir.",
-                "Sim. Não traga nada. As pessoas sempre trazem algo e aí a noite fica sendo sobre esse algo.",
-                "É a melhor oferta que eu recebi este mês, e quero que você saiba que isso diz mais do mês do que da oferta."
+                "Melhora mesmo. Desde que todo mundo possa conversar e comer um pouco.",
+                "Sim. Mas uma boa companhia também merece batatas bem cozidas.",
+                "Boa companhia ajuda. Merece uma cadeira, além de um elogio."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

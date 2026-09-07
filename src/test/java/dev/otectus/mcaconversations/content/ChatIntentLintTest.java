@@ -188,7 +188,7 @@ class ChatIntentLintTest {
     @Test
     void noTwoIntentsShareAnIdenticalKeywordSet() {
         SynonymTable syn = ChatIntentTestData.synonyms();
-        Map<Set<String>, String> seen = new HashMap<>();
+        Map<Set<String>, List<IntentBinding>> seen = new HashMap<>();
         List<String> problems = new ArrayList<>();
         for (IntentBinding b : intents.values()) {
             if (b.keywords().isEmpty()) {
@@ -196,10 +196,13 @@ class ChatIntentLintTest {
             }
             Set<String> stemmed = new TreeSet<>();
             b.keywords().keySet().forEach(k -> stemmed.add(syn.canonical(Normalizer.stemToken(k))));
-            String prior = seen.putIfAbsent(stemmed, b.id());
-            if (prior != null) {
-                problems.add(b.id() + " and " + prior + " share the keyword set " + stemmed);
+            List<IntentBinding> prior = seen.computeIfAbsent(stemmed, key -> new ArrayList<>());
+            for (IntentBinding other : prior) {
+                if (canBeLiveTogether(b, other)) {
+                    problems.add(b.id() + " and " + other.id() + " share the keyword set " + stemmed);
+                }
             }
+            prior.add(b);
         }
         assertTrue(problems.isEmpty(), String.join("\n", problems));
     }

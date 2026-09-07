@@ -1,0 +1,233 @@
+{
+  "answers": [
+    {
+      "name": "sleep",
+      "constraints": "!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "sample_sleep.cooldown.sleep",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "sleep",
+              "budget": "quick",
+              "branch": "again",
+              "beat": "sleep.again.open"
+            },
+            "next": "sleep.respond",
+            "conversations_say": {
+              "phrase": "sample_sleep.again"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": 100,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_sleep.cooldown.sleep",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "sleep",
+              "budget": "quick",
+              "branch": "young",
+              "beat": "sleep.young.open"
+            },
+            "conversations_record": {
+              "id": "sample_sleep.cooldown.sleep",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "sleep.respond",
+            "conversations_say": {
+              "phrase": "sample_sleep.young"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "mood": "depressed"
+            },
+            {
+              "chance": 100,
+              "mood": "sad"
+            },
+            {
+              "chance": 100,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_sleep.cooldown.sleep",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "sleep",
+              "budget": "quick",
+              "branch": "rough",
+              "beat": "sleep.rough.open"
+            },
+            "conversations_record": {
+              "id": "sample_sleep.cooldown.sleep",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "sleep.rough.respond",
+            "conversations_say": {
+              "phrase": "sample_sleep.rough"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "mood": "depressed"
+            },
+            {
+              "chance": -2000,
+              "mood": "sad"
+            },
+            {
+              "chance": -2000,
+              "mood": "unhappy"
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_sleep.cooldown.sleep",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "sleep",
+              "budget": "quick",
+              "branch": "ordinary",
+              "beat": "sleep.ordinary.open"
+            },
+            "conversations_record": {
+              "id": "sample_sleep.cooldown.sleep",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "sleep.respond",
+            "conversations_say": {
+              "phrase": "sample_sleep.ordinary"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_sleep.cooldown.sleep",
+                "var": "player"
+              }
+            }
+          ],
+          "actions": {
+            "positive": 2,
+            "conversations_record": {
+              "id": "sample_sleep.cooldown.sleep",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "sample_sleep.ordinary"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
