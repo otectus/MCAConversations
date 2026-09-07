@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "The future between the two of them, gated on the band and on the season.",
-    "",
-    "One scene is the practical next-year question anybody can be asked; the other only exists for a",
-    "partner or family, and it is about a decision rather than a feeling."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "future",
   "entry": {
@@ -48,7 +45,7 @@
       "act": "report",
       "polarity": "positive",
       "predicate": "plan",
-      "temporal": "future",
+      "temporal": "current",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -62,6 +59,12 @@
             "partner",
             "family"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -77,14 +80,14 @@
       },
       "lines": {
         "en": [
-          "Much like this one, which I say as a plan rather than as resignation, and I mean it as a plan.",
-          "There is one thing that will be different and I have not decided it yet, and everything else follows from it.",
-          "I stopped making five-year plans after two of them and I have not regretted it once."
+          "For next year, I'd like a plan with room to change my mind.",
+          "A steady year sounds good. I'd like to leave one part of it open, though.",
+          "I'd like next year to have some stability and some room for choice."
         ],
         "pt": [
-          "Bem parecido com este, e digo isso como plano e não como resignação, e é plano mesmo.",
-          "Tem uma coisa que vai ser diferente e eu ainda não decidi, e todo o resto decorre disso.",
-          "Parei de fazer planos de cinco anos depois de dois deles e nunca me arrependi."
+          "Para o ano que vem, quero um plano que me deixe mudar de ideia.",
+          "Um ano tranquilo parece bom. Mas quero deixar uma parte em aberto.",
+          "Quero que o ano que vem tenha alguma estabilidade e espaço para escolhas."
         ]
       },
       "replies": [
@@ -97,16 +100,17 @@
           "tone": "plain",
           "outcome": "engaged",
           "label": {
-            "en": "What's the one thing?",
-            "pt": "Qual é essa coisa?"
+            "en": "Which part would you leave open?",
+            "pt": "Que parte você deixaria em aberto?"
           },
           "phrases": [
-            "what is the one thing",
-            "which thing is undecided"
+            "which part would you leave open"
           ],
           "requires_any": [
-            "thing",
-            "undecided"
+            "which",
+            "part",
+            "leave",
+            "open"
           ],
           "disposition": {
             "familiarity": 2
@@ -115,20 +119,21 @@
             "id": "answered",
             "act": "explain",
             "polarity": "mixed",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "Whether I take somebody on. It sounds like a small decision and it changes the shape of every day afterwards.",
-                "Where I spend the winter. It has been the same answer for eleven years and this year it is a question.",
-                "I would rather not say until it is decided. Saying a thing while it is still open makes it harder to close honestly."
+                "How I spend my spare time. I'd like room to try something new.",
+                "What I learn next. Choosing too early can shut out a good surprise.",
+                "A bit of free time. I'd like to see what catches my interest."
               ],
               "pt": [
-                "Se eu pego alguém para trabalhar comigo. Parece uma decisão pequena e muda o formato de todos os dias depois.",
-                "Onde eu passo o inverno. Foi a mesma resposta por onze anos e este ano é uma pergunta.",
-                "Prefiro não dizer antes de decidir. Falar de uma coisa enquanto está aberta dificulta fechar com honestidade."
+                "Como eu uso meu tempo livre. Quero espaço para experimentar algo novo.",
+                "O que vou aprender a seguir. Decidir cedo demais pode impedir uma boa surpresa.",
+                "Um pouco de tempo livre. Quero ver o que desperta meu interesse."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         },
         {
@@ -159,23 +164,25 @@
             "id": "pleased",
             "act": "accept",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "Then that is one more thing in next year that I can count on, and I keep a short list of those.",
-                "Good. Half the people who say that are gone by the spring and the other half never say it at all.",
-                "I shall hold you to it in a mild way, which is the only way anybody should be held to anything."
+                "I'd like that. A hope is enough; you needn't make it a promise.",
+                "Then I hope we'll have something good to talk about when it comes.",
+                "That would be nice. Let's leave it as a hope we share."
               ],
               "pt": [
-                "Então é mais uma coisa no ano que vem com que eu posso contar, e eu mantenho uma lista curta dessas.",
-                "Ótimo. Metade de quem diz isso some até a primavera e a outra metade nunca diz.",
-                "Vou cobrar de um jeito leve, que é o único jeito de se cobrar qualquer coisa de alguém."
+                "Eu gostaria. A vontade já basta; não precisa virar promessa.",
+                "Então espero que tenhamos coisas boas para conversar quando esse momento chegar.",
+                "Seria bom. Vamos deixar como uma vontade que temos em comum."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "the_decision_between_us",
@@ -184,7 +191,7 @@
       "act": "report",
       "polarity": "mixed",
       "predicate": "plan",
-      "temporal": "future",
+      "temporal": "current",
       "privacy": "discreet",
       "obligations": [
         "clarify",
@@ -192,11 +199,27 @@
       ],
       "conditions": [
         {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
           "field": "player.relationship_band",
           "any_of": [
-            "partner",
-            "family"
+            "family",
+            "partner"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -212,14 +235,14 @@
       },
       "lines": {
         "en": [
-          "There is a decision the two of us keep almost making, and I would rather make it badly than keep almost making it.",
-          "We have talked around it four times. I am raising it plainly because the talking around is costing more than the decision would.",
-          "I know which way I lean and I have not said, because I wanted to hear where you were before I put a thumb on it."
+          "If we ever have a big decision to make together, I'd want both of us to get a say.",
+          "Being close shouldn't mean one of us decides and the other goes along.",
+          "For any shared decision, I'd want both voices to count."
         ],
         "pt": [
-          "Existe uma decisão que nós dois quase tomamos toda vez, e eu prefiro tomar mal a continuar quase tomando.",
-          "Já demos volta nisso quatro vezes. Estou levantando com franqueza porque dar voltas custa mais do que a decisão custaria.",
-          "Eu sei para que lado eu pendo e não disse, porque queria ouvir onde você estava antes de pôr o polegar na balança."
+          "Se tivermos uma decisão grande para tomar juntos, quero que os dois possam opinar.",
+          "Ter intimidade não deve significar que um decide e o outro só acompanha.",
+          "Em qualquer decisão conjunta, quero que as duas vozes contem."
         ]
       },
       "replies": [
@@ -232,17 +255,16 @@
           "tone": "plain",
           "outcome": "accepted",
           "label": {
-            "en": "Then let's settle it this week.",
-            "pt": "Então vamos resolver esta semana."
+            "en": "We should talk it through first.",
+            "pt": "É melhor conversar antes de decidir."
           },
           "phrases": [
-            "then let us settle it this week",
-            "we should decide it this week"
+            "we should talk it through first"
           ],
           "requires_any": [
-            "settle",
-            "decide",
-            "week"
+            "should",
+            "through",
+            "first"
           ],
           "disposition": {
             "trust": 4,
@@ -258,21 +280,22 @@
             "id": "resolved",
             "act": "accept",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "privacy": "discreet",
             "shape": "plan",
             "lines": {
               "en": [
-                "This week. Thursday evening, at the table, with nothing else on, because a decision made in a doorway gets unmade in one.",
-                "Right. And whichever way it falls we both hold it, and neither of us gets to say afterwards that it was the other one's idea.",
-                "Thank you. Four months of nearly, ended by somebody naming a day. That is usually all any of it needs."
+                "Yes. And be clear about what we're actually deciding.",
+                "Agreed. A proper conversation beats guessing what the other person wants.",
+                "Agreed. Taking a little time can save a lot of guessing."
               ],
               "pt": [
-                "Esta semana. Quinta à noite, na mesa, sem mais nada acontecendo, porque decisão tomada num vão de porta é desfeita em outro.",
-                "Certo. E para que lado cair, nós dois seguramos, e nenhum de nós pode dizer depois que a ideia foi do outro.",
-                "Obrigada. Quatro meses de quase, encerrados por alguém marcar um dia. Costuma ser tudo o que qualquer coisa precisa."
+                "Sim. E deixar claro o que estamos decidindo de verdade.",
+                "Concordo. Conversar direito é melhor que adivinhar o que o outro quer.",
+                "Concordo. Pensar um pouco pode poupar muita adivinhação."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         },
         {
@@ -284,16 +307,16 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "Which way do you lean?",
-            "pt": "Para que lado você pende?"
+            "en": "What if we want different things?",
+            "pt": "E se quisermos coisas diferentes?"
           },
           "phrases": [
-            "which way do you lean",
-            "where do you stand on it"
+            "what if we want different things"
           ],
           "requires_any": [
-            "lean",
-            "stand"
+            "want",
+            "different",
+            "things"
           ],
           "disposition": {
             "familiarity": 3,
@@ -307,19 +330,117 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "Toward yes, and about two thirds of the way, and the last third is not about the decision at all.",
-                "I will tell you on Thursday and not now, because saying it now makes your answer a response to mine.",
-                "Toward waiting, which I know is the cowardly answer, and I would like to be argued out of it by somebody who is fair about it."
+                "Then we say so. Being close doesn't make every disagreement a betrayal.",
+                "We'd have to look for room to compromise. And admit when there isn't any.",
+                "Then we'd need honesty before agreement. Pretending wouldn't make it easier."
               ],
               "pt": [
-                "Para o sim, e uns dois terços do caminho, e o último terço não é sobre a decisão de jeito nenhum.",
-                "Eu te digo na quinta e não agora, porque dizer agora transforma a sua resposta numa reação à minha.",
-                "Para esperar, e eu sei que é a resposta covarde, e eu gostaria de ser convencida do contrário por alguém que seja justo."
+                "Aí a gente diz. Ter intimidade não transforma qualquer discordância em traição.",
+                "Teríamos que procurar um meio-termo. E admitir quando não há espaço para isso.",
+                "Aí precisaríamos de honestidade antes de concordar. Fingir não facilitaria."
               ]
-            }
+            },
+            "prompt": {
+              "en": "Room for disagreement.",
+              "pt": "Espaço para discordar."
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "follow_1",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "reaction": {
+                  "id": "follow_answer_1",
+                  "act": "explain",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Both people should be able to say what they're giving up. Otherwise one may not have agreed at all.",
+                      "Something neither person has to pretend to like. It should be possible to speak honestly about it.",
+                      "A choice both people understand, with room to reconsider if the situation changes."
+                    ],
+                    "pt": [
+                      "Os dois devem poder dizer do que estão abrindo mão. Senão, talvez um nem tenha concordado.",
+                      "Algo de que nenhum dos dois precise fingir gostar. Deve ser possível falar disso com honestidade.",
+                      "Uma escolha que os dois entendam, com espaço para rever se a situação mudar."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "What would a fair compromise look like?",
+                  "pt": "Como seria um meio-termo justo?"
+                },
+                "phrases": [
+                  "what would a fair compromise look like"
+                ],
+                "requires_any": [
+                  "fair",
+                  "compromise",
+                  "look",
+                  "like"
+                ]
+              },
+              {
+                "name": "follow_2",
+                "stance": "respectful_disagreement",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "qualified",
+                "reaction": {
+                  "id": "follow_answer_2",
+                  "act": "qualify",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "I agree. Being close doesn't mean giving up every boundary.",
+                      "That's true. We'd need to name those things, rather than discover them by pushing.",
+                      "Then honesty matters even more. I wouldn't want a reluctant yes mistaken for agreement."
+                    ],
+                    "pt": [
+                      "Concordo. Ter intimidade não é abrir mão de todos os limites.",
+                      "É verdade. Precisaríamos dizer quais são, em vez de descobrir forçando.",
+                      "Aí a honestidade importa ainda mais. Não quero confundir um sim relutante com concordância."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "Some things aren't worth compromising on.",
+                  "pt": "Algumas coisas não valem um acordo."
+                },
+                "phrases": [
+                  "some things arent worth compromising on"
+                ],
+                "requires_any": [
+                  "some",
+                  "things",
+                  "arent",
+                  "worth",
+                  "compromising"
+                ]
+              }
+            ],
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

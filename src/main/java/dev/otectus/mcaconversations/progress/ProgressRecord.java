@@ -98,8 +98,19 @@ public final class ProgressRecord {
         return decisionsEver.contains(decisionId);
     }
 
+    /** Refuse a payout whose replay guard cannot be retained within the bounded ledger. */
+    public boolean canTrackDecision(String id, ReplayPolicy policy) {
+        return (decisionCountsToday.containsKey(id) || decisionCountsToday.size() < MAX_DECISIONS_TRACKED)
+                && (policy != ReplayPolicy.ONCE || decisionsEver.contains(id)
+                || decisionsEver.size() < MAX_ONCE_DECISIONS);
+    }
+
     /** Books an applied delta against the daily counters and the per-decision repeat counts. */
     public void recordApplied(String decisionId, int applied, long day) {
+        recordApplied(decisionId, applied, day, ReplayPolicy.ONCE);
+    }
+
+    public void recordApplied(String decisionId, int applied, long day, ReplayPolicy policy) {
         rollTo(day);
         if (applied > 0) {
             positiveToday += applied;
@@ -110,7 +121,7 @@ public final class ProgressRecord {
                 || decisionCountsToday.containsKey(decisionId)) {
             decisionCountsToday.merge(decisionId, 1, Integer::sum);
         }
-        if (decisionsEver.size() < MAX_ONCE_DECISIONS) {
+        if (policy == ReplayPolicy.ONCE && decisionsEver.size() < MAX_ONCE_DECISIONS) {
             decisionsEver.add(decisionId);
         }
     }

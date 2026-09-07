@@ -63,6 +63,9 @@ public final class ConversationsQuestsEvents {
                     : MemoryIds.questFailed(questId.toString());
             McaCompat.rememberForever(villager, MemoryIds.playerScoped(memId, player.getUUID()));
             StateTracker.apply(villager, player, StateRules.forQuest(completed));
+            dev.otectus.mcaconversations.history.CommitmentObserver.onQuestOutcome(
+                    villager, player, questId, completed,
+                    Math.floorDiv(villager.level().getDayTime(), 24_000L));
             // §30.4: with MCA: Reputation active, its named quest incident is the canonical story —
             // seeding the generic QUEST event as well would have villagers telling the same deed
             // twice in two voices. Memories and state above still apply either way.

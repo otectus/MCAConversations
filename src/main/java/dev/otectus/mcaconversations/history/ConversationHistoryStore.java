@@ -101,7 +101,7 @@ public final class ConversationHistoryStore {
         return loadedVersion;
     }
 
-    /** Runs every villager's pruning pass. Returns how many records were removed. */
+    /** Runs every villager's pruning pass. Returns the number of removals and state transitions. */
     public int prune(long today) {
         int removed = 0;
         List<UUID> empties = new ArrayList<>();

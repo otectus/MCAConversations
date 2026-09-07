@@ -134,19 +134,27 @@ public final class GroupDirector {
             return offers;
         }
         long today = level.getDayTime() / 24000L;
-        Optional<EpisodeRecord> subject = History.liveEpisodes(lead, today).stream().findFirst();
-        boolean aboutPublicEvent = subject
-                .map(episode -> episode.privacy() == dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC)
-                .orElse(false);
-        boolean oversharing = subject.map(episode -> !episode.provenance().maySpeak()).orElse(false);
-
+        ConversationSession session = ConversationSessions.raw(player.getUUID()).orElse(null);
+        if (session == null || !lead.getUUID().equals(session.villagerId())) {
+            return offers;
+        }
+        String topicSubject = session.currentSubject().orElse("");
+        dev.otectus.mcaconversations.conversation.NpcSpeechAct act = session.lastNpcAct().orElse(null);
+        Optional<EpisodeRecord> subject = subjectEpisode(History.liveEpisodes(lead, today),
+                session.plan().flatMap(dev.otectus.mcaconversations.scene.ConversationPlan::episodeId).orElse(null),
+                topicSubject);
         for (VillagerFinder.VillagerCandidate candidate : VillagerFinder.candidates(player, EARSHOT)) {
             Entity bystander = candidate.entity();
-            if (bystander == lead || !McaCompat.isMcaVillager(bystander)) {
+            dev.otectus.mcaconversations.chat.ChatModeSession.Session chat =
+                    dev.otectus.mcaconversations.chat.ChatModeSession.peek(player.getUUID());
+            if (bystander == lead || !McaCompat.isMcaVillager(bystander) || !bystander.isAlive()
+                    || McaCompat.isBaby(bystander) || bystander.distanceToSqr(lead) > EARSHOT * EARSHOT
+                    || McaCompat.isInteractingWith(bystander).isPresent()
+                    || chat != null && chat.isMuted(bystander.getUUID(), now)) {
                 continue;
             }
             GroupRelation relation = observe(level, lead, bystander, subject.orElse(null));
-            for (GroupShape shape : shapesFor(relation, aboutPublicEvent, oversharing)) {
+            for (GroupShape shape : shapesForBeat(relation, topicSubject, act, subject.orElse(null))) {
                 offers.add(new GroupInterjection(shape, bystander.getUUID(), leadBeat,
                         relation.knowledge().orElse(KnowledgeSource.UNKNOWN_RUMOR)));
             }
@@ -175,30 +183,75 @@ public final class GroupDirector {
 
         String leadTrade = McaCompat.getProfessionId(lead).orElse("");
         String bystanderTrade = McaCompat.getProfessionId(bystander).orElse("");
-        boolean sharesTrade = !leadTrade.isBlank() && leadTrade.equals(bystanderTrade);
+        boolean sharesTrade = isWorkingTrade(leadTrade) && leadTrade.equals(bystanderTrade);
         if (!sharesTrade) {
             sharesTrade = History.of(bystander)
                     .map(history -> history.role(leadId, SocialRole.COWORKER).isPresent())
                     .orElse(false);
         }
 
-        KnowledgeSource knowledge = null;
-        if (subject != null) {
-            if (subject.isKnownTo(bystanderId)) {
-                knowledge = KnowledgeSource.WITNESSED;
-            } else if (family) {
-                knowledge = KnowledgeSource.FAMILY;
-            } else if (sharesTrade) {
-                knowledge = KnowledgeSource.COWORKER;
-            } else if (subject.privacy() == dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC) {
-                knowledge = KnowledgeSource.PUBLIC_NOTICE;
-            }
-        } else if (family) {
-            knowledge = KnowledgeSource.FAMILY;
-        } else if (sharesTrade) {
+        // Kinship and a shared trade establish a relationship, not knowledge of a particular event.
+        KnowledgeSource knowledge = knowledgeOf(subject, bystanderId);
+        if (subject == null && sharesTrade) {
             knowledge = KnowledgeSource.COWORKER;
         }
         return GroupRelation.of(family, sharesTrade, knowledge);
+    }
+
+    static boolean isWorkingTrade(String profession) {
+        return profession != null && !profession.isBlank()
+                && !profession.equals("minecraft:none") && !profession.equals("minecraft:nitwit");
+    }
+
+    static Optional<EpisodeRecord> subjectEpisode(List<EpisodeRecord> episodes, UUID pinned, String subject) {
+        List<EpisodeRecord> matching = episodes.stream().filter(episode -> episode.subject().equals(subject))
+                .filter(episode -> pinned == null || pinned.equals(episode.id())).toList();
+        return matching.size() == 1 ? Optional.of(matching.get(0)) : Optional.empty();
+    }
+
+    static KnowledgeSource knowledgeOf(EpisodeRecord episode, UUID speaker) {
+        if (episode == null || speaker == null) {
+            return null;
+        }
+        if (episode.participants().contains(speaker) || speaker.equals(episode.ownerVillager())) {
+            return KnowledgeSource.PARTICIPANT;
+        }
+        // The witness ledger includes people who were told; it does not prove eyewitness status.
+        return episode.isKnownTo(speaker) ? KnowledgeSource.TOLD_BY : null;
+    }
+
+    /** A social relation alone is never a contract to answer any arbitrary preceding sentence. */
+    static List<GroupShape> shapesForBeat(GroupRelation relation, String subject,
+                                         dev.otectus.mcaconversations.conversation.NpcSpeechAct act,
+                                         EpisodeRecord episode) {
+        if (relation == null || act == null || act.isRupture()
+                || episode != null && episode.privacy() != dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC) {
+            return List.of();
+        }
+        KnowledgeSource knowledge = relation.knowledge().orElse(null);
+        List<GroupShape> shapes = new ArrayList<>();
+        if (episode != null && (act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.REPORT
+                || act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.CELEBRATE)
+                && GroupShape.CORROBORATE.acceptsKnowledge(knowledge)) {
+            shapes.add(GroupShape.CORROBORATE);
+        }
+        if (subject.startsWith("work.") && relation.sharesTrade()
+                && (act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.EXPLAIN
+                        || act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.COMPLAIN)
+                && GroupShape.COWORKER_DETAIL.acceptsKnowledge(knowledge)) {
+            shapes.add(GroupShape.COWORKER_DETAIL);
+        }
+        if (episode != null && relation.family()
+                && act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.REMINISCE
+                && GroupShape.FAMILY_REMEMBERS.acceptsKnowledge(knowledge)) {
+            shapes.add(GroupShape.FAMILY_REMEMBERS);
+        }
+        if (episode == null && "food.preference".equals(subject)
+                && (act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.REPORT
+                        || act == dev.otectus.mcaconversations.conversation.NpcSpeechAct.EXPLAIN)) {
+            shapes.add(GroupShape.FRIENDLY_DISAGREEMENT);
+        }
+        return List.copyOf(shapes);
     }
 
     private static void speak(GroupInterjection interjection, ServerPlayer player, long now) {

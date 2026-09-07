@@ -92,4 +92,20 @@ class GuiOfferLifetimeTest {
 
         assertTrue(session.currentOffer().isEmpty());
     }
+
+    @Test
+    void maintenancePreservesThePageItsTopicAndItsSpentBudget() {
+        ConversationSession session = ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 100);
+        session.recordApplied(2);
+        var offer = ConversationSessions.recordOffer(PLAYER, VILLAGER, "conversations.q", List.of("yes"),
+                ConversationSession.Frontend.GUI, 101);
+        assertEquals(0, ConversationSessions.sweep(1_000_000));
+        ConversationSession after = ConversationSessions.peek(PLAYER, 1_000_000).orElseThrow();
+        assertEquals("day", after.topicId().orElseThrow());
+        assertEquals(2, after.positiveApplied());
+        assertEquals(offer.revision(), after.currentOffer().orElseThrow().revision());
+        assertTrue(after.consumeOffer(offer.revision(), 0).isPresent());
+        assertEquals(1, ConversationSessions.sweep(1_000_001));
+    }
+
 }

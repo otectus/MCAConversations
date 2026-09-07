@@ -118,4 +118,25 @@ class ChatDeliveryTest {
         assertEquals(ChatDelivery.NOMINAL_LINE_LENGTH, ChatDelivery.typedLength(""));
         assertEquals(ChatDelivery.NOMINAL_LINE_LENGTH, ChatDelivery.typedLength(null));
     }
+
+    @Test
+    void publicRepliesDoNotAnnounceConfidencesOrPersonalDisclosures() {
+        for (var privacy : dev.otectus.mcaconversations.history.PrivacyLevel.values()) {
+            assertEquals(privacy == dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC,
+                    ChatDelivery.mayBroadcast(privacy, dev.otectus.mcaconversations.conversation.NpcSpeechAct.REPORT));
+        }
+        assertEquals(false, ChatDelivery.mayBroadcast(null,
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE));
+        assertEquals(false, ChatDelivery.mayBroadcast(null,
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE_PROBLEM));
+        assertEquals(true, ChatDelivery.mayBroadcast(null,
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.REPORT));
+    }
+
+
+    @Test
+    void clarificationUsesTheActualContextualAnswerLabel() {
+        var choice = new IntentMatcher.Scored("q.ask", 0.9, "conversations.q", "ask", null, "topics", true);
+        assertEquals("dialogue.conversations.q.ask", ChatModeDispatcher.topicName(choice).getString());
+    }
 }

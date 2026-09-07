@@ -223,8 +223,8 @@ public final class History {
                 return existing;
             }
             SharedThreadRecord opened = template.open(episodeId, today);
-            data.mutate(villagerId, history -> history.pair(playerId).putThread(opened), true);
-            return Optional.of(opened);
+            boolean stored = data.change(villagerId, history -> history.pair(playerId).putThread(opened));
+            return stored ? Optional.of(opened) : Optional.empty();
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("thread open failed for '{}'; ignoring", templateId, t);
             return Optional.empty();
@@ -298,8 +298,8 @@ public final class History {
                 return existing;
             }
             CommitmentRecord made = template.make(today, episodeId);
-            data.mutate(villagerId, history -> history.pair(playerId).putCommitment(made), true);
-            return Optional.of(made);
+            boolean stored = data.change(villagerId, history -> history.pair(playerId).putCommitment(made));
+            return stored ? Optional.of(made) : Optional.empty();
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("commitment creation failed for '{}'; ignoring", templateId, t);
             return Optional.empty();
@@ -392,9 +392,8 @@ public final class History {
         }
         try {
             long today = server.overworld().getDayTime() / 24000L;
-            ConversationHistorySavedData.get(server)
-                    .mutate(villager.getUUID(), history -> history.putEpisode(episode, today), true);
-            return true;
+            return ConversationHistorySavedData.get(server)
+                    .change(villager.getUUID(), history -> history.putEpisode(episode, today));
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("episode write failed; ignoring", t);
             return false;

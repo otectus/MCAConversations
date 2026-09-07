@@ -1,0 +1,75 @@
+{
+  "answers": [
+    {
+      "name": "ask_more",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.more"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.chandler.more",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "chandler.work.more"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "thanks",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.thanks"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.chandler.thanks",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "once_per_day"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.chandler.thanks",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "chandler.work.thanks"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "chandler.work.followup.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "_comment": "Sample 06. One intent per non-exit answer, bound to the exact question+answer it presses. Ids are prefixed so nothing here can silently redefine another pack's intent.",
+  "synonyms": {
+    "supper": ["feast", "meal"],
+    "borrowed": ["lent", "loaned"]
+  },
+  "intents": {
+    "commons.starter": {
+      "question": "conversations.cat.village",
+      "answer": "commons",
+      "keywords": {
+        "village": 1.4,
+        "here": 0.8,
+        "place": 1.0,
+        "people": 1.0,
+        "commons": 1.5
+      },
+      "requiresAny": ["village", "place", "people", "commons"],
+      "phrases": [
+        "what is this village like",
+        "tell me about this place",
+        "how are people here",
+        "what do people here care about"
+      ],
+      "bigrams": ["this village"],
+      "category": "topics"
+    },
+    "commons.supper.what": {
+      "question": "commons.scene.supper.endorsed.respond",
+      "answer": "ask_what_happens",
+      "keywords": {
+        "what": 1.0,
+        "happens": 1.5,
+        "supper": 1.4,
+        "night": 0.8
+      },
+      "requiresAny": ["happens", "supper", "night"],
+      "phrases": [
+        "what happens at it",
+        "what is the supper like",
+        "what goes on that night",
+        "how does it work"
+      ],
+      "category": "topics"
+    },
+    "commons.supper.coming": {
+      "question": "commons.scene.supper.endorsed.respond",
+      "answer": "say_you_will_come",
+      "keywords": {
+        "come": 1.5,
+        "there": 1.0,
+        "attend": 1.0,
+        "join": 1.0
+      },
+      "requiresAny": ["come", "there", "attend", "join"],
+      "phrases": [
+        "i will be there",
+        "i will come",
+        "count me in",
+        "i would like to join you"
+      ],
+      "category": "topics"
+    },
+    "commons.supper.why_not": {
+      "question": "commons.scene.supper.questioned.respond",
+      "answer": "ask_why_not",
+      "keywords": {
+        "why": 1.5,
+        "not": 1.0,
+        "bother": 1.0,
+        "mind": 0.8
+      },
+      "requiresAny": ["why", "bother", "mind"],
+      "phrases": [
+        "why not",
+        "what is wrong with it",
+        "why does it bother you",
+        "you do not sound keen"
+      ],
+      "category": "topics"
+    },
+    "commons.supper.agree": {
+      "question": "commons.scene.supper.questioned.respond",
+      "answer": "agree_it_is_a_lot",
+      "keywords": {
+        "lot": 1.5,
+        "much": 1.2,
+        "crowded": 1.0,
+        "loud": 1.0,
+        "agree": 1.0
+      },
+      "requiresAny": ["lot", "much", "crowded", "loud", "agree"],
+      "phrases": [
+        "that is a lot of people",
+        "i find crowds hard too",
+        "it does sound like a lot",
+        "i know what you mean"
+      ],
+      "category": "topics"
+    },
+    "commons.tool.vouch": {
+      "question": "commons.scene.borrowed_tool.active.respond",
+      "answer": "vouch_for_them",
+      "keywords": {
+        "good": 1.2,
+        "trust": 1.5,
+        "reliable": 1.5,
+        "fine": 0.8,
+        "word": 1.0
+      },
+      "requiresAny": ["trust", "reliable", "good", "word"],
+      "phrases": [
+        "they are good for it",
+        "you can trust them",
+        "they are as good as their word",
+        "they will bring it back"
+      ],
+      "category": "topics"
+    },
+    "commons.tool.who": {
+      "question": "commons.scene.borrowed_tool.active.respond",
+      "answer": "ask_who_it_was",
+      "keywords": {
+        "who": 1.5,
+        "borrowed": 1.2,
+        "took": 1.0,
+        "has": 0.6
+      },
+      "requiresAny": ["who", "borrowed", "took"],
+      "phrases": [
+        "who has it",
+        "who borrowed it",
+        "who took it",
+        "who was that"
+      ],
+      "category": "topics"
+    },
+    "commons.tool.squared": {
+      "question": "commons.scene.borrowed_tool.settled.respond",
+      "answer": "say_it_is_squared_away",
+      "keywords": {
+        "sorted": 1.5,
+        "squared": 1.5,
+        "settled": 1.2,
+        "done": 1.0
+      },
+      "requiresAny": ["sorted", "squared", "settled", "done"],
+      "phrases": [
+        "that is sorted then",
+        "all squared away",
+        "sounds settled",
+        "good that it is done"
+      ],
+      "category": "topics"
+    },
+    "commons.mill.source": {
+      "question": "commons.scene.mill.hearsay.respond",
+      "answer": "ask_where_they_heard_it",
+      "keywords": {
+        "where": 1.2,
+        "heard": 1.5,
+        "who": 1.0,
+        "told": 1.4,
+        "source": 1.0
+      },
+      "requiresAny": ["heard", "told", "where", "source"],
+      "phrases": [
+        "where did you hear that",
+        "who told you",
+        "how do you know that",
+        "who said so"
+      ],
+      "bigrams": ["you hear"],
+      "category": "topics"
+    },
+    "commons.mill.quiet": {
+      "question": "commons.scene.mill.hearsay.respond",
+      "answer": "keep_it_between_us",
+      "keywords": {
+        "quiet": 1.5,
+        "between": 1.2,
+        "private": 1.2,
+        "repeat": 1.0,
+        "spread": 1.0
+      },
+      "requiresAny": ["quiet", "between", "private", "repeat", "spread"],
+      "phrases": [
+        "keep it between us",
+        "best not to spread it",
+        "i will not repeat it",
+        "let us keep that quiet"
+      ],
+      "category": "topics"
+    },
+    "commons.evergreen.what": {
+      "question": "commons.scene.village.evergreen.respond",
+      "answer": "ask_what_it_is_like",
+      "keywords": {
+        "like": 1.2,
+        "village": 1.4,
+        "here": 0.8,
+        "living": 1.0
+      },
+      "requiresAny": ["like", "village", "living"],
+      "phrases": [
+        "what is it like here",
+        "what is living here like",
+        "tell me about the village",
+        "how is it here"
+      ],
+      "category": "topics"
+    },
+    "commons.followup.thanks": {
+      "question": "commons.followup",
+      "answer": "say_thanks",
+      "keywords": {
+        "thanks": 1.5,
+        "thank": 1.5,
+        "grateful": 1.0
+      },
+      "requiresAny": ["thanks", "thank", "grateful"],
+      "phrases": [
+        "thank you",
+        "thanks for telling me",
+        "i appreciate it"
+      ],
+      "category": "topics"
+    },
+    "commons.plain.sounds": {
+      "question": "commons.plain.respond",
+      "answer": "that_sounds_like_the_place",
+      "keywords": {
+        "sounds": 1.5,
+        "right": 1.0,
+        "place": 1.0
+      },
+      "requiresAny": ["sounds", "right", "place"],
+      "phrases": [
+        "that sounds about right",
+        "sounds like the place",
+        "that is this village all over"
+      ],
+      "category": "topics"
+    }
+  }
+}

@@ -227,4 +227,53 @@ class GroupConversationTest {
         Path path = TestPaths.of("src/main/resources/assets/mca_dialogue/lang/" + locale + ".json");
         return JsonParser.parseString(Files.readString(path)).getAsJsonObject();
     }
+    private static dev.otectus.mcaconversations.history.EpisodeRecord episode(String subject,
+            dev.otectus.mcaconversations.history.PrivacyLevel privacy) {
+        return dev.otectus.mcaconversations.history.EpisodeRecord.opened(java.util.UUID.randomUUID(),
+                "work.test", subject, dev.otectus.mcaconversations.history.EpisodeState.ACTIVE,
+                LEAD, java.util.Map.of(), privacy, 40, 1);
+    }
+
+    @Test
+    void groupSubjectMustMatchTheActualConversationAndPinnedEpisode() {
+        var work = episode("work.test", dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC);
+        var family = episode("family.test", dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC);
+        assertEquals(Optional.of(family), GroupDirector.subjectEpisode(List.of(work, family), family.id(), "family.test"));
+        assertTrue(GroupDirector.subjectEpisode(List.of(work, family), work.id(), "family.test").isEmpty());
+        assertTrue(GroupDirector.subjectEpisode(List.of(work), null, "food.preference").isEmpty());
+        assertTrue(GroupDirector.subjectEpisode(List.of(work, episode("work.test",
+                dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC)), null, "work.test").isEmpty());
+    }
+
+    @Test
+    void beingToldDoesNotBecomeEyewitnessKnowledge() {
+        var event = episode("work.test", dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC);
+        assertEquals(null, GroupDirector.knowledgeOf(event, SECOND));
+        assertEquals(KnowledgeSource.TOLD_BY, GroupDirector.knowledgeOf(event.witnessedBy(SECOND), SECOND));
+        assertEquals(KnowledgeSource.PARTICIPANT, GroupDirector.knowledgeOf(event.withParticipant(SECOND), SECOND));
+    }
+
+    @Test
+    void familyAndCoworkersCannotInterruptUnrelatedOrConfidentialSubjects() {
+        var relative = GroupRelation.of(true, true, KnowledgeSource.PARTICIPANT);
+        var secret = episode("family.test", dev.otectus.mcaconversations.history.PrivacyLevel.CONFIDENTIAL);
+        assertTrue(GroupDirector.shapesForBeat(relative, "family.test",
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.REMINISCE, secret).isEmpty());
+        assertTrue(GroupDirector.shapesForBeat(relative, "feelings.personal",
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE, null).isEmpty());
+        assertTrue(GroupDirector.shapesForBeat(relative, "food.preference",
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.ASK, null).isEmpty());
+        assertEquals(List.of(GroupShape.FRIENDLY_DISAGREEMENT), GroupDirector.shapesForBeat(
+                GroupRelation.STRANGER, "food.preference",
+                dev.otectus.mcaconversations.conversation.NpcSpeechAct.REPORT, null));
+    }
+
+    @Test
+    void sharingUnemploymentDoesNotEstablishCoworkerExpertise() {
+        assertFalse(GroupDirector.isWorkingTrade("minecraft:none"));
+        assertFalse(GroupDirector.isWorkingTrade("minecraft:nitwit"));
+        assertFalse(GroupDirector.isWorkingTrade(""));
+        assertTrue(GroupDirector.isWorkingTrade("minecraft:farmer"));
+    }
+
 }

@@ -1,0 +1,433 @@
+{
+  "_comment": [
+    "The subject on ledger.cover.accepted is what conversations_exchange reads back",
+    "later: a decision is filed under the subject of the beat the villager moved to,",
+    "with the stance of the button pressed and that beat's outcome."
+  ],
+  "beats": {
+    "ledger.open.to.ledger.respond": {
+      "topic": "ledger",
+      "say": "ledger.open",
+      "response_question": "ledger.respond",
+      "npc_act": "disclose_problem",
+      "subject": "ledger.debt",
+      "polarity": "mixed",
+      "openness": "invites_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "respectful_disagreement",
+        "candor",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      }
+    },
+    "ledger.who.first.to.ledger.respond": {
+      "topic": "ledger",
+      "say": "ledger.who.first",
+      "response_question": "ledger.respond",
+      "npc_act": "disclose",
+      "subject": "ledger.debtor",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "respectful_disagreement",
+        "candor",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged"
+    },
+    "ledger.who.again.to.ledger.respond": {
+      "topic": "ledger",
+      "say": "ledger.who.again",
+      "response_question": "ledger.respond",
+      "npc_act": "report",
+      "subject": "ledger.debtor",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "respectful_disagreement",
+        "candor",
+        "practical_help",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "qualified"
+    },
+    "ledger.forgive.agrees.to.ledger.followup": {
+      "topic": "ledger",
+      "say": "ledger.forgive.agrees",
+      "response_question": "ledger.followup",
+      "npc_act": "accept",
+      "subject": "ledger.debt",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "accepted"
+    },
+    "ledger.forgive.resents.to.ledger.followup": {
+      "topic": "ledger",
+      "say": "ledger.forgive.resents",
+      "response_question": "ledger.followup",
+      "npc_act": "qualify",
+      "subject": "ledger.debt",
+      "polarity": "mixed",
+      "openness": "guarded",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "qualified"
+    },
+    "ledger.collect.agrees.to.ledger.followup": {
+      "topic": "ledger",
+      "say": "ledger.collect.agrees",
+      "response_question": "ledger.followup",
+      "npc_act": "accept",
+      "subject": "ledger.debt",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "accepted"
+    },
+    "ledger.cover.accepted.to.ledger.followup": {
+      "topic": "ledger",
+      "say": "ledger.cover.accepted",
+      "response_question": "ledger.followup",
+      "npc_act": "accept",
+      "subject": "ledger.debt",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "accepted"
+    },
+    "ledger.promise.open.to.ledger.followup": {
+      "topic": "ledger",
+      "say": "ledger.promise.open",
+      "response_question": "ledger.followup",
+      "npc_act": "ask",
+      "subject": "ledger.promise",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    },
+    "ledger.again.open.to.ledger.followup": {
+      "topic": "ledger",
+      "say": "ledger.again.open",
+      "response_question": "ledger.followup",
+      "npc_act": "report",
+      "subject": "ledger.debt",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "ledger:unpaid"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "practical_help",
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "encouragement",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    }
+  },
+  "replies": {
+    "ledger.respond/ask_who": {
+      "stance": "curiosity",
+      "responds_to": [
+        "ledger.open.to.ledger.respond",
+        "ledger.who.first.to.ledger.respond",
+        "ledger.who.again.to.ledger.respond"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged",
+        "qualified"
+      ]
+    },
+    "ledger.respond/urge_forgive": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "ledger.open.to.ledger.respond",
+        "ledger.who.first.to.ledger.respond",
+        "ledger.who.again.to.ledger.respond"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted",
+        "qualified"
+      ]
+    },
+    "ledger.respond/urge_collect": {
+      "stance": "candor",
+      "responds_to": [
+        "ledger.open.to.ledger.respond",
+        "ledger.who.first.to.ledger.respond",
+        "ledger.who.again.to.ledger.respond"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "ledger.respond/offer_to_cover": {
+      "stance": "practical_help",
+      "responds_to": [
+        "ledger.open.to.ledger.respond",
+        "ledger.who.first.to.ledger.respond",
+        "ledger.who.again.to.ledger.respond"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "ledger.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "ledger.open.to.ledger.respond",
+        "ledger.who.first.to.ledger.respond",
+        "ledger.who.again.to.ledger.respond"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "ledger.followup/ask_how_it_went": {
+      "stance": "curiosity",
+      "responds_to": [
+        "ledger.forgive.agrees.to.ledger.followup",
+        "ledger.forgive.resents.to.ledger.followup",
+        "ledger.collect.agrees.to.ledger.followup",
+        "ledger.cover.accepted.to.ledger.followup",
+        "ledger.promise.open.to.ledger.followup",
+        "ledger.again.open.to.ledger.followup"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ]
+    },
+    "ledger.followup/remind_promise": {
+      "stance": "practical_help",
+      "responds_to": [
+        "ledger.forgive.agrees.to.ledger.followup",
+        "ledger.forgive.resents.to.ledger.followup",
+        "ledger.collect.agrees.to.ledger.followup",
+        "ledger.cover.accepted.to.ledger.followup",
+        "ledger.promise.open.to.ledger.followup",
+        "ledger.again.open.to.ledger.followup"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "ledger.followup/mention_last_time": {
+      "stance": "candor",
+      "responds_to": [
+        "ledger.forgive.agrees.to.ledger.followup",
+        "ledger.forgive.resents.to.ledger.followup",
+        "ledger.collect.agrees.to.ledger.followup",
+        "ledger.cover.accepted.to.ledger.followup",
+        "ledger.promise.open.to.ledger.followup",
+        "ledger.again.open.to.ledger.followup"
+      ],
+      "requires_facts": [
+        "ledger:unpaid"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "accepted",
+        "qualified"
+      ]
+    },
+    "ledger.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "ledger.forgive.agrees.to.ledger.followup",
+        "ledger.forgive.resents.to.ledger.followup",
+        "ledger.collect.agrees.to.ledger.followup",
+        "ledger.cover.accepted.to.ledger.followup",
+        "ledger.promise.open.to.ledger.followup",
+        "ledger.again.open.to.ledger.followup"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

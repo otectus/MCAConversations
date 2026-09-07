@@ -18,6 +18,8 @@ public record AffectionOutcome(int authored, int scaled, int granted, Reason rea
         DUPLICATE,
         /** The replay policy zeroed it: a same-day repeat, or a once-only decision that already fired. */
         REPEAT,
+        /** The bounded ledger cannot retain another replay guard, so no payout is safe. */
+        HISTORY_CAPACITY,
         /** The per-conversation budget for this depth class was exhausted. */
         CONVERSATION_BUDGET,
         /** The per-villager, per-player daily budget was exhausted. */

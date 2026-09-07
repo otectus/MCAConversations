@@ -494,6 +494,21 @@ final class ProfessionPackCompiler {
             }
         }
 
+        // Localised response-card text is an exact authored phrase in chat too. Keep
+        // translated phrases out of the English anchor/keyword bag: common Portuguese
+        // function words must not weaken unrelated controls or sibling responses.
+        String portuguese = ContentCompiler.normalizePhrase(
+                ContentCompiler.require(label, "pt", where + " label"));
+        if (!allPhrases.contains(portuguese)) {
+            allPhrases.add(portuguese);
+        }
+        for (String translated : ContentCompiler.strings(reply, "phrases_pt")) {
+            String normalized = ContentCompiler.normalizePhrase(translated);
+            if (!allPhrases.contains(normalized)) {
+                allPhrases.add(normalized);
+            }
+        }
+
         JsonObject intent = new JsonObject();
         intent.addProperty("question", questionId);
         intent.addProperty("answer", name);
@@ -510,6 +525,7 @@ final class ProfessionPackCompiler {
         // Two fixtures per reply: the label itself and one paraphrase, so the guarantee that a
         // pressable button is a speakable one is asserted rather than asserted-about.
         out.addMatcherFixture(allPhrases.get(0), questionId, intentId);
+        out.addMatcherFixture(portuguese, questionId, intentId, "pt_br");
         if (allPhrases.size() > 1) {
             out.addMatcherFixture(allPhrases.get(1), questionId, intentId);
         }

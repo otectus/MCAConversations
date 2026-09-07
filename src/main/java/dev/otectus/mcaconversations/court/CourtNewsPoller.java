@@ -7,6 +7,7 @@ import dev.otectus.mcaconversations.compat.CapitalCourtView;
 import dev.otectus.mcaconversations.compat.CapitalRelationView;
 import dev.otectus.mcaconversations.compat.CapitalsBridge;
 import dev.otectus.mcaconversations.compat.CapitalsCompat;
+import dev.otectus.mcaconversations.compat.CapitalsCapability;
 import dev.otectus.mcaconversations.gossip.GossipEvent;
 import dev.otectus.mcaconversations.gossip.GossipEventType;
 import dev.otectus.mcaconversations.gossip.GossipSavedData;
@@ -50,16 +51,6 @@ import java.util.function.Consumer;
  */
 public final class CourtNewsPoller {
 
-    /** Fixed title ids for the offices a court view names, used for the change memory. */
-    private static final String TITLE_SOVEREIGN = "sovereign";
-    private static final String TITLE_CONSORT = "sovereign_consort";
-    private static final String TITLE_HEIR = "heir_apparent";
-    private static final String TITLE_HAND = "hand";
-    private static final String TITLE_COMMANDER = "lord_commander";
-    private static final String TITLE_HERALD = "court_herald";
-    private static final String TITLE_GRAND_MAESTER = "grand_maester";
-    private static final String TITLE_MASTER_OF_LAWS = "master_of_laws";
-
     private CourtNewsPoller() {
     }
 
@@ -74,6 +65,9 @@ public final class CourtNewsPoller {
         List<CapitalChronicleEventView> chronicleSince(CapitalCourtView court, int fromIndex, int max);
 
         List<CapitalRelationView> relationsOf(CapitalCourtView court);
+
+        /** A missing diplomacy capability is not an authoritative empty relation list. */
+        default boolean relationsAvailable() { return true; }
 
         /** A name for a villager who may not be loaded; never {@code null}, empty when unknown. */
         String displayName(CapitalCourtView court, UUID entity);
@@ -107,7 +101,6 @@ public final class CourtNewsPoller {
         }
         int emitted = 0;
         boolean changed = false;
-        long today = now / 24_000L;
         for (CapitalCourtView court : courts) {
             if (court == null || court.capitalId() == null) {
                 continue;
@@ -135,10 +128,17 @@ public final class CourtNewsPoller {
 
             // Read once: the diff and the snapshot it becomes must agree, and Capitals should be
             // asked for a capital's relations exactly once per poll.
-            List<CapitalRelationView> relations = source.relationsOf(court);
+            List<CapitalRelationView> relations = source.relationsAvailable()
+                    ? source.relationsOf(court) : List.of();
             emitted += diff(court, source, memory, now, firstSight, told, relations, sink);
-            changed |= memory.setSnapshot(court.capitalId(), snapshotOf(court, relations));
-            changed |= observeOffices(court, memory, today);
+            CourtRoleMemory.CapitalSnapshot current = snapshotOf(court, relations);
+            if (!source.relationsAvailable()) {
+                current = new CourtRoleMemory.CapitalSnapshot(current.sovereign(), current.heir(),
+                        current.state(), current.mourning(), memory.snapshot(court.capitalId()).relations());
+            }
+            changed |= memory.setSnapshot(court.capitalId(), current);
+            // Only the resolved title context may update role memory. An office holder can also
+            // be a high sovereign, noble or crown heir; guessed titles would oscillate every poll.
         }
         return new PollResult(emitted, changed);
     }
@@ -164,10 +164,10 @@ public final class CourtNewsPoller {
                     source.displayName(court, court.sovereign().get())));
             emitted++;
         }
-        if (court.heir().isPresent() && before.heir().isEmpty()
-                && told.add(GossipEventType.ROYAL_BIRTH)) {
-            sink.accept(event(GossipEventType.ROYAL_BIRTH, court, now, court.heir(),
-                    source.displayName(court, court.heir().get())));
+        if (!court.heir().equals(before.heir())
+                && told.add(GossipEventType.COURT_NEWS)) {
+            sink.accept(event(GossipEventType.COURT_NEWS, court, now, court.heir(),
+                    court.heir().map(id -> source.displayName(court, id)).orElse("")));
             emitted++;
         }
         if (court.mourning() && !before.mourning() && told.add(GossipEventType.ROYAL_DEATH)) {
@@ -198,30 +198,6 @@ public final class CourtNewsPoller {
             }
         }
         return emitted;
-    }
-
-    /**
-     * Remembers who holds each office, so "I was only just given it" has something to stand on.
-     *
-     * <p>Eight named holders from the view the poll already has — never a resident scan, which on a
-     * large capital would be the most expensive thing this mod does and would learn nothing extra.
-     */
-    private static boolean observeOffices(CapitalCourtView court, CourtRoleMemory memory, long today) {
-        boolean changed = false;
-        changed |= observe(memory, court.sovereign(), TITLE_SOVEREIGN, today);
-        changed |= observe(memory, court.consort(), TITLE_CONSORT, today);
-        changed |= observe(memory, court.heir(), TITLE_HEIR, today);
-        changed |= observe(memory, court.hand(), TITLE_HAND, today);
-        changed |= observe(memory, court.commander(), TITLE_COMMANDER, today);
-        changed |= observe(memory, court.herald(), TITLE_HERALD, today);
-        changed |= observe(memory, court.grandMaester(), TITLE_GRAND_MAESTER, today);
-        changed |= observe(memory, court.masterOfLaws(), TITLE_MASTER_OF_LAWS, today);
-        return changed;
-    }
-
-    private static boolean observe(CourtRoleMemory memory, Optional<UUID> holder, String titleId,
-                                   long today) {
-        return holder.isPresent() && memory.observe(holder.get(), titleId, today);
     }
 
     private static CourtRoleMemory.CapitalSnapshot snapshotOf(CapitalCourtView court,
@@ -256,6 +232,9 @@ public final class CourtNewsPoller {
         }
         try {
             CapitalsBridge bridge = CapitalsBridge.Holder.get();
+            // These are the factual inputs to this poll. Partial context elsewhere remains usable,
+            // but neutral court/chronicle stubs must never overwrite persisted authoritative history.
+            if (!bridge.has(CapitalsCapability.COURT) || !bridge.has(CapitalsCapability.CHRONICLE)) return;
             List<CapitalCourtView> courts = bridge.allCourts(server);
             if (courts.isEmpty()) {
                 return;
@@ -310,6 +289,12 @@ public final class CourtNewsPoller {
         public List<CapitalRelationView> relationsOf(CapitalCourtView court) {
             ServerLevel level = levels.get(court.capitalId());
             return level == null ? List.of() : bridge.relationsOf(level, court);
+        }
+
+        @Override
+        public boolean relationsAvailable() {
+            return bridge.has(CapitalsCapability.DIPLOMACY)
+                    && McaConversationsConfig.dynamicFeature("capital_diplomacy", true);
         }
 
         @Override

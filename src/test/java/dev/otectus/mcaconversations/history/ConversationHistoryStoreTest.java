@@ -301,4 +301,31 @@ class ConversationHistoryStoreTest {
         assertEquals(villagers.size(), store.villagerCount());
         assertNotEquals(null, villagers);
     }
+
+    @Test
+    void pruneReportsLapsesOnceAndNeverReopensResolvedHistory() {
+        PairHistory pair = new PairHistory();
+        pair.putThread(SharedThreadRecord.opened("open", "work", "subject", Optional.empty(),
+                PrivacyLevel.ORDINARY, 1).withSchedule(1, OptionalLong.of(2)));
+        pair.putThread(SharedThreadRecord.opened("done", "work", "subject", Optional.empty(),
+                PrivacyLevel.ORDINARY, 1).withStatus(ThreadStatus.RESOLVED, 1)
+                .withSchedule(1, OptionalLong.of(2)));
+        assertEquals(1, pair.prune(5), "a lapse must mark the save dirty even with no deletions");
+        assertEquals(ThreadStatus.LAPSED, pair.thread("open").orElseThrow().status());
+        assertEquals(ThreadStatus.RESOLVED, pair.thread("done").orElseThrow().status());
+        assertEquals(0, pair.prune(6), "already-lapsed history must not keep changing dates");
+    }
+
+    @Test
+    void abandonedEpisodeTransitionMarksHistoryDirtyWithoutDeletion() {
+        ConversationHistoryStore store = new ConversationHistoryStore();
+        EpisodeRecord episode = EpisodeRecord.opened(UUID.randomUUID(), "test.expiry", "test",
+                EpisodeState.ACTIVE, VILLAGER, Map.of(), PrivacyLevel.ORDINARY, 50, 1)
+                .withDeadline(OptionalLong.empty(), OptionalLong.of(2));
+        store.getOrCreate(VILLAGER).putEpisode(episode, 1);
+        assertTrue(store.prune(3) > 0);
+        assertEquals(EpisodeState.ABANDONED,
+                roundTrip(store).peek(VILLAGER).orElseThrow().episode(episode.id()).orElseThrow().state());
+    }
+
 }

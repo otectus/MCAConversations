@@ -1,0 +1,80 @@
+{
+  "answers": [
+    {
+      "name": "wish_them_luck",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.beekeeper.hives",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "bees.followup.wished"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.profession"
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "bees.leaving"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ],
+          "actions": {
+            "next": "conversations.cat.profession"
+          }
+        }
+      ]
+    }
+  ]
+}

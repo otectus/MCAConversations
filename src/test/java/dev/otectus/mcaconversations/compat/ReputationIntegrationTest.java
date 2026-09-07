@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import dev.otectus.mcaconversations.support.TestPaths;
 
 /**
@@ -35,7 +36,7 @@ class ReputationIntegrationTest {
     @AfterEach
     void reset() {
         ReputationBridge.setAvailableForTest(false, null);
-        ReputationBridge.clearPendingRemarksForTest();
+        ReputationBridge.clearPendingRemarks();
     }
 
     // ------------------------------------------------------------------
@@ -142,10 +143,25 @@ class ReputationIntegrationTest {
     }
 
     @Test
-    void malformedStandingFieldsAreDroppedNotThrown() {
-        var query = ReputationQueryJson.standing(JsonParser.parseString("""
-                {"min": "not a number", "min_tier": "", "has_title": null}""").getAsJsonObject());
-        assertTrue(query.isEmpty(), "every unusable field is dropped, leaving an empty query");
+    void malformedStandingFieldsNeverBecomeAnUnrestrictedQuery() {
+        for (String json : List.of("{\"min\":\"not a number\"}", "{\"min_tier\":\"\"}",
+                "{\"has_title\":null}", "{\"max\":1.5}", "{\"min\":2147483648}",
+                "{\"min\":100,\"max\":20}")) {
+            assertThrows(RuntimeException.class,
+                    () -> ReputationQueryJson.standing(JsonParser.parseString(json).getAsJsonObject()),
+                    json + " must fail closed instead of dropping its constraint");
+        }
+    }
+
+    @Test
+    void malformedIncidentFieldsCannotBroadenKnowledgeOrRecencyFilters() {
+        for (String json : List.of("{\"types\":[\"mcareputation:theft\",{}]}", "{\"statuses\":[null]}",
+                "{\"tags\":true}", "{\"tags\":\" \"}", "{\"known_to_speaker\":\"yes\"}",
+                "{\"max_age\":-1}", "{\"max_age\":0.5}", "{\"max_age\":9223372036854775808}")) {
+            assertThrows(RuntimeException.class,
+                    () -> ReputationQueryJson.incident(JsonParser.parseString(json).getAsJsonObject()),
+                    json + " must reject the whole query");
+        }
     }
 
     @Test

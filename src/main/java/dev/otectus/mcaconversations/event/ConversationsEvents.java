@@ -32,6 +32,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -65,6 +66,17 @@ public final class ConversationsEvents {
             dev.otectus.mcaconversations.hub.DynamicHub.clear(player.getUUID());
             VillagerAttention.clearPlayer(player.getUUID());
         }
+    }
+
+    /** Clear process-static references before another integrated world starts in the same JVM. */
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        dev.otectus.mcaconversations.compat.ReputationBridge.clearPendingRemarks();
+        ChatModeScheduler.reset();
+        ChatModeSession.reset();
+        VillagerAttention.reset();
+        GreetOnApproach.reset();
+        dev.otectus.mcaconversations.hub.DynamicHub.reset();
     }
 
     // --- Chat mode -------------------------------------------------------------
@@ -134,6 +146,12 @@ public final class ConversationsEvents {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ChatModeSession.clear(player.getUUID());
+            GreetOnApproach.clear(player.getUUID());
+            dev.otectus.mcaconversations.hub.DynamicHub.clear(player.getUUID());
+            VillagerAttention.clearPlayer(player.getUUID());
+        }
         if (!McaBridge.isAvailable() || event.getEntity().level().isClientSide()) {
             return;
         }

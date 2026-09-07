@@ -47,6 +47,11 @@ public final class ConversationSession {
         }
     }
 
+    // A client keeps its high-water mark across session expiry and player death. Reusing a
+    // revision would make its next offer disappear, or let a delayed old packet answer a new one.
+    private static final java.util.concurrent.atomic.AtomicLong NEXT_OFFER_REVISION =
+            new java.util.concurrent.atomic.AtomicLong();
+
     private static final int MAX_TRANSACTIONS = 8;
 
     /** How many beats back anti-repetition and the debug trace can see. */
@@ -151,7 +156,7 @@ public final class ConversationSession {
         // leaking the broader session's previous villager into this offer and rejecting a valid
         // candidate captured from the currently open interaction screen.
         this.offerVillagerId = offeredVillagerId;
-        this.offerRevision++;
+        this.offerRevision = NEXT_OFFER_REVISION.incrementAndGet();
         this.currentQuestion = question == null ? "" : question;
         this.currentAnswers = answers == null ? List.of() : List.copyOf(answers);
         this.offerFrontend = frontend == null ? Frontend.GUI : frontend;
@@ -262,10 +267,14 @@ public final class ConversationSession {
     // --- Topic lifecycle --------------------------------------------------------
 
     /**
-     * Starts a topic, resetting the per-conversation heart budget. Re-entering the same topic without
-     * having left resets it too — the budget belongs to the exchange, not to the session object.
+     * Starts a new topic and its heart budget. Reopening the same active exchange preserves its
+     * spent budget and semantic state; only an explicit end or a different topic starts another.
      */
     public void beginTopic(String topicId, DepthClass budget, long now) {
+        if (topicId != null && topicId.equals(this.topicId)) {
+            touch(now);
+            return;
+        }
         this.topicId = topicId;
         this.budget = budget == null ? DepthClass.QUICK : budget;
         this.branch = null;
@@ -434,6 +443,12 @@ public final class ConversationSession {
             transactions.removeFirst();
         }
         return true;
+    }
+
+    /** An unanswered GUI page retains its semantic context and budget while the player reads. */
+    public boolean hasPendingGuiOffer() {
+        return currentQuestion != null && !currentAnswers.isEmpty()
+                && offerFrontend == Frontend.GUI && !offerConsumed;
     }
 
     /** True when nothing has happened for longer than {@code timeoutTicks}. */

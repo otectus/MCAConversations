@@ -1,0 +1,141 @@
+{
+  "answers": [
+    {
+      "name": "courage",
+      "constraints": "!baby,!toddler",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1000,
+              "memory": {
+                "id": "sample_courage.cooldown.courage",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "courage",
+              "budget": "deep",
+              "branch": "again",
+              "beat": "courage.open.again.to.courage.respond"
+            },
+            "next": "courage.respond",
+            "conversations_say": {
+              "phrase": "courage.open.again"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_courage.cooldown.courage",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "courage",
+              "budget": "deep",
+              "branch": "wary",
+              "beat": "courage.open.wary.to.courage.respond"
+            },
+            "conversations_record": {
+              "id": "sample_courage.cooldown.courage",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "courage.respond",
+            "conversations_say": {
+              "phrase": "courage.open.wary"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_courage.cooldown.courage",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -1000,
+              "conversations_relationship": {
+                "bands": [
+                  "stranger",
+                  "acquaintance",
+                  "tense",
+                  "hostile"
+                ]
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "courage",
+              "budget": "deep",
+              "branch": "open",
+              "beat": "courage.open.first.to.courage.respond"
+            },
+            "conversations_record": {
+              "id": "sample_courage.cooldown.courage",
+              "var": "player",
+              "time": 48000
+            },
+            "next": "courage.respond",
+            "conversations_say": {
+              "phrase": "courage.open.first"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

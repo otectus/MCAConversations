@@ -1,0 +1,26 @@
+{
+  "_comment": [
+    "Technique 4, non-deterministic form: neutralising an intent by redefining its id with a",
+    "keyword set no player message can ever reach. 'chitchat.season' is declared by",
+    "data/mcaconversations/chat_intents/chitchat.json; whichever file the loader reads LAST wins,",
+    "and that order is HashMap order, not pack order. See the README - the deterministic form is",
+    "the same-path replacement shipped alongside this file.",
+    "The parser requires at least one keyword or phrase, and every keyword weight must be in",
+    "(0, 10]. So the intent cannot be emptied - it can only be made unreachable. 'requiresAll'",
+    "demands every listed token be present, and these two sentinels are not words."
+  ],
+  "intents": {
+    "chitchat.season": {
+      "question": "conversations.cat.chitchat",
+      "answer": "season",
+      "keywords": {
+        "zzqxtrimsentinelalpha": 0.01
+      },
+      "requiresAll": [
+        "zzqxtrimsentinelalpha",
+        "zzqxtrimsentinelbeta"
+      ],
+      "category": "topics"
+    }
+  }
+}

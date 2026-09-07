@@ -61,7 +61,7 @@ public final class IntentMatcher {
 
         /** The target identity used by the margin rule: system name or bound question id. */
         String targetKey() {
-            return system != null ? "sys:" + system : question;
+            return system != null ? "sys:" + system : question + "/" + answer;
         }
     }
 
@@ -154,6 +154,25 @@ public final class IntentMatcher {
             } else if (s.score() >= SUBJECT_CHANGE_FLOOR && s.score() >= bestContext + SUBJECT_CHANGE_MARGIN) {
                 kept.add(s);
             }
+        }
+        // Typing one complete, uniquely authored offered reply is the same choice as clicking
+        // it. Keyword saturation on shared nouns must not turn opposite full sentences into a tie.
+        // Partial/wildcard phrases and multiple identical full replies still use normal ambiguity.
+        List<String> whole = msg.tokens.stream().map(token -> token.stem).toList();
+        Set<String> exactAnswers = new HashSet<>();
+        Set<String> exactIds = new HashSet<>();
+        for (CompiledIntent intent : index.activeIntents(currentQuestion)) {
+            if (!currentQuestion.equals(intent.context()) || !offeredAnswers.contains(intent.source.answer())) continue;
+            for (List<PhraseToken> pattern : intent.phrases) {
+                if (pattern.size() == whole.size() && pattern.stream().noneMatch(PhraseToken::wildcard)
+                        && pattern.stream().map(PhraseToken::stem).toList().equals(whole)) {
+                    exactAnswers.add(intent.source.answer());
+                    exactIds.add(intent.id());
+                }
+            }
+        }
+        if (exactAnswers.size() == 1 && kept.stream().anyMatch(candidate -> exactIds.contains(candidate.id()))) {
+            kept.removeIf(candidate -> !candidate.isSystem() && !exactIds.contains(candidate.id()));
         }
         return kept;
     }
@@ -326,10 +345,14 @@ public final class IntentMatcher {
             }
         }
 
-        if (passing.size() >= 2) {
-            Scored second = passing.get(1);
-            boolean differentTopic = !top.targetKey().equals(second.targetKey());
-            if (differentTopic && (top.score() - second.score()) < MARGIN) {
+        // Several aliases may bind to one answer. They must not hide a near-tied alternative,
+        // and opposite replies to the same question are distinct choices too.
+        for (int i = 1; i < passing.size(); i++) {
+            Scored second = passing.get(i);
+            if (top.score() - second.score() >= MARGIN) {
+                break;
+            }
+            if (!top.targetKey().equals(second.targetKey())) {
                 return addressed
                         ? new Decision(Outcome.AMBIGUOUS, top, second)
                         : Decision.none();

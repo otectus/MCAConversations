@@ -87,6 +87,7 @@ public final class QuestsBridge {
         if (!ModList.get().isLoaded("mcaquests")) {
             McaConversations.LOGGER.info("MCA: Quests not present; Conversations quest integration disabled.");
             available = false;
+            queries = null;
             return;
         }
         try {
@@ -101,6 +102,7 @@ public final class QuestsBridge {
             McaConversations.LOGGER.info("MCA: Quests detected; Conversations quest integration registered.");
         } catch (Throwable t) {
             available = false;
+            queries = null;
             McaConversations.LOGGER.error(
                     "Failed to register MCA: Quests integration; quest features disabled. "
                             + "This usually means an incompatible MCA: Quests version.", t);

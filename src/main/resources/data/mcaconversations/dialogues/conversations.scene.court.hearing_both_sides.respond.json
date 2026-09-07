@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_hearing_both_sides",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.hearing_both_sides.open.ask_hearing_both_sides_answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.hearing_both_sides",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.court.hearing_both_sides.ask_hearing_both_sides_answer.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.hearing_both_sides.ask_hearing_both_sides_answer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "consider_hearing_both_sides",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "court.hearing_both_sides.open.consider_hearing_both_sides_answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "court.hearing_both_sides",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.court.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.hearing_both_sides.consider_hearing_both_sides_answer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.court.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

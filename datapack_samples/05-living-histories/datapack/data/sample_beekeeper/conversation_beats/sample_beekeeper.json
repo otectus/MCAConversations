@@ -1,0 +1,366 @@
+{
+  "_comment": "Sample 05. Four opening beats (one per scene), seven turn beats, and the replies that connect them. Every reply either answers an obligation the inbound beat declared or performs a declared topic move; every referent a reply uses is introduced by every beat that can open its page.",
+  "beats": {
+    "bees.wet_hive.blocked.open": {
+      "topic": "work",
+      "say": "bees.scene.wet_hive.blocked",
+      "response_question": "bees.scene.wet_hive.blocked.respond",
+      "npc_act": "disclose_problem",
+      "subject": "work.beekeeper.hive",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "allowed_stances": ["practical_help", "curiosity", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "context": {
+        "profession": "minecraft:farmer",
+        "ages": ["adult"]
+      },
+      "frame": {
+        "predicate": "work_problem",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["decide", "clarify"],
+        "referents": {
+          "hive": "slot:hive",
+          "trouble": "slot:trouble"
+        },
+        "slots": ["hive", "trouble"],
+        "episode_states": ["blocked"],
+        "shape": "problem_solve"
+      }
+    },
+    "bees.wet_hive.blocked.accepted": {
+      "topic": "work",
+      "say": "bees.scene.wet_hive.blocked.accepted",
+      "response_question": "bees.followup",
+      "npc_act": "accept",
+      "subject": "work.beekeeper.hive",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "accepted",
+      "frame": {
+        "predicate": "plan",
+        "temporal": "future",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "referents": {"hive": "slot:hive"},
+        "slots": ["hive"],
+        "episode_states": ["blocked", "active"],
+        "shape": "plan"
+      }
+    },
+    "bees.wet_hive.blocked.explained": {
+      "topic": "work",
+      "say": "bees.scene.wet_hive.blocked.explained",
+      "response_question": "bees.followup",
+      "npc_act": "explain",
+      "subject": "work.beekeeper.hive",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "engaged",
+      "frame": {
+        "predicate": "disclosure",
+        "temporal": "current",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "referents": {"trouble": "slot:trouble"},
+        "slots": ["trouble"],
+        "episode_states": ["blocked"],
+        "shape": "confide"
+      }
+    },
+    "bees.wet_hive.recovered.open": {
+      "topic": "work",
+      "say": "bees.scene.wet_hive.recovered",
+      "response_question": "bees.scene.wet_hive.recovered.respond",
+      "npc_act": "report",
+      "subject": "work.beekeeper.hive",
+      "polarity": "positive",
+      "openness": "invites_followup",
+      "allowed_stances": ["curiosity", "encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "context": {
+        "profession": "minecraft:farmer",
+        "ages": ["adult"]
+      },
+      "frame": {
+        "predicate": "status_change",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "referents": {"hive": "slot:hive"},
+        "slots": ["hive"],
+        "episode_states": ["succeeded"],
+        "shape": "reminisce"
+      }
+    },
+    "bees.wet_hive.recovered.explained": {
+      "topic": "work",
+      "say": "bees.scene.wet_hive.recovered.explained",
+      "response_question": "bees.followup",
+      "npc_act": "explain",
+      "subject": "work.beekeeper.hive",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "engaged",
+      "frame": {
+        "predicate": "memory",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "referents": {"hive": "slot:hive"},
+        "slots": ["hive"],
+        "episode_states": ["succeeded"],
+        "shape": "reminisce"
+      }
+    },
+    "bees.wet_hive.recovered.thanked": {
+      "topic": "work",
+      "say": "bees.scene.wet_hive.recovered.thanked",
+      "response_question": "bees.followup",
+      "npc_act": "accept",
+      "subject": "work.beekeeper.hive",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "appreciated",
+      "frame": {
+        "predicate": "opinion",
+        "temporal": "past",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "episode_states": ["succeeded"],
+        "shape": "reminisce"
+      }
+    },
+    "bees.hives.season_ahead.open": {
+      "topic": "work",
+      "say": "bees.scene.hives.season_ahead",
+      "response_question": "bees.scene.hives.season_ahead.respond",
+      "npc_act": "explain",
+      "subject": "work.beekeeper.season",
+      "polarity": "neutral",
+      "openness": "invites_followup",
+      "allowed_stances": ["curiosity", "practical_help", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "context": {
+        "profession": "minecraft:farmer",
+        "ages": ["adult"]
+      },
+      "frame": {
+        "predicate": "plan",
+        "temporal": "future",
+        "epistemic": "inferred",
+        "privacy": "ordinary",
+        "obligations": ["clarify", "acknowledge"],
+        "shape": "plan"
+      }
+    },
+    "bees.hives.season_ahead.explained": {
+      "topic": "work",
+      "say": "bees.scene.hives.season_ahead.explained",
+      "response_question": "bees.followup",
+      "npc_act": "explain",
+      "subject": "work.beekeeper.season",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "engaged",
+      "frame": {
+        "predicate": "plan",
+        "temporal": "future",
+        "epistemic": "inferred",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "shape": "plan"
+      }
+    },
+    "bees.hives.season_ahead.accepted": {
+      "topic": "work",
+      "say": "bees.scene.hives.season_ahead.accepted",
+      "response_question": "bees.followup",
+      "npc_act": "accept",
+      "subject": "work.beekeeper.season",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "accepted",
+      "frame": {
+        "predicate": "plan",
+        "temporal": "future",
+        "epistemic": "inferred",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "shape": "plan"
+      }
+    },
+    "bees.hives.evergreen.open": {
+      "topic": "work",
+      "say": "bees.scene.hives.evergreen",
+      "response_question": "bees.scene.hives.evergreen.respond",
+      "npc_act": "report",
+      "subject": "work.beekeeper.hives",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": ["curiosity", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "context": {
+        "profession": "minecraft:farmer",
+        "ages": ["adult"]
+      },
+      "frame": {
+        "predicate": "observation",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "shape": "observe"
+      }
+    },
+    "bees.hives.evergreen.answered": {
+      "topic": "work",
+      "say": "bees.scene.hives.evergreen.answered",
+      "response_question": "bees.followup",
+      "npc_act": "explain",
+      "subject": "work.beekeeper.hives",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": ["encouragement", "exit"],
+      "forbidden_stances": ["flirtation", "dismissal", "boundary_push"],
+      "outcome": "engaged",
+      "frame": {
+        "predicate": "observation",
+        "temporal": "habitual",
+        "epistemic": "observed",
+        "privacy": "ordinary",
+        "obligations": ["acknowledge"],
+        "shape": "observe"
+      }
+    }
+  },
+  "replies": {
+    "bees.scene.wet_hive.blocked.respond/offer_to_lift_it": {
+      "stance": "practical_help",
+      "responds_to": ["bees.wet_hive.blocked.open"],
+      "tone": "plain",
+      "outcomes": ["accepted"],
+      "answers_obligation": ["decide"],
+      "uses_referents": ["hive"]
+    },
+    "bees.scene.wet_hive.blocked.respond/ask_what_went_wrong": {
+      "stance": "curiosity",
+      "responds_to": ["bees.wet_hive.blocked.open"],
+      "tone": "plain",
+      "outcomes": ["engaged"],
+      "answers_obligation": ["clarify"],
+      "uses_referents": ["trouble"]
+    },
+    "bees.scene.wet_hive.blocked.respond/leave": {
+      "stance": "exit",
+      "responds_to": ["bees.wet_hive.blocked.open"],
+      "tone": "plain",
+      "exit": true
+    },
+    "bees.scene.wet_hive.recovered.respond/ask_what_fixed_it": {
+      "stance": "curiosity",
+      "responds_to": ["bees.wet_hive.recovered.open"],
+      "tone": "plain",
+      "outcomes": ["engaged"],
+      "move": "bridge",
+      "uses_referents": ["hive"]
+    },
+    "bees.scene.wet_hive.recovered.respond/say_glad": {
+      "stance": "encouragement",
+      "responds_to": ["bees.wet_hive.recovered.open"],
+      "tone": "gentle",
+      "outcomes": ["appreciated"],
+      "answers_obligation": ["acknowledge"]
+    },
+    "bees.scene.wet_hive.recovered.respond/leave": {
+      "stance": "exit",
+      "responds_to": ["bees.wet_hive.recovered.open"],
+      "tone": "plain",
+      "exit": true
+    },
+    "bees.scene.hives.season_ahead.respond/ask_the_plan": {
+      "stance": "curiosity",
+      "responds_to": ["bees.hives.season_ahead.open"],
+      "tone": "plain",
+      "outcomes": ["engaged"],
+      "answers_obligation": ["clarify"]
+    },
+    "bees.scene.hives.season_ahead.respond/offer_a_hand": {
+      "stance": "practical_help",
+      "responds_to": ["bees.hives.season_ahead.open"],
+      "tone": "plain",
+      "outcomes": ["accepted"],
+      "answers_obligation": ["acknowledge"],
+      "move": "bridge"
+    },
+    "bees.scene.hives.season_ahead.respond/leave": {
+      "stance": "exit",
+      "responds_to": ["bees.hives.season_ahead.open"],
+      "tone": "plain",
+      "exit": true
+    },
+    "bees.scene.hives.evergreen.respond/ask_after_them": {
+      "stance": "curiosity",
+      "responds_to": ["bees.hives.evergreen.open"],
+      "tone": "plain",
+      "outcomes": ["engaged"],
+      "answers_obligation": ["acknowledge"],
+      "move": "bridge"
+    },
+    "bees.scene.hives.evergreen.respond/leave": {
+      "stance": "exit",
+      "responds_to": ["bees.hives.evergreen.open"],
+      "tone": "plain",
+      "exit": true
+    },
+    "bees.followup/wish_them_luck": {
+      "stance": "encouragement",
+      "responds_to": [
+        "bees.wet_hive.blocked.accepted",
+        "bees.wet_hive.blocked.explained",
+        "bees.wet_hive.recovered.explained",
+        "bees.wet_hive.recovered.thanked",
+        "bees.hives.season_ahead.explained",
+        "bees.hives.season_ahead.accepted",
+        "bees.hives.evergreen.answered"
+      ],
+      "tone": "gentle",
+      "outcomes": ["appreciated"],
+      "answers_obligation": ["acknowledge"],
+      "move": "reciprocate"
+    },
+    "bees.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "bees.wet_hive.blocked.accepted",
+        "bees.wet_hive.blocked.explained",
+        "bees.wet_hive.recovered.explained",
+        "bees.wet_hive.recovered.thanked",
+        "bees.hives.season_ahead.explained",
+        "bees.hives.season_ahead.accepted",
+        "bees.hives.evergreen.answered"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

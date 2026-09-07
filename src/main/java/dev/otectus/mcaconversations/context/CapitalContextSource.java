@@ -7,6 +7,8 @@ import dev.otectus.mcaconversations.compat.CapitalRelationView;
 import dev.otectus.mcaconversations.compat.CapitalStandingView;
 import dev.otectus.mcaconversations.compat.CapitalsBridge;
 import dev.otectus.mcaconversations.compat.CapitalsCompat;
+import dev.otectus.mcaconversations.compat.CapitalsCapability;
+import java.util.Set;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.court.CourtMemorySavedData;
 import net.minecraft.server.MinecraftServer;
@@ -49,7 +51,9 @@ public final class CapitalContextSource implements ConversationContextSource {
             ContextKeys.CAPITAL_AT_WAR, ContextKeys.CAPITAL_ALLIED, ContextKeys.CAPITAL_MOURNING,
             ContextKeys.CAPITAL_SOVEREIGN_IS_PLAYER, ContextKeys.CAPITAL_PLAYER_IS_SOVEREIGN,
             ContextKeys.CAPITAL_PLAYER_ALLEGIANCE, ContextKeys.CAPITAL_HEIR_NAMED,
-            ContextKeys.CAPITAL_TITLE_CHANGED, ContextKeys.CAPITAL_PREVIOUS_TITLE);
+            ContextKeys.CAPITAL_TITLE_CHANGED, ContextKeys.CAPITAL_PREVIOUS_TITLE,
+            ContextKeys.CAPITAL_SOVEREIGN_NAMED, ContextKeys.CAPITAL_SOVEREIGN_FEMALE,
+            ContextKeys.CAPITAL_CONSORT_NAMED, ContextKeys.CAPITAL_HOUSE_PRESENT, ContextKeys.CAPITAL_HOUSE_WORDS_PRESENT);
 
     @Override
     public String id() {
@@ -114,7 +118,9 @@ public final class CapitalContextSource implements ConversationContextSource {
                     : bridge.declaredCapitalOf(level, playerId);
 
             contributeCourt(builder, court, standing, relations, declared, playerId, diplomacy,
-                    rememberTitle(request, villager, standing, level));
+                    bridge.has(CapitalsCapability.TITLES)
+                            ? rememberTitle(request, villager, standing, level) : Optional.empty());
+            maskUnavailableCapabilities(builder, bridge.capabilities());
             builder.reportCapability(ContextCapabilities.Status.READY, "");
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("capital context unavailable; those fields go dark", t);
@@ -159,6 +165,12 @@ public final class CapitalContextSource implements ConversationContextSource {
         builder.put(ContextKeys.CAPITAL_STATE, court.state());
         builder.put(ContextKeys.CAPITAL_MOURNING, court.mourning());
         builder.put(ContextKeys.CAPITAL_HEIR_NAMED, court.heirNamed());
+        builder.put(ContextKeys.CAPITAL_SOVEREIGN_NAMED,
+                court.sovereign().isPresent() || court.playerSovereignId().isPresent());
+        builder.put(ContextKeys.CAPITAL_SOVEREIGN_FEMALE, court.sovereignFemale());
+        builder.put(ContextKeys.CAPITAL_CONSORT_NAMED, court.consort().isPresent());
+        builder.put(ContextKeys.CAPITAL_HOUSE_PRESENT, standing.hasHouse());
+        builder.put(ContextKeys.CAPITAL_HOUSE_WORDS_PRESENT, !standing.houseWords().isBlank());
 
         builder.put(ContextKeys.CAPITAL_TITLE, standing.titleId());
         builder.put(ContextKeys.CAPITAL_TITLE_RANK, standing.titleRank());
@@ -253,10 +265,34 @@ public final class CapitalContextSource implements ConversationContextSource {
         if (server == null) {
             return Optional.empty();
         }
-        long today = level.getDayTime() / 24000L;
+        long today = level.getGameTime() / 24000L;
         CourtMemorySavedData memory = CourtMemorySavedData.get(server);
         memory.observe(villager.getUUID(), standing.titleId(), today);
         return memory.freshChange(villager.getUUID(), today, remarkDays());
+    }
+
+    /** Partial optional bindings must not turn neutral stubs into facts such as peace or no heir. */
+    static void maskUnavailableCapabilities(ContextSnapshotBuilder builder, Set<CapitalsCapability> capabilities) {
+        if (!capabilities.contains(CapitalsCapability.COURT)) {
+            builder.allUnavailable(List.of(ContextKeys.CAPITAL_MOURNING, ContextKeys.CAPITAL_HEIR_NAMED,
+                    ContextKeys.CAPITAL_SOVEREIGN_NAMED, ContextKeys.CAPITAL_SOVEREIGN_FEMALE,
+                    ContextKeys.CAPITAL_CONSORT_NAMED, ContextKeys.CAPITAL_SOVEREIGN_IS_PLAYER,
+                    ContextKeys.CAPITAL_PLAYER_IS_SOVEREIGN, ContextKeys.CAPITAL_ROYAL_HOUSEHOLD,
+                    ContextKeys.CAPITAL_ROYAL_GUARD, ContextKeys.CAPITAL_DISGRACED));
+        }
+        if (!capabilities.contains(CapitalsCapability.TITLES)) {
+            builder.allUnavailable(List.of(ContextKeys.CAPITAL_TITLE, ContextKeys.CAPITAL_TITLE_RANK,
+                    ContextKeys.CAPITAL_OFFICE, ContextKeys.CAPITAL_TITLE_CHANGED, ContextKeys.CAPITAL_PREVIOUS_TITLE));
+        }
+        if (!capabilities.contains(CapitalsCapability.HOUSES)) {
+            builder.allUnavailable(List.of(ContextKeys.CAPITAL_HOUSE, ContextKeys.CAPITAL_HOUSE_TIER,
+                    ContextKeys.CAPITAL_HOUSE_PRESENT, ContextKeys.CAPITAL_HOUSE_WORDS_PRESENT));
+        }
+        if (!capabilities.contains(CapitalsCapability.STANDING)) builder.unavailable(ContextKeys.CAPITAL_CROWN_STANDING);
+        if (!capabilities.contains(CapitalsCapability.ALLEGIANCE)) builder.unavailable(ContextKeys.CAPITAL_PLAYER_ALLEGIANCE);
+        if (!capabilities.contains(CapitalsCapability.DIPLOMACY)) {
+            builder.allUnavailable(List.of(ContextKeys.CAPITAL_AT_WAR, ContextKeys.CAPITAL_ALLIED));
+        }
     }
 
     private static void markUnavailable(ContextSnapshotBuilder builder, String reason) {

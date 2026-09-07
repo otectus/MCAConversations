@@ -194,6 +194,7 @@ class CapitalContextSourceTest {
                 Optional.empty(), PLAYER, true, Optional.empty());
         ConversationContextSnapshot snapshot = builder.build();
 
+        assertEquals(Optional.of(false), snapshot.value(ContextKeys.CAPITAL_HOUSE_PRESENT));
         assertEquals(ContextStatus.UNKNOWN, snapshot.get(ContextKeys.CAPITAL_HOUSE).status());
         assertEquals(ContextStatus.UNKNOWN, snapshot.get(ContextKeys.CAPITAL_HOUSE_TIER).status());
         assertEquals(Optional.of(false), snapshot.value(ContextKeys.CAPITAL_HEIR_NAMED));
@@ -302,6 +303,22 @@ class CapitalContextSourceTest {
         assertEquals(Optional.of("knight"), snapshot.value(ContextKeys.CAPITAL_PREVIOUS_TITLE));
     }
 
+    @Test
+    void partialBindingDoesNotInventPeaceAnEmptySuccessionOrAnUnswornPlayer() {
+        ContextSnapshotBuilder builder = builder();
+        CapitalContextSource.contributeCourt(builder, court(false, false), standing("none", 0),
+                List.of(), Optional.empty(), PLAYER, true, Optional.empty());
+        CapitalContextSource.maskUnavailableCapabilities(builder, Set.of(CapitalsCapability.CORE));
+        ConversationContextSnapshot snapshot = builder.build();
+        assertEquals(Optional.of(true), snapshot.value(ContextKeys.CAPITAL_PRESENT));
+        for (ContextKey<?> key : List.of(ContextKeys.CAPITAL_AT_WAR, ContextKeys.CAPITAL_ALLIED,
+                ContextKeys.CAPITAL_HEIR_NAMED, ContextKeys.CAPITAL_CONSORT_NAMED,
+                ContextKeys.CAPITAL_PLAYER_ALLEGIANCE, ContextKeys.CAPITAL_TITLE_CHANGED,
+                ContextKeys.CAPITAL_HOUSE_PRESENT, ContextKeys.CAPITAL_HOUSE_WORDS_PRESENT)) {
+            assertEquals(ContextStatus.UNAVAILABLE, snapshot.get(key).status(), key.id());
+        }
+    }
+
     // --- Ownership --------------------------------------------------------------------------------
 
     @Test
@@ -310,7 +327,7 @@ class CapitalContextSourceTest {
                 .map(ContextKey::id)
                 .sorted()
                 .toList();
-        assertEquals(21, declared.size());
+        assertEquals(26, declared.size());
         assertTrue(declared.stream().allMatch(id -> id.startsWith("capital.")),
                 "this source may only own capital.* fields: " + declared);
     }

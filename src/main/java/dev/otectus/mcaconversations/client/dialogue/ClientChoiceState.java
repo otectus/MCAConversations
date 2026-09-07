@@ -55,6 +55,12 @@ public final class ClientChoiceState {
         return changed;
     }
 
+    /** A new server connection has its own revision sequence. UI closes keep the existing sequence. */
+    public void resetConnection() {
+        clearLocal();
+        highestRevision = -1L;
+    }
+
     public void clearLocal() {
         offer = null;
         focusedIndex = 0;

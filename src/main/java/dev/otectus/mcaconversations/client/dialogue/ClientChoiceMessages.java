@@ -10,15 +10,26 @@ import net.minecraft.network.chat.Component;
 public final class ClientChoiceMessages {
 
     private static final ClientChoiceState STATE = new ClientChoiceState();
+    private static Object connection;
 
     private ClientChoiceMessages() {
     }
 
     public static ClientChoiceState state() {
+        synchronizeConnection();
         return STATE;
     }
 
+    private static void synchronizeConnection() {
+        Object current = Minecraft.getInstance().getConnection();
+        if (connection != current) {
+            STATE.resetConnection();
+            connection = current;
+        }
+    }
+
     public static void accept(ChoiceOfferS2C message) {
+        synchronizeConnection();
         Minecraft minecraft = Minecraft.getInstance();
         long tick = minecraft.player == null ? 0L : minecraft.player.tickCount;
         STATE.accept(new ClientChoiceState.ClientChoiceOffer(message.revision(), message.questionId(),
@@ -26,6 +37,7 @@ public final class ClientChoiceMessages {
     }
 
     public static void clear(ChoiceClearS2C message) {
+        synchronizeConnection();
         // Read before the clear, because the state that knows which frontend lapsed is the state
         // about to be emptied.
         ConversationSession.Frontend frontend = STATE.offer()

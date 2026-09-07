@@ -22,6 +22,7 @@ public final class ChatModeScheduler {
             (a, b) -> a.tick != b.tick ? Long.compare(a.tick, b.tick) : Long.compare(a.seq, b.seq));
 
     private static long sequence = 0L;
+    private static final java.util.Map<java.util.UUID, Long> LAST_DELIVERY = new java.util.HashMap<>();
 
     private ChatModeScheduler() {
     }
@@ -29,6 +30,20 @@ public final class ChatModeScheduler {
     /** Enqueues {@code task} to run when overworld game-time reaches {@code deliverAtTick}. */
     public static void schedule(long deliverAtTick, Runnable task) {
         QUEUE.add(new Scheduled(deliverAtTick, sequence++, task));
+    }
+
+    /** Keeps a player's spoken turns in order even when a later, shorter line has less typing delay. */
+    public static void scheduleOrdered(java.util.UUID playerId, long deliverAtTick, Runnable task) {
+        Long previous = LAST_DELIVERY.get(playerId);
+        long deadline = previous == null ? deliverAtTick : Math.max(deliverAtTick, previous + 1L);
+        LAST_DELIVERY.put(playerId, deadline);
+        schedule(deadline, () -> {
+            try {
+                task.run();
+            } finally {
+                LAST_DELIVERY.remove(playerId, deadline);
+            }
+        });
     }
 
     /** Runs every task whose deadline is at or before {@code now}, in deadline order. */
@@ -55,6 +70,7 @@ public final class ChatModeScheduler {
     /** Clears the queue (server stop / test isolation). */
     public static void reset() {
         QUEUE.clear();
+        LAST_DELIVERY.clear();
         sequence = 0L;
     }
 }

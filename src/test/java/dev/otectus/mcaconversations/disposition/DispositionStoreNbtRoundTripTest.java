@@ -188,4 +188,54 @@ class DispositionStoreNbtRoundTripTest {
         assertEquals(1, record.repeatCountToday("topic." + (DispositionRecord.MAX_TRACKED_STANCES + 4), 1));
         assertEquals(0, record.repeatCountToday("topic.0", 1));
     }
+
+    @Test
+    void evictingLastPairOfSameVillagerKeepsReplacementThroughSave() {
+        DispositionStore store = new DispositionStore(1);
+        store.getOrCreate(VILLAGER, PLAYER, 100);
+        UUID replacement = UUID.randomUUID();
+        store.getOrCreate(VILLAGER, replacement, 200);
+        assertEquals(1, store.pairCount());
+        assertTrue(store.get(VILLAGER, PLAYER).isEmpty());
+        assertTrue(DispositionStore.load(store.save(new CompoundTag())).get(VILLAGER, replacement).isPresent());
+    }
+
+    @Test
+    void maximumTimestampCanStillBeEvicted() {
+        DispositionStore store = new DispositionStore(1);
+        store.getOrCreate(VILLAGER, PLAYER, Long.MAX_VALUE);
+        UUID replacement = UUID.randomUUID();
+        org.junit.jupiter.api.Assertions.assertTimeoutPreemptively(java.time.Duration.ofSeconds(2),
+                () -> store.getOrCreate(VILLAGER, replacement, Long.MAX_VALUE));
+        assertEquals(1, store.pairCount());
+        assertTrue(store.get(VILLAGER, replacement).isPresent());
+    }
+
+    @Test
+    void nonpositiveCapacityIsRejected() {
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> new DispositionStore(0));
+    }
+
+
+    @Test
+    void firstWriteStartsAtPersonalityBaselinesForEveryAxis() {
+        DispositionStore store = new DispositionStore();
+        store.apply(VILLAGER, PLAYER, "greeting", Map.of(DispositionAxis.TRUST, 2),
+                axis -> 10, 100, 8, 1, 1);
+        DispositionRecord record = store.get(VILLAGER, PLAYER).orElseThrow();
+        assertEquals(12, record.axisRaw(DispositionAxis.TRUST));
+        assertEquals(10, record.axisRaw(DispositionAxis.WARMTH));
+    }
+
+    @Test
+    void clampedMovementOnlyBooksActualChange() {
+        DispositionStore store = new DispositionStore();
+        DispositionRecord record = store.getOrCreate(VILLAGER, PLAYER, 0);
+        record.setAxis(DispositionAxis.TENSION, 1);
+        Map<DispositionAxis, Integer> applied = store.apply(VILLAGER, PLAYER, "calm",
+                Map.of(DispositionAxis.TENSION, -10), axis -> 0, 0, 50, 1, 0);
+        assertEquals(-1, applied.get(DispositionAxis.TENSION));
+        assertEquals(1, record.gainedToday(DispositionAxis.TENSION, 0));
+    }
+
 }

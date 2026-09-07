@@ -38,8 +38,8 @@ public enum CommitmentResolver {
     /** The player returns and chooses a declared follow-up reply. Always observable. */
     CONVERSATION_CHOICE("conversation_choice", true),
 
-    /** A supported event log records the relevant village change — a building, a birth, a death. */
-    EVENT_OBSERVED("event_observed", true),
+    /** Reserved for a future event observer; unavailable until a target-matching hook exists. */
+    EVENT_OBSERVED("event_observed", false),
 
     /**
      * Acknowledged and never judged.
@@ -74,7 +74,7 @@ public enum CommitmentResolver {
             return true;
         }
         if (this == QUEST_STATE) {
-            return dev.otectus.mcaconversations.compat.QuestsBridge.queries() != null;
+            return dev.otectus.mcaconversations.compat.QuestsBridge.isAvailable();
         }
         return false;
     }

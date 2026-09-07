@@ -1,0 +1,11 @@
+{
+  "_comment": [
+    "Technique 2: emptying a whole catalog by replacing the mod's file at its exact path.",
+    "SceneCatalogLoader is a SimpleJsonResourceReloadListener, so it resolves one resource per",
+    "exact ResourceLocation with the top-most pack winning. This file replaces all 373 shipped",
+    "scenes with none, and the mod's copy is never read.",
+    "Read the README before enabling this. dynamic.enabled = false in the common config does the",
+    "same job more cheaply, reversibly, per install, and without fighting the next mod update."
+  ],
+  "scenes": {}
+}

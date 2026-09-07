@@ -1,10 +1,6 @@
 {
   "_comment": [
-    "Worries, entered from the us page, gated on trust and on the hour.",
-    "",
-    "A worry is not a fear: a fear is about the world and a worry is about a specific thing that is",
-    "probably fine. One scene is the practical one; the other only comes out late and to somebody who",
-    "has earned it."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "worries",
   "entry": {
@@ -66,6 +62,12 @@
             "family"
           ],
           "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
         }
       ],
       "base_priority": 26,
@@ -80,14 +82,14 @@
       },
       "lines": {
         "en": [
-          "A thing that is probably fine and that I have checked four times, which tells you it is not about the thing.",
-          "Money, in the ordinary way. Not a crisis. Just the arithmetic being tighter than I would like for a season.",
-          "I am waiting on somebody else's decision and I hate that more than I would hate a bad answer."
+          "I worry about taking on more than I can reasonably finish.",
+          "The thought of too many obligations and too little time bothers me.",
+          "I'd rather be honest about my limits than promise more than I can finish."
         ],
         "pt": [
-          "Uma coisa que provavelmente está bem e que eu conferi quatro vezes, o que já mostra que não é sobre a coisa.",
-          "Dinheiro, do jeito comum. Não é crise. Só a conta mais apertada do que eu gostaria por uma estação.",
-          "Estou esperando a decisão de outra pessoa e eu odeio isso mais do que odiaria uma resposta ruim."
+          "Me preocupa assumir mais coisas do que consigo terminar.",
+          "A ideia de obrigações demais e tempo de menos me incomoda.",
+          "Prefiro ter honestidade sobre meus limites a prometer mais do que consigo terminar."
         ]
       },
       "replies": [
@@ -100,16 +102,16 @@
           "tone": "plain",
           "outcome": "accepted",
           "label": {
-            "en": "Tell me what would actually help.",
-            "pt": "Diga o que de fato ajudaria."
+            "en": "What would make the workload manageable?",
+            "pt": "O que tornaria as tarefas mais viáveis?"
           },
           "phrases": [
-            "tell me what would actually help",
-            "what would be useful to you"
+            "what would make the workload manageable"
           ],
           "requires_any": [
-            "help",
-            "useful"
+            "make",
+            "workload",
+            "manageable"
           ],
           "disposition": {
             "trust": 3,
@@ -125,20 +127,21 @@
             "id": "answered",
             "act": "explain",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "problem_solve",
             "lines": {
               "en": [
-                "Ask me about it again on Thursday. That is genuinely the whole of it and it is the thing nobody thinks to offer.",
-                "Two hours of somebody else's hands on the Saturday. Nothing else. I have costed this out carefully.",
-                "You already did it by asking that instead of telling me it will be fine. It might not be fine and I know that."
+                "A clear order, I think. And admitting which things can wait.",
+                "Saying what I can actually do before agreeing to everything.",
+                "Fewer assumptions about how much fits in a day. A day has its limits too."
               ],
               "pt": [
-                "Me pergunte de novo na quinta. É genuinamente tudo, e é a coisa que ninguém pensa em oferecer.",
-                "Duas horas das mãos de outra pessoa no sábado. Nada mais. Já fiz essa conta com cuidado.",
-                "Você já ajudou perguntando isso em vez de dizer que vai ficar tudo bem. Pode não ficar, e eu sei disso."
+                "Uma ordem clara, eu acho. E admitir o que pode esperar.",
+                "Dizer o que realmente consigo fazer antes de concordar com tudo.",
+                "Menos suposições sobre o que cabe num dia. Um dia também tem seus limites."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         },
         {
@@ -171,19 +174,22 @@
             "shape": "problem_solve",
             "lines": {
               "en": [
-                "A hard winter and asking for help, and the asking is the part I have been treating as the disaster.",
-                "Said out loud it is smaller than it is at three in the morning. That happens every time and I forget every time.",
-                "I do not know, which is exactly why it has been running around my head instead of sitting down on a list."
+                "Letting someone down because I said yes too quickly. I'd rather be clear at the start.",
+                "Working myself into a muddle and still leaving things unfinished. That's what I'd want to avoid.",
+                "Agreeing too quickly, then discovering someone was relying on more than I could do."
               ],
               "pt": [
-                "Um inverno duro e pedir ajuda, e o pedir é a parte que eu venho tratando como o desastre.",
-                "Dito em voz alta é menor do que é às três da manhã. Acontece toda vez e eu esqueço toda vez.",
-                "Eu não sei, que é exatamente por que isso vem correndo pela minha cabeça em vez de sentar numa lista."
+                "Decepcionar alguém porque aceitei depressa demais. Prefiro deixar claro desde o começo.",
+                "Me enrolar de tanto trabalhar e ainda deixar coisas sem terminar. É isso que quero evitar.",
+                "Aceitar depressa demais e depois descobrir que alguém contava com mais do que eu podia fazer."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "the_late_one",
@@ -207,12 +213,28 @@
           "unknown": "fail"
         },
         {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
           "field": "player.relationship_band",
           "any_of": [
             "confidant",
-            "partner",
-            "family"
+            "family",
+            "partner"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -228,14 +250,14 @@
       },
       "lines": {
         "en": [
-          "I worry about somebody who is fine, constantly, and I have never told them and I am not going to.",
-          "There is a thing I check on that does not need checking on, three times a week, and I have started walking a longer way to do it.",
-          "It is about a person, and it is not about anything they have done, and that is why it will not go anywhere."
+          "At this hour, it's easy to turn a possibility into a certainty in my head.",
+          "Night isn't always the best time to decide how bad a worry really is.",
+          "At night, a worry can sound more certain than the facts behind it."
         ],
         "pt": [
-          "Eu me preocupo constantemente com alguém que está bem, e nunca contei a essa pessoa e não vou contar.",
-          "Existe uma coisa que eu confiro e que não precisa ser conferida, três vezes por semana, e passei a dar uma volta maior para fazer isso.",
-          "É sobre uma pessoa, e não é sobre nada que ela tenha feito, e é por isso que não vai a lugar nenhum."
+          "A esta hora, é fácil transformar uma possibilidade numa certeza na minha cabeça.",
+          "A noite nem sempre é a melhor hora para decidir o tamanho real de uma preocupação.",
+          "À noite, uma preocupação pode parecer mais certa que os fatos por trás dela."
         ]
       },
       "replies": [
@@ -248,17 +270,15 @@
           "tone": "gentle",
           "outcome": "appreciated",
           "label": {
-            "en": "That is a lot to carry by yourself.",
-            "pt": "É muita coisa para carregar por conta própria."
+            "en": "We can keep the conversation quiet.",
+            "pt": "Podemos conversar com calma."
           },
           "phrases": [
-            "that is a lot to carry alone",
-            "carrying that by yourself is hard"
+            "we can keep the conversation quiet"
           ],
           "requires_any": [
-            "carry",
-            "carrying",
-            "yourself"
+            "keep",
+            "conversation"
           ],
           "disposition": {
             "trust": 4,
@@ -278,16 +298,18 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It is, and it is mine to carry, and there is a difference between help and company and I only ever wanted the second.",
-                "Thank you. Now two people know it exists, and the person it is about still gets to be untroubled by it, which was the whole design.",
-                "I have said it once before and the person told the person. I would like it noted that I said it anyway, to you, tonight."
+                "I'd like that. No need to settle every question before we part.",
+                "Thank you. A little ordinary company suits me.",
+                "That would suit me. We don't need to solve everything before parting."
               ],
               "pt": [
-                "É, e é minha para carregar, e existe diferença entre ajuda e companhia, e eu só quis a segunda.",
-                "Obrigada. Agora duas pessoas sabem que isso existe, e a pessoa de quem se trata continua sem ser incomodada, que era o desenho inteiro.",
-                "Já disse uma vez antes e a pessoa contou à pessoa. Gostaria que ficasse registrado que eu disse mesmo assim, a você, hoje."
+                "Eu gostaria. Não precisamos resolver cada questão antes de nos despedir.",
+                "Valeu. Um pouco de companhia simples me faz bem.",
+                "Isso me cairia bem. Não precisamos resolver tudo antes de nos despedir."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -299,16 +321,17 @@
           "tone": "gentle",
           "outcome": "engaged",
           "label": {
-            "en": "Would telling them help?",
-            "pt": "Contar a eles ajudaria?"
+            "en": "Would a fresh look in daylight help?",
+            "pt": "Olhar de novo à luz do dia ajudaria?"
           },
           "phrases": [
-            "would telling them help",
-            "should they know about it"
+            "would a fresh look in daylight help"
           ],
           "requires_any": [
-            "telling",
-            "know"
+            "fresh",
+            "look",
+            "daylight",
+            "help"
           ],
           "disposition": {
             "familiarity": 3,
@@ -322,19 +345,22 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "It would help me and cost them, and that trade is the exact reason I have not made it in four years.",
-                "They would be careful with me afterwards. I have watched that happen to somebody else and I would rather have the worry.",
-                "Perhaps. I have gone round that eleven times and landed in the same place, and I keep going round it anyway."
+                "I think it might. At least I'd have a better chance of separating facts from guesses.",
+                "Probably. Rest first, then work out whether there's actually something to do.",
+                "I'd like to try that. A rested look might make the real question clearer."
               ],
               "pt": [
-                "Ajudaria a mim e custaria a eles, e é exatamente essa troca que eu não fiz em quatro anos.",
-                "Iam passar a ter cuidado comigo depois. Já vi isso acontecer com outra pessoa e eu prefiro ficar com a preocupação.",
-                "Talvez. Já dei essa volta onze vezes e cheguei no mesmo lugar, e continuo dando a volta assim mesmo."
+                "Acho que sim. Pelo menos teria mais chance de separar os fatos dos palpites.",
+                "Provavelmente. Primeiro descansar, depois ver se realmente há algo a fazer.",
+                "Quero tentar. Olhar depois de descansar pode deixar a questão real mais clara."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

@@ -1,5 +1,7 @@
 # PORT_STATUS.md — 1.21.1 NeoForge parity port
 
+> Historical 1.6.0 port record. For 1.6.1 changes, see [CHANGELOG.md](CHANGELOG.md); for stabilization validation and remaining gameplay checks, see [the stabilization report](docs/STABILIZATION-2026-09.md).
+
 Resume-from-here file. If you are a fresh session: read this, then `PARITY.md`, then the approved plan
 if one exists. SOURCE `C:\Projects\MCAConversations` @ SOURCE HEAD `7d5dc29` plus its uncommitted 1.6.0 working tree (2026-09-05) is read-only truth. TARGET was cut from SOURCE
 `89edad2` (v1.2.1); the port is a re-sync of six SOURCE releases plus the loader migration.

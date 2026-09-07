@@ -159,3 +159,6 @@ instance. The in-world acceptance checklist is in [CHANGELOG.md](CHANGELOG.md).
 ## License
 
 GPL-3.0-only, matching MCA Reborn, whose internals this mod links against.
+
+
+See [the stabilization and narrative review](docs/STABILIZATION-2026-09.md) for the latest fixes, reproducible validation commands, optional API build paths, and remaining production checks.

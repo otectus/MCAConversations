@@ -36,6 +36,7 @@ class CourtNewsPollerTest {
 
         private final List<CapitalChronicleEventView> chronicle = new ArrayList<>();
         private final List<CapitalRelationView> relations = new ArrayList<>();
+        private boolean diplomacyAvailable = true;
 
         void write(String type, String text) {
             chronicle.add(new CapitalChronicleEventView(chronicle.size(), 1L, type,
@@ -62,6 +63,9 @@ class CourtNewsPollerTest {
         public List<CapitalRelationView> relationsOf(CapitalCourtView court) {
             return List.copyOf(relations);
         }
+
+        @Override
+        public boolean relationsAvailable() { return diplomacyAvailable; }
 
         @Override
         public String displayName(CapitalCourtView court, UUID entity) {
@@ -199,7 +203,7 @@ class CourtNewsPollerTest {
         List<GossipEvent> told =
                 poll(fake, court(fake, Optional.of(KING), Optional.of(USURPER), true), memory, 3);
 
-        assertEquals(List.of(GossipEventType.ROYAL_BIRTH, GossipEventType.ROYAL_DEATH,
+        assertEquals(List.of(GossipEventType.COURT_NEWS, GossipEventType.ROYAL_DEATH,
                         GossipEventType.WAR),
                 told.stream().map(GossipEvent::type).toList());
         assertEquals("Fenmarch", told.get(2).bName());
@@ -226,19 +230,41 @@ class CourtNewsPollerTest {
     }
 
     @Test
-    void officeHoldersAreRememberedAndTheFirstSightingIsNotAPromotion() {
+    void officePollingDoesNotOverwriteTheAuthoritativeResolvedTitle() {
         FakeCourt fake = new FakeCourt();
         CourtRoleMemory memory = new CourtRoleMemory();
         long today = NOW / 24_000L;
-
+        memory.observe(KING, "high_sovereign", today);
         poll(fake, court(fake, Optional.of(KING), Optional.empty(), false), memory, 3);
-        assertEquals(Optional.of("sovereign"), memory.title(KING));
-        assertTrue(memory.freshChange(KING, today, 7).isEmpty(),
-                "somebody already on the throne has not just been crowned");
+        assertEquals(Optional.of("high_sovereign"), memory.title(KING));
+        assertTrue(memory.freshChange(KING, today, 7).isEmpty());
+    }
 
-        // The same villager, now the heir: that is a change, and it is theirs to mention.
-        poll(fake, court(fake, Optional.of(USURPER), Optional.of(KING), false), memory, 3);
-        assertEquals(Optional.of("sovereign"), memory.freshChange(KING, today, 7));
+    @Test
+    void namingOrReplacingAnHeirDoesNotInventABirth() {
+        FakeCourt fake = new FakeCourt();
+        CourtRoleMemory memory = new CourtRoleMemory();
+        poll(fake, court(fake, Optional.of(KING), Optional.empty(), false), memory, 3);
+        List<GossipEvent> named = poll(fake, court(fake, Optional.of(KING), Optional.of(USURPER), false), memory, 3);
+        assertEquals(List.of(GossipEventType.COURT_NEWS), named.stream().map(GossipEvent::type).toList());
+        List<GossipEvent> replaced = poll(fake, court(fake, Optional.of(KING), Optional.of(UUID.randomUUID()), false), memory, 3);
+        assertEquals(List.of(GossipEventType.COURT_NEWS), replaced.stream().map(GossipEvent::type).toList());
+    }
+
+    @Test
+    void unavailableDiplomacyDoesNotForgetAWarAndAnnounceItAgain() {
+        FakeCourt fake = new FakeCourt();
+        fake.relations.add(new CapitalRelationView(OTHER_CAPITAL, "Fenmarch", "war", "hostile", -40));
+        CourtRoleMemory memory = new CourtRoleMemory();
+        CapitalCourtView view = court(fake, Optional.of(KING), Optional.empty(), false);
+        poll(fake, view, memory, 3);
+        fake.diplomacyAvailable = false;
+        fake.relations.clear();
+        assertTrue(poll(fake, view, memory, 3).isEmpty());
+        assertEquals("war", memory.snapshot(CAPITAL).relations().get(OTHER_CAPITAL));
+        fake.diplomacyAvailable = true;
+        fake.relations.add(new CapitalRelationView(OTHER_CAPITAL, "Fenmarch", "war", "hostile", -40));
+        assertTrue(poll(fake, view, memory, 3).isEmpty());
     }
 
     @Test

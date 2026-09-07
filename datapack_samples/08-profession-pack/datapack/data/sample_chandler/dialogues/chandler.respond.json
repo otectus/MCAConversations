@@ -1,0 +1,159 @@
+{
+  "answers": [
+    {
+      "name": "ask_hard",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.hard"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.chandler.hard",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "chandler.followup",
+            "conversations_say": {
+              "phrase": "chandler.work.hard"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "value",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.value"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.chandler.value",
+              "delta": 2,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.chandler.value",
+              "deltas": {
+                "respect": 4,
+                "warmth": 2
+              }
+            },
+            "next": "chandler.followup",
+            "conversations_say": {
+              "phrase": "chandler.work.value"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "conversations_personality": [
+                "extroverted",
+                "crabby",
+                "greedy",
+                "relaxed",
+                "peaceful",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.challenge.landed"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.chandler.challenge",
+              "delta": 1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.chandler.challenge",
+              "deltas": {
+                "respect": 4
+              }
+            },
+            "next": "chandler.followup",
+            "conversations_say": {
+              "phrase": "chandler.work.challenge.landed"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_personality": [
+                "extroverted",
+                "crabby",
+                "greedy",
+                "relaxed",
+                "peaceful",
+                "upbeat"
+              ]
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.chandler.challenge.stung"
+            },
+            "conversations_affection_apply": {
+              "decision": "work.chandler.challenge",
+              "delta": -1,
+              "budget": "standard",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.chandler.challenge",
+              "deltas": {
+                "respect": -1,
+                "tension": 4
+              }
+            },
+            "next": "chandler.followup",
+            "conversations_say": {
+              "phrase": "chandler.work.challenge.stung"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "chandler.work.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

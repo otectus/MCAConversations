@@ -81,7 +81,9 @@ public final class Normalizer {
 
     /** The stopword set, exposed so {@link Addressing} can treat them as non-name tokens. */
     static Set<String> stopwords() {
-        return STOPWORDS;
+        Set<String> all = new java.util.HashSet<>(STOPWORDS);
+        all.addAll(PT_STOPWORDS);
+        return Set.copyOf(all);
     }
 
     /** Kept as features (they carry intent shape) — never flagged stop. */
@@ -95,6 +97,20 @@ public final class Normalizer {
     /** Coordinating conjunctions break a negation window (§6.2.5). */
     private static final Set<String> CONJUNCTIONS = Set.of("but", "and", "or");
 
+    // Select by the player's reported client language. "no" is an English negator but the
+    // Portuguese contraction "em + o"; guessing from that token alone reverses ordinary replies.
+    private static final Set<String> PT_STOPWORDS = Set.of(
+            "o", "a", "os", "as", "um", "uma", "uns", "umas", "eu", "me", "meu", "minha",
+            "nos", "nosso", "nossa", "de", "do", "da", "dos", "das",
+            "em", "no", "na", "nas", "ao", "aos", "para", "por", "com", "e", "ou",
+            "se", "isso", "isto", "esse", "essa", "muito", "bem");
+    private static final Set<String> PT_QUESTION_WORDS = Set.of(
+            "como", "que", "qual", "quais", "quem", "quando", "onde", "quanto", "quantos",
+            "pode", "poderia", "conte", "sobre");
+    private static final Set<String> PT_NEGATORS = Set.of(
+            "nao", "nunca", "jamais", "nem", "ninguem", "nada", "sem");
+    private static final Set<String> PT_CONJUNCTIONS = Set.of("mas", "e", "ou", "porem");
+
     private static final Map<String, String[]> CONTRACTIONS = buildContractions();
 
     /** Small silent-e restore list for {@code -ing} stripping (§6.2.7). */
@@ -106,6 +122,17 @@ public final class Normalizer {
 
     /** Full pipeline. {@code syn} canonicalizes synonyms (pass {@link SynonymTable#EMPTY} for none). */
     public static NormalizedMessage normalize(String raw, SynonymTable syn) {
+        return normalize(raw, syn, "en_us");
+    }
+
+    /** Language-aware query features; canonical phrase stems remain identical across both locales. */
+    public static NormalizedMessage normalize(String raw, SynonymTable syn, String languageCode) {
+        boolean portuguese = languageCode != null
+                && languageCode.toLowerCase(Locale.ROOT).replace('-', '_').startsWith("pt_");
+        Set<String> stopwords = portuguese ? PT_STOPWORDS : STOPWORDS;
+        Set<String> questionWords = portuguese ? PT_QUESTION_WORDS : QUESTION_WORDS;
+        Set<String> negators = portuguese ? PT_NEGATORS : NEGATORS;
+        Set<String> conjunctions = portuguese ? PT_CONJUNCTIONS : CONJUNCTIONS;
         String folded = fold(raw == null ? "" : raw);
         boolean interrogative = folded.strip().endsWith("?");
 
@@ -132,7 +159,7 @@ public final class Normalizer {
             breaks = breaks.subList(0, MAX_TOKENS);
         }
 
-        if (!expanded.isEmpty() && QUESTION_WORDS.contains(expanded.get(0))) {
+        if (!expanded.isEmpty() && questionWords.contains(expanded.get(0))) {
             interrogative = true;
         }
 
@@ -141,9 +168,9 @@ public final class Normalizer {
         for (int i = 0; i < expanded.size(); i++) {
             String surface = expanded.get(i);
             boolean breakBefore = breaks.get(i);
-            boolean isNegator = NEGATORS.contains(surface);
-            boolean isConjunction = CONJUNCTIONS.contains(surface);
-            boolean stop = STOPWORDS.contains(surface) && !QUESTION_WORDS.contains(surface);
+            boolean isNegator = negators.contains(surface);
+            boolean isConjunction = conjunctions.contains(surface);
+            boolean stop = stopwords.contains(surface) && !questionWords.contains(surface);
 
             if (breakBefore || isConjunction) {
                 negRemaining = 0;

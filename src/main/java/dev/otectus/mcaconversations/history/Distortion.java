@@ -12,11 +12,12 @@ import java.util.Optional;
  * intact — two villagers may read the same public event differently, but neither may contradict the
  * event log about what happened, unless an author has explicitly marked one account as mistaken.
  *
- * <p>{@link #NONE} is therefore the only value the runtime ever assigns.
+ * <p>{@link #NONE} is therefore the only value the runtime introduces. Propagation preserves
+ * an existing authored distortion until a correction explicitly clears it.
  */
 public enum Distortion {
 
-    /** The account matches the record. Everything the runtime produces is this. */
+    /** The account matches the record. Fresh runtime events use this. */
     NONE("none"),
 
     /** True as far as it goes, and something was left out. Authored. */

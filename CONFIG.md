@@ -259,3 +259,10 @@ Run `/conversations context capabilities` in game to see the live context fields
 | Option | Default | Meaning |
 |---|---|---|
 | `debugLogging` | `false` | INFO-level logs for gift recording, gossip detection, and gossip telling |
+
+
+### Session and replay behavior
+
+An unanswered GUI page retains its response offer, context, and spent heart budget while it remains active. The chat inactivity timeout continues to apply to chat offers. Reopening the same active topic does not reset the per-conversation budget. Reconnecting starts a new transient session; durable daily and one-shot guards remain in saved data.
+
+Optional API build overrides (`mcaQuestsApiPath`, `mcaReputationApiPath`) are Gradle properties, not in-game configuration options. See [validation and production checks](docs/STABILIZATION-2026-09.md).

@@ -1,0 +1,514 @@
+{
+  "_comment": "Extension of the mod's conversations.cat.events page. Same basename, so MCA merges this answer into the shipped one; the shipped file carries no top-level flags, so neither does this one. Results run ideal-first, fallback last.",
+  "answers": [
+    {
+      "name": "almanac",
+      "constraints": "!toddler,!baby",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_context": {
+                "field": "capital.title_changed",
+                "is": true,
+                "unknown": "fail"
+              }
+            },
+            {
+              "chance": 200,
+              "conversations_context": {
+                "field": "capital.present",
+                "is": true,
+                "unknown": "fail"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "capitals"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "capital_topics"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "standard",
+              "branch": "court",
+              "beat": "almanac.court.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.court.respond",
+            "conversations_say": {
+              "phrase": "almanac.court.title_changed",
+              "vars": [
+                "capital_name",
+                "sovereign_title"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 700,
+              "conversations_reputation": {
+                "min_tier": "honored"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_reputation_incident": {
+                "statuses": [
+                  "active"
+                ],
+                "tags": [
+                  "crime"
+                ],
+                "known_to_speaker": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "standard",
+              "branch": "standing_high",
+              "beat": "almanac.standing.high.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.standing.respond",
+            "conversations_say": {
+              "phrase": "almanac.standing.honored",
+              "vars": [
+                "village_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 700,
+              "conversations_reputation_incident": {
+                "statuses": [
+                  "active"
+                ],
+                "tags": [
+                  "crime"
+                ],
+                "known_to_speaker": true,
+                "max_age": 168000
+              }
+            },
+            {
+              "chance": 200,
+              "conversations_reputation": {
+                "max_tier": "wary"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "standard",
+              "branch": "standing_low",
+              "beat": "almanac.standing.low.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.standing.wary.respond",
+            "conversations_say": {
+              "phrase": "almanac.standing.wary",
+              "vars": [
+                "village_name"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 600,
+              "conversations_quest_ready": {
+                "scope": "this",
+                "min": 1
+              }
+            },
+            {
+              "chance": 200,
+              "conversations_quest_active": {
+                "scope": "this",
+                "min": 1
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "quests"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "standard",
+              "branch": "quest",
+              "beat": "almanac.quest.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.quest.respond",
+            "conversations_say": {
+              "phrase": "almanac.quest.ready"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 500,
+              "conversations_gossip": {
+                "types": [
+                  "marriage",
+                  "birth",
+                  "arrival"
+                ],
+                "max_age": 72000
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "gossip"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "standard",
+              "branch": "gossip"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.gossip.respond",
+            "conversations_gossip_say": {
+              "types": [
+                "marriage",
+                "birth",
+                "arrival"
+              ],
+              "max_age": 72000,
+              "phrase_prefix": "almanac.gossip"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 300,
+              "conversations_holiday": {
+                "is": "spring_bloom"
+              }
+            },
+            {
+              "chance": 300,
+              "conversations_holiday": {
+                "is": "midsummer"
+              }
+            },
+            {
+              "chance": 300,
+              "conversations_holiday": {
+                "is": "harvest_festival"
+              }
+            },
+            {
+              "chance": 300,
+              "conversations_holiday": {
+                "is": "midwinter"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_almanac.cooldown.almanac",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "holidays"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "quick",
+              "branch": "holiday",
+              "beat": "almanac.world.holiday.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.world.respond",
+            "conversations_say": {
+              "phrase": "almanac.holiday",
+              "vars": [
+                "holiday"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 250,
+              "conversations_weather": {
+                "is": "storm"
+              }
+            },
+            {
+              "chance": 180,
+              "conversations_weather": {
+                "is": "rain"
+              }
+            },
+            {
+              "chance": 60,
+              "conversations_weather": {
+                "is": "clear"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_almanac.cooldown.almanac",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "world"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "quick",
+              "branch": "weather",
+              "beat": "almanac.world.weather.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.world.respond",
+            "conversations_say": {
+              "phrase": "almanac.weather",
+              "vars": [
+                "weather"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 120,
+              "conversations_season": {
+                "is": "spring"
+              }
+            },
+            {
+              "chance": 120,
+              "conversations_season": {
+                "is": "summer"
+              }
+            },
+            {
+              "chance": 120,
+              "conversations_season": {
+                "is": "autumn"
+              }
+            },
+            {
+              "chance": 120,
+              "conversations_season": {
+                "is": "winter"
+              }
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "sample_almanac.cooldown.almanac",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "seasons"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "quick",
+              "branch": "season",
+              "beat": "almanac.world.season.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.world.respond",
+            "conversations_say": {
+              "phrase": "almanac.season",
+              "vars": [
+                "season"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 40,
+              "conversations_enabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "almanac",
+              "budget": "quick",
+              "branch": "plain",
+              "beat": "almanac.plain.open"
+            },
+            "conversations_record": {
+              "id": "sample_almanac.cooldown.almanac",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "almanac.plain.respond",
+            "conversations_say": {
+              "phrase": "almanac.plain"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.events",
+            "say": "almanac.legacy"
+          }
+        }
+      ]
+    }
+  ]
+}

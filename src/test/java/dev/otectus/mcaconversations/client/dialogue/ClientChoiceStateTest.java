@@ -72,4 +72,17 @@ class ClientChoiceStateTest {
         assertEquals(3, state.firstOnPage());
         assertEquals(3, state.visibleCount());
     }
+
+    @Test
+    void aNewConnectionAcceptsTheNewServersLowerRevision() {
+        ClientChoiceState state = new ClientChoiceState();
+        state.accept(offer(100, 3));
+        state.lock(1);
+        state.clearLocal();
+        assertFalse(state.accept(offer(1, 2)), "closing a screen must retain replay protection");
+        state.resetConnection();
+        assertTrue(state.accept(offer(1, 2)), "another server starts a separate revision sequence");
+        assertFalse(state.locked());
+        assertEquals(0, state.focusedIndex());
+    }
 }

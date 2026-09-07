@@ -131,7 +131,7 @@ dependencies {
     // so the Minecraft type names match and there is no reobfuscation step to worry about. Never
     // bundled: the real mod supplies these classes at runtime, gated by QuestsBridge's ModList
     // check and the optional neoforge.mods.toml dependency.
-    def mcaQuestsClasses = file("${projectDir}/../MCAQuests_1.21.1/build/classes/java/main")
+    def mcaQuestsClasses = file(project.findProperty("mcaQuestsApiPath") ?: "${projectDir}/../MCAQuests_1.21.1/build/classes/java/main")
     if (mcaQuestsClasses.exists()) {
         compileOnly files(mcaQuestsClasses)
     } else {
@@ -154,7 +154,7 @@ dependencies {
     // integration compiles. The exclude fallback stays for machines without that sibling checkout;
     // every reputation-gated dialogue condition and template variable already falls back to a
     // documented safe default.
-    def mcaReputationClasses = file("${projectDir}/../MCAReputation_1.21.1/build/classes/java/main")
+    def mcaReputationClasses = file(project.findProperty("mcaReputationApiPath") ?: "${projectDir}/../MCAReputation_1.21.1/build/classes/java/main")
     if (mcaReputationClasses.exists()) {
         compileOnly files(mcaReputationClasses)
     } else {

@@ -1,0 +1,374 @@
+{
+  "_comment": "Beats say what each say pool does and which question it opens; replies say what each button is and which beats it may answer. Nothing here selects anything at runtime - it is the contract a lint checks the dialogue against.",
+  "beats": {
+    "sleep.again.open": {
+      "topic": "sleep",
+      "say": "sample_sleep.again",
+      "response_question": "sleep.respond",
+      "npc_act": "qualify",
+      "subject": "sleep.again",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "empathy",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    },
+    "sleep.young.open": {
+      "topic": "sleep",
+      "say": "sample_sleep.young",
+      "response_question": "sleep.respond",
+      "npc_act": "report",
+      "subject": "sleep.young",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "empathy",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "context": {
+        "ages": [
+          "toddler",
+          "child"
+        ]
+      }
+    },
+    "sleep.ordinary.open": {
+      "topic": "sleep",
+      "say": "sample_sleep.ordinary",
+      "response_question": "sleep.respond",
+      "npc_act": "report",
+      "subject": "sleep.ordinary",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported"
+      ],
+      "allowed_stances": [
+        "curiosity",
+        "encouragement",
+        "empathy",
+        "self_disclosure",
+        "restraint",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ]
+    },
+    "sleep.rough.open": {
+      "topic": "sleep",
+      "say": "sample_sleep.rough",
+      "response_question": "sleep.rough.respond",
+      "npc_act": "complain",
+      "subject": "sleep.rough",
+      "polarity": "negative",
+      "openness": "invites_followup",
+      "facts": [
+        "sleep:reported",
+        "sleep:poor"
+      ],
+      "allowed_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "restraint",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "humor"
+      ]
+    },
+    "sleep.ordinary.dream": {
+      "topic": "sleep",
+      "say": "sample_sleep.dream",
+      "response_question": "sleep.close",
+      "npc_act": "disclose",
+      "subject": "sleep.ordinary",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged"
+    },
+    "sleep.ordinary.glad": {
+      "topic": "sleep",
+      "say": "sample_sleep.glad",
+      "response_question": "sleep.close",
+      "npc_act": "accept",
+      "subject": "sleep.ordinary",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated"
+    },
+    "sleep.ordinary.glad.flat": {
+      "topic": "sleep",
+      "say": "sample_sleep.glad.flat",
+      "response_question": "sleep.close",
+      "npc_act": "qualify",
+      "subject": "sleep.ordinary",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "qualified"
+    },
+    "sleep.rough.empathize": {
+      "topic": "sleep",
+      "say": "sample_sleep.rough.empathize",
+      "response_question": "sleep.close",
+      "npc_act": "accept",
+      "subject": "sleep.rough",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported",
+        "sleep:poor"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "appreciated"
+    },
+    "sleep.rough.ask": {
+      "topic": "sleep",
+      "say": "sample_sleep.rough.ask",
+      "response_question": "sleep.close",
+      "npc_act": "explain",
+      "subject": "sleep.rough",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "facts": [
+        "sleep:reported",
+        "sleep:poor"
+      ],
+      "allowed_stances": [
+        "encouragement",
+        "self_disclosure",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation",
+        "dismissal",
+        "boundary_push"
+      ],
+      "outcome": "engaged"
+    }
+  },
+  "replies": {
+    "sleep.respond/dream": {
+      "stance": "curiosity",
+      "responds_to": [
+        "sleep.ordinary.open",
+        "sleep.again.open",
+        "sleep.young.open"
+      ],
+      "requires_facts": [
+        "sleep:reported"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "exit": false
+    },
+    "sleep.respond/glad": {
+      "stance": "encouragement",
+      "responds_to": [
+        "sleep.ordinary.open",
+        "sleep.again.open",
+        "sleep.young.open"
+      ],
+      "requires_facts": [
+        "sleep:reported"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated",
+        "qualified"
+      ],
+      "exit": false
+    },
+    "sleep.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "sleep.ordinary.open",
+        "sleep.again.open",
+        "sleep.young.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "sleep.rough.respond/empathize": {
+      "stance": "empathy",
+      "responds_to": [
+        "sleep.rough.open"
+      ],
+      "requires_facts": [
+        "sleep:poor"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "exit": false
+    },
+    "sleep.rough.respond/ask": {
+      "stance": "curiosity",
+      "responds_to": [
+        "sleep.rough.open"
+      ],
+      "requires_facts": [
+        "sleep:poor"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "engaged"
+      ],
+      "exit": false
+    },
+    "sleep.rough.respond/brush_off": {
+      "stance": "dismissal",
+      "responds_to": [
+        "sleep.rough.open"
+      ],
+      "requires_facts": [
+        "sleep:poor"
+      ],
+      "tone": "blunt",
+      "outcomes": [
+        "rebuffed"
+      ],
+      "exit": false
+    },
+    "sleep.rough.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "sleep.rough.open"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "sleep.close/share": {
+      "stance": "self_disclosure",
+      "responds_to": [
+        "sleep.ordinary.dream",
+        "sleep.ordinary.glad",
+        "sleep.ordinary.glad.flat",
+        "sleep.rough.empathize",
+        "sleep.rough.ask"
+      ],
+      "requires_facts": [
+        "sleep:reported"
+      ],
+      "introduces_facts": [
+        "sleep:player_short"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "exit": false
+    },
+    "sleep.close/wish": {
+      "stance": "encouragement",
+      "responds_to": [
+        "sleep.ordinary.dream",
+        "sleep.ordinary.glad",
+        "sleep.ordinary.glad.flat",
+        "sleep.rough.empathize",
+        "sleep.rough.ask"
+      ],
+      "requires_facts": [
+        "sleep:reported"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ],
+      "exit": false
+    },
+    "sleep.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "sleep.ordinary.dream",
+        "sleep.ordinary.glad",
+        "sleep.ordinary.glad.flat",
+        "sleep.rough.empathize",
+        "sleep.rough.ask"
+      ],
+      "tone": "plain",
+      "exit": true
+    }
+  }
+}

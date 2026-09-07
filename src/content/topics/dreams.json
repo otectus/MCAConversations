@@ -1,9 +1,6 @@
 {
   "_comment": [
-    "Dreams — the wanting kind, not the sleeping kind.",
-    "",
-    "One scene is for people she trusts enough to name an ambition to; the other is the version she",
-    "gives everybody else, which is smaller on purpose and is not a lie."
+    "Authored bilingual exchanges. Pooled variants share response referents; world claims require actual context, and future possibilities are not appointments or promises."
   ],
   "topic": "dreams",
   "entry": {
@@ -49,7 +46,7 @@
       "act": "report",
       "polarity": "positive",
       "predicate": "plan",
-      "temporal": "future",
+      "temporal": "current",
       "privacy": "discreet",
       "obligations": [
         "clarify",
@@ -58,12 +55,28 @@
       ],
       "conditions": [
         {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
           "field": "player.relationship_band",
           "any_of": [
             "confidant",
-            "partner",
-            "family"
+            "family",
+            "partner"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -79,14 +92,14 @@
       },
       "lines": {
         "en": [
-          "There is a thing I want and I have said it out loud twice, counting now, and both times to somebody I trusted.",
-          "I want to be the person other people come to for one particular thing. That is smaller than it sounds and harder than it sounds.",
-          "It takes about six years and I have done two of them, and the two have been better than the four before them."
+          "I'd like to get properly good at something. Good enough that the work speaks for itself.",
+          "My grand ambition? Learn a skill well enough to pass it on. That would be something.",
+          "I'd like to learn one skill well enough to share it with someone else."
         ],
         "pt": [
-          "Existe uma coisa que eu quero e já disse em voz alta duas vezes, contando agora, e as duas para alguém em quem confio.",
-          "Quero ser a pessoa que os outros procuram para uma coisa específica. É menor do que parece e mais difícil do que parece.",
-          "Leva uns seis anos e eu já fiz dois, e esses dois foram melhores que os quatro anteriores."
+          "Quero aprender a fazer algo muito bem. Bem o bastante para o trabalho falar por si.",
+          "Minha grande ambição? Aprender uma habilidade bem o bastante para ensinar. Já seria muita coisa.",
+          "Quero aprender uma habilidade bem o bastante para compartilhar com alguém."
         ]
       },
       "replies": [
@@ -118,20 +131,115 @@
             "id": "explained",
             "act": "explain",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "A dull one. It always is. The next step in anything worth doing is four months of something nobody would watch.",
-                "Asking somebody who already does it whether they will let me stand behind them for a season. I have been putting that off since spring.",
-                "I have written it down in three parts, and the first part is finished, and I look at the list more than I work on it."
+                "Choose one part to practise. Wanting to be good at everything is a fine way to start nothing.",
+                "Find something small I can try without pretending I know it already.",
+                "Find a small exercise and give it a fair try."
               ],
               "pt": [
-                "Um passo chato. Sempre é. O próximo passo de qualquer coisa que valha a pena são quatro meses de algo que ninguém assistiria.",
-                "Pedir a alguém que já faz isso para me deixar ficar atrás dela por uma estação. Venho adiando desde a primavera.",
-                "Escrevi em três partes, e a primeira está pronta, e eu olho para a lista mais do que trabalho nela."
+                "Escolher uma parte para praticar. Querer fazer tudo bem é um ótimo jeito de não começar nada.",
+                "Encontrar algo pequeno que eu possa tentar sem fingir que já sei.",
+                "Encontrar um exercício pequeno e tentar de verdade."
               ]
-            }
+            },
+            "prompt": {
+              "en": "Learning a little at a time.",
+              "pt": "Aprender um pouco de cada vez."
+            },
+            "obligations": [
+              "clarify",
+              "acknowledge"
+            ],
+            "replies": [
+              {
+                "name": "follow_1",
+                "stance": "curiosity",
+                "answers": [
+                  "clarify"
+                ],
+                "tone": "plain",
+                "outcome": "engaged",
+                "reaction": {
+                  "id": "follow_answer_1",
+                  "act": "explain",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "Try the same small task again and compare. I don't need to be the best to notice progress.",
+                      "I'd look for one part that feels less clumsy. That's a start worth keeping.",
+                      "By what I can do with a little less help. Slowly still counts."
+                    ],
+                    "pt": [
+                      "Tentaria a mesma tarefa pequena e compararia. Não preciso superar todo mundo para notar progresso.",
+                      "Procuraria uma parte que saia com menos dificuldade. É um começo que vale manter.",
+                      "Pelo que consigo fazer com um pouco menos de ajuda. Devagar também conta."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "How would you know you're getting better?",
+                  "pt": "Como saberia que está melhorando?"
+                },
+                "phrases": [
+                  "how would you know youre getting better"
+                ],
+                "requires_any": [
+                  "know",
+                  "youre",
+                  "getting",
+                  "better"
+                ]
+              },
+              {
+                "name": "follow_2",
+                "stance": "respectful_disagreement",
+                "answers": [
+                  "acknowledge"
+                ],
+                "tone": "plain",
+                "outcome": "qualified",
+                "reaction": {
+                  "id": "follow_answer_2",
+                  "act": "qualify",
+                  "polarity": "mixed",
+                  "shape": "observe",
+                  "epistemic": "inferred",
+                  "lines": {
+                    "en": [
+                      "I could. I'd just want a small first step into it.",
+                      "True. A large aim and a manageable start can go together.",
+                      "I like that thought. Ambitious doesn't have to mean rushing."
+                    ],
+                    "pt": [
+                      "Poderia. Só gostaria de um primeiro passo pequeno para começar.",
+                      "É verdade. Um objetivo grande pode combinar com um começo viável.",
+                      "Gosto dessa ideia. Ter ambição não precisa significar correr."
+                    ]
+                  },
+                  "temporal": "current"
+                },
+                "label": {
+                  "en": "You could still try something ambitious.",
+                  "pt": "Você ainda poderia tentar algo ambicioso."
+                },
+                "phrases": [
+                  "you could still try something ambitious"
+                ],
+                "requires_any": [
+                  "still",
+                  "try",
+                  "something",
+                  "ambitious"
+                ]
+              }
+            ],
+            "epistemic": "inferred"
           }
         },
         {
@@ -143,16 +251,16 @@
           "tone": "plain",
           "outcome": "appreciated",
           "label": {
-            "en": "Go and ask them this week.",
-            "pt": "Vá pedir a eles esta semana."
+            "en": "Start with something small, then.",
+            "pt": "Então comece por algo pequeno."
           },
           "phrases": [
-            "go and ask them this week",
-            "make the ask this week"
+            "start with something small then"
           ],
           "requires_any": [
-            "ask",
-            "week"
+            "start",
+            "something",
+            "small"
           ],
           "disposition": {
             "trust": 3,
@@ -168,20 +276,21 @@
             "id": "resolved",
             "act": "accept",
             "polarity": "positive",
-            "temporal": "future",
+            "temporal": "current",
             "shape": "plan",
             "lines": {
               "en": [
-                "This week. You have made it a thing I have said to somebody, which is the only trick that has ever worked on me.",
-                "Right. The worst answer is no, and no leaves me exactly where I am, which is where I have been since spring anyway.",
-                "I will. And if I have not by the weekend, ask me about it, and be unpleasant about it, because that is what I would want."
+                "Yes. A first try doesn't have to be impressive.",
+                "That's a manageable thought. I can think about the next step after the first.",
+                "That sounds sensible. A modest start is still a start."
               ],
               "pt": [
-                "Esta semana. Você transformou isso numa coisa que eu disse a alguém, que é o único truque que já funcionou comigo.",
-                "Certo. A pior resposta é não, e não me deixa exatamente onde estou, que é onde estou desde a primavera de qualquer forma.",
-                "Vou. E se eu não tiver ido até o fim de semana, me pergunte, e seja chata a respeito, porque é o que eu ia querer."
+                "Sim. A primeira tentativa não precisa impressionar.",
+                "Assim parece possível. Posso pensar no próximo passo depois do primeiro.",
+                "Parece sensato. Um começo modesto ainda é um começo."
               ]
-            }
+            },
+            "epistemic": "inferred"
           }
         },
         {
@@ -217,19 +326,22 @@
             "shape": "confide",
             "lines": {
               "en": [
-                "So am I, and I notice you did not immediately tell me how to do it, which is why I said it to you.",
-                "It changes shape when it is said. Smaller and more possible, both at once, which I did not expect.",
-                "Thank you. I will probably be embarrassed about this tomorrow and I would like it noted that I said it anyway."
+                "So am I. It's an ambition, though, not a promise that I'll be brilliant by next week.",
+                "Thank you. I like being able to say it without being asked for a timetable.",
+                "It feels good to name an ambition without turning it into a deadline."
               ],
               "pt": [
-                "Eu também, e reparei que você não me disse na hora como fazer, e é por isso que eu contei a você.",
-                "Muda de formato quando é dito. Menor e mais possível ao mesmo tempo, o que eu não esperava.",
-                "Obrigada. Provavelmente vou ficar sem graça com isso amanhã e gostaria que ficasse registrado que eu disse mesmo assim."
+                "Eu também. Mas é uma ambição, não uma promessa de genialidade até a semana que vem.",
+                "Valeu. Gosto de poder falar disso sem ter que apresentar um cronograma.",
+                "É bom dar nome a uma ambição sem transformar isso num prazo."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     },
     {
       "name": "the_small_version",
@@ -238,7 +350,7 @@
       "act": "report",
       "polarity": "positive",
       "predicate": "plan",
-      "temporal": "future",
+      "temporal": "current",
       "obligations": [
         "clarify",
         "acknowledge"
@@ -251,6 +363,12 @@
             "acquaintance",
             "friend"
           ],
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
           "unknown": "fail"
         }
       ],
@@ -266,14 +384,14 @@
       },
       "lines": {
         "en": [
-          "A better roof and a quieter winter. That is what I tell people and it happens to be true, just not all of it.",
-          "Nothing grand. I would like the next year to look like this one with two things fixed.",
-          "I want to finish something I started. I am not going to say what, because saying what makes it a promise."
+          "I'd like more time to learn, and fewer things left half done. Two fairly ordinary wishes.",
+          "Two things come to mind: learning something useful and finishing what I start.",
+          "More time to learn, fewer unfinished things. Those would be my two wishes."
         ],
         "pt": [
-          "Um telhado melhor e um inverno mais calmo. É o que eu digo às pessoas e por acaso é verdade, só não é tudo.",
-          "Nada grandioso. Eu gostaria que o ano que vem fosse igual a este com duas coisas consertadas.",
-          "Quero terminar algo que comecei. Não vou dizer o quê, porque dizer o quê transforma em promessa."
+          "Quero mais tempo para aprender e menos coisas pela metade. Dois desejos bem comuns.",
+          "Duas coisas me vêm à cabeça: aprender algo útil e terminar o que eu começo.",
+          "Mais tempo para aprender, menos coisas inacabadas. Esses seriam meus dois desejos."
         ]
       },
       "replies": [
@@ -307,16 +425,18 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "The roof, and the fact that I am the only person who knows how to do one part of my job.",
-                "One is a thing I can buy and one is a thing I have to be braver about, and I would rather talk about the first.",
-                "Nothing you could help with, which I say kindly. Some things only get fixed by the person who has been avoiding them."
+                "Time to learn, and a habit of finishing. They ought to help each other.",
+                "Learn a little, finish a little. I don't need to turn either into a heroic undertaking.",
+                "Learning and finishing. I think a little of each would do me good."
               ],
               "pt": [
-                "O telhado, e o fato de eu ser a única pessoa que sabe fazer uma parte do meu trabalho.",
-                "Uma é uma coisa que dá para comprar e a outra é uma coisa em que eu preciso ser mais corajosa, e eu prefiro falar da primeira.",
-                "Nada em que você possa ajudar, e digo isso com carinho. Algumas coisas só se resolvem por quem vem evitando elas."
+                "Tempo para aprender e o hábito de terminar. Uma coisa deve ajudar a outra.",
+                "Aprender um pouco, terminar um pouco. Não preciso transformar nenhum dos dois numa missão heroica.",
+                "Aprender e terminar. Acho que um pouco de cada me faria bem."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         },
         {
@@ -349,19 +469,22 @@
             "shape": "observe",
             "lines": {
               "en": [
-                "One of them is likely and one of them is up to me, so I shall report back in the spring on the second.",
-                "Thank you. That is a decent thing to say to somebody who has just given you the short version.",
-                "If I get one I will call it a good year, which is the sort of arithmetic that keeps a person cheerful."
+                "Thank you. I'd be happy with a small start on each.",
+                "So do I. Though wanting them is easier than making room for them.",
+                "That's kind. Neither needs to happen all at once."
               ],
               "pt": [
-                "Uma é provável e a outra depende de mim, então eu dou notícias na primavera sobre a segunda.",
-                "Obrigada. É uma coisa decente de se dizer a quem acabou de te dar a versão curta.",
-                "Se eu conseguir uma, já chamo de bom ano, que é o tipo de conta que mantém a pessoa animada."
+                "Valeu. Um pequeno começo em cada um já me deixaria contente.",
+                "Eu também. Mas querer é mais fácil que arranjar espaço para isso.",
+                "Gentileza sua. Nenhum dos dois precisa acontecer de uma vez."
               ]
-            }
+            },
+            "epistemic": "inferred",
+            "temporal": "current"
           }
         }
-      ]
+      ],
+      "epistemic": "inferred"
     }
   ]
 }

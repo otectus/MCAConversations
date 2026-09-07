@@ -7,6 +7,95 @@
     "and everything else is the rule for when the director should choose them."
   ],
   "scenes": {
+    "topic.court.a_decree_changes_lives": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.a_decree_changes_lives.respond",
+        "opening_beat": "court.a_decree_changes_lives.open"
+      }
+    },
+    "topic.court.a_petition_worth_hearing": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.sovereign_named",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.a_petition_worth_hearing.respond",
+        "opening_beat": "court.a_petition_worth_hearing.open"
+      }
+    },
+    "topic.court.a_rule_people_can_follow": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.a_rule_people_can_follow.respond",
+        "opening_beat": "court.a_rule_people_can_follow.open"
+      }
+    },
     "topic.court.from_the_bottom_of_the_hall": {
       "purpose": "topic:court",
       "shape": "observe",
@@ -46,6 +135,39 @@
         "opening_beat": "court.from_the_bottom_of_the_hall.open"
       }
     },
+    "topic.court.hearing_both_sides": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.office",
+            "is": "master_of_laws",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.hearing_both_sides.respond",
+        "opening_beat": "court.hearing_both_sides.open"
+      }
+    },
     "topic.court.the_cloak_they_took": {
       "purpose": "topic:court",
       "shape": "confide",
@@ -65,6 +187,20 @@
           {
             "field": "capital.disgraced",
             "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "player.relationship_band",
+            "any_of": [
+              "confidant",
+              "partner",
+              "family"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "social.nearby",
+            "max": 0,
             "unknown": "fail"
           }
         ]
@@ -304,6 +440,128 @@
         "opening_beat": "court.what_the_books_say.open"
       }
     },
+    "topic.court.where_a_levy_would_go": {
+      "purpose": "topic:court",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_styles": [
+          "direct"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.court.where_a_levy_would_go.respond",
+        "opening_beat": "court.where_a_levy_would_go.open"
+      }
+    },
+    "topic.crown.a_ceremony_for_everyone": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.state",
+            "is": "active",
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.mourning",
+            "is": false,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_styles": [
+          "observer"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.crown.a_ceremony_for_everyone.respond",
+        "opening_beat": "crown.a_ceremony_for_everyone.open"
+      }
+    },
+    "topic.crown.a_question_in_private": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "player.relationship_band",
+            "any_of": [
+              "confidant",
+              "partner",
+              "family"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 14,
+            "unknown": "fail"
+          },
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_styles": [
+          "gradual"
+        ],
+        "cooldown_days": 7,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.crown.a_question_in_private.respond",
+        "opening_beat": "crown.a_question_in_private.open"
+      }
+    },
     "topic.crown.a_woman_on_the_seat": {
       "purpose": "topic:crown",
       "shape": "observe",
@@ -325,6 +583,16 @@
             "is": "sovereign",
             "not": true,
             "unknown": "fail"
+          },
+          {
+            "field": "capital.sovereign_female",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.sovereign_named",
+            "is": true,
+            "unknown": "fail"
           }
         ]
       },
@@ -339,6 +607,38 @@
       "route": {
         "question": "conversations.scene.crown.a_woman_on_the_seat.respond",
         "opening_beat": "crown.a_woman_on_the_seat.open"
+      }
+    },
+    "topic.crown.growing_up_beside_a_crown": {
+      "purpose": "topic:crown",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "speaker.age",
+            "is": "teen",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.crown.growing_up_beside_a_crown.respond",
+        "opening_beat": "crown.growing_up_beside_a_crown.open"
       }
     },
     "topic.crown.nobody_named_yet": {
@@ -505,6 +805,11 @@
             "field": "capital.present",
             "is": true,
             "unknown": "fail"
+          },
+          {
+            "field": "capital.sovereign_named",
+            "is": true,
+            "unknown": "fail"
           }
         ]
       },
@@ -540,6 +845,11 @@
           {
             "field": "capital.state",
             "is": "active",
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.consort_named",
+            "is": true,
             "unknown": "fail"
           }
         ]
@@ -672,12 +982,28 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -714,6 +1040,12 @@
               "friend"
             ],
             "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
           }
         ]
       },
@@ -747,6 +1079,12 @@
               "acquaintance",
               "friend"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -783,12 +1121,28 @@
             "unknown": "fail"
           },
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -818,18 +1172,38 @@
       "context": {
         "conditions": [
           {
+            "field": "speaker.mood",
+            "any_of": [
+              "unhappy",
+              "sad",
+              "depressed"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
-              "friend",
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "friend",
+              "partner"
             ],
             "unknown": "fail"
           },
           {
             "field": "time.days_since_first_met",
             "min": 14,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -865,6 +1239,22 @@
               "acquaintance",
               "friend"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "speaker.mood",
+            "any_of": [
+              "passive",
+              "fine",
+              "happy",
+              "overjoyed"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -1030,6 +1420,12 @@
               "family"
             ],
             "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
           }
         ]
       },
@@ -1057,11 +1453,27 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -1098,6 +1510,14 @@
               "confidant",
               "partner",
               "family"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "speaker.mood",
+            "any_of": [
+              "happy",
+              "overjoyed"
             ],
             "unknown": "fail"
           }
@@ -1173,6 +1593,12 @@
               "spring"
             ],
             "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
           }
         ]
       },
@@ -1201,12 +1627,28 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -1313,16 +1755,6 @@
             "unknown": "fail"
           },
           {
-            "field": "capital.house_tier",
-            "any_of": [
-              "noble",
-              "great",
-              "royal"
-            ],
-            "not": true,
-            "unknown": "pass"
-          },
-          {
             "field": "capital.title",
             "any_of": [
               "knight",
@@ -1330,6 +1762,11 @@
               "duke",
               "dowager_duke"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_present",
+            "is": false,
             "unknown": "fail"
           }
         ]
@@ -1450,6 +1887,11 @@
               "great",
               "royal"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.house_words_present",
+            "is": true,
             "unknown": "fail"
           }
         ]
@@ -1609,6 +2051,13 @@
         "conditions": [
           {
             "field": "social.family_names",
+            "min": 1,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -1637,17 +2086,28 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
             "unknown": "fail"
           },
           {
             "field": "time.days_since_first_met",
             "min": 21,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -1777,6 +2237,11 @@
           {
             "field": "capital.state",
             "is": "active",
+            "unknown": "fail"
+          },
+          {
+            "field": "village.recent_event",
+            "is": "coronation",
             "unknown": "fail"
           }
         ]
@@ -1944,6 +2409,14 @@
               "confidant",
               "partner",
               "family"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "player.health_band",
+            "any_of": [
+              "hurt",
+              "grave"
             ],
             "unknown": "fail"
           }
@@ -2138,9 +2611,13 @@
           {
             "field": "time.band",
             "any_of": [
-              "evening",
-              "night"
+              "dusk"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "place.village_id",
+            "min": 0,
             "unknown": "fail"
           }
         ]
@@ -2213,7 +2690,7 @@
           {
             "field": "social.village_population",
             "min": 4,
-            "unknown": "neutral"
+            "unknown": "fail"
           }
         ]
       },
@@ -2229,6 +2706,39 @@
       "route": {
         "question": "conversations.scene.player.what_i_say_about_you.respond",
         "opening_beat": "player.what_i_say_about_you.open"
+      }
+    },
+    "topic.realm.a_capital_still_needs_fields": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.profession_id",
+            "is": "minecraft:farmer",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.a_capital_still_needs_fields.respond",
+        "opening_beat": "realm.a_capital_still_needs_fields.open"
       }
     },
     "topic.realm.a_face_from_elsewhere": {
@@ -2267,6 +2777,77 @@
         "opening_beat": "realm.a_face_from_elsewhere.open"
       }
     },
+    "topic.realm.after_word_of_peace": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.at_war",
+            "is": false,
+            "unknown": "fail"
+          },
+          {
+            "field": "village.recent_event",
+            "is": "peace",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.after_word_of_peace.respond",
+        "opening_beat": "realm.after_word_of_peace.open"
+      }
+    },
+    "topic.realm.an_ally_can_disagree": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "capital.allied",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.an_ally_can_disagree.respond",
+        "opening_beat": "realm.an_ally_can_disagree.open"
+      }
+    },
     "topic.realm.i_carry_the_letters": {
       "purpose": "topic:realm",
       "shape": "confide",
@@ -2301,6 +2882,37 @@
       "route": {
         "question": "conversations.scene.realm.i_carry_the_letters.respond",
         "opening_beat": "realm.i_carry_the_letters.open"
+      }
+    },
+    "topic.realm.loyalty_with_questions": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_values": [
+          "duty"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.loyalty_with_questions.respond",
+        "opening_beat": "realm.loyalty_with_questions.open"
       }
     },
     "topic.realm.named_an_enemy": {
@@ -2373,6 +2985,39 @@
       "route": {
         "question": "conversations.scene.realm.one_of_our_own.respond",
         "opening_beat": "realm.one_of_our_own.open"
+      }
+    },
+    "topic.realm.stone_before_statues": {
+      "purpose": "topic:realm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "capital.present",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.profession_id",
+            "is": "minecraft:mason",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.realm.stone_before_statues.respond",
+        "opening_beat": "realm.stone_before_statues.open"
       }
     },
     "topic.realm.sworn_to_nobody": {
@@ -2535,17 +3180,28 @@
       "context": {
         "conditions": [
           {
-            "field": "time.days_since_first_met",
-            "min": 30,
+            "field": "social.nearby",
+            "max": 0,
             "unknown": "fail"
           },
           {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 30,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -2580,6 +3236,12 @@
               "friend"
             ],
             "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
           }
         ]
       },
@@ -2610,7 +3272,7 @@
           {
             "field": "time.band",
             "any_of": [
-              "evening",
+              "dusk",
               "night"
             ],
             "unknown": "fail"
@@ -2906,17 +3568,28 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
             "unknown": "fail"
           },
           {
             "field": "time.days_since_first_met",
             "min": 30,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -2945,13 +3618,29 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
-              "friend",
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "friend",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -2980,8 +3669,29 @@
       "context": {
         "conditions": [
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
+            "field": "player.relationship_band",
+            "any_of": [
+              "confidant",
+              "family",
+              "friend",
+              "partner"
+            ],
+            "unknown": "fail"
+          },
+          {
             "field": "time.days_since_first_met",
             "min": 40,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -3010,12 +3720,33 @@
       "context": {
         "conditions": [
           {
+            "field": "narrative.rupture",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -3599,12 +4330,28 @@
             "unknown": "fail"
           },
           {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
             "field": "player.relationship_band",
             "any_of": [
               "confidant",
-              "partner",
-              "family"
+              "family",
+              "partner"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]
@@ -3641,6 +4388,12 @@
               "partner",
               "family"
             ],
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
             "unknown": "fail"
           }
         ]

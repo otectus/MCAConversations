@@ -1,0 +1,129 @@
+{
+  "answers": [
+    {
+      "name": "bees",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {"chance": 900, "conversations_scene": {"is": "bees.wet_hive.blocked"}},
+            {"chance": -5000, "conversations_scene": {"is": "bees.wet_hive.blocked", "not": true}},
+            {"chance": -2000, "conversations_disabled": "dynamic"},
+            {"chance": -2000, "conversations_disabled": "branching"},
+            {"chance": -2000, "conversations_disabled": "topics"}
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "bees.wet_hive.blocked.open"
+            },
+            "conversations_record": {
+              "id": "sample_beekeeper.cooldown.bees",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "bees.scene.wet_hive.blocked.respond",
+            "conversations_say": {
+              "phrase": "bees.scene.wet_hive.blocked",
+              "vars": ["season"],
+              "slots": ["hive", "trouble"]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {"chance": 900, "conversations_scene": {"is": "bees.wet_hive.recovered"}},
+            {"chance": -5000, "conversations_scene": {"is": "bees.wet_hive.recovered", "not": true}},
+            {"chance": -2000, "conversations_disabled": "dynamic"},
+            {"chance": -2000, "conversations_disabled": "branching"},
+            {"chance": -2000, "conversations_disabled": "topics"}
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "bees.wet_hive.recovered.open"
+            },
+            "conversations_record": {
+              "id": "sample_beekeeper.cooldown.bees",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "bees.scene.wet_hive.recovered.respond",
+            "conversations_say": {
+              "phrase": "bees.scene.wet_hive.recovered",
+              "slots": ["hive"]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {"chance": 900, "conversations_scene": {"is": "bees.hives.season_ahead"}},
+            {"chance": -5000, "conversations_scene": {"is": "bees.hives.season_ahead", "not": true}},
+            {"chance": -2000, "conversations_disabled": "dynamic"},
+            {"chance": -2000, "conversations_disabled": "branching"},
+            {"chance": -2000, "conversations_disabled": "topics"}
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "quick",
+              "branch": "scene",
+              "beat": "bees.hives.season_ahead.open"
+            },
+            "conversations_record": {
+              "id": "sample_beekeeper.cooldown.bees",
+              "var": "player",
+              "time": 24000
+            },
+            "next": "bees.scene.hives.season_ahead.respond",
+            "conversations_say": {
+              "phrase": "bees.scene.hives.season_ahead",
+              "vars": ["season"]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {"chance": 900, "conversations_scene": {"is": "bees.hives.evergreen"}},
+            {"chance": -5000, "conversations_scene": {"is": "bees.hives.evergreen", "not": true}},
+            {"chance": -2000, "conversations_disabled": "dynamic"},
+            {"chance": -2000, "conversations_disabled": "branching"},
+            {"chance": -2000, "conversations_disabled": "topics"}
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "quick",
+              "branch": "scene",
+              "beat": "bees.hives.evergreen.open"
+            },
+            "next": "bees.scene.hives.evergreen.respond",
+            "conversations_say": {
+              "phrase": "bees.scene.hives.evergreen"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {"chance": -2000, "conversations_enabled": "dynamic"}
+          ],
+          "actions": {
+            "next": "bees.plain.respond"
+          }
+        }
+      ]
+    }
+  ]
+}

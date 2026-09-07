@@ -1,0 +1,159 @@
+{
+  "_comment": "Sample 06. Six scenes, all purpose topic:village so the fallback chain is legal. The culture gate is written as a context condition on village.culture with an explicit unknown policy; the dialogue routes in dialogues/conversations.cat.village.json show the conversations_culture condition doing the same job from the other side.",
+  "scenes": {
+    "commons.supper.endorsed": {
+      "purpose": "topic:village",
+      "shape": "celebrate",
+      "profile": {
+        "ages": ["teen", "adult"]
+      },
+      "context": {
+        "conditions": [
+          {"field": "village.culture", "has": "commons_the_shearing_supper", "unknown": "fail"}
+        ],
+        "identity": [
+          {"family": "value", "any_of": ["hospitality", "commons_common_ground"]}
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "identity_values": ["hospitality", "commons_common_ground"],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "commons.scene.supper.endorsed.respond",
+        "opening_beat": "commons.supper.endorsed.open"
+      },
+      "fallback": "commons.village.evergreen"
+    },
+    "commons.supper.questioned": {
+      "purpose": "topic:village",
+      "shape": "debate",
+      "profile": {
+        "ages": ["teen", "adult"]
+      },
+      "context": {
+        "conditions": [
+          {"field": "village.culture", "has": "commons_the_shearing_supper", "unknown": "fail"}
+        ],
+        "identity": [
+          {"family": "aversion", "any_of": ["crowds", "commons_being_owed"]}
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "commons.scene.supper.questioned.respond",
+        "opening_beat": "commons.supper.questioned.open"
+      },
+      "fallback": "commons.village.evergreen"
+    },
+    "commons.borrowed_tool.active": {
+      "purpose": "topic:village",
+      "shape": "problem_solve",
+      "profile": {
+        "ages": ["adult"]
+      },
+      "context": {
+        "episode_kind": "commons.borrowed_tool",
+        "episode_state": ["active"],
+        "required_slots": {
+          "neighbour": "person",
+          "tool": "localized_token"
+        },
+        "conditions": [
+          {"field": "village.culture", "has": "commons_the_borrowed_tool", "unknown": "fail"}
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": ["commons_common_ground", "fairness"],
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "commons.scene.borrowed_tool.active.respond",
+        "opening_beat": "commons.borrowed_tool.active.open"
+      },
+      "episode": {"thread": "commons.borrowed_tool"},
+      "slots_used": ["neighbour", "tool"],
+      "fallback": "commons.village.evergreen"
+    },
+    "commons.borrowed_tool.settled": {
+      "purpose": "topic:village",
+      "shape": "reminisce",
+      "profile": {
+        "ages": ["adult"]
+      },
+      "context": {
+        "episode_kind": "commons.borrowed_tool",
+        "episode_state": ["succeeded"],
+        "required_slots": {
+          "neighbour": "person",
+          "tool": "localized_token"
+        }
+      },
+      "selection": {
+        "base_priority": 32,
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "commons.scene.borrowed_tool.settled.respond",
+        "opening_beat": "commons.borrowed_tool.settled.open"
+      },
+      "episode": {"thread": "commons.borrowed_tool"},
+      "slots_used": ["neighbour", "tool"],
+      "fallback": "commons.village.evergreen"
+    },
+    "commons.mill.hearsay": {
+      "purpose": "topic:village",
+      "shape": "confide",
+      "profile": {
+        "ages": ["adult"]
+      },
+      "context": {
+        "episode_kind": "commons.mill_hearsay",
+        "episode_state": ["active"],
+        "required_slots": {
+          "teller": "person",
+          "what": "localized_token"
+        },
+        "conditions": [
+          {"field": "village.culture", "has": "commons_the_mill_is_one_man_deep", "unknown": "fail"}
+        ]
+      },
+      "selection": {
+        "base_priority": 24,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "commons.scene.mill.hearsay.respond",
+        "opening_beat": "commons.mill.hearsay.open"
+      },
+      "slots_used": ["teller", "what"],
+      "fallback": "commons.village.evergreen"
+    },
+    "commons.village.evergreen": {
+      "purpose": "topic:village",
+      "shape": "observe",
+      "profile": {
+        "ages": ["teen", "adult"]
+      },
+      "selection": {
+        "base_priority": 12,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "commons.scene.village.evergreen.respond",
+        "opening_beat": "commons.village.evergreen.open"
+      }
+    }
+  }
+}

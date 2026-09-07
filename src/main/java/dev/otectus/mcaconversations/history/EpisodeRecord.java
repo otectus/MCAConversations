@@ -265,8 +265,10 @@ public record EpisodeRecord(UUID id,
      * mistake away from being spoken.
      */
     public EpisodeRecord withoutParticipants() {
-        return participants.isEmpty() ? this
-                : new EpisodeRecord(id, kind, subject, state, ownerVillager, Set.of(), payload,
+        Map<String, NarrativeValue> anonymous = new LinkedHashMap<>(payload);
+        anonymous.values().removeIf(value -> value.kind() == NarrativeValue.Kind.UUID_REF);
+        return participants.isEmpty() && anonymous.equals(payload) ? this
+                : new EpisodeRecord(id, kind, subject, state, ownerVillager, Set.of(), anonymous,
                         provenance, salience, createdDay, updatedDay, dueDay, expiresDay,
                         witnessedBy, consumedMilestones);
     }

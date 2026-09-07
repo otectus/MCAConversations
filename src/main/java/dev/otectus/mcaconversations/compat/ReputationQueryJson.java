@@ -1,6 +1,5 @@
 package dev.otectus.mcaconversations.compat;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -18,8 +17,9 @@ import java.util.Locale;
  * it simply never matches, and the pack's authored fallback branch fires — which is what §30.2 means
  * by "return 0 so authored disabled-context fallbacks fire".
  *
- * <p>Parsing is total: a malformed field is dropped rather than throwing, because these run inside MCA
- * dialogue evaluation where an exception would abandon the conversation the player is having.
+ * <p>Malformed supplied filters reject the whole query. The registrar wraps these parsers in
+ * {@code SafeParse}, so an invalid condition scores zero without abandoning the conversation or
+ * silently broadening the query into an unrelated standing or incident match.
  */
 public final class ReputationQueryJson {
 
@@ -33,9 +33,14 @@ public final class ReputationQueryJson {
      * }</pre>
      */
     public static ReputationBridge.StandingQuery standing(JsonObject json) {
+        Integer min = optionalInt(json, "min");
+        Integer max = optionalInt(json, "max");
+        if (min != null && max != null && min > max) {
+            throw new IllegalArgumentException("Reputation min exceeds max");
+        }
         return new ReputationBridge.StandingQuery(
-                optionalInt(json, "min"),
-                optionalInt(json, "max"),
+                min,
+                max,
                 optionalString(json, "min_tier"),
                 optionalString(json, "max_tier"),
                 optionalString(json, "has_title"));
@@ -52,56 +57,70 @@ public final class ReputationQueryJson {
                 stringList(json, "types"),
                 lowerList(json, "statuses"),
                 lowerList(json, "tags"),
-                json.has("known_to_speaker") && json.get("known_to_speaker").getAsBoolean(),
-                json.has("max_age") ? Math.max(0L, json.get("max_age").getAsLong()) : 0L);
+                optionalBoolean(json, "known_to_speaker"),
+                nonnegativeLong(json, "max_age"));
     }
 
     private static Integer optionalInt(JsonObject json, String key) {
-        try {
-            return json.has(key) ? json.get(key).getAsInt() : null;
-        } catch (RuntimeException e) {
-            return null;
+        return json.has(key) ? scalar(json.get(key), key).getAsBigDecimal().intValueExact() : null;
+    }
+
+    private static long nonnegativeLong(JsonObject json, String key) {
+        if (!json.has(key)) {
+            return 0L;
         }
+        long value = scalar(json.get(key), key).getAsBigDecimal().longValueExact();
+        if (value < 0L) {
+            throw new IllegalArgumentException(key + " must not be negative");
+        }
+        return value;
+    }
+
+    private static boolean optionalBoolean(JsonObject json, String key) {
+        if (!json.has(key)) {
+            return false;
+        }
+        var value = scalar(json.get(key), key);
+        if (!value.isBoolean()) {
+            throw new IllegalArgumentException(key + " must be a boolean");
+        }
+        return value.getAsBoolean();
+    }
+
+    private static com.google.gson.JsonPrimitive scalar(JsonElement element, String key) {
+        if (element == null || !element.isJsonPrimitive()) {
+            throw new IllegalArgumentException(key + " must be a scalar");
+        }
+        return element.getAsJsonPrimitive();
+    }
+
+    private static String text(JsonElement element, String key) {
+        var value = scalar(element, key);
+        if (!value.isString() || value.getAsString().isBlank()) {
+            throw new IllegalArgumentException(key + " must be a nonblank string");
+        }
+        return value.getAsString().trim();
     }
 
     private static String optionalString(JsonObject json, String key) {
-        try {
-            if (!json.has(key)) {
-                return null;
-            }
-            String value = json.get(key).getAsString();
-            return value == null || value.isBlank() ? null : value;
-        } catch (RuntimeException e) {
-            return null;
-        }
+        return json.has(key) ? text(json.get(key), key) : null;
     }
 
     private static List<String> stringList(JsonObject json, String key) {
-        List<String> out = new ArrayList<>();
         if (!json.has(key)) {
-            return out;
+            return List.of();
         }
+        List<String> out = new ArrayList<>();
         JsonElement element = json.get(key);
-        try {
-            if (element.isJsonArray()) {
-                JsonArray array = element.getAsJsonArray();
-                for (JsonElement entry : array) {
-                    String value = entry.getAsString();
-                    if (value != null && !value.isBlank()) {
-                        out.add(value);
-                    }
-                }
-            } else {
-                // A bare string where a list is expected is a common and harmless authoring habit.
-                String value = element.getAsString();
-                if (value != null && !value.isBlank()) {
-                    out.add(value);
-                }
+        if (element.isJsonArray()) {
+            for (JsonElement entry : element.getAsJsonArray()) {
+                out.add(text(entry, key));
             }
-        } catch (RuntimeException ignored) {
-            // one malformed entry never costs the whole condition
+        } else {
+            // Keep the documented shorthand, but never discard an invalid list member.
+            out.add(text(element, key));
         }
-        return out;
+        return List.copyOf(out);
     }
 
     private static List<String> lowerList(JsonObject json, String key) {

@@ -33,6 +33,9 @@ public final class ProgressStore {
     }
 
     ProgressStore(int maxPairs) {
+        if (maxPairs < 1) {
+            throw new IllegalArgumentException("maxPairs must be positive");
+        }
         this.maxPairs = maxPairs;
     }
 
@@ -42,8 +45,7 @@ public final class ProgressStore {
     }
 
     public ProgressRecord getOrCreate(UUID villager, UUID player, long now) {
-        Map<UUID, ProgressRecord> players = villagers.computeIfAbsent(villager, v -> new HashMap<>());
-        ProgressRecord existing = players.get(player);
+        ProgressRecord existing = get(villager, player).orElse(null);
         if (existing != null) {
             return existing;
         }
@@ -51,7 +53,8 @@ public final class ProgressStore {
             evictOldest();
         }
         ProgressRecord record = new ProgressRecord(now);
-        players.put(player, record);
+        // Eviction may remove this villager's last pair and its map. Reacquire after eviction.
+        villagers.computeIfAbsent(villager, v -> new HashMap<>()).put(player, record);
         return record;
     }
 
@@ -86,6 +89,11 @@ public final class ProgressStore {
             return new AffectionOutcome(authored, 0, 0, AffectionOutcome.Reason.ZERO);
         }
 
+        if (!record.canTrackDecision(directive.decision(), directive.policy())) {
+            record.touch(context.now());
+            return new AffectionOutcome(authored, scaled, 0, AffectionOutcome.Reason.HISTORY_CAPACITY);
+        }
+
         int afterPolicy = AffectionMath.diminished(scaled, record.repeatsToday(directive.decision(), day),
                 record.everApplied(directive.decision()), directive.policy());
         if (afterPolicy == 0) {
@@ -109,7 +117,7 @@ public final class ProgressStore {
             return new AffectionOutcome(authored, scaled, 0, AffectionOutcome.Reason.DAILY_BUDGET);
         }
 
-        record.recordApplied(directive.decision(), granted, day);
+        record.recordApplied(directive.decision(), granted, day, directive.policy());
         record.touch(context.now());
         return new AffectionOutcome(authored, scaled, granted, AffectionOutcome.Reason.APPLIED);
     }
@@ -155,7 +163,7 @@ public final class ProgressStore {
         long oldestTime = Long.MAX_VALUE;
         for (Map.Entry<UUID, Map<UUID, ProgressRecord>> villagerEntry : villagers.entrySet()) {
             for (Map.Entry<UUID, ProgressRecord> playerEntry : villagerEntry.getValue().entrySet()) {
-                if (playerEntry.getValue().lastUpdated() < oldestTime) {
+                if (oldestVillager == null || playerEntry.getValue().lastUpdated() < oldestTime) {
                     oldestTime = playerEntry.getValue().lastUpdated();
                     oldestVillager = villagerEntry.getKey();
                     oldestPlayer = playerEntry.getKey();

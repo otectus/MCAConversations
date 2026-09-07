@@ -1,0 +1,57 @@
+{
+  "answers": [
+    {
+      "name": "follow_1",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.the_named_one.open.explained.follow_answer_1"
+            },
+            "next": "conversations.scene.dreams.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.dreams.the_named_one.explained.follow_answer_1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "follow_2",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "dreams.the_named_one.open.explained.follow_answer_2"
+            },
+            "next": "conversations.scene.dreams.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.dreams.the_named_one.explained.follow_answer_2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.dreams.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

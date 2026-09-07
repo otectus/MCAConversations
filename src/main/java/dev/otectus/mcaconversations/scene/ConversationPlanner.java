@@ -3,6 +3,10 @@ package dev.otectus.mcaconversations.scene;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.context.ContextRequest;
+import dev.otectus.mcaconversations.context.ContextFingerprint;
+import dev.otectus.mcaconversations.context.ContextKey;
+import dev.otectus.mcaconversations.context.ContextKeys;
+import dev.otectus.mcaconversations.context.ContextValue;
 import dev.otectus.mcaconversations.context.ContextSources;
 import dev.otectus.mcaconversations.context.ConversationContextSnapshot;
 import dev.otectus.mcaconversations.conversation.BeatContractLoader;
@@ -15,6 +19,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The one place the director is invoked, and the reason it runs exactly once per exchange
@@ -34,8 +41,8 @@ import java.util.Optional;
  *
  * <h2>Why that makes rerolling impossible</h2>
  *
- * <p>Because the plan lives on the session both frontends share, closing the screen and reopening it
- * reuses it, switching between the GUI and chat reuses it, and changing language cannot touch it. A
+ * <p>Because the plan lives on the session both frontends share, closing the screen and reopening it during the same active exchange
+ * reuses it while its pinned facts remain valid, switching between the GUI and chat reuses it, and changing language cannot touch it. A
  * player who does not like the subject the librarian raised cannot shop for a different one.
  */
 public final class ConversationPlanner {
@@ -60,6 +67,7 @@ public final class ConversationPlanner {
         try {
             ConversationSession session = ConversationSessions.get(player.getUUID(),
                     player.level().getGameTime());
+            session.setVillagerId(villager.getUUID());
 
             // The two of them are talking, which is the moment a promise between them is observed: a
             // "come back and see me" promise is kept by this very visit, and one long past its day
@@ -91,6 +99,11 @@ public final class ConversationPlanner {
             // A new topic: capture the world once and plan against it.
             ConversationContextSnapshot snapshot = ContextSources.capture(
                     ContextRequest.of(villager, player, ContextRequest.PURPOSE_TOPIC));
+            if (canReusePlan(session, topic.get().id(), snapshot)
+                    && boundPlanStillValid(session.plan().orElseThrow(), snapshot, villager, player)) {
+                session.refreshSnapshot(snapshot);
+                return;
+            }
             session.setSnapshot(snapshot);
             session.setPlan(null);
 
@@ -120,6 +133,58 @@ public final class ConversationPlanner {
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("scene planning failed; falling back to static routing", t);
         }
+    }
+
+    // Playing the opening itself changes these values. They are selection inputs for a NEW
+    // exchange, not identities that can invalidate the one currently on screen. In particular,
+    // first-talk bookkeeping and episode bootstrap must not make a plan reroll its own opening.
+    private static final Set<ContextKey<?>> EXCHANGE_EFFECTS = Set.of(
+            ContextKeys.PLAYER_HEARTS, ContextKeys.PLAYER_RELATIONSHIP_BAND,
+            ContextKeys.TIME_DAYS_SINCE_LAST_TALK, ContextKeys.TIME_DAYS_SINCE_FIRST_MET,
+            ContextKeys.TIME_ABSENCE_BAND, ContextKeys.NARRATIVE_ACTIVE_EPISODES,
+            ContextKeys.NARRATIVE_READY_THREADS, ContextKeys.NARRATIVE_DUE_COMMITMENTS,
+            ContextKeys.NARRATIVE_RECENT_SUBJECTS);
+
+    /** Reopening preserves the scene while the people, profession and external circumstances match. */
+    static boolean canReusePlan(ConversationSession session, String topic,
+                                ConversationContextSnapshot current) {
+        return session != null && current != null && topic != null
+                && session.topicId().filter(topic::equals).isPresent()
+                && session.plan().isPresent()
+                && session.snapshot().filter(pinned -> referents(pinned).equals(referents(current))).isPresent();
+    }
+
+    private static ContextFingerprint referents(ConversationContextSnapshot snapshot) {
+        Map<ContextKey<?>, ContextValue<?>> fields = new HashMap<>(snapshot.all());
+        EXCHANGE_EFFECTS.forEach(fields::remove);
+        return ContextFingerprint.of(fields);
+    }
+
+    private static boolean boundPlanStillValid(ConversationPlan plan,
+                                               ConversationContextSnapshot snapshot,
+                                               Entity villager, ServerPlayer player) {
+        SceneDefinition scene = SceneCatalogLoader.active().scene(plan.sceneId()).orElse(null);
+        if (scene == null || scene.contextConditions().stream()
+                .filter(query -> query.field().isVolatile() || query.field().equals(ContextKeys.PLAYER_HEARTS)
+                        || query.field().equals(ContextKeys.PLAYER_RELATIONSHIP_BAND))
+                .anyMatch(query -> !query.matches(snapshot))) {
+            return false;
+        }
+        if (!scene.relationships().isEmpty() && scene.relationships().stream().noneMatch(band ->
+                snapshot.value(ContextKeys.PLAYER_RELATIONSHIP_BAND).filter(band.key()::equals).isPresent())) {
+            return false;
+        }
+        var episode = plan.episodeId().flatMap(id -> History.of(villager).flatMap(history -> history.episode(id)));
+        if (scene.needsEpisode() && (episode.isEmpty()
+                || !episode.get().kind().equals(scene.episodeKind())
+                || episode.get().hasExpired(snapshot.capturedDay())
+                || (!scene.episodeStates().isEmpty() && !scene.episodeStates().contains(episode.get().state())))) {
+            return false;
+        }
+        // Revalidate named people and episode payload without replacing any pinned binding.
+        SlotBinder.Result bound = SlotBinder.bind(scene, episode, snapshot, player.serverLevel());
+        return bound.bound() && bound.slots().entrySet().stream()
+                .allMatch(entry -> entry.getValue().equals(plan.slots().get(entry.getKey())));
     }
 
     /**

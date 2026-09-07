@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_who",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "almanac.gossip.reply.ask_who.answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "almanac.gossip.reply.ask_who",
+              "deltas": {
+                "familiarity": 3
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "almanac.gossip.reply.ask_who"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "take_it_in",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "almanac.gossip.reply.take_it_in.answer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "almanac.gossip.reply.take_it_in",
+              "deltas": {
+                "trust": 4
+              }
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "almanac.gossip.reply.take_it_in"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "almanac.gossip.reply.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

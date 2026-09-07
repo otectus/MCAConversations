@@ -6,29 +6,12 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import java.util.UUID;
 
 /**
- * Server-side validation of a GUI dialogue submission (plan §7.2).
- *
- * <p>MCA's {@code InteractionDialogueMessage.receive} resolves the villager by UUID and runs the
- * answer with no distance check, no open-screen check, no constraint re-check and no replay
- * protection — verified identical in 7.6.20 and 7.7.0-beta.2. That is tolerable while a click is
- * worth a couple of hearts; it is not once a click can set a one-shot milestone or advance an arc.
- *
- * <p>This guard is deliberately narrow:
- * <ul>
- *   <li>it only ever judges <b>this mod's own questions</b>; every native MCA question passes
- *       through untouched, so MCA's dialogue semantics are unchanged for everyone else;</li>
- *   <li>it rejects an answer that was <b>not in the set the player was actually offered</b>, which is
- *       recorded from MCA's own outgoing packet and is therefore exactly what the screen showed;</li>
- *   <li>it rejects a <b>repeat of the same submission within the same tick</b> — the signature of a
- *       duplicated or replayed packet, and something no human produces;</li>
- *   <li>it rejects a submission aimed at a villager that MCA says is <b>mid-conversation with a
- *       different player</b>.</li>
- * </ul>
- *
- * <p>Everywhere else it fails <b>open</b>: no session, no recorded offer, or an uncertain MCA state
- * all mean "allow", because a guard that breaks legitimate conversation is worse than the exploit it
- * prevents. The guarded affection and progress actions enforce idempotency, caps and age safety on
- * their own regardless, so this layer is defence in depth rather than the only line.
+ * Validates this mod's ordinary MCA mouse submissions against the server's exact live GUI offer.
+ * Native MCA questions remain outside this guard. Owned questions require a one-shot offered
+ * answer, the correct frontend and, where the packet supplied it, the same villager. The receive
+ * mixin additionally checks the player's state, distance, active interaction owner and constraints.
+ * Missing or failed validation rejects the submission; actions must never run from fabricated
+ * question/answer pairs after a session has expired or been cleared.
  */
 public final class ConversationGuard {
 
@@ -37,7 +20,8 @@ public final class ConversationGuard {
 
     /** True when the question belongs to this mod and is therefore ours to validate. */
     public static boolean isOurQuestion(String question) {
-        return question != null && question.startsWith("conversations");
+        return "conversations".equals(question)
+                || question != null && question.startsWith("conversations.");
     }
 
     /**
@@ -50,17 +34,25 @@ public final class ConversationGuard {
      */
     public static boolean rejectSubmission(UUID playerId, UUID villagerId, String question, String answer,
                                            boolean otherPlayerInteracting, long now) {
-        if (playerId == null || !isOurQuestion(question) || answer == null) {
+        if (!isOurQuestion(question)) {
             return false;
+        }
+        if (playerId == null || villagerId == null || answer == null) {
+            return true;
         }
         if (otherPlayerInteracting) {
             return reject(playerId, question, answer, "villager is mid-conversation with another player");
         }
         ConversationSession session = ConversationSessions.raw(playerId).orElse(null);
         if (session == null || session.currentQuestion() == null) {
-            // Never saw an offer for this player (fresh join, reload, or the packet mixin not applying).
-            // Nothing to compare against, so let MCA handle it as it always has.
-            return false;
+            return reject(playerId, question, answer, "there is no live offer");
+        }
+        ConversationSession.ChoiceOffer offer = session.currentOffer().orElseThrow();
+        if (offer.frontend() != ConversationSession.Frontend.GUI) {
+            return reject(playerId, question, answer, "a chat offer cannot be submitted as a GUI packet");
+        }
+        if (offer.villagerId() != null && !offer.villagerId().equals(villagerId)) {
+            return reject(playerId, question, answer, "offer belongs to another villager");
         }
         if (!session.wasOffered(question, answer)) {
             return reject(playerId, question, answer, "answer was not among the offered choices for "

@@ -616,3 +616,10 @@ that are not are the ones worth being honest with yourself about.
 - Don't add answers to MCA's `auto` questions (`root`, `chat`, `rumors`) — auto questions pick a
   random answer, so merging in a new one changes MCA's own behavior odds.
 - Extension files must mirror the original question's top-level flags (see `main.json`).
+
+
+### Stabilization behavior
+
+See [the stabilization report](docs/STABILIZATION-2026-09.md) for response-offer validation, bounded reward accounting, promise observers, language authoring, and the production verification matrix. A full replay ledger returns `HISTORY_CAPACITY` and grants no affection; daily decisions do not consume lifetime one-shot entries.
+
+Authored topic pools normally require three bilingual variants. An explicit `min_variants` of 1 or 2 is reserved for deliberately infrequent scenes and their precise reactions; source lint rejects it on high-frequency scenes. The compiler carries this policy into beat metadata for independent resource validation. It does not change runtime selection weights or bypass cooldowns.

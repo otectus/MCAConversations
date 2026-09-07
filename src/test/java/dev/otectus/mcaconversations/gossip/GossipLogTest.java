@@ -84,4 +84,27 @@ class GossipLogTest {
         // A third party can tell it.
         assertTrue(log.query(1, Set.of(), 200, 10000, C, e -> false).isPresent());
     }
+
+    @Test
+    void repeatedSubjectDoesNotCrashDeduplication() {
+        GossipLog log = new GossipLog();
+        assertTrue(log.add(event(UUID.randomUUID(), GossipEventType.MARRIAGE, 1, 100, A, A), 32));
+        assertFalse(log.add(event(UUID.randomUUID(), GossipEventType.MARRIAGE, 1, 101, A, A), 32));
+    }
+
+    @Test
+    void futureEventsAreNotReportedBeforeTheyHappen() {
+        GossipLog log = new GossipLog();
+        log.add(event(UUID.randomUUID(), GossipEventType.DEATH, 1, 1000, A, null), 32);
+        assertTrue(log.query(1, Set.of(), 999, 10_000, TELLER, e -> false).isEmpty());
+        assertTrue(log.query(1, Set.of(), 1000, 10_000, TELLER, e -> false).isPresent());
+    }
+
+    @Test
+    void disabledCapacityDoesNotRecordOrCrash() {
+        GossipLog log = new GossipLog();
+        assertFalse(log.add(event(UUID.randomUUID(), GossipEventType.DEATH, 1, 100, A, null), -1));
+        assertEquals(0, log.size());
+    }
+
 }

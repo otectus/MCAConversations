@@ -1,0 +1,111 @@
+{
+  "_comment": "Sample 05. Four scenes, one two-hop fallback chain. A scene is not dialogue: it names a question and an opening beat that already exist, and everything else is the rule for when that route is the right one. All four share purpose topic:work, which is what lets them fall back to one another.",
+  "scenes": {
+    "bees.wet_hive.blocked": {
+      "purpose": "topic:work",
+      "shape": "problem_solve",
+      "profile": {
+        "profession": ["minecraft:farmer"],
+        "ages": ["adult"],
+        "subjects_any": ["hive"]
+      },
+      "context": {
+        "episode_kind": "bees.wet_hive",
+        "episode_state": ["blocked"],
+        "required_slots": {
+          "hive": "localized_token",
+          "trouble": "localized_token"
+        },
+        "conditions": [
+          {"field": "work.profession_id", "is": "minecraft:farmer", "unknown": "fail"}
+        ],
+        "identity": [
+          {"family": "interest", "any_of": ["bees_hives", "animals", "gardening"]}
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "identity_values": ["bees_patience", "duty"],
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "bees.scene.wet_hive.blocked.respond",
+        "opening_beat": "bees.wet_hive.blocked.open"
+      },
+      "episode": {"thread": "bees.wet_hive"},
+      "slots_used": ["hive", "trouble"],
+      "vars_used": ["season"],
+      "fallback": "bees.hives.season_ahead"
+    },
+    "bees.wet_hive.recovered": {
+      "purpose": "topic:work",
+      "shape": "reminisce",
+      "profile": {
+        "profession": ["minecraft:farmer"],
+        "ages": ["adult"],
+        "subjects_any": ["hive"]
+      },
+      "context": {
+        "episode_kind": "bees.wet_hive",
+        "episode_state": ["succeeded"],
+        "required_slots": {
+          "hive": "localized_token"
+        }
+      },
+      "selection": {
+        "base_priority": 34,
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "bees.scene.wet_hive.recovered.respond",
+        "opening_beat": "bees.wet_hive.recovered.open"
+      },
+      "episode": {"thread": "bees.wet_hive"},
+      "slots_used": ["hive"],
+      "fallback": "bees.hives.season_ahead"
+    },
+    "bees.hives.season_ahead": {
+      "purpose": "topic:work",
+      "shape": "plan",
+      "profile": {
+        "profession": ["minecraft:farmer"],
+        "ages": ["adult"]
+      },
+      "context": {
+        "identity": [
+          {"family": "interest", "any_of": ["bees_hives", "animals", "gardening"]}
+        ]
+      },
+      "selection": {
+        "base_priority": 22,
+        "identity_values": ["bees_patience"],
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "bees.scene.hives.season_ahead.respond",
+        "opening_beat": "bees.hives.season_ahead.open"
+      },
+      "fallback": "bees.hives.evergreen"
+    },
+    "bees.hives.evergreen": {
+      "purpose": "topic:work",
+      "shape": "observe",
+      "profile": {
+        "profession": ["minecraft:farmer"],
+        "ages": ["adult"]
+      },
+      "selection": {
+        "base_priority": 12,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "bees.scene.hives.evergreen.respond",
+        "opening_beat": "bees.hives.evergreen.open"
+      }
+    }
+  }
+}

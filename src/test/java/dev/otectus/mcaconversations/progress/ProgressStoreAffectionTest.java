@@ -176,4 +176,35 @@ class ProgressStoreAffectionTest {
         assertEquals(2, store.applyAffection(VILLAGER, other, directive,
                 at(100, "a", DepthClass.QUICK, 0, 0)).granted());
     }
+
+    @Test
+    void dailyDecisionsDoNotConsumeLifetimeMilestoneCapacity() {
+        ProgressStore store = new ProgressStore();
+        for (int i = 0; i < 100; i++) {
+            assertEquals(1, store.applyAffection(VILLAGER, PLAYER,
+                    decision("daily." + i, 1, ReplayPolicy.DAILY_REPEAT),
+                    at(i * 24_000L, "day" + i, DepthClass.DEEP, 0, 0)).granted());
+        }
+        AffectionApply milestone = decision("new.milestone", 2, ReplayPolicy.ONCE);
+        assertEquals(2, store.applyAffection(VILLAGER, PLAYER, milestone,
+                at(3_000_000L, "first", DepthClass.DEEP, 0, 0)).granted());
+        assertEquals(0, store.applyAffection(VILLAGER, PLAYER, milestone,
+                at(4_000_000L, "second", DepthClass.DEEP, 0, 0)).granted());
+    }
+
+    @Test
+    void saturatedLifetimeLedgerCannotPayAnUnrememberedOnceDecision() {
+        ProgressStore store = new ProgressStore();
+        ProgressRecord record = store.getOrCreate(VILLAGER, PLAYER, 0);
+        for (int i = 0; i < ProgressRecord.MAX_ONCE_DECISIONS; i++) {
+            record.recordApplied("milestone." + i, 1, i);
+        }
+        AffectionOutcome outcome = store.applyAffection(VILLAGER, PLAYER,
+                decision("overflow", 1, ReplayPolicy.ONCE),
+                at(3_000_000L, "overflow", DepthClass.DEEP, 0, 0));
+        assertEquals(0, outcome.granted());
+        assertEquals(AffectionOutcome.Reason.HISTORY_CAPACITY, outcome.reason());
+        assertEquals(0, record.positiveToday(125));
+    }
+
 }
