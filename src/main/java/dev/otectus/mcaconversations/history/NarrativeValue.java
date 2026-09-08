@@ -16,8 +16,9 @@ import java.util.regex.Pattern;
  * that no translation could reach and no lint could check. Here a payload holds a
  * {@link Kind#TOKEN localized token}, a {@link Kind#REGISTRY_ID registry id}, a
  * {@link Kind#UUID_REF UUID}, an {@link Kind#BAND integer band}, a {@link Kind#DAY game day}, a
- * {@link Kind#FLAG boolean} or an {@link Kind#ENUM_TOKEN enum token} — and the locale files turn
- * those into sentences at the moment of speaking (Appendix B).
+ * {@link Kind#FLAG boolean}, an {@link Kind#ENUM_TOKEN enum token} or the one
+ * {@link Kind#LITERAL literal} a name forces — and the locale files turn those into sentences at the
+ * moment of speaking (Appendix B).
  *
  * <p>Immutable, comparable by content, and round-trippable through a two-field compound so an unknown
  * future kind reads back as {@link #EMPTY} rather than corrupting the record around it.
@@ -42,7 +43,19 @@ public record NarrativeValue(Kind kind, String raw) {
         /** A yes/no fact. */
         FLAG("flag"),
         /** A member of a closed vocabulary this mod owns, such as an episode state. */
-        ENUM_TOKEN("enum");
+        ENUM_TOKEN("enum"),
+        /**
+         * A proper noun read from the live world and spoken as-is: a village's name, and nothing
+         * else so far.
+         *
+         * <p>The one exception to the closed vocabulary, and narrowly drawn. A village name is a name
+         * the player chose; there is no lang key for it and inventing a token from it produces
+         * {@code mcaconversations.slot.ash_hollow}, which ships as a raw key in a villager's mouth.
+         * It is not prose: {@link #literal} strips formatting codes and caps the length, and no
+         * authoring path can produce one — {@link NarrativeValue#parse} refuses {@code literal:},
+         * so a datapack still cannot smuggle an English sentence into a payload.
+         */
+        LITERAL("literal");
 
         private final String key;
 
@@ -70,6 +83,9 @@ public record NarrativeValue(Kind kind, String raw) {
     /** Tokens and enum tokens: dotted lowercase, the shape used everywhere else in the mod. */
     public static final Pattern TOKEN_PATTERN = Pattern.compile("[a-z0-9_]+(\\.[a-z0-9_]+)*");
     public static final Pattern REGISTRY_PATTERN = Pattern.compile("[a-z0-9_.-]+:[a-z0-9_./-]+");
+
+    /** The longest a literal may be. A village name is a name, not a paragraph. */
+    public static final int MAX_LITERAL_LENGTH = 64;
 
     /** The value an unreadable or unknown-kind payload becomes. Never spoken, never matched. */
     public static final NarrativeValue EMPTY = new NarrativeValue(Kind.TOKEN, "");
@@ -119,6 +135,45 @@ public record NarrativeValue(Kind kind, String raw) {
         return TOKEN_PATTERN.matcher(normalized).matches()
                 ? new NarrativeValue(Kind.ENUM_TOKEN, normalized)
                 : EMPTY;
+    }
+
+    /**
+     * A proper noun from the live world, sanitised.
+     *
+     * <p>Strips section-sign formatting codes so a village named {@code §kmagic} cannot obfuscate a
+     * line, caps the length so a pathological name cannot fill the screen, and refuses a blank —
+     * a blank literal is {@link #EMPTY}, which fails to bind rather than rendering an empty gap in
+     * the middle of a sentence.
+     */
+    public static NarrativeValue literal(String value) {
+        String cleaned = sanitize(value);
+        return cleaned.isEmpty() ? EMPTY : new NarrativeValue(Kind.LITERAL, cleaned);
+    }
+
+    /** Removes formatting codes and control characters, collapses whitespace, and caps the length. */
+    public static String sanitize(String value) {
+        if (value == null) {
+            return "";
+        }
+        StringBuilder out = new StringBuilder(value.length());
+        boolean skip = false;
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (skip) {
+                // The character after a section sign is the code itself, and goes with it.
+                skip = false;
+                continue;
+            }
+            if (c == '§') {
+                skip = true;
+                continue;
+            }
+            out.append(c < ' ' ? ' ' : c);
+        }
+        String collapsed = out.toString().replaceAll("\\s+", " ").trim();
+        return collapsed.codePointCount(0, collapsed.length()) <= MAX_LITERAL_LENGTH
+                ? collapsed
+                : collapsed.substring(0, collapsed.offsetByCodePoints(0, MAX_LITERAL_LENGTH)).trim();
     }
 
     public boolean isEmpty() {
@@ -234,6 +289,9 @@ public record NarrativeValue(Kind kind, String raw) {
                         }
                     }
                     case FLAG -> flag(Boolean.parseBoolean(value));
+                    // Literals come from the world, never from an author. Accepting `literal:` here
+                    // would reopen the exact door the closed vocabulary exists to keep shut.
+                    case LITERAL -> EMPTY;
                 };
             }
             // A colon that is not a known kind is very likely a registry id.

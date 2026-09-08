@@ -36,9 +36,8 @@ public final class ConversationsSay {
                         ? sl : null;
         for (String slot : directive.slots()) {
             out.add(plan.flatMap(p -> p.slot(slot))
-                    .map(value -> SlotRenderer.render(value, level))
-                    .orElseGet(() -> net.minecraft.network.chat.Component.translatable(
-                            SlotRenderer.FALLBACK_KEY)));
+                    .map(value -> SlotRenderer.render(value, level, slot))
+                    .orElseGet(() -> SlotRenderer.fallbackFor(slot)));
         }
         return out;
     }

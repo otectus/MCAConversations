@@ -107,8 +107,30 @@ alongside.
   "Conversation content generation {} published."). Each offer now records the generation it was made
   under (`ConversationSession.ChoiceOffer#generation`), and a choice submitted against an older
   generation is refused and its topic ended instead of executing (`ConversationGuard`,
-  `ChoiceSelectionService`); the client is told the offer expired through the existing packet reason,
-  so there is no protocol change, and a live conversation is not force-closed by a reload on its own.
+  `ChoiceSelectionService`). For a numbered choice, `ChoiceSelectionService` tells the client the offer
+  expired through the existing packet reason, so there is no protocol change; for the dialogue-screen
+  path, `ConversationGuard`'s caller in `mixin/InteractionDialogueMessageMixin` cancels the packet
+  before MCA sees it, and the submission is cancelled with no notification sent. A live conversation is
+  not force-closed by a reload on its own.
+- **A village called "Ash Hollow" was being looked up as if it were a translation key, and equal
+  contexts could hash differently.** Two independent defects. First, the scene binder
+  (`scene/SlotBinder`, the `"village"` case) lowercased a villager's real village name into an
+  authored-token slot, which `template/SlotRenderer`'s `TOKEN` case then passed through the language
+  file, so an unauthored name surfaced in dialogue as a raw key such as
+  `mcaconversations.slot.ash_hollow`. Second, `context/ContextValue#token()` — the encoding
+  `context/ContextFingerprint` hashes — rendered every value with `String.valueOf`, so a set-valued
+  fact (`context/ContextKeys` marks several fields `Set`/`List`) produced a different string depending
+  on iteration order, and a status name could alias a literal string spelled the same way. The village
+  name is now bound as a sanitised `history/NarrativeValue` literal (`Kind.LITERAL`, `literal()`;
+  formatting codes stripped and length capped at `MAX_LITERAL_LENGTH` by `sanitize()`) and rendered
+  verbatim by `SlotRenderer`'s new `LITERAL` case, falling back through `fallbackFor` to the existing
+  `mcaconversations.fallback.village` text when the name is unknown. `ContextValue#token()` now uses
+  one canonical type-tagged encoding — sorted sets, order-preserving length-prefixed lists, escaped
+  delimiters, a `status:` prefix that cannot alias a literal string, and locale-independent numbers —
+  underneath the unchanged `ContextFingerprint`. Fingerprints are never persisted, so existing saves are
+  unaffected, and a literal value can never come from authored content: `NarrativeValue.parse` maps
+  `literal:` to empty. Covered by `ContextFingerprintTest`, `SlotRendererTest` and `SlotBinderTest`; not
+  separately verified in-game.
 - **Eviction picks the villager you actually stopped talking to.** When the villager cap was hit, the
   fallback victim used to be whichever entry came first in map order, which could change after a
   restart and need not be inactive. Eviction (`ConversationHistoryStore#evictionCandidate`) now skips
