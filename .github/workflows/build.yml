@@ -35,7 +35,7 @@ jobs:
       # `build` depends on verifyJarContents, so this also proves the jar ships the right
       # metadata and content and nothing shaded.
       - name: Build and test
-        run: ./gradlew --no-daemon clean test build
+        run: ./gradlew --no-daemon clean test build verifyGeneratedConversationContent verifyVoiceOverlays
 
       - name: Upload test reports
         if: always()

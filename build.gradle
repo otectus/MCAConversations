@@ -100,6 +100,47 @@ mcaProbeVersions.eachWithIndex { version, i ->
     }
 }
 
+// The sibling add-on APIs are vendored as compile-only jars in libs/api/ and pinned by
+// gradle/sibling-apis.properties: version, provider commit and SHA-256 for each. Compiling against a
+// checked-in artifact rather than a sibling checkout's class output is what makes a clean clone -- or
+// CI, which has no siblings at all -- produce the same optional integrations the release did, and
+// verifySiblingApis refuses the build the moment a jar is swapped underneath it.
+ext.siblingApis = new Properties()
+file('gradle/sibling-apis.properties').withInputStream { ext.siblingApis.load(it) }
+
+// Resolves one provider's API artifact. -PmcaQuestsApiPath / -PmcaReputationApiPath replace the
+// vendored jar with a jar or a class directory, for iterating against a provider working tree; an
+// override is announced and skips the hash check. Absence is never a warning: an unbuildable optional
+// integration is a broken build, not a quieter jar.
+ext.siblingApi = { String key, String overrideProperty ->
+    def override = project.findProperty(overrideProperty)
+    if (override) {
+        def overridden = file(override)
+        if (!overridden.exists()) {
+            throw new GradleException("-P${overrideProperty}=${override} does not exist; " +
+                    "point it at a ${key} API jar or class directory, or drop the property to use " +
+                    "the vendored ${siblingApis.getProperty("${key}.jar")}.")
+        }
+        logger.lifecycle("sibling API override in effect: ${key} <- ${overridden} (SHA-256 check skipped)")
+        return [file: overridden, pinned: false]
+    }
+    def relative = siblingApis.getProperty("${key}.jar")
+    if (!relative) {
+        throw new GradleException("gradle/sibling-apis.properties has no '${key}.jar' key; " +
+                "the ${key} API artifact cannot be resolved.")
+    }
+    def jar = file(relative)
+    if (!jar.exists()) {
+        throw new GradleException("${key} API jar missing at ${jar} (manifest key '${key}.jar' in " +
+                "gradle/sibling-apis.properties). Build the provider and copy " +
+                "build/libs/${key}-${siblingApis.getProperty("${key}.version")}-api.jar into libs/api/, " +
+                "or point -P${overrideProperty} at a local jar or class directory.")
+    }
+    return [file: jar, pinned: true]
+}
+ext.mcaQuestsApi = siblingApi('mcaquests', 'mcaQuestsApiPath')
+ext.mcaReputationApi = siblingApi('mcareputation', 'mcaReputationApiPath')
+
 dependencies {
     // MCA Reborn — a mojmap NeoForge mod jar, so it loads as a real mod under runClient/runServer.
     // (On 1.20.1 it could not: MCA's Forge mixins shipped SRG-named with no refmap.)
@@ -126,42 +167,20 @@ dependencies {
         add("mcaProbe${i}", "net.conczin.mca:mca-neoforge:${version}")
     }
 
-    // MCA: Quests — OPTIONAL integration, compile-only. The sibling mod isn't published to a
-    // Maven, so we compile against its dev class output; both mods use official 1.21.1 mappings,
-    // so the Minecraft type names match and there is no reobfuscation step to worry about. Never
-    // bundled: the real mod supplies these classes at runtime, gated by QuestsBridge's ModList
-    // check and the optional neoforge.mods.toml dependency.
-    def mcaQuestsClasses = file(project.findProperty("mcaQuestsApiPath") ?: "${projectDir}/../MCAQuests_1.21.1/build/classes/java/main")
-    if (mcaQuestsClasses.exists()) {
-        compileOnly files(mcaQuestsClasses)
-    } else {
-        logger.warn("MCA: Quests (1.21.1) classes not found at ${mcaQuestsClasses}; " +
-                "building without the optional Quests integration. Build it first " +
-                "(../MCAQuests_1.21.1: ./gradlew classes) to include it.")
-        // Only the files that actually import dev.otectus.mcaquests.*. QuestConditionQuery and
-        // QuestOpenDirective are pure data types referenced by ConversationsMcaRegistrar, so they
-        // must keep compiling either way.
-        sourceSets.main.java.exclude(
-                'dev/otectus/mcaconversations/compat/quests/ConversationsQuestsCompat.java',
-                'dev/otectus/mcaconversations/compat/quests/ConversationsQuestsEvents.java',
-                'dev/otectus/mcaconversations/compat/quests/QuestVoiceResolver.java',
-                'dev/otectus/mcaconversations/compat/quests/TalkAboutObjective.java',
-                'dev/otectus/mcaconversations/compat/quests/UnlockTopicReward.java')
-    }
+    // MCA: Quests — OPTIONAL integration, compile-only. Resolved from the vendored, hash-pinned API
+    // jar in libs/api/ (see gradle/sibling-apis.properties), not from a sibling checkout: a clean clone
+    // and CI then compile the integration exactly as the release did. Both mods use official 1.21.1
+    // mappings and there is no reobfuscation step to worry about. Never bundled: the real mod supplies
+    // these classes at runtime, gated by QuestsBridge's ModList check and the optional
+    // neoforge.mods.toml dependency.
+    compileOnly files(mcaQuestsApi.file)
 
-    // MCA: Reputation — OPTIONAL integration, same pattern. The sibling MCAReputation_1.21.1
-    // port exists, so on a machine that has built it this takes the compileOnly branch and the
-    // integration compiles. The exclude fallback stays for machines without that sibling checkout;
-    // every reputation-gated dialogue condition and template variable already falls back to a
-    // documented safe default.
-    def mcaReputationClasses = file(project.findProperty("mcaReputationApiPath") ?: "${projectDir}/../MCAReputation_1.21.1/build/classes/java/main")
-    if (mcaReputationClasses.exists()) {
-        compileOnly files(mcaReputationClasses)
-    } else {
-        logger.warn("MCA: Reputation (1.21.1) classes not found at ${mcaReputationClasses}; " +
-                "building without the optional Reputation integration.")
-        sourceSets.main.java.exclude 'dev/otectus/mcaconversations/compat/reputation/**'
-    }
+    // MCA: Reputation — OPTIONAL integration, compile-only, same vendored-API pattern as the Quests
+    // block above. Every reputation-gated dialogue condition and template variable still falls back to
+    // a documented safe default when the mod is absent at runtime; what is gone is the old build-time
+    // fallback that dropped the compat sources, which turned a missing sibling into a quietly
+    // integration-less jar.
+    compileOnly files(mcaReputationApi.file)
 
     // No Mixin dependency or annotation processor: ModDevGradle wires both through NeoForge, and
     // 1.21.1 needs no refmap (dev and production both run official Mojang names).
@@ -292,6 +311,57 @@ tasks.register('capitalsProbeTest', Test) {
                 .findAll { it.name.contains('mca-neoforge') }
                 .join(File.pathSeparator)
     }
+}
+
+// The vendored API jars are the compile-time contract with the sibling add-ons, so they are checked
+// byte-for-byte before anything compiles against them. A jar that has been rebuilt, re-copied from the
+// wrong loader's build directory or edited in place is a silently wrong build otherwise: it compiles,
+// and the mismatch only surfaces as a NoSuchMethodError in someone's world.
+tasks.register('verifySiblingApis') {
+    group = 'verification'
+    description = 'Fails if a vendored sibling API jar does not match its pinned SHA-256.'
+    doLast {
+        def problems = []
+        [[key: 'mcaquests', property: 'mcaQuestsApiPath', api: mcaQuestsApi],
+         [key: 'mcareputation', property: 'mcaReputationApiPath', api: mcaReputationApi]].each { provider ->
+            if (!provider.api.pinned) {
+                logger.lifecycle("verifySiblingApis: ${provider.key} is overridden, hash not checked.")
+                return
+            }
+            def expected = siblingApis.getProperty("${provider.key}.sha256")
+            if (!expected) {
+                problems << "gradle/sibling-apis.properties has no '${provider.key}.sha256' key"
+                return
+            }
+            def digest = java.security.MessageDigest.getInstance('SHA-256')
+            provider.api.file.withInputStream { stream ->
+                byte[] buffer = new byte[8192]
+                int read
+                while ((read = stream.read(buffer)) != -1) {
+                    digest.update(buffer, 0, read)
+                }
+            }
+            def actual = digest.digest().encodeHex().toString()
+            if (!expected.equalsIgnoreCase(actual)) {
+                problems << "${provider.api.file} does not match ${provider.key}.sha256:" +
+                        System.lineSeparator() + "      expected ${expected}" +
+                        System.lineSeparator() + "      actual   ${actual}" +
+                        System.lineSeparator() + "      Refresh: rebuild the provider (./gradlew build), copy " +
+                        "build/libs/${provider.key}-${siblingApis.getProperty("${provider.key}.version")}-api.jar " +
+                        "into libs/api/ and update version, commit and sha256 in " +
+                        "gradle/sibling-apis.properties. To compile against a working tree instead, pass " +
+                        "-P${provider.property}."
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException("verifySiblingApis failed:" + System.lineSeparator()
+                    + "  - " + problems.join(System.lineSeparator() + "  - "))
+        }
+    }
+}
+
+tasks.named('compileJava') {
+    dependsOn 'verifySiblingApis'
 }
 
 // The content compiler: expands src/content/ authoring sources into runtime resources (spec 19).

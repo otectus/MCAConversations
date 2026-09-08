@@ -9,6 +9,37 @@ Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
 
+## [1.6.3] - unreleased
+
+1.6.3 is a stabilization release that repairs correctness defects found by a September 2026 audit of
+the conversation systems (`docs/MCAConversations-Conversation-Systems-Research-and-Implementation-Plan.md`
+in the Forge repository), for both Minecraft 1.20.1 Forge and 1.21.1 NeoForge. Version 1.6.2 is
+skipped so the add-on suite shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4
+alongside.
+
+### Fixed
+
+- **A clean checkout now builds.** The optional MCA: Quests and MCA: Reputation integrations were
+  compiled against whatever class directory happened to sit in a neighbouring checkout (`build.gradle`
+  defaulted to `../MCAQuests_1.21.1/build/classes/java/main` and
+  `../MCAReputation_1.21.1/build/classes/java/main`), and when it was absent the build warned and
+  silently excluded the affected integration sources from compilation, so the GitHub Actions build
+  never failed loudly but shipped a jar with the optional integration quietly missing. MCA: Quests
+  1.6.4 and MCA: Reputation 0.4.1 now ship compile-only API jars; this repo vendors them under
+  `libs/api/` with a manifest `gradle/sibling-apis.properties` recording version, provider commit and
+  SHA-256, a `verifySiblingApis` task checks the hash before `compileJava`, and a missing or mismatched
+  jar fails the build with the expected path and hash instead of dropping the integration. The
+  `-PmcaQuestsApiPath` / `-PmcaReputationApiPath` overrides still work for developers iterating against
+  a provider working tree. The API jars are compile-only: nothing from them is packaged, and the
+  jar-contents check now fails if any provider class leaks into the mod jar.
+
+### Changed
+
+- **Continuous integration now runs the content drift gates.** `verifyGeneratedConversationContent`
+  and `verifyVoiceOverlays` are invoked by name in the `test` job's build step, next to `build` (they
+  are still not part of `check`, by design), so editing a generated resource without regenerating it,
+  or an authoring source without committing the regenerated output, fails CI.
+
 ## [1.6.1] - unreleased
 
 Stabilization, dialogue refinement and content expansion for Minecraft 1.20.1 Forge and 1.21.1 NeoForge.
