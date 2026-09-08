@@ -422,5 +422,8 @@ public final class ConversationsEvents {
         event.addListener(new dev.otectus.mcaconversations.village.VillageCultureCatalogLoader());
         dev.otectus.mcaconversations.history.NarrativeCatalogLoader.listeners()
                 .forEach(event::addListener);
+        // Last, always: listeners apply in registration order, so this is the point at which every
+        // catalog above has been published and one new content generation can be declared.
+        event.addListener(new dev.otectus.mcaconversations.conversation.ContentGenerationListener());
     }
 }
