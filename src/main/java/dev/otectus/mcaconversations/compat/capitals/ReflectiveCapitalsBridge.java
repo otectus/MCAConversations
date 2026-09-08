@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.compat.capitals;
 
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.compat.CacheLifetime;
 import dev.otectus.mcaconversations.compat.CapitalChronicleEventView;
 import dev.otectus.mcaconversations.compat.CapitalCourtView;
 import dev.otectus.mcaconversations.compat.CapitalRelationView;
@@ -9,6 +10,7 @@ import dev.otectus.mcaconversations.compat.CapitalsBridge;
 import dev.otectus.mcaconversations.compat.CapitalsCapability;
 import dev.otectus.mcaconversations.compat.CapitalsStatus;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.compat.ServerEpoch;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -35,16 +37,26 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p><b>No Capitals object is ever stored in a view.</b> The two caches here hold only uuids and the
  * opaque record objects Capitals itself owns, and a view is rebuilt from the live record every time
  * it is asked for, so a court that changed between two reads never answers from a stale snapshot.
+ *
+ * <p>Both caches are bounded, given a time-to-live and stamped with the {@link ServerEpoch} they were
+ * filled in, and both are emptied by {@link #clearCaches()} when the server stops. In singleplayer
+ * the process outlives the world, so without that an entry from the world just left could answer the
+ * first read in the world just opened.
  */
 public final class ReflectiveCapitalsBridge implements CapitalsBridge {
 
-    /** Above this many cached residents the map is dropped whole rather than swept. */
-    private static final int RESIDENT_CACHE_LIMIT = 4096;
+    /** Above this many entries either map is dropped whole rather than swept. */
+    private static final int CACHE_LIMIT = 4096;
 
     private static final int DEFAULT_CACHE_TICKS = 200;
 
-    /** One resident's resolved capital, and the tick after which it must be resolved again. */
-    private record CachedResidency(long expiryTick, Optional<UUID> capitalId) {
+    /** One resident's resolved capital, and the world and window that answer is good for. */
+    private record CachedResidency(long epoch, long createdTick, long expiryTick,
+                                   Optional<UUID> capitalId) {
+    }
+
+    /** One capital record, held under the same world and window rule as a residency. */
+    private record CachedRecord(long epoch, long createdTick, long expiryTick, Object record) {
     }
 
     private final CapitalsStatus status;
@@ -53,9 +65,10 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
     /**
      * Capital records by id, so a chronicle read or a standing read does not rescan the registry.
      * Holds Capitals' own live objects, which is safe here and only here: this class is never loaded
-     * without Capitals present.
+     * without Capitals present. They are also the reason this map expires: a record belongs to one
+     * save, and holding one past that save keeps its whole object graph alive.
      */
-    private final Map<UUID, Object> records = new ConcurrentHashMap<>();
+    private final Map<UUID, CachedRecord> records = new ConcurrentHashMap<>();
 
     private final Map<UUID, CachedResidency> residents = new ConcurrentHashMap<>();
 
@@ -97,16 +110,16 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
         }
         long now = level.getGameTime();
         CachedResidency cached = residents.get(villager);
-        if (cached != null && cached.expiryTick() > now) {
-            return cached.capitalId().map(records::get).flatMap(record -> view(level, record));
+        if (cached != null && isFresh(cached.epoch(), cached.createdTick(), cached.expiryTick(), now)) {
+            return cached.capitalId()
+                    .map(id -> freshRecord(id, now))
+                    .flatMap(record -> view(level, record));
         }
 
         Object record = residentRecord(level, villager);
         Optional<UUID> id = record == null ? Optional.empty() : CapitalsHandles.capitalId(record);
-        if (residents.size() > RESIDENT_CACHE_LIMIT) {
-            residents.clear();
-        }
-        residents.put(villager, new CachedResidency(now + cacheTicks(), id));
+        CacheLifetime.putBounded(residents, villager,
+                new CachedResidency(ServerEpoch.current(), now, now + cacheTicks(), id), CACHE_LIMIT);
         return view(level, record);
     }
 
@@ -150,7 +163,7 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
         if (server == null || court == null) {
             return Optional.empty();
         }
-        Object record = recordOf(court.capitalId());
+        Object record = recordOf(court.capitalId(), server.overworld().getGameTime());
         return record == null ? Optional.empty() : Optional.ofNullable(levelOfRecord(server, record));
     }
 
@@ -168,7 +181,7 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
         if (capitalId.isEmpty()) {
             return Optional.empty();
         }
-        records.put(capitalId.get(), record);
+        remember(capitalId.get(), record, level.getGameTime());
 
         int villageId = CapitalsHandles.villageId(record);
         return Optional.of(new CapitalCourtView(
@@ -208,21 +221,50 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
     }
 
     @Nullable
-    private Object recordOf(UUID capitalId) {
-        Object cached = records.get(capitalId);
+    private Object recordOf(UUID capitalId, long now) {
+        Object cached = freshRecord(capitalId, now);
         if (cached != null && CapitalsHandles.capitalId(cached).filter(capitalId::equals).isPresent()) {
             return cached;
         }
+        cached = null;
         for (Object record : CapitalsHandles.allCapitalRecords()) {
             Optional<UUID> id = CapitalsHandles.capitalId(record);
             if (id.isPresent()) {
-                records.put(id.get(), record);
+                remember(id.get(), record, now);
                 if (capitalId.equals(id.get())) {
                     cached = record;
                 }
             }
         }
         return cached;
+    }
+
+    /** A cached record, only when it was cached by this server run and is still inside its window. */
+    @Nullable
+    private Object freshRecord(UUID capitalId, long now) {
+        CachedRecord cached = records.get(capitalId);
+        return cached != null && isFresh(cached.epoch(), cached.createdTick(), cached.expiryTick(), now)
+                ? cached.record() : null;
+    }
+
+    private void remember(UUID capitalId, Object record, long now) {
+        CacheLifetime.putBounded(records, capitalId,
+                new CachedRecord(ServerEpoch.current(), now, now + cacheTicks(), record), CACHE_LIMIT);
+    }
+
+    private static boolean isFresh(long epoch, long createdTick, long expiryTick, long now) {
+        return CacheLifetime.isFresh(epoch, ServerEpoch.current(), createdTick, expiryTick, now);
+    }
+
+    /**
+     * Empties both caches, leaving the reflective handles alone: the binding is a property of the
+     * jars on disk and does not change when a world closes, so rebinding on the next start would be
+     * work and another log line for nothing.
+     */
+    @Override
+    public void clearCaches() {
+        residents.clear();
+        records.clear();
     }
 
     // --- villagers -------------------------------------------------------------------------------
@@ -233,7 +275,7 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
         if (level == null || court == null || villager == null) {
             return CapitalStandingView.none();
         }
-        Object record = recordOf(court.capitalId());
+        Object record = recordOf(court.capitalId(), level.getGameTime());
         if (record == null) {
             return CapitalStandingView.none();
         }
@@ -304,7 +346,7 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
 
     /** Another capital's name, resolved in <em>its</em> level rather than in the caller's. */
     private String nameOfCapital(ServerLevel level, UUID capitalId) {
-        Object record = recordOf(capitalId);
+        Object record = recordOf(capitalId, level.getGameTime());
         if (record == null) {
             return "";
         }
@@ -319,7 +361,7 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
         if (level == null || court == null || max <= 0) {
             return List.of();
         }
-        Object record = recordOf(court.capitalId());
+        Object record = recordOf(court.capitalId(), level.getGameTime());
         if (record == null) {
             return List.of();
         }
@@ -362,7 +404,7 @@ public final class ReflectiveCapitalsBridge implements CapitalsBridge {
         if (level == null || court == null || entity == null) {
             return "";
         }
-        Object record = recordOf(court.capitalId());
+        Object record = recordOf(court.capitalId(), level.getGameTime());
         String name = record == null ? "" : CapitalsHandles.resolveDisplayName(level, record, entity);
         return name.isBlank() ? CapitalsHandles.familyNodeName(level, entity) : name;
     }

@@ -10,8 +10,10 @@ import dev.otectus.mcaconversations.chat.ChatModeSession;
 import dev.otectus.mcaconversations.chat.GreetOnApproach;
 import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
+import dev.otectus.mcaconversations.compat.CapitalsBridge;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.compat.ServerEpoch;
 import dev.otectus.mcaconversations.conversation.BeatContractLoader;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
@@ -100,6 +102,10 @@ public final class ConversationsEvents {
         VillagerAttention.reset();
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
+        CapitalsBridge.Holder.clearCaches();
+        // After the clear, not before: an entry written by a straggler between here and the next
+        // start belongs to neither epoch and so can never be served.
+        ServerEpoch.advance();
     }
 
     // --- Chat mode -------------------------------------------------------------
@@ -155,6 +161,10 @@ public final class ConversationsEvents {
      */
     @SubscribeEvent
     public static void onServerStarted(ServerStartedEvent event) {
+        // Before the early return below: the epoch is what keeps a previous world's cached answers
+        // out of this one, and it is owed regardless of whether chat mode is on.
+        ServerEpoch.advance();
+
         McaConversationsConfig.Common c = McaConversationsConfig.COMMON;
         if (!c.enableChatMode.get()) {
             return;
