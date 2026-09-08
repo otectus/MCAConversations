@@ -31,6 +31,20 @@ public final class VillagerHistory {
     private final Map<String, SocialRoleRecord> roles = new LinkedHashMap<>();
     private final Map<UUID, PairHistory> pairs = new LinkedHashMap<>();
 
+    /**
+     * The last day this villager spoke to anybody, or {@link Long#MIN_VALUE} when they never have.
+     *
+     * <p>Optional in the file: written only when it is known, and derived from the pairs when it is
+     * missing, so a save from an earlier build reads back with the same number it would have had. It
+     * exists because eviction needs one comparable number per villager - walking every pair of every
+     * villager to find the least active one is the sort of thing that gets done in insertion order
+     * instead, which is how a world forgets whoever it happened to meet first.
+     */
+    private long lastActivityDay = Long.MIN_VALUE;
+
+    /** Records this load discarded to fit the caps. Transient: it describes one read, not the state. */
+    private int discardedOnLoad;
+
     // --- Episodes ------------------------------------------------------------------------------------
 
     public Optional<EpisodeRecord> episode(UUID id) {
@@ -163,20 +177,34 @@ public final class VillagerHistory {
         if (opinion.equals(existing)) {
             return false;
         }
-        if (existing == null && opinions.size() >= HistoryCaps.opinionsPerVillager()) {
-            String victim = opinions.entrySet().stream()
-                    .min(Comparator
-                            .<Map.Entry<String, SocialOpinionRecord>>comparingInt(
-                                    entry -> Math.abs(entry.getValue().value()))
-                            .thenComparingLong(entry -> entry.getValue().createdDay()))
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
-            if (victim == null) {
-                return false;
-            }
-            opinions.remove(victim);
+        if (existing == null && opinions.size() >= HistoryCaps.opinionsPerVillager()
+                && !pruneOneOpinion()) {
+            return false;
         }
         opinions.put(opinion.key(), opinion);
+        return true;
+    }
+
+    /**
+     * Drops the blandest opinion to make room: nearest to neutral first, then oldest.
+     *
+     * <p>A neutral edge is the one whose loss changes no line the villager could have said, which is
+     * why strength outranks age here. Ties break on the key so two servers reading the same file drop
+     * the same edge.
+     */
+    private boolean pruneOneOpinion() {
+        String victim = opinions.entrySet().stream()
+                .min(Comparator
+                        .<Map.Entry<String, SocialOpinionRecord>>comparingInt(
+                                entry -> Math.abs(entry.getValue().value()))
+                        .thenComparingLong(entry -> entry.getValue().createdDay())
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .map(Map.Entry::getKey)
+                .orElse(null);
+        if (victim == null) {
+            return false;
+        }
+        opinions.remove(victim);
         return true;
     }
 
@@ -235,20 +263,27 @@ public final class VillagerHistory {
         if (record.equals(existing)) {
             return false;
         }
-        if (existing == null && roles.size() >= HistoryCaps.rolesPerVillager()) {
-            String victim = roles.entrySet().stream()
-                    .min(Comparator
-                            .<Map.Entry<String, SocialRoleRecord>>comparingInt(
-                                    entry -> entry.getValue().role().persistsUntilWithdrawn() ? 1 : 0)
-                            .thenComparingLong(entry -> entry.getValue().createdDay()))
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
-            if (victim == null) {
-                return false;
-            }
-            roles.remove(victim);
+        if (existing == null && roles.size() >= HistoryCaps.rolesPerVillager() && !pruneOneRole()) {
+            return false;
         }
         roles.put(record.key(), record);
+        return true;
+    }
+
+    /** Drops the role with least to say: an expiring one before a structural one, oldest first. */
+    private boolean pruneOneRole() {
+        String victim = roles.entrySet().stream()
+                .min(Comparator
+                        .<Map.Entry<String, SocialRoleRecord>>comparingInt(
+                                entry -> entry.getValue().role().persistsUntilWithdrawn() ? 1 : 0)
+                        .thenComparingLong(entry -> entry.getValue().createdDay())
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .map(Map.Entry::getKey)
+                .orElse(null);
+        if (victim == null) {
+            return false;
+        }
+        roles.remove(victim);
         return true;
     }
 
@@ -280,25 +315,84 @@ public final class VillagerHistory {
         if (existing != null) {
             return existing;
         }
-        while (pairs.size() >= HistoryCaps.HARD_PAIRS_PER_VILLAGER) {
-            String unused = null;
-            UUID victim = pairs.entrySet().stream()
-                    .filter(entry -> entry.getValue().isEmpty())
-                    .map(Map.Entry::getKey)
-                    .findFirst()
-                    .orElseGet(() -> pairs.entrySet().stream()
-                            .min(Comparator.comparingLong(entry ->
-                                    entry.getValue().lastTalkedDay().orElse(Long.MIN_VALUE)))
-                            .map(Map.Entry::getKey)
-                            .orElse(null));
-            if (victim == null) {
-                break;
-            }
-            pairs.remove(victim);
+        while (pairs.size() >= HistoryCaps.HARD_PAIRS_PER_VILLAGER && pruneOnePair()) {
+            // Room for the newcomer.
         }
         PairHistory created = new PairHistory();
-        pairs.put(player, created);
+        adopt(player, created);
         return created;
+    }
+
+    /** Drops one pair: an empty record first, otherwise the one that spoke longest ago. */
+    private boolean pruneOnePair() {
+        UUID victim = pairs.entrySet().stream()
+                .filter(entry -> entry.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .min(Comparator.naturalOrder())
+                .orElseGet(() -> pairs.entrySet().stream()
+                        .min(Comparator
+                                .<Map.Entry<UUID, PairHistory>>comparingLong(entry ->
+                                        entry.getValue().lastTalkedDay().orElse(Long.MIN_VALUE))
+                                .thenComparing(Map.Entry.comparingByKey()))
+                        .map(Map.Entry::getKey)
+                        .orElse(null));
+        if (victim == null) {
+            return false;
+        }
+        pairs.remove(victim);
+        return true;
+    }
+
+    /**
+     * Takes ownership of a pair record, so the day that pair last spoke also becomes this villager's.
+     *
+     * <p>The one seam where {@link #lastActivityDay} is maintained. Every pair this villager holds
+     * arrives through here - freshly created above, or read back from disk - and reports its
+     * conversations from then on, which is what keeps the number correct without a second bookkeeping
+     * path that could be forgotten at a call site.
+     */
+    private void adopt(UUID player, PairHistory pair) {
+        pairs.put(player, pair);
+        pair.listenForTalk(this::talkedOn);
+    }
+
+    private void talkedOn(long day) {
+        if (day > lastActivityDay) {
+            lastActivityDay = day;
+        }
+    }
+
+    /**
+     * The last day this villager spoke to anybody, or empty when they never have.
+     *
+     * <p>The eviction order reads this; see {@link ConversationHistoryStore#getOrCreate}.
+     */
+    public java.util.OptionalLong lastActivityDay() {
+        return lastActivityDay == Long.MIN_VALUE ? java.util.OptionalLong.empty()
+                : java.util.OptionalLong.of(lastActivityDay);
+    }
+
+    /**
+     * True when forgetting this villager would drop something somebody is owed.
+     *
+     * <p>An unresolved promise or a thread still open is an obligation the player can hold the mod to,
+     * and no bound on a map is worth breaking one. A protected villager is skipped by eviction
+     * entirely (spec §8.8).
+     */
+    public boolean isProtected() {
+        for (PairHistory pair : pairs.values()) {
+            for (CommitmentRecord commitment : pair.commitments()) {
+                if (commitment.isOutstanding()) {
+                    return true;
+                }
+            }
+            for (SharedThreadRecord thread : pair.threads()) {
+                if (thread.status().isLive() || thread.hasObligation()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Map<UUID, PairHistory> pairs() {
@@ -394,6 +488,11 @@ public final class VillagerHistory {
             pairList.add(row);
         }
         tag.put("pairs", pairList);
+        if (lastActivityDay != Long.MIN_VALUE) {
+            // Optional both ways: absent when nothing has been said, and derived on load when a file
+            // written by an older build has no such key. No schema bump buys anything here.
+            tag.putLong("last_activity", lastActivityDay);
+        }
         return tag;
     }
 
@@ -428,11 +527,66 @@ public final class VillagerHistory {
             for (int i = 0; i < list.size(); i++) {
                 CompoundTag row = list.getCompound(i);
                 if (row.hasUUID("player")) {
-                    history.pairs.put(row.getUUID("player"), PairHistory.load(row));
+                    PairHistory pair = PairHistory.load(row);
+                    history.discardedOnLoad += pair.discardedOnLoad();
+                    // adopt(), not put(): the pair reports the day it last spoke on the way in, which
+                    // is where a file with no last_activity key gets its number from.
+                    history.adopt(row.getUUID("player"), pair);
                 }
             }
         }
+        if (tag.contains("last_activity")) {
+            // The stored day wins over the derived one only when it is later: a file written before
+            // this key existed, then written again by a build that has it, must not go backwards.
+            history.talkedOn(tag.getLong("last_activity"));
+        }
+        history.discardedOnLoad += history.enforceLoadedCaps();
         return history;
+    }
+
+    /**
+     * Applies every declared cap to what has just been read, and returns how many records that cost.
+     *
+     * <p>Each collection is reduced by the same private eviction the mutation path uses, so a file
+     * that was over its caps keeps exactly the records it would have kept had it filled up one
+     * conversation at a time:
+     *
+     * <ul>
+     *   <li><b>episodes</b> - the live and resolved caps as {@link #enforceEpisodeCaps} applies them,
+     *       against the latest day any episode in the file was updated. Over the live cap the least
+     *       salient is abandoned rather than deleted; only past the resolved cap is anything
+     *       forgotten, lowest salience then oldest update first;</li>
+     *   <li><b>opinions</b> - nearest to neutral first, then oldest, then by key;</li>
+     *   <li><b>roles</b> - expiring before structural, then oldest, then by key;</li>
+     *   <li><b>pairs</b> - an empty record first, otherwise the pair that spoke longest ago, then by
+     *       player UUID.</li>
+     * </ul>
+     */
+    private int enforceLoadedCaps() {
+        int discarded = 0;
+        long latest = 0;
+        for (EpisodeRecord episode : episodes.values()) {
+            latest = Math.max(latest, episode.updatedDay());
+        }
+        int episodesBefore = episodes.size();
+        enforceEpisodeCaps(latest);
+        discarded += episodesBefore - episodes.size();
+
+        while (opinions.size() > HistoryCaps.opinionsPerVillager() && pruneOneOpinion()) {
+            discarded++;
+        }
+        while (roles.size() > HistoryCaps.rolesPerVillager() && pruneOneRole()) {
+            discarded++;
+        }
+        while (pairs.size() > HistoryCaps.HARD_PAIRS_PER_VILLAGER && pruneOnePair()) {
+            discarded++;
+        }
+        return discarded;
+    }
+
+    /** How many records the load that built this history had to discard to fit the caps. */
+    int discardedOnLoad() {
+        return discardedOnLoad;
     }
 
     private static String normalize(String value) {

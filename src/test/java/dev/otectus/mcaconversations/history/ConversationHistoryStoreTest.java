@@ -1,6 +1,9 @@
 package dev.otectus.mcaconversations.history;
 
+import dev.otectus.mcaconversations.conversation.OutcomeFamily;
+import dev.otectus.mcaconversations.conversation.StanceFamily;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import org.junit.jupiter.api.Test;
 
@@ -328,4 +331,296 @@ class ConversationHistoryStoreTest {
                 roundTrip(store).peek(VILLAGER).orElseThrow().episode(episode.id()).orElseThrow().state());
     }
 
+    // --- Load-time bounds (F08) --------------------------------------------------------------------
+
+    @Test
+    void anOversizedThreadListLoadsWithinTheCapKeepingTheNewest() {
+        ListTag threads = new ListTag();
+        for (int i = 0; i < HistoryCaps.HARD_THREADS_PER_PAIR + 16; i++) {
+            threads.add(SharedThreadRecord
+                    .opened("thread." + i, "work", "work.subject", Optional.empty(),
+                            PrivacyLevel.ORDINARY, 100 + i)
+                    .withStatus(ThreadStatus.RESOLVED, 100 + i)
+                    .save());
+        }
+        CompoundTag pair = new CompoundTag();
+        pair.put("threads", threads);
+
+        PairHistory loaded = loadPair(pair);
+        assertEquals(HistoryCaps.threadsPerPair(), loaded.threads().size(),
+                "the thread cap was ignored on load");
+        // pruneOneThread drops the oldest closed thread, so the newest survive, exactly as they would
+        // have had the pair filled up one conversation at a time.
+        for (SharedThreadRecord thread : loaded.threads()) {
+            assertTrue(thread.lastMentionedDay()
+                            >= 100 + HistoryCaps.HARD_THREADS_PER_PAIR + 16 - HistoryCaps.threadsPerPair(),
+                    "load kept an older thread than the mutation path would have: " + thread.templateId());
+        }
+    }
+
+    @Test
+    void anOversizedCommitmentListKeepsTheNewestSettledPromises() {
+        ListTag commitments = new ListTag();
+        int total = HistoryCaps.HARD_COMMITMENTS_PER_PAIR + 8;
+        for (int i = 0; i < total; i++) {
+            commitments.add(CommitmentRecord.made("promise." + i, CommitmentResolver.VISIT_AFTER_DAY,
+                            NarrativeValue.EMPTY, CommitmentRecord.Party.PLAYER, 10 + i,
+                            OptionalLong.of(11 + i), Optional.empty())
+                    .resolved(CommitmentRecord.State.KEPT, 20 + i)
+                    .save());
+        }
+        CompoundTag pair = new CompoundTag();
+        pair.put("commitments", commitments);
+
+        PairHistory loaded = loadPair(pair);
+        assertEquals(HistoryCaps.commitmentsPerPair(), loaded.commitments().size());
+        for (CommitmentRecord commitment : loaded.commitments()) {
+            assertTrue(commitment.resolvedDay().orElse(0) >= 20 + total - HistoryCaps.commitmentsPerPair(),
+                    "load forgot a newer promise than the mutation path would have");
+        }
+    }
+
+    @Test
+    void anOversizedClaimListKeepsTheNewestUndisputedClaims() {
+        ListTag claims = new ListTag();
+        int total = HistoryCaps.HARD_CLAIMS_PER_PAIR + 8;
+        for (int i = 0; i < total; i++) {
+            claims.add(PlayerClaimRecord.stated("claim_" + i, NarrativeValue.token("value_" + i),
+                    "conversations.topic.food.respond/answer_" + i, 10 + i).save());
+        }
+        CompoundTag pair = new CompoundTag();
+        pair.put("claims", claims);
+
+        PairHistory loaded = loadPair(pair);
+        assertEquals(HistoryCaps.claimsPerPair(), loaded.claims().size());
+        for (PlayerClaimRecord claim : loaded.claims()) {
+            assertTrue(claim.day() >= 10 + total - HistoryCaps.claimsPerPair(),
+                    "load kept an older claim than the mutation path would have");
+        }
+    }
+
+    @Test
+    void anOversizedRecencyBlockLoadsWithinTheHardBound() {
+        CompoundTag scenes = new CompoundTag();
+        int total = TopicRecencyRecord.MAX_ENTRIES_PER_LEVEL + 40;
+        for (int i = 0; i < total; i++) {
+            scenes.putLong("scene." + i, 100 + i);
+        }
+        CompoundTag recency = new CompoundTag();
+        recency.put("scene", scenes);
+        CompoundTag pair = new CompoundTag();
+        pair.put("recency", recency);
+
+        PairHistory loaded = loadPair(pair);
+        int kept = Math.min(TopicRecencyRecord.MAX_ENTRIES_PER_LEVEL, HistoryCaps.recencyPerPair());
+        assertEquals(kept, loaded.recency().scenes().size(), "the recency cap was ignored on load");
+        assertTrue(loaded.recency().scenes().size() * 4 <= HistoryCaps.HARD_RECENCY_PER_PAIR);
+        // The most recent stamps survive: the oldest is the one whose penalty has already decayed.
+        for (long day : loaded.recency().scenes().values()) {
+            assertTrue(day >= 100 + total - kept, "load kept a staler recency stamp than mutation would");
+        }
+    }
+
+    @Test
+    void anOversizedExchangeListLoadsWithinItsCap() {
+        ListTag exchanges = new ListTag();
+        for (int i = 0; i < PairHistory.MAX_EXCHANGES + 12; i++) {
+            exchanges.add(new StanceEchoRecord(StanceFamily.PRACTICAL_HELP, OutcomeFamily.ACCEPTED,
+                    "subject." + i, 50 + i).save());
+        }
+        CompoundTag pair = new CompoundTag();
+        pair.put("exchanges", exchanges);
+
+        PairHistory loaded = loadPair(pair);
+        assertEquals(PairHistory.MAX_EXCHANGES, loaded.exchanges().size());
+        assertEquals(50 + PairHistory.MAX_EXCHANGES + 11, loaded.exchanges().get(0).day(),
+                "the newest decision should have survived");
+    }
+
+    @Test
+    void anOversizedOpinionAndRoleListLoadWithinTheirCaps() {
+        ListTag opinions = new ListTag();
+        int opinionTotal = HistoryCaps.HARD_OPINIONS_PER_VILLAGER + 12;
+        for (int i = 0; i < opinionTotal; i++) {
+            opinions.add(new SocialOpinionRecord(new UUID(7L, i), "reliability", 3,
+                    "episode.cause." + i, Confidence.WITNESSED, PrivacyLevel.DISCREET, 10 + i,
+                    OptionalLong.empty()).save());
+        }
+        ListTag roles = new ListTag();
+        int roleTotal = HistoryCaps.HARD_ROLES_PER_VILLAGER + 12;
+        for (int i = 0; i < roleTotal; i++) {
+            roles.add(SocialRoleRecord.observed(new UUID(8L, i), SocialRole.MENTOR,
+                    "episode.taught." + i, 10 + i).save());
+        }
+        CompoundTag row = new CompoundTag();
+        row.put("opinions", opinions);
+        row.put("roles", roles);
+
+        VillagerHistory loaded = VillagerHistory.load(row);
+        assertEquals(HistoryCaps.opinionsPerVillager(), loaded.opinions().size());
+        assertEquals(HistoryCaps.rolesPerVillager(), loaded.roles().size());
+        // Equal strength and equal persistence throughout, so both rules fall through to "oldest goes".
+        for (SocialOpinionRecord opinion : loaded.opinions()) {
+            assertTrue(opinion.createdDay() >= 10 + opinionTotal - HistoryCaps.opinionsPerVillager());
+        }
+        for (SocialRoleRecord role : loaded.roles()) {
+            assertTrue(role.createdDay() >= 10 + roleTotal - HistoryCaps.rolesPerVillager());
+        }
+    }
+
+    @Test
+    void anOversizedEpisodeListLoadsWithinTheActiveAndResolvedCaps() {
+        ListTag episodes = new ListTag();
+        int liveTotal = HistoryCaps.HARD_ACTIVE_EPISODES + 8;
+        for (int i = 0; i < liveTotal; i++) {
+            episodes.add(EpisodeRecord.opened(new UUID(11L, i), "work.kind." + i, "work.subject",
+                    EpisodeState.ACTIVE, VILLAGER, Map.of(), PrivacyLevel.ORDINARY, i + 1, 200).save());
+        }
+        int resolvedTotal = HistoryCaps.HARD_RESOLVED_EPISODES + 8;
+        for (int i = 0; i < resolvedTotal; i++) {
+            episodes.add(EpisodeRecord.opened(new UUID(12L, i), "work.done." + i, "work.subject",
+                            EpisodeState.SUCCEEDED, VILLAGER, Map.of(), PrivacyLevel.ORDINARY, i + 1, 100)
+                    .save());
+        }
+        CompoundTag row = new CompoundTag();
+        row.put("episodes", episodes);
+
+        VillagerHistory loaded = VillagerHistory.load(row);
+        assertTrue(loaded.liveEpisodes(200).size() <= HistoryCaps.activeEpisodes(),
+                "the live cap was ignored on load");
+        long past = loaded.episodes().stream().filter(e -> !e.state().isLive()).count();
+        assertTrue(past <= HistoryCaps.resolvedEpisodes(), "the resolved cap was ignored on load");
+        // Salience decides, exactly as it does on the mutation path: the most salient live episodes
+        // stay live, and the blandest resolved ones are the ones forgotten.
+        for (EpisodeRecord episode : loaded.liveEpisodes(200)) {
+            assertTrue(episode.salience() > liveTotal - HistoryCaps.activeEpisodes(),
+                    "a blander episode outlived a more salient one");
+        }
+    }
+
+    @Test
+    void anOversizedPairListLoadsWithinThePairCap() {
+        ListTag pairs = new ListTag();
+        int total = HistoryCaps.HARD_PAIRS_PER_VILLAGER + 8;
+        for (int i = 0; i < total; i++) {
+            CompoundTag pair = new CompoundTag();
+            pair.putUUID("player", new UUID(13L, i));
+            pair.putLong("first_met", 1);
+            pair.putLong("last_talked", 10 + i);
+            pairs.add(pair);
+        }
+        CompoundTag row = new CompoundTag();
+        row.put("pairs", pairs);
+
+        VillagerHistory loaded = VillagerHistory.load(row);
+        assertEquals(HistoryCaps.HARD_PAIRS_PER_VILLAGER, loaded.pairs().size());
+        for (PairHistory pair : loaded.pairs().values()) {
+            assertTrue(pair.lastTalkedDay().orElseThrow()
+                            >= 10 + total - HistoryCaps.HARD_PAIRS_PER_VILLAGER,
+                    "load forgot a more recent player than the mutation path would have");
+        }
+    }
+
+    @Test
+    void anOversizedVillagerListLoadsWithinTheWorldBound() {
+        ListTag villagers = new ListTag();
+        int total = HistoryCaps.HARD_VILLAGERS + 5;
+        for (int i = 0; i < total; i++) {
+            villagers.add(villagerRow(new UUID(14L, i), 10 + i));
+        }
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("version", ConversationHistoryStore.CURRENT_VERSION);
+        tag.put("villagers", villagers);
+
+        ConversationHistoryStore loaded = ConversationHistoryStore.load(tag);
+        assertEquals(HistoryCaps.HARD_VILLAGERS, loaded.villagerCount(),
+                "the world-wide bound was ignored on load");
+        for (int i = 0; i < 5; i++) {
+            assertTrue(loaded.peek(new UUID(14L, i)).isEmpty(),
+                    "the least recently active villagers should have been the ones dropped");
+        }
+        assertTrue(loaded.peek(new UUID(14L, total - 1)).isPresent(),
+                "the most recently active villager was dropped");
+    }
+
+    @Test
+    void aCappedLoadReSavesByteIdenticallyAndKeepsTheSameRecords() {
+        ListTag villagers = new ListTag();
+        for (int i = 0; i < 40; i++) {
+            villagers.add(villagerRow(new UUID(15L, i), 10 + i));
+        }
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("version", ConversationHistoryStore.CURRENT_VERSION);
+        tag.put("villagers", villagers);
+
+        ConversationHistoryStore once = ConversationHistoryStore.load(tag);
+        CompoundTag first = once.save(new CompoundTag());
+        ConversationHistoryStore twice = ConversationHistoryStore.load(first);
+        CompoundTag second = twice.save(new CompoundTag());
+
+        assertEquals(first, second, "a capped load did not settle after one round trip");
+        assertEquals(once.villagers(), twice.villagers(), "the retained set changed on reload");
+        assertEquals(once.recordCount(), twice.recordCount());
+    }
+
+    @Test
+    void recordCountCountsRolesAndRecency() {
+        ConversationHistoryStore store = new ConversationHistoryStore();
+        VillagerHistory history = store.getOrCreate(VILLAGER);
+        assertEquals(0, store.recordCount());
+
+        history.putRole(SocialRoleRecord.observed(NEIGHBOUR, SocialRole.MENTOR,
+                "episode.taught_me_the_trade", 10));
+        assertEquals(1, store.recordCount(), "an observed role was not counted");
+
+        history.pair(PLAYER).recordPlayed("scene.one", "subject.one", "problem_solve", "work", 12);
+        // Four levels stamped by one played scene, each its own entry in the file.
+        assertEquals(5, store.recordCount(), "the recency levels were not counted");
+    }
+
+    @Test
+    void anOverLongTextFieldIsTruncatedOnLoadAndOnMutation() {
+        String huge = "a".repeat(HistoryCaps.MAX_TEXT_LENGTH * 3);
+        SocialOpinionRecord opinion = new SocialOpinionRecord(NEIGHBOUR, "reliability", 2, huge,
+                Confidence.WITNESSED, PrivacyLevel.DISCREET, 10, OptionalLong.empty());
+        assertEquals(HistoryCaps.MAX_TEXT_LENGTH, opinion.cause().length(),
+                "an over-long cause was stored whole on the mutation path");
+
+        CompoundTag row = new CompoundTag();
+        ListTag opinions = new ListTag();
+        CompoundTag stored = opinion.save();
+        stored.putString("cause", huge);
+        opinions.add(stored);
+        row.put("opinions", opinions);
+
+        VillagerHistory loaded = VillagerHistory.load(row);
+        assertEquals(HistoryCaps.MAX_TEXT_LENGTH, loaded.opinions().get(0).cause().length(),
+                "an over-long cause survived the load path");
+    }
+
+    // --- Fixtures for the load-time bounds ----------------------------------------------------------
+
+    /** One villager row with a single non-empty pair that last spoke on {@code day}. */
+    private static CompoundTag villagerRow(UUID villager, long day) {
+        CompoundTag pair = new CompoundTag();
+        pair.putUUID("player", PLAYER);
+        pair.putLong("first_met", 1);
+        pair.putLong("last_talked", day);
+        ListTag pairs = new ListTag();
+        pairs.add(pair);
+        CompoundTag row = new CompoundTag();
+        row.put("pairs", pairs);
+        row.putUUID("uuid", villager);
+        return row;
+    }
+
+    /** Reads one pair record on its own, through the villager that owns it. */
+    private static PairHistory loadPair(CompoundTag pairBody) {
+        pairBody.putUUID("player", PLAYER);
+        ListTag pairs = new ListTag();
+        pairs.add(pairBody);
+        CompoundTag row = new CompoundTag();
+        row.put("pairs", pairs);
+        return VillagerHistory.load(row).peekPair(PLAYER).orElseThrow();
+    }
 }

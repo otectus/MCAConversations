@@ -64,6 +64,44 @@ alongside.
   GUI/numbered choices (`conversation/ChoiceSelectionService`); when it fails, no effect runs, no reply
   is scheduled, and the exchange ends quietly. Candidates tied at equal distance now rank
   deterministically by name then UUID.
+- **Capitals data could outlive the world it came from.** The MCA: Capitals residency cache and the
+  record cache (`compat/capitals/ReflectiveCapitalsBridge`) lived for the whole game process, keyed
+  only by expiry tick — the record cache had no size limit and no expiry check at all — and nothing
+  cleared either one when a server stopped, so opening another world in the same session, or
+  restoring an older save, could answer a court question from the previous world's data, and a clock
+  moved backwards could keep an entry fresh indefinitely. Every cached entry is now stamped with a
+  per-server epoch (`compat/ServerEpoch`) and its creation tick; an entry is served only when the
+  epoch matches the running server, its expiry tick is still ahead, and the clock has not moved
+  behind its creation tick (`compat/CacheLifetime`); both caches now share one bound and are emptied
+  on server stop (`event/ConversationsEvents#onServerStopped` clears the caches, then advances the
+  epoch) while the reflective handles stay bound. MCA: Capitals remains optional; the fix changes
+  nothing when it is absent, since `NoopCapitalsBridge` inherits an empty `clearCaches`.
+- **A history save written by a newer version is now left alone.** Loading projected the fields it
+  recognised and wrote the current schema version back (`ConversationHistoryStore#save`), silently
+  discarding the rest, so a world briefly opened with a later build and then rolled back lost whatever
+  that build had added. A store whose version is newer than this mod's (`ConversationHistoryStore#load`)
+  now runs read-only for the session (`isDegraded`, enforced by `ConversationHistorySavedData#setDirty`),
+  conversations continue on what it can read, and any save re-emits the original tag byte for byte. The
+  schema version is unchanged (still 1); new keys are optional.
+- **Decoding a history file now respects the same limits as playing.** The load path
+  (`VillagerHistory#load`, `PairHistory#load`) used to insert villagers, pairs, episodes, opinions,
+  roles, threads, commitments, claims and recency stamps straight into their maps, so a hand-edited or
+  oversized file bypassed every cap; free text had no length limit anywhere. Every collection is now
+  capped on load with the same retention rule the game uses when adding — protected villagers
+  (an unresolved commitment or a live thread) are skipped first, then empty histories, then the oldest
+  `last_activity` day — free text is cut at 512 code points (`HistoryCaps.MAX_TEXT_LENGTH`,
+  `HistoryCaps#text`), `recordCount` now counts roles and recency, and when a load actually discards
+  something the original data is written once to a sibling store `mcaconversations_history_backup`
+  (`ConversationHistoryBackupSavedData`, never read by the mod; safe to delete).
+- **Eviction picks the villager you actually stopped talking to.** When the villager cap was hit, the
+  fallback victim used to be whichever entry came first in map order, which could change after a
+  restart and need not be inactive. Eviction (`ConversationHistoryStore#evictionCandidate`) now skips
+  villagers with an unresolved commitment, a live thread, or an open conversation
+  (`VillagerHistory#isProtected`, `ConversationSessions#hasSessionWith` via `setLiveSessionPredicate`),
+  then prefers empty histories, then the oldest persisted `last_activity` day (derived from existing
+  pair data for older saves), then a fixed UUID order, so the victim is the same before and after a
+  reload; if every villager is protected nothing is evicted and the new history is kept out of the
+  store with a diagnostic rather than dropping an obligation.
 
 ### Changed
 
@@ -90,8 +128,11 @@ alongside.
   cancelled events, and matches the final message text, so a message another mod cancels never reaches
   a villager and a rewritten message is matched as rewritten; the experimental local-chat mode
   (`chatModeLocalChat`, default off, `#onLocalChat`) keeps its early `HIGH` slot because it must own
-  cancellation, and a message is never processed by both paths. An immutable snapshot of the accepted
-  message (`chat/AcceptedChat`) crosses to the server thread instead of the live event. Bystanders who
+  cancellation, and a message is never processed by both paths. On the ordinary path, the text handed
+  to the server thread is now taken from the final message component into an immutable
+  `chat/AcceptedChat` snapshot on the event thread, so a rewrite by a later handler is what gets
+  matched; the local-chat owner keeps the raw text it re-broadcasts, because it owns presentation.
+  Bystanders who
   overhear a public reply (`chat/ChatDelivery#deliver`) are now checked by the same engagement policy
   individually, rather than by a bare connection/distance test.
 

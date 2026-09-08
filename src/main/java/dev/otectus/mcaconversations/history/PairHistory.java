@@ -45,6 +45,16 @@ public final class PairHistory {
     private long firstMetDay = Long.MIN_VALUE;
     private long lastTalkedDay = Long.MIN_VALUE;
 
+    /**
+     * Told when this pair speaks, so the villager that owns the pair can keep its own activity day
+     * without polling every pair it holds. Set by {@link VillagerHistory} when it hands the record out
+     * or reads one back; a pair built on its own — a unit test, a throwaway — simply has nobody to tell.
+     */
+    private java.util.function.LongConsumer talkListener = day -> { };
+
+    /** Records this load discarded to fit the caps. Transient: it describes one read, not the state. */
+    private int discardedOnLoad;
+
     // --- Threads ------------------------------------------------------------------------------------
 
     public Optional<SharedThreadRecord> thread(String templateId) {
@@ -107,8 +117,9 @@ public final class PairHistory {
             if (!thread.status().isClosed() || thread.hasObligation()) {
                 continue;
             }
-            if (thread.lastMentionedDay() < oldest) {
-                oldest = thread.lastMentionedDay();
+            long day = thread.lastMentionedDay();
+            if (day < oldest || (day == oldest && victim != null && entry.getKey().compareTo(victim) < 0)) {
+                oldest = day;
                 victim = entry.getKey();
             }
         }
@@ -149,24 +160,39 @@ public final class PairHistory {
         if (commitment.equals(existing)) {
             return false;
         }
-        if (existing == null && commitments.size() >= HistoryCaps.commitmentsPerPair()) {
-            // Settled promises are the only ones that may be forgotten to make room.
-            String victim = null;
-            long oldest = Long.MAX_VALUE;
-            for (Map.Entry<String, CommitmentRecord> entry : commitments.entrySet()) {
-                CommitmentRecord candidate = entry.getValue();
-                if (candidate.state().isSettled()
-                        && candidate.resolvedDay().orElse(candidate.createdDay()) < oldest) {
-                    oldest = candidate.resolvedDay().orElse(candidate.createdDay());
-                    victim = entry.getKey();
-                }
-            }
-            if (victim == null) {
-                return false;
-            }
-            commitments.remove(victim);
+        if (existing == null && commitments.size() >= HistoryCaps.commitmentsPerPair()
+                && !pruneOneCommitment()) {
+            return false;
         }
         commitments.put(commitment.id(), commitment);
+        return true;
+    }
+
+    /**
+     * Drops one settled promise to make room.
+     *
+     * <p>Settled promises are the only ones that may be forgotten. A pair at the cap with nothing
+     * settled records no new promise, which is the correct outcome: losing an outstanding one to make
+     * room for another is the untracked-promise failure the caps exist to prevent (spec §8.8).
+     */
+    private boolean pruneOneCommitment() {
+        String victim = null;
+        long oldest = Long.MAX_VALUE;
+        for (Map.Entry<String, CommitmentRecord> entry : commitments.entrySet()) {
+            CommitmentRecord candidate = entry.getValue();
+            if (!candidate.state().isSettled()) {
+                continue;
+            }
+            long day = candidate.resolvedDay().orElse(candidate.createdDay());
+            if (day < oldest || (day == oldest && victim != null && entry.getKey().compareTo(victim) < 0)) {
+                oldest = day;
+                victim = entry.getKey();
+            }
+        }
+        if (victim == null) {
+            return false;
+        }
+        commitments.remove(victim);
         return true;
     }
 
@@ -211,18 +237,31 @@ public final class PairHistory {
             claims.put(claim.type(), updated);
             return true;
         }
-        if (claims.size() >= HistoryCaps.claimsPerPair()) {
-            String victim = claims.entrySet().stream()
-                    .filter(entry -> !entry.getValue().disputed())
-                    .min(Comparator.comparingLong(entry -> entry.getValue().day()))
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
-            if (victim == null) {
-                return false;
-            }
-            claims.remove(victim);
+        if (claims.size() >= HistoryCaps.claimsPerPair() && !pruneOneClaim()) {
+            return false;
         }
         claims.put(claim.type(), claim);
+        return true;
+    }
+
+    /**
+     * Drops the oldest settled claim to make room; never a disputed one.
+     *
+     * <p>A disputed claim is the only kind a scene still has something to say about — it is the pair's
+     * open question — so it outranks every quiet answer that has never been contradicted.
+     */
+    private boolean pruneOneClaim() {
+        String victim = claims.entrySet().stream()
+                .filter(entry -> !entry.getValue().disputed())
+                .min(Comparator.<Map.Entry<String, PlayerClaimRecord>>comparingLong(
+                                entry -> entry.getValue().day())
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .map(Map.Entry::getKey)
+                .orElse(null);
+        if (victim == null) {
+            return false;
+        }
+        claims.remove(victim);
         return true;
     }
 
@@ -293,6 +332,7 @@ public final class PairHistory {
             firstMetDay = day;
         }
         lastTalkedDay = day;
+        talkListener.accept(day);
         return changed;
     }
 
@@ -312,6 +352,7 @@ public final class PairHistory {
             lastTalkedDay = day;
             changed = true;
         }
+        talkListener.accept(day);
         return changed;
     }
 
@@ -418,11 +459,103 @@ public final class PairHistory {
         forEachCompound(tag, "exchanges", row ->
                 StanceEchoRecord.load(row).ifPresent(e -> history.exchanges.put(e.subject(), e)));
         if (tag.contains("recency", Tag.TAG_COMPOUND)) {
+            // The record bounds its own four levels in its constructor, keeping the most recent
+            // stamps - the same entries the mutation path would have kept.
             history.recency = TopicRecencyRecord.load(tag.getCompound("recency"));
         }
         history.firstMetDay = tag.contains("first_met") ? tag.getLong("first_met") : Long.MIN_VALUE;
         history.lastTalkedDay = tag.contains("last_talked") ? tag.getLong("last_talked") : Long.MIN_VALUE;
+        history.discardedOnLoad = history.enforceLoadedCaps();
         return history;
+    }
+
+    /**
+     * Applies every declared cap to what has just been read, and returns how many records that cost.
+     *
+     * <p>A file is not a caller. Nothing stops a hand-edited or corrupted save from holding ten
+     * thousand threads for one pair, and until this existed the caps were enforced on the way in and
+     * ignored on the way back — which is the same as not having them, because a world reloads.
+     *
+     * <p>Each collection is reduced in two stages, and the split is the whole design:
+     *
+     * <ol>
+     *   <li><b>The mutation rule, verbatim.</b> The same private eviction the live path uses runs
+     *       until the configured cap is met, so a pair that was over its cap keeps exactly the records
+     *       it would have kept had it reached the cap one conversation at a time: settled promises go
+     *       before outstanding ones, closed threads before obligations, quiet claims before
+     *       disputed ones.</li>
+     *   <li><b>The hard ceiling, unconditionally.</b> When the mutation rule refuses — a pair whose
+     *       thousands of threads all carry obligations — the remainder is still cut down to the hard
+     *       constant, oldest day first. Refusing here would preserve the unbounded growth the caps
+     *       exist to stop, so past the hard ceiling "never drop an obligation" gives way to "a world
+     *       must stay loadable". The original file is copied aside before that happens
+     *       ({@code mcaconversations_history_backup}), which is the reason that backup exists.</li>
+     * </ol>
+     */
+    private int enforceLoadedCaps() {
+        int discarded = 0;
+        while (threads.size() > HistoryCaps.threadsPerPair() && pruneOneThread()) {
+            discarded++;
+        }
+        discarded += trimToHardCap(threads, HistoryCaps.HARD_THREADS_PER_PAIR,
+                SharedThreadRecord::lastMentionedDay);
+
+        while (commitments.size() > HistoryCaps.commitmentsPerPair() && pruneOneCommitment()) {
+            discarded++;
+        }
+        discarded += trimToHardCap(commitments, HistoryCaps.HARD_COMMITMENTS_PER_PAIR,
+                commitment -> commitment.resolvedDay().orElse(commitment.createdDay()));
+
+        while (claims.size() > HistoryCaps.claimsPerPair() && pruneOneClaim()) {
+            discarded++;
+        }
+        discarded += trimToHardCap(claims, HistoryCaps.HARD_CLAIMS_PER_PAIR, PlayerClaimRecord::day);
+
+        // Exchanges have one cap rather than two, and their mutation rule - drop the oldest - never
+        // refuses, so the single loop covers both stages.
+        discarded += trimToHardCap(exchanges, MAX_EXCHANGES, StanceEchoRecord::day);
+        return discarded;
+    }
+
+    /**
+     * Cuts one collection down to {@code cap}, oldest day first and ties broken by key.
+     *
+     * <p>Deterministic on purpose: two servers handed the same file must keep the same records, or a
+     * multiplayer world's history depends on which machine opened it.
+     */
+    private static <T> int trimToHardCap(Map<String, T> values, int cap,
+                                         java.util.function.ToLongFunction<T> day) {
+        if (values.size() <= cap) {
+            return 0;
+        }
+        List<Map.Entry<String, T>> ordered = new ArrayList<>(values.entrySet());
+        ordered.sort(Comparator
+                .<Map.Entry<String, T>>comparingLong(entry -> day.applyAsLong(entry.getValue()))
+                .thenComparing(Map.Entry.comparingByKey()));
+        int discarded = values.size() - cap;
+        for (int i = 0; i < discarded; i++) {
+            values.remove(ordered.get(i).getKey());
+        }
+        return discarded;
+    }
+
+    /** How many records the load that built this pair had to discard to fit the caps. */
+    int discardedOnLoad() {
+        return discardedOnLoad;
+    }
+
+    /**
+     * Points this pair at the villager that owns it, so one conversation updates both.
+     *
+     * <p>Package-private: only {@link VillagerHistory} may claim a pair, because only the villager has
+     * an activity day for the pair to feed.
+     */
+    void listenForTalk(java.util.function.LongConsumer listener) {
+        talkListener = listener == null ? day -> { } : listener;
+        if (lastTalkedDay != Long.MIN_VALUE) {
+            // A pair read back from disk has already spoken; the villager needs to hear that once.
+            talkListener.accept(lastTalkedDay);
+        }
     }
 
     private static ListTag saveList(List<CompoundTag> rows) {

@@ -1,7 +1,5 @@
 package dev.otectus.mcaconversations.history;
 
-import dev.otectus.mcaconversations.McaConversations;
-
 /**
  * Field-by-field upgrades between history schema versions (spec §22.1).
  *
@@ -37,10 +35,9 @@ public final class HistoryMigration {
             return;
         }
         if (fromVersion > ConversationHistoryStore.CURRENT_VERSION) {
-            McaConversations.LOGGER.warn(
-                    "Conversation history was written by a newer build (schema {} > {}). Reading it with the "
-                            + "current reader: unknown fields are ignored and nothing is discarded.",
-                    fromVersion, ConversationHistoryStore.CURRENT_VERSION);
+            // Nothing to do, and deliberately nothing to say: the store has already retained the file
+            // verbatim, warned once, and put itself in read-only degraded mode. Warning again here
+            // would report one condition twice, and there is no upgrade to run downwards anyway.
             return;
         }
         if (fromVersion == 0) {

@@ -133,6 +133,26 @@ public final class ConversationSessions {
     }
 
     /**
+     * True when some player is in a session pointed at this villager right now.
+     *
+     * <p>Asked by the history store's eviction, which must never forget a villager somebody has a
+     * screen open on. Deliberately a plain read of the map with no expiry handling: a session that has
+     * timed out but not been swept still means the player is standing there mid-conversation, and
+     * eviction is the wrong place to decide otherwise.
+     */
+    public static boolean hasSessionWith(UUID villagerId) {
+        if (villagerId == null) {
+            return false;
+        }
+        for (ConversationSession session : SESSIONS.values()) {
+            if (villagerId.equals(session.villagerId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Drops sessions idle for well past the timeout. Called on the low-frequency maintenance cadence,
      * not per tick — an expired-but-not-yet-swept session is already inert because
      * {@link #get} and {@link #peek} end its topic on contact.
