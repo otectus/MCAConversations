@@ -106,9 +106,14 @@ public final class SlotBinder {
         return switch (name) {
             case "worksite", "location" -> snapshot.value(ContextKeys.PLACE_LOCATION)
                     .map(NarrativeValue::token);
+            // A village's name is the player's own words, not a token: squashing "Ash Hollow" into
+            // `ash_hollow` produced a lang key nobody had written, so the sentence said
+            // "mcaconversations.slot.ash_hollow" out loud. It binds as a literal and is spoken as
+            // written; when there is no name the slot does not bind and the scene's fallback route
+            // takes over, which is what binding being all-or-nothing is for.
             case "village" -> snapshot.value(ContextKeys.PLACE_VILLAGE_NAME)
-                    .map(value -> NarrativeValue.token(value.toLowerCase(java.util.Locale.ROOT)
-                            .replaceAll("[^a-z0-9_]", "_")));
+                    .map(NarrativeValue::literal)
+                    .filter(value -> !value.isEmpty());
             case "season" -> snapshot.value(ContextKeys.TIME_SEASON).map(NarrativeValue::token);
             case "weather" -> snapshot.value(ContextKeys.WEATHER_STATE).map(NarrativeValue::token);
             case "time_band" -> snapshot.value(ContextKeys.TIME_BAND).map(NarrativeValue::token);

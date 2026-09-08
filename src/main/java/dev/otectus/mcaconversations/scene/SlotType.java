@@ -61,9 +61,14 @@ public enum SlotType {
             return false;
         }
         return switch (this) {
+            // A literal is admitted here and nowhere else: the only one the mod produces is a
+            // village's own name, which is a place, and a place slot is where it belongs. It cannot
+            // arrive from an authored payload — NarrativeValue.parse refuses `literal:` — so the
+            // closed vocabulary still holds for everything an author writes.
             case LOCALIZED_TOKEN, LOCATION_TOKEN ->
                     value.kind() == NarrativeValue.Kind.TOKEN
-                            || value.kind() == NarrativeValue.Kind.ENUM_TOKEN;
+                            || value.kind() == NarrativeValue.Kind.ENUM_TOKEN
+                            || value.kind() == NarrativeValue.Kind.LITERAL;
             case REGISTRY_ID -> value.kind() == NarrativeValue.Kind.REGISTRY_ID;
             case PERSON -> value.kind() == NarrativeValue.Kind.UUID_REF;
             case NUMBER_BAND -> value.kind() == NarrativeValue.Kind.BAND;

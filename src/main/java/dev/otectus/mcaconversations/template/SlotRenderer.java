@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,6 +38,18 @@ public final class SlotRenderer {
     /** The neutral phrase used when a slot cannot be rendered at all. */
     public static final String FALLBACK_KEY = "mcaconversations.fallback.something";
 
+    /**
+     * Slots with a better fallback than "something".
+     *
+     * <p>"Something" is right for a gift and wrong for a place: a villager who cannot name their
+     * village says "the village", which is what {@code mcaconversations.fallback.village} already
+     * says for the {@code %village%} template variable, in both shipped locales. Reusing that key
+     * rather than adding one also keeps out of {@code mcaconversations.slot.}, a prefix the content
+     * compiler owns and rewrites.
+     */
+    private static final Map<String, String> SLOT_FALLBACKS =
+            Map.of("village", "mcaconversations.fallback.village");
+
     private SlotRenderer() {
     }
 
@@ -46,12 +59,23 @@ public final class SlotRenderer {
      * @param level the level, needed to resolve a person slot's current name
      */
     public static Component render(NarrativeValue value, ServerLevel level) {
+        return render(value, level, "");
+    }
+
+    /**
+     * Renders one bound value, with the fallback the named slot deserves.
+     *
+     * @param level    the level, needed to resolve a person slot's current name
+     * @param slotName the slot this value was bound to, or {@code ""} when the caller has no name
+     */
+    public static Component render(NarrativeValue value, ServerLevel level, String slotName) {
         if (value == null || value.isEmpty()) {
-            return Component.translatable(FALLBACK_KEY);
+            return fallback(slotName);
         }
         try {
             return switch (value.kind()) {
                 case TOKEN, ENUM_TOKEN -> Component.translatable(TOKEN_PREFIX + value.raw());
+                case LITERAL -> literalName(value, slotName);
                 case REGISTRY_ID -> registryName(value.raw());
                 case UUID_REF -> personName(value, level);
                 case BAND -> Component.translatable(TOKEN_PREFIX + "band."
@@ -60,8 +84,30 @@ public final class SlotRenderer {
                 case FLAG -> Component.translatable(TOKEN_PREFIX + (value.asFlag() ? "yes" : "no"));
             };
         } catch (Throwable t) {
-            return Component.translatable(FALLBACK_KEY);
+            return fallback(slotName);
         }
+    }
+
+    /** The best neutral phrase for a named slot that could not be rendered at all. */
+    public static Component fallbackFor(String slotName) {
+        return fallback(slotName);
+    }
+
+    private static Component fallback(String slotName) {
+        return Component.translatable(
+                SLOT_FALLBACKS.getOrDefault(slotName == null ? "" : slotName, FALLBACK_KEY));
+    }
+
+    /**
+     * A name the world supplied, spoken as it is written.
+     *
+     * <p>Sanitised again at render time rather than trusted from the binding: a value can also arrive
+     * from a save file, and a name carrying formatting codes would recolour the rest of the line.
+     * A name that sanitises away to nothing falls back rather than leaving a hole in the sentence.
+     */
+    private static Component literalName(NarrativeValue value, String slotName) {
+        String text = NarrativeValue.sanitize(value.raw());
+        return text.isEmpty() ? fallback(slotName) : Component.literal(text);
     }
 
     /**
