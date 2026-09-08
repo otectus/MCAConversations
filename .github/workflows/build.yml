@@ -112,7 +112,7 @@ jobs:
           # Every mixin in the config must actually attach. require=0 on most of them means a
           # missed target is silent at runtime, so this is where it has to be caught.
           for mixin in BreedableRelationshipMixin DialoguesMixin InteractionDialogueMessageMixin \
-                       McaNetworkMixin PlayerLegacyDataMixin QuestionMixin; do
+                       NetworkHandlerMixin PlayerLegacyDataMixin QuestionMixin; do
             grep -q "Mixing $mixin from mcaconversations.mixins.json" server.log \
               || fail "$mixin did not apply"
           done

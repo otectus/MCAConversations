@@ -44,8 +44,16 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   brush you off instead). Open the chat box and nearby villagers stop and turn to you expectantly;
   your conversation partner stays put, facing you, until a while after the conversation lapses —
   and still flees danger. Say *"bye"* or *"stop talking"* and they respect it, per villager.
-  Shout a question in the square and the villagers it applies to answer, staggered. Optional
-  radius-local chat (on by default, EXPERIMENTAL) keeps conversations neighborhood-scale.
+  Shout a question in the square and the villagers it applies to answer, staggered. Since a promise
+  comes due, an unacknowledged rupture, an open thread or a change in the villager's own situation
+  all take priority over a plain hello on the same approach roll (`InitiativePlanner`, wired through
+  `GreetOnApproach`) — the villager says that one line instead of hello. Both a greeting and a
+  planner initiative go through the same `InitiativeGate.decide`/`record`; only the budget weight
+  differs, so raising it never spends the greeting's one daily chance: a greeting is weighed as a
+  bark and spends nothing, while a planner initiative is weighed as a full initiative and spends the
+  day's one allowance.
+  Optional radius-local chat (**EXPERIMENTAL**, default off)
+  keeps conversations neighborhood-scale.
 - **A relationship deeper than hearts** — every villager quietly tracks how much they *trust*
   and *respect* you, how *warm* they feel around you, recent *tension*, and how long you've known
   each other. Hearts stay MCA's one visible number — the vector never shows and never grants
@@ -81,17 +89,17 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 
 ## Requirements
 
-Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires **MCA Reborn 7.7.36-beta.3 for
-NeoForge**.
+Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires **MCA Reborn** for NeoForge (the exact
+build is `mca_version` in `gradle.properties`).
 
-The MCA range is deliberately narrow (`[7.7.36-beta.3,7.7.37)`). This mod mixes into MCA
+The MCA range is deliberately narrow (`mca_version_range` in `gradle.properties`). This mod mixes into MCA
 internals, so every release it claims to support has to be tested against, not assumed. If you are
 on a different 7.7.x build and want it supported, say so rather than editing the range yourself —
 a mixin that silently stops applying looks like a missing feature, not a version mismatch.
 
 > **This jar is for NeoForge only and will not load on Forge 1.20.1.** The 1.20.1 Forge line is a
-> separate download (`mcaconversations-1.2.1.jar`); this one is
-> `mcaconversations-neoforge-2.0.0+1.21.1.jar`. They are not interchangeable in either direction.
+> separate download (`mcaconversations-<version>.jar`); this one is
+> `mcaconversations-neoforge-<version>+1.21.1.jar`. They are not interchangeable in either direction.
 
 > **Back up your world before upgrading.** Conversations migrates its own player data
 > automatically (see below), but MCA 7.7.36 also changes how it persists personalities and traits
@@ -133,14 +141,34 @@ MCA's dialogue system loads datapack JSON from any namespace and merges same-nam
 most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
 (`conversations_gossip`, `conversations_disposition`, `conversations_check`, `conversations_say`, ...) into
-MCA's public registries — no runtime patching of MCA except a handful of small, narrowly scoped
-mixins (the Chat→hub redirect, a gift observer, chat mode's dialogue-payload-to-chat redirect, a
-submission guard, and the hub-button visibility filter). Chat mode's matcher is a
+MCA's public registries — no runtime patching of MCA except a set of small, narrowly scoped mixins,
+all but one `require = 0` (`mcaconversations.mixins.json`'s `defaultRequire`), so a target that
+stops matching a future MCA build is a startup warning, not a crash — the exception is the
+1.20.1-save import (`PlayerLegacyDataMixin`), pinned to vanilla's own `Player#readAdditionalSaveData`
+at `require = 1`. Six apply to common code — the
+Chat→hub redirect (`DialoguesMixin`), a gift observer for the gratitude state
+(`BreedableRelationshipMixin`), chat mode's dialogue-payload-to-chat redirect (`NetworkHandlerMixin`),
+a GUI submission guard (`InteractionDialogueMessageMixin`), the hub/age answer-list filter
+(`QuestionMixin`), and the 1.20.1-save import (`PlayerLegacyDataMixin`) — and five to the client: a
+digit-shortcut adapter for vanilla's own chat screen (`ChatScreenChoiceMixin`) and one for MCA's own
+`InteractScreen` (`InteractScreenChoiceMixin`),
+the personality-locale gate widener (`MCAClientMixin`), and two Townstead-cooperation mixins
+(`TownsteadChoicePanelMixin`, `TownsteadRpgDialogueScreenMixin`). Chat mode's matcher is a
 second *frontend* to the same engine: free text resolves to the exact `(question, answer)` a GUI click
 would send, so parity is structural, not re-implemented; its intents live in
 `data/<any-namespace>/chat_intents/*.json` and are fully datapack-extensible (including synonym packs).
-The only client-side code is a one-byte "chat box open" ping so villagers can turn toward a typing
-player. The relationship vector lives in its own versioned world save data and
+
+Client-side code is not limited to a typing ping: `client/` holds 29 files. The typing tracker
+(`ChatTypingTracker`) is still the only one that reports anything back to the server — it edge-detects
+the vanilla chat screen so nearby villagers can turn toward a typing player — but the rest render or
+read local state: `client/dialogue` (22 files) builds the three configurable dialogue styles
+(`RESPONSIVE`, `MINIMAL`, `MCA_ORIGINAL` — `McaConversationsConfig.DialogueMenuStyle`), with portrait
+rendering, paging, digit-key shortcuts, transition-only narrator output and a per-character text
+reveal; `client/dialogue/dev` (3 files) is a dev-only in-game preview screen and command for the
+dialogue card; `client/townstead` (2 files) let Townstead's own choice panel accept the same
+numbered-digit shortcuts through a reflective adapter, without linking Townstead's classes in.
+
+The relationship vector lives in its own versioned world save data and
 **never touches hearts**: MCA's hearts remain the only authoritative, visible relationship number,
 and every heart change still flows through MCA's own dialogue actions. See
 [DATAPACK.md](DATAPACK.md) for the full JSON vocabulary (datapack authors can build on it, including
@@ -155,6 +183,20 @@ Unlike the 1.20.1 line, **`runClient` and `runServer` are valid tests of MCA int
 1.21.1 NeoForge jar uses official Mojang names, so it loads as a normal mod in a development
 runtime. On 1.20.1 its mixins were SRG-named with no refmap and only resolved in a production
 instance. The in-world acceptance checklist is in [CHANGELOG.md](CHANGELOG.md).
+
+### What is verified
+
+Every push runs the unit/lint suite and the real-jar MCA binding probes (`.github/workflows/build.yml`,
+`test` job, both Ubuntu and Windows) plus `verifyGeneratedConversationContent` and
+`verifyVoiceOverlays`, so an authoring source that was edited without regenerating its committed
+output fails CI. A separate `dedicated-server-smoke` job boots a real dedicated server against the
+resolved MCA jar, asserts a clean start, runs `/reload` and checks that the chat-intent, conversation-catalog
+and interiority-profile loaders re-ran, that no client class reached the server, and that the mod
+logged no error. The job also asserts that each of the six common mixins attached (the five client
+mixins are not asserted, since a dedicated server loads none), and that the workflow's list must be
+kept in sync with `mcaconversations.mixins.json` by hand. None of this is
+an in-game production check: those are still open and tracked per-finding in
+`docs/RELEASE-1.6.3-LEDGER.md`.
 
 ## License
 

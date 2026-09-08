@@ -1,6 +1,6 @@
 # PARITY.md — MCA: Conversations 1.20.1 Forge (v1.6.0) → 1.21.1 NeoForge
 
-> Historical 1.6.0 port record. For 1.6.1 changes, see [CHANGELOG.md](CHANGELOG.md); for stabilization validation and remaining gameplay checks, see [the stabilization report](docs/STABILIZATION-2026-09.md).
+> Historical 1.6.0 port record. For changes since, see the top entry of [CHANGELOG.md](CHANGELOG.md); for stabilization validation and remaining gameplay checks, see [the stabilization report](docs/STABILIZATION-2026-09.md).
 
 **Status:** Complete. Documentation updated to 1.6.0. SOURCE commit includes MCA: Capitals integration (1.5.2 dialogue presentation styles + 1.6.0 Capitals features).
 

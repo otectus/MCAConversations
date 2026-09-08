@@ -3,8 +3,8 @@
 Conversations's dialogue is ordinary MCA Reborn dialogue JSON, loaded by MCA itself from
 `data/<any-namespace>/dialogues/<question>.json`. Datapack authors can extend or override it, and
 can use this mod's custom conditions/actions in their own packs. Everything below is verified
-against the packaged MCA Reborn jars — 7.7.0-beta.2 (the build this mod is compiled against)
-and 7.6.20 (still supported at runtime).
+against the packaged MCA Reborn jars this port compiles against and probes (`mca_version` and
+`mca_probe_versions` in `gradle.properties`).
 
 ## How MCA loads dialogue (the parts that matter)
 
@@ -37,7 +37,8 @@ and 7.6.20 (still supported at runtime).
   `{"chance": -1000, "hearts_max": 24}` kills a result outright when hearts ≤ 24.
 - **MCA parses condition values strictly at load, with NO error containment.** An invalid enum
   value (e.g. a bad `current_chore`) throws out of `Dialogues.apply` and **crashes the game during
-  world creation / any datapack reload**. Valid values (MCA 7.6.26):
+  world creation / any datapack reload**. Valid values (the MCA build this port compiles against —
+  `mca_version` in `gradle.properties`):
   - `current_chore`: `none, prospect, harvest, chop, hunt, fish`
   - `mood`: `depressed, sad, unhappy, passive, fine, happy, overjoyed` (string-compared — a bad
     value silently never matches rather than crashing)
@@ -61,7 +62,7 @@ and 7.6.20 (still supported at runtime).
   This mod's own `conversations_*` keys are **parse-safe**: malformed JSON logs an ERROR and the entry
   degrades to a no-op action / never-matching condition instead of crashing the reload.
 
-### Three engine rules that decide how you author a result (verified in 7.6.20 and 7.7.0-beta.2)
+### Three engine rules that decide how you author a result (verified against the MCA builds in `gradle.properties`'s `mca_version` and `mca_probe_versions`)
 
 These are not obvious from the JSON, and getting any of them wrong produces content that looks fine
 and behaves strangely. All three are enforced by `ConversationGraphLintTest`.
@@ -83,6 +84,23 @@ and behaves strangely. All three are enforced by `ConversationGraphLintTest`.
 3. **An `auto` question must have exactly one answer.** `Actions.next` calls `getRandomAnswer()` on an
    auto question, and answers *merge across datapacks*, so a second answer turns the node into a coin
    flip that a third-party pack can introduce without touching your file.
+
+### Answer `constraints` (MCA's native vocabulary)
+
+An answer's own `constraints` array is MCA's native gate, separate from this mod's result-level
+conditions above — it decides whether the answer is offered at all, evaluated by MCA itself before
+any `conversations_*` condition sees it. **There is no `child` token.** Nine shipped answers used to
+carry `!child` to keep a topic off small children; MCA's real `Constraint` registry has no `child`
+entry and silently drops a token it does not recognise, so that exclusion never took effect. The base
+ids (each usable plain or negated with `!`, checked in as `NativeConstraintTokens.BASE` and
+cross-checked against real MCA jars by `ConstraintVocabularyProbeTest`) are: `family`, `relative`,
+`baby`, `toddler`, `teen`, `adult`, `spouse`, `engaged`, `promised`, `kids`, `parent`, `cleric`,
+`adventurer`, `mercenary`, `outlawed`, `trader`, `peasant`, `noble`, `mayor`, `monarch`, `orphan`,
+`following`, `staying`, `village_has_space`, `has_village`, `hit_by`, `riding`. `relative` and
+`riding` arrived in MCA 7.7 and are present on every build this port's declared range (`mca_version_range`
+in `gradle.properties`) can run against. `ContentLintTest` fails the build if any shipped constraint token is not one of
+these, plain or negated — author age exclusion through the conversation catalog's `ages` allow-list
+below, not through a constraint.
 
 ## MCA's LongTermMemory (what `memory`/`remember` really do)
 
@@ -147,8 +165,8 @@ Available only when MCA Capitals is installed and the `[capitals]` master switch
 
 | Key | Value | Meaning |
 |---|---|---|
-| `conversations_enabled` | `"topics" \| "states" \| "templates" \| "gossip" \| "quests" \| "world" \| "dispositions" \| "checks" \| "chat" \| "capitals" \| "capital_topics" \| "capital_news" \| "capital_diplomacy"` | 1 when that config feature is on, else 0 |
-| `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch |
+| `conversations_enabled` | one of the closed `FeatureId` ids — `topics`, `states`, `templates`, `gossip`, `quests`, `world`, `seasons`, `holidays`, `dispositions`, `checks`, `branching`, `chat`, `townstead`, `capitals`, `capital_topics`, `capital_news`, `capital_diplomacy`, `dynamic`, `identity`, `episodes`, `history`, `social_opinions`, `village_culture`, `group` | 1 when that config feature is on, else 0. Feature ids resolve through one closed registry (`FeatureId`); it currently defines no aliases, only these 24 canonical ids. **An id `FeatureId` does not know is an invalid reference, not a feature**: both `conversations_enabled` and `conversations_disabled` score 0 on it, and it is logged once at WARN (`McaConversationsConfig.warnUnknownFeature`) rather than silently defaulting to enabled |
+| `conversations_disabled` | same | inverse — pair with a large negative `chance` as a kill-switch. Same unknown-id behavior as `conversations_enabled`: it also scores 0, never 1, so a typo cannot make a sink permanently unable to fire |
 | `conversations_gossip` | `{"types": ["marriage","divorce","death","birth","arrival","departure","quest","coronation","royal_marriage","royal_birth","royal_death","appointment","disgrace","war","peace","alliance","capital_founded","court_news"]?, "max_age": <ticks>?}` | 1 when the villager's home village has an event matching the filter that this villager hasn't told this player (defaults: all types, 72000 ticks) |
 | `conversations_weather` | `{"is": "clear" \| "rain" \| "storm"}` | 1 when the current sky in the villager's level matches (storm outranks rain outranks clear); 0 when `enableWeatherLines` is off |
 | `conversations_season` | `{"is": "spring" \| "summer" \| "autumn" \| "winter"}` | 1 when the current season matches — read from Serene Seasons if installed, else the calendar season from the world day; 0 when `enableSeasonLines` is off |
@@ -227,7 +245,12 @@ already does it.
 **The conversation catalog** (`data/<namespace>/conversation_catalog/*.json`) is the machine-readable
 claim that a topic exists. It is not a second dialogue engine; MCA's JSON stays authoritative. It
 exists so lint can check that every shipped topic really became a conversation, and so arc, milestone
-and exclusive ids are declared in exactly one place a typo cannot slip past:
+and exclusive ids are declared in exactly one place a typo cannot slip past. Files load through the
+same `SimpleJsonResourceReloadListener` pattern as the chat-intent loader (`ConversationCatalogLoader`):
+on a reload, every file across every pack is merged in a fixed **sorted** order (by resource location),
+so which file wins a colliding topic id is deterministic across machines and reloads, never dependent
+on pack-stack iteration order; a colliding id is reported once at WARN naming every declaring file and
+the one that won:
 
 ```json
 {"topics": {"day": {
@@ -239,6 +262,21 @@ and exclusive ids are declared in exactly one place a typo cannot slip past:
   "chat_required": true
 }}}
 ```
+
+`ages` is an allow-list drawn from `AgeGroup`'s four **authorable** groups — `toddler`, `child`,
+`teen`, `adult` (`AgeGroup.parse` rejects anything else, including `baby`: MCA's own babies never
+hold a conversation at all, so a topic cannot be authored for them). An unreadable age (MCA absent, an
+unassigned age state, a future MCA age this port does not know) never satisfies the allow-list, even
+an allow-list that names every authorable group. `TopicAgeGate` is applied on every entry path a
+catalogued topic can be reached from except one: the MCA dialogue screen's answer list
+(`mixin/QuestionMixin`, which removes an under-age answer before it is ever clickable — MCA's own
+result conditions run too late to hide a menu entry), dialogue-screen submissions
+(`mixin/InteractionDialogueMessageMixin`), the numbered-choice packet
+(`conversation/ChoiceSelectionService`) and free-text chat (`chat/GatePreview`) all call
+`TopicAgeGate.allows`. The fifth path, dynamic hub routing (`hub/DynamicHub`), applies
+`TopicEntry.allowsAge` directly rather than going through `TopicAgeGate`, dropping an under-age slot
+before it is ever built. A topic with no catalog row is not gated by any of this — it is left exactly
+as MCA's own dialogue JSON offers it.
 
 Stance families are the shared vocabulary for *what kind of thing the player just said*: `empathy`,
 `curiosity`, `candor`, `encouragement`, `practical_help`, `humor`, `respectful_disagreement`,

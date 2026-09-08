@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file. Format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow SemVer.
 
 Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA Reborn
-`[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.8)`.
+`[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.8)`. As of 1.6.3, this release is built against the
+compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.4.1, vendored in `libs/api/` and hash-pinned by `gradle/sibling-apis.properties`; those jars are not packaged.
 
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
@@ -143,9 +144,11 @@ alongside.
 - **A villager could remember telling you something you never saw, and some ways of leaving left
   state behind.** A delayed chat reply that got dropped because the player walked away, died or
   logged out had already been recorded as played at the moment the answer was chosen; and the several
-  ways a conversation could end — logout, death, timeout, an authored ending, a datapack reload, an
-  out-of-range abort — each cleared a different subset of state, so an attention lease or a queued
-  line could survive its own conversation. Every close path now names its reason
+  ways a conversation could end — full teardowns (logout, player or villager death, timeout, server
+  stop, and an out-of-range/dimension-change/player-gone abort before an answer runs) and topic-only
+  endings that leave the session in place (an authored ending, a reload refusal) — each cleared a
+  different subset of state, so an attention lease or a queued line could survive its own
+  conversation. Every close path now names its reason
   (`conversation/CloseReason`, an operational fact never a social consequence — `PLAYER_LEFT` is not a
   snub and `TIMED_OUT` is not boredom), and one teardown, `ConversationSessions#close`, ends the topic,
   releases both the villager's and the player's attention leases, and drops that player's queued lines

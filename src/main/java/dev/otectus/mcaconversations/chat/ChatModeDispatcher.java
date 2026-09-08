@@ -699,7 +699,7 @@ public final class ChatModeDispatcher {
                 player, target.entity(), engageRadius * engageRadius);
         if (!verdict.ok()) {
             McaConversations.LOGGER.debug("chat-mode answer abandoned before selectAnswer: {}", verdict);
-            ConversationSessions.endTopic(player.getUUID(), now,
+            ConversationSessions.close(player.getUUID(),
                     dev.otectus.mcaconversations.conversation.CloseReason.of(verdict));
             return;
         }

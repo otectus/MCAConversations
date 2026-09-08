@@ -85,6 +85,13 @@ The live villager portrait is intentionally omitted regardless of `showSpeakerPo
 | `enableWeatherLines` | `true` | weather-aware lines are off; the `conversations_weather` condition and the `world` feature flag score as disabled |
 | `enableBranching` | `true` | converted topics fall back to their 1.0.0 one-line result and return to the category, payout and all. Nothing is ever left as an empty page: each starter carries an explicit legacy fallback |
 
+Content and these options both name features through one closed registry, `FeatureId`. A
+`conversations_enabled`/`conversations_disabled` condition (or a direct
+`McaConversationsConfig.isFeatureEnabled(String)` call) that names an id `FeatureId` does not
+recognise — a typo, or a feature this build has since renamed — is treated as **disabled**, logged
+once at WARN, and never as enabled: content that names an unknown feature id is invalidated rather
+than switched on.
+
 ### `hubEntryMode` (default `ADDITIVE`)
 
 How the Conversations hub is reached from MCA's villager **interaction screen**. Replaces the old
