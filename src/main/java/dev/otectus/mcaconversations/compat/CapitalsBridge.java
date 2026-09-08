@@ -93,6 +93,15 @@ public interface CapitalsBridge {
         return capabilities().contains(capability);
     }
 
+    /**
+     * Drops whatever this bridge has cached, without unbinding it. Called when a server stops,
+     * because in singleplayer the process outlives the world and a cache keyed by uuid would
+     * otherwise carry one save's answers into the next. The default is the no-op an implementation
+     * that caches nothing wants.
+     */
+    default void clearCaches() {
+    }
+
     /** True when Capitals is installed and at least its core capability bound. */
     default boolean isAvailable() {
         return status() == CapitalsStatus.FULL || status() == CapitalsStatus.PARTIAL;
@@ -115,6 +124,14 @@ public interface CapitalsBridge {
         /** Set once from {@link CapitalsCompat#init()}; last writer wins. */
         public static void set(CapitalsBridge bridge) {
             instance = bridge == null ? NoopCapitalsBridge.INSTANCE : bridge;
+        }
+
+        /**
+         * Empties the live bridge's caches and leaves it installed. The binding is a property of the
+         * jars on disk, so it stays good across a world change; only the data it cached does not.
+         */
+        public static void clearCaches() {
+            instance.clearCaches();
         }
     }
 }
