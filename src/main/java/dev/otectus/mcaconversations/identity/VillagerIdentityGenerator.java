@@ -1,5 +1,7 @@
 package dev.otectus.mcaconversations.identity;
 
+import dev.otectus.mcaconversations.conversation.AgeGroup;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -39,7 +41,7 @@ public final class VillagerIdentityGenerator {
     }
 
     /** Ages that get no work style, because they have no work to have a style about. */
-    private static final Set<String> NON_WORKING_AGES = Set.of("baby", "child");
+    private static final Set<AgeGroup> NON_WORKING_AGES = Set.of(AgeGroup.BABY, AgeGroup.CHILD);
 
     /**
      * The stable seed for one villager.
@@ -92,7 +94,7 @@ public final class VillagerIdentityGenerator {
                 normalizedAge, normalizedProfession, normalizedArchetype, normalizedPersonality);
         String aversion = pickOne(catalog, IdentityFamily.AVERSION, draws, taken,
                 normalizedAge, normalizedProfession, normalizedArchetype, normalizedPersonality);
-        String workStyle = NON_WORKING_AGES.contains(normalizedAge)
+        String workStyle = NON_WORKING_AGES.contains(AgeGroup.fromMca(normalizedAge))
                 ? ""
                 : pickOne(catalog, IdentityFamily.WORK_STYLE, draws, taken,
                         normalizedAge, normalizedProfession, normalizedArchetype, normalizedPersonality);

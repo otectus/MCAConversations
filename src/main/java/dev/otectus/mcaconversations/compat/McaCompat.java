@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.compat;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.locale.LineVoice;
 import dev.otectus.mcaconversations.compat.mca.McaHandles;
+import dev.otectus.mcaconversations.conversation.AgeGroup;
 import dev.otectus.mcaconversations.personality.Personalities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -330,6 +331,14 @@ public final class McaCompat {
      */
     public static Optional<String> getAgeGroup(Entity villager) {
         return Optional.ofNullable(McaHandles.ageStateName(villager));
+    }
+
+    /**
+     * The same read as {@link #getAgeGroup}, typed. An unreadable or unrecognised age state is
+     * {@link AgeGroup#UNKNOWN}, which no age allow-list ever admits.
+     */
+    public static AgeGroup ageGroup(Entity villager) {
+        return AgeGroup.fromMca(McaHandles.ageStateName(villager));
     }
 
     // ------------------------------------------------------------------

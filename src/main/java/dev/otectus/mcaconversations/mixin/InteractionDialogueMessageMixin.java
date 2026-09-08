@@ -6,6 +6,7 @@ import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
 import dev.otectus.mcaconversations.conversation.ConversationGuard;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.TopicAgeGate;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
@@ -101,7 +102,11 @@ public abstract class InteractionDialogueMessageMixin {
             if (villager == null || !villager.isAlive() || !McaCompat.isMcaVillager(villager)
                     || player.distanceToSqr(villager) > 64.0D
                     || !McaCompat.isInteractingWith(villager).filter(player.getUUID()::equals).isPresent()
-                    || !McaCompat.checkConstraints(villager, player, question, answer)) {
+                    || !McaCompat.checkConstraints(villager, player, question, answer)
+                    // MCA's constraints cannot express the catalog's age allow-list (there is no
+                    // 'child' token), so a packet naming a teen-and-adult topic has to be refused here
+                    // rather than trusted because the button was clickable.
+                    || !TopicAgeGate.allows(question, answer, villager)) {
                 ci.cancel();
                 return;
             }

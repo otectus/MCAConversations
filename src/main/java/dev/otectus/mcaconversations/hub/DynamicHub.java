@@ -2,6 +2,11 @@ package dev.otectus.mcaconversations.hub;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
+import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.AgeGroup;
+import dev.otectus.mcaconversations.conversation.ConversationCatalog;
+import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.history.EpisodeRecord;
 import dev.otectus.mcaconversations.history.History;
 import dev.otectus.mcaconversations.history.PairHistory;
@@ -70,7 +75,7 @@ public final class DynamicHub {
         }
         HubPlan plan = HubPlan.EMPTY;
         try {
-            if (McaConversationsConfig.dynamicFeature("dynamic", false) && slotBudget() > 0
+            if (McaConversationsConfig.dynamicFeature(FeatureId.DYNAMIC, false) && slotBudget() > 0
                     && villager != null) {
                 plan = planFor(villager, player, today);
             }
@@ -120,8 +125,25 @@ public final class DynamicHub {
         }
         Optional<PairHistory> pair = history.get().peekPair(player.getUUID());
         List<EpisodeRecord> live = history.get().liveEpisodes(today);
-        return build(pair.map(record -> record.resumable(today)).orElse(List.of()),
+        HubPlan plan = build(pair.map(record -> record.resumable(today)).orElse(List.of()),
                 live, player.getUUID(), slotBudget());
+        return withoutTopicsTooOldFor(plan, McaCompat.ageGroup(villager));
+    }
+
+    /**
+     * Drops entries the catalog says this villager is too young to be asked about. The hub is an
+     * entry path like any other, and a slot that opened a teen-and-adult topic on a child would walk
+     * straight past the allow-list the answer list and the packets enforce.
+     */
+    static HubPlan withoutTopicsTooOldFor(HubPlan plan, AgeGroup age) {
+        ConversationCatalog catalog = ConversationCatalogLoader.active();
+        List<HubSlot> kept = new ArrayList<>(plan.slots().size());
+        for (HubSlot slot : plan.slots()) {
+            if (catalog.topic(slot.topic()).map(entry -> entry.allowsAge(age)).orElse(true)) {
+                kept.add(slot);
+            }
+        }
+        return kept.size() == plan.slots().size() ? plan : new HubPlan(kept);
     }
 
     /**

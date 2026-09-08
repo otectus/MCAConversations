@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.chat.group;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.chat.ChatDelivery;
 import dev.otectus.mcaconversations.chat.VillagerFinder;
 import dev.otectus.mcaconversations.compat.McaCompat;
@@ -44,7 +45,7 @@ public final class GroupDirector {
     }
 
     public static boolean enabled() {
-        return McaConversationsConfig.dynamicFeature("group", false);
+        return McaConversationsConfig.dynamicFeature(FeatureId.GROUP, false);
     }
 
     /**

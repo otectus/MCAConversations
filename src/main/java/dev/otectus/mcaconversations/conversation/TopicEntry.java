@@ -28,7 +28,7 @@ public record TopicEntry(String id,
                          String entryAnswer,
                          DepthClass depth,
                          String returnQuestion,
-                         Set<String> ages,
+                         Set<AgeGroup> ages,
                          Set<StanceFamily> requiredStanceFamilies,
                          boolean chatRequired,
                          Optional<Arc> arc,
@@ -36,7 +36,8 @@ public record TopicEntry(String id,
                          Map<String, Set<String>> exclusiveGroups) {
 
     /** MCA's age vocabulary, minus {@code baby} — babies babble and are never catalog topics. */
-    public static final Set<String> AGE_GROUPS = Set.of("toddler", "child", "teen", "adult");
+    public static final Set<AgeGroup> AGE_GROUPS =
+            Set.of(AgeGroup.TODDLER, AgeGroup.CHILD, AgeGroup.TEEN, AgeGroup.ADULT);
 
     /** Bare, dot-separated lowercase ids — the shape every arc, milestone and exclusive id must take. */
     public static final Pattern ID = Pattern.compile("[a-z0-9_]+(\\.[a-z0-9_]+)*");
@@ -65,13 +66,11 @@ public record TopicEntry(String id,
                         "topic '" + id + "' has an unknown depth class"));
         String returnQuestion = requireString(json, "return_question", id);
 
-        Set<String> ages = new LinkedHashSet<>();
+        Set<AgeGroup> ages = new LinkedHashSet<>();
         for (JsonElement element : requireArray(json, "ages", id)) {
             String age = element.getAsString();
-            if (!AGE_GROUPS.contains(age)) {
-                throw new IllegalArgumentException("topic '" + id + "' lists unknown age group '" + age + "'");
-            }
-            ages.add(age);
+            ages.add(AgeGroup.parse(age).orElseThrow(() -> new IllegalArgumentException(
+                    "topic '" + id + "' lists unknown age group '" + age + "'")));
         }
         if (ages.isEmpty()) {
             throw new IllegalArgumentException("topic '" + id + "' must list at least one age group");
@@ -133,9 +132,13 @@ public record TopicEntry(String id,
                 Set.copyOf(milestones), Map.copyOf(exclusiveGroups));
     }
 
-    /** True when this topic may be entered by a villager of the given MCA age group. */
-    public boolean allowsAge(String ageGroup) {
-        return ageGroup != null && ages.contains(ageGroup);
+    /**
+     * True when this topic may be entered by a villager of the given age group. An
+     * {@link AgeGroup#UNKNOWN} age passes no allow-list: an age we could not read is not an age we
+     * may assume is old enough.
+     */
+    public boolean allowsAge(AgeGroup ageGroup) {
+        return ageGroup != null && ageGroup != AgeGroup.UNKNOWN && ages.contains(ageGroup);
     }
 
     private static String requireString(JsonObject json, String field, String topicId) {

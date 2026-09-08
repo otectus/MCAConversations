@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.compat;
 
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.support.TestPaths;
 
 import org.junit.jupiter.api.AfterEach;
@@ -149,21 +150,19 @@ class CapitalsBridgeTest {
     }
 
     /**
-     * Read from source rather than by calling {@code isFeatureEnabled}, because a COMMON spec value
-     * throws until its file is loaded and no file is loaded in a unit run. What matters is that each
-     * feature id has a case at all: an id with no case falls through to the default and scores as
-     * enabled forever, so a {@code conversations_disabled} sink on it could never fire.
+     * Each capital feature must be a constant of the closed {@link FeatureId} registry. An id with no
+     * constant does not resolve at all, so a {@code conversations_enabled} on it scores 0 and the
+     * capital content it gates would simply never appear.
      */
     @Test
-    void everyCapitalFeatureIdHasItsOwnCase() throws IOException {
-        String source = Files.readString(SOURCE_ROOT.resolve("McaConversationsConfig.java"),
-                StandardCharsets.UTF_8);
-
+    void everyCapitalFeatureIdHasItsOwnConstant() throws IOException {
         for (String feature : List.of("capitals", "capital_topics", "capital_news",
                 "capital_diplomacy")) {
-            assertTrue(source.contains("case \"" + feature + "\""),
-                    feature + " has no case in isFeatureEnabled, so it can never be switched off.");
+            assertTrue(FeatureId.parse(feature).isPresent(),
+                    feature + " is not a FeatureId, so it can neither be read nor switched off.");
         }
+        String source = Files.readString(SOURCE_ROOT.resolve("McaConversationsConfig.java"),
+                StandardCharsets.UTF_8);
         assertTrue(source.contains("b.push(\"capitals\")"),
                 "The [capitals] config section must exist for those switches to read.");
     }

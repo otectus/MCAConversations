@@ -54,7 +54,10 @@ public final class ChoiceSelectionService {
 
         String question = offer.questionId();
         String answer = offer.answerIds().get(absoluteIndex);
-        if (!McaCompat.checkConstraints(villager, player, question, answer)) {
+        if (!McaCompat.checkConstraints(villager, player, question, answer)
+                // The same age allow-list the GUI answer list and the direct packet enforce; a
+                // numbered reply must not be a way around it.
+                || !TopicAgeGate.allows(question, answer, villager)) {
             rejectClient(player, revision);
             return false;
         }

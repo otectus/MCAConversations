@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.history;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -37,12 +38,12 @@ public final class History {
     }
 
     public static boolean enabled() {
-        return McaConversationsConfig.dynamicFeature("history", false);
+        return McaConversationsConfig.dynamicFeature(FeatureId.HISTORY, false);
     }
 
     /** True when episodes may be created and advanced at all. */
     public static boolean episodesEnabled() {
-        return McaConversationsConfig.dynamicFeature("episodes", false);
+        return McaConversationsConfig.dynamicFeature(FeatureId.EPISODES, false);
     }
 
     // --- Reads ---------------------------------------------------------------------------------------
@@ -382,7 +383,7 @@ public final class History {
      * rather than one villager's copy of it.
      */
     public static boolean putEpisode(Entity villager, EpisodeRecord episode) {
-        if (!McaConversationsConfig.dynamicFeature("episodes", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.EPISODES, false)
                 || villager == null || episode == null) {
             return false;
         }
@@ -409,7 +410,7 @@ public final class History {
      * moves.
      */
     public static boolean correctEpisode(Entity villager, UUID episodeId) {
-        if (!McaConversationsConfig.dynamicFeature("episodes", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.EPISODES, false)
                 || villager == null || episodeId == null) {
             return false;
         }
@@ -435,7 +436,7 @@ public final class History {
 
     /** Records or adjusts one caused opinion of a named neighbour. */
     public static void recordOpinion(Entity villager, SocialOpinionRecord opinion) {
-        if (!McaConversationsConfig.dynamicFeature("social_opinions", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.SOCIAL_OPINIONS, false)
                 || villager == null || opinion == null) {
             return;
         }
@@ -461,7 +462,7 @@ public final class History {
      * where a villager knows they dislike somebody but has forgotten that they work with them.
      */
     public static void recordRole(Entity villager, SocialRoleRecord role) {
-        if (!McaConversationsConfig.dynamicFeature("social_opinions", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.SOCIAL_OPINIONS, false)
                 || villager == null || role == null) {
             return;
         }
@@ -479,7 +480,7 @@ public final class History {
 
     /** Ends a role because the arrangement behind it has ended. */
     public static void withdrawRole(Entity villager, UUID target, SocialRole role) {
-        if (!McaConversationsConfig.dynamicFeature("social_opinions", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.SOCIAL_OPINIONS, false)
                 || villager == null || target == null || role == null) {
             return;
         }

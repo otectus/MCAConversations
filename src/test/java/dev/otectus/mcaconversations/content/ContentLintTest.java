@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.otectus.mcaconversations.check.CheckDefinition;
+import dev.otectus.mcaconversations.conversation.AgeGroup;
 import dev.otectus.mcaconversations.check.CheckTier;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
@@ -126,10 +127,8 @@ class ContentLintTest {
     private static final Set<String> PERSONALITIES = Personalities.overlayPrefixes();
     private static final Set<String> AGE_GROUPS = Set.of("unassigned", "baby", "toddler", "child", "teen", "adult");
     private static final Set<String> RANKS = Set.of("outlaw", "peasant", "merchant", "noble", "mayor", "monarch");
-    private static final Set<String> CONSTRAINTS = Set.of(
-            "family", "spouse", "kids", "parent", "adult", "teen", "toddler", "baby", "engaged",
-            "promised", "cleric", "adventurer", "mercenary", "outlawed", "trader", "orphan",
-            "has_village", "following", "hit_by", "mayor", "monarch", "noble", "peasant");
+    /** MCA's real constraint vocabulary; see {@link NativeConstraintTokens} for where it comes from. */
+    private static final Set<String> CONSTRAINTS = Set.copyOf(NativeConstraintTokens.BASE);
     private static final Set<String> FEATURES = Set.of(
             "topics", "states", "templates", "gossip", "quests", "world", "dispositions", "checks",
             // "world" gates weather only; seasons and holidays have their own flags, and until
@@ -247,6 +246,67 @@ class ContentLintTest {
                 }
             }
         }));
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /**
+     * Every {@code constraints} string in the corpus, wherever it sits — on an answer as well as in a
+     * result condition. MCA silently ignores a token it does not know, so an invented one is not an
+     * error at load, it is an exclusion that never happens: nine answers shipped {@code !child} for
+     * versions before anyone noticed the age gate was inert.
+     */
+    @Test
+    void everyConstraintTokenIsOneMcaActuallyHas() throws IOException {
+        List<String> problems = new ArrayList<>();
+        try (Stream<Path> files = Files.list(DIALOGUES)) {
+            for (Path file : files.filter(path -> path.toString().endsWith(".json")).toList()) {
+                JsonElement root = JsonParser.parseString(Files.readString(file));
+                collectConstraintProblems(root, file.getFileName().toString(), problems);
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    private static void collectConstraintProblems(JsonElement element, String where, List<String> problems) {
+        if (element.isJsonObject()) {
+            for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
+                if ("constraints".equals(entry.getKey()) && entry.getValue().isJsonPrimitive()) {
+                    for (String token : entry.getValue().getAsString().split(",")) {
+                        String trimmed = token.strip();
+                        if (!trimmed.isEmpty() && !NativeConstraintTokens.ALL.contains(trimmed)) {
+                            problems.add(where + ": '" + trimmed + "' is not an MCA constraint, so it"
+                                    + " constrains nothing at all");
+                        }
+                    }
+                } else {
+                    collectConstraintProblems(entry.getValue(), where, problems);
+                }
+            }
+        } else if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                collectConstraintProblems(child, where, problems);
+            }
+        }
+    }
+
+    /** Every catalog age is one the runtime can act on; an unparsable one would silently allow nobody. */
+    @Test
+    void everyCatalogAgeParses() throws IOException {
+        JsonObject topics = JsonParser.parseString(Files.readString(ContentFixture.TOPICS))
+                .getAsJsonObject().getAsJsonObject("topics");
+        List<String> problems = new ArrayList<>();
+        for (Map.Entry<String, JsonElement> topic : topics.entrySet()) {
+            JsonArray ages = topic.getValue().getAsJsonObject().getAsJsonArray("ages");
+            if (ages == null || ages.isEmpty()) {
+                problems.add(topic.getKey() + ": no ages listed");
+                continue;
+            }
+            for (JsonElement age : ages) {
+                if (AgeGroup.parse(age.getAsString()).isEmpty()) {
+                    problems.add(topic.getKey() + ": '" + age.getAsString() + "' is not an authorable age group");
+                }
+            }
+        }
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
     }
 

@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.identity;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.personality.Personalities;
 import dev.otectus.mcaconversations.profession.ProfessionProfile;
@@ -39,7 +40,7 @@ public final class Identity {
 
     /** True when identity is switched on. Callers use it to skip work, never to fabricate a default. */
     public static boolean enabled() {
-        return McaConversationsConfig.dynamicFeature("identity", false);
+        return McaConversationsConfig.dynamicFeature(FeatureId.IDENTITY, false);
     }
 
     /**

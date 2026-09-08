@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.scene;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.context.ContextRequest;
 import dev.otectus.mcaconversations.context.ContextFingerprint;
 import dev.otectus.mcaconversations.context.ContextKey;
@@ -60,7 +61,7 @@ public final class ConversationPlanner {
      */
     public static void onAnswerSubmitted(Entity villager, ServerPlayer player,
                                          String question, String answer) {
-        if (!McaConversationsConfig.dynamicFeature("dynamic", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.DYNAMIC, false)
                 || villager == null || player == null) {
             return;
         }

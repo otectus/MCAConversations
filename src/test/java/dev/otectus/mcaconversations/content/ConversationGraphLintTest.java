@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.otectus.mcaconversations.conversation.AgeGroup;
 import dev.otectus.mcaconversations.conversation.RelationshipBand;
 import dev.otectus.mcaconversations.conversation.RelationshipQuery;
 import dev.otectus.mcaconversations.conversation.ConversationCatalog;
@@ -132,14 +133,14 @@ class ConversationGraphLintTest {
     }
 
     /**
-     * The catalog's {@code ages} and the opener's {@code constraints} are two statements of the same
-     * fact, and nothing used to make them agree — four topics declared {@code ["adult"]} while their
-     * openers were gated only {@code !toddler,!baby}, so a child could be asked to keep an adult's
-     * secret. Age is decided by the button being offered at all, so the constraint string on the
-     * starter answer is the thing that has to match.
+     * A topic must be reachable by every age it declares. The opener's {@code constraints} may be
+     * <em>wider</em> than the catalog, because MCA's vocabulary cannot express the whole allow-list —
+     * there is no {@code child} token — and {@code TopicAgeGate} enforces the catalog's narrower list
+     * on every entry path instead. What it may never be is narrower: a topic declaring an age no
+     * button offers to is a row describing content nobody can reach.
      */
     @Test
-    @DisplayName("a topic's declared ages match the ages its opener is actually offered to")
+    @DisplayName("a topic's opener is offered to every age the catalog declares")
     void catalogAgesMatchOpenerGating() {
         List<String> problems = new ArrayList<>();
         for (TopicEntry topic : catalog.topics()) {
@@ -156,16 +157,12 @@ class ConversationGraphLintTest {
             Set<String> offered = new LinkedHashSet<>(agesPermittedBy(constraints));
             offered.retainAll(agesReaching(topic.entryQuestion()));
             for (String age : AGE_GROUPS) {
-                boolean declared = topic.allowsAge(age);
+                boolean declared = AgeGroup.parse(age).filter(topic::allowsAge).isPresent();
                 boolean reachable = offered.contains(age);
                 if (declared && !reachable) {
                     problems.add(topic.id() + ": catalog lists age '" + age + "' but nothing offers the"
                             + " opener to them — the answer's constraints are '" + constraints
                             + "' and the page itself is only reachable by " + agesReaching(topic.entryQuestion()));
-                } else if (!declared && reachable) {
-                    problems.add(topic.id() + ": a '" + age + "' villager can be asked this but the"
-                            + " catalog does not list that age — add \"" + age + "\" to ages, or tighten"
-                            + " the constraints on " + topic.entryQuestion() + "/" + topic.entryAnswer());
                 }
             }
         }
