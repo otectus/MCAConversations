@@ -1,6 +1,9 @@
 package dev.otectus.mcaconversations.conversation;
 
+import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.chat.ChatModeScheduler;
+import dev.otectus.mcaconversations.chat.VillagerAttention;
 
 import java.util.List;
 import java.util.Map;
@@ -113,21 +116,58 @@ public final class ConversationSessions {
         return session;
     }
 
-    public static void endTopic(UUID playerId, long now) {
-        peek(playerId, now).ifPresent(ConversationSession::endTopic);
+    /**
+     * Ends the current topic, stamping why, while the session itself stays: the player is still
+     * standing in front of the villager and the exchange's cross-topic memory (recent beats, applied
+     * heart caps) is still theirs. Deliberately <em>not</em> a teardown — a farewell line for this
+     * very ending may still be queued behind its humanized delay, and a topic that ends never means
+     * the pair stopped talking. {@link #close} is the teardown.
+     */
+    public static void endTopic(UUID playerId, long now, CloseReason reason) {
+        peek(playerId, now).ifPresent(session -> {
+            session.endTopic();
+            session.noteClosed(reason);
+        });
+    }
+
+    /**
+     * The one teardown path: the conversation is over for good. Removes the session, stamps the
+     * reason on the (now detached) object, hands the villager its day back, drops every attention
+     * lease aimed at the player, and cancels any reply still waiting in the delivery queue — a line
+     * scheduled for a player who has logged out or died must never surface later.
+     *
+     * @return the removed session, or empty when the player had none.
+     */
+    public static Optional<ConversationSession> close(UUID playerId, CloseReason reason) {
+        if (playerId == null) {
+            return Optional.empty();
+        }
+        ConversationSession session = SESSIONS.remove(playerId);
+        if (session != null) {
+            session.endTopic();
+            session.noteClosed(reason);
+            VillagerAttention.release(session.villagerId());
+        }
+        VillagerAttention.clearPlayer(playerId);
+        ChatModeScheduler.clearPlayer(playerId);
+        McaConversations.LOGGER.debug("conversation session closed for {}: {} (had session: {})",
+                playerId, reason, session != null);
+        return Optional.ofNullable(session);
     }
 
     /** Drops a player's session entirely (logout, death). */
-    public static void clear(UUID playerId) {
-        SESSIONS.remove(playerId);
+    public static void clear(UUID playerId, CloseReason reason) {
+        close(playerId, reason);
     }
 
-    /** Ends any session pointed at a villager that just died or was removed. */
-    public static void clearVillager(UUID villagerId) {
-        for (ConversationSession session : SESSIONS.values()) {
+    /** Closes every session pointed at a villager that just died or was removed. */
+    public static void clearVillager(UUID villagerId, CloseReason reason) {
+        if (villagerId == null) {
+            return;
+        }
+        for (ConversationSession session : List.copyOf(SESSIONS.values())) {
             if (villagerId.equals(session.villagerId())) {
-                session.endTopic();
-                session.setVillagerId(null);
+                close(session.playerId(), reason);
             }
         }
     }
@@ -160,10 +200,10 @@ public final class ConversationSessions {
     public static int sweep(long now) {
         long hardTimeout = (long) timeoutTicks() * 4L;
         int removed = 0;
-        for (Map.Entry<UUID, ConversationSession> entry : SESSIONS.entrySet()) {
+        for (Map.Entry<UUID, ConversationSession> entry : List.copyOf(SESSIONS.entrySet())) {
             if (!entry.getValue().hasPendingGuiOffer()
                     && now - entry.getValue().lastActivityGameTime() > hardTimeout) {
-                SESSIONS.remove(entry.getKey());
+                close(entry.getKey(), CloseReason.TIMED_OUT);
                 removed++;
             }
         }
@@ -175,13 +215,16 @@ public final class ConversationSessions {
     }
 
     /** Forget transient state when the server stops. */
-    public static void clearAll() {
+    public static void clearAll(CloseReason reason) {
+        for (UUID playerId : List.copyOf(SESSIONS.keySet())) {
+            close(playerId, reason);
+        }
         SESSIONS.clear();
     }
 
     /** Test seam: forget every session. */
     public static void clearAllForTesting() {
-        clearAll();
+        clearAll(CloseReason.DISCONNECTED);
     }
 
     private static int timeoutTicks() {

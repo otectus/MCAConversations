@@ -118,6 +118,11 @@ public final class ChatDelivery {
             forSpeaker = personal;
         }
         speaker.sendSystemMessage(forSpeaker);
+        if (feedback != null) {
+            // The player has now heard this turn: run whatever was waiting on that (see
+            // ChatModeSession#deferUntilDelivered). Once per turn, on the first line that lands.
+            feedback.fireDelivered();
+        }
         if (publicReplies && villager.level() instanceof ServerLevel level) {
             double r2 = radius * radius;
             for (ServerPlayer other : level.players()) {

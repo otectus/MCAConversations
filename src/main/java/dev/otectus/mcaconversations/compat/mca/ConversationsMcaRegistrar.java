@@ -645,7 +645,8 @@ public final class ConversationsMcaRegistrar {
             case BRANCH -> ConversationSessions.get(player.getUUID(), now)
                     .setBranch(directive.branch().orElse(null));
             case TURN -> { /* handled below, alongside the beat that may ride on begin/branch */ }
-            case END -> ConversationSessions.endTopic(player.getUUID(), now);
+            case END -> ConversationSessions.endTopic(player.getUUID(), now,
+                    dev.otectus.mcaconversations.conversation.CloseReason.COMPLETED);
         }
         if (directive.op() != SessionDirective.Op.END) {
             directive.beat().ifPresent(beatId -> {

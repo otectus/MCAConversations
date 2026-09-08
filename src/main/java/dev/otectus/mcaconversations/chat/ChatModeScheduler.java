@@ -15,7 +15,8 @@ import java.util.PriorityQueue;
  */
 public final class ChatModeScheduler {
 
-    private record Scheduled(long tick, long seq, Runnable task) {
+    /** {@code player} is the recipient the entry belongs to, or null for a task owned by nobody. */
+    private record Scheduled(long tick, long seq, java.util.UUID player, Runnable task) {
     }
 
     private static final PriorityQueue<Scheduled> QUEUE = new PriorityQueue<>(
@@ -29,7 +30,15 @@ public final class ChatModeScheduler {
 
     /** Enqueues {@code task} to run when overworld game-time reaches {@code deliverAtTick}. */
     public static void schedule(long deliverAtTick, Runnable task) {
-        QUEUE.add(new Scheduled(deliverAtTick, sequence++, task));
+        schedule(null, deliverAtTick, task);
+    }
+
+    /**
+     * As {@link #schedule(long, Runnable)}, but tagged with the player the task speaks to so
+     * {@link #clearPlayer} can drop it when their conversation ends.
+     */
+    public static void schedule(java.util.UUID player, long deliverAtTick, Runnable task) {
+        QUEUE.add(new Scheduled(deliverAtTick, sequence++, player, task));
     }
 
     /** Keeps a player's spoken turns in order even when a later, shorter line has less typing delay. */
@@ -37,7 +46,7 @@ public final class ChatModeScheduler {
         Long previous = LAST_DELIVERY.get(playerId);
         long deadline = previous == null ? deliverAtTick : Math.max(deliverAtTick, previous + 1L);
         LAST_DELIVERY.put(playerId, deadline);
-        schedule(deadline, () -> {
+        schedule(playerId, deadline, () -> {
             try {
                 task.run();
             } finally {
@@ -65,6 +74,40 @@ public final class ChatModeScheduler {
     public static int computeDelayTicks(int baseDelay, int lineLength) {
         long delay = (long) Math.max(0, baseDelay) + Math.max(0, lineLength) / 4L;
         return (int) Math.min(60L, delay);
+    }
+
+    /**
+     * Drops every queued delivery aimed at {@code player} — their conversation ended, so a line
+     * still waiting on the humanized delay must never arrive after the goodbye. Everyone else keeps
+     * their deadlines and their order: the queue is rebuilt from the survivors, whose {@code tick}
+     * and {@code seq} are untouched.
+     */
+    public static void clearPlayer(java.util.UUID player) {
+        if (player == null) {
+            return;
+        }
+        java.util.List<Scheduled> survivors = new java.util.ArrayList<>(QUEUE.size());
+        for (Scheduled entry : QUEUE) {
+            if (!player.equals(entry.player())) {
+                survivors.add(entry);
+            }
+        }
+        if (survivors.size() != QUEUE.size()) {
+            QUEUE.clear();
+            QUEUE.addAll(survivors);
+        }
+        LAST_DELIVERY.remove(player);
+    }
+
+    /** How many deliveries are still queued for {@code player} (diagnostics and tests). */
+    public static int pendingFor(java.util.UUID player) {
+        int count = 0;
+        for (Scheduled entry : QUEUE) {
+            if (player != null && player.equals(entry.player())) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /** Clears the queue (server stop / test isolation). */

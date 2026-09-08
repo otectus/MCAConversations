@@ -69,7 +69,8 @@ class AmbientSelectionTest {
             session.consumeOffer(offer.revision(), 0);
             assertTrue(ChatModeDispatcher.canAnotherAmbientResponderSpeak(session));
         } finally {
-            dev.otectus.mcaconversations.conversation.ConversationSessions.clear(player);
+            dev.otectus.mcaconversations.conversation.ConversationSessions.clear(player,
+                    dev.otectus.mcaconversations.conversation.CloseReason.COMPLETED);
         }
     }
 }
