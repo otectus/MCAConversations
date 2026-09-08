@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.chat;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.EngagementPolicy;
 import dev.otectus.mcaconversations.locale.LineVoice;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -79,12 +80,21 @@ public final class ChatDelivery {
                 () -> deliver(villager, player, rendered, publicReplies, radius, feedback, lineIndex));
     }
 
-    private static void deliver(Entity villager, ServerPlayer speaker, Component rendered,
-                                boolean publicReplies, double radius, ChatModeSession.Scope feedback,
-                                int lineIndex) {
-        if (speaker.hasDisconnected() || !speaker.isAlive() || !villager.isAlive()
-                || speaker.level() != villager.level() || speaker.distanceToSqr(villager) > radius * radius) {
-            return;
+    /**
+     * Delivers a scheduled line, or drops it. Returns {@code true} iff the line was actually spoken
+     * to the speaker: a drop writes no state at all — no consumed hearts suffix, no consumed options
+     * block — so the exchange still owes the player its feedback if the pair comes back together.
+     * Bystanders are gated by the same policy one at a time, and a bystander who has walked off only
+     * misses the overheard copy; the speaker's own delivery is what the result reports.
+     */
+    private static boolean deliver(Entity villager, ServerPlayer speaker, Component rendered,
+                                   boolean publicReplies, double radius, ChatModeSession.Scope feedback,
+                                   int lineIndex) {
+        EngagementPolicy.Verdict verdict = EngagementPolicy.evaluate(speaker, villager, radius * radius);
+        if (!verdict.ok()) {
+            // Routine: players walk away mid-sentence. Never a warning.
+            McaConversations.LOGGER.debug("chat-mode reply dropped before delivery: {}", verdict);
+            return false;
         }
         boolean lastLine = feedback != null && lineIndex == feedback.linesScheduled;
         String suffix = lastLine ? heartsSuffix(feedback.heartsDelta) : "";
@@ -111,12 +121,14 @@ public final class ChatDelivery {
         if (publicReplies && villager.level() instanceof ServerLevel level) {
             double r2 = radius * radius;
             for (ServerPlayer other : level.players()) {
-                if (other != speaker && !other.hasDisconnected()
-                        && other.distanceToSqr(villager) <= r2) {
+                // Same policy the speaker was gated by, so an overhearing player is refused for the
+                // same stated reason rather than by a second, differently-worded distance test.
+                if (other != speaker && EngagementPolicy.evaluate(other, villager, r2).ok()) {
                     other.sendSystemMessage(rendered); // relationship feedback is personal — speaker only
                 }
             }
         }
+        return true;
     }
 
     /** Public-chat configuration never promotes a recorded confidence or personal disclosure. */

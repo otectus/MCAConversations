@@ -154,7 +154,6 @@ public final class ConversationsMcaRegistrar {
         FeatureId feature = FeatureId.parse(raw).orElse(null);
         if (feature == null) {
             McaConversationsConfig.warnUnknownFeature(raw);
-            McaConversations.LOGGER.warn("{} names unknown feature '{}'; the condition scores 0", condition, raw);
         }
         return feature;
     }

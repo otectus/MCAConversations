@@ -150,7 +150,10 @@ public final class ChoiceSelectionService {
             return null;
         }
         Entity villager = player.serverLevel().getEntity(candidateVillagerId);
-        if (villager == null || player.distanceToSqr(villager) > GUI_DISTANCE_SQR) {
+        // Same policy the chat frontend refuses by, so a click and a typed number are rejected for
+        // the same stated reason; only the radius is this frontend's own.
+        if (villager == null
+                || !EngagementPolicy.evaluate(player, villager, GUI_DISTANCE_SQR).ok()) {
             return null;
         }
         return McaCompat.isInteractingWith(villager)
