@@ -41,7 +41,7 @@ public record SocialRoleRecord(UUID target,
     private static final String KEY_EXPIRES = "expires";
 
     public SocialRoleRecord {
-        cause = cause == null ? "" : cause.trim().toLowerCase(Locale.ROOT);
+        cause = cause == null ? "" : HistoryCaps.text(cause.trim().toLowerCase(Locale.ROOT));
         confidence = confidence == null ? Confidence.WITNESSED : confidence;
         expiresDay = expiresDay == null ? OptionalLong.empty() : expiresDay;
     }

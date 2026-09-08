@@ -45,7 +45,7 @@ public record PlayerClaimRecord(String type,
 
     public PlayerClaimRecord {
         type = normalize(type);
-        sourceReply = sourceReply == null ? "" : sourceReply.trim();
+        sourceReply = sourceReply == null ? "" : HistoryCaps.text(sourceReply.trim());
         value = value == null ? NarrativeValue.EMPTY : value;
         // A claim is by definition the player's own report. Storing it as anything firmer would let a
         // later scene speak about the player's life as though the villager had seen it.
@@ -125,6 +125,6 @@ public record PlayerClaimRecord(String type,
     }
 
     private static String normalize(String value) {
-        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+        return value == null ? "" : HistoryCaps.text(value.trim().toLowerCase(Locale.ROOT));
     }
 }

@@ -228,19 +228,36 @@ public record TopicRecencyRecord(Map<String, Long> scenes,
         return Map.copyOf(updated);
     }
 
+    /**
+     * Bounds one level, keeping the most recent stamps.
+     *
+     * <p>The same choice {@link #stamped} makes when it evicts, applied to a whole map at once: the
+     * furthest-back day goes first, ties broken by key so two servers reading the same file keep the
+     * same entries. That matters because this constructor is also the load path — a hand-edited or
+     * hostile save with thousands of stamps per level is bounded here, before anything asks the record
+     * a question.
+     */
     private static Map<String, Long> bounded(Map<String, Long> values) {
         if (values == null || values.isEmpty()) {
             return Map.of();
         }
         Map<String, Long> out = new LinkedHashMap<>();
         for (Map.Entry<String, Long> entry : values.entrySet()) {
-            if (out.size() >= MAX_ENTRIES_PER_LEVEL) {
-                break;
-            }
             String key = normalize(entry.getKey());
             if (!key.isEmpty() && entry.getValue() != null) {
                 out.put(key, entry.getValue());
             }
+        }
+        int cap = Math.min(MAX_ENTRIES_PER_LEVEL, HistoryCaps.recencyPerPair());
+        if (out.size() > cap) {
+            List<Map.Entry<String, Long>> kept = new ArrayList<>(out.entrySet());
+            kept.sort(Map.Entry.<String, Long>comparingByValue().reversed()
+                    .thenComparing(Map.Entry.comparingByKey()));
+            Map<String, Long> trimmed = new LinkedHashMap<>();
+            for (int i = 0; i < cap; i++) {
+                trimmed.put(kept.get(i).getKey(), kept.get(i).getValue());
+            }
+            out = trimmed;
         }
         return Map.copyOf(out);
     }
@@ -325,6 +342,6 @@ public record TopicRecencyRecord(Map<String, Long> scenes,
     }
 
     private static String normalize(String value) {
-        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+        return value == null ? "" : HistoryCaps.text(value.trim().toLowerCase(Locale.ROOT));
     }
 }

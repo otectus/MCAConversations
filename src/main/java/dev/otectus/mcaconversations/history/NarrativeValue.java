@@ -78,7 +78,7 @@ public record NarrativeValue(Kind kind, String raw) {
     private static final String KEY_RAW = "v";
 
     public NarrativeValue {
-        raw = raw == null ? "" : raw.trim();
+        raw = raw == null ? "" : HistoryCaps.text(raw.trim());
         if (kind == null) {
             kind = Kind.TOKEN;
         }

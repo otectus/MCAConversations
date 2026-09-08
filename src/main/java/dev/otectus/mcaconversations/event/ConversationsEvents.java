@@ -25,6 +25,7 @@ import dev.otectus.mcaconversations.progress.ProgressSavedData;
 import dev.otectus.mcaconversations.gift.GiftMemoryProvider;
 import dev.otectus.mcaconversations.gift.ConversationsCapabilities;
 import dev.otectus.mcaconversations.gossip.GossipDetectors;
+import dev.otectus.mcaconversations.history.ConversationHistorySavedData;
 import dev.otectus.mcaconversations.state.ConversationState;
 import dev.otectus.mcaconversations.state.StateTracker;
 import net.minecraft.server.level.ServerPlayer;
@@ -96,6 +97,10 @@ public final class ConversationsEvents {
     /** Clear process-static references before another integrated world starts in the same JVM. */
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
+        // Back to "nobody is talking to anybody" before the sessions themselves go, so a store that
+        // outlives this world by a moment cannot consult a registry that has already been emptied.
+        ConversationHistorySavedData.peek(event.getServer())
+                .ifPresent(data -> data.store().setLiveSessionPredicate(null));
         dev.otectus.mcaconversations.compat.ReputationBridge.clearPendingRemarks();
         ChatModeScheduler.reset();
         ChatModeSession.reset();
@@ -164,6 +169,11 @@ public final class ConversationsEvents {
         // Before the early return below: the epoch is what keeps a previous world's cached answers
         // out of this one, and it is owed regardless of whether chat mode is on.
         ServerEpoch.advance();
+
+        // Likewise owed regardless: history eviction must know who is mid-conversation before the
+        // first player can be, and the store cannot ask conversation/ itself without depending on it.
+        ConversationHistorySavedData.get(event.getServer()).store()
+                .setLiveSessionPredicate(ConversationSessions::hasSessionWith);
 
         McaConversationsConfig.Common c = McaConversationsConfig.COMMON;
         if (!c.enableChatMode.get()) {

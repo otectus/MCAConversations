@@ -209,6 +209,6 @@ public record SharedThreadRecord(String templateId,
     }
 
     private static String normalize(String value) {
-        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+        return value == null ? "" : HistoryCaps.text(value.trim().toLowerCase(Locale.ROOT));
     }
 }

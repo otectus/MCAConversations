@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.history;
 
+import dev.otectus.mcaconversations.McaConversations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -22,22 +23,67 @@ import java.util.function.Function;
  * matters more here than in the other stores: the director reads history during selection, on every
  * interaction, and a read that marked the world dirty would turn conversation into disk traffic
  * (spec §21.6).
+ *
+ * <p><b>Never dirty at all when degraded.</b> A file written by a newer build is read but never
+ * written back in this build's shape, so {@link #setDirty()} is swallowed outright rather than
+ * trusted to every call site — including the ones Minecraft itself might add. The store owns the
+ * decision; this class only enforces it.
  */
 public final class ConversationHistorySavedData extends SavedData {
 
     private static final String DATA_NAME = "mcaconversations_history";
 
     private final ConversationHistoryStore store;
+    private boolean backedUp;
+    private boolean degradedAnnounced;
 
     private ConversationHistorySavedData(ConversationHistoryStore store) {
         this.store = store;
     }
 
     public static ConversationHistorySavedData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(
+        ConversationHistorySavedData data = server.overworld().getDataStorage().computeIfAbsent(
                 tag -> new ConversationHistorySavedData(ConversationHistoryStore.load(tag)),
                 () -> new ConversationHistorySavedData(new ConversationHistoryStore()),
                 DATA_NAME);
+        data.backUpIfTruncated(server);
+        return data;
+    }
+
+    /**
+     * Copies the file aside, once, when loading it had to discard records to fit the caps.
+     *
+     * <p>Only ever written when something was actually lost, so an ordinary world never grows a second
+     * file. See {@link ConversationHistoryBackupSavedData} for what it is and when to delete it.
+     */
+    private void backUpIfTruncated(MinecraftServer server) {
+        if (backedUp) {
+            return;
+        }
+        backedUp = true;
+        store.originalTagIfTruncated().ifPresent(original -> {
+            ConversationHistoryBackupSavedData.write(server, original);
+            McaConversations.LOGGER.warn(
+                    "Conversation history held more than the caps allow; {} records were dropped while "
+                            + "loading it. The file as it was found has been copied to {}.dat, which is "
+                            + "safe to delete.",
+                    store.discardedOnLoad(), ConversationHistoryBackupSavedData.DATA_NAME);
+        });
+    }
+
+    /**
+     * The already-loaded history for this server, or empty when nothing has asked for it yet.
+     *
+     * <p>Unlike {@link #get} this never reads the file. It exists for shutdown, where forcing a load
+     * of a store nobody used would be a pointless disk read at the one moment the world is closing.
+     */
+    public static Optional<ConversationHistorySavedData> peek(MinecraftServer server) {
+        if (server == null || server.overworld() == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(server.overworld().getDataStorage().get(
+                tag -> new ConversationHistorySavedData(ConversationHistoryStore.load(tag)),
+                DATA_NAME));
     }
 
     /** Read-only view of one villager's history. Never creates, never marks dirty. */
@@ -57,6 +103,29 @@ public final class ConversationHistorySavedData extends SavedData {
             setDirty();
         }
         return result;
+    }
+
+    /**
+     * Marks the world dirty, unless this world's history came from a newer build.
+     *
+     * <p>Swallowed rather than merely skipped at the call sites above: a degraded store would write
+     * back only the fields this build knows about, and one forgotten call site is all it would take to
+     * delete a later version's data. Announced once, at WARN, because the player is losing something
+     * real — this session's conversations are not being remembered — and silence would make that look
+     * like a bug in the mod rather than a rollback.
+     */
+    @Override
+    public void setDirty() {
+        if (store.isDegraded()) {
+            if (!degradedAnnounced) {
+                degradedAnnounced = true;
+                McaConversations.LOGGER.warn(
+                        "Conversation history is read-only because the world was last opened with a newer "
+                                + "build of this mod; changes made this session will not be saved.");
+            }
+            return;
+        }
+        super.setDirty();
     }
 
     /** Convenience for the common boolean-returning mutation. */

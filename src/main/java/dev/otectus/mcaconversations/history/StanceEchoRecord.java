@@ -37,7 +37,7 @@ public record StanceEchoRecord(StanceFamily stance, OutcomeFamily outcome, Strin
     private static final String KEY_DAY = "day";
 
     public StanceEchoRecord {
-        subject = subject == null ? "" : subject.trim().toLowerCase(Locale.ROOT);
+        subject = subject == null ? "" : HistoryCaps.text(subject.trim().toLowerCase(Locale.ROOT));
     }
 
     /**

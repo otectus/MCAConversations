@@ -60,6 +60,18 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   GUI/numbered choices (`conversation/ChoiceSelectionService`); when it fails, no effect runs, no reply
   is scheduled, and the exchange ends quietly. Candidates tied at equal distance now rank
   deterministically by name then UUID.
+- **Capitals data could outlive the world it came from.** The MCA: Capitals residency cache and the
+  record cache (`compat/capitals/ReflectiveCapitalsBridge`) lived for the whole game process, keyed
+  only by expiry tick — the record cache had no size limit and no expiry check at all — and nothing
+  cleared either one when a server stopped, so opening another world in the same session, or
+  restoring an older save, could answer a court question from the previous world's data, and a clock
+  moved backwards could keep an entry fresh indefinitely. Every cached entry is now stamped with a
+  per-server epoch (`compat/ServerEpoch`) and its creation tick; an entry is served only when the
+  epoch matches the running server, its expiry tick is still ahead, and the clock has not moved
+  behind its creation tick (`compat/CacheLifetime`); both caches now share one bound and are emptied
+  on server stop (`event/ConversationsEvents#onServerStopped` clears the caches, then advances the
+  epoch) while the reflective handles stay bound. MCA: Capitals remains optional; the fix changes
+  nothing when it is absent, since `NoopCapitalsBridge` inherits an empty `clearCaches`.
 
 ### Changed
 
@@ -86,8 +98,9 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   cancelled events, and matches the final message text, so a message another mod cancels never reaches
   a villager and a rewritten message is matched as rewritten; the experimental local-chat mode
   (`chatModeLocalChat`, default off, `#onLocalChat`) keeps its early `HIGH` slot because it must own
-  cancellation, and a message is never processed by both paths. An immutable snapshot of the accepted
-  message (`chat/AcceptedChat`) crosses to the server thread instead of the live event.
+  cancellation, and a message is never processed by both paths. The text handed to the server thread
+  is now taken from the final message component into an immutable `chat/AcceptedChat` snapshot on the
+  event thread, so a rewrite by a later handler is what gets matched.
 
 ## [1.6.1] - unreleased
 
