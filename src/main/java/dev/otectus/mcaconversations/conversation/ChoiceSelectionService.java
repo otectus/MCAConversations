@@ -35,6 +35,19 @@ public final class ChoiceSelectionService {
             rejectClient(player, revision);
             return false;
         }
+        if (offer.generation() != ContentGeneration.current()) {
+            // The numbered card the player is answering was minted from content a reload has since
+            // replaced. Claim the offer so a second reply is refused too, close the topic safely,
+            // and execute nothing.
+            session.consumeOffer(revision, absoluteIndex);
+            session.clearOffer();
+            ConversationSessions.endTopic(player.getUUID(), now);
+            McaConversations.LOGGER.debug(
+                    "refused numbered response revision {} from {}: content was reloaded after the offer was made",
+                    revision, player.getGameProfile().getName());
+            rejectClient(player, revision);
+            return false;
+        }
 
         Entity villager = resolveVillager(player, offer, candidateVillagerId);
         if (villager == null || !villager.isAlive() || !McaCompat.isMcaVillager(villager)) {

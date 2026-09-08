@@ -24,6 +24,7 @@ class GuiOfferLifetimeTest {
     /** Past the largest configurable session timeout, so the expiry branch runs under any config. */
     private static final long LONG_AFTER = 100L + 30_000L;
     private static final int TIMEOUT = 1200;
+    private static final String QUESTION = "conversations.cat.chitchat";
 
     @BeforeEach
     void reset() {
@@ -60,9 +61,11 @@ class GuiOfferLifetimeTest {
     @DisplayName("only chat offers age out by time")
     void onlyChatOffersAgeOut() {
         ConversationSession.ChoiceOffer gui = new ConversationSession.ChoiceOffer(
-                1, null, "main", List.of("chat"), ConversationSession.Frontend.GUI, 0, false);
+                1, null, "main", List.of("chat"), ConversationSession.Frontend.GUI, 0, false,
+                ContentGeneration.current());
         ConversationSession.ChoiceOffer chat = new ConversationSession.ChoiceOffer(
-                1, VILLAGER, "main", List.of("chat"), ConversationSession.Frontend.CHAT, 0, false);
+                1, VILLAGER, "main", List.of("chat"), ConversationSession.Frontend.CHAT, 0, false,
+                ContentGeneration.current());
 
         assertFalse(ChoiceSelectionService.offerTimedOut(gui, TIMEOUT * 100L, TIMEOUT));
         assertFalse(ChoiceSelectionService.offerTimedOut(chat, TIMEOUT, TIMEOUT));
@@ -108,4 +111,24 @@ class GuiOfferLifetimeTest {
         assertEquals(1, ConversationSessions.sweep(1_000_001));
     }
 
+    @Test
+    @DisplayName("an offer minted before a reload is refused after it, and takes its topic with it")
+    void offerFromAnOlderContentGenerationIsRefused() {
+        ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 100);
+        ConversationSession.ChoiceOffer offer = ConversationSessions.recordOffer(
+                PLAYER, VILLAGER, QUESTION, List.of("yes", "no"),
+                ConversationSession.Frontend.GUI, 100);
+        assertEquals(ContentGeneration.current(), offer.generation());
+
+        ContentGeneration.advance();
+
+        assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER, QUESTION, "yes", false, 101),
+                "content the answers came from no longer exists — nothing may run");
+
+        ConversationSession session = ConversationSessions.raw(PLAYER).orElseThrow();
+        assertTrue(session.currentOffer().isEmpty(), "the refused offer is gone, not re-answerable");
+        assertTrue(session.topicId().isEmpty(), "the topic is closed safely, not left half-open");
+        assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER, QUESTION, "yes", false, 102),
+                "a second submission is refused too");
+    }
 }

@@ -38,10 +38,16 @@ public final class ConversationSession {
     /** Which frontend an offer belongs to: a GUI offer lives with MCA's screen, a chat offer with the session. */
     public enum Frontend { GUI, CHAT }
 
-    /** Immutable view of the exact ordered answer set MCA most recently offered this player. */
+    /**
+     * Immutable view of the exact ordered answer set MCA most recently offered this player.
+     *
+     * <p>{@code generation} is the content generation the offer was minted under. It is server-side
+     * only — nothing puts it on the wire — and exists so a submission cannot execute against a
+     * catalog that a reload has already replaced.
+     */
     public record ChoiceOffer(long revision, UUID villagerId, String questionId,
                               List<String> answerIds, Frontend frontend,
-                              long createdGameTime, boolean consumed) {
+                              long createdGameTime, boolean consumed, long generation) {
         public ChoiceOffer {
             answerIds = answerIds == null ? List.of() : List.copyOf(answerIds);
         }
@@ -73,6 +79,7 @@ public final class ConversationSession {
     private List<String> currentAnswers = List.of();
     private UUID offerVillagerId;
     private long offerRevision;
+    private long offerGeneration = ContentGeneration.current();
     private long offerCreatedGameTime;
     private boolean offerConsumed;
     private Frontend offerFrontend = Frontend.GUI;
@@ -157,6 +164,7 @@ public final class ConversationSession {
         // candidate captured from the currently open interaction screen.
         this.offerVillagerId = offeredVillagerId;
         this.offerRevision = NEXT_OFFER_REVISION.incrementAndGet();
+        this.offerGeneration = ContentGeneration.current();
         this.currentQuestion = question == null ? "" : question;
         this.currentAnswers = answers == null ? List.of() : List.copyOf(answers);
         this.offerFrontend = frontend == null ? Frontend.GUI : frontend;
@@ -170,7 +178,7 @@ public final class ConversationSession {
             return Optional.empty();
         }
         return Optional.of(new ChoiceOffer(offerRevision, offerVillagerId, currentQuestion,
-                currentAnswers, offerFrontend, offerCreatedGameTime, offerConsumed));
+                currentAnswers, offerFrontend, offerCreatedGameTime, offerConsumed, offerGeneration));
     }
 
     /**

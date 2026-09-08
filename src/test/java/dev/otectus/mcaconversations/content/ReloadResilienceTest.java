@@ -5,6 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.otectus.mcaconversations.conversation.BeatCatalog;
 import dev.otectus.mcaconversations.conversation.BeatContractLoader;
+import dev.otectus.mcaconversations.conversation.ConversationCatalog;
+import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.DepthClass;
+import dev.otectus.mcaconversations.conversation.TopicEntry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -102,6 +106,67 @@ class ReloadResilienceTest {
                             + " and must not be treated as one");
         } finally {
             BeatContractLoader.setActiveForTesting(before);
+        }
+    }
+
+    // --- Deterministic topic-id resolution (audit F12) --------------------------
+
+    private static final String TOPIC = """
+            {
+              "entry": {"question": "conversations.cat.chitchat", "answer": "day"},
+              "depth": "%s",
+              "return_question": "conversations.cat.chitchat",
+              "ages": ["adult"],
+              "required_stance_families": ["empathy", "exit"]
+            }""";
+
+    private static JsonObject topicFile(String depth) {
+        JsonObject topics = new JsonObject();
+        topics.add("day", JsonParser.parseString(TOPIC.formatted(depth)).getAsJsonObject());
+        JsonObject root = new JsonObject();
+        root.add("topics", topics);
+        return root;
+    }
+
+    private static void reloadCatalog(Map<ResourceLocation, JsonElement> files) throws Exception {
+        Method apply = ConversationCatalogLoader.class.getDeclaredMethod(
+                "apply", Map.class, ResourceManager.class, ProfilerFiller.class);
+        apply.setAccessible(true);
+        apply.invoke(new ConversationCatalogLoader(), files, null, null);
+    }
+
+    /**
+     * The collision itself is logged, not returned, and the test source set has no appender
+     * infrastructure to capture it — so what is pinned here is the part that matters to a player:
+     * the same file wins on every load, whatever order the pack stack handed the files over in.
+     */
+    @Test
+    @DisplayName("one topic id in two files resolves to the sorted-last file, whatever the input order")
+    void collidingTopicIdResolvesDeterministically() throws Exception {
+        ConversationCatalog before = ConversationCatalogLoader.active();
+        try {
+            ResourceLocation first = ResourceLocation.fromNamespaceAndPath("mcaconversations", "aaa");
+            ResourceLocation last = ResourceLocation.fromNamespaceAndPath("mcaconversations", "zzz");
+
+            Map<ResourceLocation, JsonElement> ascending = new LinkedHashMap<>();
+            ascending.put(first, topicFile("quick"));
+            ascending.put(last, topicFile("deep"));
+            reloadCatalog(ascending);
+            TopicEntry fromAscending = ConversationCatalogLoader.topic("day").orElseThrow();
+            assertEquals(DepthClass.DEEP, fromAscending.depth(),
+                    "the sorted-last file must win, not the first one seen");
+
+            Map<ResourceLocation, JsonElement> descending = new LinkedHashMap<>();
+            descending.put(last, topicFile("deep"));
+            descending.put(first, topicFile("quick"));
+            reloadCatalog(descending);
+            assertEquals(DepthClass.DEEP, ConversationCatalogLoader.topic("day").orElseThrow().depth(),
+                    "iteration order of the incoming map must not decide the winner");
+
+            assertEquals(1, ConversationCatalogLoader.active().size(),
+                    "a collision merges to one topic, it does not duplicate it");
+        } finally {
+            ConversationCatalogLoader.setActiveForTesting(before);
         }
     }
 }

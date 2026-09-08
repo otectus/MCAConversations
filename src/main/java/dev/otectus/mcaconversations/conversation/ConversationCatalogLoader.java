@@ -48,13 +48,22 @@ public final class ConversationCatalogLoader extends SimpleJsonResourceReloadLis
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
         try {
-            // Last id wins across datapacks, mirroring MCA's dialogue merge and the chat-intent loader.
+            // Last id wins across datapacks, mirroring MCA's dialogue merge and the chat-intent
+            // loader — but "last" has to mean something. The map arrives in whatever order the pack
+            // stack produced, so sort it, as the scene loader does, and the winner of a collision is
+            // the same file on every load and every machine.
             Map<String, TopicEntry> byId = new LinkedHashMap<>();
-            for (Map.Entry<ResourceLocation, JsonElement> file : files.entrySet()) {
-                if (!file.getValue().isJsonObject()) {
+            Map<String, ResourceLocation> declaredIn = new LinkedHashMap<>();
+            Map<String, List<ResourceLocation>> collisions = new LinkedHashMap<>();
+            List<ResourceLocation> ordered = new ArrayList<>(files.keySet());
+            ordered.sort(ResourceLocation::compareTo);
+
+            for (ResourceLocation location : ordered) {
+                JsonElement value = files.get(location);
+                if (value == null || !value.isJsonObject()) {
                     continue;
                 }
-                JsonObject root = file.getValue().getAsJsonObject();
+                JsonObject root = value.getAsJsonObject();
                 if (!root.has("topics") || !root.get("topics").isJsonObject()) {
                     continue;
                 }
@@ -62,17 +71,33 @@ public final class ConversationCatalogLoader extends SimpleJsonResourceReloadLis
                     String id = e.getKey();
                     if (!e.getValue().isJsonObject()) {
                         McaConversations.LOGGER.warn("conversation catalog topic '{}' in {} is not an object — skipped",
-                                id, file.getKey());
+                                id, location);
                         continue;
                     }
                     JsonObject topicJson = e.getValue().getAsJsonObject();
                     TopicEntry entry = SafeParse.orNull("conversation_catalog", topicJson,
                             () -> TopicEntry.fromJson(id, topicJson));
-                    if (entry != null) {
-                        byId.put(id, entry);
+                    if (entry == null) {
+                        continue;
                     }
+                    ResourceLocation previous = declaredIn.put(id, location);
+                    if (previous != null) {
+                        collisions.computeIfAbsent(id, ignored -> {
+                            List<ResourceLocation> all = new ArrayList<>();
+                            all.add(previous);
+                            return all;
+                        }).add(location);
+                    }
+                    byId.put(id, entry);
                 }
             }
+            // A topic id is meant to be declared in exactly one place (DATAPACK.md, "the conversation
+            // catalog"), so two files claiming one id is an authoring mistake rather than an override
+            // idiom — a pack overrides a shipped topic by replacing that topic's file path. One line
+            // per colliding id, after the merge, so it can name the file that actually won.
+            collisions.forEach((id, sources) -> McaConversations.LOGGER.warn(
+                    "conversation catalog topic '{}' is declared in {} — {} wins (last in sorted order)",
+                    id, sources, declaredIn.get(id)));
             ConversationCatalog catalog = ConversationCatalog.build(new ArrayList<>(byId.values()));
             active = catalog;
             McaConversations.LOGGER.info("Loaded {} conversation topics from {} catalog file(s).",

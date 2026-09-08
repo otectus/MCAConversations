@@ -87,12 +87,28 @@ alongside.
   (`VillagerHistory#load`, `PairHistory#load`) used to insert villagers, pairs, episodes, opinions,
   roles, threads, commitments, claims and recency stamps straight into their maps, so a hand-edited or
   oversized file bypassed every cap; free text had no length limit anywhere. Every collection is now
-  capped on load with the same retention rule the game uses when adding — protected villagers
-  (an unresolved commitment or a live thread) are skipped first, then empty histories, then the oldest
-  `last_activity` day — free text is cut at 512 code points (`HistoryCaps.MAX_TEXT_LENGTH`,
-  `HistoryCaps#text`), `recordCount` now counts roles and recency, and when a load actually discards
-  something the original data is written once to a sibling store `mcaconversations_history_backup`
-  (`ConversationHistoryBackupSavedData`, never read by the mod; safe to delete).
+  capped on load by a deterministic rule that drops settled, closed and low-salience records before
+  obligations and disputes (each collection has its own order, mirroring what the game keeps when
+  adding — see `VillagerHistory#enforceLoadedCaps` and `PairHistory#enforceLoadedCaps`); if a file
+  still exceeds a hard cap after that, the oldest entries go regardless of obligation
+  (`PairHistory#trimToHardCap`), and the original file is backed up first. Free text is cut at 512
+  code points (`HistoryCaps.MAX_TEXT_LENGTH`, `HistoryCaps#text`), `recordCount` now counts roles and
+  recency, and when a load actually discards something the original data is written once to a sibling
+  store `mcaconversations_history_backup` (`ConversationHistoryBackupSavedData`, never read by the
+  mod; safe to delete).
+- **A datapack reload no longer leaves a stale choice armed.** Each catalog used to publish
+  independently, and the conversation catalog merged files in whatever order the resource map
+  happened to iterate, so a topic id declared in two files resolved arbitrarily and silently; an offer
+  made before a reload could also still be submitted afterwards against content that had changed or
+  vanished. `ConversationCatalogLoader` now merges files in a fixed sorted order and reports a
+  duplicate topic id with both source files and the file that won. After every reload completes, one
+  numbered content generation is published (`ContentGenerationListener`, registered last in
+  `ConversationsEvents#onAddReloadListeners` so it runs after every other catalog loader, logging
+  "Conversation content generation {} published."). Each offer now records the generation it was made
+  under (`ConversationSession.ChoiceOffer#generation`), and a choice submitted against an older
+  generation is refused and its topic ended instead of executing (`ConversationGuard`,
+  `ChoiceSelectionService`); the client is told the offer expired through the existing packet reason,
+  so there is no protocol change, and a live conversation is not force-closed by a reload on its own.
 - **Eviction picks the villager you actually stopped talking to.** When the villager cap was hit, the
   fallback victim used to be whichever entry came first in map order, which could change after a
   restart and need not be inactive. Eviction (`ConversationHistoryStore#evictionCandidate`) now skips

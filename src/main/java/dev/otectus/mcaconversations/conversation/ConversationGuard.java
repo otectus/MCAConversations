@@ -61,6 +61,14 @@ public final class ConversationGuard {
         if (!session.consumeOfferedAnswer(question, answer)) {
             return reject(playerId, question, answer, "offer revision was already consumed");
         }
+        if (offer.generation() != ContentGeneration.current()) {
+            // The answers on screen were written by content a reload has since replaced. Drop the
+            // page and close the topic safely — nothing runs — so the next click is refused for the
+            // ordinary reason instead of executing against a catalog that no longer exists.
+            session.clearOffer();
+            ConversationSessions.endTopic(playerId, now);
+            return reject(playerId, question, answer, "content was reloaded after the offer was made");
+        }
         session.setVillagerId(villagerId);
         session.touch(now);
         return false;
