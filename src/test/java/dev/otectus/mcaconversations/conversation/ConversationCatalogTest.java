@@ -50,8 +50,8 @@ class ConversationCatalogTest {
         assertEquals("conversations.cat.chitchat", day.entryQuestion());
         assertEquals("day", day.entryAnswer());
         assertTrue(day.chatRequired(), "chat parity is required unless a topic opts out");
-        assertTrue(day.allowsAge("toddler"));
-        assertFalse(day.allowsAge("baby"));
+        assertTrue(day.allowsAge(AgeGroup.TODDLER));
+        assertFalse(day.allowsAge(AgeGroup.BABY));
         assertTrue(day.arc().isEmpty());
     }
 

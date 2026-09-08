@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.content;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.otectus.mcaconversations.FeatureId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -112,6 +113,57 @@ class FeatureOffLintTest {
                 "These buttons would be empty with the layer switched off, which is worse than the"
                         + " release they are supposed to fall back to:" + SEP
                         + String.join(SEP, problems));
+    }
+
+    /**
+     * Every feature id the shipped data and the sample datapacks name must resolve. An id
+     * {@link FeatureId} does not know is not a feature switch that is on — it scores 0 on both
+     * conditions, so a typo removes the result it was meant to gate.
+     */
+    @Test
+    @DisplayName("every feature id in the data resolves through FeatureId")
+    void featureIdsInDataAreReal() throws IOException {
+        List<String> problems = new ArrayList<>();
+        int ids = 0;
+        for (Path root : List.of(Path.of("src/main/resources/data"), Path.of("datapack_samples"))) {
+            if (!Files.isDirectory(root)) {
+                continue;
+            }
+            try (Stream<Path> files = Files.walk(root)) {
+                for (Path file : files.filter(path -> path.toString().endsWith(".json")).toList()) {
+                    JsonElement json = JsonParser.parseString(Files.readString(file));
+                    for (String id : featureIds(json)) {
+                        ids++;
+                        if (FeatureId.parse(id).isEmpty()) {
+                            problems.add(file + ": '" + id + "' names no feature");
+                        }
+                    }
+                }
+            }
+        }
+        assertTrue(ids > 0, "no feature ids found; this lint is measuring nothing");
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /** Every value of a conversations_enabled/conversations_disabled key, at any depth. */
+    private static List<String> featureIds(JsonElement element) {
+        List<String> ids = new ArrayList<>();
+        if (element.isJsonObject()) {
+            for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
+                boolean isFeature = "conversations_enabled".equals(entry.getKey())
+                        || "conversations_disabled".equals(entry.getKey());
+                if (isFeature && entry.getValue().isJsonPrimitive()) {
+                    ids.add(entry.getValue().getAsString());
+                } else {
+                    ids.addAll(featureIds(entry.getValue()));
+                }
+            }
+        } else if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                ids.addAll(featureIds(child));
+            }
+        }
+        return ids;
     }
 
     private static String branchOf(JsonObject result) {

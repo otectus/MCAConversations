@@ -111,7 +111,7 @@ public record BeatContract(String id,
 
             Set<String> ages = new LinkedHashSet<>();
             for (String age : strings(json, "ages")) {
-                if (!TopicEntry.AGE_GROUPS.contains(age)) {
+                if (AgeGroup.parse(age).filter(TopicEntry.AGE_GROUPS::contains).isEmpty()) {
                     throw new IllegalArgumentException(
                             "beat '" + beatId + "' age '" + age + "' is not one of " + TopicEntry.AGE_GROUPS);
                 }

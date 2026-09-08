@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.scene;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.context.ContextKeys;
 import dev.otectus.mcaconversations.context.ConversationContextSnapshot;
@@ -80,7 +81,7 @@ public final class ConversationDirector {
     public static Optional<ConversationPlan> select(Entity villager, ServerPlayer player,
                                                     ScenePurpose purpose, String topic,
                                                     ConversationContextSnapshot snapshot) {
-        if (!McaConversationsConfig.dynamicFeature("dynamic", false)
+        if (!McaConversationsConfig.dynamicFeature(FeatureId.DYNAMIC, false)
                 || villager == null || player == null || purpose == null || snapshot == null) {
             return Optional.empty();
         }

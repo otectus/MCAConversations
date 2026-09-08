@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.history;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.chat.VillagerFinder;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import net.minecraft.server.MinecraftServer;
@@ -202,7 +203,7 @@ public final class RumourPropagation {
      * @return how many stories moved, for the debug command
      */
     public static int sweep(MinecraftServer server, long today) {
-        if (server == null || !McaConversationsConfig.dynamicFeature("episodes", false)) {
+        if (server == null || !McaConversationsConfig.dynamicFeature(FeatureId.EPISODES, false)) {
             return 0;
         }
         int moved = 0;

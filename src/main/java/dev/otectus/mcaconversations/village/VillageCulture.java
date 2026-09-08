@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.village;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.identity.Identity;
 import dev.otectus.mcaconversations.identity.VillagerIdentityRecord;
@@ -33,7 +34,7 @@ public final class VillageCulture {
     }
 
     public static boolean enabled() {
-        return McaConversationsConfig.dynamicFeature("village_culture", false);
+        return McaConversationsConfig.dynamicFeature(FeatureId.VILLAGE_CULTURE, false);
     }
 
     /**

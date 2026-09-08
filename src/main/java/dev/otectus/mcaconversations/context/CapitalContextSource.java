@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.context;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.compat.CapitalCourtView;
 import dev.otectus.mcaconversations.compat.CapitalRelationView;
 import dev.otectus.mcaconversations.compat.CapitalStandingView;
@@ -306,11 +307,11 @@ public final class CapitalContextSource implements ConversationContextSource {
      * MCA's selection loop. An unloaded config reads as the shipped default.
      */
     private static boolean topicsEnabled() {
-        return McaConversationsConfig.dynamicFeature("capital_topics", true);
+        return McaConversationsConfig.dynamicFeature(FeatureId.CAPITAL_TOPICS, true);
     }
 
     private static boolean diplomacyEnabled() {
-        return McaConversationsConfig.dynamicFeature("capital_diplomacy", true);
+        return McaConversationsConfig.dynamicFeature(FeatureId.CAPITAL_DIPLOMACY, true);
     }
 
     private static int remarkDays() {

@@ -30,6 +30,24 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   `-PmcaReputationApiPath` overrides still work for developers iterating against a provider working
   tree. The API jars are compile-only: nothing from them is packaged, and the jar-contents check now
   fails if any provider class leaks into the mod jar.
+- **Nine conversation starters were gated on a token MCA does not recognise.** The answers `routine`,
+  `interests`, `player`, `origin`, `place`, `crown`, `court`, `house` and `realm` in
+  `data/mcaconversations/dialogues/conversations.cat.{chitchat,personal,village}.json` carried
+  `!child` in their `constraints`; MCA's real `Constraint` registry has no `child` entry (checked in
+  as `NativeConstraintTokens`, cross-checked against real MCA jars by `ConstraintVocabularyProbeTest`),
+  and MCA drops a token it does not recognise instead of rejecting it, so the exclusion those answers
+  were written to express never happened and the topics were offered to child villagers. They now use
+  `!baby,!toddler`; the teen-and-adult intent itself is carried by the catalog's `ages` allow-list, not
+  by a constraint (see the next entry). `ContentLintTest` now fails the build if any shipped constraint
+  token is not one MCA actually has.
+- **A misspelled feature id no longer counts as enabled.** `McaConversationsConfig.isFeatureEnabled`
+  used to fall through to `true` for an id it did not recognise, so a typo in a
+  `conversations_enabled`/`conversations_disabled` condition switched content on, or left the sink it
+  was meant to trigger permanently unable to fire. Feature ids now resolve through one closed registry,
+  `FeatureId`; an id neither condition recognises invalidates the rule (both score 0) with a single
+  warning naming the raw id, and an unknown id read through `McaConversationsConfig.isFeatureEnabled(String)`
+  directly is likewise treated as disabled with one warning. `FeatureOffLintTest` now checks that every
+  feature id in the shipped data and the sample datapacks resolves through `FeatureId`.
 
 ### Changed
 
@@ -37,6 +55,18 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   and `verifyVoiceOverlays` are invoked by name in the workflow next to `build` (they are still not
   part of `check`, by design), so editing a generated resource without regenerating it, or an
   authoring source without committing the regenerated output, fails CI.
+- **Topic age gates authored in the catalog are now enforced on every entry path.**
+  `conversation_catalog/topics.json` has always declared an `ages` allow-list per topic, but
+  `TopicEntry.allowsAge` had no callers. A shared predicate, `conversation/TopicAgeGate` (backed by the
+  `conversation/AgeGroup` vocabulary — `baby, toddler, child, teen, adult`, where an unreadable age
+  never passes a positive list), is now applied in the MCA dialogue screen's answer list
+  (`mixin/QuestionMixin`), on direct answer submissions (`mixin/InteractionDialogueMessageMixin`,
+  `conversation/ChoiceSelectionService`), in free-text chat matching (`chat/GatePreview`) and in
+  dynamic hub routing (`hub/DynamicHub`). Topics declared adult-only or child-and-up are now hidden
+  from younger villagers everywhere, not just where MCA's native constraints happened to reach; the
+  `QuestionMixin` injection into `getValidAnswers` now captures the villager argument so it can make
+  that call. Datapack authors' `ages` values are still validated on load, and an unknown value is
+  still rejected.
 
 ## [1.6.1] - unreleased
 

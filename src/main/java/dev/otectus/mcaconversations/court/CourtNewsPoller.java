@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.court;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.compat.CapitalChronicleEventView;
 import dev.otectus.mcaconversations.compat.CapitalCourtView;
 import dev.otectus.mcaconversations.compat.CapitalRelationView;
@@ -294,7 +295,7 @@ public final class CourtNewsPoller {
         @Override
         public boolean relationsAvailable() {
             return bridge.has(CapitalsCapability.DIPLOMACY)
-                    && McaConversationsConfig.dynamicFeature("capital_diplomacy", true);
+                    && McaConversationsConfig.dynamicFeature(FeatureId.CAPITAL_DIPLOMACY, true);
         }
 
         @Override
@@ -307,7 +308,7 @@ public final class CourtNewsPoller {
     /** Config is not loaded in unit tests or very early startup; treat that as enabled. */
     private static boolean newsEnabled() {
         try {
-            return McaConversationsConfig.isFeatureEnabled("capital_news");
+            return McaConversationsConfig.isFeatureEnabled(FeatureId.CAPITAL_NEWS);
         } catch (Throwable t) {
             return true;
         }

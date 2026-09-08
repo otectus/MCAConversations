@@ -4,6 +4,7 @@ import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.compat.mca.McaHandles;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.check.CheckContextFactory;
 import dev.otectus.mcaconversations.check.CheckDefinition;
 import dev.otectus.mcaconversations.check.CheckResolver;
@@ -141,6 +142,23 @@ public final class ConversationsMcaRegistrar {
         }
     }
 
+    /**
+     * Reads a feature id for the two feature conditions, or null when the content names one that does
+     * not exist. The unknown id is reported once by {@link McaConversationsConfig#warnUnknownFeature}.
+     */
+    private static FeatureId parseFeature(String condition, com.google.gson.JsonElement json) {
+        String raw = SafeParse.orNull(condition, json, json::getAsString);
+        if (raw == null) {
+            return null;
+        }
+        FeatureId feature = FeatureId.parse(raw).orElse(null);
+        if (feature == null) {
+            McaConversationsConfig.warnUnknownFeature(raw);
+            McaConversations.LOGGER.warn("{} names unknown feature '{}'; the condition scores 0", condition, raw);
+        }
+        return feature;
+    }
+
     public static void register() {
         // The living-histories living-histories vocabulary lives in its own registrar: nine orthogonal entries
         // covering identity, context, episodes, threads, promises, claims, opinions, recency and the
@@ -149,11 +167,14 @@ public final class ConversationsMcaRegistrar {
 
         // --- Conditions (dialogue JSON shares the gift-predicate condition registry) ---
 
+        // An id no FeatureId knows is an invalid reference, not a feature: it parses to null, so
+        // conversations_enabled AND conversations_disabled both score 0 on it and a typo removes the
+        // result rather than pinning it permanently on.
         McaHandles.registerCondition("conversations_enabled",
-                (json, name) -> SafeParse.orNull("conversations_enabled", json, json::getAsString),
+                (json, name) -> parseFeature("conversations_enabled", json),
                 feature -> (villager, stack, player) -> {
                     try {
-                        return feature != null && McaConversationsConfig.isFeatureEnabled(feature) ? 1.0f : 0.0f;
+                        return McaConversationsConfig.isFeatureEnabled(feature) ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_enabled({}) failed; defaulting 0", feature, t);
                         return 0.0f;
@@ -161,7 +182,7 @@ public final class ConversationsMcaRegistrar {
                 });
 
         McaHandles.registerCondition("conversations_disabled",
-                (json, name) -> SafeParse.orNull("conversations_disabled", json, json::getAsString),
+                (json, name) -> parseFeature("conversations_disabled", json),
                 feature -> (villager, stack, player) -> {
                     try {
                         return feature != null && !McaConversationsConfig.isFeatureEnabled(feature) ? 1.0f : 0.0f;

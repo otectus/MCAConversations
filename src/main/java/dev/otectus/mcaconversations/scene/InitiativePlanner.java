@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.scene;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.chat.ChatDelivery;
 import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.compat.McaCompat;
@@ -177,7 +178,7 @@ public final class InitiativePlanner {
     /** What this villager would raise with this player right now, if anything. */
     public static Optional<Opening> find(Entity villager, ServerPlayer player, long today) {
         if (villager == null || player == null
-                || !McaConversationsConfig.dynamicFeature("history", false)) {
+                || !McaConversationsConfig.dynamicFeature(FeatureId.HISTORY, false)) {
             return Optional.empty();
         }
         try {

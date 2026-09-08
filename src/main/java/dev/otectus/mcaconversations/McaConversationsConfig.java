@@ -5,6 +5,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import dev.otectus.mcaconversations.season.CalendarSource;
 import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /** Forge common + client configuration. See CONFIG.md for the user-facing documentation. */
 public final class McaConversationsConfig {
@@ -53,58 +55,59 @@ public final class McaConversationsConfig {
     private McaConversationsConfig() {
     }
 
-    /**
-     * Resolves a feature id used by the {@code conversations_enabled}/{@code conversations_disabled} dialogue
-     * conditions. Unknown ids count as enabled so a content typo degrades to "always on" rather
-     * than silently killing a dialogue branch.
-     */
-    public static boolean isFeatureEnabled(String feature) {
-        return switch (feature.toLowerCase(Locale.ROOT)) {
-            case "topics" -> COMMON.enableTopics.get();
-            case "states" -> COMMON.enableStates.get();
-            case "templates" -> COMMON.enableTemplates.get();
-            case "gossip" -> COMMON.enableGossip.get();
-            case "quests" -> COMMON.enableQuests.get();
-            case "world" -> COMMON.enableWeatherLines.get();
-            // Without these, "seasons" and "holidays" fell through to the default and scored as
-            // enabled forever, so a conversations_disabled sink on either could never fire and
-            // season- or festival-aware content had no way to degrade when its flag was off.
-            case "seasons" -> COMMON.enableSeasonLines.get();
-            case "holidays" -> COMMON.enableHolidayLines.get();
-            case "dispositions" -> COMMON.enableDispositions.get();
-            case "checks" -> COMMON.enableChecks.get();
-            case "branching" -> COMMON.enableBranching.get();
-            case "chat" -> COMMON.enableChatMode.get();
-            case "townstead" -> COMMON.townsteadEnabled.get();
-            // MCA Capitals. Each sub-feature is gated by the master switch as well as its own, so
-            // capitals.enabled=false silences the whole layer without touching three other flags.
-            case "capitals" -> COMMON.capitalsEnabled.get();
-            case "capital_topics" -> COMMON.capitalsEnabled.get() && COMMON.capitalTopicsEnabled.get();
-            case "capital_news" -> COMMON.capitalsEnabled.get() && COMMON.capitalNewsEnabled.get();
-            case "capital_diplomacy" -> COMMON.capitalsEnabled.get()
-                    && COMMON.capitalDiplomacyTalkEnabled.get();
-            // Living-histories features. Each is gated by the master switch as well as its own, so
-            // dynamic.enabled=false silences the whole layer without touching seven other flags.
-            case "dynamic" -> COMMON.dynamicEnabled.get();
-            case "identity" -> COMMON.dynamicEnabled.get() && COMMON.identityEnabled.get();
-            case "episodes" -> COMMON.dynamicEnabled.get() && COMMON.episodesEnabled.get()
-                    && COMMON.historyEnabled.get();
-            case "history" -> COMMON.historyEnabled.get();
-            case "social_opinions" -> COMMON.dynamicEnabled.get() && COMMON.socialOpinionsEnabled.get();
-            case "village_culture" -> COMMON.dynamicEnabled.get() && COMMON.villageCultureEnabled.get();
-            case "group" -> COMMON.dynamicEnabled.get() && COMMON.groupEnabled.get();
-            default -> true;
-        };
+    /** Raw ids already reported as unknown, bounded so a hostile datapack cannot grow it without end. */
+    private static final Set<String> WARNED_UNKNOWN_FEATURES = ConcurrentHashMap.newKeySet();
+    private static final int MAX_WARNED_UNKNOWN_FEATURES = 64;
+
+    /** Reads a feature switch. See {@link FeatureId} for what each id decides. */
+    public static boolean isFeatureEnabled(FeatureId feature) {
+        return feature != null && feature.read();
     }
 
     /**
-     * Reads a living-histories feature switch without ever throwing.
+     * Resolves a raw feature id used by the {@code conversations_enabled}/{@code conversations_disabled}
+     * dialogue conditions and answers its switch.
+     *
+     * <p>An id {@link FeatureId} does not know is an invalid reference and reads as <b>disabled</b>,
+     * reported once per distinct id. It used to count as enabled, which made a typo permanently
+     * unswitchable rather than merely wrong.
+     */
+    public static boolean isFeatureEnabled(String feature) {
+        FeatureId resolved = FeatureId.parse(feature).orElse(null);
+        if (resolved == null) {
+            warnUnknownFeature(feature);
+            return false;
+        }
+        return resolved.read();
+    }
+
+    /** Reports an unrecognised feature id once, and only while the bounded set has room. */
+    public static void warnUnknownFeature(String feature) {
+        String key = feature == null ? "" : feature.trim().toLowerCase(Locale.ROOT);
+        if (WARNED_UNKNOWN_FEATURES.size() < MAX_WARNED_UNKNOWN_FEATURES
+                && WARNED_UNKNOWN_FEATURES.add(key)) {
+            McaConversations.LOGGER.warn(
+                    "Unknown feature id '{}' — it names no switch, so it reads as disabled everywhere", feature);
+        }
+    }
+
+    /**
+     * Reads a feature switch without ever throwing.
      *
      * <p>{@link #isFeatureEnabled} is called from dialogue conditions, where a config read happens
      * inside MCA's selection loop and a config that has not loaded yet (a datapack reload during world
      * creation) would otherwise propagate. This wrapper answers {@code fallback} in that window rather
      * than taking the reload with it.
      */
+    public static boolean dynamicFeature(FeatureId feature, boolean fallback) {
+        try {
+            return isFeatureEnabled(feature);
+        } catch (Throwable t) {
+            return fallback;
+        }
+    }
+
+    /** The legacy string entry point, with the same never-throw contract. */
     public static boolean dynamicFeature(String feature, boolean fallback) {
         try {
             return isFeatureEnabled(feature);

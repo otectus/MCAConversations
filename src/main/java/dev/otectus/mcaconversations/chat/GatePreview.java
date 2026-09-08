@@ -1,8 +1,10 @@
 package dev.otectus.mcaconversations.chat;
 
+import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.IntentMatcher.Scored;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.TopicAgeGate;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
@@ -28,8 +30,11 @@ public final class GatePreview {
         if (McaCompat.isBaby(villager) && !(scored.isSystem() && "greet".equals(scored.system()))) {
             return false;
         }
+        // The category is a runtime string from the intent file; an id that names no feature is an
+        // invalid reference, so the intent is not eligible rather than unconditionally eligible.
         String category = scored.category();
-        if (category != null && !McaConversationsConfig.isFeatureEnabled(category)) {
+        if (category != null && !McaConversationsConfig.isFeatureEnabled(
+                FeatureId.parse(category).orElse(null))) {
             return false;
         }
         if (scored.isSystem()) {
@@ -39,6 +44,11 @@ public final class GatePreview {
             }
             return true; // system intents route to dispatcher behaviors — no answer constraints to check
         }
-        return McaCompat.checkConstraints(villager, player, scored.question(), scored.answer());
+        if (!McaCompat.checkConstraints(villager, player, scored.question(), scored.answer())) {
+            return false;
+        }
+        // Chat mode enters topics by the same question/answer pair the GUI does, so it owes the
+        // catalog's age allow-list the same answer.
+        return TopicAgeGate.allows(scored.question(), scored.answer(), villager);
     }
 }
