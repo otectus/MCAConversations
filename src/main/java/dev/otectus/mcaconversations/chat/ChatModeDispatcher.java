@@ -12,6 +12,7 @@ import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.EngagementPolicy;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
 import dev.otectus.mcaconversations.disposition.Dispositions;
@@ -78,16 +79,19 @@ public final class ChatModeDispatcher {
         if (player == null || !isOptedIn(player)) {
             return false;
         }
-        String raw = event.getRawText();
         MinecraftServer server = player.getServer();
         if (server == null) {
             return false;
         }
+        // The local-chat owner takes getRawText(): it cancels the event and renders the line itself,
+        // so it presents what the player typed rather than another mod's decoration of it.
+        AcceptedChat accepted = AcceptedChat.of(player, event.getRawText(),
+                server.overworld().getGameTime());
         try {
             server.execute(() -> {
                 try {
-                    rebroadcastLocal(player, raw);
-                    handle(player, raw);
+                    rebroadcastLocal(player, accepted.text());
+                    handle(player, accepted.text());
                 } catch (Throwable t) {
                     McaConversations.LOGGER.warn("chat-mode local-chat delivery failed", t);
                 }
@@ -126,15 +130,18 @@ public final class ChatModeDispatcher {
         if (player == null) {
             return;
         }
-        String raw = event.getRawText();
         MinecraftServer server = player.getServer();
         if (server == null) {
             return;
         }
+        // The observing path takes getMessage(): it never cancels or re-renders, so the message the
+        // villagers hear is the one the server is about to broadcast, rewrites by other mods included.
+        AcceptedChat accepted = AcceptedChat.of(player, event.getMessage().getString(),
+                server.overworld().getGameTime());
         try {
             server.execute(() -> {
                 try {
-                    handle(player, raw);
+                    handle(player, accepted.text());
                 } catch (Throwable t) {
                     McaConversations.LOGGER.warn("chat-mode handler failed; ignoring message", t);
                 }
@@ -683,6 +690,18 @@ public final class ChatModeDispatcher {
         shared.clearOffer();
         boolean showHearts = McaConversationsConfig.COMMON.chatModeShowHeartChanges.get();
         int heartsBefore = showHearts ? McaCompat.getHearts(player, target.entity()) : 0;
+        // The message was accepted a thread hop (and, for a numbered reply, a client round trip) ago.
+        // Re-check the pair before MCA's engine runs: an answer must not fire at a villager the
+        // player has since walked away from, left the dimension of, or outlived.
+        double engageRadius = McaConversationsConfig.chatModeAddressedRadius();
+        EngagementPolicy.Verdict verdict = EngagementPolicy.evaluate(
+                player, target.entity(), engageRadius * engageRadius);
+        if (!verdict.ok()) {
+            McaConversations.LOGGER.debug("chat-mode answer abandoned before selectAnswer: {}", verdict);
+            ConversationSessions.endTopic(player.getUUID(), now);
+            return;
+        }
+
         // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
         // planning hook never fires here. Calling it explicitly is what keeps the two frontends
         // behaviourally equivalent: the same topic opens the same scene whichever way it was asked

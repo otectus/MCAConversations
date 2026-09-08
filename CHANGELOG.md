@@ -48,6 +48,18 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   warning naming the raw id, and an unknown id read through `McaConversationsConfig.isFeatureEnabled(String)`
   directly is likewise treated as disabled with one warning. `FeatureOffLintTest` now checks that every
   feature id in the shipped data and the sample datapacks resolves through `FeatureId`.
+- **A villager at the corner of the chat box could earn hearts for a reply it never gave.** Chat-mode
+  targeting (`chat/VillagerFinder`) gathered candidates from an inflated bounding box — a cube, up to
+  `sqrt(3)·radius` from the player — while delivery (`chat/ChatDelivery`) checked a sphere of the same
+  radius, so a villager standing between the two (for example at three quarters of the radius along
+  both horizontal axes) was a valid target: MCA ran the answer's effects for it, and the reply was then
+  discarded at delivery. Candidate search (`VillagerFinder.rank`) now filters to the sphere before
+  ranking, and one engagement policy (`conversation/EngagementPolicy`: speaker connected and alive,
+  villager alive, same dimension, within range) is re-evaluated immediately before MCA's answer runs
+  (`chat/ChatModeDispatcher#driveStaggered`), at delivery time (`chat/ChatDelivery#deliver`), and for
+  GUI/numbered choices (`conversation/ChoiceSelectionService`); when it fails, no effect runs, no reply
+  is scheduled, and the exchange ends quietly. Candidates tied at equal distance now rank
+  deterministically by name then UUID.
 
 ### Changed
 
@@ -61,12 +73,21 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   `conversation/AgeGroup` vocabulary — `baby, toddler, child, teen, adult`, where an unreadable age
   never passes a positive list), is now applied in the MCA dialogue screen's answer list
   (`mixin/QuestionMixin`), on direct answer submissions (`mixin/InteractionDialogueMessageMixin`,
-  `conversation/ChoiceSelectionService`), in free-text chat matching (`chat/GatePreview`) and in
-  dynamic hub routing (`hub/DynamicHub`). Topics declared adult-only or child-and-up are now hidden
+  `conversation/ChoiceSelectionService`), and in free-text chat matching (`chat/GatePreview`); dynamic
+  hub routing (`hub/DynamicHub`) applies the same `TopicEntry.allowsAge` check to its slots directly,
+  in `withoutTopicsTooOldFor`. Topics declared adult-only or child-and-up are now hidden
   from younger villagers everywhere, not just where MCA's native constraints happened to reach; the
   `QuestionMixin` injection into `getValidAnswers` now captures the villager argument so it can make
   that call. Datapack authors' `ages` values are still validated on load, and an unknown value is
   still rejected.
+- **Ordinary chat is observed after every other handler has had its say.** The single chat listener
+  (`event/ConversationsEvents#onServerChat`) ran at `EventPriority.HIGH` and copied the raw text before
+  other mods could cancel or rewrite the message. It now listens at `EventPriority.LOWEST`, skips
+  cancelled events, and matches the final message text, so a message another mod cancels never reaches
+  a villager and a rewritten message is matched as rewritten; the experimental local-chat mode
+  (`chatModeLocalChat`, default off, `#onLocalChat`) keeps its early `HIGH` slot because it must own
+  cancellation, and a message is never processed by both paths. An immutable snapshot of the accepted
+  message (`chat/AcceptedChat`) crosses to the server thread instead of the live event.
 
 ## [1.6.1] - unreleased
 

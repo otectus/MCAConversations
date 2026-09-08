@@ -105,19 +105,39 @@ public final class ConversationsEvents {
     // --- Chat mode -------------------------------------------------------------
 
     /**
-     * Chat-mode entry point. Cheap early-out before the thread hop; the dispatcher captures only the
-     * raw text on this (background) thread and hops to the server thread. The default path never
-     * cancels or mutates the player's message — villagers respond around normal chat (1.19+ signed-chat
-     * safety). The one exception is the EXPERIMENTAL opt-in {@code chatModeLocalChat}, which cancels
-     * and rebroadcasts within a radius (trade-off documented on the dispatcher method + config).
+     * EXPERIMENTAL local-chat owner ({@code chatModeLocalChat}, default off). It <em>rewrites</em> the
+     * message's delivery — cancelling it and rebroadcasting within a radius — so it runs at HIGH, ahead
+     * of listeners that only want to read the final message (trade-off documented on the dispatcher
+     * method + config). When it claims the message it also runs the matching pipeline itself, and
+     * cancels the event; a cancelled event is not delivered to {@link #onServerChat} below, so a
+     * claimed message is processed exactly once. When local chat is off, or declines, it cancels
+     * nothing and the observing listener picks the message up instead.
      */
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onServerChat(ServerChatEvent event) {
+    public static void onLocalChat(ServerChatEvent event) {
         if (!McaBridge.isAvailable() || !McaConversationsConfig.COMMON.enableChatMode.get()) {
             return;
         }
-        if (ChatModeDispatcher.interceptLocalChat(event)) {
-            return; // consumed: local rebroadcast + pipeline run on one main-thread hop
+        ChatModeDispatcher.interceptLocalChat(event); // no-op unless chatModeLocalChat is on
+    }
+
+    /**
+     * The ordinary observing path. It never cancels or mutates the player's message — villagers
+     * respond around normal chat (1.19+ signed-chat safety) — so it runs at LOWEST, after every other
+     * mod has had its say and the message text is final. The dispatcher snapshots that text on this
+     * (background) thread and hops to the server thread.
+     *
+     * <p>Forge does not deliver a cancelled event to a listener that did not ask for cancelled
+     * events, so the explicit check is belt and braces: it is the one line that states out loud that
+     * a message claimed by {@link #onLocalChat} must not be handled a second time here.
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onServerChat(ServerChatEvent event) {
+        if (event.isCanceled()) {
+            return; // claimed by the local-chat owner, which already ran the pipeline
+        }
+        if (!McaBridge.isAvailable() || !McaConversationsConfig.COMMON.enableChatMode.get()) {
+            return;
         }
         ChatModeDispatcher.onChat(event);
     }
