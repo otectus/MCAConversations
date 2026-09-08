@@ -103,6 +103,29 @@ _What you are working on right now. One or two lines._
 
 **Capitals binding:** MCA Capitals is bound reflectively via `compat/capitals/CapitalsBinding.java`, with no direct imports of its classes. The capital name is the MCA village's name; the event source is chronicle diffs and court snapshots polled together in `court/CourtNewsPoller.java`. The probe jar location is supplied as a command-line property `-PcapitalsJar=<path>` (read via `project.hasProperty` in `build.gradle` ~:262 by the `capitalsProbeTest` task); no probe-version list is stored in `gradle.properties` (binding versions are hard-coded in the binding itself, as they are with MCA).
 
+## Content pipeline
+
+`src/content/{topics,professions,voices}` are the hand-authored sources for the branching/dynamic
+corpus. Two Gradle tasks compile them into committed runtime resources (`build.gradle`):
+
+- `generateConversationContent` runs `authoring.ContentCompiler` (`src/content` → `src/main/resources`),
+  owning `conversations.scene.*` dialogues, `scene_*.json` contracts/intents and the five
+  narrative-template directories.
+- `generateVoiceOverlays` runs `authoring.VoiceFamilyCompiler` (`src/content/voices` →
+  `src/main/resources/assets`), expanding the six authored voices into every personality overlay
+  namespace in both locales.
+
+Neither is wired into `processResources`; the compiler lives in the test source set and the generated
+output is committed. `verifyGeneratedConversationContent` and `verifyVoiceOverlays` are the drift
+gates — separate `Test` tasks that recompile into a scratch tree and byte-compare it back. `check`
+does not depend on either (see `build.gradle`), so CI invokes them by name alongside `build`.
+
+`data/mcaconversations/dialogues/conversations.cat.*.json` (the six category starter files) and
+`conversations.json` are **not** part of this pipeline — they are hand-authored MCA question banks
+that the generators never read or write (confirmed against `ContentCompiler`'s own ownership doc
+comment and by grepping `src/test/java/.../authoring/` for `conversations.cat`, which finds no
+generator reference to those files, only test fixtures that use the ids).
+
 ## Known issues
 
 _Bugs you know about but have not fixed, with the symptom and any lead._

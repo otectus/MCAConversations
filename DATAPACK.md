@@ -127,6 +127,17 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_check` | `{"id": "<topic.stance>", "tier": "crit" \| "success" \| "partial" \| "rebuff", "axis", "difficulty": 0–100, "stance"?, "arc"?}` | 1 when the seeded check resolver lands on this result's declared tier — see *Dialogue checks* below. All tier results of a stance share id/axis/difficulty/stance/arc. Optional `stance` names a stance family so the villager's interiority profile can make that kind of remark land better or worse on them; optional `arc` names the ordered progression the check belongs to, so the seeded roll changes when the relationship genuinely moves on |
 | `conversations_progress` | `{"arc","min"?,"max"?}` / `{"milestone","has"?}` / `{"exclusive","is"}` | 1 when the durable ledger agrees: arc stage in range, milestone set (or deliberately absent with `"has": false`), or this side of an exclusive choice taken (`"is": "none"` for undecided). Exactly one of the three keys |
 
+`conversations_enabled`/`conversations_disabled` resolve through one closed registry, `FeatureId`
+(`src/main/java/dev/otectus/mcaconversations/FeatureId.java`) — `topics`, `states`, `templates`,
+`gossip`, `quests`, `world`, `seasons`, `holidays`, `dispositions`, `checks`, `branching`, `chat`,
+`townstead`, `capitals`, `capital_topics`, `capital_news`, `capital_diplomacy`, `dynamic`, `identity`,
+`episodes`, `history`, `social_opinions`, `village_culture`, `group`. Each constant may also carry
+historical alias spellings that resolve to it; none of the current ids has one. **An id neither
+`FeatureId.parse` nor an alias recognises is not "enabled" — it is an invalid reference.** Both
+conditions score 0 on it (`compat/mca/ConversationsMcaRegistrar#parseFeature`), and the mistake is
+reported once at WARN, naming the raw id (`McaConversationsConfig.warnUnknownFeature`, capped at 64
+distinct unknown ids per run).
+
 ## Custom actions
 
 | Key | Value | Effect |
@@ -194,7 +205,13 @@ already does it.
 **The conversation catalog** (`data/<namespace>/conversation_catalog/*.json`) is the machine-readable
 claim that a topic exists. It is not a second dialogue engine; MCA's JSON stays authoritative. It
 exists so lint can check that every shipped topic really became a conversation, and so arc, milestone
-and exclusive ids are declared in exactly one place a typo cannot slip past:
+and exclusive ids are declared in exactly one place a typo cannot slip past.
+
+Files merge in sorted resource-location order (`ConversationCatalogLoader`), so the result is the same
+on every machine regardless of pack-stack iteration order. A topic id is meant to be declared in
+exactly one place — a pack overrides a shipped topic by replacing that topic's file, not by redeclaring
+the id in a second file — so a collision is reported as a warning naming both source files and the
+file that actually won (last in sorted order), rather than silently picked by map order:
 
 ```json
 {"topics": {"day": {
@@ -206,6 +223,18 @@ and exclusive ids are declared in exactly one place a typo cannot slip past:
   "chat_required": true
 }}}
 ```
+
+`ages` is an allow-list from `conversation/AgeGroup.java`'s four authorable values — `toddler`,
+`child`, `teen`, `adult` (`baby` and `unknown` exist in the enum for a runtime read but can never be
+authored or satisfy an allow-list). It is enforced by `conversation/TopicAgeGate` on every entry
+path a topic-carrying question/answer can reach: the dialogue screen's answer list
+(`mixin/QuestionMixin`), a dialogue-screen submission (`mixin/InteractionDialogueMessageMixin`,
+alongside `conversation/ConversationGuard`'s offer-replay checks), the numbered-choice packet
+(`conversation/ChoiceSelectionService`), and free-text chat matching (`chat/GatePreview`). The
+dynamic hub (`hub/DynamicHub`) is the one exception: it applies `TopicEntry#allowsAge` to its slots
+directly rather than going through `TopicAgeGate`. Only entries the
+catalog knows are gated — an answer with no catalog row is left exactly as MCA offered it. An
+unreadable villager age never satisfies the list.
 
 Stance families are the shared vocabulary for *what kind of thing the player just said*: `empathy`,
 `curiosity`, `candor`, `encouragement`, `practical_help`, `humor`, `respectful_disagreement`,
@@ -407,6 +436,19 @@ Rules the content lints enforce (`ContentLintTest`):
 - **No answer name may collide with a question name**: answer `a` of question `q` labels from
   `dialogue.q.a`, the same key question `q.a` would use as its header. (That's why the hub button
   for relationships isn't named `family` — `conversations.family` exists as a follow-up.)
+
+**`constraints` is MCA's own closed vocabulary, not this mod's.** The tokens MCA's `Constraint`
+registry actually has, checked in as `NativeConstraintTokens.BASE`
+(`src/test/java/dev/otectus/mcaconversations/content/NativeConstraintTokens.java`, cross-checked
+against real MCA jars by `ConstraintVocabularyProbeTest`): `family`, `baby`, `toddler`, `teen`,
+`adult`, `spouse`, `engaged`, `promised`, `kids`, `parent`, `cleric`, `adventurer`, `mercenary`,
+`outlawed`, `trader`, `peasant`, `noble`, `mayor`, `monarch`, `orphan`, `following`, `staying`,
+`village_has_space`, `has_village`, `hit_by` — each also valid negated with a `!` prefix. **`child` is
+not one of them.** MCA silently drops a token it does not recognise rather than rejecting it, so
+`"constraints": ["!child"]` constrains nothing at all; age gating below the small-kid line is the
+catalog's `ages` allow-list (see "the conversation catalog" above), enforced by `TopicAgeGate`, never
+a constraint. Content lint (`ContentLintTest`) fails the build on any shipped constraint token
+outside this list.
 
 **Adding a category** = one hub answer + one `conversations.cat.<id>.json` + two lang keys
 (`dialogue.conversations.<id>` button label, `dialogue.conversations.cat.<id>` page header) + a back answer

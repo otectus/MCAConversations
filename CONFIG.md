@@ -125,6 +125,12 @@ reproduce the old behaviour exactly.
 Feature toggles act through the `conversations_enabled`/`conversations_disabled` dialogue conditions and
 server-side early-outs — content degrades to fallback lines rather than disappearing mid-tree.
 
+An id neither condition recognises does not count as enabled or as a working kill-switch: it resolves
+to no feature at all, so both `conversations_enabled` and `conversations_disabled` score 0 on it.
+Content that names a misspelled id is therefore invalidated rather than switched on, and the mistake
+is logged once at WARN naming the raw id (`FeatureId`, `McaConversationsConfig.warnUnknownFeature`;
+see DATAPACK.md for the full id list).
+
 ## `[dynamic]` — living histories
 
 > `maxInitiativesPerVillagerPlayerDay`, `initiativeCooldownTicks` and `dynamicTopicSlots` live in the **server** file; the switches and `debugDirector` live in the **common** file.

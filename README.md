@@ -102,9 +102,15 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 - **Villagers who know when not to talk to you (new)** — what a villager may start on its own is
   budgeted and gated: at most one greeting per villager per day, nothing at all from somebody asleep,
   fighting, panicking or busy with another player, and a "stop talking" that is honoured before
-  anything else is even considered. Greetings are the whole of what a villager currently opens
-  unprompted; the budget and the gate for fuller unsolicited conversations are built and idle, and
-  the content that would use them is 1.5.0 work.
+  anything else is even considered. Greetings are raised by `GreetOnApproach`, as one line that costs
+  nothing against the day's initiative allowance. `InitiativePlanner` raises everything else
+  unprompted: a promise that has come due, a rupture between the two of them that has not been
+  acknowledged, a thread the villager left open and is ready to pick back up, and their own situation
+  having changed since they last spoke — plus, with MCA: Reputation or MCA: Capitals installed, the
+  village having just changed its mind about the player, or this villager's own place at court having
+  changed. Each of those can open a decision page and spends the day's one allowance, except a changed
+  situation, which is gated the same way but never counts against that cap. All of it is gated by the
+  same busy/asleep/muted checks as a greeting.
 - **Somebody else can join in (new, off by default)** — in chat mode, a second villager may
   corroborate something public, differ about a preference, add a detail only their trade would know,
   remember a family event differently, or tell the first one that it is not theirs to tell. Three
@@ -215,13 +221,39 @@ MCA's dialogue system loads datapack JSON from any namespace and merges same-nam
 most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
 (`conversations_gossip`, `conversations_disposition`, `conversations_check`, `conversations_say`, ...) into
-MCA's public registries — no runtime patching of MCA except three small soft-fail mixins (the Chat→hub
-redirect, a gift observer, and chat mode's dialogue-packet-to-chat redirect). Chat mode's matcher is a
+MCA's public registries. `mcaconversations.mixins.json` lists eleven mixins in total — five common
+and six client (`client:` list) — every one soft-fail on a missed injection point
+(`injectors.defaultRequire = 0`, so an unresolved method target is skipped at startup instead of
+crashing it); tolerance of a target *class* that does not exist at all comes separately from
+`@Pseudo` and, on the mixins that name MCA's two package roots, from Mixin simply omitting whichever
+root it cannot find (see `mixin/NetworkHandlerMixin`, `mixin/InteractionDialogueMessageMixin`).
+The five common mixins patch MCA classes directly: `DialoguesMixin` (the Chat→hub redirect), `BreedableRelationshipMixin` (a
+gift-acceptance observer), `InteractionDialogueMessageMixin` (validates a GUI dialogue submission —
+distance, ownership, constraints and the catalog's age gate — before MCA acts on it),
+`NetworkHandlerMixin` (chat mode's dialogue-packet-to-chat redirect) and `QuestionMixin` (filters the
+injected hub answer, and the catalog's age gate, out of MCA's own answer list). Chat mode's matcher is a
 second *frontend* to the same engine: free text resolves to the exact `(question, answer)` a GUI click
 would send, so parity is structural, not re-implemented; its intents live in
 `data/<any-namespace>/chat_intents/*.json` and are fully datapack-extensible (including synonym packs).
-The only client-side code is a one-byte "chat box open" ping so villagers can turn toward a typing
-player. The relationship vector lives in its own versioned world save data and
+
+Client-side code is not limited to a ping. `client` tracks whether the chat box is open so villagers
+can turn toward a typing player. `client.dialogue` renders the interaction-screen response card in
+three menu styles — `RESPONSIVE`, `MINIMAL` and `MCA_ORIGINAL` (`DialogueStyleProfile`) — with the
+villager portrait, paging, mouse and keyboard navigation, narrator announcements on focus and
+selection (`DialogueChoiceNarrator`), and an optional per-character text reveal (`QuestionReveal`,
+see `questionRevealMode` above). `client.dialogue.dev` is a development-only response-card preview
+screen and command; its classes ship in the jar same as any other, but the command only registers
+when `FMLLoader.isProduction()` is false, so it never appears in a production build. `client.townstead` bridges Townstead's own RPG
+dialogue screen, and the two Townstead client mixins (`TownsteadChoicePanelMixin`,
+`TownsteadRpgDialogueScreenMixin`) give its choice panel and RPG dialogue screen numbered digit
+selection without touching its camera, typewriter or native selection routine. The remaining four
+client mixins are `ChatScreenChoiceMixin` (vanilla `ChatScreen`, an empty-chat-field digit shortcut
+for chat mode's numbered choices), `InteractScreenChoiceMixin` (MCA's own interaction screen, the
+same responsive-choice rendering as the dialogue-screen response card), and `VillagerMessageMixin`
+and `MCAClientMixin`, covering pooled-dialogue-variant stability and the personality-locale widening
+described under Languages above.
+
+The relationship vector lives in its own versioned world save data and
 **never touches hearts**: MCA's hearts remain the only authoritative, visible relationship number,
 and every heart change still flows through MCA's own dialogue actions. See
 [DATAPACK.md](DATAPACK.md) for the full JSON vocabulary (datapack authors can build on it, including
@@ -233,6 +265,16 @@ Alpha. Pure logic (gossip log, diffing, templates, content lint) is unit-tested;
 behavior can only be verified in a production-style instance** — MCA Reborn does not load under a
 ForgeGradle dev runtime (its bundled mixins only resolve against SRG names), so `runClient` is not
 a valid test of MCA integration. See the in-world checklist in [CHANGELOG.md](CHANGELOG.md).
+
+## What is verified
+
+CI runs the unit/lint suites and the real-jar binding probes (`McaBindingProbeTest` and friends)
+against the MCA versions in `gradle.properties`/`mca_probe_versions`. It does not run the game.
+In-game production checks — a real client and dedicated server on the supported loaders — are listed
+per release in `docs/RELEASE-<version>-LEDGER.md`; a passing CI run is not a claim that any of those
+checks were performed. Optional radius-local chat (`chatModeLocalChat`, off by default) is
+experimental for the same reason: see `docs/RELEASE-1.6.3-LEDGER.md` §c, finding F05, for the
+production check that has not yet been exercised in a running game.
 
 ## License
 

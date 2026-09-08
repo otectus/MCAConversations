@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file. Format foll
 
 Compatibility: Minecraft 1.20.1 · Forge 47.x · requires MCA Reborn `[7.6,8)`.
 Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer declared (MCA 7.6
-asks for it itself; MCA 7.7 dropped it). Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
+asks for it itself; MCA 7.7 dropped it). Since 1.6.3, the optional MCA: Quests and MCA: Reputation
+integrations compile against those add-ons' compile-only API jars, vendored under `libs/api/` and
+hash-pinned by `gradle/sibling-apis.properties` — MCA: Quests 1.6.4 and MCA: Reputation 0.4.1. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
 ## [1.6.3] - unreleased
@@ -136,6 +138,30 @@ shares the 1.6.3 number: MCA: Quests is releasing 1.6.3 and 1.6.4 alongside.
   pair data for older saves), then a fixed UUID order, so the victim is the same before and after a
   reload; if every villager is protected nothing is evicted and the new history is kept out of the
   store with a diagnostic rather than dropping an obligation.
+- **A villager could remember telling you something you never saw, and some ways of leaving left
+  state behind.** A delayed chat reply that got dropped because the player walked away, died or
+  logged out had already been recorded as played at the moment the answer was chosen; and the several
+  ways a conversation could end — logout, death, timeout, an authored ending, a datapack reload, an
+  out-of-range abort — each cleared a different subset of state, so an attention lease or a queued
+  line could survive its own conversation. Every close path now names its reason
+  (`conversation/CloseReason`, an operational fact never a social consequence — `PLAYER_LEFT` is not a
+  snub and `TIMED_OUT` is not boredom). Logout, player or villager death, a timed-out sweep, a server
+  stop, and an out-of-range/dimension-changed/player-gone engagement abort before an answer runs all
+  now reach the one teardown, `ConversationSessions#close`, which ends the topic, releases both the
+  villager's and the player's attention leases, and drops that player's queued lines
+  (`ChatModeScheduler#clearPlayer`). An authored ending and a reload's stale-offer refusal still only
+  end the topic through `#endTopic` alone, which does not drop a queued line, so a farewell already in
+  flight is kept and the session's memory stays with the pair. For free-text chat, a scene is now
+  recorded as played only once its first reply line actually reaches the player
+  (`scene/ConversationPlanner#onScenePlayed` deferring
+  through `chat/ChatModeSession#deferUntilDelivered`, fired by `chat/ChatDelivery#deliver` after the
+  speaker receives the line, with a turn-time fallback when no line was scheduled) — a dropped reply is
+  not remembered as heard, while the player's own accepted choice and everything MCA wrote stay
+  recorded at turn time either way; the dialogue-screen frontend, whose packet is already on the wire,
+  keeps recording at turn time as before. Four of the twelve close reasons (`SPEAKER_UNAVAILABLE`,
+  `FEATURE_DISABLED`, `INVALID_OFFER`, `CONTAINED_ERROR`) are reserved for later work — nothing closes
+  for them yet — and nothing on the network changed. Covered by `SessionCloseReasonTest`,
+  `ChatModeSchedulerTest` and `ChatDeliveryTest`; not verified in-game.
 
 ### Changed
 
