@@ -75,6 +75,36 @@ class ChatModeSchedulerTest {
     }
 
     @Test
+    void clearPlayer_dropsOnlyThatPlayersEntriesAndKeepsDeadlineOrder() {
+        List<String> fired = new ArrayList<>();
+        var leaving = java.util.UUID.randomUUID();
+        var staying = java.util.UUID.randomUUID();
+        ChatModeScheduler.scheduleOrdered(staying, 10, () -> fired.add("stay-early"));
+        ChatModeScheduler.scheduleOrdered(leaving, 20, () -> fired.add("gone"));
+        ChatModeScheduler.scheduleOrdered(staying, 30, () -> fired.add("stay-late"));
+        ChatModeScheduler.schedule(15, () -> fired.add("unowned"));
+
+        ChatModeScheduler.clearPlayer(leaving);
+        assertEquals(0, ChatModeScheduler.pendingFor(leaving));
+        assertEquals(2, ChatModeScheduler.pendingFor(staying));
+
+        ChatModeScheduler.drain(100);
+        assertEquals(List.of("stay-early", "unowned", "stay-late"), fired);
+    }
+
+    @Test
+    void clearPlayer_alsoForgetsTheOrderingAnchor() {
+        List<String> fired = new ArrayList<>();
+        var player = java.util.UUID.randomUUID();
+        ChatModeScheduler.scheduleOrdered(player, 60, () -> fired.add("before"));
+        ChatModeScheduler.clearPlayer(player);
+        // Without clearing the anchor the next conversation's first line would inherit tick 61.
+        ChatModeScheduler.scheduleOrdered(player, 10, () -> fired.add("after"));
+        ChatModeScheduler.drain(10);
+        assertEquals(List.of("after"), fired);
+    }
+
+    @Test
     void aShortInterjectionCannotOvertakeItsLongOpeningLine() {
         List<String> fired = new ArrayList<>();
         var player = java.util.UUID.randomUUID();

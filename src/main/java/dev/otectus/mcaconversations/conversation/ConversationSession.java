@@ -88,6 +88,7 @@ public final class ConversationSession {
     private int positiveApplied;
     private int negativeApplied;
     private Frontend frontend = Frontend.GUI;
+    private CloseReason lastCloseReason;
 
     private String currentBeatId;
     private String currentSubject;
@@ -303,6 +304,20 @@ public final class ConversationSession {
      */
     public void endTopic() {
         resetTopic(offerFrontend != Frontend.GUI || offerConsumed);
+    }
+
+    /**
+     * Why this session was last torn down, or empty while it has never been closed. Stamped by
+     * {@link ConversationSessions#close} just before the session leaves the registry, so the
+     * detached object still explains itself to a log line or a test.
+     */
+    public Optional<CloseReason> lastCloseReason() {
+        return Optional.ofNullable(lastCloseReason);
+    }
+
+    /** Records the ending. Diagnostic only — no state depends on it (see {@link CloseReason}). */
+    public void noteClosed(CloseReason reason) {
+        this.lastCloseReason = reason;
     }
 
     private void resetTopic() {

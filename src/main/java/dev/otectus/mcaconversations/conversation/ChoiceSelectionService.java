@@ -40,7 +40,7 @@ public final class ChoiceSelectionService {
             // and execute nothing.
             session.consumeOffer(revision, absoluteIndex);
             session.clearOffer();
-            ConversationSessions.endTopic(player.getUUID(), now);
+            ConversationSessions.endTopic(player.getUUID(), now, CloseReason.CONTENT_RELOADED);
             McaConversations.LOGGER.debug(
                     "refused numbered response revision {} from {}: content was reloaded after the offer was made",
                     revision, player.getGameProfile().getName());

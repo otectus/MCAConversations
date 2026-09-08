@@ -48,7 +48,8 @@ class ConversationPlannerTest {
             session.endTopic();
             assertFalse(ConversationPlanner.canReusePlan(session, "work", afterOpening));
         } finally {
-            ConversationSessions.clear(player);
+            ConversationSessions.clear(player,
+                    dev.otectus.mcaconversations.conversation.CloseReason.COMPLETED);
         }
     }
 }

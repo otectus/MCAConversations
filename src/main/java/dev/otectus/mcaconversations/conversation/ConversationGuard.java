@@ -66,7 +66,7 @@ public final class ConversationGuard {
             // page and close the topic safely — nothing runs — so the next click is refused for the
             // ordinary reason instead of executing against a catalog that no longer exists.
             session.clearOffer();
-            ConversationSessions.endTopic(playerId, now);
+            ConversationSessions.endTopic(playerId, now, CloseReason.CONTENT_RELOADED);
             return reject(playerId, question, answer, "content was reloaded after the offer was made");
         }
         session.setVillagerId(villagerId);

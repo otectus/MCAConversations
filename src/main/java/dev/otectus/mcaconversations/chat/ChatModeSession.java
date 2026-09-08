@@ -128,17 +128,17 @@ public final class ChatModeSession {
     }
 
     /** Drops a player's session (logout/death), including the shared conversation session. */
-    public static void clear(UUID playerId) {
+    public static void clear(UUID playerId, dev.otectus.mcaconversations.conversation.CloseReason reason) {
         SESSIONS.remove(playerId);
-        ConversationSessions.clear(playerId);
+        ConversationSessions.clear(playerId, reason);
     }
 
     /** Release server-owned references before an integrated server is stopped or replaced. */
-    public static void reset() {
+    public static void reset(dev.otectus.mcaconversations.conversation.CloseReason reason) {
         SESSIONS.clear();
         LAST_AMBIENT.clear();
         activeScope = null;
-        ConversationSessions.clearAll();
+        ConversationSessions.clearAll(reason);
     }
 
     // --- Ambient per-villager rate limit (spec §12) ---------------------------
@@ -236,6 +236,30 @@ public final class ChatModeSession {
         return s != null && s.player == player;
     }
 
+    /**
+     * Defers {@code task} until the villager's reply for the open turn actually reaches
+     * {@code player}, when this player is mid-exchange in chat mode.
+     *
+     * <p>This is the delivery boundary the chat frontend lacks by default: MCA's engine runs to
+     * completion at match time, but the sentence it produced is still sitting in
+     * {@link ChatModeScheduler} behind a humanized delay and may yet be dropped for range, death or
+     * a dimension change. Anything that records what the player was told belongs on this side of
+     * that gap. Returns false when no scope is open — the GUI frontend, where the line is already
+     * on its way, and the caller should do the work itself.
+     */
+    public static boolean deferUntilDelivered(ServerPlayer player, Runnable task) {
+        Scope s = activeScope;
+        if (s == null || s.player != player || task == null) {
+            return false;
+        }
+        Runnable existing = s.onDelivered;
+        s.onDelivered = existing == null ? task : () -> {
+            existing.run();
+            task.run();
+        };
+        return true;
+    }
+
     /** Mixin hook for the heart-impact analysis strip ({@code AnalysisResults}): swallowed silently. */
     public static boolean swallowAnalysis(ServerPlayer player) {
         Scope s = activeScope;
@@ -243,6 +267,9 @@ public final class ChatModeSession {
     }
 
     private static void assertServerThread(ServerPlayer player) {
+        if (player == null) {
+            return; // no player, no thread to be wrong about (test seams open an empty scope)
+        }
         MinecraftServer server = player.getServer();
         if (server != null && !server.isSameThread()) {
             McaConversations.LOGGER.error(
@@ -268,6 +295,11 @@ public final class ChatModeSession {
         public net.minecraft.network.chat.Component options;
         public long optionsRevision;
         int linesScheduled;
+        /**
+         * Bookkeeping this turn owes the player only if they actually hear the reply — recency
+         * stamping for a disclosed scene. Run once, by the first line that reaches them.
+         */
+        private Runnable onDelivered;
         private final Scope previous;
 
         private Scope(ServerPlayer player, Entity villager, int extraDelayTicks, Scope previous) {
@@ -277,9 +309,28 @@ public final class ChatModeSession {
             this.previous = previous;
         }
 
+        /** Runs the deferred bookkeeping exactly once; later lines of the same turn find it gone. */
+        void fireDelivered() {
+            Runnable task = onDelivered;
+            onDelivered = null;
+            if (task == null) {
+                return;
+            }
+            try {
+                task.run();
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("deferred delivery bookkeeping failed; ignoring", t);
+            }
+        }
+
         @Override
         public void close() {
             activeScope = previous;
+            if (onDelivered != null && linesScheduled == 0) {
+                // The turn said nothing out loud (a swallowed menu, a silent line): there is no
+                // delivery to wait for, so the bookkeeping falls back to turn time.
+                fireDelivered();
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ import net.minecraft.network.chat.MutableComponent;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The chat line template substitution must keep the villager-line {@link Component} intact (never
@@ -138,5 +140,47 @@ class ChatDeliveryTest {
     void clarificationUsesTheActualContextualAnswerLabel() {
         var choice = new IntentMatcher.Scored("q.ask", 0.9, "conversations.q", "ask", null, "topics", true);
         assertEquals("dialogue.conversations.q.ask", ChatModeDispatcher.topicName(choice).getString());
+    }
+
+    // --- Delivery-boundary hook -----------------------------------------------
+    //
+    // deliver() itself needs live entities, so what is covered here is the plumbing either side of
+    // it: a hook parked on the open scope runs exactly once when a delivered line fires it, and
+    // never when the scope closes with a line that was scheduled but dropped.
+
+    @Test
+    void deliveryHook_firesOnceOnTheFirstDeliveredLine() {
+        int[] fired = {0};
+        try (ChatModeSession.Scope scope = ChatModeSession.open(null, null, 0)) {
+            assertTrue(ChatModeSession.deferUntilDelivered(null, () -> fired[0]++));
+            scope.linesScheduled = 2;
+            scope.fireDelivered();
+            scope.fireDelivered();  // the turn's second line finds the bookkeeping already done
+        }
+        assertEquals(1, fired[0]);
+    }
+
+    @Test
+    void deliveryHook_doesNotFireWhenTheScheduledLineIsDropped() {
+        int[] fired = {0};
+        try (ChatModeSession.Scope scope = ChatModeSession.open(null, null, 0)) {
+            assertTrue(ChatModeSession.deferUntilDelivered(null, () -> fired[0]++));
+            scope.linesScheduled = 1;  // scheduled, then dropped before delivery: never fired
+        }
+        assertEquals(0, fired[0]);
+    }
+
+    @Test
+    void deliveryHook_fallsBackToTurnTimeWhenTheTurnSaysNothing() {
+        int[] fired = {0};
+        try (ChatModeSession.Scope scope = ChatModeSession.open(null, null, 0)) {
+            assertTrue(ChatModeSession.deferUntilDelivered(null, () -> fired[0]++));
+        }
+        assertEquals(1, fired[0], "no line was ever scheduled, so there is no delivery to wait for");
+    }
+
+    @Test
+    void deliveryHook_isRefusedWhenNoScopeIsOpen() {
+        assertFalse(ChatModeSession.deferUntilDelivered(null, () -> { }));
     }
 }

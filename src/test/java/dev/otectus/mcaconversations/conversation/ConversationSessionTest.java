@@ -125,7 +125,7 @@ class ConversationSessionTest {
     @DisplayName("a villager's death ends any session pointed at it")
     void villagerDeathClearsSessions() {
         ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 100);
-        ConversationSessions.clearVillager(VILLAGER);
+        ConversationSessions.clearVillager(VILLAGER, CloseReason.SPEAKER_DEAD);
         ConversationSession session = ConversationSessions.get(PLAYER, 100);
         assertTrue(session.topicId().isEmpty());
         assertEquals(null, session.villagerId());
@@ -184,7 +184,7 @@ class ConversationSessionTest {
     @Test
     void offersNeverReuseARevisionAfterSessionRecreation() {
         var first = ConversationSessions.recordOffer(PLAYER, "conversations.q", List.of("first"), 100);
-        ConversationSessions.clear(PLAYER);
+        ConversationSessions.clear(PLAYER, CloseReason.DISCONNECTED);
         var second = ConversationSessions.recordOffer(PLAYER, "conversations.q", List.of("second"), 200);
         assertTrue(second.revision() > first.revision());
         assertTrue(ConversationSessions.consumeOffer(PLAYER, first.revision(), 0, 200).isEmpty());

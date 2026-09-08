@@ -194,6 +194,12 @@ public final class ConversationPlanner {
      * <p>Called from the session's {@code turn} op rather than from planning, because a plan that was
      * made and then lost a scoring contest inside MCA must not count as having been played — that
      * would suppress a scene the player never saw.
+     *
+     * <p>For the chat frontend the stamping is deferred once more, to the moment the reply is
+     * actually delivered ({@link dev.otectus.mcaconversations.chat.ChatModeSession#deferUntilDelivered}):
+     * the same argument applied to the humanized delay, during which the player can walk away. The
+     * player's own accepted choice and everything MCA wrote are recorded at turn time either way —
+     * only the villager's memory of having said this waits for the saying.
      */
     public static void onScenePlayed(Entity villager, ServerPlayer player, String beatId) {
         if (villager == null || player == null) {
@@ -210,11 +216,20 @@ public final class ConversationPlanner {
                 return;
             }
             long today = villager.level().getDayTime() / 24000L;
-            History.recordPlayed(villager, player, scene.id(),
-                    scene.subjectsAny().isEmpty() ? scene.topic() : scene.subjectsAny().iterator().next(),
-                    scene.shape().key(), scene.topic(), today);
-            plan.get().episodeId().ifPresent(episodeId ->
-                    History.witness(villager, episodeId, player, today));
+            ConversationPlan played = plan.get();
+            Runnable record = () -> {
+                History.recordPlayed(villager, player, scene.id(),
+                        scene.subjectsAny().isEmpty() ? scene.topic() : scene.subjectsAny().iterator().next(),
+                        scene.shape().key(), scene.topic(), today);
+                played.episodeId().ifPresent(episodeId ->
+                        History.witness(villager, episodeId, player, today));
+            };
+            // In chat mode the sentence is still queued behind its humanized delay and may yet be
+            // dropped for range or death, so what the villager "told" this player is only true once
+            // the line lands. The GUI has no such gap: its packet is already on the wire.
+            if (!dev.otectus.mcaconversations.chat.ChatModeSession.deferUntilDelivered(player, record)) {
+                record.run();
+            }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("scene play bookkeeping failed; ignoring", t);
         }

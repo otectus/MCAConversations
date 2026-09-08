@@ -15,6 +15,7 @@ import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.ServerEpoch;
 import dev.otectus.mcaconversations.conversation.BeatContractLoader;
+import dev.otectus.mcaconversations.conversation.CloseReason;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.court.CourtNewsPoller;
@@ -87,10 +88,11 @@ public final class ConversationsEvents {
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            ChatModeSession.clear(player.getUUID());
+            // close() releases the attention leases and cancels queued replies; the rest is
+            // per-player state that is not the session's to drop.
+            ChatModeSession.clear(player.getUUID(), CloseReason.DISCONNECTED);
             GreetOnApproach.clear(player.getUUID());
             dev.otectus.mcaconversations.hub.DynamicHub.clear(player.getUUID());
-            VillagerAttention.clearPlayer(player.getUUID());
         }
     }
 
@@ -103,7 +105,7 @@ public final class ConversationsEvents {
                 .ifPresent(data -> data.store().setLiveSessionPredicate(null));
         dev.otectus.mcaconversations.compat.ReputationBridge.clearPendingRemarks();
         ChatModeScheduler.reset();
-        ChatModeSession.reset();
+        ChatModeSession.reset(CloseReason.DISCONNECTED);
         VillagerAttention.reset();
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
@@ -210,10 +212,9 @@ public final class ConversationsEvents {
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            ChatModeSession.clear(player.getUUID());
+            ChatModeSession.clear(player.getUUID(), CloseReason.PLAYER_LEFT);
             GreetOnApproach.clear(player.getUUID());
             dev.otectus.mcaconversations.hub.DynamicHub.clear(player.getUUID());
-            VillagerAttention.clearPlayer(player.getUUID());
         }
         if (!McaBridge.isAvailable() || event.getEntity().level().isClientSide()) {
             return;
@@ -223,7 +224,7 @@ public final class ConversationsEvents {
             dropDispositions(event.getEntity());
             dropProgress(event.getEntity());
             dropLivingHistory(event.getEntity());
-            ConversationSessions.clearVillager(event.getEntity().getUUID());
+            ConversationSessions.clearVillager(event.getEntity().getUUID(), CloseReason.SPEAKER_DEAD);
         }
     }
 

@@ -48,14 +48,39 @@ public final class VillagerAttention {
             return;
         }
         VILLAGERS.put(villager.getUUID(), villager);
-        LEDGER.hold(villager.getUUID(), player.getUUID(), untilTick, source);
+        hold(villager.getUUID(), player.getUUID(), untilTick, source);
+    }
+
+    /**
+     * Id form of {@link #hold(Entity, ServerPlayer, long, Source)}, for callers that hold ids rather
+     * than entities. The entity form registers the live villager first; this one only books the hold,
+     * so a villager never seen as an entity is simply never pinned by {@link #tick}.
+     */
+    public static void hold(UUID villagerId, UUID playerId, long untilTick, Source source) {
+        if (villagerId == null || playerId == null) {
+            return;
+        }
+        LEDGER.hold(villagerId, playerId, untilTick, source);
     }
 
     /** The conversation ended (farewell/mute/shrug): the villager goes back to its day. */
     public static void release(Entity villager) {
         if (villager != null) {
-            LEDGER.release(villager.getUUID());
+            release(villager.getUUID());
         }
+    }
+
+    /** Id form of {@link #release(Entity)} — the villager may already be gone from the world. */
+    public static void release(UUID villagerId) {
+        if (villagerId != null) {
+            LEDGER.release(villagerId);
+            VILLAGERS.remove(villagerId);
+        }
+    }
+
+    /** Read-only view of the live holds (villager id → hold), for diagnostics and tests. */
+    public static Map<UUID, Hold> activeHolds() {
+        return java.util.Collections.unmodifiableMap(LEDGER.activeHolds());
     }
 
     /** A typing ping from {@code player}: nearby villagers glance over until the pings stop. */
