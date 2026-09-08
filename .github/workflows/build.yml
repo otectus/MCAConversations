@@ -48,18 +48,21 @@ jobs:
           key: forge-${{ runner.os }}-${{ hashFiles('gradle.properties') }}
           restore-keys: forge-${{ runner.os }}-
 
-      - name: Check
-        run: ./gradlew check --stacktrace
-
-      - name: Build the reobfuscated jar
-        run: ./gradlew build --stacktrace
+      # One invocation: `build` already runs `check`, and the two content drift gates are deliberately
+      # not wired into `check` (regenerating is an author command), so CI names them explicitly.
+      # No sibling checkout and no -P override -- the optional integrations compile against the
+      # hash-pinned jars vendored in libs/api/.
+      - name: Build and verify
+        run: ./gradlew build verifyGeneratedConversationContent verifyVoiceOverlays --stacktrace
 
       - name: Upload the jar
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mcaconversations-jar
-          path: build/libs/*.jar
+          path: |
+            build/libs/*.jar
+            gradle/sibling-apis.properties
           if-no-files-found: error
 
       - name: Upload the conversation reports
