@@ -58,9 +58,50 @@ follow the player to the next villager.
   reports itself on a quiet cadence, and a discussion that stops reporting is closed and its villager
   released within five seconds. Nothing waits for the client to agree: a crashed or malfunctioning
   one cannot keep an NPC pinned by declining to acknowledge the ending.
+- **Villagers now stay put and look at you for the whole discussion.** An accepted conversation
+  stops the villager's own walking — wandering, following, setting off for work, crossing the village
+  on their schedule — and turns them to face whoever they are talking to, for as long as the
+  conversation lasts: reading for several minutes, changing topic, opening the history drawer, none
+  of it loses them. MCA's own walk-toward-you step is cancelled at its source rather than undone
+  afterwards, which is what a villager who drifted away mid-sentence was winning against before.
+  Staying put means exactly that and nothing more: the villager is not invulnerable, still falls,
+  still takes knockback, and is never teleported back to where they were standing — anything that
+  actually shoves them out of range simply ends the conversation the ordinary way. Ending the
+  discussion hands them straight back to their own schedule, and returning to the topic list is not
+  ending it. `holdVillagerDuringInteraction` turns the standing still off and keeps the facing.
 
 ### Changed
 
+- **An attack ends the conversation, and the conversation cannot come back.** Being hit used to
+  pause the hold for as long as the villager flinched and then take them prisoner again the moment
+  the flinch ended — which is how a villager who should have been running from a zombie stood in
+  place to finish a sentence. Any blow now ends the discussion outright: the window closes, the
+  pending reply is dropped, the villager is released the same instant, and there is nothing left
+  anywhere that could resume. A hit that armour or a shield absorbs counts, a hit from anything at
+  all counts — the zombie behind the villager is the case that matters most — and one blow ends the
+  conversation once however many ways the game reports it. A villager already fleeing is released the
+  same way (`interruptOnImmediateDanger`), and none of it is a snub: no hearts move, and MCA's own
+  crime and reputation handling stays the only thing that decides what attacking a villager means.
+  This no longer depends on the conversation-states feature being switched on, because being free to
+  run away is not a feature.
+- **After an attack, that villager will not talk again for five seconds.** Long enough that the
+  player who just swung cannot immediately pin the villager they hit, short enough that a genuine
+  apology is only a moment away; `attackReopenDelayTicks` sets it, and continuing danger keeps
+  refusing regardless. The delay belongs to the villager, so a bystander cannot pin them either.
+- **A guard who is attacked mid-conversation still fights back.** `attackedBehavior` defaults to
+  `NATIVE_COMBAT`: the conversation ends and MCA's own reaction is left completely alone, profession
+  and all. Servers that would rather see every villager break away first can set `RETREAT`, which
+  drops any attack target the villager had just acquired and puts them straight into their panic
+  behaviour instead.
+- **Turning chat mode off no longer lets villagers walk away from their dialogue window.** Chat
+  mode's own engagements and the glances of somebody typing nearby end with it, as they should; a
+  graphical conversation never had anything to do with chat mode and now keeps its villager on a
+  server that runs with it disabled.
+- **Ending a discussion now ends MCA's side of it too.** MCA used to be left believing a window was
+  still open on a villager this mod had already released, which blocked its own interaction handling
+  until something else noticed. The teardown now closes MCA's interaction as well — but only while
+  that interaction still belongs to the player whose discussion ended, so it can never shut a window
+  somebody else is reading.
 - **The choice channel is now protocol 4, and 1.7.1 does not pair with 1.7.0.** The channel requires
   an exact match, so a 1.7.0 client is refused by a 1.7.1 server and vice versa — deliberately, and
   with a clear rejection rather than a misread packet. Update both sides together; on a dedicated

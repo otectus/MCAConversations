@@ -130,6 +130,7 @@ public final class McaHandles {
     private static final MethodHandle H_SAVE_ENTITY_DATA = R.handle(McaBinding.PLAYER_SAVE_ENTITY_DATA);
     private static final MethodHandle H_SAVE_FAMILY_ENTRY = R.handle(McaBinding.PLAYER_SAVE_FAMILY_ENTRY);
     private static final MethodHandle H_INTERACTING_PLAYER = R.handle(McaBinding.GET_INTERACTING_PLAYER);
+    private static final MethodHandle H_STOP_INTERACTING = R.handle(McaBinding.STOP_INTERACTING);
     private static final MethodHandle H_DIALOGUES = R.handle(McaBinding.DIALOGUES_GET_INSTANCE);
     private static final MethodHandle H_SELECT_ANSWER = R.handle(McaBinding.DIALOGUES_SELECT_ANSWER);
     private static final MethodHandle H_GET_QUESTION = R.handle(McaBinding.DIALOGUES_GET_QUESTION);
@@ -274,6 +275,39 @@ public final class McaHandles {
         Object handler = isVillager(villager) ? ref(H_INTERACTIONS, villager) : null;
         Object present = unwrap(ref(H_INTERACTING_PLAYER, handler));
         return present instanceof Player p ? Optional.ofNullable(p.getUUID()) : Optional.empty();
+    }
+
+    /**
+     * Ends MCA's own interaction with this villager, but only while it still belongs to
+     * {@code playerId} (teardown stage 6, spec §4.5).
+     *
+     * <p>The condition is the whole point. {@code stopInteracting} clears whoever the interacting
+     * player currently is and closes <em>their</em> screen; calling it unconditionally from one
+     * player's teardown is how a second player, who has since been handed the villager, loses the
+     * window they are reading. So the current holder is read first, and a villager who has moved on
+     * to somebody else — or to no one — is left alone.
+     *
+     * @return true when MCA's interaction was actually ended
+     */
+    public static boolean stopInteractingIfOwned(Object villager, UUID playerId) {
+        if (playerId == null || !isVillager(villager)) {
+            return false;
+        }
+        Object handler = ref(H_INTERACTIONS, villager);
+        if (handler == null) {
+            return false;
+        }
+        Object present = unwrap(ref(H_INTERACTING_PLAYER, handler));
+        if (!(present instanceof Player p) || !playerId.equals(p.getUUID())) {
+            return false;
+        }
+        try {
+            H_STOP_INTERACTING.invoke(handler);
+            return true;
+        } catch (Throwable t) {
+            // A native close that fails costs one stale MCA screen, never the teardown that called it.
+            return false;
+        }
     }
 
     private static Object brain(Object villager) {

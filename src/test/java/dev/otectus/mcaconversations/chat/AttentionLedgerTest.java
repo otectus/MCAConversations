@@ -141,4 +141,32 @@ class AttentionLedgerTest {
         ledger.release(V1); // death / removal / server stop: nobody is talking to a gone villager
         assertFalse(ledger.activeHolds().containsKey(V1));
     }
+
+    // --- Movement ownership (spec §5.1) ------------------------------------------------------
+
+    @Test
+    void onlyAnExchangeOwnsMovement() {
+        AttentionLedger ledger = new AttentionLedger();
+        ledger.hold(V1, P1, 1000, Source.CONVERSATION);
+        ledger.hold(V2, P1, 1000, Source.TYPING);
+        assertTrue(ledger.activeHolds().get(V1).ownsMovement());
+        assertFalse(ledger.activeHolds().get(V2).ownsMovement(),
+                "a glance from somebody typing nearby must never pin a villager");
+    }
+
+    @Test
+    void chatModeGoingOffKeepsTheGraphicalDiscussionsHold() {
+        AttentionLedger ledger = new AttentionLedger();
+        ConversationHandle gui = handleFor(P1, V1);
+        ledger.hold(V1, P1, 1000, Source.CONVERSATION, gui); // a dialogue window
+        ledger.hold(V2, P2, 1000, Source.TYPING);            // somebody with the chat box open
+
+        // Exactly what VillagerAttention does when enableChatMode is off: drop what chat mode made.
+        int dropped = ledger.releaseIf(hold -> !hold.isGuiDiscussion());
+
+        assertEquals(1, dropped);
+        assertTrue(ledger.activeHolds().containsKey(V1),
+                "a GUI conversation has nothing to do with chat mode and keeps its villager");
+        assertFalse(ledger.activeHolds().containsKey(V2));
+    }
 }

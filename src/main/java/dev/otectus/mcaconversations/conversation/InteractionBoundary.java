@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.conversation;
 
 import dev.otectus.mcaconversations.McaConversations;
+import dev.otectus.mcaconversations.chat.ConversationMovementController;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.network.ConversationRef;
 import dev.otectus.mcaconversations.network.ConversationsNetwork;
@@ -72,6 +73,10 @@ public final class InteractionBoundary {
             accepted.filter(handle -> !handle.equals(before))
                     .ifPresent(handle -> ConversationsNetwork.sendOpened(player,
                             ConversationRef.of(handle), handle.frontend()));
+            // Spec §5.2 step 1: stop where you are the moment the discussion is accepted, rather than
+            // taking one more step while waiting for the next lifecycle tick to notice.
+            accepted.ifPresent(handle -> ConversationMovementController.onAccepted(handle, villager,
+                    player, player.level().getGameTime()));
             return accepted;
         } catch (Throwable t) {
             // The conversation still works without a handle; it simply keeps the pre-1.7.1 behaviour

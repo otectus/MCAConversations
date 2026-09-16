@@ -436,6 +436,19 @@ public final class McaCompat {
         return McaHandles.interactingPlayer(villager);
     }
 
+    /**
+     * Ends MCA's own interaction with this villager — its interacting-player reference and the screen
+     * it opened — but only while that interaction still belongs to {@code playerId}.
+     *
+     * <p>Teardown stage 6 (spec §4.5): a managed discussion ending closes MCA's half of itself rather
+     * than leaving MCA convinced a window is still open. Conditional by construction, so one player's
+     * ending can never close the window of the player who took the villager over.
+     * <b>Server side only.</b> Fail-closed: any failure returns false and changes nothing.
+     */
+    public static boolean stopInteractingIfOwned(Entity villager, UUID playerId) {
+        return McaHandles.stopInteractingIfOwned(villager, playerId);
+    }
+
     // ------------------------------------------------------------------
     // Living-histories context capabilities (spec §7.3)
     //

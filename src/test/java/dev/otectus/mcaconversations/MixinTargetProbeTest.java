@@ -95,6 +95,11 @@ class MixinTargetProbeTest {
         INJECTION_POINTS.put("DialoguesMixin", List.of("getQuestion"));
         INJECTION_POINTS.put("QuestionMixin", List.of("getValidAnswers"));
         INJECTION_POINTS.put("InteractionDialogueMessageMixin", List.of("receive"));
+        // MCA's walk-toward-the-player step, cancelled while a managed discussion holds the villager.
+        // Private, and deliberately chosen over the Behavior lifecycle methods, whose names differ
+        // between 7.6.20 and everything after it; followPlayer is the one name stable across the
+        // whole fleet, so a rename here has to fail the build rather than stop holding villagers.
+        INJECTION_POINTS.put("InteractTaskMovementMixin", List.of("followPlayer"));
         // MCA's tokenless close. Present as receive(ServerPlayer) on 7.6.20, 7.7.0-beta.2 and
         // 7.7.1-alpha.2; the guard is a silent no-op if it is ever renamed, which is exactly what
         // this entry exists to turn into a build failure.
