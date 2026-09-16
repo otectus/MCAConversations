@@ -24,14 +24,15 @@ class ChoiceClearPayloadTest {
 
     @Test
     void theByteOrderMatchesTheForgeEncoder() {
-        // varLong 5 | CONSUMED (explicit varInt identifier 1)
+        // handle flags (absent, absent) | varLong 5 | CONSUMED (explicit varInt identifier 1)
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-        ChoiceClearS2C.STREAM_CODEC.encode(buffer, new ChoiceClearS2C(5L, ChoiceClearS2C.Reason.CONSUMED));
+        ChoiceClearS2C.STREAM_CODEC.encode(buffer,
+                new ChoiceClearS2C(ConversationRef.NONE, 5L, ChoiceClearS2C.Reason.CONSUMED));
         byte[] actual = new byte[buffer.readableBytes()];
         buffer.getBytes(0, actual);
-        assertArrayEquals(new byte[]{0x05, 0x01}, actual);
+        assertArrayEquals(new byte[]{0x00, 0x00, 0x05, 0x01}, actual);
 
-        assertEquals(new ChoiceClearS2C(5L, ChoiceClearS2C.Reason.CONSUMED),
+        assertEquals(new ChoiceClearS2C(ConversationRef.NONE, 5L, ChoiceClearS2C.Reason.CONSUMED),
                 ChoiceClearS2C.STREAM_CODEC.decode(buffer));
         assertFalse(buffer.isReadable(), "the decoder must consume exactly what the encoder wrote");
     }
@@ -40,7 +41,8 @@ class ChoiceClearPayloadTest {
     void everyReasonRoundTrips() {
         for (ChoiceClearS2C.Reason reason : ChoiceClearS2C.Reason.values()) {
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            ChoiceClearS2C.STREAM_CODEC.encode(buffer, new ChoiceClearS2C(1L, reason));
+            ChoiceClearS2C.STREAM_CODEC.encode(buffer,
+                    new ChoiceClearS2C(ConversationRef.NONE, 1L, reason));
             assertEquals(reason, ChoiceClearS2C.STREAM_CODEC.decode(buffer).reason());
         }
     }

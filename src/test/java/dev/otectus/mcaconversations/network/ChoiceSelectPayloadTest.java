@@ -27,12 +27,12 @@ class ChoiceSelectPayloadTest {
 
     @Test
     void theByteOrderMatchesTheForgeEncoder() {
-        // varLong 7 | varInt 3 | boolean false (no villager)
+        // Protocol 4: handle flags (no session, no villager) | varLong 7 | varInt 3
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-        ChoiceSelectC2S.STREAM_CODEC.encode(buffer, new ChoiceSelectC2S(7L, 3, null));
+        ChoiceSelectC2S.STREAM_CODEC.encode(buffer, new ChoiceSelectC2S(ConversationRef.NONE, 7L, 3));
         byte[] actual = new byte[buffer.readableBytes()];
         buffer.getBytes(0, actual);
-        assertArrayEquals(new byte[]{0x07, 0x03, 0x00}, actual);
+        assertArrayEquals(new byte[]{0x00, 0x00, 0x07, 0x03}, actual);
 
         ChoiceSelectC2S decoded = ChoiceSelectC2S.STREAM_CODEC.decode(buffer);
         assertEquals(7L, decoded.revision());
@@ -44,9 +44,20 @@ class ChoiceSelectPayloadTest {
     @Test
     void aPresentVillagerAddsTheFlagAndSixteenBytes() {
         UUID villager = UUID.fromString("00000000-0000-0001-0000-000000000002");
+        ChoiceSelectC2S message = new ChoiceSelectC2S(ConversationRef.ofVillager(villager), 7L, 3);
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-        ChoiceSelectC2S.STREAM_CODEC.encode(buffer, new ChoiceSelectC2S(7L, 3, villager));
-        assertEquals(3 + 16, buffer.readableBytes());
-        assertEquals(new ChoiceSelectC2S(7L, 3, villager), ChoiceSelectC2S.STREAM_CODEC.decode(buffer));
+        ChoiceSelectC2S.STREAM_CODEC.encode(buffer, message);
+        assertEquals(4 + 16, buffer.readableBytes());
+        assertEquals(message, ChoiceSelectC2S.STREAM_CODEC.decode(buffer));
+    }
+
+    @Test
+    void aFullHandleAddsBothIdentities() {
+        ConversationRef handle = new ConversationRef(UUID.randomUUID(), UUID.randomUUID());
+        ChoiceSelectC2S message = new ChoiceSelectC2S(handle, 7L, 3);
+        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        ChoiceSelectC2S.STREAM_CODEC.encode(buffer, message);
+        assertEquals(4 + 32, buffer.readableBytes());
+        assertEquals(message, ChoiceSelectC2S.STREAM_CODEC.decode(buffer));
     }
 }

@@ -14,8 +14,12 @@ import net.minecraft.resources.ResourceLocation;
  * rather than a catch-all lapse. Reasons travel as explicit stable identifiers, never as ordinals:
  * inserting a constant must not silently re-label an older packet, and an identifier this build does
  * not know decodes as {@link Reason#NONE} — a silent clear — instead of throwing on the client.
+ *
+ * <p>Since protocol 4 a clear also names the discussion it retires. Retiring one offer is not ending
+ * a conversation, and a clear that arrives after the player has moved on must not be allowed to wipe
+ * the card in front of them just because its revision happens to be higher.
  */
-public record ChoiceClearS2C(long revision, Reason reason) implements CustomPacketPayload {
+public record ChoiceClearS2C(ConversationRef handle, long revision, Reason reason) implements CustomPacketPayload {
 
     public enum Reason {
         /** No explanation: the offer simply no longer applies (an empty answer list, an oversized offer). */
@@ -65,17 +69,20 @@ public record ChoiceClearS2C(long revision, Reason reason) implements CustomPack
     }
 
     public ChoiceClearS2C {
+        handle = handle == null ? ConversationRef.NONE : handle;
         reason = reason == null ? Reason.NONE : reason;
     }
 
     static void encode(FriendlyByteBuf buffer, ChoiceClearS2C message) {
+        ConversationRef.write(buffer, message.handle());
         buffer.writeVarLong(message.revision());
         buffer.writeVarInt(message.reason().id());
     }
 
     static ChoiceClearS2C decode(FriendlyByteBuf buffer) {
+        ConversationRef handle = ConversationRef.read(buffer);
         long revision = buffer.readVarLong();
-        return new ChoiceClearS2C(revision, Reason.byId(buffer.readVarInt()));
+        return new ChoiceClearS2C(handle, revision, Reason.byId(buffer.readVarInt()));
     }
 
 

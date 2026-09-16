@@ -23,4 +23,12 @@ public interface ChoicePacketSink {
 
     default void clear(ChoiceClearS2C message) {
     }
+
+    /** The server accepted a discussion; the client may now name it on everything it sends. */
+    default void opened(ConversationOpenedS2C message) {
+    }
+
+    /** That discussion has ended. Only the matching UI is retired; a successor's is untouched. */
+    default void closed(ConversationClosedS2C message) {
+    }
 }

@@ -3,10 +3,13 @@ package dev.otectus.mcaconversations.mixin;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
 import dev.otectus.mcaconversations.compat.mca.McaHandles;
+import dev.otectus.mcaconversations.conversation.ConversationHandle;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.conversation.InteractionBoundary;
 import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 import dev.otectus.mcaconversations.network.ChoiceOfferS2C;
+import dev.otectus.mcaconversations.network.ConversationRef;
 import dev.otectus.mcaconversations.network.ConversationsNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.UUID;
 
 /**
  * Chat mode's one delivery-redirection hook. MCA's {@code say}/{@code next} dialogue actions deliver
@@ -35,6 +40,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * is exactly what varies, so it cannot be named here. {@code @Coerce} lets the handler declare a
  * supertype — {@code Object} — and Mixin inserts the cast; {@code McaHandles} then identifies the
  * payload by a {@link Class} resolved from the probed root.
+ *
+ * <p><b>It is also the interaction boundary.</b> A graphical dialogue payload is the earliest point
+ * at which this mod can see both that MCA accepted an interaction and which villager it accepted;
+ * {@link InteractionBoundary} mints the discussion's handle there, so the offer it records names a
+ * real villager instead of {@code null}.
  *
  * <p>{@code remap = false}: MCA's own method. {@code require = 0} (config default): if MCA reshapes
  * {@code sendToPlayer} the injection silently no-ops, {@code ChatModeSession.redirectionAvailable()}
@@ -65,19 +75,30 @@ public abstract class NetworkHandlerMixin {
                 // only place the constraint-filtered answer list exists, and knowing it is what lets
                 // the submission validator reject an answer that was never on screen.
                 boolean chat = ChatModeSession.activeFor(player);
+                // A graphical offer's villager is MCA's answer, not a guess and not a null. This is
+                // also where a graphical discussion is accepted: it is the first moment the server
+                // both knows MCA took the interaction and has something to put on the screen.
+                ConversationHandle handle = chat ? null
+                        : InteractionBoundary.beginGui(player).orElse(null);
+                UUID speaker = chat ? ChatModeSession.activeVillagerId(player)
+                        : handle == null ? null : handle.villagerId();
                 ConversationSession.ChoiceOffer offer = ConversationSessions.recordOffer(
-                        player.getUUID(), chat ? ChatModeSession.activeVillagerId(player) : null,
+                        player.getUUID(), speaker,
                         McaHandles.responseQuestion(message), McaHandles.responseAnswers(message),
                         chat ? ConversationSession.Frontend.CHAT : ConversationSession.Frontend.GUI,
                         player.level().getGameTime());
+                ConversationRef ref = handle == null
+                        ? ConversationsNetwork.refFor(player) : ConversationRef.of(handle);
                 if (offer.answerIds().size() <= ChoiceOfferS2C.MAX_CHOICES) {
                     if (offer.answerIds().isEmpty()) {
-                        ConversationsNetwork.clearOffer(player, offer.revision(), ChoiceClearS2C.Reason.NONE);
+                        ConversationsNetwork.clearOffer(player, ref, offer.revision(),
+                                ChoiceClearS2C.Reason.NONE);
                     } else {
-                        ConversationsNetwork.sendOffer(player, ChoiceOfferS2C.from(offer));
+                        ConversationsNetwork.sendOffer(player, ChoiceOfferS2C.from(ref, offer));
                     }
                 } else {
-                    ConversationsNetwork.clearOffer(player, offer.revision(), ChoiceClearS2C.Reason.NONE);
+                    ConversationsNetwork.clearOffer(player, ref, offer.revision(),
+                            ChoiceClearS2C.Reason.NONE);
                     ConversationsNetwork.warnOversizedOffer(offer.questionId(), offer.answerIds().size());
                 }
                 if (chat) {

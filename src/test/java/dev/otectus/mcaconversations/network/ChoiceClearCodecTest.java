@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,10 +22,13 @@ class ChoiceClearCodecTest {
     void everyReasonRoundTrips() {
         for (ChoiceClearS2C.Reason reason : ChoiceClearS2C.Reason.values()) {
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            ChoiceClearS2C.encode(buffer, new ChoiceClearS2C(7L, reason));
+            ConversationRef handle = new ConversationRef(UUID.randomUUID(), UUID.randomUUID());
+            ChoiceClearS2C.encode(buffer, new ChoiceClearS2C(handle, 7L, reason));
             ChoiceClearS2C decoded = ChoiceClearS2C.decode(buffer);
             assertEquals(reason, decoded.reason());
             assertEquals(7L, decoded.revision());
+            assertEquals(handle, decoded.handle());
+            assertEquals(0, buffer.readableBytes());
         }
     }
 
@@ -41,6 +45,7 @@ class ChoiceClearCodecTest {
     void anUnknownIdentifierClearsSilentlyRatherThanThrowing() {
         // A build that learns a new explanation must not crash the connection of one that has not.
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        ConversationRef.write(buffer, ConversationRef.NONE);
         buffer.writeVarLong(3L);
         buffer.writeVarInt(9999);
         ChoiceClearS2C decoded = ChoiceClearS2C.decode(buffer);

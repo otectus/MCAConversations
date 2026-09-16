@@ -3,6 +3,10 @@ package dev.otectus.mcaconversations.network;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
+import dev.otectus.mcaconversations.conversation.CloseReason;
+import dev.otectus.mcaconversations.conversation.ConversationLifecycle;
+import dev.otectus.mcaconversations.conversation.ConversationPresence;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -65,6 +69,78 @@ public final class ConversationsNetwork {
                 ConversationsNetwork::handleSelect);
         registrar.playToServer(ChoiceReturnC2S.TYPE, ChoiceReturnC2S.STREAM_CODEC,
                 ConversationsNetwork::handleReturn);
+        // Protocol 4: the discussion lifecycle itself. The registrar is versioned and the version is
+        // an exact match, so an older client is refused at handshake rather than arriving here.
+        registrar.playToClient(ConversationOpenedS2C.TYPE, ConversationOpenedS2C.STREAM_CODEC,
+                ConversationsNetwork::handleOpened);
+        registrar.playToClient(ConversationClosedS2C.TYPE, ConversationClosedS2C.STREAM_CODEC,
+                ConversationsNetwork::handleClosed);
+        registrar.playToServer(ConversationPresenceC2S.TYPE, ConversationPresenceC2S.STREAM_CODEC,
+                ConversationsNetwork::handlePresence);
+        registrar.playToServer(ConversationCloseC2S.TYPE, ConversationCloseC2S.STREAM_CODEC,
+                ConversationsNetwork::handleClose);
+    }
+
+    private static void handleOpened(ConversationOpenedS2C payload, IPayloadContext context) {
+        context.enqueueWork(() -> sink.opened(payload));
+    }
+
+    private static void handleClosed(ConversationClosedS2C payload, IPayloadContext context) {
+        context.enqueueWork(() -> sink.closed(payload));
+    }
+
+    private static void handlePresence(ConversationPresenceC2S payload, IPayloadContext context) {
+        try {
+            context.enqueueWork(() -> {
+                if (context.player() instanceof ServerPlayer sender) {
+                    ConversationPresence.heartbeat(sender.getUUID(), payload.handle().sessionId(),
+                            payload.handle().villagerId(), sender.level().getGameTime());
+                }
+            });
+        } catch (Throwable t) {
+            // A lost heartbeat costs one cadence, never a disconnect.
+            McaConversations.LOGGER.debug("conversation presence handler failed; ignoring", t);
+        }
+    }
+
+    private static void handleClose(ConversationCloseC2S payload, IPayloadContext context) {
+        try {
+            context.enqueueWork(() -> {
+                if (context.player() instanceof ServerPlayer sender) {
+                    ConversationLifecycle.terminateIfCurrent(sender.getUUID(),
+                            payload.handle().sessionId(), payload.handle().villagerId(),
+                            CloseReason.CLIENT_CLOSED);
+                }
+            });
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("conversation close handler failed; ignoring", t);
+        }
+    }
+
+    /** The wire name of the discussion this player is in right now, or {@link ConversationRef#NONE}. */
+    public static ConversationRef refFor(ServerPlayer player) {
+        return player == null ? ConversationRef.NONE
+                : ConversationRef.of(ConversationPresence.ofPlayer(player.getUUID()).orElse(null));
+    }
+
+    /** Announces an accepted discussion to the one player who is in it. */
+    public static void sendOpened(ServerPlayer player, ConversationRef handle,
+                                  ConversationSession.Frontend frontend) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        PacketDistributor.sendToPlayer(player, new ConversationOpenedS2C(handle, frontend));
+    }
+
+    /**
+     * Announces one discussion's ending. Best effort by design: a client that never receives this
+     * loses nothing the server is waiting on, because no villager is held pending an acknowledgement.
+     */
+    public static void sendClosed(ServerPlayer player, ConversationRef handle, CloseReason reason) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        PacketDistributor.sendToPlayer(player, new ConversationClosedS2C(handle, reason));
     }
 
     /**
@@ -95,7 +171,8 @@ public final class ConversationsNetwork {
 
     private static void handleReturn(ChoiceReturnC2S payload, IPayloadContext context) {
         if (context.player() instanceof ServerPlayer sender) {
-            ChoiceSelectionService.returnToTopics(sender, payload.revision(), payload.villagerId());
+            ChoiceSelectionService.returnToTopics(sender, payload.handle().sessionId(),
+                    payload.revision(), payload.villagerId());
         }
     }
 
@@ -103,8 +180,8 @@ public final class ConversationsNetwork {
         try {
             context.enqueueWork(() -> {
                 if (context.player() instanceof ServerPlayer sender) {
-                    ChoiceSelectionService.select(sender, payload.revision(),
-                            payload.absoluteIndex(), payload.villagerId());
+                    ChoiceSelectionService.select(sender, payload.handle().sessionId(),
+                            payload.revision(), payload.absoluteIndex(), payload.villagerId());
                 }
             });
         } catch (Throwable t) {
@@ -117,7 +194,22 @@ public final class ConversationsNetwork {
     }
 
     public static void clearOffer(ServerPlayer player, long revision, ChoiceClearS2C.Reason reason) {
-        PacketDistributor.sendToPlayer(player, new ChoiceClearS2C(revision, reason));
+        clearOffer(player, refFor(player), revision, reason);
+    }
+
+    /**
+     * As above for a clear that belongs to a <em>named</em> discussion rather than the current one.
+     *
+     * <p>Refusing a straggler has to be addressed to the discussion the straggler came from: sending
+     * it under the live handle would tell the client to retire the card the player is looking at,
+     * which is exactly the bug the identity work exists to remove.
+     */
+    public static void clearOffer(ServerPlayer player, ConversationRef handle, long revision,
+                                  ChoiceClearS2C.Reason reason) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        PacketDistributor.sendToPlayer(player, new ChoiceClearS2C(handle, revision, reason));
     }
 
     public static void warnOversizedOffer(String question, int count) {

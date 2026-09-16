@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ChoiceReturnCodecTest {
     @Test
     void returnRoundTripsTheRefusedRevisionAndSpeaker() {
-        var message = new ChoiceReturnC2S(Long.MAX_VALUE, UUID.randomUUID());
+        var message = new ChoiceReturnC2S(
+                new ConversationRef(UUID.randomUUID(), UUID.randomUUID()), Long.MAX_VALUE);
         var buffer = new FriendlyByteBuf(Unpooled.buffer());
         try {
             ChoiceReturnC2S.encode(buffer, message);

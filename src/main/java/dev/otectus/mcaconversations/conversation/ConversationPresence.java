@@ -24,6 +24,13 @@ public final class ConversationPresence {
 
     private static final Map<UUID, ConversationHandle> BY_PLAYER = new ConcurrentHashMap<>();
     private static final Map<UUID, ConversationHandle> BY_VILLAGER = new ConcurrentHashMap<>();
+    /**
+     * Last heartbeat per discussion, keyed by session UUID rather than by player: keying it by
+     * player would let a heartbeat for a discussion that has ended renew the one that replaced it,
+     * which is the exact confusion the handles exist to prevent. Entries are removed with their
+     * handle, so the map cannot outgrow the presence indexes.
+     */
+    private static final Map<UUID, Long> HEARTBEATS = new ConcurrentHashMap<>();
 
     private ConversationPresence() {
     }
@@ -79,6 +86,32 @@ public final class ConversationPresence {
         }
         BY_PLAYER.remove(handle.playerId(), handle);
         BY_VILLAGER.remove(handle.villagerId(), handle);
+        HEARTBEATS.remove(handle.sessionId());
+    }
+
+    /**
+     * Records that the client is still present in the discussion it names (spec §4.3, §4.5).
+     *
+     * <p>Refuses anything that is not the sender's live discussion. A heartbeat is the cheapest
+     * packet to forge and the easiest to deliver late, so it is given no power at all beyond
+     * refreshing a timestamp: it cannot create a discussion, revive a retired one, or move a
+     * villager between owners.
+     *
+     * @return true when the heartbeat was recorded
+     */
+    public static boolean heartbeat(UUID senderId, UUID sessionId, UUID villagerId, long gameTime) {
+        ConversationHandle current = ofPlayer(senderId).orElse(null);
+        if (!HandleAuthority.judge(current, sessionId, villagerId).equals(HandleAuthority.Decision.ACCEPT)) {
+            return false;
+        }
+        HEARTBEATS.put(current.sessionId(), gameTime);
+        return true;
+    }
+
+    /** When this discussion last said it was still there, or empty when it never has. */
+    public static java.util.OptionalLong lastHeartbeat(ConversationHandle handle) {
+        Long at = handle == null ? null : HEARTBEATS.get(handle.sessionId());
+        return at == null ? java.util.OptionalLong.empty() : java.util.OptionalLong.of(at);
     }
 
     /** How many players are in a registered discussion. Diagnostics and tests. */
@@ -90,5 +123,6 @@ public final class ConversationPresence {
     public static void clear() {
         BY_PLAYER.clear();
         BY_VILLAGER.clear();
+        HEARTBEATS.clear();
     }
 }
