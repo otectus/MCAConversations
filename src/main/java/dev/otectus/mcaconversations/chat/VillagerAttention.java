@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.AttentionLedger.Hold;
 import dev.otectus.mcaconversations.chat.AttentionLedger.Source;
 import dev.otectus.mcaconversations.chat.VillagerFinder.VillagerCandidate;
+import dev.otectus.mcaconversations.conversation.ConversationHandle;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -44,11 +45,20 @@ public final class VillagerAttention {
 
     /** Requests attention (see {@link AttentionLedger#hold} for the precedence rules). */
     public static void hold(Entity villager, ServerPlayer player, long untilTick, Source source) {
+        hold(villager, player, untilTick, source, null);
+    }
+
+    /**
+     * Requests attention on behalf of an accepted discussion. The hold remembers the handle, so only
+     * that discussion's ending can release it (see {@link #releaseIfOwned}).
+     */
+    public static void hold(Entity villager, ServerPlayer player, long untilTick, Source source,
+                            ConversationHandle owner) {
         if (villager == null || player == null) {
             return;
         }
         VILLAGERS.put(villager.getUUID(), villager);
-        hold(villager.getUUID(), player.getUUID(), untilTick, source);
+        LEDGER.hold(villager.getUUID(), player.getUUID(), untilTick, source, owner);
     }
 
     /**
@@ -57,10 +67,16 @@ public final class VillagerAttention {
      * so a villager never seen as an entity is simply never pinned by {@link #tick}.
      */
     public static void hold(UUID villagerId, UUID playerId, long untilTick, Source source) {
+        hold(villagerId, playerId, untilTick, source, null);
+    }
+
+    /** Id form of the owned hold; see {@link #hold(Entity, ServerPlayer, long, Source, ConversationHandle)}. */
+    public static void hold(UUID villagerId, UUID playerId, long untilTick, Source source,
+                            ConversationHandle owner) {
         if (villagerId == null || playerId == null) {
             return;
         }
-        LEDGER.hold(villagerId, playerId, untilTick, source);
+        LEDGER.hold(villagerId, playerId, untilTick, source, owner);
     }
 
     /** The conversation ended (farewell/mute/shrug): the villager goes back to its day. */
@@ -76,6 +92,36 @@ public final class VillagerAttention {
             LEDGER.release(villagerId);
             VILLAGERS.remove(villagerId);
         }
+    }
+
+    /**
+     * Releases a villager only when the ending owns its hold: the discussion that booked it, or an
+     * unowned hold belonging to the same player. A villager another player has since taken over
+     * keeps attending them.
+     *
+     * @return true when a hold was actually dropped
+     */
+    public static boolean releaseIfOwned(UUID villagerId, ConversationHandle owner) {
+        if (villagerId == null || !LEDGER.releaseIfOwned(villagerId, owner)) {
+            return false;
+        }
+        VILLAGERS.remove(villagerId);
+        return true;
+    }
+
+    /** Player-token form, for endings that never minted a handle (chat farewells, mutes, logout). */
+    public static boolean releaseIfOwned(UUID villagerId, UUID playerId) {
+        if (villagerId == null || !LEDGER.releaseIfOwned(villagerId, playerId)) {
+            return false;
+        }
+        VILLAGERS.remove(villagerId);
+        return true;
+    }
+
+    /** Entity form of {@link #releaseIfOwned(UUID, UUID)} for the chat paths that hold a villager. */
+    public static boolean releaseIfOwned(Entity villager, ServerPlayer player) {
+        return villager != null && player != null
+                && releaseIfOwned(villager.getUUID(), player.getUUID());
     }
 
     /** Read-only view of the live holds (villager id → hold), for diagnostics and tests. */

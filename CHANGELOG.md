@@ -31,6 +31,28 @@ follow the player to the next villager.
   — MCA's family tree button does exactly that — is reconciled against the window, and a newly opened
   screen inherits nothing from the one before it.
 
+### Changed
+
+- **A conversation that ends can no longer hand back a villager somebody else is talking to.** Ending
+  a discussion released the villager by name alone, so on a shared server the tail end of one
+  player's conversation — a delayed close, a timeout swept a moment late, a logout — freed a villager
+  who had already turned to somebody else, and that second player's partner wandered off
+  mid-sentence. Each accepted discussion is now identified in its own right, the server records who
+  is talking to whom on both sides of the pair, and a villager is released only by the discussion
+  that actually held them. The same identity makes an ending arriving late harmless: a close for a
+  conversation that has already been replaced — including one between the same player and the same
+  villager, reopened — is ignored instead of tearing down the conversation that replaced it.
+- **A conversation that fails to end tidily still ends.** Teardown now runs as ordered, independently
+  guarded steps, so a step that fails cannot leave the ones after it unrun; whatever else goes wrong,
+  the villager is handed back and the pair can start again immediately. Ending a topic is still not
+  ending the conversation: returning to the topic list leaves the player standing there with the
+  villager still attending, exactly as before. Each ending also carries a permanent identifier rather
+  than its position in a list, so the reason a conversation closed survives future versions, and six
+  new ones name endings the server could previously only describe as something vaguer: the screen was
+  closed, the player turned to another villager, another player took over, the villager was attacked,
+  the villager left the loaded world, or the villager had to flee immediate danger. None of them
+  carries any social meaning — a technical ending is still never a snub.
+
 ## [1.7.0] - unreleased
 
 Refinement release: all ten stages of the refinement plan, shipped as one version.

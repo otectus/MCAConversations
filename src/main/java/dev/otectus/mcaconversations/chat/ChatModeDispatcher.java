@@ -637,7 +637,7 @@ public final class ChatModeDispatcher {
         s.villagerId = null;
         s.clearQuestion();
         s.consecutiveMisses = 0;
-        VillagerAttention.release(target.entity()); // conversation over — back to their day
+        VillagerAttention.releaseIfOwned(target.entity(), player); // conversation over — back to their day
     }
 
     /** "Stop talking" (spec §11): mute this villager↔player pairing for {@code chatModeMuteTicks}. */
@@ -647,7 +647,7 @@ public final class ChatModeDispatcher {
         s.mute(target.entity().getUUID(), now + Math.max(0, muteTicks));
         s.clearQuestion();
         deflect(target, player, "muted");
-        VillagerAttention.release(target.entity()); // asked to leave the player be — walks off too
+        VillagerAttention.releaseIfOwned(target.entity(), player); // asked to leave the player be — walks off too
     }
 
     /** "Never mind" (spec §11): drop the open sub-question; never counts as a miss. */
@@ -819,7 +819,7 @@ public final class ChatModeDispatcher {
             // The villager disengages from this player for a while — flailing at Agnes never mutes Ilsa.
             int cooldown = McaConversationsConfig.COMMON.chatModeCooldownTicks.get();
             s.mute(target.entity().getUUID(), now + Math.max(0, cooldown) * 4L);
-            VillagerAttention.release(target.entity()); // demonstratively turns back to work
+            VillagerAttention.releaseIfOwned(target.entity(), player); // demonstratively turns back to work
         }
     }
 
@@ -1151,12 +1151,28 @@ public final class ChatModeDispatcher {
         }
     }
 
-    /** Conversation attention: the villager stays put facing the player until the timer lapses. */
+    /**
+     * Conversation attention: the villager stays put facing the player until the timer lapses.
+     *
+     * <p>Booked under this player's accepted discussion when they are in one with this same villager,
+     * so the hold can only be released by that discussion's ending. A chat exchange that never went
+     * through an interaction boundary books an unowned hold exactly as before, and is released by
+     * player instead — nothing that worked without a handle needs one now.
+     */
     private static void attend(VillagerCandidate target, ServerPlayer player, long now) {
         int ticks = McaConversationsConfig.chatModeAttentionTicks();
         if (ticks > 0) {
-            VillagerAttention.hold(target.entity(), player, now + ticks, AttentionLedger.Source.CONVERSATION);
+            VillagerAttention.hold(target.entity(), player, now + ticks,
+                    AttentionLedger.Source.CONVERSATION, ownerOf(player, target));
         }
+    }
+
+    /** This player's handle when it names this villager, else null (an unowned hold). */
+    private static dev.otectus.mcaconversations.conversation.ConversationHandle ownerOf(
+            ServerPlayer player, VillagerCandidate target) {
+        return dev.otectus.mcaconversations.conversation.ConversationPresence.ofPlayer(player.getUUID())
+                .filter(handle -> handle.villagerId().equals(target.entity().getUUID()))
+                .orElse(null);
     }
 
     /**

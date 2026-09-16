@@ -2,6 +2,8 @@ package dev.otectus.mcaconversations.chat;
 
 import dev.otectus.mcaconversations.chat.AttentionLedger.Hold;
 import dev.otectus.mcaconversations.chat.AttentionLedger.Source;
+import dev.otectus.mcaconversations.conversation.ConversationHandle;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -11,7 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Attention bookkeeping: precedence, expiry, and scoped releases (typing vs conversation). */
+/**
+ * Attention bookkeeping: precedence, expiry, and scoped releases — by source (typing vs
+ * conversation) and by owner (which discussion booked the hold).
+ */
 class AttentionLedgerTest {
 
     private static final UUID V1 = UUID.nameUUIDFromBytes("villager-1".getBytes());
@@ -88,5 +93,52 @@ class AttentionLedgerTest {
         ledger.releasePlayer(P1);
         assertFalse(ledger.activeHolds().containsKey(V1));
         assertTrue(ledger.activeHolds().containsKey(V2));
+    }
+
+    private static ConversationHandle handleFor(UUID player, UUID villager) {
+        return ConversationHandle.mint(player, villager, "minecraft:overworld",
+                ConversationSession.Frontend.GUI);
+    }
+
+    @Test
+    void onlyTheDiscussionThatBookedAHoldMayReleaseIt() {
+        AttentionLedger ledger = new AttentionLedger();
+        ConversationHandle owner = handleFor(P1, V1);
+        ConversationHandle stale = handleFor(P1, V1); // same pair, earlier discussion
+        ledger.hold(V1, P1, 1000, Source.CONVERSATION, owner);
+
+        assertFalse(ledger.releaseIfOwned(V1, stale), "a retired discussion releases nothing");
+        assertTrue(ledger.activeHolds().containsKey(V1));
+        assertTrue(ledger.releaseIfOwned(V1, owner));
+        assertFalse(ledger.activeHolds().containsKey(V1));
+    }
+
+    @Test
+    void anotherPlayersHoldSurvivesThisPlayersEnding() {
+        AttentionLedger ledger = new AttentionLedger();
+        ConversationHandle mine = handleFor(P1, V1);
+        ledger.hold(V1, P2, 1000, Source.CONVERSATION, handleFor(P2, V1)); // P2 took the villager over
+
+        assertFalse(ledger.releaseIfOwned(V1, mine), "a villager somebody else owns is not mine to free");
+        assertFalse(ledger.releaseIfOwned(V1, P1));
+        assertEquals(P2, ledger.activeHolds().get(V1).playerId());
+    }
+
+    @Test
+    void anUnownedHoldIsReleasedByTheSamePlayersDiscussion() {
+        AttentionLedger ledger = new AttentionLedger();
+        ledger.hold(V1, P1, 1000, Source.CONVERSATION); // a chat exchange, no handle minted
+        assertNull(ledger.activeHolds().get(V1).owner());
+        assertTrue(ledger.releaseIfOwned(V1, handleFor(P1, V1)),
+                "the player's own ending still ends the hold it booked without a handle");
+        assertFalse(ledger.activeHolds().containsKey(V1));
+    }
+
+    @Test
+    void unconditionalReleaseRemainsForTheVillagerItselfGoingAway() {
+        AttentionLedger ledger = new AttentionLedger();
+        ledger.hold(V1, P2, 1000, Source.CONVERSATION, handleFor(P2, V1));
+        ledger.release(V1); // death / removal / server stop: nobody is talking to a gone villager
+        assertFalse(ledger.activeHolds().containsKey(V1));
     }
 }

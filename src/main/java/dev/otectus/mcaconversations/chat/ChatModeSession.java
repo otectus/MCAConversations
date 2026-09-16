@@ -129,8 +129,20 @@ public final class ChatModeSession {
 
     /** Drops a player's session (logout/death), including the shared conversation session. */
     public static void clear(UUID playerId, dev.otectus.mcaconversations.conversation.CloseReason reason) {
-        SESSIONS.remove(playerId);
+        detach(playerId);
         ConversationSessions.clear(playerId, reason);
+    }
+
+    /**
+     * Drops only this player's chat-specific state — sticky target, miss ladder, mutes — without
+     * ending the shared conversation session.
+     *
+     * <p>The separation is what keeps the teardown coordinator from recursing: it runs this as one
+     * stage of ending a discussion, while {@link #clear} is the outside world's "this player is gone"
+     * entry point that also closes the shared session (spec §4.5).
+     */
+    public static void detach(UUID playerId) {
+        SESSIONS.remove(playerId);
     }
 
     /** Release server-owned references before an integrated server is stopped or replaced. */

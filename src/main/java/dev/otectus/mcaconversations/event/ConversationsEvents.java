@@ -101,6 +101,9 @@ public final class ConversationsEvents {
         dev.otectus.mcaconversations.compat.ReputationBridge.clearPendingRemarks();
         ChatModeScheduler.reset();
         ChatModeSession.reset(CloseReason.DISCONNECTED);
+        // Forget who was talking to whom and advance the handle epoch, so no discussion identity
+        // from the world that just stopped can ever equal one minted by the next.
+        dev.otectus.mcaconversations.conversation.ConversationLifecycle.reset();
         VillagerAttention.reset();
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();

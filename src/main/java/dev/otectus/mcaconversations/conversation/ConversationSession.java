@@ -71,6 +71,7 @@ public final class ConversationSession {
 
     private final UUID playerId;
 
+    private ConversationHandle handle;
     private UUID villagerId;
     private String topicId;
     private DepthClass budget = DepthClass.QUICK;
@@ -122,8 +123,31 @@ public final class ConversationSession {
         if (this.villagerId != null && !this.villagerId.equals(villagerId)) {
             // Switching target ends the old conversation: its budget must not carry over.
             resetTopic();
+            // The handle named the old villager, so it no longer describes this session. Dropping it
+            // is what keeps a teardown for the previous discussion from removing this one.
+            this.handle = null;
         }
         this.villagerId = villagerId;
+    }
+
+    /**
+     * The accepted discussion this session belongs to, or empty for a session that predates one —
+     * chat mode's ambient exchanges still work without a minted handle.
+     *
+     * <p>Held here so that every late arrival (a queued reply, a click, a close) can be checked
+     * against the identity of the discussion it was made in, rather than against the player id,
+     * which the player's <em>next</em> discussion shares.
+     */
+    public Optional<ConversationHandle> handle() {
+        return Optional.ofNullable(handle);
+    }
+
+    /** Attaches the identity of the discussion this session is now serving. */
+    public void setHandle(ConversationHandle handle) {
+        this.handle = handle;
+        if (handle != null) {
+            this.villagerId = handle.villagerId();
+        }
     }
 
     public Optional<String> topicId() {
