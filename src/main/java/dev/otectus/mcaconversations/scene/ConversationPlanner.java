@@ -61,6 +61,14 @@ public final class ConversationPlanner {
      */
     public static void onAnswerSubmitted(Entity villager, ServerPlayer player,
                                          String question, String answer) {
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            onAnswerSubmittedPinned(villager, player, question, answer);
+        }
+    }
+
+    private static void onAnswerSubmittedPinned(Entity villager, ServerPlayer player,
+                                         String question, String answer) {
         if (!McaConversationsConfig.dynamicFeature(FeatureId.DYNAMIC, false)
                 || villager == null || player == null) {
             return;
@@ -202,6 +210,13 @@ public final class ConversationPlanner {
      * only the villager's memory of having said this waits for the saying.
      */
     public static void onScenePlayed(Entity villager, ServerPlayer player, String beatId) {
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            onScenePlayedPinned(villager, player, beatId);
+        }
+    }
+
+    private static void onScenePlayedPinned(Entity villager, ServerPlayer player, String beatId) {
         if (villager == null || player == null) {
             return;
         }

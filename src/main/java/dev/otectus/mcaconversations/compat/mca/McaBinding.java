@@ -343,6 +343,7 @@ public final class McaBinding {
     // Chat-mode delivery -------------------------------------------------------------------------------
     public static final Member NETWORK_SEND_TO_PLAYER = statik(C_NETWORK, "sendToPlayer", void.class, 2);
     public static final Member QUESTION_RESPONSE_NEW = constructor(C_QUESTION_RESPONSE, 2);
+    public static final Member DIALOGUE_RESPONSE_NEW = constructor(C_DIALOGUE_RESPONSE, 3);
     public static final Member QUESTION_RESPONSE_TEXT =
             virtual(C_QUESTION_RESPONSE, "getQuestionText", Object.class, 0);
     public static final Member QUESTION_RESPONSE_SILENT = getter(C_QUESTION_RESPONSE, "silent");
@@ -441,7 +442,7 @@ public final class McaBinding {
             GET_INTERACTING_PLAYER,
             DIALOGUES_GET_INSTANCE, DIALOGUES_SELECT_ANSWER, DIALOGUES_GET_QUESTION, QUESTION_GET_ANSWER,
             ANSWER_VALID_FOR_CONSTRAINT, CONSTRAINT_ALL_MATCHING,
-            NETWORK_SEND_TO_PLAYER, QUESTION_RESPONSE_NEW, QUESTION_RESPONSE_TEXT, QUESTION_RESPONSE_SILENT,
+            NETWORK_SEND_TO_PLAYER, QUESTION_RESPONSE_NEW, DIALOGUE_RESPONSE_NEW, QUESTION_RESPONSE_TEXT, QUESTION_RESPONSE_SILENT,
             DIALOGUE_RESPONSE_QUESTION, DIALOGUE_RESPONSE_ANSWERS,
             CONFIG_GET_INSTANCE, CONFIG_ONLINE_TTS,
             ACTIONS_REGISTER, GIFT_REGISTER,

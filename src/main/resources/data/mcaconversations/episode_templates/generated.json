@@ -7,6 +7,35 @@
     "day - so the thing somebody is worrying about is theirs and stays theirs."
   ],
   "episodes": {
+    "shared.advice": {
+      "subject": "shared_history.advice",
+      "initial_state": "active",
+      "states": [
+        "active",
+        "succeeded",
+        "remembered",
+        "abandoned"
+      ],
+      "transitions": [
+        "active->succeeded",
+        "active->abandoned",
+        "succeeded->remembered",
+        "abandoned->remembered"
+      ],
+      "required_slots": [
+        "matter"
+      ],
+      "slot_options": {
+        "matter": [
+          "sh_the_roof_or_the_fence",
+          "sh_moving_my_stall",
+          "sh_a_letter_i_owe"
+        ]
+      },
+      "privacy": "ordinary",
+      "salience": 48,
+      "expires_after_days": 24
+    },
     "village.change": {
       "subject": "village.change",
       "initial_state": "active",
@@ -2447,11 +2476,16 @@
       "initial_state": "active",
       "states": [
         "active",
+        "blocked",
         "succeeded",
         "abandoned",
         "remembered"
       ],
       "transitions": [
+        "blocked->active",
+        "active->blocked",
+        "blocked->succeeded",
+        "blocked->abandoned",
         "active->succeeded",
         "active->abandoned",
         "succeeded->remembered",

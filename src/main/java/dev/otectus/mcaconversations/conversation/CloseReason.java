@@ -39,7 +39,11 @@ public enum CloseReason {
     FEATURE_DISABLED,
     /** The offer being answered did not exist, was consumed, or belonged to someone else. Reserved: the offer paths reject without closing. */
     INVALID_OFFER,
-    /** A contained failure ended the exchange rather than propagating. Reserved: nothing closes for this reason yet. */
+    /**
+     * A contained failure ended the exchange rather than propagating: the dialogue engine threw, or
+     * reported that it had not run the answer. Purely technical — like every reason here it carries
+     * no social meaning, and a player whose action failed has not slighted anybody.
+     */
     CONTAINED_ERROR;
 
     /**

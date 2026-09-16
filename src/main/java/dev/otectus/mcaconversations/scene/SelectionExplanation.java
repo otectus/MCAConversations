@@ -33,6 +33,9 @@ public final class SelectionExplanation {
 
     private int indexed;
     private int afterHardFilters;
+    private int evaluated;
+    private int reserved;
+    private boolean budgetExhausted;
     private String selected = "";
     private String seedBasis = "";
     private String contextFingerprint = "";
@@ -49,6 +52,24 @@ public final class SelectionExplanation {
 
     public SelectionExplanation afterHardFilters(int count) {
         this.afterHardFilters = count;
+        return this;
+    }
+
+    /** How many candidates the gate stack actually ran for, reserved and ordinary alike. */
+    public SelectionExplanation evaluated(int count) {
+        this.evaluated = count;
+        return this;
+    }
+
+    /** How many scored positions continuity claimed before ordinary priority ran. */
+    public SelectionExplanation reserved(int count) {
+        this.reserved = count;
+        return this;
+    }
+
+    /** True when evaluation stopped at its bound rather than at the end of the candidate order. */
+    public SelectionExplanation budgetExhausted(boolean exhausted) {
+        this.budgetExhausted = exhausted;
         return this;
     }
 
@@ -120,11 +141,35 @@ public final class SelectionExplanation {
         return afterHardFilters;
     }
 
+    /** Candidates that reached scoring — the same count as {@link #eligibleCount()}, named for §9.1. */
+    public int scoredCount() {
+        return afterHardFilters;
+    }
+
+    public int evaluatedCount() {
+        return evaluated;
+    }
+
+    public int rejectedCount() {
+        return rejections.size();
+    }
+
+    public int reservedCount() {
+        return reserved;
+    }
+
+    public boolean budgetExhausted() {
+        return budgetExhausted;
+    }
+
     /** The whole explanation, as the trace exporter and the debug command print it. */
     public List<String> lines() {
         List<String> out = new ArrayList<>();
         out.add("purpose=" + purpose + " indexed=" + indexed + " eligible=" + afterHardFilters
                 + " selected=" + (selected.isEmpty() ? "(none)" : selected));
+        out.add("  evaluated=" + evaluated + " rejected=" + rejections.size()
+                + " reserved=" + reserved + " scored=" + afterHardFilters
+                + (budgetExhausted ? " budget=exhausted" : ""));
         if (!seedBasis.isEmpty()) {
             out.add("  seed=" + seedBasis);
         }

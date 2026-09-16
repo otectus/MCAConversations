@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
+import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.McaConversationsConfig.DialogueMenuStyle;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,8 @@ class DialogueStyleProfileTest {
 
     @Test
     void minimalDrawsTheSameMenuWithFewerGraphics() {
+        // The stated restraint of the default card, in one place: no portrait, no badge artwork, no
+        // pop-out — and therefore no focus treatment that could move a row out from under a pointer.
         DialogueStyleProfile profile = DialogueStyleProfile.of(DialogueMenuStyle.MINIMAL);
         assertTrue(profile.customRenderer(), "MINIMAL is still the Conversations menu");
         assertFalse(profile.portrait(), "§10: no live portrait");
@@ -56,8 +59,11 @@ class DialogueStyleProfileTest {
             assertNotNull(DialogueStyleProfile.of(style), style.name());
             assertSame(DialogueStyleProfile.of(style), DialogueStyleProfile.of(style), style.name());
         }
-        assertSame(DialogueStyleProfile.RESPONSIVE, DialogueStyleProfile.of(null),
+        assertSame(DialogueStyleProfile.of(McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE),
+                DialogueStyleProfile.of(null),
                 "a null style means an unreadable config, which falls back to the shipped default");
+        assertSame(DialogueStyleProfile.MINIMAL, DialogueStyleProfile.of(null),
+                "since 1.6.3 that default is the restrained card");
     }
 
     @Test

@@ -33,12 +33,24 @@ public final class ChatDelivery {
         villagerSays(villager, player, line, 0);
     }
 
+    /** As above, with the audience the caller has already classified this utterance for. */
+    public static void villagerSays(Entity villager, ServerPlayer player, Component line,
+                                    UtteranceAudience audience) {
+        villagerSays(villager, player, line, 0, null, audience);
+    }
+
     /**
      * As {@link #villagerSays(Entity, ServerPlayer, Component)} but adds {@code extraDelayTicks} on top
      * of the humanized reply delay — the stagger offset for ambient multi-responder replies (spec §12.3).
      */
     public static void villagerSays(Entity villager, ServerPlayer player, Component line, int extraDelayTicks) {
-        villagerSays(villager, player, line, extraDelayTicks, null);
+        villagerSays(villager, player, line, extraDelayTicks, null, null);
+    }
+
+    /** As above, with an explicit audience. */
+    public static void villagerSays(Entity villager, ServerPlayer player, Component line,
+                                    int extraDelayTicks, UtteranceAudience audience) {
+        villagerSays(villager, player, line, extraDelayTicks, null, audience);
     }
 
     /**
@@ -48,6 +60,16 @@ public final class ChatDelivery {
      */
     static void villagerSays(Entity villager, ServerPlayer player, Component line, int extraDelayTicks,
                              ChatModeSession.Scope feedback) {
+        villagerSays(villager, player, line, extraDelayTicks, feedback, null);
+    }
+
+    /**
+     * Full form. {@code audience} is the frozen classification of this utterance; a null one is
+     * derived here from the speaker's own exchange, and derivation that cannot bind the metadata to
+     * this speaker falls back to the participant.
+     */
+    static void villagerSays(Entity villager, ServerPlayer player, Component line, int extraDelayTicks,
+                             ChatModeSession.Scope feedback, UtteranceAudience audience) {
         McaConversationsConfig.Common cfg = McaConversationsConfig.COMMON;
         String name = McaCompat.getVillagerName(villager).filter(n -> !n.isBlank()).orElse("Villager");
         MutableComponent coloredName = Component.literal(name).withStyle(style -> style
@@ -62,15 +84,8 @@ public final class ChatDelivery {
         long now = server != null ? server.overworld().getGameTime() : 0L;
         int delay = ChatModeScheduler.computeDelayTicks(cfg.chatModeReplyDelayTicks.get(), voiced.length());
         delay += Math.max(0, extraDelayTicks);
-        dev.otectus.mcaconversations.conversation.ConversationSession conversation =
-                dev.otectus.mcaconversations.conversation.ConversationSessions.raw(player.getUUID()).orElse(null);
-        dev.otectus.mcaconversations.history.PrivacyLevel privacy = conversation == null ? null
-                : conversation.plan().flatMap(dev.otectus.mcaconversations.scene.ConversationPlan::episodeId)
-                        .flatMap(id -> dev.otectus.mcaconversations.history.History.of(villager)
-                                .flatMap(history -> history.episode(id)))
-                        .map(dev.otectus.mcaconversations.history.EpisodeRecord::privacy).orElse(null);
-        boolean publicReplies = cfg.chatModePublicReplies.get() && mayBroadcast(privacy,
-                conversation == null ? null : conversation.lastNpcAct().orElse(null));
+        UtteranceAudience classified = audience == null ? classify(villager, player) : audience;
+        boolean publicReplies = cfg.chatModePublicReplies.get() && classified.bystandersMayHear();
         // Public replies travel as far as an overheard player message (the addressed radius), so a
         // bystander hears whole conversations — not the question without the answer.
         double radius = McaConversationsConfig.chatModeAddressedRadius();
@@ -81,9 +96,11 @@ public final class ChatDelivery {
     }
 
     /**
-     * Delivers a scheduled line, or drops it. Returns {@code true} iff the line was actually spoken:
-     * a drop writes no state at all — no consumed hearts suffix, no consumed options block — so the
-     * exchange still owes the player its feedback if the pair comes back together.
+     * Delivers a scheduled line, or drops it. Returns {@code true} iff the line was actually spoken
+     * to the speaker: a drop writes no state at all — no consumed hearts suffix, no consumed options
+     * block — so the exchange still owes the player its feedback if the pair comes back together.
+     * Bystanders are gated by the same policy one at a time, and a bystander who has walked off only
+     * misses the overheard copy; the speaker's own delivery is what the result reports.
      */
     private static boolean deliver(Entity villager, ServerPlayer speaker, Component rendered,
                                    boolean publicReplies, double radius, ChatModeSession.Scope feedback,
@@ -116,6 +133,7 @@ public final class ChatDelivery {
             forSpeaker = personal;
         }
         speaker.sendSystemMessage(forSpeaker);
+        int overheard = 0;
         if (feedback != null) {
             // The player has now heard this turn: run whatever was waiting on that (see
             // ChatModeSession#deferUntilDelivered). Once per turn, on the first line that lands.
@@ -124,21 +142,48 @@ public final class ChatDelivery {
         if (publicReplies && villager.level() instanceof ServerLevel level) {
             double r2 = radius * radius;
             for (ServerPlayer other : level.players()) {
-                if (other != speaker && !other.hasDisconnected()
-                        && other.distanceToSqr(villager) <= r2) {
+                // Same policy the speaker was gated by, so an overhearing player is refused for the
+                // same stated reason rather than by a second, differently-worded distance test.
+                if (other != speaker && EngagementPolicy.evaluate(other, villager, r2).ok()) {
                     other.sendSystemMessage(rendered); // relationship feedback is personal — speaker only
+                    overheard++;
                 }
             }
         }
+        // Recorded after the fact, from who was actually sent the line: an intended audience is not
+        // a delivery, and a dropped or out-of-range recipient must never be counted as one.
+        McaConversations.LOGGER.debug("chat-mode line delivered to the speaker and {} bystander(s)", overheard);
         return true;
     }
 
-    /** Public-chat configuration never promotes a recorded confidence or personal disclosure. */
+    /**
+     * Derives the audience of a line nobody classified, binding the metadata to this speaker.
+     *
+     * <p>The session's privacy and last speech act describe <em>its</em> exchange. When the villager
+     * speaking is not that exchange's villager — a bystander interjecting, or an ambient line from a
+     * second speaker — the metadata is somebody else's and is not used; the line stays with the
+     * participant instead.
+     */
+    static UtteranceAudience classify(Entity villager, ServerPlayer player) {
+        dev.otectus.mcaconversations.conversation.ConversationSession conversation =
+                dev.otectus.mcaconversations.conversation.ConversationSessions.raw(player.getUUID()).orElse(null);
+        boolean bound = conversation != null && villager != null
+                && villager.getUUID().equals(conversation.villagerId());
+        if (!bound) {
+            return UtteranceAudience.participantOnly("no exchange bound to this speaker");
+        }
+        dev.otectus.mcaconversations.history.PrivacyLevel privacy =
+                conversation.plan().flatMap(dev.otectus.mcaconversations.scene.ConversationPlan::episodeId)
+                        .flatMap(id -> dev.otectus.mcaconversations.history.History.of(villager)
+                                .flatMap(history -> history.episode(id)))
+                        .map(dev.otectus.mcaconversations.history.EpisodeRecord::privacy).orElse(null);
+        return UtteranceAudience.ofDialogue(privacy, conversation.lastNpcAct().orElse(null), true);
+    }
+
+    /** Public-chat configuration never promotes a recorded confidence, disclosure or unknown line. */
     static boolean mayBroadcast(dev.otectus.mcaconversations.history.PrivacyLevel privacy,
                                 dev.otectus.mcaconversations.conversation.NpcSpeechAct act) {
-        return (privacy == null || privacy == dev.otectus.mcaconversations.history.PrivacyLevel.PUBLIC)
-                && act != dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE
-                && act != dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE_PROBLEM;
+        return UtteranceAudience.ofDialogue(privacy, act, true).bystandersMayHear();
     }
 
     /**

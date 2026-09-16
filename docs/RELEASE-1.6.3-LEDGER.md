@@ -113,25 +113,139 @@ repositories apart from line endings (`diff -rq --strip-trailing-cr`, no differe
 
 ## e) Deferred to 1.7.x
 
-- **F10** (WP12, editorial repair) — source prose that violates its own identity/grammar assumptions
-  (e.g. the outlaw profession's ungendered pack using a gendered self-description).
+- **F10** (WP12, editorial repair) — *partly repaired this release.* The named case is fixed: the
+  outlaw pack's gendered self-descriptions ("the woman who mends carts", "a woman doing sums at her
+  own table", "a person who says she has changed") now read identity-neutrally in both locales, its
+  three feminine `Obrigada` thanks became `Agradeço`, one line no longer forces feminine agreement
+  onto the player, the pack's authoring comment no longer implies a gender gate, and the `watcher`
+  slot — which mixes "the headman" with "the families at the top of the lane" and "the children" —
+  no longer feeds five lines that fixed singular (and, in Portuguese, masculine) agreement around it.
+  The same class of ungated gendered self-description was repaired in `mca_mercenary`,
+  `minecraft_armorer`, `minecraft_weaponsmith` and `werewolves_werewolf_expert`.
+  **Remaining corpus coverage:** Portuguese first-person agreement in the villager's own voice is
+  still gendered across the rest of the corpus — roughly 240 `Obrigada`/`Obrigado` thanks in 57 of
+  the `src/content/` sources, plus first-person adjectives and participles (`cansada`, `sozinha`,
+  `pronta`, `justa`, `vizinha` and similar) in most profession packs. `src/content/topics/` and
+  `src/content/voices/` were not swept. No profession pack declares a gender key, so all of it is
+  reachable by any villager; repairing it is prose rework per line, not a substitution, and is
+  deferred rather than done blindly.
 - **F11** (WP09, selection) — the director's 32-candidate base-priority admission cutoff can exclude a
   candidate before continuity scoring ever sees it.
 - **The rest of WP08** — utterance ids, a transcript, per-recipient disclosure bookkeeping, durable
   checkpoints, resume-after-restart, and the automatic-node budget. Only the close-reason/teardown
   portion landed this release (§c, `8120ca4`).
+
+  *Also addressed this release:* safe continuation through the threads that already exist.
+  Continuation is resolved from the pair's own thread and its authored continuation target
+  (`scene/ContinuationResolver`), revalidated against the bundle the operation is pinned to — the
+  template still present and still describing the same subject under the same topic
+  (`SharedThreadRecord.agreesWith`), an authored resume scene still in the scene catalog, the bound
+  episode still live, plus readiness, cooldown, lapsing and the resume budget. Those scenes are now
+  admitted through the director's continuity class (`ConversationDirector.Relevance.resumeScenes`),
+  at higher precision than the thread-template and subject indexes and under the identical gate
+  stack, budget and cap; no scoring weight changed. The hub only offers a continuation that resolves,
+  and its label was rewritten to the restrained "about what we were discussing" wording in both
+  locales. Classes: `scene/ContinuationResolver`, `scene/ConversationDirector`,
+  `history/SharedThreadRecord`, `hub/DynamicHub`, `hub/HubLabels`. Tests:
+  `ContinuationResolverTest`, `ContinuityAdmissionTest`, `DynamicHubTest`, `SessionCloseReasonTest`.
+
+  **Verified, not changed:** no close reason feeds a social consequence. Threads are written only by
+  authored `conversations_thread` directives during a scene that was actually played
+  (`compat/mca/LivingHistoriesRegistrar`), and the stance and outcome those directives read are
+  cleared by the session's own topic reset, so an interruption cannot leave a stance for a later
+  thread write to inherit or record a walked-away ending; `SessionCloseReasonTest` now pins that for
+  every technical reason. Likewise, no outcome family reaches a heart or disposition delta, so a
+  misunderstanding-repair path remains a stance/outcome change on the thread and refunds nothing.
+
+  **Still deferred:** durable arbitrary checkpoints and general resume-after-restart. This slice adds
+  no persisted field — the history save format is untouched, and continuation is reconstructed from
+  the thread frame that was already saved.
 - **WP10** — player-facing transcript, availability reasons, narrator/input/layout parity work beyond
-  what already exists in `client.dialogue`.
+  what already exists in `client.dialogue`. *Partly addressed this release:* the presentation pass
+  made the restrained card the default for an absent `dialogueMenuStyle`/`motionMode` (MINIMAL and
+  REDUCED, with every stored value preserved — Forge writes both keys on first save, so only an
+  absent key is reached), reduced `REDUCED` to a fade on a genuine open or close with focus,
+  selection, answer expansion and paging immediate, keyed the card's entrance to the lifetime of the
+  presentation rather than to the offer revision (a pause between turns is a wait, not a
+  close/reopen), and refined MINIMAL itself: a hairline above the answers, a stationary gutter mark
+  for focus, full-row hit targets and higher backing contrast, with no portrait, badge artwork or
+  focus translation. Classes: `McaConversationsConfig`, `client/dialogue/MinimalDialogueSkin`,
+  `ConversationMotionSpec`, `DialogueChoiceVisualState`, `DialogueStyleProfile`, `DialogueSkin`,
+  `ClientChoiceController`. Tests: `ConfigSpecTest`, `DialogueChoiceVisualStateTest`,
+  `ConversationMotionSpecTest`, `DialogueMenuStyleResolverTest`, `DialogueStyleProfileTest`,
+  `MinimalSkinIsTextureFreeLintTest`. Production check still required: all three styles against all
+  three motion modes on a running client, including an upgraded `mcaconversations-client.toml` that
+  still reads `RESPONSIVE`/`FULL`.
+
+  *Also addressed this release:* the two card utilities and the availability sentences. `H` opens a
+  collapsed, connection-local drawer of what this client actually received and sent — bounded by the
+  new `deliveredHistoryEntries` client key (64), deduplicated by delivery identity, cleared on
+  disconnect and world change, never written to disk and never exportable — and `P` opens a
+  presentation pane that writes `dialogueMenuStyle`, `motionMode`, `questionRevealMode`,
+  `uiSoundVolume` and `showResponseControlHints` through the Forge client spec, states the effective
+  style when `numberedResponses = false` overrides it, and lists what "reset to recommended" would
+  change before applying it. Both are drawn inside the response viewport, leave the outer geometry
+  untouched, and own the keyboard and pointer while open so neither can submit a response. A hub
+  entry the player was shown but cannot open now answers with a plain sentence (busy, already
+  discussed today, not ready) instead of silence; the sentence names no topic id, no condition and no
+  eligibility reason, is never produced for a topic the player has not been offered, and is
+  descriptive only — selection still goes through the server's ordinary gate. Classes:
+  `client/dialogue/DeliveredLine`, `DeliveredHistory`, `ClientDialogueHistory`, `PresentationSettings`,
+  `ConfigPresentationStore`, `DialogueUtilityState`, `DialogueUtilityView`, `DialogueChoiceRenderer`,
+  `ClientChoiceController`, `ClientChoiceMessages`, `mixin/client/InteractScreenChoiceMixin`,
+  `hub/TopicAvailability`, `chat/ChatModeDispatcher`, `McaConversationsConfig`. Tests:
+  `DeliveredHistoryTest`, `PresentationSettingsTest`, `DialogueUtilityStateTest`,
+  `TopicAvailabilityTest`. Production check still required: both overlays on a running client at
+  several GUI scales, including keyboard-only operation and an upgraded client TOML.
+
+  **Still deferred:** a durable, exportable transcript or conversation journal. The drawer is
+  explicitly not one — it is in-memory, bounded, connection-local and holds only this client's own
+  deliveries — because a persistent transcript needs utterance ids and per-recipient disclosure
+  bookkeeping (the rest of WP08) before it could be written without recording things the reader was
+  never told. The remaining narrator/input/layout parity work is also still deferred.
 - **WP11** — authoring-tool improvements (schemas, source maps, simulator, reports, samples) beyond
   the existing `ContentCompiler`/`VoiceFamilyCompiler` pipeline.
-- **WP13** — the everyday-expansion scene set (48 proposed scenes and pilot micro-arcs).
+- **WP13** — *bounded replacement delivered this release.* The 48-scene everyday expansion was
+  deferred; in its place eight authored encounters shipped in both locales across four topic packs
+  and one profession pack: four in `shared_history` (a new `shared.advice` episode family — the first
+  non-work family in the corpus — carrying the opinion asked for, the advice revisited, the
+  misunderstanding repaired, and the long-settled callback), one in `village` (a change that moved on
+  since the last conversation), one in `neighbour` and one in `interests` (pleasant low-stakes
+  exchanges), and a `blocked` state on `minecraft_mason`'s `work.quick_apprentice` (a friendly
+  technique standoff, reachable from a new reply on the live state). Four of the new openings carry
+  authored voice-family variants (`warm`, `quiet`, `plainspoken`, `bright`).
+  **Remaining:** the rest of the 48-scene proposal and the pilot micro-arcs. No new commitment
+  resolver was added, so none of these encounters creates a tracked promise; commitment-bearing
+  everyday scenes still need WP11-era authoring support. No integration-dependent follow-up was
+  authored — none of the proposed observations was available through an existing provider without new
+  capability work (WP14). The corpus-wide salience-weighted overlay floor
+  (`SignatureOverlayLintTest.WEIGHTED_COVERAGE_FLOOR`, 18%) is now the binding constraint on
+  unvoiced authored expansion: this slice had to write four overlay variant sets to stay above it,
+  and any further expansion must budget voice coverage with the scenes.
 - **WP14** — the Quests/Reputation/Capitals/Townstead/Seasons integration capability matrix and
   exact-artifact production scenarios called for in §21.3.
 - **WP15** — optional expansions (NPC groups, spectators, gestures/audio, new Crime/Skills adapters).
-- **F12's staging coordinator** — this release publishes one monotonic content generation after every
-  reload and refuses a stale offer against it (`ContentGenerationListener`), but does not stage and
-  cross-validate related catalogs before publishing, or roll back a partially-failed reload as one
-  unit — the coordinator that §7's F12 implementation note describes.
+- **F12's staging coordinator** — now built. `ContentReloadCoordinator` replaces the eleven
+  independently-publishing listeners with one: it stages every owned section and an index of the
+  effective `dialogues/**` on the preparation executor, cross-validates them, and publishes one
+  `ConversationContentBundle` and one generation with a single reference assignment, inside the tail
+  of MCA's `Dialogues.apply` — the one moment both halves of this mod's content exist and neither has
+  been observed. A rejected reload publishes nothing: the previous bundle, its generation and the
+  owned executable questions all stay in force, the newly parsed owned keys are removed from MCA's
+  map, and the previous table is put back. The handler moved to `EventPriority.HIGH`, which removes
+  the §3.3 startup race. The `AddReloadListenerEvent` inventory, the recommended A + C strategy, its
+  documented limitations and the structured-diagnostics specification are in
+  `docs/RELOAD-TRANSACTION-BOUNDARY.md`, with an "Implemented" addendum recording what shipped and
+  what still cannot be covered. Fixtures: `McaDialogueReloadProbeTest` (all three probe jars, MCA's
+  members unchanged), `ReloadTransactionBaselineTest` and `ReloadResilienceTest` (transformed from
+  the mixed-verdict baseline to the one-verdict one), `ContentStagingTest`,
+  `ContentResourceOverrideTest`, `DialogueResourceIndexTest`, `ContentValidationTest`,
+  `ContentReloadDiagnosticsTest`, `ContentReloadCoordinatorTest`, `ContentBundleLifecycleTest`,
+  `OwnedDialogueRetentionTest`, `ContentOperationConsistencyTest`, `StaleOfferAcrossReloadTest`,
+  `PendingContentReloadTest`. Outstanding production check: a running world for the retention hook
+  itself — `require = 0` means a reshaped `Dialogues.apply` disables it silently, and the unit JVM
+  cannot drive MCA's transformed parse path (boundary note §5). Exercise `/reload` with an open
+  answer card, with a deliberately broken pack, and on all three probe versions.
 - **F01's reflective-binding alternative** — this release solves F01 by vendoring compile-only API
   jars for MCA: Quests and MCA: Reputation (`libs/api/`, hash-pinned). It does not extend
   `compat.mca`'s name-based reflective-binding pattern (no compile-time dependency at all, matching

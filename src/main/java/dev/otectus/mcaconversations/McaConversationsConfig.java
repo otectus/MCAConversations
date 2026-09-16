@@ -31,6 +31,23 @@ public final class McaConversationsConfig {
     /** How the villager's line is revealed. Opt-in: the base experience shows it at once. */
     public enum QuestionReveal { OFF, FAST }
 
+    /**
+     * The presentation an installation gets when it has never expressed a preference.
+     *
+     * <p>1.7.0 moves these from RESPONSIVE/FULL to the restrained pair. They are constants rather
+     * than literals at the {@code define} call because the client also has to answer the same
+     * question before any file is loaded, and two hand-written copies of a default is how an install
+     * ends up looking different for the first few frames of every screen.
+     *
+     * <p>This only affects a key that is <em>absent</em>. Forge writes every declared key into the
+     * TOML the first time it saves the file, so an existing installation already states its own
+     * values explicitly and keeps them; a stored RESPONSIVE is a choice, never a stale default.
+     */
+    public static final DialogueMenuStyle DEFAULT_DIALOGUE_MENU_STYLE = DialogueMenuStyle.MINIMAL;
+
+    /** The motion profile for an absent {@code motionMode}; see {@link #DEFAULT_DIALOGUE_MENU_STYLE}. */
+    public static final MotionMode DEFAULT_MOTION_MODE = MotionMode.REDUCED;
+
     public static final Common COMMON;
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final Server SERVER;
@@ -998,6 +1015,7 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.BooleanValue speakerNameAccent;
         public final ForgeConfigSpec.BooleanValue showSpeakerPortrait;
         public final ForgeConfigSpec.EnumValue<QuestionReveal> questionRevealMode;
+        public final ForgeConfigSpec.IntValue deliveredHistoryEntries;
 
         Client(ForgeConfigSpec.Builder b) {
             b.push("display");
@@ -1009,9 +1027,11 @@ public final class McaConversationsConfig {
             dialogueMenuStyle = b.comment(
                     "Dialogue menu presentation.",
                     "RESPONSIVE   - the full MCA: Conversations responsive card.",
-                    "MINIMAL      - the responsive menu with simpler, lower-overhead graphics.",
-                    "MCA_ORIGINAL - let MCA Reborn draw and control its original dialogue menu.")
-                    .defineEnum("dialogueMenuStyle", DialogueMenuStyle.RESPONSIVE);
+                    "MINIMAL      - the same menu with flat graphics; recommended, and the default",
+                    "               for a key that is absent since 1.7.0 (it was RESPONSIVE before).",
+                    "MCA_ORIGINAL - let MCA Reborn draw and control its original dialogue menu.",
+                    "An existing config file already states this key, so upgrading never changes it.")
+                    .defineEnum("dialogueMenuStyle", DEFAULT_DIALOGUE_MENU_STYLE);
             numericResponseShortcuts = b.comment(
                     "Allow number keys to select visible choices while a dialogue screen owns focus.",
                     "Disabled automatically when numberedResponses is false so invisible mappings never exist.")
@@ -1023,10 +1043,14 @@ public final class McaConversationsConfig {
                     "Show the compact keyboard and paging hint below the response list.")
                     .define("showResponseControlHints", true);
             motionMode = b.comment(
-                    "Conversation motion: FULL uses short state-driven movement, REDUCED uses fades only,",
-                    "and OFF changes visual state immediately. OFF is the canonical way to disable",
-                    "every dialogue animation.")
-                    .defineEnum("motionMode", MotionMode.FULL);
+                    "Conversation motion: FULL uses short state-driven movement, REDUCED fades the card",
+                    "in and out and changes everything else immediately, and OFF changes visual state",
+                    "immediately. OFF is the canonical way to disable every dialogue animation.",
+                    "REDUCED is recommended, and the default for a key that is absent since 1.7.0 (it",
+                    "was FULL before). An existing config file already states this key and keeps it.",
+                    "This covers the effects MCA: Conversations draws; Townstead keeps its own screen,",
+                    "camera work and typewriter.")
+                    .defineEnum("motionMode", DEFAULT_MOTION_MODE);
             uiSoundVolume = b.comment(
                     "Volume multiplier for response focus, page and confirmation sounds. Zero disables them.")
                     .defineInRange("uiSoundVolume", 0.65D, 0.0D, 1.0D);
@@ -1043,6 +1067,12 @@ public final class McaConversationsConfig {
                     "few ticks. Ignored when motionMode is OFF and under MCA_ORIGINAL, and any input",
                     "completes it immediately.")
                     .defineEnum("questionRevealMode", QuestionReveal.OFF);
+            deliveredHistoryEntries = b.comment(
+                    "How many delivered lines and sent responses the dialogue card's history drawer",
+                    "keeps in memory. The drawer is collapsed by default, holds only what this client",
+                    "actually received, is cleared on disconnect and world change, and is never written",
+                    "to disk or exported. 0 disables the drawer entirely.")
+                    .defineInRange("deliveredHistoryEntries", 64, 0, 256);
             b.pop();
         }
     }

@@ -39,12 +39,32 @@ public final class DialogueChoiceNarrator {
     }
 
     public void focus(long revision, int absoluteIndex, int total, Component answer) {
+        focus(revision, absoluteIndex, Component.translatable(
+                "gui.mcaconversations.responses.narration", absoluteIndex + 1, total, answer));
+    }
+
+    /**
+     * The same deduplicated announcement from a sentence the caller composed.
+     *
+     * <p>What a focused response is announced as depends on which controls are enabled, and that is
+     * {@link DialogueControlModel}'s single answer rather than a second copy of the rule here.
+     */
+    public void focus(long revision, int absoluteIndex, Component message) {
         if (offerRevision != revision || focusedIndex == absoluteIndex) {
             return;
         }
         focusedIndex = absoluteIndex;
-        say(Component.translatable("gui.mcaconversations.responses.narration",
-                absoluteIndex + 1, total, answer));
+        say(message);
+    }
+
+    /** Narrates a refused answer with the reason it was refused, not a generic lapse. */
+    public static void lapsed(dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason reason) {
+        sayThroughNarrator(ClientChoiceMessages.explanation(reason));
+    }
+
+    /** Announced when the keyboard moves between the card's reading regions. */
+    public void region(Component message) {
+        say(message);
     }
 
     public void page(long revision, int current, int total) {
@@ -75,7 +95,7 @@ public final class DialogueChoiceNarrator {
      * screen state that would otherwise own the narrator.
      */
     public static void expired() {
-        sayThroughNarrator(Component.translatable("gui.mcaconversations.responses.expired"));
+        lapsed(dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason.EXPIRED);
     }
 
     private void say(Component component) {

@@ -23,7 +23,13 @@ import java.util.function.Supplier;
  */
 public final class ConversationsNetwork {
 
-    public static final String PROTOCOL = "2";
+    /**
+     * The channel protocol, kept out of Java prose: it is a build property like every other version
+     * string in this project, expanded into {@code mcaconversations-network.properties} by
+     * {@code processResources}. The literal below is only the fallback for a classpath that somehow
+     * has the classes without the resource, and it must stay in step with {@code gradle.properties}.
+     */
+    public static final String PROTOCOL = NetworkProtocol.version();
     private static final java.util.Set<String> WARNED_OVERSIZED_OFFERS =
             java.util.concurrent.ConcurrentHashMap.newKeySet();
 
@@ -31,7 +37,21 @@ public final class ConversationsNetwork {
             new ResourceLocation(McaConversations.MOD_ID, "main"),
             () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
+    private static volatile ChoicePacketSink sink = ChoicePacketSink.NONE;
+
     private ConversationsNetwork() {
+    }
+
+    /**
+     * Installs the physical client's packet sink. Called from client setup only; a dedicated server
+     * never calls it and keeps {@link ChoicePacketSink#NONE}.
+     */
+    public static void installSink(ChoicePacketSink incoming) {
+        sink = incoming == null ? ChoicePacketSink.NONE : incoming;
+    }
+
+    static ChoicePacketSink sink() {
+        return sink;
     }
 
     public static void register() {
@@ -46,6 +66,9 @@ public final class ConversationsNetwork {
                 java.util.Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(3, ChoiceSelectC2S.class,
                 ChoiceSelectC2S::encode, ChoiceSelectC2S::decode, ChoiceSelectC2S::handle,
+                java.util.Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(4, ChoiceReturnC2S.class,
+                ChoiceReturnC2S::encode, ChoiceReturnC2S::decode, ChoiceReturnC2S::handle,
                 java.util.Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 

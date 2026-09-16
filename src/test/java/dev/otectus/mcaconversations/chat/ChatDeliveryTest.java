@@ -131,8 +131,31 @@ class ChatDeliveryTest {
                 dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE));
         assertEquals(false, ChatDelivery.mayBroadcast(null,
                 dev.otectus.mcaconversations.conversation.NpcSpeechAct.DISCLOSE_PROBLEM));
-        assertEquals(true, ChatDelivery.mayBroadcast(null,
+    }
+
+    @Test
+    void anUnclassifiedLineIsNotAPublicOne() {
+        // Missing episode privacy used to read as permission to broadcast, which made "we never
+        // recorded how private this was" and "this is safe to shout" the same answer. A line nobody
+        // classified now goes to the person it was said to, and to nobody else.
+        assertEquals(false, ChatDelivery.mayBroadcast(null,
                 dev.otectus.mcaconversations.conversation.NpcSpeechAct.REPORT));
+        assertEquals(false, ChatDelivery.mayBroadcast(null, null));
+    }
+
+    @Test
+    void sensitiveStaticLinesStayBetweenTheTwoOfThem() {
+        // These have no episode behind them at all, so they can only be judged by what they are.
+        assertEquals(false, UtteranceAudience.ofStaticLine("chatmode.insult").bystandersMayHear());
+        assertEquals(false,
+                UtteranceAudience.ofStaticLine("conversations.family.confide").bystandersMayHear());
+        assertEquals(false, UtteranceAudience.ofStaticLine("").bystandersMayHear());
+    }
+
+    @Test
+    void classifiedPublicStaticLinesMayBeOverheard() {
+        assertEquals(true, UtteranceAudience.ofStaticLine("chatmode.hail").bystandersMayHear());
+        assertEquals(true, UtteranceAudience.ofStaticLine("chatmode.busy").bystandersMayHear());
     }
 
 

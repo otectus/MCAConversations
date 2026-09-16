@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
+import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.McaConversationsConfig.DialogueMenuStyle;
 
 /**
@@ -31,7 +32,7 @@ public record DialogueStyleProfile(boolean customRenderer, boolean portrait, boo
 
     /** Total over the enum: a style added without a profile is a compile error, not a blank card. */
     public static DialogueStyleProfile of(DialogueMenuStyle style) {
-        return switch (style == null ? DialogueMenuStyle.RESPONSIVE : style) {
+        return switch (style == null ? McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE : style) {
             case RESPONSIVE -> RESPONSIVE;
             case MINIMAL -> MINIMAL;
             case MCA_ORIGINAL -> MCA_ORIGINAL;

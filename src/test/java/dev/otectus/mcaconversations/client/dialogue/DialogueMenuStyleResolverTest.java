@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
+import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.McaConversationsConfig.DialogueMenuStyle;
 import dev.otectus.mcaconversations.support.TestPaths;
 import org.junit.jupiter.api.Test;
@@ -42,16 +43,41 @@ class DialogueMenuStyleResolverTest {
     }
 
     @Test
-    void aMissingStyleFallsBackToResponsive() {
+    void aMissingStyleFallsBackToTheShippedDefault() {
         // A null arrives only from a spec that failed to load; the fallback is the shipped default
-        // rather than an exception thrown inside a render path.
-        assertEquals(DialogueMenuStyle.RESPONSIVE, ClientChoiceController.resolve(true, null));
+        // rather than an exception thrown inside a render path. Since 1.6.3 that default is MINIMAL,
+        // and it is read from the one constant the spec itself is declared with.
+        assertEquals(McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE,
+                ClientChoiceController.resolve(true, null));
+        assertEquals(DialogueMenuStyle.MINIMAL, ClientChoiceController.resolve(true, null));
     }
 
     @Test
-    void unloadedClientConfigResolvesToResponsive() {
+    void unloadedClientConfigResolvesToTheShippedDefault() {
         // No config file is loaded in this JVM, so the underlying get() throws.
-        assertEquals(DialogueMenuStyle.RESPONSIVE, ClientChoiceController.dialogueMenuStyle());
+        assertEquals(DialogueMenuStyle.MINIMAL, ClientChoiceController.dialogueMenuStyle());
+        assertEquals(McaConversationsConfig.DEFAULT_MOTION_MODE, ClientChoiceController.motionMode());
+    }
+
+    @Test
+    void ownershipAndInputAreTheSameForEveryStyleAndMotionCombination() {
+        // Motion is an accessibility preference, not an ownership decision. The matrix asserts that
+        // no combination hands the screen to the wrong side or removes the input the style implies:
+        // Conversations draws for RESPONSIVE and MINIMAL and numbers them both, MCA draws its own
+        // menu under MCA_ORIGINAL, and the legacy override still beats all nine cells.
+        for (DialogueMenuStyle style : DialogueMenuStyle.values()) {
+            boolean ours = style != DialogueMenuStyle.MCA_ORIGINAL;
+            assertEquals(ours, DialogueStyleProfile.of(style).customRenderer(), style.name());
+            for (McaConversationsConfig.MotionMode mode : McaConversationsConfig.MotionMode.values()) {
+                ConversationMotionSpec spec = ConversationMotionSpec.of(mode, style);
+                assertEquals(mode, spec.mode(), style + "/" + mode);
+                assertEquals(style, ClientChoiceController.resolve(true, style),
+                        "motion must never change which menu is shown: " + style + "/" + mode);
+                assertEquals(DialogueMenuStyle.MCA_ORIGINAL,
+                        ClientChoiceController.resolve(false, style),
+                        "the legacy override still wins under " + style + "/" + mode);
+            }
+        }
     }
 
     @Test

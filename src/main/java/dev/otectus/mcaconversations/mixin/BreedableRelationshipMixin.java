@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Records accepted gifts for the gratitude state and the {@code last_gift_item} template variable.
- * {@code acceptGift} is called only when MCA has decided the gift is taken (rejects go through
- * {@code rejectGift}), with the gifted stack still intact as a parameter — the exact hook the
- * gift tracker needs.
+ * {@code acceptGift} still contains inventory, satisfaction and saturation refusals. The accepted
+ * path takes exactly one item through {@code ItemStack.split(1)}, so the hook runs immediately
+ * before that transfer and records only that item.
  *
  * <p><b>Two targets, one jar</b> — see {@link NetworkHandlerMixin} for why both MCA package roots
  * are listed and why {@link Pseudo} is set.
@@ -50,12 +50,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 }, remap = false)
 public abstract class BreedableRelationshipMixin {
 
-    @Inject(method = "acceptGift", at = @At("HEAD"), require = 0)
+    @Inject(method = "acceptGift", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;split(I)Lnet/minecraft/world/item/ItemStack;",
+            shift = At.Shift.BEFORE, remap = true), require = 0, remap = false)
     private void mcaconversations$onAcceptGift(ItemStack stack, @Coerce Object gift, ServerPlayer player,
                                                @Coerce Object memories, CallbackInfo ci) {
         try {
             McaHandles.relationshipVillager(this)
-                    .ifPresent(villager -> GiftTracker.recordAcceptedGift(villager, player, stack));
+                    .ifPresent(villager -> GiftTracker.recordAcceptedGift(villager, player,
+                            stack.copyWithCount(1)));
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("Gift-detection hook failed; ignoring", t);
         }

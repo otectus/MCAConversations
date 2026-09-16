@@ -83,7 +83,7 @@ class ChoicePageMapTest {
     }
 
     @Test
-    void compactSpacingEngagesOnlyWhenNormalRowsDoNotFit() {
+    void compactSpacingDependsOnTheWindowAndFont() {
         List<Integer> normal = heights(4, 200);
         List<Integer> compact = heights(4, 14);
         assertTrue(DialogueChoiceLayout.packPages(180, 3, 9, normal, compact, true).compact(),

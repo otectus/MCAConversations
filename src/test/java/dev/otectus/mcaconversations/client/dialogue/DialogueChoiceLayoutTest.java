@@ -9,6 +9,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class DialogueChoiceLayoutTest {
 
     @Test
+    void aLongFirstAnswerCannotChangeTheFrameDensity() {
+        for (int height : new int[]{180, 300, 600}) {
+            var shortOffer = DialogueChoiceLayout.packPages(height, 1, 9,
+                    List.of(20), List.of(16), true);
+            var longOffer = DialogueChoiceLayout.packPages(height, 20, 9,
+                    List.of(1000), List.of(996), true);
+            assertEquals(shortOffer.compact(), longOffer.compact());
+            var shortFrame = DialogueChoiceLayout.geometry(400, height, 9, true,
+                    shortOffer.compact(), DialogueChoiceLayout.HeaderSpec.NONE, false);
+            var longFrame = DialogueChoiceLayout.geometry(400, height, 9, true,
+                    longOffer.compact(), DialogueChoiceLayout.HeaderSpec.NONE, false);
+            assertEquals(shortFrame, longFrame);
+        }
+    }
+
+    @Test
     void responsiveRowsDoNotOverlap() {
         DialogueChoiceLayout.Layout layout = DialogueChoiceLayout.create(
                 320, 300, 2, List.of(18, 27, 18, 36), true);

@@ -39,6 +39,37 @@ class DialogueChoicePresenterTest {
         assertInstanceOf(DialogueHitTarget.None.class, card.hit(2, 2));
     }
 
+    @Test
+    void theQuestionAndTheListAreSeparatelyAddressableRegions() {
+        // The wheel is routed by what it is over, so the two reading regions have to be
+        // distinguishable from each other and from a miss outside the card.
+        PreparedDialogueCard card = card();
+        assertInstanceOf(DialogueHitTarget.Question.class, card.hit(20, 13),
+                "the question's own region is a target");
+        assertInstanceOf(DialogueHitTarget.Responses.class, card.hit(20, 70),
+                "empty space inside the viewport still belongs to the list");
+        assertInstanceOf(DialogueHitTarget.None.class, card.hit(20, 100),
+                "below the viewport the card claims nothing");
+    }
+
+    @Test
+    void aRowScrolledOutOfTheViewportIsNotClickableThroughTheQuestion() {
+        DialogueChoiceLayout.Rect panel = new DialogueChoiceLayout.Rect(10, 10, 160, 100);
+        DialogueChoiceLayout.Rect above = new DialogueChoiceLayout.Rect(15, 0, 140, 20);
+        DialogueChoiceLayout.Layout layout = new DialogueChoiceLayout.Layout(panel, panel, null,
+                15, 15, 1, 35, List.of(above), 80, null, null,
+                new DialogueChoiceLayout.Rect(15, 12, 140, 20),
+                new DialogueChoiceLayout.Rect(15, 40, 140, 40), 120);
+        PreparedDialogueCard card = new PreparedDialogueCard(1, layout,
+                List.of(FormattedCharSequence.EMPTY),
+                List.of(new PreparedChoiceRow(0, 1, above, above, Component.literal("A"),
+                        List.of(FormattedCharSequence.EMPTY), true, false)),
+                10, DialogueChoiceLayout.NUMBER_COLUMN, false);
+        assertInstanceOf(DialogueHitTarget.Question.class, card.hit(20, 15),
+                "a row scrolled above the viewport must not be clickable over the question");
+        assertTrue(card.responsesOverflow());
+    }
+
     private static PreparedDialogueCard card() {
         DialogueChoiceLayout.Rect panel = new DialogueChoiceLayout.Rect(10, 10, 160, 100);
         DialogueChoiceLayout.Rect first = new DialogueChoiceLayout.Rect(15, 15, 140, 20);
@@ -46,7 +77,9 @@ class DialogueChoicePresenterTest {
         DialogueChoiceLayout.Layout layout = new DialogueChoiceLayout.Layout(panel, panel, null,
                 15, 15, 1, 35, List.of(first, second), 80,
                 new DialogueChoiceLayout.Rect(100, 80, 18, 18),
-                new DialogueChoiceLayout.Rect(130, 80, 18, 18));
+                new DialogueChoiceLayout.Rect(130, 80, 18, 18),
+                new DialogueChoiceLayout.Rect(15, 12, 140, 20),
+                new DialogueChoiceLayout.Rect(15, 15, 140, 60), 45);
         return new PreparedDialogueCard(1, layout, List.of(FormattedCharSequence.EMPTY), List.of(
                 new PreparedChoiceRow(0, 1, first, first, Component.literal("A"),
                         List.of(FormattedCharSequence.EMPTY), false),

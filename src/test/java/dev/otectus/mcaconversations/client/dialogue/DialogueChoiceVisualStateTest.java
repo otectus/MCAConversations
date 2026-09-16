@@ -21,10 +21,9 @@ class DialogueChoiceVisualStateTest {
             4.0F, 3.0F, 2.5F, 2.0F, 1.5F, 2.0F, 3.0F, 2.0F,
             4, 4, 1, 3, 4, 0.35F, 3.0F, 2.0F);
 
-    private static final ConversationMotionSpec REDUCED = new ConversationMotionSpec(
+    private static final ConversationMotionSpec REDUCED = ConversationMotionSpec.of(
             McaConversationsConfig.MotionMode.REDUCED,
-            3.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 2.0F, 2.0F,
-            0, 0, 0, 0, 0, 0.0F, 0.0F, 0.0F);
+            McaConversationsConfig.DialogueMenuStyle.MINIMAL);
 
     private static final ConversationMotionSpec OFF = new ConversationMotionSpec(
             McaConversationsConfig.MotionMode.OFF,
@@ -43,9 +42,20 @@ class DialogueChoiceVisualStateTest {
 
     private static ClientChoiceState offered(String... answers) {
         ClientChoiceState state = new ClientChoiceState();
-        state.accept(new ClientChoiceState.ClientChoiceOffer(1, "q", List.of(answers),
-                ConversationSession.Frontend.GUI, 0));
+        offer(state, 1, answers);
         return state;
+    }
+
+    /** The next turn of the same conversation: a newer revision on the same open screen. */
+    private static void offer(ClientChoiceState state, long revision, String... answers) {
+        state.accept(new ClientChoiceState.ClientChoiceOffer(revision, "q" + revision,
+                List.of(answers), ConversationSession.Frontend.GUI, 0));
+    }
+
+    private static void settle(DialogueChoiceVisualState visual, int ticks) {
+        for (int i = 0; i < ticks; i++) {
+            visual.tick();
+        }
     }
 
     @Test
@@ -94,6 +104,72 @@ class DialogueChoiceVisualStateTest {
         assertEquals(OFF.focusOutset(), visual.lockedOutset(0, OFF), 0.0001F,
                 "a zeroed profile must not animate the selection press");
         assertTrue(OFF.instant());
+    }
+
+    @Test
+    void aNewQuestionDoesNotReplayTheEntrance() {
+        // The failure this prevents: every answer clears the offer and the next one arrives a
+        // moment later, so an entrance keyed to the revision fades the whole card in again on each
+        // turn of the conversation. On a slow server that reads as the menu closing and reopening.
+        ClientChoiceState state = offered("a", "b");
+        DialogueChoiceVisualState visual = observing(state);
+        settle(visual, 8);
+        assertEquals(1.0F, visual.cardProgress(0, FULL), 0.001F, "the card has finished entering");
+
+        offer(state, 2, "c", "d");
+        visual.observe(state, 0);
+        assertEquals(1.0F, visual.cardProgress(0, FULL), 0.001F,
+                "the next question replaces the text; the card is already open");
+        assertEquals(1.0F, visual.cardProgress(0, REDUCED), 0.001F,
+                "and under reduced motion it must not fade again either");
+    }
+
+    @Test
+    void rowsStillArriveWithEachQuestionUnderFullMotion() {
+        // The other half: keying the card to the presentation must not freeze the content. Rows are
+        // content, so the cascade the responsive card has always had still runs per question.
+        ClientChoiceState state = offered("a", "b", "c");
+        DialogueChoiceVisualState visual = observing(state);
+        settle(visual, 8);
+        assertEquals(1.0F, visual.rowEntryProgress(2, 0, FULL), 0.001F);
+
+        offer(state, 2, "d", "e", "f");
+        visual.observe(state, 0);
+        assertEquals(0.0F, visual.rowEntryProgress(2, 0, FULL), 0.001F,
+                "new answers arrive as new answers");
+        assertEquals(1.0F, visual.rowEntryProgress(2, 0, REDUCED), 0.001F,
+                "reduced motion still shows them at once");
+        assertEquals(0.0F, visual.questionRevealProgress(0, 4.0F), 0.001F,
+                "the reveal is per question, not per screen");
+    }
+
+    @Test
+    void closingTheScreenIsWhatMakesTheNextOpenAnEntrance() {
+        ClientChoiceState state = offered("a", "b");
+        DialogueChoiceVisualState visual = observing(state);
+        settle(visual, 8);
+        visual.reset();
+
+        ClientChoiceState reopened = offered("a", "b");
+        visual.observe(reopened, 0);
+        assertEquals(0.0F, visual.cardProgress(0, FULL), 0.001F,
+                "a genuine open still enters; only the turns in between do not");
+    }
+
+    @Test
+    void reducedMotionChangesPagesAndSelectionWithoutMotion() {
+        ClientChoiceState state = offered("a", "b", "c");
+        DialogueChoiceVisualState visual = observing(state);
+        settle(visual, 8);
+        state.moveFocus(1);
+        visual.observe(state, 0);
+        assertEquals(1.0F, visual.focusProgress(1, 0, REDUCED), 0.001F, "focus is immediate");
+        assertEquals(0.0F, visual.focusProgress(0, 0, REDUCED), 0.001F);
+        assertEquals(1.0F, visual.pageProgress(0, REDUCED), 0.001F, "paging is immediate");
+        state.lock(1);
+        visual.observe(state, 0);
+        assertEquals(0.0F, visual.lockedOutset(0, REDUCED), 0.001F, "selection moves nothing");
+        assertTrue(REDUCED.exitTicks() > 0.0F, "the one thing left is the fade on a real close");
     }
 
     @Test

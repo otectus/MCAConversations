@@ -24,7 +24,7 @@ public final class ClientChoiceController {
         if (!numberedResponses) {
             return McaConversationsConfig.DialogueMenuStyle.MCA_ORIGINAL;
         }
-        return configured == null ? McaConversationsConfig.DialogueMenuStyle.RESPONSIVE : configured;
+        return configured == null ? McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE : configured;
     }
 
     public static McaConversationsConfig.DialogueMenuStyle dialogueMenuStyle() {
@@ -32,7 +32,7 @@ public final class ClientChoiceController {
             return resolve(McaConversationsConfig.CLIENT.numberedResponses.get(),
                     McaConversationsConfig.CLIENT.dialogueMenuStyle.get());
         } catch (Throwable ignored) {
-            return McaConversationsConfig.DialogueMenuStyle.RESPONSIVE;
+            return McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE;
         }
     }
 
@@ -90,7 +90,7 @@ public final class ClientChoiceController {
         try {
             return McaConversationsConfig.CLIENT.motionMode.get();
         } catch (Throwable ignored) {
-            return McaConversationsConfig.MotionMode.FULL;
+            return McaConversationsConfig.DEFAULT_MOTION_MODE;
         }
     }
 
@@ -127,11 +127,36 @@ public final class ClientChoiceController {
     }
 
     public static boolean select(int absoluteIndex, UUID villagerId) {
+        return select(absoluteIndex, villagerId, null);
+    }
+
+    public static void returnToTopics(UUID villagerId) {
+        ClientChoiceState.Lapse lapse = ClientChoiceMessages.state().lapse().orElse(null);
+        if (villagerId != null && lapse != null && lapse.backToTopics()) {
+            ConversationsNetwork.CHANNEL.sendToServer(
+                    new dev.otectus.mcaconversations.network.ChoiceReturnC2S(lapse.revision(), villagerId));
+        }
+    }
+
+    /**
+     * As above, recording what was sent.
+     *
+     * <p>{@code answerText} is the line the player actually read on the card. When the caller has no
+     * resolved text, use the same answer label as the chat frontend's numbered list.
+     */
+    public static boolean select(int absoluteIndex, UUID villagerId,
+                                 net.minecraft.network.chat.Component answerText) {
         ClientChoiceState state = ClientChoiceMessages.state();
         ClientChoiceState.ClientChoiceOffer offer = state.offer().orElse(null);
         if (offer == null || !state.lock(absoluteIndex)) {
             return false;
         }
+        net.minecraft.network.chat.Component recorded = answerText;
+        if (recorded == null && absoluteIndex >= 0 && absoluteIndex < offer.answerIds().size()) {
+            recorded = net.minecraft.network.chat.Component.translatable(
+                    "dialogue." + offer.questionId() + "." + offer.answerIds().get(absoluteIndex));
+        }
+        ClientDialogueHistory.submitted(offer.revision(), absoluteIndex, recorded);
         float volume = (float) uiSoundVolume();
         if (volume > 0.0F) {
             Minecraft.getInstance().getSoundManager().play(

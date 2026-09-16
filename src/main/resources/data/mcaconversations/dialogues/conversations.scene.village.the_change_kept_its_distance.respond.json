@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_shifted",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.the_change_kept_its_distance.open.named_the_shift"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.change",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "village.change"
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.the_change_kept_its_distance.named_the_shift"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_that_is_a_relief",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.the_change_kept_its_distance.open.eased_a_little"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.change",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "village.change"
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.the_change_kept_its_distance.eased_a_little"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "it_may_be_quieter_not_over",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "village.the_change_kept_its_distance.open.granted_the_point"
+            },
+            "conversations_disposition_apply": {
+              "topic": "village.change",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "village.change"
+            },
+            "next": "conversations.scene.village.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.the_change_kept_its_distance.granted_the_point"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

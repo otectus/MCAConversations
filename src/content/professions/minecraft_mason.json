@@ -721,6 +721,221 @@
                   ]
                 }
               }
+            },
+            {
+              "name": "ask_if_you_ever_disagree",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Do the two of you ever disagree about the method?",
+                "pt": "Vocês dois já discordam sobre o método?"
+              },
+              "phrases": [
+                "do the two of you ever disagree about the method",
+                "do you argue about how it is done"
+              ],
+              "requires_any": [
+                "disagree",
+                "argue"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "advance": "blocked",
+              "reaction": {
+                "id": "admitted_the_standoff",
+                "act": "report",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "temporal": "current",
+                "shape": "debate",
+                "episode_states": [
+                  "active",
+                  "blocked"
+                ],
+                "lines": {
+                  "en": [
+                    "Daily, and about nothing that matters. We have been stuck on the same small point all week.",
+                    "Constantly. None of it is about whether the wall stands, which is why it is enjoyable.",
+                    "We are at a standstill over a habit, not a fault. Ask me about it and you will see how little is at stake."
+                  ],
+                  "pt": [
+                    "Todo dia, e sobre nada que importe. Estamos travados no mesmo pontinho a semana toda.",
+                    "O tempo todo. Nada disso é sobre o muro ficar de pé, e é por isso que é divertido.",
+                    "Estamos num impasse por causa de um costume, não de um defeito. Pergunte e você vai ver como é pouca coisa."
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "state": "blocked",
+          "shape": "debate",
+          "predicate": "opinion",
+          "temporal": "current",
+          "polarity": "mixed",
+          "act": "report",
+          "obligations": [
+            "clarify",
+            "decide",
+            "acknowledge"
+          ],
+          "slots_used": [
+            "pupil"
+          ],
+          "base_priority": 24,
+          "prompt": {
+            "en": "The method.",
+            "pt": "O método."
+          },
+          "lines": {
+            "en": [
+              "%2$s wets the stone before setting it. I was taught dry. Neither of us has lost a wall over it.",
+              "We have argued about the joint width all week, %2$s and I, and the wall goes up straight either way.",
+              "I say you point the seam the same day. %2$s says the next. It is the friendliest argument on the site."
+            ],
+            "pt": [
+              "%2$s molha a pedra antes de assentar. A mim ensinaram a seco. Nenhum de nós perdeu um muro por isso.",
+              "Passamos a semana discutindo a largura da junta, %2$s e eu, e o muro sobe reto de qualquer jeito.",
+              "Eu digo que se rejunta no mesmo dia. %2$s diz que no dia seguinte. É a discussão mais amigável da obra."
+            ]
+          },
+          "replies": [
+            {
+              "name": "side_with_the_apprentice",
+              "stance": "respectful_disagreement",
+              "answers": [
+                "decide"
+              ],
+              "tone": "plain",
+              "outcome": "qualified",
+              "label": {
+                "en": "The apprentice has the better of that one.",
+                "pt": "O aprendiz está com a razão nessa."
+              },
+              "phrases": [
+                "the apprentice has the better of that one",
+                "i would do it the apprentice way"
+              ],
+              "requires_any": [
+                "apprentice"
+              ],
+              "disposition": {
+                "respect": 2
+              },
+              "reaction": {
+                "id": "granted_it",
+                "act": "qualify",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "temporal": "current",
+                "shape": "debate",
+                "lines": {
+                  "en": [
+                    "You may both be right. I have been wrong about mortar before and the wall did not care.",
+                    "That is two against one now, and I still intend to do it my way and watch.",
+                    "Possibly. I will try it their way on the garden wall, where nothing depends on it."
+                  ],
+                  "pt": [
+                    "Talvez os dois tenham razão. Já errei sobre argamassa antes e o muro nem ligou.",
+                    "Agora são dois contra um, e eu ainda pretendo fazer do meu jeito e observar.",
+                    "Pode ser. Vou tentar do jeito deles no muro da horta, onde nada depende disso."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "ask_who_taught_which",
+              "stance": "curiosity",
+              "answers": [
+                "clarify"
+              ],
+              "tone": "plain",
+              "outcome": "engaged",
+              "label": {
+                "en": "Who taught each of you that?",
+                "pt": "Quem ensinou isso a cada um de vocês?"
+              },
+              "phrases": [
+                "who taught each of you that",
+                "where did each habit come from"
+              ],
+              "requires_any": [
+                "taught",
+                "habit"
+              ],
+              "disposition": {
+                "familiarity": 2
+              },
+              "reaction": {
+                "id": "traced_the_habit",
+                "act": "explain",
+                "polarity": "mixed",
+                "predicate": "opinion",
+                "temporal": "current",
+                "shape": "debate",
+                "lines": {
+                  "en": [
+                    "My teacher, who worked dry stone in a dry valley. Theirs worked a river bank. Both of them were right where they stood.",
+                    "That is the whole of it, really: two good teachers, two different sorts of weather.",
+                    "Nobody taught the pupil. That is the part I cannot argue with and do not much like."
+                  ],
+                  "pt": [
+                    "Minha mestra, que trabalhava pedra seca num vale seco. A do aprendiz trabalhava beira de rio. Cada uma tinha razão onde estava.",
+                    "É só isso, no fundo: dois bons mestres, dois tipos de tempo.",
+                    "Ninguém ensinou isso ao aprendiz. É a parte que eu não consigo contestar e de que não gosto muito."
+                  ]
+                }
+              }
+            },
+            {
+              "name": "say_it_sounds_like_a_good_site",
+              "stance": "encouragement",
+              "answers": [
+                "acknowledge"
+              ],
+              "tone": "gentle",
+              "outcome": "appreciated",
+              "label": {
+                "en": "That sounds like a good site to work on.",
+                "pt": "Parece uma boa obra para trabalhar."
+              },
+              "phrases": [
+                "that sounds like a good site to work on",
+                "a site worth working on"
+              ],
+              "requires_any": [
+                "site"
+              ],
+              "disposition": {
+                "warmth": 2,
+                "respect": 1
+              },
+              "reaction": {
+                "id": "took_the_compliment",
+                "act": "accept",
+                "polarity": "positive",
+                "predicate": "opinion",
+                "temporal": "current",
+                "shape": "debate",
+                "lines": {
+                  "en": [
+                    "It is. An argument you can have over a shared pot at noon is not really an argument.",
+                    "I had not thought of it that way. It is a good week, and I have been describing it as a problem.",
+                    "Most days, yes. We will settle it eventually and then find another one."
+                  ],
+                  "pt": [
+                    "É mesmo. Uma discussão que dá para ter na hora do almoço não é bem uma discussão.",
+                    "Eu não tinha pensado assim. É uma boa semana, e eu venho descrevendo como um problema.",
+                    "Na maioria dos dias, sim. Uma hora resolvemos e então achamos outra."
+                  ]
+                }
+              }
             }
           ]
         },

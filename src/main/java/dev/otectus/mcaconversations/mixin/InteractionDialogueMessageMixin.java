@@ -1,11 +1,11 @@
 package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
-import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
 import dev.otectus.mcaconversations.conversation.ConversationGuard;
-import dev.otectus.mcaconversations.conversation.TopicAgeGate;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -60,48 +60,31 @@ public abstract class InteractionDialogueMessageMixin {
 
     @Inject(method = "receive", at = @At("HEAD"), cancellable = true, require = 0)
     private void mcaconversations$validateSubmission(ServerPlayer player, CallbackInfo ci) {
+        if (!ConversationGuard.isOurQuestion(question)) {
+            return;
+        }
+        // Owned submissions use the same one-shot executor as numbered choices. Letting MCA's
+        // receive continue after a validation-only injection left native actions outside the pinned
+        // operation and unable to report execution failure or clear a partially created successor.
+        ci.cancel();
+        if (player == null || villagerUUID == null) {
+            return;
+        }
+        ConversationSession.ChoiceOffer offer = ConversationSessions.raw(player.getUUID())
+                .flatMap(ConversationSession::currentOffer).orElse(null);
+        if (offer == null || offer.frontend() != ConversationSession.Frontend.GUI
+                || !offer.questionId().equals(question)) {
+            // This packet has no revision. An unrelated question must never clear the live offer.
+            return;
+        }
+        int index = offer.answerIds().indexOf(answer);
+        if (index < 0 || offer.consumed()) {
+            return;
+        }
         try {
-            if (!ConversationGuard.isOurQuestion(question)) {
-                return;
-            }
-            if (player == null || player.hasDisconnected() || !player.isAlive() || player.isSpectator()
-                    || villagerUUID == null) {
-                ci.cancel();
-                return;
-            }
-            boolean otherPlayerInteracting = false;
-            Entity villager = player.serverLevel().getEntity(villagerUUID);
-            if (villager != null) {
-                // Resolve busy ownership once; an active interaction with this player is also
-                // required below before a GUI packet may drive the dialogue engine.
-                otherPlayerInteracting = McaCompat.isInteractingWith(villager)
-                        .filter(uuid -> !uuid.equals(player.getUUID()))
-                        .isPresent();
-            }
-            if (villager == null || !villager.isAlive() || !McaCompat.isMcaVillager(villager)
-                    || player.distanceToSqr(villager) > 64.0D
-                    || !McaCompat.isInteractingWith(villager).filter(player.getUUID()::equals).isPresent()
-                    || !McaCompat.checkConstraints(villager, player, question, answer)
-                    // MCA's constraints cannot express the catalog's age allow-list (there is no
-                    // 'child' token), so a packet naming a teen-and-adult topic has to be refused here
-                    // rather than trusted because the button was clickable.
-                    || !TopicAgeGate.allows(question, answer, villager)) {
-                ci.cancel();
-                return;
-            }
-            if (ConversationGuard.rejectSubmission(player.getUUID(), villagerUUID, question, answer,
-                    otherPlayerInteracting, player.level().getGameTime())) {
-                ci.cancel();
-                return;
-            }
-            // The submission is going through, so this is the last moment before MCA scores the
-            // answer's results — and therefore the only place a scene can be chosen once for the whole
-            // exchange rather than once per candidate condition (see ConversationPlanner).
-            dev.otectus.mcaconversations.scene.ConversationPlanner
-                    .onAnswerSubmitted(villager, player, question, answer);
+            ChoiceSelectionService.submit(player, offer.revision(), index, villagerUUID);
         } catch (Throwable t) {
-            ci.cancel();
-            McaConversations.LOGGER.warn("dialogue submission validation failed; rejecting submission", t);
+            McaConversations.LOGGER.warn("dialogue submission failed", t);
         }
     }
 }

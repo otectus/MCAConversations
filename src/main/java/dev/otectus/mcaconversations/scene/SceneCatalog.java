@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Every authored scene, indexed so the director never scans it (spec §9.1, §21.6).
@@ -55,6 +56,8 @@ public final class SceneCatalog {
 
     private final Map<String, SceneDefinition> byId;
     private final Map<String, List<SceneDefinition>> byLeaf;
+    private final Map<String, List<SceneDefinition>> byThread;
+    private final Map<String, List<SceneDefinition>> bySubject;
     private final SortedMap<String, Integer> rawLeafSizes;
     private final SortedMap<String, Integer> topicSizes;
     private final List<String> truncations;
@@ -91,11 +94,45 @@ public final class SceneCatalog {
             frozen.put(entry.getKey(), List.copyOf(list));
         }
 
+        // Continuity indexes. A thread the pair already has open, or a subject they already owe each
+        // other a word about, must be findable without walking the catalog and without depending on
+        // the purpose/topic leaf surviving MAX_INDEXED: the whole point of admission is that a
+        // relevant scene is not lost because 128 alphabetically earlier ones share its bucket.
+        Map<String, List<SceneDefinition>> threads = new TreeMap<>();
+        Map<String, List<SceneDefinition>> subjects = new TreeMap<>();
+        for (SceneDefinition scene : ids.values()) {
+            if (scene.opensThread()) {
+                add(threads, scene.threadTemplate(), scene);
+            }
+            for (String subject : new TreeSet<>(scene.subjectsAny())) {
+                add(subjects, subject, scene);
+            }
+        }
+
         this.byId = Map.copyOf(ids);
         this.byLeaf = Map.copyOf(frozen);
+        this.byThread = freeze(threads);
+        this.bySubject = freeze(subjects);
         this.rawLeafSizes = java.util.Collections.unmodifiableSortedMap(raw);
         this.topicSizes = java.util.Collections.unmodifiableSortedMap(topics);
         this.truncations = List.copyOf(overflow);
+    }
+
+    private static void add(Map<String, List<SceneDefinition>> index, String key,
+                            SceneDefinition scene) {
+        if (key == null || key.isEmpty()) {
+            return;
+        }
+        List<SceneDefinition> list = index.computeIfAbsent(key, unused -> new ArrayList<>());
+        if (list.size() < MAX_INDEXED) {
+            list.add(scene);
+        }
+    }
+
+    private static Map<String, List<SceneDefinition>> freeze(Map<String, List<SceneDefinition>> index) {
+        Map<String, List<SceneDefinition>> out = new LinkedHashMap<>();
+        index.forEach((key, list) -> out.put(key, List.copyOf(list)));
+        return Map.copyOf(out);
     }
 
     public static SceneCatalog build(Collection<SceneDefinition> scenes) {
@@ -159,6 +196,21 @@ public final class SceneCatalog {
                 into.add(scene);
             }
         }
+    }
+
+    /**
+     * Scenes that open one named thread, in id order and bounded by {@link #MAX_INDEXED}.
+     *
+     * <p>Built at load time rather than searched at selection time, so continuity admission stays a
+     * lookup like every other stage of the pipeline.
+     */
+    public List<SceneDefinition> byThreadTemplate(String template) {
+        return byThread.getOrDefault(normalize(template), List.of());
+    }
+
+    /** Scenes naming one subject, in id order and bounded by {@link #MAX_INDEXED}. */
+    public List<SceneDefinition> bySubject(String subject) {
+        return bySubject.getOrDefault(normalize(subject), List.of());
     }
 
     /**

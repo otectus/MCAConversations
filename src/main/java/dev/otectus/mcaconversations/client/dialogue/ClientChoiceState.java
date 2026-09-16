@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
 import dev.otectus.mcaconversations.conversation.ConversationSession;
+import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,17 @@ public final class ClientChoiceState {
         }
     }
 
+    /**
+     * What is left on screen after an offer was cleared with an explanation: the sentence to read
+     * and the one action that is safe to take. Never interactive as a choice — the answers it
+     * replaced are gone, and nothing here re-sends them.
+     */
+    public record Lapse(long revision, ChoiceClearS2C.Reason reason, boolean backToTopics,
+                        ConversationSession.Frontend frontend) {
+    }
+
     private ClientChoiceOffer offer;
+    private Lapse lapse;
     private long highestRevision = -1L;
     private int focusedIndex;
     private int page;
@@ -32,6 +43,7 @@ public final class ClientChoiceState {
             return false;
         }
         highestRevision = incoming.revision();
+        lapse = null;
         offer = incoming.answerIds().isEmpty() ? null : incoming;
         focusedIndex = 0;
         page = 0;
@@ -42,17 +54,63 @@ public final class ClientChoiceState {
 
     /** Applies only an equal/newer clear; delayed packets cannot erase a newer offer. */
     public boolean clear(long revision) {
+        return clear(revision, ChoiceClearS2C.Reason.NONE);
+    }
+
+    /**
+     * Applies only an equal/newer clear; a delayed rejection of an old decision cannot erase the
+     * newer, unrelated one the player is looking at.
+     *
+     * <p>An explained reason leaves a {@link Lapse} behind. The answers really are gone — nothing
+     * below keeps them selectable — but the explanation of why has to outlive them, or the card
+     * vanishes mid-click and the player is told nothing at all.
+     */
+    public boolean clear(long revision, ChoiceClearS2C.Reason reason) {
         if (revision < highestRevision) {
             return false;
         }
         highestRevision = revision;
-        boolean changed = offer != null;
+        ConversationSession.Frontend frontend = offer != null ? offer.frontend()
+                : lapse != null ? lapse.frontend() : null;
+        boolean changed = offer != null || lapse != null && lapse.reason() != reason;
         offer = null;
         focusedIndex = 0;
         page = 0;
         lockedIndex = -1;
         pages = List.of();
+        lapse = reason != null && reason.explained()
+                ? new Lapse(revision, reason, offersReturnToTopics(reason), frontend) : null;
         return changed;
+    }
+
+    /**
+     * Whether a lapse may offer to go back to the topic list rather than only to close.
+     *
+     * <p>Going back is a fresh request the server revalidates like any other, so it is safe exactly
+     * when the reason says the conversation itself is still viable. A failed action is not: it stops
+     * at navigation, because nothing here knows how much of it ran, and re-entering a menu whose
+     * state is unknown would be a retry wearing a different label.
+     */
+    public static boolean offersReturnToTopics(ChoiceClearS2C.Reason reason) {
+        return reason == ChoiceClearS2C.Reason.EXPIRED
+                || reason == ChoiceClearS2C.Reason.CONTENT_RELOADED
+                || reason == ChoiceClearS2C.Reason.REQUIREMENTS_CHANGED;
+    }
+
+    public Optional<Lapse> lapse() {
+        return Optional.ofNullable(lapse);
+    }
+
+    /** A lapse retains its frontend after the offer and its exit animation are gone. */
+    public boolean lapseFor(ConversationSession.Frontend frontend) {
+        return lapse != null && lapse.frontend() == frontend;
+    }
+
+    /** Dismisses the explanation shell once the player has acted on it. */
+    public boolean dismissLapse() {
+        boolean had = lapse != null;
+        lapse = null;
+        return had;
     }
 
     /** A new server connection has its own revision sequence. UI closes keep the existing sequence. */
@@ -63,6 +121,7 @@ public final class ClientChoiceState {
 
     public void clearLocal() {
         offer = null;
+        lapse = null;
         focusedIndex = 0;
         page = 0;
         lockedIndex = -1;

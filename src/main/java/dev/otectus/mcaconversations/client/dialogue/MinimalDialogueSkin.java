@@ -25,15 +25,25 @@ public final class MinimalDialogueSkin implements DialogueSkin {
     /** The one instance. Stateless, like the responsive skin; an object only so a style can pick it. */
     public static final DialogueSkin INSTANCE = new MinimalDialogueSkin();
 
-    /** Dark neutral backing at roughly three-quarters opacity, and one muted grey border pixel. */
-    private static final int BACKING = 0xC0101010;
+    /** Dark neutral backing, opaque enough to read light text over any world, and one grey border. */
+    private static final int BACKING = 0xD8101010;
     private static final int BORDER = 0xFF6E6E6E;
 
-    /** Focus: a subtle fill. Lock: the same fill plus a white outline, so the two never share a cue. */
-    private static final int FOCUS_FILL = 0x30C8C8C8;
-    private static final int FOCUS_OUTLINE = 0xFFA0A0A0;
-    private static final int LOCK_FILL = 0x40FFFFFF;
+    /** One hairline between the question and the answers; the card's only internal division. */
+    private static final int SEPARATOR = 0x60FFFFFF;
+
+    /**
+     * Focus is a fill and a marker in the gutter; lock adds an outline. Neither moves anything: the
+     * marker is painted inside the row the layout already reserved, to the left of the numeral's
+     * box, so the numeral and the answer text keep the same coordinates focused and unfocused.
+     */
+    private static final int FOCUS_FILL = 0x40C8C8C8;
+    private static final int FOCUS_MARKER = 0xFFC8C8C8;
+    private static final int LOCK_FILL = 0x50FFFFFF;
     private static final int LOCK_OUTLINE = 0xFFFFFFFF;
+
+    /** Width of the gutter marker. Two pixels reads as a deliberate mark rather than an artefact. */
+    private static final int MARKER_WIDTH = 2;
 
     /** A flat scrollbar. Overflow support is not a decoration, so it stays. */
     private static final int SCROLL_TRACK = 0x40000000;
@@ -48,17 +58,34 @@ public final class MinimalDialogueSkin implements DialogueSkin {
     }
 
     /**
-     * One fill and one border. {@code listBody} is deliberately ignored: a recessed list area is the
-     * decorative depth this style is here to remove, and the rows are legible on the flat backing.
+     * One fill, one border, and one hairline at the top of the list body.
+     *
+     * <p>{@code listBody} is still never recessed — the decorative depth is what this style exists
+     * to remove — but the boundary it describes is information: without it the villager's line and
+     * the first answer are two runs of text on one flat field. A single row of pixels at the
+     * division the layout already computed states the boundary and moves nothing.
      */
     @Override
     public void panel(GuiGraphics graphics, DialogueChoiceLayout.Rect panel,
                       DialogueChoiceLayout.Rect listBody, float alpha) {
         DialogueCardSkin.fill(graphics, panel, ConversationPalette.withAlpha(BACKING, alpha));
         DialogueCardSkin.outline(graphics, panel, ConversationPalette.withAlpha(BORDER, alpha), 1);
+        if (listBody == null || listBody.height() <= 0 || listBody.width() <= 0) {
+            return;
+        }
+        graphics.fill(listBody.x(), listBody.y(), listBody.x() + listBody.width(), listBody.y() + 1,
+                ConversationPalette.withAlpha(SEPARATOR, alpha));
     }
 
-    /** Nothing at rest; a fill when focused; a fill and a white outline when locked. */
+    /**
+     * Nothing at rest; one stationary treatment when focused; that treatment plus a white outline
+     * when locked.
+     *
+     * <p>The focused row is a fill and a marker in its own gutter — no second border, no shadow and
+     * no stacked decoration, and above all no geometry: the rect drawn here is the rect the layout
+     * reserved, which is also the rect that is clicked. Lock keeps the same shape and adds an
+     * outline, so committing a choice is legible without relying on telling two greys apart.
+     */
     @Override
     public void row(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,
                     boolean focused, boolean locked) {
@@ -67,8 +94,13 @@ public final class MinimalDialogueSkin implements DialogueSkin {
         }
         DialogueCardSkin.fill(graphics, rect,
                 ConversationPalette.withAlpha(locked ? LOCK_FILL : FOCUS_FILL, alpha));
-        DialogueCardSkin.outline(graphics, rect,
-                ConversationPalette.withAlpha(locked ? LOCK_OUTLINE : FOCUS_OUTLINE, alpha), 1);
+        int marker = ConversationPalette.withAlpha(locked ? LOCK_OUTLINE : FOCUS_MARKER, alpha);
+        graphics.fill(rect.x(), rect.y(), rect.x() + Math.min(MARKER_WIDTH, rect.width()),
+                rect.y() + rect.height(), marker);
+        if (locked) {
+            DialogueCardSkin.outline(graphics, rect,
+                    ConversationPalette.withAlpha(LOCK_OUTLINE, alpha), 1);
+        }
     }
 
     /**

@@ -1,0 +1,134 @@
+{
+  "answers": [
+    {
+      "name": "say_what_i_actually_meant",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.i_took_it_the_wrong_way.open.took_it_again"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "trust": 2,
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.i_took_it_the_wrong_way.took_it_again"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "accept_their_reading",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.i_took_it_the_wrong_way.open.eased_between_us"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.i_took_it_the_wrong_way.eased_between_us"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "it_was_only_an_opinion",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.i_took_it_the_wrong_way.open.reweighed_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.i_took_it_the_wrong_way.reweighed_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "straighten_it_out_later",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.i_took_it_the_wrong_way.open.set_it_aside"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.i_took_it_the_wrong_way.set_it_aside"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

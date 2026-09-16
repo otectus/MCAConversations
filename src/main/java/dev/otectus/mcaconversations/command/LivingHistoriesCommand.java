@@ -106,6 +106,14 @@ public final class LivingHistoriesCommand {
     // --- profile -------------------------------------------------------------------------------
 
     private static int inspectProfile(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return inspectProfilePinned(source);
+        }
+    }
+
+    private static int inspectProfilePinned(CommandSourceStack source) {
         ServerPlayer player = player(source);
         Entity villager = nearestVillager(source);
         if (player == null || villager == null) {
@@ -137,6 +145,14 @@ public final class LivingHistoriesCommand {
     }
 
     private static int listTokens(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return listTokensPinned(source);
+        }
+    }
+
+    private static int listTokensPinned(CommandSourceStack source) {
         var catalog = IdentityCatalogLoader.active();
         say(source, "Identity catalog: " + catalog.size() + " token(s), "
                 + (catalog.isComplete() ? "every family populated" : "INCOMPLETE — some family is empty"));
@@ -151,6 +167,14 @@ public final class LivingHistoriesCommand {
     // --- history -------------------------------------------------------------------------------
 
     private static int inspectHistory(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return inspectHistoryPinned(source);
+        }
+    }
+
+    private static int inspectHistoryPinned(CommandSourceStack source) {
         ServerPlayer player = player(source);
         Entity villager = nearestVillager(source);
         if (player == null || villager == null) {
@@ -242,6 +266,14 @@ public final class LivingHistoriesCommand {
     }
 
     private static int forget(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return forgetPinned(source);
+        }
+    }
+
+    private static int forgetPinned(CommandSourceStack source) {
         Entity villager = nearestVillager(source);
         if (villager == null) {
             return fail(source, "Stand near an MCA villager and look at them.");
@@ -259,6 +291,14 @@ public final class LivingHistoriesCommand {
     // --- scene ---------------------------------------------------------------------------------
 
     private static int showPlan(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return showPlanPinned(source);
+        }
+    }
+
+    private static int showPlanPinned(CommandSourceStack source) {
         ServerPlayer player = player(source);
         if (player == null) {
             return fail(source, "Run this as a player.");
@@ -282,6 +322,14 @@ public final class LivingHistoriesCommand {
     }
 
     private static int showCandidates(CommandSourceStack source, String topic) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return showCandidatesPinned(source, topic);
+        }
+    }
+
+    private static int showCandidatesPinned(CommandSourceStack source, String topic) {
         ServerPlayer player = player(source);
         Entity villager = nearestVillager(source);
         if (player == null || villager == null) {
@@ -304,6 +352,14 @@ public final class LivingHistoriesCommand {
     // --- context -------------------------------------------------------------------------------
 
     private static int showSnapshot(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return showSnapshotPinned(source);
+        }
+    }
+
+    private static int showSnapshotPinned(CommandSourceStack source) {
         ServerPlayer player = player(source);
         Entity villager = nearestVillager(source);
         if (player == null || villager == null) {
@@ -321,6 +377,14 @@ public final class LivingHistoriesCommand {
     }
 
     private static int showCapabilities(CommandSourceStack source) {
+        // One command invocation, one bundle: a report that mixed two would be a lie.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return showCapabilitiesPinned(source);
+        }
+    }
+
+    private static int showCapabilitiesPinned(CommandSourceStack source) {
         ServerPlayer player = player(source);
         Entity villager = nearestVillager(source);
         McaBinding.Resolution resolution = McaHandles.resolution();
@@ -402,6 +466,13 @@ public final class LivingHistoriesCommand {
 
     /** Unused today; kept so a future subcommand can list scenes without re-deriving the catalog. */
     static List<String> sceneIds() {
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
+            return sceneIdsPinned();
+        }
+    }
+
+    private static List<String> sceneIdsPinned() {
         return SceneCatalogLoader.active().all().stream()
                 .map(dev.otectus.mcaconversations.scene.SceneDefinition::id)
                 .toList();

@@ -408,6 +408,189 @@
         }
       ],
       "epistemic": "inferred"
+    },
+    {
+      "name": "the_gathering_next_door",
+      "subject": "neighbour.gathering",
+      "shape": "plan",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "plan",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.band",
+          "any_of": [
+            "afternoon",
+            "dusk"
+          ],
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 22,
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The gathering.",
+        "pt": "A reunião."
+      },
+      "lines": {
+        "en": [
+          "The house on the corner is having people in this week, and I have been asked to bring something that is not bread.",
+          "There is a gathering two doors down and I have spent three days deciding what to carry over.",
+          "They expect me along this week with a dish and an opinion about the new gate. I have the dish."
+        ],
+        "pt": [
+          "A casa da esquina vai receber gente esta semana, e me pediram para levar algo que não seja pão.",
+          "Tem uma reunião a duas portas daqui e passei três dias decidindo o que levar.",
+          "Me esperam lá esta semana com um prato e uma opinião sobre o portão novo. O prato eu tenho."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_settled_on",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What did you settle on?",
+            "pt": "No que você resolveu?"
+          },
+          "phrases": [
+            "what did you settle on",
+            "which dish won in the end"
+          ],
+          "requires_any": [
+            "settle",
+            "dish"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named_the_dish",
+            "act": "explain",
+            "polarity": "positive",
+            "predicate": "plan",
+            "temporal": "current",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "Something baked with the last of the apples. Nobody can disapprove of apples.",
+                "Nothing clever. Clever is how you end up carrying a cold pot home again.",
+                "I have not settled it. I will decide on the doorstep, the way I always do."
+              ],
+              "pt": [
+                "Algo assado com as últimas maçãs. Ninguém reprova maçã.",
+                "Nada espertinho. Espertinho é como se acaba levando uma panela fria de volta para casa.",
+                "Ainda não resolvi. Vou decidir na porta, como sempre faço."
+              ]
+            }
+          }
+        },
+        {
+          "name": "offer_to_carry_something",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I can carry something over for you.",
+            "pt": "Posso levar algo para você."
+          },
+          "phrases": [
+            "i can carry something over for you",
+            "i will carry a dish over"
+          ],
+          "requires_any": [
+            "carry"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "welcomed_the_hand",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "plan",
+            "temporal": "current",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "If you are about, that is welcome. If you are not, nobody will be waiting on you.",
+                "Kind of you. It is a short lane and a light pot, so treat it as an offer and not a duty.",
+                "That would save me a trip. No promise needed; I will manage either way."
+              ],
+              "pt": [
+                "Se você estiver por aqui, é bem-vindo. Se não estiver, ninguém vai ficar esperando.",
+                "Gentileza sua. É uma viela curta e uma panela leve, então trate como oferta e não como dever.",
+                "Isso me pouparia uma ida. Não precisa prometer nada; eu me viro de um jeito ou de outro."
+              ]
+            }
+          }
+        },
+        {
+          "name": "wish_the_evening_well",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I hope it goes easily.",
+            "pt": "Espero que corra tranquilo."
+          },
+          "phrases": [
+            "i hope it goes easily",
+            "hope the evening goes well"
+          ],
+          "requires_any": [
+            "hope",
+            "easily"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "thanked_the_wish",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "plan",
+            "temporal": "current",
+            "shape": "plan",
+            "lines": {
+              "en": [
+                "So do I. A gathering only has to be pleasant, which is a low bar and often missed.",
+                "I appreciate the wish. It costs you nothing and it did help.",
+                "It will go the way these go. I hope you find something as harmless to spend an evening on."
+              ],
+              "pt": [
+                "Eu também. Uma reunião só precisa ser agradável, o que é pouco e mesmo assim escapa.",
+                "Agradeço o desejo. Não te custa nada e ajudou mesmo assim.",
+                "Vai ser como essas coisas são. Espero que você ache algo tão inofensivo para ocupar uma noite."
+              ]
+            }
+          }
+        }
+      ],
+      "epistemic": "observed"
     }
   ]
 }

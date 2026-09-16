@@ -104,6 +104,31 @@ class SessionCloseReasonTest {
     }
 
     @Test
+    @DisplayName("a technical interruption leaves no stance or outcome for a later thread write to read")
+    void interruptionRecordsNothingSocial() {
+        // The thread directive writes `playerStance` and `lastOutcome` from exactly these two reads
+        // (LivingHistoriesRegistrar, thread op PLAYED). If an interruption left them standing, the
+        // next scene this pair played would inherit the stance of an exchange that never finished,
+        // and a thread would record a walked-away ending for a dropped connection.
+        for (CloseReason reason : new CloseReason[] {CloseReason.DISCONNECTED, CloseReason.PLAYER_LEFT,
+                CloseReason.SPEAKER_DEAD, CloseReason.SPEAKER_UNAVAILABLE, CloseReason.OUT_OF_RANGE,
+                CloseReason.DIMENSION_CHANGED, CloseReason.TIMED_OUT, CloseReason.CONTAINED_ERROR}) {
+            reset();
+            ConversationSession session = engage();
+            session.recordPlayerStance(StanceFamily.EMPATHY, java.util.List.of());
+            assertTrue(session.lastPlayerStance().isPresent());
+
+            ConversationSessions.close(PLAYER, reason);
+
+            assertEquals(reason, session.lastCloseReason().orElse(null));
+            assertTrue(session.lastPlayerStance().isEmpty(),
+                    "an interruption is not a stance: " + reason);
+            assertTrue(session.lastOutcome().isEmpty(),
+                    "an interruption is not an outcome: " + reason);
+        }
+    }
+
+    @Test
     @DisplayName("a topic ending is not a teardown: the player is still standing there")
     void endTopicKeepsTheSession() {
         engage();

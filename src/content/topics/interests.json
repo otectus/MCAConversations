@@ -668,6 +668,190 @@
         }
       ],
       "epistemic": "inferred"
+    },
+    {
+      "name": "the_part_that_still_amuses_me",
+      "subject": "interests.early_attempts",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "obligations": [
+        "acknowledge",
+        "clarify"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_first_met",
+          "min": 10,
+          "unknown": "fail"
+        },
+        {
+          "field": "player.relationship_band",
+          "any_of": [
+            "friend",
+            "confidant",
+            "family",
+            "partner"
+          ],
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 24,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "When I was new at it.",
+        "pt": "Quando eu era novato nisso."
+      },
+      "lines": {
+        "en": [
+          "I once spent a whole winter learning to whistle a tune I had misheard. Nobody had the heart to correct me until spring.",
+          "My first attempt at this ended with a neighbour's cat wearing most of it. I still laugh at the wrong moment when I think of it.",
+          "I took this very seriously at the start. I have a drawer of very serious evidence and it is all terrible."
+        ],
+        "pt": [
+          "Uma vez passei um inverno inteiro aprendendo a assobiar uma música que eu tinha entendido errado. Ninguém teve coragem de me corrigir até a primavera.",
+          "Minha primeira tentativa nisso terminou com o gato do vizinho usando quase tudo. Ainda rio na hora errada quando lembro.",
+          "Eu levava isso muito a sério no começo. Tenho uma gaveta de provas muito sérias e todas são péssimas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "say_that_is_a_good_story",
+          "stance": "humor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "playful",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That is a good story.",
+            "pt": "Essa é uma boa história."
+          },
+          "phrases": [
+            "that is a good story",
+            "i would have paid to see that"
+          ],
+          "requires_any": [
+            "story",
+            "paid"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "laughed_along",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "It is better as a story than it was as a winter, I promise you.",
+                "I tell it badly and it still works, which is the mark of a good one.",
+                "It only became funny about four years afterwards. Most of them do."
+              ],
+              "pt": [
+                "Como história é melhor do que foi como inverno, garanto.",
+                "Eu conto mal e mesmo assim funciona, que é a marca de uma boa.",
+                "Só virou engraçado uns quatro anos depois. Quase todas são assim."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_how_it_ended",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How did it end?",
+            "pt": "Como aquilo terminou?"
+          },
+          "phrases": [
+            "how did it end",
+            "how did that one end"
+          ],
+          "requires_any": [
+            "end"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "told_the_ending",
+            "act": "explain",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Badly, and then well, and then I kept doing it anyway. That is most of the answer.",
+                "Somebody older took pity and showed me the obvious thing I had been avoiding.",
+                "It did not end. I am simply less embarrassing about it than I was."
+              ],
+              "pt": [
+                "Mal, depois bem, e depois eu continuei fazendo assim mesmo. É essa a maior parte da resposta.",
+                "Alguém mais velho teve pena e me mostrou o óbvio que eu vinha evitando.",
+                "Não terminou. Eu só passo menos vergonha com isso do que antes."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_it_is_worth_keeping",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Keep that one.",
+            "pt": "Guarde essa."
+          },
+          "phrases": [
+            "keep that one",
+            "that is worth keeping"
+          ],
+          "requires_any": [
+            "keep",
+            "keeping"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "kept_it",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "I intend to. It is cheaper than a good coat and it lasts longer.",
+                "I will. There is not much from that year I would want back, and that is one piece of it.",
+                "Thank you. It is a small thing to have and it costs nobody anything."
+              ],
+              "pt": [
+                "Pretendo. É mais barato que um bom casaco e dura mais.",
+                "Vou guardar. Não é muita coisa daquele ano que eu quereria de volta, e essa é uma delas.",
+                "Agradeço. É uma coisinha de se ter e não custa nada a ninguém."
+              ]
+            }
+          }
+        }
+      ],
+      "epistemic": "observed"
     }
   ]
 }

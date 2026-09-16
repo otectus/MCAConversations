@@ -1527,6 +1527,210 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_view_i_wanted"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_view_i_wanted",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "shared_history.the_view_i_wanted.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.shared_history",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.shared_history.the_view_i_wanted.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_view_i_wanted",
+              "slots": [
+                "matter"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.shared_history.what_i_did_with_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.what_i_did_with_it",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "shared_history.what_i_did_with_it.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.shared_history",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.shared_history.what_i_did_with_it.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.what_i_did_with_it",
+              "slots": [
+                "matter"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.shared_history.i_took_it_the_wrong_way"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.i_took_it_the_wrong_way",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "shared_history.i_took_it_the_wrong_way.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.shared_history",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.shared_history.i_took_it_the_wrong_way.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.i_took_it_the_wrong_way",
+              "slots": [
+                "matter"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_one_we_both_remember"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_one_we_both_remember",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "shared_history",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "shared_history.the_one_we_both_remember.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.shared_history",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.shared_history.the_one_we_both_remember.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_one_we_both_remember",
+              "slots": [
+                "matter"
+              ]
+            }
+          }
+        },
+        {
           "baseChance": 800,
           "conditions": [
             {
@@ -1547,6 +1751,30 @@
               "chance": -5000,
               "conversations_scene": {
                 "is": "topic.shared_history.the_date_nobody_marks"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_view_i_wanted"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.what_i_did_with_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.i_took_it_the_wrong_way"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.shared_history.the_one_we_both_remember"
               }
             }
           ],

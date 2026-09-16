@@ -1956,3 +1956,59 @@ For `RESPONSIVE` and `MINIMAL`, MCA: Conversations owns that presentation.
 For `MCA_ORIGINAL`, it deliberately steps aside and lets MCA Reborn own it.
 
 That separation should make 1.5.2 easier to maintain while giving players substantially more control over how conversations feel.
+
+---
+
+# Addendum — 2026-09-13 (1.7.0 presentation pass)
+
+This addendum records what changed after the specification above was written. Nothing earlier is
+rewritten; where the two disagree, this section is current.
+
+**Defaults.** The recommended pair is now the shipped pair: `dialogueMenuStyle = MINIMAL` and
+`motionMode = REDUCED` (§5.1's table previously specified `RESPONSIVE` and `FULL`). A Forge config
+default applies only to a key that is absent from the file, and Forge writes every declared key the
+first time it saves, so every existing installation keeps its own explicit values; a stored
+`RESPONSIVE`/`FULL` is a player's choice and is never treated as an old default. The legacy
+`numberedResponses = false` override still resolves to `MCA_ORIGINAL` ahead of any style. The same
+two values are the in-code fallback used when the client spec has not loaded, so the card never
+differs between the first frames and the rest.
+
+**Motion policy (Conversations-owned effects only).** Where another mod owns the dialogue screen —
+Townstead in particular — its screen, camera work and typewriter remain its own and are not governed
+by `motionMode`.
+
+| Event | `FULL` | `REDUCED` | `OFF` |
+|---|---|---|---|
+| Open | short entrance (fade, plus a few pixels under `RESPONSIVE`) | one brief fade | immediate |
+| New question in the same conversation | content replaced in place; rows still cascade under `RESPONSIVE` | immediate; the panel neither moves nor re-fades | immediate |
+| Focus | short eased transition | immediate | immediate |
+| Selection | press/settle under `RESPONSIVE`, colour change under `MINIMAL` | immediate | immediate |
+| Response expansion | immediate | immediate | immediate |
+| Page replacement | short slide | immediate | immediate |
+| Question reveal | `questionRevealMode`, `OFF` by default | `questionRevealMode`, `OFF` by default | never |
+| Close | short fade out | the same fade out | immediate |
+
+**Entrance lifetime.** §9's entrance is keyed to the lifetime of the presentation rather than to the
+offer revision. A gap between two turns of one conversation is a waiting state, not a close followed
+by an open, so a new revision replaces the content without replaying the card's entrance. Only a
+genuine close (the screen closing, which resets the visual state) makes the next card an entrance
+again. Content-scoped timings — the row cascade and the question reveal — still restart per question.
+
+**MINIMAL refinements.** Unchanged from §§9.3, 10 and 20: no portrait, no badge artwork, no recessed
+list well, no focus pop-out, no stacked selection decoration. Added: one hairline at the top of the
+list body, more contrast in the panel backing, and a stationary focus treatment — a fill plus a
+two-pixel mark in the row's left gutter, drawn inside the rect the layout reserved, which is also the
+full-row hit target. Text coordinates do not change with focus; confirmation adds a white outline.
+
+**Addendum, 2026-09-13 — the two card utilities.** The card gains two overlays, both drawn inside the
+response viewport and neither able to submit a response. `H` shows a collapsed, bounded,
+connection-local list of the lines this client received and the responses it sent, with each reply's
+true status (sent, accepted, refused with the server's reason); it is deduplicated by delivery identity,
+so one utterance is one entry however many surfaces it reached, and it is cleared on disconnect and
+world change with nothing written to disk. `P` shows the presentation settings — style, motion,
+reveal, interface sound and control hints — written to the Forge client spec, with the effective style
+stated whenever `numberedResponses = false` overrides the configured one, and a "reset to recommended"
+action that lists its changes before applying them. Neither overlay changes the outer geometry of
+§§7–9, and while one is open it owns the keyboard and the pointer, so opening it cannot select a
+response. Both close with `Back`, `Esc`, `Backspace` or `Tab`, returning the keyboard to the region it
+came from. Townstead's own presentation is untouched and the pane says so.

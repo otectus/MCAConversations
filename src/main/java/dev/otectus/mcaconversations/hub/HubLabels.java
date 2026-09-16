@@ -8,10 +8,14 @@ import java.util.Optional;
 /**
  * What a dynamic hub entry is called, and what a player can say to pick it (spec §14.2).
  *
- * <p>Eleven labels, all authored: five ways of saying "go on about that", five of saying "may I ask
- * about that", and one neutral "what's on your mind?". None of them can be more specific than a
- * domain, which is what makes the privacy rule structural rather than a thing content has to
+ * <p>Eleven labels, all authored: five ways of saying "about what we were discussing", five of saying
+ * "may I ask about that", and one neutral "what's on your mind?". None of them can be more specific
+ * than a domain, which is what makes the privacy rule structural rather than a thing content has to
  * remember — there is no wording available to a label that could name a person or a secret.
+ *
+ * <p>The continuation wording is deliberately flat. A villager picking a subject back up has no way
+ * of knowing whether the player left it four days ago or was interrupted mid-sentence, so the label
+ * says only that there was something, and the authored resume scene says what.
  *
  * <p>The phrases are the matching side of the same eleven entries. They are checked before the
  * ordinary intent matcher, because a live hub entry is an exact offer the player has just been shown
@@ -59,10 +63,36 @@ public final class HubLabels {
             return MIND_PHRASES;
         }
         String domain = slot.domain().key();
-        return slot.kind() == HubSlot.Kind.CONTINUE
-                ? List.of("go on about your " + domain, "where were we", "carry on about the " + domain)
-                : List.of("ask about your " + domain, "can i ask about the " + domain,
-                        "tell me about your " + domain);
+        if (slot.kind() != HubSlot.Kind.CONTINUE) {
+            return List.of("ask about your " + domain, "can i ask about the " + domain,
+                    "tell me about your " + domain);
+        }
+        // The label's own wording first, so a player who types back what the villager offered is
+        // taken at their word, then the shorter ways of saying the same thing.
+        String noun = continuationNoun(slot.domain());
+        return noun.isEmpty()
+                ? List.of("about what we were discussing", "where were we",
+                        "go on about your " + domain)
+                : List.of("about what we were discussing " + noun, "about what we were discussing",
+                        "where were we", "go on about your " + domain,
+                        "carry on about the " + domain);
+    }
+
+    /**
+     * How a continuation label names its domain, or empty when it names nothing.
+     *
+     * <p>Restrained on purpose. "About what we were discussing" is the whole of the personal entry,
+     * because a label that said which personal thing would be saying it to a player who has not been
+     * told — and the other four say no more than the domain the hub already allows them.
+     */
+    static String continuationNoun(HubDomain domain) {
+        return switch (domain) {
+            case WORK -> "your work";
+            case FAMILY -> "your family";
+            case VILLAGE -> "the village";
+            case EVERYDAY -> "your day";
+            case PERSONAL -> "";
+        };
     }
 
     private static final List<String> MIND_PHRASES = List.of(

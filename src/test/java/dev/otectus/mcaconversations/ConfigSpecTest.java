@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.junit.jupiter.api.Test;
@@ -181,19 +182,75 @@ class ConfigSpecTest {
     }
 
     @Test
-    void clientSpecDeclaresDialogueMenuStyleDefaultingToResponsive() {
-        // The default is the whole migration promise: an install that never edits its client TOML
-        // keeps the 1.5.1 card it already has.
+    void clientSpecDefaultsToTheRestrainedPresentation() {
+        // 1.6.3: an install that has never stated a preference gets MINIMAL and REDUCED. The
+        // constants are asserted alongside the spec because the client answers them directly while
+        // no file is loaded, and a disagreement would show as a different card for a few frames.
         UnmodifiableConfig spec = McaConversationsConfig.CLIENT_SPEC.getSpec();
         assertTrue(spec.contains("display.dialogueMenuStyle"), "display.dialogueMenuStyle");
 
         ForgeConfigSpec.ValueSpec style = assertInstanceOf(
                 ForgeConfigSpec.ValueSpec.class, spec.get("display.dialogueMenuStyle"));
-        assertEquals(McaConversationsConfig.DialogueMenuStyle.RESPONSIVE, style.getDefault());
+        assertEquals(McaConversationsConfig.DialogueMenuStyle.MINIMAL, style.getDefault());
+        assertEquals(McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE, style.getDefault());
         for (McaConversationsConfig.DialogueMenuStyle value
                 : McaConversationsConfig.DialogueMenuStyle.values()) {
             assertTrue(style.test(value), value + " must be accepted by the spec");
         }
+
+        ForgeConfigSpec.ValueSpec motion = assertInstanceOf(
+                ForgeConfigSpec.ValueSpec.class, spec.get("display.motionMode"));
+        assertEquals(McaConversationsConfig.MotionMode.REDUCED, motion.getDefault());
+        assertEquals(McaConversationsConfig.DEFAULT_MOTION_MODE, motion.getDefault());
+        for (McaConversationsConfig.MotionMode value : McaConversationsConfig.MotionMode.values()) {
+            assertTrue(motion.test(value), value + " must be accepted by the spec");
+        }
+    }
+
+    @Test
+    void anExistingFileKeepsItsRicherPresentationAcrossTheDefaultChange() {
+        // The upgrade hazard in changing a default: Forge writes every declared key when it first
+        // saves the file, so a player who has ever run 1.5.x has display.dialogueMenuStyle stated
+        // explicitly. Correcting such a file must leave RESPONSIVE, FULL and the legacy override
+        // exactly as they are — a stored value is a choice, and nothing here may read it as a
+        // leftover default.
+        CommentedConfig existing = CommentedConfig.inMemory();
+        existing.set("display.numberedResponses", false);
+        existing.set("display.dialogueMenuStyle", "RESPONSIVE");
+        existing.set("display.motionMode", "FULL");
+        existing.set("display.questionRevealMode", "FAST");
+        McaConversationsConfig.CLIENT_SPEC.correct(existing);
+
+        assertEquals(Boolean.FALSE, existing.<Boolean>get("display.numberedResponses"),
+                "the deprecated MCA_ORIGINAL override must survive a default change");
+        assertEquals(McaConversationsConfig.DialogueMenuStyle.RESPONSIVE,
+                existing.getEnum("display.dialogueMenuStyle",
+                        McaConversationsConfig.DialogueMenuStyle.class));
+        assertEquals(McaConversationsConfig.MotionMode.FULL,
+                existing.getEnum("display.motionMode", McaConversationsConfig.MotionMode.class));
+        assertEquals(McaConversationsConfig.QuestionReveal.FAST,
+                existing.getEnum("display.questionRevealMode",
+                        McaConversationsConfig.QuestionReveal.class),
+                "an explicitly enabled reveal is not switched off by anything in 1.6.3");
+    }
+
+    @Test
+    void anAbsentKeyIsTheOnlyThingTheNewDefaultsReach() {
+        // The other half of the same contract: a file that never mentions these keys — a new
+        // install, or one that was hand-trimmed — is corrected to the recommended pair, and the
+        // reveal stays off because that default did not change.
+        CommentedConfig fresh = CommentedConfig.inMemory();
+        McaConversationsConfig.CLIENT_SPEC.correct(fresh);
+
+        assertEquals(McaConversationsConfig.DialogueMenuStyle.MINIMAL,
+                fresh.getEnum("display.dialogueMenuStyle",
+                        McaConversationsConfig.DialogueMenuStyle.class));
+        assertEquals(McaConversationsConfig.MotionMode.REDUCED,
+                fresh.getEnum("display.motionMode", McaConversationsConfig.MotionMode.class));
+        assertEquals(McaConversationsConfig.QuestionReveal.OFF,
+                fresh.getEnum("display.questionRevealMode",
+                        McaConversationsConfig.QuestionReveal.class));
+        assertEquals(Boolean.TRUE, fresh.<Boolean>get("display.numberedResponses"));
     }
 
     @Test

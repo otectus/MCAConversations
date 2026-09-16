@@ -129,18 +129,31 @@ class DialogueRenderPlanTest {
         assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
     }
 
+    /**
+     * Rows are a document inside the response viewport now, not the thing the panel is sized from.
+     * A page that fits must still be entirely inside the viewport; a page that cannot fit -- one
+     * answer taller than the whole viewport -- is allowed to overflow, because the alternative is
+     * cutting authored text, and the viewport scrolls instead.
+     */
     @Test
-    void rowsStayInsideThePanelAndNeverOverlap() {
+    void rowsStayInsideTheResponseViewportAndNeverOverlap() {
         List<String> problems = new ArrayList<>();
         for (Case c : cases()) {
             DialogueChoiceLayout.Layout layout = firstPage(c);
             DialogueChoiceLayout.Rect panel = layout.panel();
+            DialogueChoiceLayout.Rect viewport = layout.responseViewport();
+            boolean fits = layout.documentHeight() <= viewport.height();
             DialogueChoiceLayout.Rect previous = null;
             for (DialogueChoiceLayout.Rect row : layout.rows()) {
                 if (row.x() < panel.x() || row.x() + row.width() > panel.x() + panel.width()) {
                     problems.add(c + ": a row is wider than its panel");
                 }
-                if (row.y() < panel.y() || row.y() + row.height() > panel.y() + panel.height()) {
+                if (fits && (row.y() < viewport.y()
+                        || row.y() + row.height() > viewport.y() + viewport.height())) {
+                    problems.add(c + ": a row escapes the viewport it was packed to fit");
+                }
+                if (fits && (row.y() < panel.y()
+                        || row.y() + row.height() > panel.y() + panel.height())) {
                     problems.add(c + ": a row escapes the panel vertically");
                 }
                 if (previous != null
@@ -148,6 +161,71 @@ class DialogueRenderPlanTest {
                     problems.add(c + ": rows overlap");
                 }
                 previous = row;
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
+    }
+
+    /**
+     * The frame is the promise this stage makes: whatever the villager says next, and however many
+     * answers it offers, the panel and the footer are on the same pixels they were on last turn.
+     */
+    @Test
+    void theFrameDoesNotMoveWithTheContent() {
+        List<String> problems = new ArrayList<>();
+        for (int[] viewport : VIEWPORTS) {
+            for (int fontLineHeight : FONT_LINE_HEIGHTS) {
+                for (boolean footer : new boolean[]{true, false}) {
+                    DialogueChoiceLayout.Layout reference = null;
+                    for (int questionLines : new int[]{1, 3, 8, 40}) {
+                        for (int answers : new int[]{1, 3, 9}) {
+                            for (int answerLines : new int[]{1, 2, 5}) {
+                                DialogueChoiceLayout.Layout layout = DialogueChoiceLayout.create(
+                                        viewport[0], viewport[1], questionLines, fontLineHeight,
+                                        rowHeights(answers, answerLines, fontLineHeight, false),
+                                        footer, false, answers > 1, answers > 1);
+                                if (reference == null) {
+                                    reference = layout;
+                                    continue;
+                                }
+                                if (!reference.panel().equals(layout.panel())
+                                        || reference.footerY() != layout.footerY()
+                                        || reference.dividerY() != layout.dividerY()
+                                        || !reference.questionViewport()
+                                                .equals(layout.questionViewport())
+                                        || !reference.responseViewport()
+                                                .equals(layout.responseViewport())) {
+                                    problems.add(viewport[0] + "x" + viewport[1] + " font="
+                                            + fontLineHeight + " footer=" + footer
+                                            + ": the frame moved for " + questionLines
+                                            + " question lines and " + answers + "x" + answerLines
+                                            + " answers");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));
+    }
+
+    /** Every screen the mod supports keeps room for at least one whole answer and three question lines. */
+    @Test
+    void theFrameAlwaysReservesReadableRegions() {
+        List<String> problems = new ArrayList<>();
+        for (Case c : cases()) {
+            DialogueChoiceLayout.Layout layout = firstPage(c);
+            int step = DialogueChoiceLayout.lineStep(c.fontLineHeight());
+            if (layout.questionViewport().height() < step) {
+                problems.add(c + ": the question region cannot show one line");
+            }
+            if (layout.responseViewport().height()
+                    < DialogueChoiceLayout.rowHeight(1, c.fontLineHeight(), true)) {
+                problems.add(c + ": the response viewport cannot show one answer");
+            }
+            if (layout.questionViewport().width() < 40) {
+                problems.add(c + ": the question region is too narrow to read");
             }
         }
         assertTrue(problems.isEmpty(), String.join(System.lineSeparator(), problems));

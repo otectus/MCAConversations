@@ -49,10 +49,18 @@ public record ConversationMotionSpec(
             3.0F, 0.0F, 2.0F, 1.5F, 0.0F, 0.0F, 2.0F, 2.0F,
             2, 0, 0, 0, 2, 0.0F, 0.0F, 0.0F);
 
-    /** Fades only: the card still resolves over a few ticks, but nothing translates or cascades. */
+    /**
+     * One fade when the card opens and one when it closes; everything else is immediate.
+     *
+     * <p>Since 1.7.0 the page duration is zero as well. Paging is not an arrival: the panel stays
+     * where it is and its contents are replaced, and a player who asked for reduced motion asked
+     * for exactly that rather than for a shorter version of the same movement. The entrance is
+     * keyed to the lifetime of the presentation (see {@link DialogueChoiceVisualState}), so a new
+     * question during the same conversation replaces the text without fading the card again.
+     */
     private static final ConversationMotionSpec REDUCED = new ConversationMotionSpec(
             McaConversationsConfig.MotionMode.REDUCED,
-            3.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 2.0F, 2.0F,
+            3.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 2.0F,
             0, 0, 0, 0, 0, 0.0F, 0.0F, 0.0F);
 
     private static final ConversationMotionSpec OFF = new ConversationMotionSpec(

@@ -1,27 +1,20 @@
 package dev.otectus.mcaconversations.content;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import dev.otectus.mcaconversations.conversation.BeatCatalog;
-import dev.otectus.mcaconversations.conversation.BeatContractLoader;
-import dev.otectus.mcaconversations.conversation.ConversationCatalog;
-import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.ContentProblem;
+import dev.otectus.mcaconversations.conversation.ContentReloadAttempt;
+import dev.otectus.mcaconversations.conversation.ContentReloadCoordinator;
+import dev.otectus.mcaconversations.conversation.ConversationContentBundle;
 import dev.otectus.mcaconversations.conversation.DepthClass;
-import dev.otectus.mcaconversations.conversation.TopicEntry;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
-
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,14 +26,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * twice — by id, and by the {@code say} + {@code next} route they contract — and two packs that both
  * claim one route are a genuine conflict the catalog refuses to build. If that refusal were allowed
  * to leave the catalog empty, every villager in the world would fall back to uncontracted lines
- * because somebody's third-party pack had a typo in it. The loader keeps the last good catalog
- * instead, and this pins that.
+ * because somebody's third-party pack had a typo in it.
  *
- * <p>The loader's {@code apply} is protected and the class is final, so it is invoked reflectively.
- * That is the honest shape of the test: the behaviour under test is what the reload listener does,
- * not what some extracted helper does.
+ * <p>What changed with the coordinator is the <em>scope</em> of that retention. It used to be one
+ * loader keeping one catalog; it is the whole bundle now, so a colliding beat file does not leave the
+ * topics, scenes and narrative templates of the same broken pack in force alongside the old beats.
  */
 class ReloadResilienceTest {
+
+    private final ConversationContentBundle before = ContentReloadCoordinator.committed();
+
+    @AfterEach
+    void restore() {
+        ContentReloadCoordinator.setCommittedForTesting(before);
+    }
 
     private static final String BEAT = """
             {
@@ -54,63 +53,6 @@ class ReloadResilienceTest {
               "allowed_stances": ["exit"]
             }""";
 
-    private static Map<ResourceLocation, JsonElement> pack(String fileName, String... beatIds) {
-        JsonObject beats = new JsonObject();
-        for (String id : beatIds) {
-            beats.add(id, JsonParser.parseString(BEAT).getAsJsonObject());
-        }
-        JsonObject root = new JsonObject();
-        root.add("beats", beats);
-        Map<ResourceLocation, JsonElement> files = new LinkedHashMap<>();
-        files.put(new ResourceLocation("mcaconversations", fileName), root);
-        return files;
-    }
-
-    private static void reload(Map<ResourceLocation, JsonElement> files) throws Exception {
-        Method apply = BeatContractLoader.class.getDeclaredMethod(
-                "apply", Map.class, ResourceManager.class, ProfilerFiller.class);
-        apply.setAccessible(true);
-        apply.invoke(new BeatContractLoader(), files, null, null);
-    }
-
-    @Test
-    @DisplayName("a pack that contracts one route twice leaves the previous catalog standing")
-    void collidingPackKeepsThePreviousCatalog() throws Exception {
-        BeatCatalog before = BeatContractLoader.active();
-        try {
-            reload(pack("good", "day.probe.one"));
-            BeatCatalog good = BeatContractLoader.active();
-            assertEquals(1, good.size(), "the good pack should have loaded");
-
-            // Two ids, one route: BeatCatalog.build refuses, and the loader must keep what it had.
-            reload(pack("broken", "day.probe.two", "day.probe.three"));
-            assertSame(good, BeatContractLoader.active(),
-                    "a colliding reload must leave the previous catalog in place, not empty it");
-            assertEquals(1, BeatContractLoader.active().size());
-        } finally {
-            BeatContractLoader.setActiveForTesting(before);
-        }
-    }
-
-    @Test
-    @DisplayName("an empty pack is a choice, not a failure")
-    void anEmptyPackIsHonoured() throws Exception {
-        BeatCatalog before = BeatContractLoader.active();
-        try {
-            reload(pack("good", "day.probe.one"));
-            assertEquals(1, BeatContractLoader.active().size());
-
-            reload(new LinkedHashMap<>());
-            assertTrue(BeatContractLoader.active().size() == 0,
-                    "a pack that removes every beat has removed every beat — that is not a failure"
-                            + " and must not be treated as one");
-        } finally {
-            BeatContractLoader.setActiveForTesting(before);
-        }
-    }
-
-    // --- Deterministic topic-id resolution (audit F12) --------------------------
-
     private static final String TOPIC = """
             {
               "entry": {"question": "conversations.cat.chitchat", "answer": "day"},
@@ -120,53 +62,124 @@ class ReloadResilienceTest {
               "required_stance_families": ["empathy", "exit"]
             }""";
 
-    private static JsonObject topicFile(String depth) {
-        JsonObject topics = new JsonObject();
-        topics.add("day", JsonParser.parseString(TOPIC.formatted(depth)).getAsJsonObject());
-        JsonObject root = new JsonObject();
-        root.add("topics", topics);
-        return root;
-    }
-
-    private static void reloadCatalog(Map<ResourceLocation, JsonElement> files) throws Exception {
-        Method apply = ConversationCatalogLoader.class.getDeclaredMethod(
-                "apply", Map.class, ResourceManager.class, ProfilerFiller.class);
-        apply.setAccessible(true);
-        apply.invoke(new ConversationCatalogLoader(), files, null, null);
-    }
-
-    /**
-     * The collision itself is logged, not returned, and the test source set has no appender
-     * infrastructure to capture it — so what is pinned here is the part that matters to a player:
-     * the same file wins on every load, whatever order the pack stack handed the files over in.
-     */
-    @Test
-    @DisplayName("one topic id in two files resolves to the sorted-last file, whatever the input order")
-    void collidingTopicIdResolvesDeterministically() throws Exception {
-        ConversationCatalog before = ConversationCatalogLoader.active();
-        try {
-            ResourceLocation first = new ResourceLocation("mcaconversations", "aaa");
-            ResourceLocation last = new ResourceLocation("mcaconversations", "zzz");
-
-            Map<ResourceLocation, JsonElement> ascending = new LinkedHashMap<>();
-            ascending.put(first, topicFile("quick"));
-            ascending.put(last, topicFile("deep"));
-            reloadCatalog(ascending);
-            TopicEntry fromAscending = ConversationCatalogLoader.topic("day").orElseThrow();
-            assertEquals(DepthClass.DEEP, fromAscending.depth(),
-                    "the sorted-last file must win, not the first one seen");
-
-            Map<ResourceLocation, JsonElement> descending = new LinkedHashMap<>();
-            descending.put(last, topicFile("deep"));
-            descending.put(first, topicFile("quick"));
-            reloadCatalog(descending);
-            assertEquals(DepthClass.DEEP, ConversationCatalogLoader.topic("day").orElseThrow().depth(),
-                    "iteration order of the incoming map must not decide the winner");
-
-            assertEquals(1, ConversationCatalogLoader.active().size(),
-                    "a collision merges to one topic, it does not duplicate it");
-        } finally {
-            ConversationCatalogLoader.setActiveForTesting(before);
+    private static String beatFile(String... ids) {
+        StringBuilder body = new StringBuilder("{\"beats\": {");
+        for (int i = 0; i < ids.length; i++) {
+            body.append(i == 0 ? "" : ",").append('"').append(ids[i]).append("\": ").append(BEAT);
         }
+        return body.append("}}").toString();
+    }
+
+    private static String topicFile(String depth) {
+        return "{\"topics\": {\"day\": " + TOPIC.formatted(depth) + "}}";
+    }
+
+    private static ReloadFixture.Outcome reload(ReloadFixture fixture) throws Exception {
+        return fixture.reload(fixture.manager(), Map.of(), Set.of());
+    }
+
+    @Test
+    @DisplayName("a pack that contracts one route twice leaves the whole previous bundle standing")
+    void collidingPackKeepsThePreviousCatalog() throws Exception {
+        reload(new ReloadFixture().withChitchat()
+                .with("conversation_beats", "mcaconversations", "good", beatFile("day.probe.one"))
+                .with("conversation_catalog", "mcaconversations", "topics", topicFile("quick")));
+        ConversationContentBundle good = ContentReloadCoordinator.committed();
+        assertEquals(1, good.beats().size(), "the good pack should have loaded");
+        assertEquals(1, good.topics().size());
+
+        // Two ids, one route: BeatCatalog.build refuses. The topics of the same pack are perfectly
+        // valid, and under the old per-listener verdicts they would have been published anyway.
+        ReloadFixture.Outcome broken = reload(new ReloadFixture().withChitchat()
+                .with("conversation_beats", "mcaconversations", "broken",
+                        beatFile("day.probe.two", "day.probe.three"))
+                .with("conversation_catalog", "mcaconversations", "topics", topicFile("deep")));
+
+        assertEquals(ContentReloadAttempt.Verdict.REJECTED, broken.attempt().verdict());
+        assertSame(good, ContentReloadCoordinator.committed(),
+                "a colliding reload must leave the previous bundle in place, not empty or half-replace it");
+        assertSame(good.beats(), ContentReloadCoordinator.committed().beats());
+        assertSame(good.topics(), ContentReloadCoordinator.committed().topics());
+        assertEquals(DepthClass.QUICK,
+                ContentReloadCoordinator.committed().topics().topic("day").orElseThrow().depth(),
+                "the valid half of a refused pack is not published either");
+        assertEquals(good.generation(), ContentReloadCoordinator.committed().generation(),
+                "and the generation does not move, because nothing was published");
+    }
+
+    @Test
+    @DisplayName("an empty pack is a choice, not a failure")
+    void anEmptyPackIsHonoured() throws Exception {
+        reload(new ReloadFixture().withChitchat()
+                .with("conversation_beats", "mcaconversations", "good", beatFile("day.probe.one"))
+                .with("conversation_catalog", "mcaconversations", "topics", topicFile("quick")));
+        assertEquals(1, ContentReloadCoordinator.committed().beats().size());
+
+        ReloadFixture.Outcome emptied = reload(new ReloadFixture());
+
+        assertTrue(emptied.committedNow(),
+                "a pack that removes every beat has removed every beat — that is not a failure"
+                        + " and must not be treated as one");
+        assertEquals(0, ContentReloadCoordinator.committed().beats().size());
+        assertEquals(0, ContentReloadCoordinator.committed().topics().size(),
+                "an empty section with nothing referencing it is valid, not missing");
+    }
+
+    @Test
+    @DisplayName("a wrong-shaped section is not the same as an absent one")
+    void aWrongShapedSectionIsRefused() throws Exception {
+        reload(new ReloadFixture().withChitchat()
+                .with("conversation_beats", "mcaconversations", "good", beatFile("day.probe.one"))
+                .with("conversation_catalog", "mcaconversations", "topics", topicFile("quick")));
+        ConversationContentBundle good = ContentReloadCoordinator.committed();
+
+        ReloadFixture.Outcome broken = reload(new ReloadFixture().withChitchat()
+                .with("conversation_beats", "mcaconversations", "bad", "{\"beats\": [\"not an object\"]}"));
+
+        assertEquals(ContentReloadAttempt.Verdict.REJECTED, broken.attempt().verdict());
+        assertSame(good, ContentReloadCoordinator.committed());
+        assertTrue(broken.attempt().problems().stream()
+                        .anyMatch(p -> p.reason().equals("section_wrong_shape")),
+                "the diagnostic says the section is the wrong shape, not that it was empty");
+    }
+
+    @Test
+    @DisplayName("one topic id in two files resolves to the sorted-last file and names both origins")
+    void collidingTopicIdResolvesDeterministically() throws Exception {
+        ReloadFixture.Outcome ascending = reload(new ReloadFixture().withChitchat()
+                .with("conversation_catalog", "mcaconversations", "aaa", topicFile("quick"))
+                .with("conversation_catalog", "mcaconversations", "zzz", topicFile("deep")));
+
+        assertTrue(ascending.committedNow());
+        assertEquals(DepthClass.DEEP,
+                ContentReloadCoordinator.committed().topics().topic("day").orElseThrow().depth(),
+                "the sorted-last file must win, not the first one seen");
+        assertEquals(1, ContentReloadCoordinator.committed().topics().size(),
+                "a collision merges to one topic, it does not duplicate it");
+
+        ContentProblem collision = ascending.attempt().problems().stream()
+                .filter(p -> p.reason().equals("topic_declared_twice"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("the collision must be reported, not merely resolved"));
+        assertEquals(2, collision.contributors().size(),
+                "both contributing resources are named, not only the winner");
+        assertEquals("zzz.json", fileName(collision),
+                "and the winner is the one the record is attributed to");
+
+        // The same two files in the other input order: the pack stack's iteration order must not be
+        // what decides which one a player ends up talking to.
+        ConversationContentBundle first = ContentReloadCoordinator.committed();
+        reload(new ReloadFixture().withChitchat()
+                .with("conversation_catalog", "mcaconversations", "zzz", topicFile("deep"))
+                .with("conversation_catalog", "mcaconversations", "aaa", topicFile("quick")));
+        assertNotSame(first, ContentReloadCoordinator.committed(), "the second reload did publish");
+        assertEquals(DepthClass.DEEP,
+                ContentReloadCoordinator.committed().topics().topic("day").orElseThrow().depth(),
+                "iteration order of the incoming resources must not decide the winner");
+    }
+
+    private static String fileName(ContentProblem problem) {
+        String path = problem.origin().path();
+        return path.substring(path.lastIndexOf('/') + 1);
     }
 }

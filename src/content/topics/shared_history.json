@@ -750,6 +750,965 @@
         ]
       },
       "epistemic": "inferred"
+    },
+    {
+      "name": "the_view_i_wanted",
+      "subject": "shared_history.advice",
+      "shape": "problem_solve",
+      "act": "ask",
+      "polarity": "mixed",
+      "predicate": "opinion",
+      "temporal": "current",
+      "epistemic": "observed",
+      "obligations": [
+        "decide",
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
+        }
+      ],
+      "episode_kind": "shared.advice",
+      "episode_state": [
+        "active"
+      ],
+      "slots_used": [
+        "matter"
+      ],
+      "thread": "shared_history.advice",
+      "base_priority": 30,
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Something you could weigh in on.",
+        "pt": "Algo para você opinar."
+      },
+      "lines": {
+        "en": [
+          "I keep going back and forth about %2$s, and I would rather hear a plain opinion than keep circling it.",
+          "Nobody in the lane is neutral about %2$s. You are, near enough. What would you do?",
+          "I have been turning %2$s over for longer than it deserves. Tell me how it looks from outside."
+        ],
+        "pt": [
+          "Fico indo e voltando sobre %2$s, e prefiro ouvir uma opinião franca a continuar dando voltas.",
+          "Ninguém na viela é neutro sobre %2$s. Você quase é. O que você faria?",
+          "Ando remoendo %2$s por mais tempo do que merece. Me diga como isso parece de fora."
+        ]
+      },
+      "replies": [
+        {
+          "name": "say_what_id_do",
+          "stance": "candor",
+          "answers": [
+            "decide"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Here is what I would do.",
+            "pt": "Eu faria assim."
+          },
+          "phrases": [
+            "here is what i would do",
+            "what i would do in your place"
+          ],
+          "requires_any": [
+            "would",
+            "place"
+          ],
+          "disposition": {
+            "respect": 2,
+            "trust": 1
+          },
+          "advance": "succeeded",
+          "reaction": {
+            "id": "weighed",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "opinion",
+            "temporal": "current",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "That is a plain answer, and I asked for one. I will sit with it tonight and tell you what I chose.",
+                "Right. You have not left me much room to keep circling, which is what I wanted.",
+                "I can work with that. It is not what I expected to hear, which is probably the use of asking."
+              ],
+              "pt": [
+                "É uma resposta franca, e foi o que eu pedi. Vou pensar nisso hoje à noite e te digo o que escolhi.",
+                "Certo. Você não me deixou muito espaço para ficar dando voltas, que era o que eu queria.",
+                "Dá para trabalhar com isso. Não é o que eu esperava ouvir, e talvez seja essa a serventia de perguntar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_which_way_they_lean",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which way are you leaning already?",
+            "pt": "Para que lado você já está pendendo?"
+          },
+          "phrases": [
+            "which way are you leaning already",
+            "what do you want to do about it"
+          ],
+          "requires_any": [
+            "leaning",
+            "want"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named_the_lean",
+            "act": "explain",
+            "polarity": "mixed",
+            "predicate": "opinion",
+            "temporal": "current",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "Towards the easy one, and I do not trust myself about that.",
+                "Towards whichever answer means nobody has to be told anything.",
+                "I am not leaning at all. That is the trouble; I have made a level thing out of something that has a right answer."
+              ],
+              "pt": [
+                "Para o lado fácil, e eu não confio em mim nisso.",
+                "Para a resposta em que ninguém precisa ser avisado de nada.",
+                "Não estou pendendo para lado nenhum. É esse o problema; transformei em empate uma coisa que tem resposta certa."
+              ]
+            }
+          }
+        },
+        {
+          "name": "offer_to_ask_around",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I can ask around for you, though that is not a promise of an answer.",
+            "pt": "Posso perguntar por aí, mas isso não é promessa de resposta."
+          },
+          "phrases": [
+            "i can ask around for you",
+            "i will put the question to a few people"
+          ],
+          "requires_any": [
+            "ask",
+            "question"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "accepted_the_offer",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "observation",
+            "temporal": "current",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "That is more than I asked for, and I will take it without holding you to it.",
+                "Kind of you. Nothing is owed if nothing comes of it.",
+                "If you hear something, tell me. If you forget, I will not count it against you."
+              ],
+              "pt": [
+                "É mais do que eu pedi, e aceito sem cobrar nada.",
+                "Gentileza sua. Nada fica devendo se não der em nada.",
+                "Se souber de algo, me conte. Se esquecer, não vou levar a mal."
+              ]
+            }
+          }
+        },
+        {
+          "name": "leave_the_choice_with_them",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It is yours to decide. Tell me when you have chosen.",
+            "pt": "A decisão é sua. Me conte quando tiver escolhido."
+          },
+          "phrases": [
+            "it is yours to decide",
+            "the choice should be yours"
+          ],
+          "requires_any": [
+            "yours",
+            "choice"
+          ],
+          "disposition": {
+            "respect": 2
+          },
+          "reaction": {
+            "id": "left_with_me",
+            "act": "accept",
+            "polarity": "mixed",
+            "predicate": "opinion",
+            "temporal": "current",
+            "shape": "problem_solve",
+            "lines": {
+              "en": [
+                "Fair. I did rather want somebody else to carry it for an afternoon.",
+                "Yes. Next time I will bring you the answer rather than the question.",
+                "Understood. I will stop handing it around and decide it."
+              ],
+              "pt": [
+                "Justo. Eu bem queria que outra pessoa carregasse isso por uma tarde.",
+                "Sim. Da próxima vez eu trago a resposta em vez da pergunta.",
+                "Entendido. Vou parar de passar isso adiante e decidir."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "what_i_did_with_it",
+      "subject": "shared_history.advice",
+      "shape": "reminisce",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "status_change",
+      "temporal": "past",
+      "epistemic": "observed",
+      "obligations": [
+        "acknowledge",
+        "clarify"
+      ],
+      "conditions": [
+        {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_last_talk",
+          "min": 4,
+          "unknown": "fail"
+        }
+      ],
+      "episode_kind": "shared.advice",
+      "episode_state": [
+        "succeeded"
+      ],
+      "slots_used": [
+        "matter"
+      ],
+      "thread": "shared_history.advice",
+      "base_priority": 36,
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What I decided.",
+        "pt": "O que eu decidi."
+      },
+      "lines": {
+        "en": [
+          "I did what you said about %2$s, near enough. It went the way you thought it would.",
+          "I took half your answer on %2$s and left the other half. The half I kept was the useful one.",
+          "I went the other way on %2$s in the end. It was not bad counsel; I simply weigh the quiet more than you do."
+        ],
+        "pt": [
+          "Fiz o que você disse sobre %2$s, quase igual. Saiu como você imaginava.",
+          "Peguei metade da sua resposta sobre %2$s e deixei a outra metade. A que ficou era a útil.",
+          "No fim fui pelo outro caminho sobre %2$s. Não era conselho ruim; eu só dou mais peso ao sossego."
+        ]
+      },
+      "replies": [
+        {
+          "name": "glad_you_weighed_it",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I am glad you weighed it properly.",
+            "pt": "Fico contente que você tenha pesado bem."
+          },
+          "phrases": [
+            "i am glad you weighed it properly",
+            "glad you thought it through"
+          ],
+          "requires_any": [
+            "weighed",
+            "glad"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 1
+          },
+          "resolves_thread": true,
+          "advance": "remembered",
+          "reaction": {
+            "id": "settled_it",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "It is decided either way now, so it can stop being a subject.",
+                "I appreciate that. I would rather have chosen badly than gone on not choosing.",
+                "That is the end of it, then. The next thing I ask you will be a different thing."
+              ],
+              "pt": [
+                "De um jeito ou de outro já está decidido, então pode deixar de ser assunto.",
+                "Agradeço. Prefiro ter escolhido mal a continuar sem escolher.",
+                "Então está encerrado. A próxima coisa que eu te perguntar vai ser outra."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_which_part_changed",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Which part did you change?",
+            "pt": "Que parte você mudou?"
+          },
+          "phrases": [
+            "which part did you change",
+            "what did you alter in it"
+          ],
+          "requires_any": [
+            "part",
+            "alter"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named_the_change",
+            "act": "explain",
+            "polarity": "mixed",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "The order of it. Your answer assumed I had a free week, and I had two free afternoons.",
+                "The part that needed somebody else to agree with me. The rest I did on my own account.",
+                "Only the timing. Everything else I took as it came to me."
+              ],
+              "pt": [
+                "A ordem. Sua resposta supunha que eu tinha uma semana livre, e eu tinha duas tardes.",
+                "A parte que exigia que outra pessoa concordasse comigo. O resto eu fiz por conta própria.",
+                "Só o momento. O resto eu peguei como veio."
+              ]
+            }
+          }
+        },
+        {
+          "name": "still_prefer_the_other_way",
+          "stance": "respectful_disagreement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "qualified",
+          "label": {
+            "en": "I still think the other way was better.",
+            "pt": "Ainda acho que o outro caminho era melhor."
+          },
+          "phrases": [
+            "i still think the other way was better",
+            "the other way would have served you better"
+          ],
+          "requires_any": [
+            "other",
+            "better"
+          ],
+          "disposition": {
+            "respect": 2
+          },
+          "reaction": {
+            "id": "held_the_line",
+            "act": "qualify",
+            "polarity": "mixed",
+            "predicate": "opinion",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "You may be right. I am not going to undo it, and I am not going to pretend otherwise either.",
+                "Possibly. I will know in a year, and so will you.",
+                "Say more about that. I can still take the lesson even if I cannot take the decision back."
+              ],
+              "pt": [
+                "Pode ser que você tenha razão. Não vou desfazer, e também não vou fingir o contrário.",
+                "Talvez. Vou saber daqui a um ano, e você também.",
+                "Me diga mais sobre isso. Ainda dá para tirar a lição, mesmo sem poder voltar atrás na decisão."
+              ]
+            }
+          }
+        },
+        {
+          "name": "hear_the_rest_another_day",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Tell me the rest another day.",
+            "pt": "Me conte o resto outro dia."
+          },
+          "phrases": [
+            "tell me the rest another day",
+            "we can pick this up later"
+          ],
+          "requires_any": [
+            "rest",
+            "pick"
+          ],
+          "disposition": {
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "kept_the_rest",
+            "act": "accept",
+            "polarity": "mixed",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "It keeps. It is not going to change again now.",
+                "Another day, then. There is no hurry in a thing already done.",
+                "Fine. I have told you the part that mattered anyway."
+              ],
+              "pt": [
+                "Pode esperar. Agora não vai mudar mais.",
+                "Outro dia, então. Não há pressa numa coisa já feita.",
+                "Tudo bem. A parte que importava eu já contei."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "i_took_it_the_wrong_way",
+      "subject": "shared_history.advice",
+      "shape": "repair",
+      "act": "qualify",
+      "polarity": "mixed",
+      "predicate": "repair",
+      "temporal": "past",
+      "epistemic": "inferred",
+      "obligations": [
+        "repair",
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_last_talk",
+          "min": 5,
+          "unknown": "fail"
+        }
+      ],
+      "episode_kind": "shared.advice",
+      "episode_state": [
+        "succeeded"
+      ],
+      "slots_used": [
+        "matter"
+      ],
+      "thread": "shared_history.advice",
+      "base_priority": 32,
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "How I took it.",
+        "pt": "Como eu entendi."
+      },
+      "lines": {
+        "en": [
+          "I have been assuming you meant something sharper about %2$s than you probably did.",
+          "When you answered me about %2$s I heard a verdict. I am not sure that is what you gave me.",
+          "I told somebody you had settled %2$s for me. That was me putting words in your mouth."
+        ],
+        "pt": [
+          "Andei presumindo que você quis dizer algo mais duro sobre %2$s do que provavelmente quis.",
+          "Quando você me respondeu sobre %2$s eu ouvi um veredito. Não tenho certeza de que foi isso que você me deu.",
+          "Falei para alguém que você tinha resolvido %2$s por mim. Fui eu colocando palavras na sua boca."
+        ]
+      },
+      "replies": [
+        {
+          "name": "say_what_i_actually_meant",
+          "stance": "candor",
+          "answers": [
+            "repair",
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "qualified",
+          "label": {
+            "en": "Here is what I actually meant.",
+            "pt": "Foi isso que eu quis dizer, na verdade."
+          },
+          "phrases": [
+            "here is what i actually meant",
+            "i meant it as one opinion among several"
+          ],
+          "requires_any": [
+            "meant",
+            "opinion"
+          ],
+          "disposition": {
+            "trust": 2,
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "took_it_again",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "repair",
+            "lines": {
+              "en": [
+                "Then I heard it heavier than you said it. That is mine to correct, not yours.",
+                "Good. I would rather have the smaller version of what you said and have it right.",
+                "That changes it. I will tell the person I quoted you to, as well."
+              ],
+              "pt": [
+                "Então eu ouvi com mais peso do que você deu. Isso é meu para corrigir, não seu.",
+                "Ótimo. Prefiro a versão menor do que você disse, mas certa.",
+                "Isso muda as coisas. Vou avisar também a pessoa a quem eu te citei."
+              ]
+            }
+          }
+        },
+        {
+          "name": "accept_their_reading",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "You heard it fairly. I did put it strongly.",
+            "pt": "Você entendeu de forma justa. Eu falei com firmeza mesmo."
+          },
+          "phrases": [
+            "you heard it fairly",
+            "i did put it strongly"
+          ],
+          "requires_any": [
+            "fairly",
+            "strongly"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "eased_between_us",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "repair",
+            "lines": {
+              "en": [
+                "Then we both carried a piece of it. I can live with that division.",
+                "It helps not to be the only one who misread the room.",
+                "All right. It cost me two days of assuming, and now it has stopped costing."
+              ],
+              "pt": [
+                "Então cada um carregou um pedaço. Dá para conviver com essa divisão.",
+                "Ajuda não ser a única pessoa que leu a sala errado.",
+                "Tudo bem. Custou dois dias de suposição, e agora parou de custar."
+              ]
+            }
+          }
+        },
+        {
+          "name": "it_was_only_an_opinion",
+          "stance": "respectful_disagreement",
+          "answers": [
+            "repair"
+          ],
+          "tone": "plain",
+          "outcome": "qualified",
+          "label": {
+            "en": "It was an opinion, and it stands as one.",
+            "pt": "Era uma opinião, e continua sendo só isso."
+          },
+          "phrases": [
+            "it was an opinion and it stands as one",
+            "i gave you an opinion not a ruling"
+          ],
+          "requires_any": [
+            "opinion",
+            "stands"
+          ],
+          "disposition": {
+            "respect": 2
+          },
+          "reaction": {
+            "id": "reweighed_it",
+            "act": "qualify",
+            "polarity": "mixed",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "repair",
+            "lines": {
+              "en": [
+                "Then I gave it a rank it never asked for. I do that with people I trust.",
+                "Fair. I will treat it as one voice and stop hiding behind it.",
+                "Noted. It is still the best answer I was given, and it is still not an order."
+              ],
+              "pt": [
+                "Então eu dei a isso um peso que ninguém pediu. Faço isso com quem eu confio.",
+                "Justo. Vou tratar como uma voz entre outras e parar de me esconder atrás disso.",
+                "Anotado. Continua sendo a melhor resposta que me deram, e continua não sendo uma ordem."
+              ]
+            }
+          }
+        },
+        {
+          "name": "straighten_it_out_later",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "We can straighten this out later; no hurry.",
+            "pt": "Podemos acertar isso depois; sem pressa."
+          },
+          "phrases": [
+            "we can straighten this out later",
+            "we can come back to this another day"
+          ],
+          "requires_any": [
+            "straighten",
+            "back"
+          ],
+          "disposition": {
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "set_it_aside",
+            "act": "accept",
+            "polarity": "mixed",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "repair",
+            "lines": {
+              "en": [
+                "Then it waits. At least it is named now, which is most of it.",
+                "Right. I will stop rehearsing it in the meantime.",
+                "Another day. It is smaller already for having been said out loud."
+              ],
+              "pt": [
+                "Então espera. Pelo menos agora tem nome, que já é a maior parte.",
+                "Certo. Enquanto isso eu paro de ensaiar isso na cabeça.",
+                "Outro dia. Já ficou menor só por ter sido dito em voz alta."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "the_one_we_both_remember",
+      "subject": "shared_history.advice",
+      "shape": "reminisce",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "memory",
+      "temporal": "past",
+      "epistemic": "observed",
+      "obligations": [
+        "acknowledge",
+        "clarify"
+      ],
+      "conditions": [
+        {
+          "field": "social.nearby",
+          "max": 0,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_first_met",
+          "min": 7,
+          "unknown": "fail"
+        },
+        {
+          "field": "work.activity",
+          "is": "panic",
+          "not": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "time.days_since_last_talk",
+          "min": 6,
+          "unknown": "fail"
+        }
+      ],
+      "episode_kind": "shared.advice",
+      "episode_state": [
+        "remembered"
+      ],
+      "slots_used": [
+        "matter"
+      ],
+      "thread": "shared_history.advice",
+      "base_priority": 24,
+      "cooldown_days": 6,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "The one we settled.",
+        "pt": "Aquela que a gente resolveu."
+      },
+      "lines": {
+        "en": [
+          "It is long since %2$s was settled, and I still think of it as something we worked out between us.",
+          "We spent a whole evening on %2$s once. I could not tell you now why it felt so large.",
+          "Whenever somebody asks me about %2$s I hear your half of it alongside mine."
+        ],
+        "pt": [
+          "Faz tempo que %2$s ficou para trás, e ainda penso nisso como algo que acertamos juntos.",
+          "Passamos uma noite inteira com %2$s uma vez. Hoje eu não saberia dizer por que parecia tão grande.",
+          "Sempre que alguém me pergunta sobre %2$s eu escuto a sua parte junto com a minha."
+        ]
+      },
+      "replies": [
+        {
+          "name": "i_remember_it_too",
+          "stance": "empathy",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I remember it too.",
+            "pt": "Eu também lembro."
+          },
+          "phrases": [
+            "i remember it too",
+            "that one stayed with me as well"
+          ],
+          "requires_any": [
+            "remember",
+            "stayed"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "shared_the_memory",
+            "act": "reminisce",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "Then it belongs to both of us, which is more than most decisions manage.",
+                "Good. I would have felt foolish being the only one still carrying it.",
+                "It was a small thing and it is still here. That is how you tell which ones mattered."
+              ],
+              "pt": [
+                "Então pertence a nós dois, o que é mais do que a maioria das decisões consegue.",
+                "Que bom. Eu me sentiria tolo sendo o único a ainda carregar isso.",
+                "Era uma coisa pequena e continua aqui. É assim que se sabe quais importaram."
+              ]
+            }
+          }
+        },
+        {
+          "name": "ask_what_stayed_with_them",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What stayed with you from it?",
+            "pt": "O que ficou com você disso?"
+          },
+          "phrases": [
+            "what stayed with you from it",
+            "which part of it stuck"
+          ],
+          "requires_any": [
+            "stayed",
+            "stuck"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named_what_stayed",
+            "act": "explain",
+            "polarity": "positive",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "That somebody asked me what I wanted before telling me what to do.",
+                "That it was allowed to be a small matter and still take an evening.",
+                "Mostly that I stopped rehearsing it afterwards. That was new for me."
+              ],
+              "pt": [
+                "Que alguém me perguntou o que eu queria antes de me dizer o que fazer.",
+                "Que era permitido ser um assunto pequeno e mesmo assim levar uma noite.",
+                "Principalmente que depois eu parei de ficar ensaiando aquilo. Isso foi novo para mim."
+              ]
+            }
+          }
+        },
+        {
+          "name": "leave_it_where_it_is",
+          "stance": "restraint",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Some things are better left where they are.",
+            "pt": "Algumas coisas ficam melhor onde estão."
+          },
+          "phrases": [
+            "some things are better left where they are",
+            "we can leave that one be"
+          ],
+          "requires_any": [
+            "better",
+            "leave"
+          ],
+          "disposition": {
+            "respect": 1
+          },
+          "reaction": {
+            "id": "left_where_it_is",
+            "act": "accept",
+            "polarity": "mixed",
+            "predicate": "memory",
+            "temporal": "past",
+            "shape": "reminisce",
+            "lines": {
+              "en": [
+                "True enough. A thing kept well does not need handling every week.",
+                "Then we leave it there, in good order.",
+                "Yes. I only wanted to say it was still there, not to take it apart."
+              ],
+              "pt": [
+                "É verdade. Uma coisa bem guardada não precisa ser mexida toda semana.",
+                "Então deixamos onde está, em ordem.",
+                "Sim. Eu só queria dizer que ainda estava lá, não desmontar aquilo."
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "slot_lang": {
+    "sh_the_roof_or_the_fence": {
+      "en": "which to mend first, the roof or the fence",
+      "pt": "o que consertar primeiro, o telhado ou a cerca"
+    },
+    "sh_moving_my_stall": {
+      "en": "moving my stall to the other side of the square",
+      "pt": "mudar minha banca para o outro lado da praça"
+    },
+    "sh_a_letter_i_owe": {
+      "en": "a letter I have owed somebody since spring",
+      "pt": "uma carta que devo a alguém desde a primavera"
+    }
+  },
+  "episodes": [
+    {
+      "kind": "shared.advice",
+      "subject": "shared_history.advice",
+      "initial_state": "active",
+      "salience": 48,
+      "expires_after_days": 24,
+      "slots": {
+        "matter": [
+          "sh_the_roof_or_the_fence",
+          "sh_moving_my_stall",
+          "sh_a_letter_i_owe"
+        ]
+      }
     }
   ]
 }

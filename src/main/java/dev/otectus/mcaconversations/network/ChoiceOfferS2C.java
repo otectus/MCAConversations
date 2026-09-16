@@ -1,6 +1,5 @@
 package dev.otectus.mcaconversations.network;
 
-import dev.otectus.mcaconversations.client.dialogue.ClientChoiceMessages;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import io.netty.handler.codec.DecoderException;
 import net.minecraft.network.FriendlyByteBuf;
@@ -59,7 +58,7 @@ public record ChoiceOfferS2C(long revision, ConversationSession.Frontend fronten
     static void handle(ChoiceOfferS2C message, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> ClientChoiceMessages.accept(message)));
+                () -> () -> ConversationsNetwork.sink().offer(message)));
         context.setPacketHandled(true);
     }
 }

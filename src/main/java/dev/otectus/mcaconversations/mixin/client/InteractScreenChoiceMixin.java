@@ -3,6 +3,8 @@ package dev.otectus.mcaconversations.mixin.client;
 import dev.otectus.mcaconversations.client.dialogue.ClientChoiceController;
 import dev.otectus.mcaconversations.client.dialogue.ClientChoiceMessages;
 import dev.otectus.mcaconversations.client.dialogue.ClientChoiceState;
+import dev.otectus.mcaconversations.client.dialogue.ClientDialogueHistory;
+import dev.otectus.mcaconversations.client.dialogue.ConfirmationArming;
 import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceInput;
 import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceRenderer;
 import dev.otectus.mcaconversations.client.dialogue.DialogueHitTarget;
@@ -43,6 +45,7 @@ public abstract class InteractScreenChoiceMixin {
     @Shadow(remap = false) private String dialogQuestionId;
 
     @Unique private final DialogueChoiceRenderer mcaconversations$renderer = new DialogueChoiceRenderer();
+    @Unique private final UUID mcaconversations$historyConversation = UUID.randomUUID();
     @Unique private List<FormattedCharSequence> mcaconversations$savedQuestion;
     @Unique private UUID mcaconversations$villagerId;
     @Unique private Component mcaconversations$speakerName;
@@ -78,6 +81,15 @@ public abstract class InteractScreenChoiceMixin {
         mcaconversations$questionComponent = question instanceof Component component
                 ? component.copy() : question;
         mcaconversations$questionRevision++;
+        // The one point where this client has the villager's line as a resolved component. Recording
+        // it here is what keeps the history the conversation that happened: a pooled line asked for
+        // again resolves to a different sentence, so an id kept for later would not be this line.
+        if (mcaconversations$questionComponent instanceof Component spoken) {
+            ClientDialogueHistory.spoken(
+                    ClientDialogueHistory.spokenIdentity(mcaconversations$historyConversation,
+                            mcaconversations$questionRevision),
+                    mcaconversations$speakerName, spoken);
+        }
         return question;
     }
 
@@ -89,6 +101,10 @@ public abstract class InteractScreenChoiceMixin {
     @Inject(method = {"render", "m_88315_"}, at = @At("HEAD"), require = 0, remap = false)
     private void mcaconversations$hideLegacyChoices(GuiGraphics graphics, int mouseX, int mouseY,
                                                     float partialTick, CallbackInfo ci) {
+        // Unconditional: a confirmation key released while no offer is up is still a release, and
+        // the next press has to be able to act on it.
+        mcaconversations$restoreReofferedChoices();
+        mcaconversations$renderer.syncConfirmationInput();
         if (mcaconversations$active() || mcaconversations$renderer.hasOutgoingPresentation()) {
             mcaconversations$savedQuestion = dialogQuestionText;
             dialogQuestionText = null;
@@ -108,6 +124,8 @@ public abstract class InteractScreenChoiceMixin {
                 mcaconversations$questionComponent, mcaconversations$questionRevision,
                 mcaconversations$speakerName, mcaconversations$silentQuestion, dialogQuestionText,
                 mcaconversations$speaker);
+        mcaconversations$renderer.lapseReturn(() -> ClientChoiceController.returnToTopics(
+                mcaconversations$villagerId));
     }
 
     @Inject(method = {"keyPressed", "m_7933_"}, at = @At("HEAD"),
@@ -117,33 +135,68 @@ public abstract class InteractScreenChoiceMixin {
         if (!mcaconversations$active()) {
             return;
         }
+        if (ClientChoiceMessages.state().lapseFor(ConversationSession.Frontend.GUI)) {
+            mcaconversations$renderer.lapseKey(keyCode);
+            cir.setReturnValue(true);
+            return;
+        }
+        // An open utility owns the keyboard outright. Asked before the digit branch and before the
+        // confirmation keys, so opening the history or the settings pane cannot select an answer.
+        if (mcaconversations$renderer.utilityOpen()) {
+            mcaconversations$renderer.utilityKey(keyCode, (modifiers & GLFW.GLFW_MOD_SHIFT) != 0);
+            cir.setReturnValue(true);
+            return;
+        }
         ClientChoiceState state = ClientChoiceMessages.state();
         if (ClientChoiceController.numericShortcutsEnabled()) {
             java.util.OptionalInt digit = DialogueChoiceInput.digit(keyCode, modifiers);
             if (digit.isPresent()) {
                 mcaconversations$renderer.keyboardInput();
-                int index = state.firstOnPage() + digit.getAsInt() - 1;
-                if (index < state.firstOnPage() + state.visibleCount()) {
-                    mcaconversations$select(index);
+                // Consumed whether or not it confirms. An auto-repeat that we decline must not fall
+                // through to whatever the host screen would have done with the same digit.
+                if (mcaconversations$renderer.confirmPress(keyCode)) {
+                    int index = state.firstOnPage() + digit.getAsInt() - 1;
+                    if (index < state.firstOnPage() + state.visibleCount()) {
+                        mcaconversations$select(index);
+                    }
                 }
                 cir.setReturnValue(true);
                 return;
             }
         }
         switch (keyCode) {
-            case GLFW.GLFW_KEY_UP -> mcaconversations$renderer.moveFocus(-1);
-            case GLFW.GLFW_KEY_DOWN -> mcaconversations$renderer.moveFocus(1);
-            case GLFW.GLFW_KEY_HOME -> mcaconversations$renderer.focusBoundary(false);
-            case GLFW.GLFW_KEY_END -> mcaconversations$renderer.focusBoundary(true);
-            case GLFW.GLFW_KEY_PAGE_UP -> mcaconversations$renderer.changePage(-1);
-            case GLFW.GLFW_KEY_PAGE_DOWN -> mcaconversations$renderer.changePage(1);
             case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER, GLFW.GLFW_KEY_SPACE -> {
                 mcaconversations$renderer.keyboardInput();
-                mcaconversations$select(state.focusedIndex());
+                if (mcaconversations$renderer.confirmPress(keyCode)) {
+                    mcaconversations$select(state.focusedIndex());
+                }
+                cir.setReturnValue(true);
             }
-            default -> { return; }
+            default -> {
+                boolean shift = (modifiers & GLFW.GLFW_MOD_SHIFT) != 0;
+                if (mcaconversations$renderer.navigationKey(keyCode, shift)) {
+                    cir.setReturnValue(true);
+                }
+            }
         }
-        cir.setReturnValue(true);
+    }
+
+    /**
+     * Release tracking. The screen may not override this at all, which is why the renderer also
+     * reconciles against the window every frame; both paths feed the same arming state.
+     */
+    @Inject(method = {"keyReleased", "m_94721_"}, at = @At("HEAD"), require = 0, remap = false)
+    private void mcaconversations$keyReleased(int keyCode, int scanCode, int modifiers,
+                                              CallbackInfoReturnable<Boolean> cir) {
+        mcaconversations$renderer.confirmRelease(keyCode);
+    }
+
+    @Inject(method = {"mouseReleased", "m_6348_"}, at = @At("HEAD"), require = 0, remap = false)
+    private void mcaconversations$mouseReleased(double mouseX, double mouseY, int button,
+                                                CallbackInfoReturnable<Boolean> cir) {
+        if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            mcaconversations$renderer.confirmRelease(ConfirmationArming.POINTER);
+        }
     }
 
     @Inject(method = {"mouseClicked", "m_6375_"}, at = @At("HEAD"),
@@ -155,10 +208,14 @@ public abstract class InteractScreenChoiceMixin {
         }
         DialogueHitTarget target = mcaconversations$renderer.click(mouseX, mouseY);
         if (target instanceof DialogueHitTarget.Choice choice) {
-            mcaconversations$select(choice.absoluteIndex());
+            if (mcaconversations$renderer.confirmPress(ConfirmationArming.POINTER)) {
+                mcaconversations$select(choice.absoluteIndex());
+            }
             cir.setReturnValue(true);
         } else if (target instanceof DialogueHitTarget.PreviousPage
-                || target instanceof DialogueHitTarget.NextPage) {
+                || target instanceof DialogueHitTarget.NextPage
+                || target instanceof DialogueHitTarget.Question
+                || target instanceof DialogueHitTarget.Responses) {
             cir.setReturnValue(true);
         } else {
             // Preserve MCA's icon/button handling without letting a stale legacy hover submit.
@@ -171,9 +228,10 @@ public abstract class InteractScreenChoiceMixin {
     private void mcaconversations$mouseScrolled(double mouseX, double mouseY, double delta,
                                                 CallbackInfoReturnable<Boolean> cir) {
         if (mcaconversations$active()) {
-            if (!mcaconversations$renderer.scroll(mouseX, mouseY, delta)) {
-                mcaconversations$renderer.changePage(delta < 0.0D ? 1 : -1);
-            }
+            // The renderer routes the wheel to the region it is over. An event it does not claim is
+            // consumed and dropped: it must never turn the answer page from over the question, or
+            // from a reading region that has simply reached its end.
+            mcaconversations$renderer.scroll(mouseX, mouseY, delta);
             cir.setReturnValue(true);
         }
     }
@@ -187,6 +245,20 @@ public abstract class InteractScreenChoiceMixin {
         mcaconversations$speaker = null;
     }
 
+    /** Restores MCA's answer fields when a terminal reply re-offers the same question. */
+    @Unique
+    private void mcaconversations$restoreReofferedChoices() {
+        if (dialogQuestionId == null || dialogAnswers == null || !dialogAnswers.isEmpty()
+                || ClientChoiceMessages.state().locked()) {
+            return;
+        }
+        ClientChoiceState.ClientChoiceOffer offer = ClientChoiceMessages.state().offer().orElse(null);
+        if (offer != null && offer.frontend() == ConversationSession.Frontend.GUI
+                && offer.questionId().equals(dialogQuestionId) && !offer.answerIds().isEmpty()) {
+            dialogAnswers = offer.answerIds();
+        }
+    }
+
     /**
      * The sole ownership gate: every injector above asks this, and it reads the effective dialogue
      * style through the controller, so a style change takes effect atomically per frame and per
@@ -195,6 +267,10 @@ public abstract class InteractScreenChoiceMixin {
      */
     @Unique
     private boolean mcaconversations$active() {
+        if (ClientChoiceController.numberingEnabled()
+                && ClientChoiceMessages.state().lapseFor(ConversationSession.Frontend.GUI)) {
+            return true;
+        }
         if (!ClientChoiceController.numberingEnabled() || dialogQuestionText == null
                 || dialogQuestionId == null || dialogAnswers == null) {
             return false;
@@ -214,7 +290,8 @@ public abstract class InteractScreenChoiceMixin {
      */
     @Unique
     private boolean mcaconversations$select(int absoluteIndex) {
-        if (!ClientChoiceController.select(absoluteIndex, mcaconversations$villagerId)) {
+        if (!ClientChoiceController.select(absoluteIndex, mcaconversations$villagerId,
+                mcaconversations$renderer.answerText(absoluteIndex))) {
             return false;
         }
         dialogAnswerHover = null;

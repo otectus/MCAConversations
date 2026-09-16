@@ -10,6 +10,8 @@ import dev.otectus.mcaconversations.chat.Normalizer.NormalizedMessage;
 import dev.otectus.mcaconversations.chat.VillagerFinder.VillagerCandidate;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.conversation.ContentOperation;
+import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.conversation.EngagementPolicy;
@@ -72,6 +74,12 @@ public final class ChatModeDispatcher {
      * back to untouched vanilla chat rather than eating the message.
      */
     public static boolean interceptLocalChat(ServerChatEvent event) {
+        try (ContentOperation ignored = ContentOperation.open()) {
+            return interceptLocalChatPinned(event);
+        }
+    }
+
+    private static boolean interceptLocalChatPinned(ServerChatEvent event) {
         if (!McaConversationsConfig.COMMON.chatModeLocalChat.get()) {
             return false;
         }
@@ -124,7 +132,13 @@ public final class ChatModeDispatcher {
         }
     }
 
-    /** Background-thread entry point: capture plain data and hop to the server thread. */
+    /**
+     * Background-thread entry point: capture plain data and hop to the server thread.
+     *
+     * <p>Deliberately <em>not</em> where the bundle is captured. This runs off the server thread, and
+     * background work must have no ambient bundle — the operation begins where the work does, inside
+     * the hop.
+     */
     public static void onChat(ServerChatEvent event) {
         ServerPlayer player = event.getPlayer();
         if (player == null) {
@@ -140,7 +154,10 @@ public final class ChatModeDispatcher {
                 server.overworld().getGameTime());
         try {
             server.execute(() -> {
-                try {
+                // One captured bundle for the whole pipeline: target, address, normalize, match,
+                // gate-preview and drive all read content, and a reload landing between two of them
+                // would answer one message out of two different catalogs.
+                try (ContentOperation ignored = ContentOperation.open()) {
                     handle(player, accepted.text());
                 } catch (Throwable t) {
                     McaConversations.LOGGER.warn("chat-mode handler failed; ignoring message", t);
@@ -313,7 +330,8 @@ public final class ChatModeDispatcher {
             // A bare name ("Nataliya?") is a call, not a question: acknowledge, turn, and wait.
             if (address.named()) {
                 ChatDelivery.villagerSays(target.entity(), player,
-                        voiced(target.entity(), player, "chatmode.attentive"));
+                        voiced(target.entity(), player, "chatmode.attentive"),
+                        UtteranceAudience.ofStaticLine("chatmode.attentive"));
                 ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
                 attend(target, player, now);
             }
@@ -639,12 +657,19 @@ public final class ChatModeDispatcher {
         attend(target, player, now); // still conversing, just changing the subject
     }
 
-    private static void drive(VillagerCandidate target, ServerPlayer player, String question, String answer, long now) {
-        driveStaggered(target, player, question, answer, now, 0, true);
+    private static dev.otectus.mcaconversations.conversation.ChoiceOutcome drive(
+            VillagerCandidate target, ServerPlayer player, String question, String answer, long now) {
+        return driveStaggered(target, player, question, answer, now, 0, true);
     }
 
     /** The same live gates apply to packet shortcuts as to text typed into chat. */
     public static boolean canSelectOfferedChoice(Entity villager, ServerPlayer player, long now) {
+        try (ContentOperation ignored = ContentOperation.open()) {
+            return canSelectOfferedChoicePinned(villager, player, now);
+        }
+    }
+
+    private static boolean canSelectOfferedChoicePinned(Entity villager, ServerPlayer player, long now) {
         if (!McaConversationsConfig.COMMON.enableChatMode.get() || !isOptedIn(player)
                 || McaCompat.isBaby(villager)
                 || villager instanceof net.minecraft.world.entity.LivingEntity living && living.isSleeping()
@@ -662,14 +687,24 @@ public final class ChatModeDispatcher {
                         || now - session.lastProcessedGameTime >= cooldown);
     }
 
-    /** Entry used after the numbered packet service has atomically consumed a CHAT offer. */
-    public static void selectOfferedChoice(Entity villager, ServerPlayer player,
-                                           String question, String answer, long now) {
+    /**
+     * Entry used after the numbered packet service has atomically consumed a CHAT offer. Reports how
+     * the exchange ended, so the caller never signals success for an answer that never ran.
+     */
+    public static dev.otectus.mcaconversations.conversation.ChoiceOutcome selectOfferedChoice(
+            Entity villager, ServerPlayer player, String question, String answer, long now) {
+        try (ContentOperation ignored = ContentOperation.open()) {
+            return selectOfferedChoicePinned(villager, player, question, answer, now);
+        }
+    }
+
+    private static dev.otectus.mcaconversations.conversation.ChoiceOutcome selectOfferedChoicePinned(
+            Entity villager, ServerPlayer player, String question, String answer, long now) {
         markProcessed(player, now);
         VillagerCandidate target = new VillagerCandidate(villager,
                 McaCompat.getVillagerName(villager).orElse(""),
                 villager.distanceToSqr(player), 1.0D);
-        drive(target, player, question, answer, now);
+        return drive(target, player, question, answer, now);
     }
 
     /**
@@ -677,13 +712,18 @@ public final class ChatModeDispatcher {
      * the villager as the sticky target. Ambient non-first responders drive normally but do not steal
      * stickiness (spec §12.4).
      */
-    private static void driveStaggered(VillagerCandidate target, ServerPlayer player, String question,
-                                       String answer, long now, int stagger, boolean makeSticky) {
+    private static dev.otectus.mcaconversations.conversation.ChoiceOutcome driveStaggered(
+            VillagerCandidate target, ServerPlayer player, String question,
+            String answer, long now, int stagger, boolean makeSticky) {
         // Every exchange replaces the old decision, including a subject change whose result only
         // says a line and never sends a follow-up menu. Keep both frontend views synchronized.
+        // Superseded, not consumed: this decision is being replaced unanswered, and telling the
+        // client it was accepted is the same lie as reporting success for an action that threw. An
+        // offer the selection service already claimed is left alone — its own outcome names it.
         ConversationSessions.raw(player.getUUID()).flatMap(ConversationSession::currentOffer)
+                .filter(offer -> !offer.consumed())
                 .ifPresent(offer -> dev.otectus.mcaconversations.network.ConversationsNetwork.clearOffer(player,
-                        offer.revision(), dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason.CONSUMED));
+                        offer.revision(), dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason.SUPERSEDED));
         ConversationSession shared = ConversationSessions.get(player.getUUID(), now);
         shared.setVillagerId(target.entity().getUUID());
         shared.setFrontend(ConversationSession.Frontend.CHAT);
@@ -700,7 +740,7 @@ public final class ChatModeDispatcher {
             McaConversations.LOGGER.debug("chat-mode answer abandoned before selectAnswer: {}", verdict);
             ConversationSessions.close(player.getUUID(),
                     dev.otectus.mcaconversations.conversation.CloseReason.of(verdict));
-            return;
+            return dev.otectus.mcaconversations.conversation.ChoiceOutcome.of(verdict);
         }
 
         // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
@@ -710,6 +750,9 @@ public final class ChatModeDispatcher {
         dev.otectus.mcaconversations.scene.ConversationPlanner
                 .onAnswerSubmitted(target.entity(), player, question, answer);
         boolean ok;
+        long revisionBefore = ConversationSessions.raw(player.getUUID())
+                .flatMap(ConversationSession::currentOffer)
+                .map(ConversationSession.ChoiceOffer::revision).orElse(-1L);
         try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity(), stagger)) {
             ok = McaCompat.selectAnswer(target.entity(), player, question, answer);
             if (showHearts && ok) {
@@ -717,6 +760,9 @@ public final class ChatModeDispatcher {
                 scope.heartsDelta = McaCompat.getHearts(player, target.entity()) - heartsBefore;
             }
             if (ok) {
+                // Re-arm before the queued options capture their revision.
+                ChoiceSelectionService.reofferAfterTerminal(player, target.entity(), question,
+                        revisionBefore, now);
                 // selectAnswer may have left a new decision open; the redirect mixin recorded what was
                 // offered, so the reply can carry the choices the GUI would have drawn as buttons.
                 String nextQuestion = ChatModeSession.currentQuestion(player.getUUID());
@@ -742,9 +788,20 @@ public final class ChatModeDispatcher {
             // exchange, and every interjection has to answer the beat that was just spoken.
             dev.otectus.mcaconversations.chat.group.GroupDirector
                     .maybeInterject(target.entity(), player, now);
-        } else {
-            McaConversations.LOGGER.debug("chat-mode selectAnswer({}, {}) returned false", question, answer);
+            return dev.otectus.mcaconversations.conversation.ChoiceOutcome.CONSUMED;
         }
+        // A refused engine call is a contained failure, not a turn: the exchange ends through the
+        // one teardown path, with the reason that says a technical fault stopped it. Nothing is
+        // retried and no consequence is assumed to have landed.
+        McaConversations.LOGGER.warn("chat-mode selectAnswer({}, {}) reported failure", question, answer);
+        // Capture a partially created successor before teardown removes the only record of it.
+        ConversationSessions.raw(player.getUUID()).flatMap(ConversationSession::currentOffer)
+                .ifPresent(offer -> dev.otectus.mcaconversations.network.ConversationsNetwork.clearOffer(
+                        player, offer.revision(),
+                        dev.otectus.mcaconversations.network.ChoiceClearS2C.Reason.EXECUTION_FAILED));
+        ConversationSessions.close(player.getUUID(),
+                dev.otectus.mcaconversations.conversation.CloseReason.CONTAINED_ERROR);
+        return dev.otectus.mcaconversations.conversation.ChoiceOutcome.EXECUTION_FAILED;
     }
 
     /** Graduated in-character confusion (§11), tracked per session: confused → hint → shrug+mute. */
@@ -769,18 +826,21 @@ public final class ChatModeDispatcher {
     private static void clarify(VillagerCandidate target, ServerPlayer player, Scored top, Scored alt, long now) {
         // %1$s = player name (auto), %2$s = first topic, %3$s = second topic.
         ChatDelivery.villagerSays(target.entity(), player,
-                voiced(target.entity(), player, "chatmode.clarify", topicName(top), topicName(alt)));
+                voiced(target.entity(), player, "chatmode.clarify", topicName(top), topicName(alt)),
+                UtteranceAudience.ofStaticLine("chatmode.clarify"));
         attend(target, player, now); // waiting on the player's answer
     }
 
     private static void deflect(VillagerCandidate target, ServerPlayer player, String key) {
-        ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, "chatmode." + key));
+        ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, "chatmode." + key),
+                UtteranceAudience.ofStaticLine("chatmode." + key));
     }
 
     private static void deflectHint(VillagerCandidate target, ServerPlayer player) {
         // %1$s = player name (auto), %2$s = the topic list.
         ChatDelivery.villagerSays(target.entity(), player,
-                voiced(target.entity(), player, "chatmode.hint", eligibleTopics(target, player)));
+                voiced(target.entity(), player, "chatmode.hint", eligibleTopics(target, player)),
+                UtteranceAudience.ofStaticLine("chatmode.hint"));
     }
 
     /** The current game day, for the records that count in days rather than ticks. */
@@ -809,10 +869,64 @@ public final class ChatModeDispatcher {
         String question = entry.get().entryQuestion();
         String answer = entry.get().entryAnswer();
         if (!McaCompat.checkConstraints(target.entity(), player, question, answer)) {
-            return false;
+            // The player typed the phrase of an entry this villager was showing them, so silence is
+            // the one answer that is not available: they asked for something they were offered.
+            return explainUnavailable(target, player, slot);
         }
         drive(target, player, question, answer, now);
         return true;
+    }
+
+    /**
+     * Says, in plain words, why an offered hub entry cannot be opened.
+     *
+     * <p>Descriptive only. The sentence is about a topic this player was just shown — nothing hidden,
+     * undiscovered or age-gated ever reaches here, because nothing of that kind is ever on the hub —
+     * and it names no topic id, no condition and no eligibility reason. Sent as narration rather than
+     * as villager speech: a refusal to open a menu entry is the game telling the player where they
+     * stand, not the villager saying a line.
+     */
+    private static boolean explainUnavailable(VillagerCandidate target, ServerPlayer player,
+                                              dev.otectus.mcaconversations.hub.HubSlot slot) {
+        dev.otectus.mcaconversations.hub.TopicAvailability reason =
+                availabilityOf(target, player, slot);
+        net.minecraft.network.chat.Component sentence =
+                reason.sentence(McaCompat.getVillagerName(target.entity())
+                        .filter(name -> !name.isBlank())
+                        .<net.minecraft.network.chat.Component>map(
+                                net.minecraft.network.chat.Component::literal)
+                        .orElse(null));
+        if (sentence == null) {
+            return false;
+        }
+        player.sendSystemMessage(sentence);
+        return true;
+    }
+
+    /** Which of the three social reasons applies, from what the server already knows. */
+    static dev.otectus.mcaconversations.hub.TopicAvailability availabilityOf(
+            VillagerCandidate target, ServerPlayer player,
+            dev.otectus.mcaconversations.hub.HubSlot slot) {
+        try {
+            if (McaCompat.isInteractingWith(target.entity())
+                    .filter(holder -> !holder.equals(player.getUUID())).isPresent()) {
+                return dev.otectus.mcaconversations.hub.TopicAvailability.BUSY;
+            }
+            long today = gameDay(player);
+            boolean discussedToday = dev.otectus.mcaconversations.history.History
+                    .of(target.entity())
+                    .flatMap(history -> history.peekPair(player.getUUID()))
+                    .map(pair -> pair.recency().daysSince(
+                            dev.otectus.mcaconversations.history.TopicRecencyRecord.Level.TOPIC,
+                            slot.topic(), today) == 0L)
+                    .orElse(false);
+            if (discussedToday) {
+                return dev.otectus.mcaconversations.hub.TopicAvailability.DISCUSSED_TODAY;
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("availability explanation fell back to 'not ready'", t);
+        }
+        return dev.otectus.mcaconversations.hub.TopicAvailability.NOT_READY;
     }
 
     /** Preferred hint order for the shipped topic hubs; datapack-added topics follow alphabetically. */
@@ -974,6 +1088,12 @@ public final class ChatModeDispatcher {
      * status the command reports. Op-gated by the command.
      */
     public static String debugAsk(ServerPlayer player, String questionId, String answerName) {
+        try (ContentOperation ignored = ContentOperation.open()) {
+            return debugAskPinned(player, questionId, answerName);
+        }
+    }
+
+    private static String debugAskPinned(ServerPlayer player, String questionId, String answerName) {
         if (!McaBridge.isAvailable()) {
             return "MCA is not available; chat mode is inert.";
         }
@@ -1049,7 +1169,8 @@ public final class ChatModeDispatcher {
                              boolean makeSticky) {
         String pool = McaCompat.getHearts(player, target.entity()) < 0
                 ? "chatmode.hail_cold" : "chatmode.hail";
-        ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger);
+        ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger,
+                UtteranceAudience.ofStaticLine(pool));
         if (makeSticky) {
             ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
         }
@@ -1063,6 +1184,12 @@ public final class ChatModeDispatcher {
      * run while the feature is live.
      */
     public static List<String> debugScore(ServerPlayer player, String message) {
+        try (ContentOperation ignored = ContentOperation.open()) {
+            return debugScorePinned(player, message);
+        }
+    }
+
+    private static List<String> debugScorePinned(ServerPlayer player, String message) {
         if (!McaBridge.isAvailable()) {
             return List.of("MCA is not available; chat mode is inert.");
         }

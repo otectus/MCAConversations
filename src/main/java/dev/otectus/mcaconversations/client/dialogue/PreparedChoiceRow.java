@@ -13,9 +13,18 @@ public record PreparedChoiceRow(
         DialogueChoiceLayout.Rect baseVisualRect,
         Component answer,
         List<FormattedCharSequence> lines,
-        boolean textClipped
+        boolean textClipped,
+        boolean expanded
 ) {
     public PreparedChoiceRow {
         lines = List.copyOf(lines);
+    }
+
+    /** Compatibility constructor for callers that never expand a row. */
+    public PreparedChoiceRow(int absoluteIndex, int visibleNumber,
+                             DialogueChoiceLayout.Rect hitRect,
+                             DialogueChoiceLayout.Rect baseVisualRect, Component answer,
+                             List<FormattedCharSequence> lines, boolean textClipped) {
+        this(absoluteIndex, visibleNumber, hitRect, baseVisualRect, answer, lines, textClipped, false);
     }
 }

@@ -365,17 +365,29 @@ public final class LivingHistoriesRegistrar {
         switch (directive.op()) {
             case OPEN -> History.openEpisode(villager, directive.kind(), directive.slots(), today)
                     .ifPresent(episode -> History.witness(villager, episode.id(), player, today));
-            case ADVANCE -> History.liveEpisode(villager, directive.kind(), today)
+            case ADVANCE -> episodeForAction(villager, player, directive.kind(), today)
                     .ifPresent(episode -> History.transition(villager, episode.id(),
                             directive.state().orElse(episode.state()), today));
-            case WITNESS -> History.liveEpisode(villager, directive.kind(), today)
+            case WITNESS -> episodeForAction(villager, player, directive.kind(), today)
                     .ifPresent(episode -> History.witness(villager, episode.id(), player, today));
-            case CORRECT -> History.liveEpisode(villager, directive.kind(), today)
+            case CORRECT -> episodeForAction(villager, player, directive.kind(), today)
                     .ifPresent(episode -> History.correctEpisode(villager, episode.id()));
             default -> {
                 // INVALID never reaches here: isValid() is checked by the caller.
             }
         }
+    }
+
+    private static Optional<dev.otectus.mcaconversations.history.EpisodeRecord> episodeForAction(
+            Entity villager, ServerPlayer player, String kind, long today) {
+        Optional<UUID> bound = planOf(player).flatMap(ConversationPlan::episodeId);
+        if (bound.isPresent()) {
+            // A remembered scene acts on its pinned episode, including SUCCEEDED -> REMEMBERED.
+            // Looking up a live copy by kind both lost that transition and could alter a newer story.
+            return History.of(villager).flatMap(history -> history.episode(bound.get()))
+                    .filter(episode -> episode.kind().equals(kind) && !episode.hasExpired(today));
+        }
+        return History.liveEpisode(villager, kind, today);
     }
 
     private static void applyThread(HistoryDirective.Thread directive, Entity villager,

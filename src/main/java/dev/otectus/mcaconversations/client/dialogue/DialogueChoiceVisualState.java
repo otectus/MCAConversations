@@ -1,11 +1,23 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
-/** Screen-local, client-clocked animation state; it never decides offer or selection truth. */
+/**
+ * Screen-local, client-clocked animation state; it never decides offer or selection truth.
+ *
+ * <p>The entrance is keyed to the lifetime of the presentation rather than to the offer revision.
+ * A conversation is a sequence of questions on one card, and the gap between two of them is the
+ * server thinking, not the card closing and opening again: replaying the entrance on every answer
+ * turns a slow connection into a flicker. So {@code enterAt} is stamped once, when the card first
+ * appears, and again only after {@link #reset()} — which the screen calls when it actually closes.
+ * Content-scoped timings ({@code contentAt}) still restart per question, which is what keeps the
+ * row cascade and the question reveal working under FULL.
+ */
 public final class DialogueChoiceVisualState {
 
     private long tick;
     private long revision = -1L;
+    private boolean presented;
     private float enterAt;
+    private float contentAt;
     private int focusedIndex = -1;
     private int previousFocus = -1;
     private float focusAt;
@@ -25,9 +37,14 @@ public final class DialogueChoiceVisualState {
     public void observe(ClientChoiceState state, float partialTick) {
         float now = time(partialTick);
         long incoming = state.offer().map(ClientChoiceState.ClientChoiceOffer::revision).orElse(-1L);
+        if (!presented) {
+            presented = true;
+            enterAt = now;
+            contentAt = now;
+        }
         if (incoming != revision) {
             revision = incoming;
-            enterAt = now;
+            contentAt = now;
             focusedIndex = -1;
             previousFocus = -1;
             lockedIndex = -1;
@@ -54,7 +71,9 @@ public final class DialogueChoiceVisualState {
     }
 
     public float rowEntryProgress(int visibleIndex, float partialTick, ConversationMotionSpec spec) {
-        float elapsed = time(partialTick) - enterAt - visibleIndex * spec.rowStagger();
+        // Content-scoped: rows belong to the question on screen, so each new set of answers arrives
+        // the way the profile says answers arrive, while the card itself enters only once.
+        float elapsed = time(partialTick) - contentAt - visibleIndex * spec.rowStagger();
         return ConversationMotionSpec.easeOutCubic(durationProgress(elapsed, spec.rowEntryTicks()));
     }
 
@@ -74,9 +93,9 @@ public final class DialogueChoiceVisualState {
         return 0.0F;
     }
 
-    /** How far the question has appeared, measured from the moment the card entered. */
+    /** How far the question has appeared, measured from the moment that question arrived. */
     public float questionRevealProgress(float partialTick, float ticks) {
-        return durationProgress(time(partialTick) - enterAt, ticks);
+        return durationProgress(time(partialTick) - contentAt, ticks);
     }
 
     public float pageProgress(float partialTick, ConversationMotionSpec spec) {
@@ -108,7 +127,9 @@ public final class DialogueChoiceVisualState {
                         durationProgress(elapsed - press, settle)) * spec.selectionSettleRise();
     }
 
+    /** Ends the presentation: the next offer is a genuine open and enters again. */
     public void reset() {
+        presented = false;
         revision = -1L;
         focusedIndex = -1;
         previousFocus = -1;

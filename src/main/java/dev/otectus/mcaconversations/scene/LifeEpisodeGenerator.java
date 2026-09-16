@@ -102,6 +102,19 @@ public final class LifeEpisodeGenerator {
             if (candidates.isEmpty()) {
                 return Optional.empty();
             }
+            // A completed situation still belongs to this pair's follow-up scenes. Do not create
+            // another active copy the moment an answer advances the old one to SUCCEEDED.
+            Optional<EpisodeRecord> bound = History.pair(villager, player).stream()
+                    .flatMap(pair -> pair.threads().stream())
+                    .filter(thread -> thread.topic().equals(topic))
+                    .flatMap(thread -> thread.episodeId().stream())
+                    .flatMap(id -> History.of(villager).flatMap(history -> history.episode(id)).stream())
+                    .filter(episode -> !episode.hasExpired(today)
+                            && candidates.stream().anyMatch(template -> template.kind().equals(episode.kind())))
+                    .findFirst();
+            if (bound.isPresent()) {
+                return bound;
+            }
             // Resume before create. A situation the player already knows about is the one that is
             // still going on; opening a second would make the villager's life restart every visit.
             for (EpisodeTemplate template : candidates) {
