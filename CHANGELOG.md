@@ -70,6 +70,22 @@ follow the player to the next villager.
   discussion hands them straight back to their own schedule, and returning to the topic list is not
   ending it. `holdVillagerDuringInteraction` turns the standing still off and keeps the facing.
 
+- **Another player can take the conversation over, and the villager simply turns to them.** A
+  villager has one person they are talking to, and until now a second player walking up argued with
+  the first one's conversation instead of replacing it. An accepted interaction from somebody else
+  now hands the villager over in a single step on the server: they keep standing exactly where they
+  are — there is no moment in between in which they are free to walk off — and turn to face whoever
+  just spoke to them. The first player's window closes saying the villager is speaking with someone
+  else, and their card, their pending reply and anything their conversation had queued go with it.
+  The second player starts a conversation of their own and inherits nothing: no thread, no choices,
+  no history belonging to the first. Nor can the first player's client reach the new conversation
+  afterwards — a late close, a liveness ping, a click on the card that has already gone, even MCA's
+  own close arriving on their connection, all refused, with the villager still held by the person
+  actually talking to them. A villager who has just been attacked can be taken over by nobody until
+  the delay has run, and repeated opens of the same villager by the same player are limited, so a
+  stuck right-click cannot flicker a villager between owners several times a second. Bystanders and
+  group dialogue are unchanged: neither of them is an owner.
+
 ### Changed
 
 - **An attack ends the conversation, and the conversation cannot come back.** Being hit used to

@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.conversation.CloseReason;
 import dev.otectus.mcaconversations.conversation.ConversationHandle;
 import dev.otectus.mcaconversations.conversation.ConversationLifecycle;
 import dev.otectus.mcaconversations.conversation.ConversationPresence;
+import dev.otectus.mcaconversations.conversation.OpenRateLimiter;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.chat.ConversationMovementController.Stance;
@@ -123,6 +124,7 @@ class ConversationMovementControllerTest {
             ConversationLifecycle.clearTeardownHooks();
             ConversationSessions.clearAllForTesting();
             ConversationPresence.clear();
+            OpenRateLimiter.clear();
             VillagerAttention.reset();
         }
     }

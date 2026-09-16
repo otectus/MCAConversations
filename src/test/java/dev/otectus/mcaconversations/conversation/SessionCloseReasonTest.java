@@ -28,6 +28,7 @@ class SessionCloseReasonTest {
     void reset() {
         ConversationSessions.clearAllForTesting();
         ConversationPresence.clear();
+        OpenRateLimiter.clear();
         VillagerAttention.reset();
         ChatModeScheduler.reset();
     }

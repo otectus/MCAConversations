@@ -41,6 +41,7 @@ class ConversationDangerTest {
         ConversationLifecycle.clearTeardownHooks();
         ConversationSessions.clearAllForTesting();
         ConversationPresence.clear();
+        OpenRateLimiter.clear();
         DangerLockout.clear();
         VillagerAttention.reset();
         ChatModeScheduler.reset();
@@ -105,6 +106,27 @@ class ConversationDangerTest {
         assertTrue(ConversationLifecycle.begin(PLAYER, VILLAGER, DIM,
                 ConversationSession.Frontend.GUI, 100 + delay).isPresent(),
                 "once the delay has run the villager talks again");
+    }
+
+    @Test
+    @DisplayName("a takeover during the lockout is refused, and leaves the discussion it aimed at alone")
+    void aTakeoverDuringTheLockoutIsRefused() {
+        ConversationHandle mine = begin(PLAYER, 100);
+        // The villager was hit while somebody else was in range — being taken over is one more way
+        // of being pinned, so the lockout has to refuse it exactly like any other open.
+        DangerLockout.lock(VILLAGER, 100, 40);
+
+        assertTrue(ConversationLifecycle.begin(OTHER, VILLAGER, DIM,
+                ConversationSession.Frontend.GUI, 110).isEmpty(),
+                "a second player cannot take over a villager who is under a danger lockout");
+
+        assertTrue(ConversationPresence.ownsVillager(mine), "and the refusal changes nothing at all");
+        assertEquals(PLAYER, VillagerAttention.activeHolds().get(VILLAGER).playerId());
+        assertEquals(mine, VillagerAttention.activeHolds().get(VILLAGER).owner());
+
+        assertTrue(ConversationLifecycle.begin(OTHER, VILLAGER, DIM,
+                ConversationSession.Frontend.GUI, 140).isPresent(),
+                "once the lockout has run the takeover is ordinary again");
     }
 
     @Test

@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,6 +31,7 @@ class ConversationHandleIsolationTest {
 
     private static final UUID PLAYER = UUID.nameUUIDFromBytes("handle-player".getBytes());
     private static final UUID OTHER_PLAYER = UUID.nameUUIDFromBytes("handle-player-2".getBytes());
+    private static final UUID THIRD_PLAYER = UUID.nameUUIDFromBytes("handle-player-3".getBytes());
     private static final UUID VILLAGER = UUID.nameUUIDFromBytes("handle-villager".getBytes());
     private static final UUID OTHER_VILLAGER = UUID.nameUUIDFromBytes("handle-villager-2".getBytes());
     private static final String DIM = "minecraft:overworld";
@@ -40,6 +42,7 @@ class ConversationHandleIsolationTest {
         ConversationLifecycle.clearTeardownHooks();
         ConversationSessions.clearAllForTesting();
         ConversationPresence.clear();
+        OpenRateLimiter.clear();
         VillagerAttention.reset();
         ChatModeScheduler.reset();
     }
@@ -190,5 +193,139 @@ class ConversationHandleIsolationTest {
         assertFalse(ConversationPresence.isCurrent(handle));
         assertEquals(0, ConversationSessions.size());
         assertFalse(VillagerAttention.activeHolds().containsKey(VILLAGER));
+    }
+
+    // Takeover ---------------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("a second player's interaction takes the villager over, and the hold never lapses")
+    void anAcceptedInteractionTakesTheVillagerOver() {
+        ConversationHandle first = begin(PLAYER, VILLAGER);
+        ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 100);
+        ChatModeScheduler.scheduleOrdered(PLAYER, 400, () -> { });
+
+        // What the first player's teardown sees while it is running. A gap here — one tick with the
+        // villager unheld — is the whole failure this ordering exists to prevent, and it is the only
+        // moment it could ever appear, so it is observed from inside the teardown itself.
+        AttentionLedger.Hold[] duringTeardown = new AttentionLedger.Hold[1];
+        CloseReason[] toldWhy = new CloseReason[1];
+        ConversationLifecycle.addTeardownHook((handle, reason) -> {
+            duringTeardown[0] = VillagerAttention.activeHolds().get(VILLAGER);
+            toldWhy[0] = reason;
+        });
+
+        ConversationHandle second = ConversationLifecycle
+                .begin(OTHER_PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI, 200).orElseThrow();
+
+        assertNotEquals(first, second);
+        assertEquals(CloseReason.TAKEN_OVER, toldWhy[0],
+                "the first player's window is told why it closed");
+        assertNotNull(duringTeardown[0], "the villager is never unheld between the two owners");
+        assertEquals(second, duringTeardown[0].owner(),
+                "and the hold already belongs to the player taking over");
+        assertTrue(duringTeardown[0].ownsMovement(), "which is the hold that stops them walking");
+
+        assertTrue(ConversationPresence.ownsVillager(second));
+        assertTrue(ConversationPresence.ownsPlayer(second));
+        assertTrue(ConversationPresence.ofPlayer(PLAYER).isEmpty(), "the first discussion is over");
+        assertEquals(OTHER_PLAYER, VillagerAttention.activeHolds().get(VILLAGER).playerId(),
+                "the villager turns to whoever owns them now");
+        assertEquals(0, ChatModeScheduler.pendingFor(PLAYER),
+                "and nothing the first discussion queued survives it");
+        assertEquals(Optional.of(second), ConversationSessions.raw(OTHER_PLAYER).orElseThrow().handle());
+        assertTrue(ConversationSessions.raw(PLAYER).isEmpty(),
+                "the second player inherits no thread of the first player's");
+    }
+
+    @Test
+    @DisplayName("three players in sequence: only the last one owns the villager, its hold and its session")
+    void threePlayersInSequenceLeaveOneOwner() {
+        ConversationHandle a = begin(PLAYER, VILLAGER);
+        ConversationHandle b = ConversationLifecycle
+                .begin(OTHER_PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI, 200).orElseThrow();
+        ConversationHandle c = ConversationLifecycle
+                .begin(THIRD_PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI, 300).orElseThrow();
+
+        assertEquals(c, ConversationPresence.ofVillager(VILLAGER).orElseThrow());
+        assertTrue(ConversationPresence.ofPlayer(PLAYER).isEmpty());
+        assertTrue(ConversationPresence.ofPlayer(OTHER_PLAYER).isEmpty());
+        assertEquals(1, ConversationPresence.size(), "one owner per villager, never three");
+
+        AttentionLedger.Hold hold = VillagerAttention.activeHolds().get(VILLAGER);
+        assertEquals(c, hold.owner());
+        assertEquals(THIRD_PLAYER, hold.playerId());
+
+        // Neither predecessor can reach the survivor, through any door.
+        assertTrue(ConversationLifecycle.terminate(a, CloseReason.CLIENT_CLOSED).isEmpty());
+        assertTrue(ConversationLifecycle.terminate(b, CloseReason.CLIENT_CLOSED).isEmpty());
+        assertEquals(c, ConversationPresence.ofVillager(VILLAGER).orElseThrow());
+        assertEquals(c, VillagerAttention.activeHolds().get(VILLAGER).owner(),
+                "a predecessor's close never hands back the current owner's villager");
+    }
+
+    @Test
+    @DisplayName("interacting again as the current owner does not mint a second discussion")
+    void aDuplicateInteractFromTheOwnerChangesNothing() {
+        ConversationHandle owner = begin(PLAYER, VILLAGER);
+        int allowanceAfterTheOpen = OpenRateLimiter.remaining(PLAYER, VILLAGER, 100);
+
+        ConversationHandle again = ConversationLifecycle
+                .begin(PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI, 101).orElseThrow();
+
+        assertSame(owner, again, "a second right-click on the villager you are talking to is one discussion");
+        assertEquals(allowanceAfterTheOpen, OpenRateLimiter.remaining(PLAYER, VILLAGER, 101),
+                "and it is not charged as an open, because it opened nothing");
+        assertEquals(owner, VillagerAttention.activeHolds().get(VILLAGER).owner());
+    }
+
+    @Test
+    @DisplayName("closing and immediately walking back up mints a new discussion, and the old close is a no-op")
+    void aRapidReopenIsANewDiscussionNotAHandoff() {
+        ConversationHandle first = begin(PLAYER, VILLAGER);
+        assertTrue(ConversationLifecycle
+                .terminateIfCurrent(PLAYER, first.sessionId(), VILLAGER, CloseReason.CLIENT_CLOSED)
+                .isPresent());
+
+        // Same tick, same pair: a reopen, never a takeover — there is nobody to take it over from.
+        ConversationHandle second = begin(PLAYER, VILLAGER);
+        assertNotEquals(first, second);
+        assertEquals(PLAYER, second.playerId(), "the same player is still the owner");
+        assertEquals(second, VillagerAttention.activeHolds().get(VILLAGER).owner());
+
+        // The window that was dismissed a moment ago finally reports itself closed.
+        assertTrue(ConversationLifecycle
+                .terminateIfCurrent(PLAYER, first.sessionId(), VILLAGER, CloseReason.CLIENT_CLOSED)
+                .isEmpty(), "a close naming the dismissed discussion never closes its replacement");
+        assertTrue(ConversationPresence.ownsPlayer(second));
+        assertTrue(ConversationPresence.ownsVillager(second));
+    }
+
+    @Test
+    @DisplayName("repeated opens of one pair are refused for the rest of the window, and only that pair")
+    void repeatedOpensOfOnePairAreRateLimited() {
+        for (int open = 0; open < OpenRateLimiter.BURST; open++) {
+            ConversationHandle handle = ConversationLifecycle
+                    .begin(PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI, 100).orElseThrow();
+            ConversationLifecycle.terminate(handle, CloseReason.CLIENT_CLOSED);
+        }
+
+        // A discussion with somebody else is a different pair and is unaffected by the flicker.
+        ConversationHandle elsewhere = ConversationLifecycle
+                .begin(PLAYER, OTHER_VILLAGER, DIM, ConversationSession.Frontend.GUI, 101).orElseThrow();
+
+        assertTrue(ConversationLifecycle
+                .begin(PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI, 101).isEmpty(),
+                "the pair has had its opens for this window");
+        assertTrue(ConversationPresence.ownsPlayer(elsewhere),
+                "and a refused open tears nothing down: the live discussion is exactly as it was");
+        assertTrue(ConversationPresence.ownsVillager(elsewhere));
+
+        // Once the window has rolled over the same interaction is ordinary again.
+        ConversationHandle later = ConversationLifecycle
+                .begin(PLAYER, VILLAGER, DIM, ConversationSession.Frontend.GUI,
+                        100 + OpenRateLimiter.WINDOW_TICKS).orElseThrow();
+        assertTrue(ConversationPresence.ownsVillager(later));
+        assertFalse(ConversationPresence.isCurrent(elsewhere),
+                "and it ends the discussion it replaced, the ordinary way");
     }
 }

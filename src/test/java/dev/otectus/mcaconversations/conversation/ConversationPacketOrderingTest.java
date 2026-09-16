@@ -28,6 +28,7 @@ class ConversationPacketOrderingTest {
 
     private static final UUID PLAYER = UUID.nameUUIDFromBytes("ordering-player".getBytes());
     private static final UUID OTHER_PLAYER = UUID.nameUUIDFromBytes("ordering-player-2".getBytes());
+    private static final UUID THIRD_PLAYER = UUID.nameUUIDFromBytes("ordering-player-3".getBytes());
     private static final UUID VILLAGER = UUID.nameUUIDFromBytes("ordering-villager".getBytes());
     private static final String DIM = "minecraft:overworld";
 
@@ -37,6 +38,7 @@ class ConversationPacketOrderingTest {
         ConversationLifecycle.clearTeardownHooks();
         ConversationSessions.clearAllForTesting();
         ConversationPresence.clear();
+        OpenRateLimiter.clear();
         VillagerAttention.reset();
         ChatModeScheduler.reset();
     }
@@ -223,5 +225,43 @@ class ConversationPacketOrderingTest {
                 CloseReason.CLIENT_CLOSED);
         assertEquals(1, ChatModeScheduler.pendingFor(PLAYER));
         assertEquals(second, ConversationPresence.ofPlayer(PLAYER).orElseThrow());
+    }
+
+    @Test
+    @DisplayName("after two takeovers, nothing either predecessor sends reaches the player now talking")
+    void noPredecessorsPacketReachesTheCurrentOwner() {
+        ConversationHandle first = begin(PLAYER, VILLAGER);
+        ConversationHandle second = ConversationLifecycle.begin(OTHER_PLAYER, VILLAGER, DIM,
+                ConversationSession.Frontend.GUI, 200L).orElseThrow();
+        ConversationHandle current = ConversationLifecycle.begin(THIRD_PLAYER, VILLAGER, DIM,
+                ConversationSession.Frontend.GUI, 300L).orElseThrow();
+        assertNotEquals(first, second);
+        assertEquals(current, ConversationPresence.ofVillager(VILLAGER).orElseThrow());
+
+        // Both handles are now nobody's. Every packet either connection could still have in flight
+        // names one of them, and each kind is refused in its own way.
+        for (ConversationHandle stale : java.util.List.of(first, second)) {
+            assertTrue(judge(stale).stale(), "an answer clicked before the takeover is refused");
+            assertFalse(ConversationPresence.heartbeat(stale.playerId(), stale.sessionId(), VILLAGER, 310L),
+                    "a liveness ping from a discussion that ended renews nothing");
+            assertTrue(ConversationLifecycle.terminateIfCurrent(stale.playerId(), stale.sessionId(),
+                    VILLAGER, CloseReason.CLIENT_CLOSED).isEmpty(),
+                    "and their close ends only the discussion they named, which is already over");
+            assertFalse(HandleAuthority.allowsNativeCloseOf(VILLAGER, stale.playerId()),
+                    "nor may MCA's own tokenless close arrive on their connection");
+        }
+
+        // Naming the live discussion instead of their own buys them nothing either.
+        assertTrue(HandleAuthority.judgeFor(PLAYER, current.sessionId(), VILLAGER).stale());
+        assertFalse(ConversationPresence.heartbeat(PLAYER, current.sessionId(), VILLAGER, 311L));
+        assertTrue(ConversationLifecycle.terminateIfCurrent(PLAYER, current.sessionId(), VILLAGER,
+                CloseReason.CLIENT_CLOSED).isEmpty());
+
+        assertEquals(current, ConversationPresence.ofVillager(VILLAGER).orElseThrow());
+        assertEquals(current, VillagerAttention.activeHolds().get(VILLAGER).owner(),
+                "the villager is still held by the player actually talking to them");
+        assertTrue(ConversationPresence.heartbeat(THIRD_PLAYER, current.sessionId(), VILLAGER, 312L),
+                "and that player's own ping is still accepted");
+        assertTrue(HandleAuthority.allowsNativeCloseOf(VILLAGER, THIRD_PLAYER));
     }
 }

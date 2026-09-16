@@ -24,6 +24,7 @@ class ConversationSessionTest {
     void reset() {
         ConversationSessions.clearAllForTesting();
         ConversationPresence.clear();
+        OpenRateLimiter.clear();
     }
 
     @Test
