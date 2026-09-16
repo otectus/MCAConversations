@@ -126,6 +126,9 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_budget` | `{"axis": "positive"\|"negative"\|"repeats", "min"?, "max"?, "decision"?}` | 1 while today's affection ledger for this villager and player is in range. `repeats` counts one decision and requires `decision`; the other two are daily totals and must not name one |
 | `conversations_check` | `{"id": "<topic.stance>", "tier": "crit" \| "success" \| "partial" \| "rebuff", "axis", "difficulty": 0–100, "stance"?, "arc"?}` | 1 when the seeded check resolver lands on this result's declared tier — see *Dialogue checks* below. All tier results of a stance share id/axis/difficulty/stance/arc. Optional `stance` names a stance family so the villager's interiority profile can make that kind of remark land better or worse on them; optional `arc` names the ordered progression the check belongs to, so the seeded roll changes when the relationship genuinely moves on |
 | `conversations_progress` | `{"arc","min"?,"max"?}` / `{"milestone","has"?}` / `{"exclusive","is"}` | 1 when the durable ledger agrees: arc stage in range, milestone set (or deliberately absent with `"has": false`), or this side of an exclusive choice taken (`"is": "none"` for undecided). Exactly one of the three keys |
+| `conversations_reputation` | `{"min"?, "max"?, "min_tier"?, "max_tier"?, "has_title"?}` | 1 when the player's public standing with this villager's village satisfies every stated bound. Needs MCA: Reputation; 0 without it |
+| `conversations_reputation_incident` | `{"types"?, "statuses"?, "tags"?, "known_to_speaker"?, "max_age"?}` | 1 when a matching deed exists in that village's ledger — and, with `known_to_speaker`, only when *this* villager knows of it. Needs MCA: Reputation; 0 without it |
+| `conversations_reputation_profile` | `{"scope"?, "recognition"?, "facets"?, "allow_partial_history"?}` | 1 when the player's **public profile** satisfies every clause: what they are known for, and how widely. Needs MCA: Reputation 0.6.0 with profiles enabled and profile content published; 0 otherwise. See below |
 
 `conversations_enabled`/`conversations_disabled` resolve through one closed registry, `FeatureId`
 (`src/main/java/dev/otectus/mcaconversations/FeatureId.java`) — `topics`, `states`, `templates`,
@@ -149,6 +152,7 @@ distinct unknown ids per run).
 | `conversations_session` | `{"op": "begin"\|"branch"\|"end", "topic"?, "budget"?, "branch"?}` | frames a topic on the shared conversation session. `begin` resets the per-conversation heart budget (depth class from the catalog unless `budget` overrides it); `branch` records which way an opener went; `end` closes the topic. Carries no reward of its own |
 | `conversations_affection_apply` | `{"decision": "<topic.stage.stance>", "delta": ±1..8, "budget"?, "policy"?}` | **the only way branching content may move hearts.** See below |
 | `conversations_progress_apply` | one object or an array of `{"arc",…}` / `{"milestone"}` / `{"exclusive","member"}` | moves durable narrative state. See below |
+| `conversations_reputation_signal` | `{"incident", "decision"?, "visibility"?, "binds"?, "bind_types"?, "bind_max_age"?, "supersedes"?, "supersede_window"?}` | records an authored conversation outcome as a public deed in MCA: Reputation, exactly once. No-op without that mod. See below |
 
 ### Branching conversations (v1.1.0)
 
@@ -309,6 +313,101 @@ Available only when MCA Capitals is installed and the `[capitals]` master switch
 | `capital.heir_named` | boolean | — | Whether a clear heir has been designated |
 | `capital.title_changed` | boolean | — | Whether this villager's title just changed (within `roleRemarkDays`) |
 | `capital.previous_title` | string | former title id | The title they held before this one (when changed) |
+
+### Public-profile conditions (MCA: Reputation 0.6.0)
+
+A public profile is what a village can **say** about a player, which is a different question from how
+much it likes them: `recognition` is how widely they are known, `facets` are what they are known for.
+An infamous murderer and a revered hero can carry the same recognition, and recognition alone never
+authorises familiarity — hearts, relationship bands and romance eligibility are untouched by anything
+here.
+
+```json
+{
+  "chance": 40,
+  "conversations_reputation_profile": {
+    "scope": "speaker",
+    "recognition": { "min": 15, "max": 900, "min_tier": "recognized" },
+    "facets": {
+      "mcareputation:bravery": { "min": 10, "min_evidence": 1 },
+      "mcareputation:violence": { "max": 0, "allow_unobserved": true }
+    },
+    "allow_partial_history": false
+  }
+}
+```
+
+| Key | Default | Meaning |
+|---|---|---|
+| `scope` | `speaker` | `speaker` asks what **this villager** knows the player for, filtered through what they have actually heard. `community` asks what the village as a whole can say |
+| `recognition.min` / `recognition.max` | — | Inclusive bounds on the recognition value. `"max": 0` asks for a stranger with a provably clean record |
+| `recognition.min_tier` | — | The lowest acceptable recognition tier id (MCA: Reputation ships `unknown`, `noticed`, `recognized`, `well_known`, `renowned`, `famous`) |
+| `facets` | — | Up to sixteen facet clauses, keyed by facet id (MCA: Reputation ships `mcareputation:` `reliability`, `bravery`, `compassion`, `lawfulness`, `generosity`, `mercy`, `violence`). Each takes `min`, `max`, `min_evidence` and `allow_unobserved`; at least one of `min`/`max` is required |
+| `facets.<id>.min_evidence` | `1` | How many live deeds must stand behind the value. A facet with nothing behind it describes nobody |
+| `facets.<id>.allow_unobserved` | `false` | The named escape hatch for "no contrary evidence is known". Without it, a facet nobody has ever observed does **not** satisfy an upper bound |
+| `allow_partial_history` | `false` | Whether a clause that depends on complete history may answer on a save whose history is not complete (an old world migrated into profiles). Clauses resting on an upper bound or on `allow_unobserved` are the ones this protects |
+
+Semantics worth authoring against:
+
+- **Every clause is ANDed**, and an unknown facet or tier id **fails closed**: a typo cannot open a
+  gate.
+- **"Cannot say" is not "no".** With MCA: Reputation absent, profiles switched off, no profile content
+  published, a query the mod rejects, or — for `"scope": "speaker"` — a villager whose community
+  cannot be resolved, the condition scores `0` so your own fallback branch runs. A speaker-scoped
+  question is **never** answered from the village's profile.
+- **A genuine zero is a real answer.** A villager who has heard nothing about the player scores `0` on
+  a `min` clause because there is no evidence, not because the question failed.
+
+### Reputation context fields (MCA: Reputation 0.6.0 profiles)
+
+The same facts as plain context fields, usable in `conversations_context` and in a
+`conversation_scenes/` condition: `{"field": "standing.speaker_known_for", "has": "mcareputation:bravery", "unknown": "fail"}`.
+All three read UNAVAILABLE without MCA: Reputation or without its profile layer, so a scene gated on
+one hides itself instead of firing on a false.
+
+| Field | Type | Values | Meaning |
+|---|---|---|---|
+| `standing.speaker_knows_player` | boolean | — | Whether this villager knows of any public deed of the player's at all. The gate to open with |
+| `standing.speaker_recognition_tier` | string | `unknown`, `noticed`, `recognized`, `well_known`, `renowned`, `famous` | The recognition tier this villager's own knowledge puts the player in; UNKNOWN when they know of nothing that would place them |
+| `standing.speaker_known_for` | set of strings | facet ids, e.g. `mcareputation:bravery` | At most three facets this villager would describe the player by. Use `has` / `has_all` |
+
+Two shipped scenes use them (`src/content/topics/standing.json`): `known_for_courage` and
+`known_for_violence`, each gated on `standing.speaker_knows_player` plus one facet.
+
+### `conversations_reputation_signal` (records a deed)
+
+```json
+{
+  "conversations_reputation_signal": {
+    "incident": "mcareputation:public_apology",
+    "visibility": "village",
+    "decision": "standing.amends.public_apology",
+    "binds": "known_incident",
+    "bind_types": ["mcareputation:villager_assaulted"],
+    "bind_max_age": 168000,
+    "supersedes": "standing.amends.grudging_apology",
+    "supersede_window": 168000
+  }
+}
+```
+
+The action names an **incident definition** and never a score delta: how much an apology is worth is
+MCA: Reputation's decision, not a pack's.
+
+| Key | Default | Meaning |
+|---|---|---|
+| `incident` | required | The incident definition to record |
+| `visibility` | the definition's own | MCA: Reputation's visibility name. A misspelling records nothing rather than inheriting the public default |
+| `decision` | the incident id | The authored decision — the apology *stage*. Part of the deed's identity |
+| `binds` | `none` | `known_incident` binds the deed to the exact eligible grievance **this villager knows about**, which is what makes one apology payable once while leaving a second, unrelated grievance addressable. With nothing eligible known, nothing is recorded |
+| `bind_types` | any | Incident types eligible to be bound. Only valid alongside `binds` |
+| `bind_max_age` | no limit | How far back, in ticks, an eligible incident may lie |
+| `supersedes` | — | An earlier decision whose deed this one **replaces** rather than stacks on, so a fuller apology after a partial one totals one figure |
+| `supersede_window` | `168000` | How far back, in ticks, the superseded deed may lie |
+
+The deed's identity is `decision` plus the bound incident, and it deliberately does **not** name the
+villager: repeating the same apology to a different resident is the same deed, and a replay after a
+reconnect recovers the first answer instead of paying again.
 
 ## The disposition vector & dialogue checks (v0.7.0)
 

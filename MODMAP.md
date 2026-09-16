@@ -30,14 +30,14 @@ dev.otectus.mcaconversations.client.dialogue         32 files
 dev.otectus.mcaconversations.client.dialogue.dev     3 files
 dev.otectus.mcaconversations.client.townstead        2 files
 dev.otectus.mcaconversations.command                 2 files
-dev.otectus.mcaconversations.compat                  34 files
+dev.otectus.mcaconversations.compat                  35 files
 dev.otectus.mcaconversations.compat.capitals         3 files
 dev.otectus.mcaconversations.compat.mca              4 files
 dev.otectus.mcaconversations.compat.quests           7 files
 dev.otectus.mcaconversations.compat.reputation       2 files
 dev.otectus.mcaconversations.compat.seasons          1 file
 dev.otectus.mcaconversations.compat.townstead        3 files
-dev.otectus.mcaconversations.context                 19 files
+dev.otectus.mcaconversations.context                 20 files
 dev.otectus.mcaconversations.conversation            62 files
 dev.otectus.mcaconversations.court                   5 files
 dev.otectus.mcaconversations.debug                   3 files

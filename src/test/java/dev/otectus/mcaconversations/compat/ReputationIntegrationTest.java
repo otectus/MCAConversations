@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -186,6 +187,375 @@ class ReputationIntegrationTest {
     }
 
     // ------------------------------------------------------------------
+    // Profile condition JSON (0.6.0, §16.2)
+    // ------------------------------------------------------------------
+
+    @Test
+    void theProfileConditionParsesEveryField() {
+        var query = ReputationQueryJson.profile(JsonParser.parseString("""
+                {"scope": "speaker",
+                 "recognition": {"min": 15, "max": 900, "min_tier": "recognized"},
+                 "facets": {
+                   "mcareputation:bravery": {"min": 10, "min_evidence": 2},
+                   "mcareputation:violence": {"max": 0, "allow_unobserved": true}
+                 },
+                 "allow_partial_history": true}""").getAsJsonObject());
+        assertEquals(ReputationBridge.ProfileQuerySpec.Scope.SPEAKER, query.scope());
+        assertEquals(15, query.minRecognition());
+        assertEquals(900, query.maxRecognition());
+        assertEquals("recognized", query.minRecognitionTier());
+        assertTrue(query.allowPartialHistory());
+        assertEquals(2, query.facets().size());
+        var bravery = query.facets().stream()
+                .filter(facet -> facet.facet().equals("mcareputation:bravery"))
+                .findFirst().orElseThrow();
+        assertEquals(10, bravery.min());
+        assertEquals(2, bravery.minEvidence());
+        assertFalse(bravery.allowUnobserved(), "the absence escape hatch is never a default");
+        var violence = query.facets().stream()
+                .filter(facet -> facet.facet().equals("mcareputation:violence"))
+                .findFirst().orElseThrow();
+        assertEquals(0, violence.max());
+        assertTrue(violence.allowUnobserved());
+        assertFalse(query.isEmpty());
+    }
+
+    /**
+     * §16.2's question is what <em>this</em> villager knows the player for, so an unscoped condition
+     * asks that and not the village's view — the wider answer has to be asked for by name.
+     */
+    @Test
+    void anUnscopedProfileConditionAsksTheSpeakerNotTheVillage() {
+        var query = ReputationQueryJson.profile(JsonParser.parseString(
+                "{\"recognition\": {\"min\": 1}}").getAsJsonObject());
+        assertEquals(ReputationBridge.ProfileQuerySpec.Scope.SPEAKER, query.scope());
+        assertEquals(ReputationBridge.ProfileQuerySpec.Scope.COMMUNITY,
+                ReputationQueryJson.profile(JsonParser.parseString(
+                        "{\"scope\": \"community\"}").getAsJsonObject()).scope());
+    }
+
+    @Test
+    void aProfileConditionWithNoClauseAsksNothingRatherThanEverything() {
+        var query = ReputationQueryJson.profile(JsonParser.parseString("{}").getAsJsonObject());
+        assertTrue(query.isEmpty());
+        assertTrue(query.facets().isEmpty());
+        assertFalse(query.allowPartialHistory(), "a gate that needs whole history must opt in");
+    }
+
+    @Test
+    void malformedProfileConditionsFailClosedRatherThanBroadening() {
+        for (String json : List.of(
+                "{\"scope\":\"quest_giver\"}",
+                "{\"recognition\":{\"min\":-1}}",
+                "{\"recognition\":{\"min\":40,\"max\":10}}",
+                "{\"recognition\":{\"min_tier\":\"\"}}",
+                "{\"recognition\":[]}",
+                "{\"facets\":{\"bravery\":{\"min\":1}}}",
+                "{\"facets\":{\"mcareputation:\":{\"min\":1}}}",
+                "{\"facets\":{\"mcareputation:bravery\":{}}}",
+                "{\"facets\":{\"mcareputation:bravery\":{\"min\":5,\"max\":1}}}",
+                "{\"facets\":{\"mcareputation:bravery\":{\"min\":1,\"min_evidence\":-1}}}",
+                "{\"facets\":{\"mcareputation:bravery\":{\"min\":1,\"min_evidence\":65}}}",
+                "{\"facets\":{\"mcareputation:bravery\":{\"min\":1,\"allow_unobserved\":\"yes\"}}}",
+                "{\"facets\":{\"mcareputation:bravery\":true}}",
+                "{\"allow_partial_history\":\"sometimes\"}")) {
+            assertThrows(RuntimeException.class,
+                    () -> ReputationQueryJson.profile(JsonParser.parseString(json).getAsJsonObject()),
+                    json + " must reject the whole query rather than drop a clause");
+        }
+    }
+
+    /** A pack may not ask about more facets than Reputation will evaluate. */
+    @Test
+    void aProfileConditionCannotNameMoreFacetsThanReputationEvaluates() {
+        StringBuilder json = new StringBuilder("{\"facets\":{");
+        for (int i = 0; i <= ReputationBridge.ProfileQuerySpec.MAX_FACETS; i++) {
+            json.append(i == 0 ? "" : ",")
+                    .append("\"mcareputation:facet").append(i).append("\":{\"min\":1}");
+        }
+        json.append("}}");
+        assertThrows(RuntimeException.class, () -> ReputationQueryJson.profile(
+                JsonParser.parseString(json.toString()).getAsJsonObject()));
+    }
+
+    // ------------------------------------------------------------------
+    // Profile answers and capability gating (0.6.0, §14.4)
+    // ------------------------------------------------------------------
+
+    private static final ReputationBridge.ProfileQuerySpec SPEAKER_QUERY =
+            new ReputationBridge.ProfileQuerySpec(ReputationBridge.ProfileQuerySpec.Scope.SPEAKER,
+                    15, null, null, List.of(), false);
+    private static final ReputationBridge.ProfileQuerySpec COMMUNITY_QUERY =
+            new ReputationBridge.ProfileQuerySpec(ReputationBridge.ProfileQuerySpec.Scope.COMMUNITY,
+                    15, null, null, List.of(), false);
+
+    /** With the mod absent there is no answer at all, which is not the same as "no". */
+    @Test
+    void withoutReputationEveryProfileQuestionIsUnavailable() {
+        assertEquals(ReputationBridge.ProfileAnswer.UNAVAILABLE,
+                ReputationBridge.matchesProfile(null, null, SPEAKER_QUERY));
+        assertTrue(ReputationBridge.features(null).isEmpty());
+        assertFalse(ReputationBridge.hasFeature(null, ReputationBridge.FEATURE_SPEAKER_PROFILE));
+        assertTrue(ReputationBridge.speakerProfile(null, null).isEmpty());
+    }
+
+    /**
+     * A build whose profile features are not live answers unavailable <b>before</b> the query runs.
+     *
+     * <p>Reputation advertises the five profile strings only while profiles are enabled and a pack has
+     * published content, precisely so a companion does not read "cannot answer" as "no". Asking anyway
+     * and treating the resulting false as an answer is the failure this gate exists to prevent.
+     */
+    @Test
+    void aProfilelessBuildIsUnavailableRatherThanNegative() {
+        ReputationBridge.setAvailableForTest(true,
+                new CapableQueries(java.util.Set.of(ReputationBridge.FEATURE_DELIVERY),
+                        ReputationBridge.ProfileAnswer.MATCH));
+        assertFalse(ReputationBridge.supportsProfileScope(null,
+                ReputationBridge.ProfileQuerySpec.Scope.SPEAKER));
+        assertEquals(ReputationBridge.ProfileAnswer.UNAVAILABLE,
+                ReputationBridge.matchesProfile(null, null, SPEAKER_QUERY),
+                "an unsupported scope must not reach the query at all");
+    }
+
+    /** Each scope negotiates its own capability: a speaker query is not a community query. */
+    @Test
+    void eachProfileScopeNegotiatesItsOwnCapability() {
+        ReputationBridge.setAvailableForTest(true,
+                new CapableQueries(java.util.Set.of(ReputationBridge.FEATURE_SPEAKER_PROFILE),
+                        ReputationBridge.ProfileAnswer.MATCH));
+        var speakerOnly = new CapableQueries(
+                java.util.Set.of(ReputationBridge.FEATURE_SPEAKER_PROFILE),
+                ReputationBridge.ProfileAnswer.MATCH);
+        assertTrue(speakerOnly.features(null).contains(ReputationBridge.FEATURE_SPEAKER_PROFILE));
+        assertFalse(speakerOnly.features(null).contains(ReputationBridge.FEATURE_PROFILE_SNAPSHOT),
+                "a build with speaker profiles live need not have the community one live");
+        assertEquals(ReputationBridge.ProfileAnswer.MATCH,
+                speakerOnly.matchesProfile(null, null, SPEAKER_QUERY));
+        assertEquals(ReputationBridge.ProfileAnswer.MATCH,
+                speakerOnly.matchesProfile(null, null, COMMUNITY_QUERY),
+                "the façade answers what it is asked; the scope gate is the bridge's job");
+    }
+
+    /** A throwing or drifted build is unavailable, never a silent "no". */
+    @Test
+    void aThrowingBackendAnswersProfileQuestionsUnavailable() {
+        ReputationBridge.setAvailableForTest(true, new ThrowingQueries());
+        assertTrue(ReputationBridge.features(null).isEmpty());
+        assertEquals(ReputationBridge.ProfileAnswer.UNAVAILABLE,
+                ReputationBridge.matchesProfile(null, null, SPEAKER_QUERY));
+        assertTrue(ReputationBridge.speakerProfile(null, null).isEmpty());
+        assertFalse(ReputationBridge.recordSignal(null, null,
+                ReputationBridge.SignalRequest.of("mcareputation:public_apology", null, "d")));
+    }
+
+    /** Only a match is a match: a condition scores on MATCH and on nothing else. */
+    @Test
+    void onlyAMatchCountsAsOne() {
+        assertTrue(ReputationBridge.ProfileAnswer.MATCH.matched());
+        assertFalse(ReputationBridge.ProfileAnswer.NO_MATCH.matched());
+        assertFalse(ReputationBridge.ProfileAnswer.UNAVAILABLE.matched(),
+                "an unanswerable question must score zero so the authored fallback fires");
+    }
+
+    /** §16.2: at most three descriptors reach a line, however many the profile carries. */
+    @Test
+    void aSpeakerProfileCarriesAtMostThreeDescriptors() {
+        var view = new ReputationBridge.SpeakerProfileView(true, 40, "well_known",
+                List.of("a:one", "a:two", "a:three", "a:four", "a:five"), 9, true);
+        assertEquals(ReputationBridge.SpeakerProfileView.MAX_DOMINANT_FACETS,
+                view.dominantFacets().size());
+        assertEquals(List.of("a:one", "a:two", "a:three"), view.dominantFacets());
+        var nothing = new ReputationBridge.SpeakerProfileView(false, 0, null, null, 0, true);
+        assertEquals("", nothing.recognitionTierId(), "an unknown tier is blank, never null");
+        assertTrue(nothing.dominantFacets().isEmpty());
+        assertFalse(nothing.knowsPlayer(), "a valid zero stays zero");
+    }
+
+    // ------------------------------------------------------------------
+    // The signal's identity: binding, supersession, replay (§16.2)
+    // ------------------------------------------------------------------
+
+    @Test
+    void theSignalActionParsesEveryField() {
+        var signal = ReputationQueryJson.signal(JsonParser.parseString("""
+                {"incident": "mcareputation:public_apology", "visibility": "witnessed",
+                 "decision": "standing.amends.public_apology", "binds": "known_incident",
+                 "bind_types": ["mcareputation:villager_assaulted"], "bind_max_age": 168000,
+                 "supersedes": "standing.amends.grudging", "supersede_window": 72000}""")
+                .getAsJsonObject());
+        assertEquals("mcareputation:public_apology", signal.incidentId());
+        assertEquals("witnessed", signal.visibility());
+        assertEquals("standing.amends.public_apology", signal.decisionId());
+        assertTrue(signal.bindKnownIncident());
+        assertEquals(List.of("mcareputation:villager_assaulted"), signal.bindTypes());
+        assertEquals(168000L, signal.bindMaxAgeTicks());
+        assertTrue(signal.supersedes());
+        assertEquals("standing.amends.grudging", signal.supersedesDecisionId());
+        assertEquals(72000L, signal.supersedeWindowTicks());
+    }
+
+    @Test
+    void aSignalDefaultsToItsIncidentAndBindsNothing() {
+        var signal = ReputationQueryJson.signal(JsonParser.parseString(
+                "{\"incident\": \"mcareputation:public_apology\"}").getAsJsonObject());
+        assertEquals("mcareputation:public_apology", signal.decisionId(),
+                "an unnamed decision is the incident itself, as it always was");
+        assertFalse(signal.bindKnownIncident());
+        assertFalse(signal.supersedes());
+        assertEquals(ReputationBridge.SignalRequest.DEFAULT_SUPERSEDE_WINDOW_TICKS,
+                signal.supersedeWindowTicks(), "an unstated window is a documented default, not zero");
+    }
+
+    @Test
+    void malformedSignalsRecordNothing() {
+        for (String json : List.of(
+                "{}",
+                "{\"incident\": \"\"}",
+                "{\"incident\": \"mcareputation:public_apology\", \"decision\": \" \"}",
+                "{\"incident\": \"mcareputation:public_apology\", \"binds\": \"whatever\"}",
+                "{\"incident\": \"mcareputation:public_apology\", \"bind_types\": [\"a:b\"]}",
+                "{\"incident\": \"mcareputation:public_apology\", \"bind_max_age\": -1}",
+                "{\"incident\": \"mcareputation:public_apology\", \"supersede_window\": -5}")) {
+            assertThrows(RuntimeException.class,
+                    () -> ReputationQueryJson.signal(JsonParser.parseString(json).getAsJsonObject()),
+                    json + " must fail closed rather than record a deed nobody authored");
+        }
+    }
+
+    /**
+     * The identity fix itself: the villager is gone from the key, and the incident is in it.
+     *
+     * <p>1.7.1 keyed by {@code conversation:<villager>:<player>:<decision>}, so the same apology paid
+     * again as soon as a different resident was standing there, while a second unrelated grievance
+     * could not be apologised for at all. The player and community are already part of Reputation's
+     * receipt identity, so neither belongs in the key either.
+     */
+    @Test
+    void theOperationKeyNamesTheDecisionAndTheIncidentAndNotTheVillager() {
+        String first = ReputationSignalIdentity.operationKey("standing.amends.public_apology", null);
+        assertEquals("conversation:standing.amends.public_apology", first);
+
+        java.util.UUID villagerA = java.util.UUID.randomUUID();
+        java.util.UUID villagerB = java.util.UUID.randomUUID();
+        assertEquals(ReputationSignalIdentity.operationKey("standing.amends", null),
+                ReputationSignalIdentity.operationKey("standing.amends", null),
+                "the same apology stage is the same operation however often it is clicked");
+        assertFalse(first.contains(villagerA.toString()) || first.contains(villagerB.toString()));
+
+        java.util.UUID incidentOne = java.util.UUID.randomUUID();
+        java.util.UUID incidentTwo = java.util.UUID.randomUUID();
+        String boundOne = ReputationSignalIdentity.operationKey("standing.amends",
+                incidentOne.toString());
+        String boundTwo = ReputationSignalIdentity.operationKey("standing.amends",
+                incidentTwo.toString());
+        assertNotEquals(boundOne, boundTwo,
+                "two unrelated grievances must stay independently addressable");
+        assertEquals(boundOne, ReputationSignalIdentity.operationKey("STANDING.AMENDS",
+                incidentOne.toString().toUpperCase(java.util.Locale.ROOT)),
+                "case cannot make one apology into two");
+        assertNotEquals(boundOne, first,
+                "a bound apology and an unbound one are different operations");
+    }
+
+    @Test
+    void anOverLongOperationKeyIsDigestedRatherThanTruncated() {
+        String longDecision = "standing.amends." + "x".repeat(400);
+        String key = ReputationSignalIdentity.operationKey(longDecision, null);
+        assertTrue(key.length() <= ReputationSignalIdentity.MAX_OPERATION_KEY_LENGTH);
+        assertTrue(ReputationSignalIdentity.isCompacted(key));
+        assertEquals(key, ReputationSignalIdentity.operationKey(longDecision, null),
+                "a receipt written yesterday has to be findable today");
+        assertNotEquals(key, ReputationSignalIdentity.operationKey(longDecision + "y", null),
+                "truncation would collapse two identities into one paid operation");
+    }
+
+    @Test
+    void aSignalWithoutADecisionIsAPackErrorRatherThanAnEmptyKey() {
+        assertThrows(IllegalArgumentException.class,
+                () -> ReputationSignalIdentity.operationKey("   ", null));
+        assertThrows(IllegalArgumentException.class,
+                () -> ReputationSignalIdentity.operationKey(null, "abc"));
+    }
+
+    /**
+     * The adapter's delivery path is source-scanned, like the other assertions about the guarded
+     * package: {@code compat.reputation} names MCA: Reputation types and cannot load on this suite's
+     * classpath, where the API jar is deliberately compile-only.
+     */
+    @Test
+    void theAdapterDeliversInsteadOfRecordingAndSupersedesInsteadOfStacking() throws IOException {
+        String compat = Files.readString(
+                SOURCE_ROOT.resolve("compat/reputation/ConversationsReputationCompat.java"),
+                StandardCharsets.UTF_8);
+        assertTrue(compat.contains("McaReputationApi.deliver(delivery)"),
+                "a keyed delivery is what makes the apology exactly-once");
+        assertTrue(compat.contains("ProfiledDelivery.superseding(delivery, supersede.get())"),
+                "an amending decision folds its precursor in one canonical commit");
+        assertTrue(compat.contains("McaReputationApi.recordSuperseding("),
+                "a build without profiled delivery still supersedes rather than stacking");
+        assertTrue(compat.replaceAll("\\s+", " ").contains("McaReputationApi .findReceipt("),
+                "the precursor is found by its own operation key, not by guessing the newest deed");
+        assertTrue(compat.contains("ReceiptOutcome.DUPLICATE"),
+                "a duplicate is a terminal answer, not a failure to retry");
+        assertTrue(compat.contains("SpeakerContext"),
+                "the villager is supplied as a real speaker context for the bound selection");
+        assertTrue(compat.contains(".witness(villager.getUUID())"),
+                "a deed the speaker was present for is witnessed, honestly");
+        assertFalse(compat.contains("\"conversation:\" + villager.getUUID()"),
+                "the 1.7.1 villager-keyed dedupe key must be gone");
+        assertFalse(compat.contains("getMethod(\"getOpinionBias\""),
+                "capability negotiation replaced the reflective probe");
+        assertTrue(compat.contains("McaReputationApi.capabilities(server)"),
+                "gating is negotiated through capabilities, not reflected over methods");
+    }
+
+    /** §13.2/§16.2: the resolved opinion term replaces the village term, and is never added to it. */
+    @Test
+    void theOpinionTermReplacesTheVillageTermAndIsNeverAddedToIt() throws IOException {
+        String bridge = Files.readString(SOURCE_ROOT.resolve("compat/ReputationBridge.java"),
+                StandardCharsets.UTF_8);
+        String collapsed = bridge.replaceAll("\\s+", " ");
+        assertTrue(collapsed.contains("int raw = queries.supportsOpinionBias(player) "
+                        + "? queries.opinionBias(player, villager, normalized) "
+                        + ": queries.checkBias(player, villager, normalized);"),
+                "exactly one of the two terms is read, chosen rather than summed");
+        String compat = Files.readString(
+                SOURCE_ROOT.resolve("compat/reputation/ConversationsReputationCompat.java"),
+                StandardCharsets.UTF_8);
+        assertFalse(compat.contains("getCheckBias") && compat.contains("+ McaReputationApi.getOpinionBias"),
+                "a facet bias beside the village bias would count the same standing twice");
+    }
+
+    /** The profile-changed listener exists, is manually registered, and only invalidates. */
+    @Test
+    void theProfileChangeListenerInvalidatesRatherThanSpeaks() throws IOException {
+        String events = Files.readString(
+                SOURCE_ROOT.resolve("compat/reputation/ConversationsReputationEvents.java"),
+                StandardCharsets.UTF_8);
+        assertTrue(events.contains("onProfileChanged(ReputationProfileChangedEvent event)"),
+                "the profile-only change has a consumer, so it is listened for");
+        assertTrue(events.contains("ReputationBridge.invalidateStandingCache("),
+                "what it does is drop a memo; nothing is said out loud");
+        String handler = events.substring(events.indexOf("public void onProfileChanged"));
+        assertFalse(handler.contains("noteStandingChange("),
+                "a background profile change must not become a thing a villager remarks on");
+        assertFalse(events.contains("\n@Mod."),
+                "the annotation would put a Reputation event type on a standalone install's classpath");
+    }
+
+    /** The memo the profile event invalidates: per player, and never longer than its window. */
+    @Test
+    void theStandingMemoIsDroppedPerPlayer() {
+        assertTrue(ReputationBridge.BIAS_CACHE_TICKS > 0);
+        assertTrue(ReputationBridge.MAX_CACHED_BIASES > 0);
+        // Pure invalidation: no server, no cached entries, and no exception either way.
+        ReputationBridge.invalidateStandingCache(PLAYER);
+        ReputationBridge.invalidateStandingCache(null);
+        assertEquals(0, ReputationBridge.publicStandingFit(null, null, "trust"));
+    }
+
+    // ------------------------------------------------------------------
     // Gossip candidate normalisation (§30.4)
     // ------------------------------------------------------------------
 
@@ -342,8 +712,8 @@ class ReputationIntegrationTest {
     @Test
     void anOlderReputationKeepsTheVillageLevelBias() {
         ReputationBridge.ReputationQueries older = new StubQueries(5);
-        assertFalse(older.supportsOpinionBias(),
-                "a build with no getOpinionBias must not be asked for one");
+        assertFalse(older.supportsOpinionBias(null),
+                "a build that cannot report the opinion capability must not be asked for one");
         assertEquals(5, older.opinionBias(null, null, "trust"),
                 "without the method the village-level bias is the answer");
         assertEquals("", older.communityId(null));
@@ -506,8 +876,98 @@ class ReputationIntegrationTest {
 
         @Override
         public boolean recordSignal(net.minecraft.server.level.ServerPlayer player,
-                                    net.minecraft.world.entity.Entity villager, String incidentId,
-                                    String visibility, String decisionId) {
+                                    net.minecraft.world.entity.Entity villager,
+                                    ReputationBridge.SignalRequest request) {
+            return true;
+        }
+
+        @Override
+        public java.util.Optional<net.minecraft.network.chat.Component> recentKnownDeed(
+                net.minecraft.server.level.ServerPlayer player,
+                net.minecraft.world.entity.Entity villager) {
+            return java.util.Optional.empty();
+        }
+
+        @Override
+        public boolean hasUnresolvedNegativeIncident(net.minecraft.server.level.ServerPlayer player,
+                                                     net.minecraft.world.entity.Entity villager) {
+            return false;
+        }
+    }
+
+    /**
+     * A façade that advertises a chosen capability set and answers every profile question the same
+     * way, for exercising the gating without a running game.
+     */
+    private record CapableQueries(java.util.Set<String> features,
+                                  ReputationBridge.ProfileAnswer answer)
+            implements ReputationBridge.ReputationQueries {
+
+        @Override
+        public java.util.Set<String> features(net.minecraft.server.level.ServerPlayer player) {
+            return features;
+        }
+
+        @Override
+        public ReputationBridge.ProfileAnswer matchesProfile(
+                net.minecraft.server.level.ServerPlayer player,
+                net.minecraft.world.entity.Entity villager,
+                ReputationBridge.ProfileQuerySpec query) {
+            return answer;
+        }
+
+        @Override
+        public java.util.Optional<ReputationBridge.SpeakerProfileView> speakerProfile(
+                net.minecraft.server.level.ServerPlayer player,
+                net.minecraft.world.entity.Entity villager) {
+            return java.util.Optional.of(new ReputationBridge.SpeakerProfileView(true, 40,
+                    "well_known", List.of("mcareputation:bravery"), 3, true));
+        }
+
+        @Override
+        public int score(net.minecraft.server.level.ServerPlayer player,
+                         net.minecraft.world.entity.Entity villager) {
+            return 0;
+        }
+
+        @Override
+        public String tierId(net.minecraft.server.level.ServerPlayer player,
+                             net.minecraft.world.entity.Entity villager) {
+            return "";
+        }
+
+        @Override
+        public int checkBias(net.minecraft.server.level.ServerPlayer player,
+                             net.minecraft.world.entity.Entity villager, String axis) {
+            return 0;
+        }
+
+        @Override
+        public boolean matchesStanding(net.minecraft.server.level.ServerPlayer player,
+                                       net.minecraft.world.entity.Entity villager,
+                                       ReputationBridge.StandingQuery query) {
+            return false;
+        }
+
+        @Override
+        public boolean matchesIncident(net.minecraft.server.level.ServerPlayer player,
+                                       net.minecraft.world.entity.Entity villager,
+                                       ReputationBridge.IncidentQuery query) {
+            return false;
+        }
+
+        @Override
+        public java.util.Optional<ReputationBridge.GossipCandidate> nextGossip(
+                net.minecraft.server.level.ServerPlayer player,
+                net.minecraft.world.entity.Entity teller, java.util.Set<String> types,
+                long maxAgeTicks) {
+            return java.util.Optional.empty();
+        }
+
+        @Override
+        public boolean recordSignal(net.minecraft.server.level.ServerPlayer player,
+                                    net.minecraft.world.entity.Entity villager,
+                                    ReputationBridge.SignalRequest request) {
             return true;
         }
 
@@ -569,8 +1029,28 @@ class ReputationIntegrationTest {
 
         @Override
         public boolean recordSignal(net.minecraft.server.level.ServerPlayer player,
-                                    net.minecraft.world.entity.Entity villager, String incidentId,
-                                    String visibility, String decisionId) {
+                                    net.minecraft.world.entity.Entity villager,
+                                    ReputationBridge.SignalRequest request) {
+            throw new IllegalStateException("boom");
+        }
+
+        @Override
+        public java.util.Set<String> features(net.minecraft.server.level.ServerPlayer player) {
+            throw new IllegalStateException("boom");
+        }
+
+        @Override
+        public ReputationBridge.ProfileAnswer matchesProfile(
+                net.minecraft.server.level.ServerPlayer player,
+                net.minecraft.world.entity.Entity villager,
+                ReputationBridge.ProfileQuerySpec query) {
+            throw new IllegalStateException("boom");
+        }
+
+        @Override
+        public java.util.Optional<ReputationBridge.SpeakerProfileView> speakerProfile(
+                net.minecraft.server.level.ServerPlayer player,
+                net.minecraft.world.entity.Entity villager) {
             throw new IllegalStateException("boom");
         }
 

@@ -30,6 +30,42 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class ReputationBridge {
 
+    // --- capability strings (MCA: Reputation's own ReputationCapabilities.FEATURE_* values) -------
+    //
+    // Spelled out here as plain strings because this class must not name a Reputation type, and
+    // negotiated rather than assumed: since 0.4.1 every optional operation is additive to API
+    // version 1, so the version handshake alone cannot say whether one exists. The guarded compat
+    // class checks each of these against the constant it mirrors at registration time
+    // (ConversationsReputationCompat#featureStringsAgree), so a renamed capability disables the
+    // integration instead of silently reading as "unsupported" forever.
+
+    /** {@code deliver(IncidentDelivery)} exists: a request plus a producer-owned operation identity. */
+    public static final String FEATURE_DELIVERY = "delivery";
+
+    /** Keyed deliveries leave a replayable receipt, so an apology cannot be paid for twice. */
+    public static final String FEATURE_RECEIPTS = "receipts";
+
+    /** One deed can absorb an earlier one, so two apology stages total one figure. */
+    public static final String FEATURE_SUPERSEDE = "supersede";
+
+    /** Selectors can be evaluated against a named speaker, and fail closed without one. */
+    public static final String FEATURE_SPEAKER_QUERY = "speaker_query";
+
+    /** Gossip carries a semantic revision and reports corrections instead of repeating them. */
+    public static final String FEATURE_GOSSIP_STORY = "gossip_story";
+
+    /** A community's public profile — recognition, facets, coverage — can be queried (0.6.0). */
+    public static final String FEATURE_PROFILE_SNAPSHOT = "profile_snapshot_v1";
+
+    /** A profile filtered through one villager's own knowledge can be queried (0.6.0). */
+    public static final String FEATURE_SPEAKER_PROFILE = "speaker_profile_v1";
+
+    /** A keyed delivery may carry a profile-aware supersession in one canonical commit (0.6.0). */
+    public static final String FEATURE_PROFILED_DELIVERY = "profiled_delivery_v1";
+
+    /** A profile-only change is published, so a cached profile-dependent answer can be dropped. */
+    public static final String FEATURE_PROFILE_CHANGE = "profile_change_v1";
+
     private static volatile boolean available;
     private static volatile ReputationQueries queries;
 
@@ -90,10 +126,17 @@ public final class ReputationBridge {
         /**
          * Records an authored conversation outcome as a public deed (§30.6).
          *
-         * @return true when something was actually recorded
+         * <p>Carries a {@link SignalRequest} rather than a loose incident/visibility/decision triple
+         * because the identity of the deed is the interesting part: a repeated menu decision is not an
+         * identity for several unrelated incidents, and the same apology must not pay again because a
+         * different resident was standing there or because the screen was reopened. The request says
+         * which incident the deed is bound to and which earlier decision it supersedes; the adapter
+         * turns that into one operation key and one delivery.
+         *
+         * @return true when the delivery reached a terminal accepted outcome — applied, accepted with
+         *         no public incident, or a replay of one that already was. False for every refusal.
          */
-        boolean recordSignal(ServerPlayer player, Entity villager, String incidentId, String visibility,
-                             String decisionId);
+        boolean recordSignal(ServerPlayer player, Entity villager, SignalRequest request);
 
         /** A recent notable deed this villager knows, for the standing topic's flavour line. */
         Optional<Component> recentKnownDeed(ServerPlayer player, Entity villager);
@@ -104,11 +147,14 @@ public final class ReputationBridge {
         /**
          * Whether the installed MCA: Reputation answers the per-villager opinion question at all.
          *
-         * <p>Defaults to {@code false} because an older Reputation has no such method: the compat
-         * class probes for it once and reports what it found, so an older server keeps the
-         * village-level bias instead of taking a {@code NoSuchMethodError} into a conversation.
+         * <p>Defaults to {@code false}, which is the answer for a build that cannot report its
+         * capabilities and for an operator who switched villager opinion off: either way the
+         * village-level bias is used, rather than a zero that would quietly flatten every check.
+         *
+         * <p>Takes the player because the question is answered from the running server's capability
+         * snapshot, not from a static probe — the feature can be switched off while the world is up.
          */
-        default boolean supportsOpinionBias() {
+        default boolean supportsOpinionBias(ServerPlayer player) {
             return false;
         }
 
@@ -123,6 +169,213 @@ public final class ReputationBridge {
         /** The stable id of this villager's community, or {@code ""} when they belong to none. */
         default String communityId(Entity villager) {
             return "";
+        }
+
+        /**
+         * The capability strings the installed MCA: Reputation currently advertises (§14.4).
+         *
+         * <p>Empty for a build too old to answer the question at all, which reads as "none of the
+         * optional operations exist" — the safe assumption, and the one that keeps the authored
+         * fallback in play. A profile feature appears here <b>only while it is live</b>, because a
+         * query that cannot answer must not look like a negative answer about the player.
+         */
+        default Set<String> features(ServerPlayer player) {
+            return Set.of();
+        }
+
+        /**
+         * Whether a player's public profile satisfies an authored predicate.
+         *
+         * <p>Three answers, never two: a speaker-scoped query with no resolvable speaker is
+         * {@link ProfileAnswer#UNAVAILABLE} and must never be answered from the community's view of
+         * the player, which is exactly how a stranger ends up greeted as a friend.
+         */
+        default ProfileAnswer matchesProfile(ServerPlayer player, Entity villager,
+                                             ProfileQuerySpec query) {
+            return ProfileAnswer.UNAVAILABLE;
+        }
+
+        /**
+         * What this villager personally knows the player for, or empty when nobody could say.
+         *
+         * <p>A villager who genuinely knows nothing answers with a present, empty view
+         * ({@link SpeakerProfileView#knowsPlayer()} false) rather than an empty optional: that valid
+         * zero is a real answer and must not be replaced by the village's.
+         */
+        default Optional<SpeakerProfileView> speakerProfile(ServerPlayer player, Entity villager) {
+            return Optional.empty();
+        }
+
+        /**
+         * Drops server-scoped state — capability snapshots and the like — when the world goes away.
+         *
+         * <p>The registration itself survives: the façade is installed once per JVM from common
+         * setup, so releasing it here would leave a second world loaded in the same process with no
+         * integration at all.
+         */
+        default void clearServerState() {
+        }
+    }
+
+    /** Whether an authored profile predicate held, failed, or could not be evaluated at all. */
+    public enum ProfileAnswer {
+
+        /** The profile was evaluated and every clause held. */
+        MATCH,
+
+        /** The profile was evaluated and a clause did not hold. A real answer about the player. */
+        NO_MATCH,
+
+        /**
+         * Nobody could answer: Reputation absent, profiles off or unpublished, an invalid query, a
+         * save whose history is incomplete, or — for a speaker-scoped query — no resolvable speaker.
+         * The authored fallback is the only correct response.
+         */
+        UNAVAILABLE;
+
+        public boolean matched() {
+            return this == MATCH;
+        }
+    }
+
+    /**
+     * An authored public-profile test (§14.5, §16.2). All clauses are ANDed.
+     *
+     * @param scope              whose knowledge answers it: the whole community, or this speaker
+     * @param minRecognition     inclusive lower bound on how widely known the player is
+     * @param maxRecognition     inclusive upper bound; {@code 0} asks for a complete-history stranger
+     * @param minRecognitionTier the lowest acceptable recognition tier id
+     * @param facets             facet clauses, at most {@link #MAX_FACETS}
+     * @param allowPartialHistory whether a clause that needs complete history may answer on a save
+     *                            that cannot prove it; false by default, deliberately
+     */
+    public record ProfileQuerySpec(Scope scope, Integer minRecognition, Integer maxRecognition,
+                                   String minRecognitionTier, List<FacetSpec> facets,
+                                   boolean allowPartialHistory) {
+
+        /** Reputation's own bound on one predicate; stated here so a pack fails at parse, not at use. */
+        public static final int MAX_FACETS = 16;
+
+        /** The largest evidence requirement a facet clause may state. */
+        public static final int MAX_MIN_EVIDENCE = 64;
+
+        public ProfileQuerySpec {
+            scope = scope == null ? Scope.SPEAKER : scope;
+            facets = facets == null ? List.of() : List.copyOf(facets);
+        }
+
+        /** Whose knowledge the question is asked of. */
+        public enum Scope {
+
+            /** What the village as a whole can say about the player. */
+            COMMUNITY,
+
+            /** What this villager personally knows, and nothing they have not heard. */
+            SPEAKER;
+
+            public static Optional<Scope> byKey(String key) {
+                if (key == null) {
+                    return Optional.empty();
+                }
+                return switch (key.trim().toLowerCase(java.util.Locale.ROOT)) {
+                    case "community", "village" -> Optional.of(COMMUNITY);
+                    case "speaker", "villager" -> Optional.of(SPEAKER);
+                    default -> Optional.empty();
+                };
+            }
+        }
+
+        /**
+         * One facet clause.
+         *
+         * @param facet           the facet id, as Reputation spells it ({@code mcareputation:bravery})
+         * @param min             inclusive lower bound on the facet value
+         * @param max             inclusive upper bound
+         * @param minEvidence     how many live deeds must stand behind it; 1 unless authored otherwise
+         * @param allowUnobserved whether a facet with no evidence may satisfy the clause — the named
+         *                        escape hatch for "no contrary evidence is known", never a default
+         */
+        public record FacetSpec(String facet, Integer min, Integer max, int minEvidence,
+                                boolean allowUnobserved) {
+        }
+
+        /** Whether this query states no clause at all, and so asks nothing of the profile. */
+        public boolean isEmpty() {
+            return minRecognition == null && maxRecognition == null && minRecognitionTier == null
+                    && facets.isEmpty();
+        }
+    }
+
+    /**
+     * What one villager knows the player for, bounded to what a line may honestly draw on (§13.3).
+     *
+     * <p>Recognition is not warmth: a revered hero and an infamous murderer can carry the same number.
+     * Nothing here authorises familiarity, hearts, or a greeting — Conversations' own relationship
+     * rules keep that job.
+     *
+     * @param knowsPlayer      whether this villager knows any public evidence about the player at all
+     * @param recognition      how widely known they are, in this villager's knowledge
+     * @param recognitionTierId the recognition tier that value falls in, or {@code ""}
+     * @param dominantFacets   at most three facet ids this villager would describe them by, strongest
+     *                         first
+     * @param knownIncidents   how many deeds this villager knows of, however they came to know
+     * @param completeHistory  whether the save can prove the history behind it is complete
+     */
+    public record SpeakerProfileView(boolean knowsPlayer, int recognition, String recognitionTierId,
+                                     List<String> dominantFacets, int knownIncidents,
+                                     boolean completeHistory) {
+
+        /** §16.2 keeps the descriptor list short: three traits is a remark, ten is a dossier. */
+        public static final int MAX_DOMINANT_FACETS = 3;
+
+        public SpeakerProfileView {
+            recognitionTierId = recognitionTierId == null ? "" : recognitionTierId;
+            dominantFacets = dominantFacets == null ? List.of()
+                    : List.copyOf(dominantFacets.subList(0,
+                            Math.min(dominantFacets.size(), MAX_DOMINANT_FACETS)));
+        }
+    }
+
+    /**
+     * One authored {@code conversations_reputation_signal} (§30.6, §16.2 "existing amends repair").
+     *
+     * @param incidentId          the incident definition to record; never a raw score delta
+     * @param visibility          Reputation's visibility name, or null for the definition's own
+     * @param decisionId          the authored decision, which names the apology <em>stage</em>
+     * @param bindKnownIncident   whether the deed must be bound to an exact incident this villager
+     *                            knows of — the identity that stops one apology paying twice while
+     *                            leaving a second, unrelated incident independently addressable
+     * @param bindTypes           incident types eligible to be bound, or empty for any
+     * @param bindMaxAgeTicks     how far back an eligible incident may lie; 0 for no limit
+     * @param supersedesDecisionId an earlier decision whose deed this one replaces, so a fuller
+     *                            apology after a partial one totals one figure rather than two
+     * @param supersedeWindowTicks how far back the superseded deed may lie
+     */
+    public record SignalRequest(String incidentId, String visibility, String decisionId,
+                                boolean bindKnownIncident, List<String> bindTypes,
+                                long bindMaxAgeTicks, String supersedesDecisionId,
+                                long supersedeWindowTicks) {
+
+        /** A week of game time: long enough for a real apology, short enough not to fold history. */
+        public static final long DEFAULT_SUPERSEDE_WINDOW_TICKS = 168_000L;
+
+        public SignalRequest {
+            bindTypes = bindTypes == null ? List.of() : List.copyOf(bindTypes);
+            bindMaxAgeTicks = Math.max(0L, bindMaxAgeTicks);
+            supersedeWindowTicks = supersedeWindowTicks <= 0L
+                    ? DEFAULT_SUPERSEDE_WINDOW_TICKS : supersedeWindowTicks;
+            supersedesDecisionId = supersedesDecisionId == null || supersedesDecisionId.isBlank()
+                    ? "" : supersedesDecisionId.trim();
+        }
+
+        /** The plain shape: an incident, a visibility and the decision that authored it. */
+        public static SignalRequest of(String incidentId, String visibility, String decisionId) {
+            return new SignalRequest(incidentId, visibility, decisionId, false, List.of(), 0L, "", 0L);
+        }
+
+        /** Whether this signal asks to replace an earlier decision's deed. */
+        public boolean supersedes() {
+            return !supersedesDecisionId.isEmpty();
         }
     }
 
@@ -238,18 +491,202 @@ public final class ReputationBridge {
         if (!appliesToAxis(normalized)) {
             return 0;
         }
+        long now = gameTimeOf(player, villager);
+        BiasKey key = new BiasKey(player.getUUID(), villager.getUUID(), normalized);
+        CachedBias cached = BIAS_CACHE.get(key);
+        if (cached != null && cached.isFresh(now)) {
+            return cached.value();
+        }
         try {
             // A check always names a villager (the guard above), so whenever Reputation can answer the
             // per-villager question that is the better answer: what the blacksmith who watched it
             // happen makes of you, rather than what the village at large does. An older Reputation
             // has no such method, reports false, and the village-level bias is used unchanged.
-            int raw = queries.supportsOpinionBias()
+            //
+            // Exactly one term, either way. Since 0.6.0 the per-villager answer is itself the
+            // facet-aware one — the interpretation is inside that rung's bias, not a bonus beside it —
+            // so adding the village term to it would be counting the same standing twice (§13.2).
+            int raw = queries.supportsOpinionBias(player)
                     ? queries.opinionBias(player, villager, normalized)
                     : queries.checkBias(player, villager, normalized);
-            return clampStandingFit(raw, normalized);
+            int term = clampStandingFit(raw, normalized);
+            cacheBias(key, term, now);
+            return term;
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("[MCA: Conversations] reputation check bias failed; using 0", t);
             return 0;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // The opinion term's short-lived memo
+    // ------------------------------------------------------------------
+    //
+    // One dialogue page asks for this term once per check condition, and all four tier results of a
+    // stance share one set of inputs — so a single page can ask the same question a dozen times. Since
+    // 0.6.0 the answer behind it aggregates the evidence this villager knows rather than reading one
+    // stored integer, which is cheap once and wasteful twelve times in the same tick.
+    //
+    // Twenty ticks, invalidated the moment Reputation says the player's standing or profile moved, and
+    // cleared with the world. Deliberately not a longer cache: a memo that outlives its invalidation
+    // signal is a wrong answer waiting for a reload.
+
+    private record BiasKey(UUID player, UUID villager, String axis) {
+    }
+
+    private record CachedBias(int value, long tick) {
+
+        boolean isFresh(long now) {
+            long age = now - tick;
+            return age >= 0 && age < BIAS_CACHE_TICKS;
+        }
+    }
+
+    /** How long a memoized opinion term stays usable. One second of game time. */
+    public static final long BIAS_CACHE_TICKS = 20L;
+
+    /** Bound on the memo, so a busy server cannot accumulate pairs forever. */
+    public static final int MAX_CACHED_BIASES = 512;
+
+    private static final java.util.Map<BiasKey, CachedBias> BIAS_CACHE = new ConcurrentHashMap<>();
+
+    private static void cacheBias(BiasKey key, int value, long now) {
+        if (BIAS_CACHE.size() >= MAX_CACHED_BIASES) {
+            BIAS_CACHE.clear();
+        }
+        BIAS_CACHE.put(key, new CachedBias(value, now));
+    }
+
+    private static long gameTimeOf(ServerPlayer player, Entity villager) {
+        if (villager != null && villager.level() != null) {
+            return villager.level().getGameTime();
+        }
+        return player == null || player.level() == null ? 0L : player.level().getGameTime();
+    }
+
+    /**
+     * Drops what this mod remembers about one player's standing, because Reputation says it moved.
+     *
+     * <p>Called for a tier crossing and for a profile change — including the profile-only change no
+     * standing event can describe, which is the whole reason Reputation publishes one (§15). The
+     * revision is logged, not stored: this is an invalidation, and treating the numbers on an event as
+     * a profile is how a cache starts disagreeing with the store it came from.
+     */
+    public static void invalidateStandingCache(UUID playerId) {
+        if (playerId == null) {
+            BIAS_CACHE.clear();
+            return;
+        }
+        BIAS_CACHE.keySet().removeIf(key -> playerId.equals(key.player()));
+    }
+
+    // ------------------------------------------------------------------
+    // Capability negotiation
+    // ------------------------------------------------------------------
+
+    /**
+     * Every capability the installed Reputation currently advertises for this player's server.
+     *
+     * <p>Empty with the mod absent, and empty for a build too old to answer the question — both of
+     * which read as "none of the optional operations exist", the assumption that keeps the authored
+     * fallback in play. The player is required because capabilities are a property of a running
+     * world: profiles can be switched off, or a pack's profile content unpublished, while the server
+     * is up.
+     */
+    public static Set<String> features(ServerPlayer player) {
+        if (!isAvailable() || player == null) {
+            return Set.of();
+        }
+        try {
+            Set<String> features = queries.features(player);
+            return features == null ? Set.of() : features;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("[MCA: Conversations] reputation capability read failed; "
+                    + "assuming none", t);
+            return Set.of();
+        }
+    }
+
+    /** Whether one named capability is live right now. */
+    public static boolean hasFeature(ServerPlayer player, String feature) {
+        return feature != null && features(player).contains(feature);
+    }
+
+    /**
+     * Whether a profile question in this scope can be asked at all.
+     *
+     * <p>Asked before the query rather than inferred from its answer, so an authored fallback fires on
+     * a build without profiles instead of on a player who has simply done nothing yet.
+     */
+    public static boolean supportsProfileScope(ServerPlayer player, ProfileQuerySpec.Scope scope) {
+        Set<String> features = features(player);
+        return scope == ProfileQuerySpec.Scope.COMMUNITY
+                ? features.contains(FEATURE_PROFILE_SNAPSHOT)
+                : features.contains(FEATURE_SPEAKER_PROFILE);
+    }
+
+    // ------------------------------------------------------------------
+    // Public profiles
+    // ------------------------------------------------------------------
+
+    /**
+     * Scores an authored profile predicate, three-valued.
+     *
+     * <p>{@link ProfileAnswer#UNAVAILABLE} for an absent mod, an unsupported scope, a query Reputation
+     * refused, and a speaker it could not resolve. Never the community's answer to a speaker's
+     * question (§13.3).
+     */
+    public static ProfileAnswer matchesProfile(ServerPlayer player, Entity villager,
+                                               ProfileQuerySpec query) {
+        if (!isAvailable() || player == null || villager == null || query == null) {
+            return ProfileAnswer.UNAVAILABLE;
+        }
+        if (!supportsProfileScope(player, query.scope())) {
+            return ProfileAnswer.UNAVAILABLE;
+        }
+        try {
+            ProfileAnswer answer = queries.matchesProfile(player, villager, query);
+            return answer == null ? ProfileAnswer.UNAVAILABLE : answer;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("[MCA: Conversations] reputation profile query failed; "
+                    + "answering unavailable", t);
+            return ProfileAnswer.UNAVAILABLE;
+        }
+    }
+
+    /** What this villager knows the player for, or empty when nobody could say. */
+    public static Optional<SpeakerProfileView> speakerProfile(ServerPlayer player, Entity villager) {
+        if (!isAvailable() || player == null || villager == null
+                || !features(player).contains(FEATURE_SPEAKER_PROFILE)) {
+            return Optional.empty();
+        }
+        try {
+            Optional<SpeakerProfileView> view = queries.speakerProfile(player, villager);
+            return view == null ? Optional.empty() : view;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("[MCA: Conversations] speaker profile read failed; "
+                    + "answering unavailable", t);
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Records an authored conversation outcome as a public deed. False when nothing was recorded.
+     *
+     * <p>Safe to call with Reputation absent, where it is a no-op returning false — which is what
+     * makes {@code conversations_reputation_signal} authorable in a pack that also has to load
+     * without the mod.
+     */
+    public static boolean recordSignal(ServerPlayer player, Entity villager, SignalRequest request) {
+        if (!isAvailable() || player == null || villager == null || request == null) {
+            return false;
+        }
+        try {
+            return queries.recordSignal(player, villager, request);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("[MCA: Conversations] reputation signal failed; nothing was "
+                    + "recorded", t);
+            return false;
         }
     }
 
@@ -346,6 +783,9 @@ public final class ReputationBridge {
                 || tierId == null || tierId.isEmpty()) {
             return;
         }
+        // The village has changed its mind, so whatever this mod memoized about how one of its
+        // residents reads the player is now the old answer.
+        invalidateStandingCache(playerId);
         PENDING_REMARKS.values().removeIf(remark -> !isFresh(remark, now));
         if (PENDING_REMARKS.size() >= MAX_PENDING_REMARKS) {
             PENDING_REMARKS.clear();
@@ -415,9 +855,21 @@ public final class ReputationBridge {
         }
     }
 
-    /** Clears world-specific, transient remarks when the server stops. */
+    /** Clears world-specific, transient remarks and memos when the server stops. */
     public static void clearPendingRemarks() {
         PENDING_REMARKS.clear();
+        BIAS_CACHE.clear();
+        ReputationQueries impl = queries;
+        if (impl != null) {
+            try {
+                // The façade stays registered — it is installed once per JVM — but everything it
+                // cached about the world that just closed goes with the world.
+                impl.clearServerState();
+            } catch (Throwable t) {
+                McaConversations.LOGGER.debug("[MCA: Conversations] reputation server-state clear "
+                        + "failed; the next world re-reads it anyway", t);
+            }
+        }
     }
 
     /** Compatibility alias for existing tests. */

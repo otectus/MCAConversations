@@ -2314,6 +2314,102 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.standing.known_for_courage"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.standing.known_for_courage",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "standing.known_for_courage.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.standing.known_for_courage.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.known_for_courage"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.standing.known_for_violence"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.standing.known_for_violence",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "standing",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "standing.known_for_violence.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.standing",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.standing.known_for_violence.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.standing.known_for_violence"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 200,
               "conversations_progress": {
                 "arc": "standing",
@@ -2546,6 +2642,18 @@
               }
             },
             {
+              "chance": 40,
+              "conversations_reputation_profile": {
+                "scope": "speaker",
+                "facets": {
+                  "mcareputation:bravery": {
+                    "min": 10,
+                    "min_evidence": 1
+                  }
+                }
+              }
+            },
+            {
               "chance": -2000,
               "conversations_reputation_incident": {
                 "statuses": [
@@ -2727,6 +2835,18 @@
               "chance": 100,
               "conversations_reputation": {
                 "max_tier": "wary"
+              }
+            },
+            {
+              "chance": 40,
+              "conversations_reputation_profile": {
+                "scope": "speaker",
+                "facets": {
+                  "mcareputation:violence": {
+                    "min": 10,
+                    "min_evidence": 1
+                  }
+                }
               }
             },
             {

@@ -59,6 +59,7 @@ class ContentLintTest {
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed",
             "conversations_reputation", "conversations_reputation_incident",
+            "conversations_reputation_profile",
             "conversations_session", "conversations_budget",
             // Living histories, registered by LivingHistoriesRegistrar.
             "conversations_profile", "conversations_context", "conversations_episode",
