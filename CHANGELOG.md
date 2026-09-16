@@ -31,8 +31,37 @@ follow the player to the next villager.
   — MCA's family tree button does exactly that — is reconciled against the window, and a newly opened
   screen inherits nothing from the one before it.
 
+### Added
+
+- **Every conversation now has a name, and every message says which one it belongs to.** Until now a
+  packet could only say "this player's current conversation", which is why a click from a window that
+  had just closed was answered against whoever the player had turned to next. The server now tells the
+  client which discussion it has accepted, and every answer, topic return, close and liveness ping
+  quotes that name back. Anything naming a conversation that has ended — a click, a close, a ping, an
+  explanation — is refused and nothing else: the exchange the player is actually in keeps its card,
+  its villager and its place. Refusals stay refusals, too; a duplicated or late answer never closes a
+  conversation that is working.
+
 ### Changed
 
+- **The choice channel is now protocol 4, and 1.7.1 does not pair with 1.7.0.** The channel requires
+  an exact match, so a 1.7.0 client is refused by a 1.7.1 server and vice versa — deliberately, and
+  with a clear rejection rather than a misread packet. Update both sides together; on a dedicated
+  server that means the server jar and every player's jar, and both loaders' builds publish together.
+- **The server, not the screen, now decides which villager a dialogue belongs to.** A graphical offer
+  used to be recorded against no villager at all, leaving the client to infer one from whichever
+  window happened to be open. The villager now comes from MCA's own record of who is interacting with
+  whom, at the moment MCA accepts the interaction, so an offer names a real speaker before it is ever
+  sent. Closing the window tells the server so directly, instead of the ending having to be inferred
+  a few seconds later.
+- **Closing your window can no longer end somebody else's conversation.** MCA's own close request
+  names a villager and nothing more, and acts on it without checking who sent it — so after a villager
+  changed hands, the previous player's window closing took the villager away from the player who was
+  mid-sentence with them. That close is now refused when it comes from someone who is not the
+  villager's current partner, and left completely untouched for any villager this mod is not managing.
+- **A conversation's queued lines now end with that conversation, and only that one.** Deferred
+  villager replies were cancelled per player, so an ending swept up anything the player's *next*
+  exchange had already queued. Each queued line is stamped with the conversation that produced it.
 - **A conversation that ends can no longer hand back a villager somebody else is talking to.** Ending
   a discussion released the villager by name alone, so on a shared server the tail end of one
   player's conversation — a delayed close, a timeout swept a moment late, a logout — freed a villager

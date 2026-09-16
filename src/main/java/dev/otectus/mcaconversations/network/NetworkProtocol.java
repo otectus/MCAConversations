@@ -16,7 +16,7 @@ final class NetworkProtocol {
 
     private static final String RESOURCE = "/mcaconversations-network.properties";
     /** Only reached when the resource is missing from the classpath; keep in step with gradle.properties. */
-    private static final String FALLBACK = "3";
+    private static final String FALLBACK = "4";
 
     private NetworkProtocol() {
     }

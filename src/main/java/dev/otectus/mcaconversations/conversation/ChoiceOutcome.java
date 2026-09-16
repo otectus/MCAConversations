@@ -38,7 +38,15 @@ public enum ChoiceOutcome {
     /** Internal: no live offer, a stale revision, an out-of-range index, or a replayed packet. */
     INVALID_SUBMISSION(ChoiceClearS2C.Reason.EXPIRED, false),
     /** Internal: the offer belongs to another villager, or the villager to another player. */
-    OWNERSHIP_MISMATCH(ChoiceClearS2C.Reason.EXPIRED, false);
+    OWNERSHIP_MISMATCH(ChoiceClearS2C.Reason.EXPIRED, false),
+    /**
+     * Internal: the packet named a discussion that is not the live one — a click from a window the
+     * player has already closed, or from the exchange before the one they are in now.
+     *
+     * <p>Emphatically not terminal. The straggler is refused and its own card retired; the
+     * conversation the player is actually having is left exactly as it was (spec §4.4).
+     */
+    OBSOLETE_HANDLE(ChoiceClearS2C.Reason.EXPIRED, false);
 
     private final ChoiceClearS2C.Reason wireReason;
     private final boolean terminal;

@@ -17,13 +17,21 @@ public final class ChatModeScheduler {
 
     /**
      * {@code player} is the recipient the entry belongs to, or null for a task owned by nobody;
+     * {@code handle} is the discussion it was queued in, or null when the recipient was in none;
      * {@code bundle} is the content the task was created under.
      *
      * <p>Stamping the bundle is what keeps a deferred line honest. The reply was already chosen and
      * rendered when the task was queued; running it later against whatever content has been published
      * since would let a humanized delivery delay smuggle a new catalog into a finished exchange.
+     *
+     * <p>Stamping the handle is what keeps it addressed to the right conversation. A queued line
+     * belongs to the exchange that produced it; when that exchange ends the line must go with it, and
+     * when the <em>next</em> one ends the line it queued must go with that instead. Clearing by
+     * player alone could not tell those apart, so an ending erased whatever the successor had already
+     * scheduled (spec §4.5 step 4).
      */
     private record Scheduled(long tick, long seq, java.util.UUID player,
+                             dev.otectus.mcaconversations.conversation.ConversationHandle handle,
                              dev.otectus.mcaconversations.conversation.ConversationContentBundle bundle,
                              Runnable task) {
     }
@@ -45,10 +53,25 @@ public final class ChatModeScheduler {
     /**
      * As {@link #schedule(long, Runnable)}, but tagged with the player the task speaks to so
      * {@link #clearPlayer} can drop it when their conversation ends.
+     *
+     * <p>The discussion is stamped here rather than passed in, so every existing caller becomes
+     * handle-aware without changing: the conversation a line belongs to is, by definition, the one
+     * its recipient is in at the moment it is queued.
      */
     public static void schedule(java.util.UUID player, long deliverAtTick, Runnable task) {
-        QUEUE.add(new Scheduled(deliverAtTick, sequence++, player,
+        QUEUE.add(new Scheduled(deliverAtTick, sequence++, player, currentHandle(player),
                 dev.otectus.mcaconversations.conversation.ContentOperation.bundle(), task));
+    }
+
+    private static dev.otectus.mcaconversations.conversation.ConversationHandle currentHandle(
+            java.util.UUID player) {
+        try {
+            return dev.otectus.mcaconversations.conversation.ConversationPresence.ofPlayer(player)
+                    .orElse(null);
+        } catch (Throwable ignored) {
+            // Presence is server-thread state; a queue used outside one is untagged, never broken.
+            return null;
+        }
     }
 
     /** Keeps a player's spoken turns in order even when a later, shorter line has less typing delay. */
@@ -108,6 +131,38 @@ public final class ChatModeScheduler {
             QUEUE.addAll(survivors);
         }
         LAST_DELIVERY.remove(player);
+    }
+
+    /**
+     * Drops what exactly one discussion queued, and nothing a successor queued.
+     *
+     * <p>Untagged work for the same player goes too: a line queued before handles existed, or
+     * outside any discussion, still belongs to the exchange that is ending, and leaving it behind
+     * would reintroduce the goodbye-then-one-more-line ending this method exists to prevent. What it
+     * refuses to touch is work stamped with a <em>different</em> handle — the successor's.
+     */
+    public static void clearHandle(dev.otectus.mcaconversations.conversation.ConversationHandle handle) {
+        if (handle == null) {
+            return;
+        }
+        java.util.UUID player = handle.playerId();
+        java.util.List<Scheduled> survivors = new java.util.ArrayList<>(QUEUE.size());
+        for (Scheduled entry : QUEUE) {
+            boolean mine = player.equals(entry.player())
+                    && (entry.handle() == null || handle.equals(entry.handle()));
+            if (!mine) {
+                survivors.add(entry);
+            }
+        }
+        if (survivors.size() != QUEUE.size()) {
+            QUEUE.clear();
+            QUEUE.addAll(survivors);
+        }
+        // Only when nothing of this player's is left: the ordering watermark is per player, and a
+        // successor that already queued a line still needs it.
+        if (pendingFor(player) == 0) {
+            LAST_DELIVERY.remove(player);
+        }
     }
 
     /** How many deliveries are still queued for {@code player} (diagnostics and tests). */

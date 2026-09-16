@@ -4,9 +4,14 @@ import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 import dev.otectus.mcaconversations.network.ChoiceOfferS2C;
 import dev.otectus.mcaconversations.network.ChoicePacketSink;
+import dev.otectus.mcaconversations.network.ConversationClosedS2C;
+import dev.otectus.mcaconversations.network.ConversationOpenedS2C;
+import dev.otectus.mcaconversations.network.ConversationRef;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -15,6 +20,12 @@ import java.util.UUID;
  * <p>It also keeps the one thing an incoming offer cannot say for itself: which villager this client
  * is looking at. The offer packet carries no identity, so the open interaction screen supplies it,
  * and everything the offer leaves behind is named after that villager rather than after nobody.
+ *
+ * <p>Since protocol 4 it additionally keeps the <em>handle</em> the server named when it accepted the
+ * discussion. That is what every outgoing packet quotes back, and what lets an incoming one be
+ * recognised as belonging to a conversation this client has already left. The small ring of
+ * {@linkplain #CLOSED dismissed handles} completes it: a delayed open or offer for a window the
+ * player has already closed is dropped rather than resurrecting it (spec §7).
  */
 public final class ClientChoiceMessages implements ChoicePacketSink {
 
@@ -25,6 +36,17 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
     private static Object screen;
     private static UUID screenVillagerId;
     private static boolean screenShown;
+
+    /**
+     * How many dismissed discussions to remember. Bounded on purpose: this only has to outlive the
+     * packets already in flight for a window that has just closed, and an unbounded set would grow
+     * for as long as a connection lasts.
+     */
+    private static final int REMEMBERED_CLOSES = 32;
+    private static final Set<UUID> CLOSED = new LinkedHashSet<>();
+
+    private static UUID handleSessionId;
+    private static UUID handleVillagerId;
 
     private ClientChoiceMessages() {
     }
@@ -63,6 +85,70 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
         screen = null;
         screenVillagerId = null;
         screenShown = false;
+    }
+
+    /**
+     * The name to put on an outgoing packet about {@code villagerId}.
+     *
+     * <p>The session travels only when the handle this client holds is actually for that villager.
+     * Quoting a handle at the wrong villager would be a claim the server has to refuse, and the
+     * honest alternative — naming the villager alone — is exactly what an unmanaged frontend sends.
+     */
+    public static ConversationRef refFor(UUID villagerId) {
+        UUID session = handleSessionId;
+        if (session != null && (villagerId == null || villagerId.equals(handleVillagerId))) {
+            return new ConversationRef(session, handleVillagerId != null ? handleVillagerId : villagerId);
+        }
+        return ConversationRef.ofVillager(villagerId);
+    }
+
+    /** The discussion this client is in, or {@link ConversationRef#NONE} when it is in none. */
+    public static ConversationRef currentRef() {
+        UUID session = handleSessionId;
+        return session == null ? ConversationRef.NONE : new ConversationRef(session, handleVillagerId);
+    }
+
+    /**
+     * Forgets the current handle because this client has just asked for it to end.
+     *
+     * <p>Called from the screen teardown that sends the close, so the heartbeat stops with the
+     * window rather than one round trip later, and so a delayed offer for the dismissed discussion
+     * has something to be recognised against before the server's own terminal packet arrives.
+     */
+    public static void forgetHandle() {
+        remember(handleSessionId);
+        handleSessionId = null;
+        handleVillagerId = null;
+    }
+
+    private static void remember(UUID sessionId) {
+        if (sessionId == null) {
+            return;
+        }
+        CLOSED.add(sessionId);
+        while (CLOSED.size() > REMEMBERED_CLOSES) {
+            java.util.Iterator<UUID> oldest = CLOSED.iterator();
+            oldest.next();
+            oldest.remove();
+        }
+    }
+
+    /**
+     * Whether a packet naming {@code ref} is still this client's business.
+     *
+     * <p>Three answers collapse into one: a packet that names no discussion is judged the way it was
+     * before handles existed; one that names a dismissed discussion is dropped; one that names a
+     * discussion other than the live one is dropped. A client that somehow has no handle yet accepts
+     * the packet and adopts what it says, because the alternative is a screen that never updates.
+     */
+    private static boolean addressedToUs(ConversationRef ref) {
+        if (ref == null || !ref.identified()) {
+            return true;
+        }
+        if (CLOSED.contains(ref.sessionId())) {
+            return false;
+        }
+        return handleSessionId == null || handleSessionId.equals(ref.sessionId());
     }
 
     /** The villager whose interaction screen is open on this client, or null if none is. */
@@ -109,6 +195,11 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
             screen = null;
             screenVillagerId = null;
             screenShown = false;
+            handleSessionId = null;
+            handleVillagerId = null;
+            // Handles are minted per server lifetime, so a new connection's cannot collide with the
+            // old one's and there is nothing left to recognise.
+            CLOSED.clear();
             connection = current;
         }
     }
@@ -123,8 +214,42 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
         applyClear(message);
     }
 
+    @Override
+    public void opened(ConversationOpenedS2C message) {
+        synchronizeConnection();
+        if (!message.handle().identified() || CLOSED.contains(message.handle().sessionId())) {
+            // A delayed acceptance of a window the player already dismissed. Adopting it would give
+            // the client a live handle for a conversation that is over.
+            return;
+        }
+        handleSessionId = message.handle().sessionId();
+        handleVillagerId = message.handle().villagerId();
+    }
+
+    @Override
+    public void closed(ConversationClosedS2C message) {
+        synchronizeConnection();
+        UUID session = message.handle().sessionId();
+        remember(session);
+        if (session == null || !session.equals(handleSessionId)) {
+            // A close for a discussion this client has already replaced. Retiring anything here
+            // would close the window the player is looking at because the previous one ended.
+            return;
+        }
+        UUID villager = handleVillagerId;
+        handleSessionId = null;
+        handleVillagerId = null;
+        if (villager == null || villager.equals(screenVillagerId())) {
+            STATE.clearLocal(ConversationSession.Frontend.GUI);
+        }
+        STATE.clearLocal(ConversationSession.Frontend.CHAT);
+    }
+
     public static void accept(ChoiceOfferS2C message) {
         synchronizeConnection();
+        if (!addressedToUs(message.handle())) {
+            return;
+        }
         Minecraft minecraft = Minecraft.getInstance();
         long tick = minecraft.player == null ? 0L : minecraft.player.tickCount;
         // Only the graphical frontend has a screen, and a graphical offer belongs to the villager
@@ -137,6 +262,11 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
 
     public static void applyClear(ChoiceClearS2C message) {
         synchronizeConnection();
+        if (!addressedToUs(message.handle())) {
+            // A refusal addressed to a conversation this client has left. The revision watermark
+            // alone could not tell it from a refusal of the card on screen.
+            return;
+        }
         // Read before the clear, because the state that knows which frontend lapsed is the state
         // about to be emptied.
         ConversationSession.Frontend frontend = STATE.offer()

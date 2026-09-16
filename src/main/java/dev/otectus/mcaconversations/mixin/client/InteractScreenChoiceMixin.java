@@ -253,10 +253,16 @@ public abstract class InteractScreenChoiceMixin {
      * lapse has no offer — clearing it was exactly the case the guard excluded — so the explanation
      * survived the close and was still on the state when the player opened the next villager's
      * screen. Only the graphical frontend is dropped: a chat conversation is not this screen's.
+     *
+     * <p>The server is told too. MCA sends its own tokenless close from the same place, but that
+     * packet names a villager and not a discussion, so it cannot say <em>which</em> conversation
+     * ended; this one can, and it is what lets the server end the handle as {@code CLIENT_CLOSED}
+     * instead of waiting for a lapsed heartbeat to infer it.
      */
     @Unique
     private void mcaconversations$releaseScreen() {
         ClientChoiceMessages.state().clearLocal(ConversationSession.Frontend.GUI);
+        dev.otectus.mcaconversations.client.dialogue.ClientChoiceController.closeConversation();
         ClientChoiceMessages.screenClosed(this);
         mcaconversations$renderer.reset();
         mcaconversations$speaker = null;

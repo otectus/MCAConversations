@@ -134,7 +134,8 @@ public final class ClientChoiceController {
         ClientChoiceState.Lapse lapse = ClientChoiceMessages.state().lapse().orElse(null);
         if (villagerId != null && lapse != null && lapse.backToTopics()) {
             ConversationsNetwork.CHANNEL.sendToServer(
-                    new dev.otectus.mcaconversations.network.ChoiceReturnC2S(lapse.revision(), villagerId));
+                    new dev.otectus.mcaconversations.network.ChoiceReturnC2S(
+                            ClientChoiceMessages.refFor(villagerId), lapse.revision()));
         }
     }
 
@@ -163,7 +164,33 @@ public final class ClientChoiceController {
                     SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, volume));
         }
         ConversationsNetwork.CHANNEL.sendToServer(
-                new ChoiceSelectC2S(offer.revision(), absoluteIndex, villagerId));
+                new ChoiceSelectC2S(ClientChoiceMessages.refFor(villagerId), offer.revision(), absoluteIndex));
         return true;
+    }
+
+    /**
+     * Tells the server the player dismissed their conversation window.
+     *
+     * <p>Sent from the screen teardown so an ending the player caused is known at once instead of
+     * being inferred a few seconds later from a lapsed heartbeat. The handle goes with it, so a
+     * dismissal cannot end the conversation that has already replaced this one; the server decides
+     * the reason itself.
+     *
+     * <p>The local handle is forgotten either way. A close whose packet is lost still stops this
+     * client heartbeating a window that is gone, and the server ends the discussion on its own terms.
+     */
+    public static void closeConversation() {
+        dev.otectus.mcaconversations.network.ConversationRef ref = ClientChoiceMessages.currentRef();
+        ClientChoiceMessages.forgetHandle();
+        if (!ref.identified()) {
+            return;
+        }
+        try {
+            ConversationsNetwork.CHANNEL.sendToServer(
+                    new dev.otectus.mcaconversations.network.ConversationCloseC2S(ref));
+        } catch (Throwable t) {
+            dev.otectus.mcaconversations.McaConversations.LOGGER
+                    .debug("conversation close request failed; the server will expire it", t);
+        }
     }
 }

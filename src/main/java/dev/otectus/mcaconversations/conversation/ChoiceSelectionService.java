@@ -7,6 +7,7 @@ import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 import dev.otectus.mcaconversations.network.ChoiceOfferS2C;
+import dev.otectus.mcaconversations.network.ConversationRef;
 import dev.otectus.mcaconversations.network.ConversationsNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -22,7 +23,13 @@ public final class ChoiceSelectionService {
     }
 
     public static boolean select(ServerPlayer player, long revision, int absoluteIndex, UUID candidateVillagerId) {
-        return submit(player, revision, absoluteIndex, candidateVillagerId).ok();
+        return submit(player, null, revision, absoluteIndex, candidateVillagerId).ok();
+    }
+
+    /** As above for a numbered click that named the discussion it was made in (protocol 4). */
+    public static boolean select(ServerPlayer player, UUID sessionId, long revision, int absoluteIndex,
+                                 UUID candidateVillagerId) {
+        return submit(player, sessionId, revision, absoluteIndex, candidateVillagerId).ok();
     }
 
     /**
@@ -39,19 +46,39 @@ public final class ChoiceSelectionService {
      */
     public static ChoiceOutcome submit(ServerPlayer player, long revision, int absoluteIndex,
                                        UUID candidateVillagerId) {
+        return submit(player, null, revision, absoluteIndex, candidateVillagerId);
+    }
+
+    /**
+     * As above, for a submission that named its discussion.
+     *
+     * <p>{@code sessionId} may be null, and null is not a refusal: MCA's own dialogue packet and
+     * chat mode's ambient exchanges carry no handle and are judged exactly as they were before
+     * handles existed. What a <em>wrong</em> session id buys is a refusal that leaves the live
+     * conversation alone — see {@link HandleAuthority}.
+     */
+    public static ChoiceOutcome submit(ServerPlayer player, UUID sessionId, long revision, int absoluteIndex,
+                                       UUID candidateVillagerId) {
         try (ContentOperation ignored = ContentOperation.open()) {
-            return submitPinned(player, revision, absoluteIndex, candidateVillagerId);
+            return submitPinned(player, sessionId, revision, absoluteIndex, candidateVillagerId);
         }
     }
 
-    private static ChoiceOutcome submitPinned(ServerPlayer player, long revision, int absoluteIndex,
-                                              UUID candidateVillagerId) {
+    private static ChoiceOutcome submitPinned(ServerPlayer player, UUID sessionId, long revision,
+                                              int absoluteIndex, UUID candidateVillagerId) {
         if (player == null || player.hasDisconnected() || !player.isAlive() || player.isSpectator()) {
             // There is nobody left to explain anything to.
             return ChoiceOutcome.SPEAKER_UNAVAILABLE;
         }
         if (!McaBridge.isAvailable()) {
             return reject(player, revision, ChoiceOutcome.FEATURE_DISABLED);
+        }
+        // Before anything is resolved: is this even the conversation the player is in? A click from
+        // a closed window carries a perfectly plausible revision, and answering it against whoever
+        // they are talking to now is how one villager's reply ended up executing on another.
+        if (HandleAuthority.judgeFor(player.getUUID(), sessionId, candidateVillagerId).stale()) {
+            return reject(player, new ConversationRef(sessionId, candidateVillagerId), revision,
+                    ChoiceOutcome.OBSOLETE_HANDLE);
         }
         long now = player.level().getGameTime();
         ConversationSession session = ConversationSessions.raw(player.getUUID()).orElse(null);
@@ -148,7 +175,8 @@ public final class ChoiceSelectionService {
             ConversationSessions.reofferConsumed(player.getUUID(), question, revisionBefore, now)
                     .filter(offer -> !offer.answerIds().isEmpty()
                             && offer.answerIds().size() <= ChoiceOfferS2C.MAX_CHOICES)
-                    .ifPresent(offer -> ConversationsNetwork.sendOffer(player, ChoiceOfferS2C.from(offer)));
+                    .ifPresent(offer -> ConversationsNetwork.sendOffer(player,
+                            ChoiceOfferS2C.from(ConversationsNetwork.refFor(player), offer)));
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("re-offer after terminal reply failed for {}", question, t);
         }
@@ -249,19 +277,42 @@ public final class ChoiceSelectionService {
      * obsolete or duplicated packet must never tear down the session the player is still using.
      */
     public static ChoiceOutcome reject(ServerPlayer player, long revision, ChoiceOutcome outcome) {
+        return reject(player, ConversationsNetwork.refFor(player), revision, outcome);
+    }
+
+    /**
+     * As above, addressed to a named discussion rather than to the live one.
+     *
+     * <p>A refusal for a straggler is sent back under the straggler's own handle, so the client
+     * retires the card that produced it and not the one in front of the player. Nothing about the
+     * live conversation is touched — no topic-return authorization is granted for a discussion that
+     * is not the live one, which is why that grant is conditioned on the outcome below.
+     */
+    public static ChoiceOutcome reject(ServerPlayer player, ConversationRef handle, long revision,
+                                       ChoiceOutcome outcome) {
         if (outcome == ChoiceOutcome.CONTENT_RELOADED || outcome == ChoiceOutcome.REQUIREMENTS_CHANGED
                 || outcome == ChoiceOutcome.INVALID_SUBMISSION || outcome == ChoiceOutcome.TIMED_OUT) {
             ConversationSessions.raw(player.getUUID()).ifPresent(session -> session.allowTopicReturn(revision));
         }
-        ConversationsNetwork.clearOffer(player, revision, outcome.wireReason());
-        McaConversations.LOGGER.debug("refused numbered response revision {} from {}: {}",
-                revision, player.getGameProfile().getName(), outcome);
+        ConversationsNetwork.clearOffer(player, handle, revision, outcome.wireReason());
+        McaConversations.LOGGER.debug("refused numbered response revision {} from {}: {} ({})",
+                revision, player.getGameProfile().getName(), outcome, handle);
         return outcome;
     }
 
     /** Opens a newly filtered menu after a refusal, without executing any answer from the old offer. */
     public static void returnToTopics(ServerPlayer player, long revision, UUID villagerId) {
+        returnToTopics(player, null, revision, villagerId);
+    }
+
+    /** As above for a request that named its discussion; one from a retired discussion is refused. */
+    public static void returnToTopics(ServerPlayer player, UUID sessionId, long revision, UUID villagerId) {
         if (player == null || player.hasDisconnected() || !player.isAlive() || player.isSpectator()) {
+            return;
+        }
+        if (HandleAuthority.judgeFor(player.getUUID(), sessionId, villagerId).stale()) {
+            reject(player, new ConversationRef(sessionId, villagerId), revision,
+                    ChoiceOutcome.OBSOLETE_HANDLE);
             return;
         }
         try (ContentOperation ignored = ContentOperation.open()) {

@@ -70,6 +70,49 @@ public final class ConversationsNetwork {
         CHANNEL.registerMessage(4, ChoiceReturnC2S.class,
                 ChoiceReturnC2S::encode, ChoiceReturnC2S::decode, ChoiceReturnC2S::handle,
                 java.util.Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        // Protocol 4: the discussion lifecycle itself. Ids are appended, never reused — the channel
+        // demands exact protocol equality, so an old client is refused at handshake rather than
+        // arriving here and being misread as one of the packets above.
+        CHANNEL.registerMessage(5, ConversationOpenedS2C.class,
+                ConversationOpenedS2C::encode, ConversationOpenedS2C::decode, ConversationOpenedS2C::handle,
+                java.util.Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(6, ConversationClosedS2C.class,
+                ConversationClosedS2C::encode, ConversationClosedS2C::decode, ConversationClosedS2C::handle,
+                java.util.Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(7, ConversationPresenceC2S.class,
+                ConversationPresenceC2S::encode, ConversationPresenceC2S::decode, ConversationPresenceC2S::handle,
+                java.util.Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(8, ConversationCloseC2S.class,
+                ConversationCloseC2S::encode, ConversationCloseC2S::decode, ConversationCloseC2S::handle,
+                java.util.Optional.of(NetworkDirection.PLAY_TO_SERVER));
+    }
+
+    /** The wire name of the discussion this player is in right now, or {@link ConversationRef#NONE}. */
+    public static ConversationRef refFor(ServerPlayer player) {
+        return player == null ? ConversationRef.NONE : ConversationRef.of(
+                dev.otectus.mcaconversations.conversation.ConversationPresence
+                        .ofPlayer(player.getUUID()).orElse(null));
+    }
+
+    /** Announces an accepted discussion to the one player who is in it. */
+    public static void sendOpened(ServerPlayer player, ConversationRef handle,
+                                  dev.otectus.mcaconversations.conversation.ConversationSession.Frontend frontend) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new ConversationOpenedS2C(handle, frontend));
+    }
+
+    /**
+     * Announces one discussion's ending. Best effort by design: a client that never receives this
+     * loses nothing the server is waiting on, because no villager is held pending an acknowledgement.
+     */
+    public static void sendClosed(ServerPlayer player, ConversationRef handle,
+                                  dev.otectus.mcaconversations.conversation.CloseReason reason) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new ConversationClosedS2C(handle, reason));
     }
 
     public static void sendOffer(ServerPlayer player, ChoiceOfferS2C offer) {
@@ -77,7 +120,22 @@ public final class ConversationsNetwork {
     }
 
     public static void clearOffer(ServerPlayer player, long revision, ChoiceClearS2C.Reason reason) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new ChoiceClearS2C(revision, reason));
+        clearOffer(player, refFor(player), revision, reason);
+    }
+
+    /**
+     * As above for a clear that belongs to a <em>named</em> discussion rather than the current one.
+     *
+     * <p>Refusing a straggler has to be addressed to the discussion the straggler came from: sending
+     * it under the live handle would tell the client to retire the card the player is looking at,
+     * which is exactly the bug the identity work exists to remove.
+     */
+    public static void clearOffer(ServerPlayer player, ConversationRef handle, long revision,
+                                  ChoiceClearS2C.Reason reason) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new ChoiceClearS2C(handle, revision, reason));
     }
 
     public static void warnOversizedOffer(String question, int count) {

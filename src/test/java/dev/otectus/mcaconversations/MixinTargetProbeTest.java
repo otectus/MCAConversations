@@ -95,6 +95,10 @@ class MixinTargetProbeTest {
         INJECTION_POINTS.put("DialoguesMixin", List.of("getQuestion"));
         INJECTION_POINTS.put("QuestionMixin", List.of("getValidAnswers"));
         INJECTION_POINTS.put("InteractionDialogueMessageMixin", List.of("receive"));
+        // MCA's tokenless close. Present as receive(ServerPlayer) on 7.6.20, 7.7.0-beta.2 and
+        // 7.7.1-alpha.2; the guard is a silent no-op if it is ever renamed, which is exactly what
+        // this entry exists to turn into a build failure.
+        INJECTION_POINTS.put("McaInteractionCloseMixin", List.of("receive"));
         INJECTION_POINTS.put("BreedableRelationshipMixin", List.of("acceptGift"));
         INJECTION_POINTS.put("MCAClientMixin", List.of("useExpandedPersonalityTranslations"));
         INJECTION_POINTS.put("VillagerMessageMixin", List.of("<init>", "getMessage", "getContent"));

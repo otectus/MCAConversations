@@ -159,8 +159,9 @@ public final class ConversationLifecycle {
             stage(handle, why, "session", () -> removed[0] = ConversationSessions.detach(handle, why));
             // 3. Only this handle's attention. A villager taken over keeps the new owner's hold.
             stage(handle, why, "attention", () -> VillagerAttention.releaseIfOwned(handle.villagerId(), handle));
-            // 4. Nothing this discussion scheduled may surface after it ended.
-            stage(handle, why, "delivery", () -> ChatModeScheduler.clearPlayer(handle.playerId()));
+            // 4. Nothing THIS discussion scheduled may surface after it ended — and nothing the
+            //    successor scheduled may be swept up with it, which a player-wide clear would do.
+            stage(handle, why, "delivery", () -> ChatModeScheduler.clearHandle(handle));
             // 5. Chat stickiness and the dynamic hub are this player's view of the discussion.
             stage(handle, why, "chat", () -> ChatModeSession.detach(handle.playerId()));
             stage(handle, why, "hub", () -> dev.otectus.mcaconversations.hub.DynamicHub.clear(handle.playerId()));
@@ -174,6 +175,28 @@ public final class ConversationLifecycle {
         McaConversations.LOGGER.debug("conversation closed as {}: {} (had session: {})",
                 why, handle, removed[0] != null);
         return Optional.ofNullable(removed[0]);
+    }
+
+    /**
+     * Ends the discussion a client named, and only that one (spec §4.4).
+     *
+     * <p>The entry point for {@code ConversationCloseC2S} and for anything else that knows a
+     * discussion by name rather than by object. A close that names a retired handle — the window a
+     * player dismissed a moment after reopening the same villager, or the one the server took away
+     * from them in a handoff — is a debug line: the successor is untouched.
+     *
+     * @return the session that was removed, or empty when the named discussion is not the live one
+     */
+    public static Optional<ConversationSession> terminateIfCurrent(UUID playerId, UUID sessionId,
+                                                                   UUID villagerId, CloseReason reason) {
+        ConversationHandle current = ConversationPresence.ofPlayer(playerId).orElse(null);
+        HandleAuthority.Decision decision = HandleAuthority.judge(current, sessionId, villagerId);
+        if (decision != HandleAuthority.Decision.ACCEPT) {
+            McaConversations.LOGGER.debug("ignored a {} close naming session {} from {}: {}",
+                    reason, sessionId, playerId, decision);
+            return Optional.empty();
+        }
+        return terminate(current, reason);
     }
 
     /** Ends whatever discussion this player is having, if any. */

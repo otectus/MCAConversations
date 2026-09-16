@@ -104,6 +104,7 @@ public final class ConversationsEvents {
         // Forget who was talking to whom and advance the handle epoch, so no discussion identity
         // from the world that just stopped can ever equal one minted by the next.
         dev.otectus.mcaconversations.conversation.ConversationLifecycle.reset();
+        dev.otectus.mcaconversations.network.ConversationLifecycleBridge.shutdown();
         VillagerAttention.reset();
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
@@ -173,6 +174,11 @@ public final class ConversationsEvents {
         // Before the early return below: the epoch is what keeps a previous world's cached answers
         // out of this one, and it is owed regardless of whether chat mode is on.
         ServerEpoch.advance();
+
+        // The teardown coordinator's terminal packet. Registered here so conversation/ never has to
+        // import network/, and re-bound every start so an integrated world opened twice sends to the
+        // world that is actually running.
+        dev.otectus.mcaconversations.network.ConversationLifecycleBridge.install(event.getServer());
 
         // Likewise owed regardless: history eviction must know who is mid-conversation before the
         // first player can be, and the store cannot ask conversation/ itself without depending on it.
