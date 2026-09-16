@@ -251,17 +251,20 @@ MCA's dialogue system loads datapack JSON from any namespace and merges same-nam
 most of Conversations is data: `data/mcaconversations/dialogues/*.json` adds new questions and extends MCA's
 `main`/`greet`. The Java side registers custom dialogue conditions/actions
 (`conversations_gossip`, `conversations_disposition`, `conversations_check`, `conversations_say`, ...) into
-MCA's public registries. `mcaconversations.mixins.json` lists eleven mixins in total — five common
+MCA's public registries. `mcaconversations.mixins.json` lists thirteen mixins in total — seven common
 and six client (`client:` list) — every one soft-fail on a missed injection point
 (`injectors.defaultRequire = 0`, so an unresolved method target is skipped at startup instead of
 crashing it); tolerance of a target *class* that does not exist at all comes separately from
 `@Pseudo` and, on the mixins that name MCA's two package roots, from Mixin simply omitting whichever
 root it cannot find (see `mixin/NetworkHandlerMixin`, `mixin/InteractionDialogueMessageMixin`).
-The five common mixins patch MCA classes directly: `DialoguesMixin` (the Chat→hub redirect), `BreedableRelationshipMixin` (a
+The seven common mixins patch MCA classes directly: `DialoguesMixin` (the Chat→hub redirect), `BreedableRelationshipMixin` (a
 gift-acceptance observer), `InteractionDialogueMessageMixin` (validates a GUI dialogue submission —
 distance, ownership, constraints and the catalog's age gate — before MCA acts on it),
-`NetworkHandlerMixin` (chat mode's dialogue-packet-to-chat redirect) and `QuestionMixin` (filters the
-injected hub answer, and the catalog's age gate, out of MCA's own answer list). Chat mode's matcher is a
+`NetworkHandlerMixin` (chat mode's dialogue-packet-to-chat redirect), `QuestionMixin` (filters the
+injected hub answer, and the catalog's age gate, out of MCA's own answer list),
+`McaInteractionCloseMixin` (guards MCA's tokenless interaction-close request, so a player who does not
+own a managed discussion cannot end it) and `InteractTaskMovementMixin` (cancels
+`InteractTask#followPlayer` while a managed hold owns the villager). Chat mode's matcher is a
 second *frontend* to the same engine: free text resolves to the exact `(question, answer)` a GUI click
 would send, so parity is structural, not re-implemented; its intents live in
 `data/<any-namespace>/chat_intents/*.json` and are fully datapack-extensible (including synonym packs).
