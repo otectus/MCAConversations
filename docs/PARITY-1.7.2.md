@@ -74,8 +74,8 @@ audits sources, resources and authored content, not `libs/`):
 | | Forge 1.20.1 | NeoForge 1.21.1 |
 | --- | --- | --- |
 | Jar | `libs/api/mcareputation-0.6.0-api.jar` | `libs/api/mcareputation-0.6.0-api.jar` |
-| Provider commit | `367a8a0fd46f5a59b48bc9e373c4cb8eda10ce9c` | `fe717a56258f5c0dabda426ffa13d8758b603b42` (provisional — see the ledger) |
-| SHA-256 | `d17bb8c279f91da8702de76861c8eb9212eeca62351924d0ce9c714854672d6e` | `4379d6d8a3a5828d0e57018ac952cf6c1d62440f0e646e370d93943fb37e901f` |
+| Provider commit | `367a8a0fd46f5a59b48bc9e373c4cb8eda10ce9c` | `fc8575918fefa580d09f635be5a6fc744893bfac` |
+| SHA-256 | `d17bb8c279f91da8702de76861c8eb9212eeca62351924d0ce9c714854672d6e` | `3b84ffe2cb224e980db8207c5088588642b27dafd0e3a7a719c11e9c1c3c0681` |
 | Classes | 69 | 68 |
 | Declared API version | 1 | 2 |
 
@@ -106,13 +106,12 @@ python3 /home/otectus/Projects/MCAConversations/tools/verify_release_parity.py \
 Release parity verified: shared files match and every platform difference is accounted for.
 ```
 
-This repository's own copy of the script prints the same line with
-`--manifest docs/parity-1.7.2-adaptations.json` and with no `--manifest` at all, since 1.7.2 is now
-the newest manifest here. **The Forge copy still needs its own 1.7.2 manifest for the `--manifest`-less
-form**: with none, it selects the newest manifest in the repository the script lives in, which there
-is still 1.7.1, and fails on the seven files re-expressed above. Copying this manifest into
-`/home/otectus/Projects/MCAConversations/docs/` is all that is required; it was not done from the port,
-which leaves the Forge checkout untouched.
+Both copies of the script now also pass with **no** `--manifest`. The script selects the newest
+`docs/parity-*-adaptations.json` in the repository it itself lives in, and both repositories now carry
+the 1.7.2 manifest: this one committed with the adoption commit, the Forge one as `e3c0415`. The two
+files are byte-identical. (Before `e3c0415` existed, the Forge copy selected 1.7.1 and failed on the
+seven files re-expressed above, which is why the explicit `--manifest` form is the one quoted here —
+it is correct either way.)
 
 The [adaptation manifest](parity-1.7.2-adaptations.json) names and hashes every allowed difference and
 records the reviewed release and protocol, so an edited adapter, a missing file, a new unmatched file

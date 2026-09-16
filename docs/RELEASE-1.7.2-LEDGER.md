@@ -18,8 +18,8 @@ statement is still in the Forge tree and was deliberately **not** edited from he
 | Version | `mod_version` 1.7.1 → **1.7.2**, in `gradle.properties` only |
 | Network protocol | **4**, unchanged — no payload shape changed, so a 1.7.1 client still pairs with a 1.7.2 server |
 | MCA: Reputation API jar | `libs/api/mcareputation-0.4.1-api.jar` → **`libs/api/mcareputation-0.6.0-api.jar`** |
-| Provider commit | `otectus/MCAReputation` `fe717a56258f5c0dabda426ffa13d8758b603b42` (0.6.0, branch `neoforge/1.21.1`) |
-| Provider jar SHA-256 | `4379d6d8a3a5828d0e57018ac952cf6c1d62440f0e646e370d93943fb37e901f` (78 entries, 68 classes) |
+| Provider commit | `otectus/MCAReputation` `fc8575918fefa580d09f635be5a6fc744893bfac` (0.6.0, branch `neoforge/1.21.1`, merge-base `b70f320`) |
+| Provider jar SHA-256 | `3b84ffe2cb224e980db8207c5088588642b27dafd0e3a7a719c11e9c1c3c0681` (126,733 bytes, 78 entries, 68 classes) |
 | Declared Reputation API version | still **2** — the NeoForge generation of that API — so the `getApiVersion() != 2` handshake is unchanged |
 | `neoforge.mods.toml` dependency | `mcareputation`, `type="optional"`, `versionRange="[0.2,)"`, `ordering="AFTER"` — deliberately **not** narrowed |
 
@@ -30,11 +30,13 @@ loader, commit, path and hash above, and `verifySiblingApis` ran ahead of every 
 without `-PmcaReputationApiPath` and passed — which is the check that the jar on disk is the one this
 ledger names.
 
-**One hash to re-record later.** The provider commit above is the MCA: Reputation NeoForge commit the
-jar was built from. Its `api/**` content is being rebased onto `b70f320` (0.5.0 on NeoForge) as this
-lands; the jar bytes are unchanged by that rebase because `api/**` is identical across it, so the
-SHA-256 pin stands, but **the final NeoForge MCA: Reputation commit hash must be re-recorded here and
-in `gradle/sibling-apis.properties` once that rebase lands.**
+The pin is final. An earlier revision of this ledger recorded the pre-rebase commit
+`fe717a5` as provisional, because MCA: Reputation's 0.6.0 NeoForge `api/**` was still being rebased
+onto `b70f320` (0.5.0 on NeoForge). That rebase has landed at `fc85759`, the API jar was rebuilt from
+it, and the commit and SHA-256 above are that build: 126,733 bytes, byte-different from the pre-rebase
+jar but with an **identical entry list** (78 entries, 68 classes, same class names), so no source
+change followed from the refresh. The refresh was landed as its own commit on top of the adoption
+commit, and `compileJava`, `check` and `build` were re-run against it.
 
 ## What was delivered
 
@@ -129,6 +131,24 @@ from the jar: `neoforge.mods.toml` declares `version="1.7.2+1.21.1"`,
 is still `type="optional"` / `[0.2,)` / `AFTER`, the two new scene dialogues are present, and the jar
 contains **no** `mcareputation` class — the API jar is compile-only and was not bundled.
 
+### Re-run after the API jar refresh
+
+The vendored jar was refreshed to the post-rebase build (`fc85759`) in a second commit on top of the
+adoption commit, and the same wrapper was used again on 2026-09-16:
+
+| Command | Result | Log |
+| --- | --- | --- |
+| `compileJava` | PASS — `verifySiblingApis` executed against the new hash with no override; `compileJava` itself UP-TO-DATE, because the refreshed jar has an identical ABI | `/tmp/gradle-MCAConversations_1.21.1-compileJava-20260916-165324.log` |
+| `check --rerun-tasks -x verifyGeneratedConversationContent` | PASS — `:test` executed fresh | `/tmp/gradle-MCAConversations_1.21.1-check-20260916-165416.log` |
+| `build` | PASS — `verifySiblingApis` and `verifyJarContents` executed; `jar` UP-TO-DATE | `/tmp/gradle-MCAConversations_1.21.1-build-20260916-165529.log` |
+
+A plain `check` right after the refresh reported `:test UP-TO-DATE` and was therefore re-run with
+`--rerun-tasks`: Gradle's compile-classpath normalisation ignores a jar change that does not move the
+ABI, which is exactly what this refresh was, so nothing downstream looked stale. The forced run
+reported the same **1,632 tests — 0 failures, 0 errors, 6 skipped**. `jar` stayed UP-TO-DATE and the
+release jar is byte-identical to the adoption commit's (4,989,702 bytes): the API jar is compile-only
+and never packaged, so a new one cannot change the artifact.
+
 `.mcmod-tools/check_mod.py` is a Forge 1.20.1 tool. Run against this port it reports **60 errors, 0
 warnings, 0 notes**, every one of them the expected platform mismatch (NeoForge imports,
 `ModConfigSpec`, `ResourceLocation.fromNamespaceAndPath`, Java 21, `pack_format` 34, and the absence
@@ -155,17 +175,12 @@ python3 /home/otectus/Projects/MCAConversations/tools/verify_release_parity.py \
 Release parity verified: shared files match and every platform difference is accounted for.
 ```
 
-The same output comes from this repository's own copy of the script, both with
-`--manifest docs/parity-1.7.2-adaptations.json` and with no `--manifest` at all, since the newest
-manifest here is now 1.7.2.
-
-**The Forge copy of the script needs its own 1.7.2 manifest to be run without `--manifest`.** With no
-`--manifest`, the script picks the newest `docs/parity-*-adaptations.json` in the repository the
-script itself lives in — which in the Forge tree is still `parity-1.7.1-adaptations.json` — and that
-run fails with seven `Unreviewed difference` / `Stale or changed reviewed adaptation` pairs for the
-files re-expressed here. Copying `docs/parity-1.7.2-adaptations.json` into
-`/home/otectus/Projects/MCAConversations/docs/` is all it needs; that copy was **not** made from here,
-because the Forge checkout was left untouched by this work.
+The same output comes from this repository's own copy of the script, and from either copy with no
+`--manifest` at all: the script picks the newest `docs/parity-*-adaptations.json` in the repository it
+itself lives in, and both repositories now carry a byte-identical 1.7.2 manifest — this one with the
+adoption commit, the Forge one as `e3c0415`. Until `e3c0415` existed the Forge copy selected 1.7.1 and
+failed on the seven files re-expressed here, which is why the explicit `--manifest` form above is the
+one recorded; it is correct either way. Nothing in the Forge checkout was edited from here.
 
 ## Not run, and not claimed
 
@@ -177,8 +192,8 @@ because the Forge checkout was left untouched by this work.
    no MCA: Reputation on its runtime classpath.
 2. **No run against a second MCA: Reputation build.** Only the 0.6.0 NeoForge API jar was compiled
    against; nothing was launched against 0.4.1 or 0.5.0 on this loader.
-3. **The provider commit hash is provisional**, as recorded under Baseline. The jar bytes are pinned;
-   the commit id is not final until the MCA: Reputation NeoForge rebase lands.
+3. **The provider pin is final** (`fc85759`), refreshed after the MCA: Reputation NeoForge rebase
+   landed. Nothing about it is outstanding.
 4. **Nothing was pushed**, and no tag or release was created.
 
 ## Deliberate divergences from the spec text
