@@ -1,4 +1,4 @@
-> **Current release: 1.7.0.** See [the current parity report](docs/PARITY-1.7.0.md).
+> **Current release: 1.7.1.** See [the current parity report](docs/PARITY-1.7.1.md).
 > The older release inventory below is retained as historical port documentation.
 
 # PARITY.md — MCA: Conversations 1.20.1 Forge (v1.6.0) → 1.21.1 NeoForge

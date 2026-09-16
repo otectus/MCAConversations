@@ -8,7 +8,7 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-Shared gameplay and content track 1.7.0. See [current parity evidence](docs/PARITY-1.7.0.md).
+Shared gameplay and content track 1.7.1. See [current parity evidence](docs/PARITY-1.7.1.md).
 
 ## Features (1.7.0)
 
@@ -172,11 +172,14 @@ MCA's public registries — no runtime patching of MCA except a set of small, na
 all but one `require = 0` (`mcaconversations.mixins.json`'s `defaultRequire`), so a target that
 stops matching a future MCA build is a startup warning, not a crash — the exception is the
 1.20.1-save import (`PlayerLegacyDataMixin`), pinned to vanilla's own `Player#readAdditionalSaveData`
-at `require = 1`. Six apply to common code — the
+at `require = 1`. Eight apply to common code — the
 Chat→hub redirect (`DialoguesMixin`), a gift observer for the gratitude state
 (`BreedableRelationshipMixin`), chat mode's dialogue-payload-to-chat redirect (`NetworkHandlerMixin`),
 a GUI submission guard (`InteractionDialogueMessageMixin`), the hub/age answer-list filter
-(`QuestionMixin`), and the 1.20.1-save import (`PlayerLegacyDataMixin`) — and five to the client: a
+(`QuestionMixin`), a guard on MCA's tokenless interaction-close request so a player who does not own a
+managed discussion cannot end it (`McaInteractionCloseMixin`), a cancel of
+`InteractTask#followPlayer` while a managed hold owns the villager (`InteractTaskMovementMixin`),
+and the 1.20.1-save import (`PlayerLegacyDataMixin`) — and five to the client: a
 digit-shortcut adapter for vanilla's own chat screen (`ChatScreenChoiceMixin`) and one for MCA's own
 `InteractScreen` (`InteractScreenChoiceMixin`),
 the personality-locale gate widener (`MCAClientMixin`), and two Townstead-cooperation mixins
@@ -219,7 +222,7 @@ Every push runs the unit/lint suite and the real-jar MCA binding probes (`.githu
 output fails CI. A separate `dedicated-server-smoke` job boots a real dedicated server against the
 resolved MCA jar, asserts a clean start, runs `/reload` and checks that the chat-intent, conversation-catalog
 and interiority-profile loaders re-ran, that no client class reached the server, and that the mod
-logged no error. The job also asserts that each of the six common mixins attached (the five client
+logged no error. The job also asserts that each of the eight common mixins attached (the five client
 mixins are not asserted, since a dedicated server loads none), and that the workflow's list must be
 kept in sync with `mcaconversations.mixins.json` by hand. None of this is
 an in-game production check: those are still open and tracked per-finding in
