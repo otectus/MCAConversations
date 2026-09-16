@@ -124,7 +124,7 @@ public final class ConversationLifecycle {
     private static ConversationHandle mintAndClaim(UUID playerId, UUID villagerId, String dimension,
                                                    ConversationSession.Frontend frontend, long now) {
         ConversationHandle handle = ConversationHandle.mint(playerId, villagerId, dimension, frontend);
-        ConversationPresence.claim(handle);
+        ConversationPresence.claim(handle, now);
         ConversationSessions.attach(handle, now);
         McaConversations.LOGGER.debug("conversation accepted: {}", handle);
         return handle;

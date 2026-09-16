@@ -31,17 +31,36 @@ public final class ConversationPresence {
      * handle, so the map cannot outgrow the presence indexes.
      */
     private static final Map<UUID, Long> HEARTBEATS = new ConcurrentHashMap<>();
+    /**
+     * The tick each discussion first went past the continue distance, keyed the same way. Absent
+     * means the pair is together; the lifecycle tick writes what
+     * {@link ConversationDistancePolicy#judge} hands back and owns nothing else about the grace band.
+     */
+    private static final Map<UUID, Long> OUTSIDE_SINCE = new ConcurrentHashMap<>();
 
     private ConversationPresence() {
     }
 
-    /** Registers {@code handle} as the current owner on both sides. */
-    public static void claim(ConversationHandle handle) {
+    /**
+     * Registers {@code handle} as the current owner on both sides, and starts its presence lease.
+     *
+     * <p>The lease is seeded with the acceptance tick rather than left empty, so a discussion whose
+     * client never attaches a window is expired by the same rule as one whose client stopped
+     * reporting. Without the seed there would be no timestamp to expire and a screen that never
+     * opened would hold its villager until something else noticed.
+     */
+    public static void claim(ConversationHandle handle, long now) {
         if (handle == null) {
             return;
         }
         BY_PLAYER.put(handle.playerId(), handle);
         BY_VILLAGER.put(handle.villagerId(), handle);
+        HEARTBEATS.put(handle.sessionId(), now);
+    }
+
+    /** Every discussion currently registered under a player. A snapshot, safe to iterate and close. */
+    public static java.util.List<ConversationHandle> handles() {
+        return java.util.List.copyOf(BY_PLAYER.values());
     }
 
     /** The discussion this player is having, if any. */
@@ -87,6 +106,7 @@ public final class ConversationPresence {
         BY_PLAYER.remove(handle.playerId(), handle);
         BY_VILLAGER.remove(handle.villagerId(), handle);
         HEARTBEATS.remove(handle.sessionId());
+        OUTSIDE_SINCE.remove(handle.sessionId());
     }
 
     /**
@@ -114,6 +134,40 @@ public final class ConversationPresence {
         return at == null ? java.util.OptionalLong.empty() : java.util.OptionalLong.of(at);
     }
 
+    /**
+     * Whether this discussion's client has gone quiet for longer than the lease (spec §4.3).
+     *
+     * <p>The lease is what a graphical conversation has instead of a reading timeout. Nothing about
+     * how long the player has been looking at the card counts against them; what counts is whether
+     * their window is still there to say so. A discussion with no timestamp at all has already been
+     * retired and is nobody's to expire, and a lease of zero switches the rule off entirely.
+     */
+    public static boolean leaseExpired(ConversationHandle handle, long now, int leaseTicks) {
+        if (handle == null || leaseTicks <= 0) {
+            return false;
+        }
+        Long last = HEARTBEATS.get(handle.sessionId());
+        return last != null && now - last > leaseTicks;
+    }
+
+    /** The tick this discussion first went out of range, or {@link ConversationDistancePolicy#NOT_OUTSIDE}. */
+    public static long outsideSince(ConversationHandle handle) {
+        Long since = handle == null ? null : OUTSIDE_SINCE.get(handle.sessionId());
+        return since == null ? ConversationDistancePolicy.NOT_OUTSIDE : since;
+    }
+
+    /** Remembers what the distance policy decided; {@code NOT_OUTSIDE} forgets an earlier lapse. */
+    public static void noteOutside(ConversationHandle handle, long since) {
+        if (handle == null) {
+            return;
+        }
+        if (since == ConversationDistancePolicy.NOT_OUTSIDE) {
+            OUTSIDE_SINCE.remove(handle.sessionId());
+        } else {
+            OUTSIDE_SINCE.put(handle.sessionId(), since);
+        }
+    }
+
     /** How many players are in a registered discussion. Diagnostics and tests. */
     public static int size() {
         return BY_PLAYER.size();
@@ -124,5 +178,6 @@ public final class ConversationPresence {
         BY_PLAYER.clear();
         BY_VILLAGER.clear();
         HEARTBEATS.clear();
+        OUTSIDE_SINCE.clear();
     }
 }

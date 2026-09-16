@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
+import dev.otectus.mcaconversations.conversation.CloseReason;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 import dev.otectus.mcaconversations.network.ChoiceOfferS2C;
@@ -47,6 +48,7 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
 
     private static UUID handleSessionId;
     private static UUID handleVillagerId;
+    private static boolean retiredByServer;
 
     private ClientChoiceMessages() {
     }
@@ -241,8 +243,87 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
         handleVillagerId = null;
         if (villager == null || villager.equals(screenVillagerId())) {
             STATE.clearLocal(ConversationSession.Frontend.GUI);
+            explain(message.reason());
+            closeHostScreen();
         }
         STATE.clearLocal(ConversationSession.Frontend.CHAT);
+    }
+
+    /**
+     * Says why the conversation ended, where a refused answer would have said why it lapsed.
+     *
+     * <p>The same action-bar line and the same sentences: an ending the player can see the cause of —
+     * they walked too far, the villager cannot carry on — reads better than a window that simply
+     * vanishes. Endings the player caused themselves say nothing at all; being told "you closed this"
+     * for closing it is noise.
+     */
+    private static void explain(CloseReason reason) {
+        ChoiceClearS2C.Reason spoken = explanationOf(reason);
+        Minecraft minecraft = Minecraft.getInstance();
+        if (spoken != null && minecraft.player != null) {
+            minecraft.player.displayClientMessage(explanation(spoken), true);
+        }
+    }
+
+    /**
+     * The existing refusal sentence an ending is explained with, or null for one said in silence.
+     *
+     * <p>Deliberately a reuse rather than a new set of strings: the player does not need one wording
+     * for "you are too far apart to go on" when an answer is refused and another when the window
+     * closes a second later. Reasons with nothing useful to say — the player closed it, they turned
+     * to somebody else, the conversation simply finished — map to null.
+     */
+    static ChoiceClearS2C.Reason explanationOf(CloseReason reason) {
+        if (reason == null) {
+            return null;
+        }
+        return switch (reason) {
+            case OUT_OF_RANGE, DIMENSION_CHANGED -> ChoiceClearS2C.Reason.OUT_OF_RANGE;
+            case SPEAKER_DEAD, SPEAKER_UNAVAILABLE, ENTITY_UNLOADED, ATTACKED, DANGER, TAKEN_OVER ->
+                    ChoiceClearS2C.Reason.SPEAKER_UNAVAILABLE;
+            case CONTENT_RELOADED -> ChoiceClearS2C.Reason.CONTENT_RELOADED;
+            case CONTAINED_ERROR -> ChoiceClearS2C.Reason.EXECUTION_FAILED;
+            default -> null;
+        };
+    }
+
+    /**
+     * Closes the window the ended discussion was being read in (spec §4.6).
+     *
+     * <p>Through the screen's own close path, not {@code setScreen(null)}: MCA's interaction screen
+     * ends its own interaction from there, and skipping it would leave MCA believing the player is
+     * still standing in a conversation that no longer exists. The re-entrant teardown that follows is
+     * exactly the ordinary one, minus the outbound close — {@link #retiredByServer()} is what tells
+     * it not to send the server a close for a discussion the server has just ended.
+     *
+     * <p>Only the claimed interaction screen, and only while it is the window actually on top. A
+     * terminal packet must never be able to dismiss a screen this mod does not own.
+     */
+    private static void closeHostScreen() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (!(screen instanceof net.minecraft.client.gui.screens.Screen host) || minecraft.screen != host) {
+            return;
+        }
+        retiredByServer = true;
+        try {
+            host.onClose();
+        } catch (Throwable t) {
+            dev.otectus.mcaconversations.McaConversations.LOGGER
+                    .debug("could not close the window of an ended conversation", t);
+        } finally {
+            retiredByServer = false;
+        }
+    }
+
+    /**
+     * True while a window is closing because the server said the discussion is over.
+     *
+     * <p>The teardown in that window then skips the close it would otherwise send. Not merely
+     * redundant: that close names a handle the server has already retired, and the honest client
+     * behaviour for an ending it was told about is to acknowledge nothing.
+     */
+    public static boolean retiredByServer() {
+        return retiredByServer;
     }
 
     public static void accept(ChoiceOfferS2C message) {

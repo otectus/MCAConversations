@@ -41,6 +41,23 @@ follow the player to the next villager.
   explanation — is refused and nothing else: the exchange the player is actually in keeps its card,
   its villager and its place. Refusals stay refusals, too; a duplicated or late answer never closes a
   conversation that is working.
+- **You can walk while you talk: sixteen blocks, with a second's grace out to twenty-four.** A
+  graphical conversation used to be governed by a fixed eight blocks that nothing could change and
+  nobody was told about — a step too far and the next answer simply failed, with the window still
+  open as if nothing had happened. The distance a conversation may be *continued* at is now sixteen
+  blocks and configurable, standing exactly that far apart counts as in range, and between sixteen
+  and twenty-four there is a second in which the card stays readable and a step back inside picks
+  the conversation up where it was. Nothing may be *done* from out there — an answer or a topic
+  change is refused until you are back in range — and past twenty-four blocks the conversation ends
+  at once. Opening a conversation is untouched: it still takes an ordinary interaction at MCA's own
+  reach, so none of this lets anybody start talking from across the square. Chat mode keeps its own
+  hearing radii, which are a different question and were left alone.
+- **A window that vanishes gives the villager back.** A graphical conversation deliberately has no
+  reading timeout, which left the server no way to tell a player reading a long reply from a client
+  that had crashed — and a villager could stand attending nobody indefinitely. The open window now
+  reports itself on a quiet cadence, and a discussion that stops reporting is closed and its villager
+  released within five seconds. Nothing waits for the client to agree: a crashed or malfunctioning
+  one cannot keep an NPC pinned by declining to acknowledge the ending.
 
 ### Changed
 
@@ -82,6 +99,25 @@ follow the player to the next villager.
   closed, the player turned to another villager, another player took over, the villager was attacked,
   the villager left the loaded world, or the villager had to flee immediate danger. None of them
   carries any social meaning — a technical ending is still never a snub.
+- **Reading for several minutes no longer loses you the villager.** The idle sweep protected a
+  conversation only while an unanswered card was on screen, so a player between topics, or reading
+  the history drawer, could have the conversation swept out from under them for the crime of not
+  clicking anything. While the window is open and reporting itself, the sweep leaves that discussion
+  alone entirely; it ends when the conversation ends, and not on a stopwatch.
+- **A conversation the server ends now closes the window it was being read in.** Until now the
+  terminal message retired the card and left the empty shell standing, so the only way out of a
+  conversation that was already over was to close it by hand. The matching window now closes itself,
+  saying why where a refused answer would have said why it lapsed — too far apart, or the villager
+  cannot carry on — and only ever the window belonging to the discussion that ended. It sends the
+  server no close of its own for an ending the server is the one that announced.
+- **Eight new server settings for how long a discussion lasts.** In the server file under
+  `[conversation]`: `continueDistance` (16.0) and `immediateCloseDistance` (24.0) with
+  `distanceGraceTicks` (20) between them, `guiLeaseTicks` (100) for how long an open window may go
+  without reporting itself, `holdVillagerDuringInteraction` (true), and the safety trio
+  `attackReopenDelayTicks` (100), `attackedBehavior` (`NATIVE_COMBAT`, with `RETREAT` as the
+  alternative for servers that would rather a guard broke off) and `interruptOnImmediateDanger`
+  (true). Every one of them is documented in CONFIG.md; the cadence the window reports itself on
+  stays an internal constant, because the lease is the number that decides anything.
 
 ## [1.7.0] - unreleased
 

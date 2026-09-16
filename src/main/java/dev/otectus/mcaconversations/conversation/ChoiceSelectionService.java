@@ -17,9 +17,39 @@ import java.util.UUID;
 /** Server-authoritative validation and one-shot execution for numeric choice packets. */
 public final class ChoiceSelectionService {
 
-    private static final double GUI_DISTANCE_SQR = 64.0D;
-
     private ChoiceSelectionService() {
+    }
+
+    /**
+     * How far apart this exchange may be held, read fresh each time (spec §5.4).
+     *
+     * <p>This used to be one constant, {@code GUI_DISTANCE_SQR = 64.0}, which is eight blocks and was
+     * neither configurable nor shared with anything else. The policy replaces it with the configured
+     * continue distance, the hard limit past it and the grace between them. Only the graphical
+     * frontend uses this: the chat frontend keeps its own ambient and addressed radii, which answer a
+     * different question and are not merged into it.
+     */
+    private static ConversationDistancePolicy distancePolicy() {
+        return ConversationDistancePolicy.configured();
+    }
+
+    /**
+     * Ends the discussion when an action was attempted from past the hard limit; nothing otherwise.
+     *
+     * <p>Inside the grace band an out-of-range reply is a refusal and only a refusal: the player is a
+     * step too far, the answer does not run, and the window stays where it is until the grace runs
+     * out in the lifecycle tick. Past the immediate-close distance there is nothing left to wait for,
+     * so the discussion ends here rather than a tick later — by handle, so a reply from a player who
+     * is no longer the villager's partner can never close somebody else's conversation.
+     */
+    private static void closeIfBeyondImmediate(ServerPlayer player, Entity villager,
+                                               ConversationDistancePolicy policy) {
+        if (villager == null || !policy.beyondImmediate(player.distanceToSqr(villager))) {
+            return;
+        }
+        ConversationPresence.ofVillager(villager.getUUID())
+                .filter(handle -> handle.playerId().equals(player.getUUID()))
+                .ifPresent(handle -> ConversationLifecycle.terminate(handle, CloseReason.OUT_OF_RANGE));
     }
 
     public static boolean select(ServerPlayer player, long revision, int absoluteIndex, UUID candidateVillagerId) {
@@ -245,9 +275,13 @@ public final class ChoiceSelectionService {
         }
         // Same policy the chat frontend refuses by, so a click and a typed number are rejected for
         // the same stated reason; only the radius is this frontend's own.
+        ConversationDistancePolicy policy = distancePolicy();
         ChoiceOutcome engagement = ChoiceOutcome.of(
-                EngagementPolicy.evaluate(player, villager, GUI_DISTANCE_SQR));
+                EngagementPolicy.evaluate(player, villager, policy.continueDistanceSqr()));
         if (!engagement.ok()) {
+            if (engagement == ChoiceOutcome.OUT_OF_RANGE) {
+                closeIfBeyondImmediate(player, villager, policy);
+            }
             return Resolution.refused(engagement);
         }
         return McaCompat.isInteractingWith(villager)
@@ -321,7 +355,14 @@ public final class ChoiceSelectionService {
                 return;
             }
             Entity villager = villagerId == null ? null : player.serverLevel().getEntity(villagerId);
-            ChoiceOutcome outcome = ChoiceOutcome.of(EngagementPolicy.evaluate(player, villager, GUI_DISTANCE_SQR));
+            ConversationDistancePolicy policy = distancePolicy();
+            ChoiceOutcome outcome = ChoiceOutcome.of(
+                    EngagementPolicy.evaluate(player, villager, policy.continueDistanceSqr()));
+            if (outcome == ChoiceOutcome.OUT_OF_RANGE) {
+                // A topic return is an effect like any other: refused from the grace band, and past
+                // the hard limit the discussion it would have returned to no longer exists.
+                closeIfBeyondImmediate(player, villager, policy);
+            }
             if (outcome.ok() && (!alive(villager) || McaCompat.isInteractingWith(villager)
                     .filter(player.getUUID()::equals).isEmpty())) {
                 outcome = ChoiceOutcome.SPEAKER_UNAVAILABLE;
