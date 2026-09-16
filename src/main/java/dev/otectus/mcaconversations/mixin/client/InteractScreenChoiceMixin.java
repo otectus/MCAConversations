@@ -262,7 +262,11 @@ public abstract class InteractScreenChoiceMixin {
     @Unique
     private void mcaconversations$releaseScreen() {
         ClientChoiceMessages.state().clearLocal(ConversationSession.Frontend.GUI);
-        dev.otectus.mcaconversations.client.dialogue.ClientChoiceController.closeConversation();
+        if (!ClientChoiceMessages.retiredByServer()) {
+            // The one exception: this window is closing because the server already ended the
+            // discussion and said so. Telling it again would name a handle it has just retired.
+            dev.otectus.mcaconversations.client.dialogue.ClientChoiceController.closeConversation();
+        }
         ClientChoiceMessages.screenClosed(this);
         mcaconversations$renderer.reset();
         mcaconversations$speaker = null;

@@ -50,6 +50,15 @@ class ConfigSpecTest {
             Map.entry("conversation.conversationDailyNegativeCap", 10),
             Map.entry("conversation.strongerNegativeOutcomes", false),
             Map.entry("conversation.conversationSessionTimeoutTicks", 1200),
+            Map.entry("conversation.continueDistance", 16.0),
+            Map.entry("conversation.immediateCloseDistance", 24.0),
+            Map.entry("conversation.distanceGraceTicks", 20),
+            Map.entry("conversation.guiLeaseTicks", 100),
+            Map.entry("conversation.holdVillagerDuringInteraction", true),
+            Map.entry("conversation.attackReopenDelayTicks", 100),
+            Map.entry("conversation.attackedBehavior",
+                    McaConversationsConfig.AttackedBehavior.NATIVE_COMBAT),
+            Map.entry("conversation.interruptOnImmediateDanger", true),
             Map.entry("rpg.dispositionGainMultiplier", 1.0),
             Map.entry("rpg.dispositionDecayMultiplier", 1.0),
             Map.entry("rpg.dispositionDailyAxisCap", 8),
@@ -125,6 +134,18 @@ class ConfigSpecTest {
         assertFalse(McaConversationsConfig.strongerNegativeOutcomes());
         assertEquals(1200, McaConversationsConfig.conversationSessionTimeoutTicks());
 
+        // 1.7.1: the continued-distance policy and the presence lease. These are read from the
+        // server tick, which runs long before a server config file is guaranteed to be loaded.
+        assertEquals(16.0, McaConversationsConfig.continueDistance());
+        assertEquals(24.0, McaConversationsConfig.immediateCloseDistance());
+        assertEquals(20, McaConversationsConfig.distanceGraceTicks());
+        assertEquals(100, McaConversationsConfig.guiLeaseTicks());
+        assertTrue(McaConversationsConfig.holdVillagerDuringInteraction());
+        assertEquals(100, McaConversationsConfig.attackReopenDelayTicks());
+        assertEquals(McaConversationsConfig.AttackedBehavior.NATIVE_COMBAT,
+                McaConversationsConfig.attackedBehavior());
+        assertTrue(McaConversationsConfig.interruptOnImmediateDanger());
+
         assertEquals(1.0, McaConversationsConfig.dispositionGainMultiplier());
         assertEquals(1.0, McaConversationsConfig.dispositionDecayMultiplier());
         assertEquals(8, McaConversationsConfig.dispositionDailyAxisCap());
@@ -179,6 +200,45 @@ class ConfigSpecTest {
                 (ForgeConfigSpec.ValueSpec) spec.get("dynamic.initiativeCooldownTicks");
         assertTrue(cooldown.test(300));
         assertFalse(cooldown.test(0), "there is no such thing as no cooldown at all");
+    }
+
+    @Test
+    void theDiscussionDistancesAndLeaseAreBoundedAndOrdered() {
+        // The distance policy normalises a nonsensical pair for itself, but the spec should not let
+        // one be written in the first place: a radius of zero or a lease of a real-time hour is a
+        // typo, not a configuration. Zero is kept meaningful where it means "off" and refused where
+        // it would mean "no conversation may continue at all".
+        UnmodifiableConfig spec = McaConversationsConfig.SERVER_SPEC.getSpec();
+
+        ForgeConfigSpec.ValueSpec continued =
+                (ForgeConfigSpec.ValueSpec) spec.get("conversation.continueDistance");
+        assertTrue(continued.test(16.0));
+        assertFalse(continued.test(0.0), "a conversation has to be holdable at some distance");
+        assertFalse(continued.test(128.0));
+
+        ForgeConfigSpec.ValueSpec immediate =
+                (ForgeConfigSpec.ValueSpec) spec.get("conversation.immediateCloseDistance");
+        assertTrue(immediate.test(24.0));
+        assertFalse(immediate.test(0.0));
+
+        ForgeConfigSpec.ValueSpec grace =
+                (ForgeConfigSpec.ValueSpec) spec.get("conversation.distanceGraceTicks");
+        assertTrue(grace.test(0), "0 is the documented way to end the moment the pair separate");
+        assertFalse(grace.test(-1));
+
+        ForgeConfigSpec.ValueSpec lease =
+                (ForgeConfigSpec.ValueSpec) spec.get("conversation.guiLeaseTicks");
+        assertTrue(lease.test(0), "0 is the documented way to switch the lease off");
+        assertTrue(lease.test(100));
+        assertFalse(lease.test(-1));
+
+        ForgeConfigSpec.ValueSpec attacked =
+                (ForgeConfigSpec.ValueSpec) spec.get("conversation.attackedBehavior");
+        assertEquals(McaConversationsConfig.AttackedBehavior.NATIVE_COMBAT, attacked.getDefault());
+        for (McaConversationsConfig.AttackedBehavior value
+                : McaConversationsConfig.AttackedBehavior.values()) {
+            assertTrue(attacked.test(value), value + " must be accepted by the spec");
+        }
     }
 
     @Test

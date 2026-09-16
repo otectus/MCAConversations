@@ -14,6 +14,11 @@ import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.ServerEpoch;
 import dev.otectus.mcaconversations.conversation.CloseReason;
+import dev.otectus.mcaconversations.conversation.ConversationDistancePolicy;
+import dev.otectus.mcaconversations.conversation.ConversationHandle;
+import dev.otectus.mcaconversations.conversation.ConversationLifecycle;
+import dev.otectus.mcaconversations.conversation.ConversationPresence;
+import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.court.CourtNewsPoller;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
@@ -311,6 +316,10 @@ public final class ConversationsEvents {
         // Villager attention (typing awareness + conversation presence) is applied every tick.
         VillagerAttention.tick(event.getServer(), gameTime);
 
+        // Presence leases and the continued-distance policy, driven from the ownership index alone:
+        // one map of live discussions, never a scan of the world's entities (spec §4.3, §5.4).
+        tickDiscussions(event.getServer(), gameTime);
+
         // The approach scan: one light cadence carrying both things a villager may say to somebody
         // walking past. Greeting and initiative are separately switchable, so the scan runs when
         // either is on and each half checks its own switch — a server that turned greetings off has
@@ -338,6 +347,99 @@ public final class ConversationsEvents {
             spreadVillageTalk(event.getServer());
             ConversationSessions.sweep(gameTime);
         }
+    }
+
+    /**
+     * The lifecycle tick: every live graphical discussion, judged once per tick (spec §4.3, §4.7).
+     *
+     * <p>Two things are asked of each one, and nothing else. Is its window still reporting itself —
+     * because a graphical offer has no reading timeout, so the lease is the only thing that tells a
+     * player who is reading from a client that crashed. And are the pair still close enough to be
+     * talking, which since 1.7.1 means the configured continue distance with a grace band behind it
+     * rather than a click failing silently at eight blocks.
+     *
+     * <p>Driven entirely from the presence index, which is a handful of UUIDs: no entity scan, no
+     * area query, and at most one entity lookup per discussion. A server where nobody is talking to
+     * anybody does no work here at all. Chat-frontend discussions are deliberately excluded — they
+     * have no window to lease and their own radius and attention span already govern them.
+     *
+     * <p>The clock is server time, so a paused single-player world expires nothing: the tick that
+     * would notice never runs.
+     */
+    private static void tickDiscussions(net.minecraft.server.MinecraftServer server, long gameTime) {
+        java.util.List<ConversationHandle> handles = ConversationPresence.handles();
+        if (handles.isEmpty()) {
+            return;
+        }
+        ConversationDistancePolicy policy = ConversationDistancePolicy.configured();
+        int leaseTicks = McaConversationsConfig.guiLeaseTicks();
+        for (ConversationHandle handle : handles) {
+            if (handle.frontend() != ConversationSession.Frontend.GUI) {
+                continue;
+            }
+            try {
+                CloseReason reason = judgeDiscussion(server, handle, policy, leaseTicks, gameTime);
+                if (reason != null) {
+                    ConversationLifecycle.terminate(handle, reason);
+                }
+            } catch (Throwable t) {
+                // A discussion that cannot be judged is not a discussion worth keeping a villager for.
+                McaConversations.LOGGER.debug("conversation tick failed for {}; closing it", handle, t);
+                ConversationLifecycle.terminate(handle, CloseReason.CONTAINED_ERROR);
+            }
+        }
+    }
+
+    /**
+     * Why this discussion must end now, or null while it may go on.
+     *
+     * <p>Ordered most fundamental first, so an ending is reported as the thing that actually happened:
+     * a player who logged out is disconnected rather than merely quiet, and a villager who is gone is
+     * gone rather than far away. The lease is asked before the distance for the same reason — a
+     * window that has stopped reporting itself is no longer a conversation to measure.
+     */
+    private static CloseReason judgeDiscussion(net.minecraft.server.MinecraftServer server,
+                                               ConversationHandle handle,
+                                               ConversationDistancePolicy policy,
+                                               int leaseTicks, long gameTime) {
+        ServerPlayer player = server.getPlayerList().getPlayer(handle.playerId());
+        if (player == null || player.hasDisconnected()) {
+            return CloseReason.DISCONNECTED;
+        }
+        if (!player.isAlive() || player.isSpectator()) {
+            return CloseReason.PLAYER_LEFT;
+        }
+        Entity villager = player.serverLevel().getEntity(handle.villagerId());
+        if (villager == null) {
+            // Not in the player's level: either the pair are in different dimensions now, or the
+            // villager has left the loaded world. Both end the discussion; they are told apart only
+            // so the ending names what happened. Never force-load a chunk to keep a conversation.
+            return elsewhere(server, player, handle.villagerId())
+                    ? CloseReason.DIMENSION_CHANGED : CloseReason.ENTITY_UNLOADED;
+        }
+        if (!villager.isAlive()) {
+            return CloseReason.SPEAKER_DEAD;
+        }
+        if (ConversationPresence.leaseExpired(handle, gameTime, leaseTicks)) {
+            // The window is gone: dismissed without its close arriving, or a client that stopped.
+            // Either way the villager is released without waiting for anybody to acknowledge it.
+            return CloseReason.CLIENT_CLOSED;
+        }
+        ConversationDistancePolicy.Verdict verdict = policy.judge(player.distanceToSqr(villager),
+                ConversationPresence.outsideSince(handle), gameTime);
+        ConversationPresence.noteOutside(handle, verdict.outsideSince());
+        return verdict.terminate() ? CloseReason.OUT_OF_RANGE : null;
+    }
+
+    /** Whether this villager is loaded in some level other than the player's. */
+    private static boolean elsewhere(net.minecraft.server.MinecraftServer server, ServerPlayer player,
+                                     java.util.UUID villagerId) {
+        for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+            if (level != player.serverLevel() && level.getEntity(villagerId) != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Age-based disposition pruning, riding the gossip scan cadence (no extra tick work). */

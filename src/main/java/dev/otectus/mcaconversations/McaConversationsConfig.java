@@ -19,6 +19,23 @@ public final class McaConversationsConfig {
     }
 
     /**
+     * What an attacked villager is free to do once the discussion has been torn down (spec §11.4).
+     *
+     * <p>The discussion ends either way; that is not what this chooses. It chooses what happens next:
+     * NATIVE_COMBAT leaves MCA's own reaction alone, which is what keeps a guard a guard, and RETREAT
+     * asks even a combat profession to break away from the attacker first.
+     *
+     * <p>Declared with the setting rather than with the behaviour so the key exists in the file from
+     * the version that introduces it; the attack interruption that reads it is 1.7.1 slice 5.
+     */
+    public enum AttackedBehavior {
+        /** MCA decides: a guard fights back, a farmer panics. The default. */
+        NATIVE_COMBAT,
+        /** Break away from the attacker whatever the profession would ordinarily do. */
+        RETREAT
+    }
+
+    /**
      * Which dialogue menu the player sees. Kept here beside {@link MotionMode} so the enum stays
      * free of client imports: the client package may not be referenced from common code.
      */
@@ -202,6 +219,16 @@ public final class McaConversationsConfig {
         }
     }
 
+    /** A server enum, with the same never-throw contract. */
+    private static <T extends Enum<T>> T serverEnum(ForgeConfigSpec.EnumValue<T> value, T fallback) {
+        try {
+            T current = value.get();
+            return current == null ? fallback : current;
+        } catch (Throwable t) {
+            return fallback;
+        }
+    }
+
     /** chatModeRadius, or 12.0 while the server spec is unavailable. */
     public static double chatModeRadius() {
         return serverDouble(SERVER.chatModeRadius, 12.0);
@@ -265,6 +292,46 @@ public final class McaConversationsConfig {
     /** conversationSessionTimeoutTicks, or 1200 while the server spec is unavailable. */
     public static int conversationSessionTimeoutTicks() {
         return serverInt(SERVER.conversationSessionTimeoutTicks, 1200);
+    }
+
+    /** continueDistance, or 16.0 while the server spec is unavailable. */
+    public static double continueDistance() {
+        return serverDouble(SERVER.continueDistance, 16.0);
+    }
+
+    /** immediateCloseDistance, or 24.0 while the server spec is unavailable. */
+    public static double immediateCloseDistance() {
+        return serverDouble(SERVER.immediateCloseDistance, 24.0);
+    }
+
+    /** distanceGraceTicks, or 20 while the server spec is unavailable. */
+    public static int distanceGraceTicks() {
+        return serverInt(SERVER.distanceGraceTicks, 20);
+    }
+
+    /** guiLeaseTicks, or 100 while the server spec is unavailable. */
+    public static int guiLeaseTicks() {
+        return serverInt(SERVER.guiLeaseTicks, 100);
+    }
+
+    /** holdVillagerDuringInteraction, or true while the server spec is unavailable. */
+    public static boolean holdVillagerDuringInteraction() {
+        return serverBool(SERVER.holdVillagerDuringInteraction, true);
+    }
+
+    /** attackReopenDelayTicks, or 100 while the server spec is unavailable. */
+    public static int attackReopenDelayTicks() {
+        return serverInt(SERVER.attackReopenDelayTicks, 100);
+    }
+
+    /** attackedBehavior, or NATIVE_COMBAT while the server spec is unavailable. */
+    public static AttackedBehavior attackedBehavior() {
+        return serverEnum(SERVER.attackedBehavior, AttackedBehavior.NATIVE_COMBAT);
+    }
+
+    /** interruptOnImmediateDanger, or true while the server spec is unavailable. */
+    public static boolean interruptOnImmediateDanger() {
+        return serverBool(SERVER.interruptOnImmediateDanger, true);
     }
 
     /** dispositionGainMultiplier, or 1.0 while the server spec is unavailable. */
@@ -857,6 +924,14 @@ public final class McaConversationsConfig {
         public final ForgeConfigSpec.IntValue conversationDailyNegativeCap;
         public final ForgeConfigSpec.BooleanValue strongerNegativeOutcomes;
         public final ForgeConfigSpec.IntValue conversationSessionTimeoutTicks;
+        public final ForgeConfigSpec.DoubleValue continueDistance;
+        public final ForgeConfigSpec.DoubleValue immediateCloseDistance;
+        public final ForgeConfigSpec.IntValue distanceGraceTicks;
+        public final ForgeConfigSpec.IntValue guiLeaseTicks;
+        public final ForgeConfigSpec.BooleanValue holdVillagerDuringInteraction;
+        public final ForgeConfigSpec.IntValue attackReopenDelayTicks;
+        public final ForgeConfigSpec.EnumValue<AttackedBehavior> attackedBehavior;
+        public final ForgeConfigSpec.BooleanValue interruptOnImmediateDanger;
 
         public final ForgeConfigSpec.DoubleValue dispositionGainMultiplier;
         public final ForgeConfigSpec.DoubleValue dispositionDecayMultiplier;
@@ -934,6 +1009,47 @@ public final class McaConversationsConfig {
                     "and its per-conversation budget resets (1200 = 60 s). Sessions are transient and never",
                     "persist across a restart; arcs, milestones and the daily budgets do.")
                     .defineInRange("conversationSessionTimeoutTicks", 1200, 200, 24000);
+            continueDistance = b.comment(
+                    "How far apart (blocks) a player and a villager may be and go on talking. Measured",
+                    "in three dimensions and inclusive: standing exactly this far apart is still in range.",
+                    "This is the CONTINUED distance only - opening an interaction still needs MCA's own",
+                    "reach, so raising this never lets anybody start a conversation from further away.",
+                    "The chat frontend keeps its own hearing radii above; they are a different question.")
+                    .defineInRange("continueDistance", 16.0, 1.0, 64.0);
+            immediateCloseDistance = b.comment(
+                    "Past this distance (blocks) the conversation ends at once, with no grace period.",
+                    "Values below continueDistance are raised to it, which simply removes the grace band.")
+                    .defineInRange("immediateCloseDistance", 24.0, 1.0, 128.0);
+            distanceGraceTicks = b.comment(
+                    "How long (game ticks) a player may stand between continueDistance and",
+                    "immediateCloseDistance before the conversation ends (20 = 1 s). The window stays",
+                    "readable during the grace, but no answer or topic change may run from out there,",
+                    "and walking back inside clears the timer. 0 ends the conversation immediately.")
+                    .defineInRange("distanceGraceTicks", 20, 0, 1200);
+            guiLeaseTicks = b.comment(
+                    "How long (game ticks) a dialogue window may go without saying it is still open",
+                    "before the server releases the villager (100 = 5 s, several heartbeat intervals).",
+                    "This is what frees a villager from a client that crashed or a window that vanished;",
+                    "reading for minutes renews it continuously and never expires. 0 disables the lease,",
+                    "which means only an explicit close, distance or death ever releases the villager.")
+                    .defineInRange("guiLeaseTicks", 100, 0, 24000);
+            holdVillagerDuringInteraction = b.comment(
+                    "Hold a villager still and facing you while you are talking to them. Turning this off",
+                    "only gives up the movement hold; every lifecycle rule above still applies.")
+                    .define("holdVillagerDuringInteraction", true);
+            attackReopenDelayTicks = b.comment(
+                    "How long (game ticks) after an attack before that villager will talk again",
+                    "(100 = 5 s). Ongoing danger keeps refusing regardless of this number.")
+                    .defineInRange("attackReopenDelayTicks", 100, 0, 24000);
+            attackedBehavior = b.comment(
+                    "What a villager is free to do after an attack ends the conversation.",
+                    "NATIVE_COMBAT - leave MCA's own reaction alone; a guard fights back. The default.",
+                    "RETREAT       - break away from the attacker whatever the profession would do.")
+                    .defineEnum("attackedBehavior", AttackedBehavior.NATIVE_COMBAT);
+            interruptOnImmediateDanger = b.comment(
+                    "End the conversation when the villager is in immediate danger, so they are free to",
+                    "flee rather than standing in a fight to finish a sentence.")
+                    .define("interruptOnImmediateDanger", true);
             b.pop();
 
             b.push("rpg");

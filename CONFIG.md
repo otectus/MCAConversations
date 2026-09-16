@@ -333,6 +333,30 @@ One honest wrinkle: MCA itself doubles a **negative** heart change for a `SENSIT
 inside its own reward path and therefore after these caps. The budget bounds what this mod grants;
 MCA's personality rule can still amplify a granted loss.
 
+### How long a discussion lasts (1.7.1)
+
+These are about the discussion itself rather than the hearts it pays: how far apart you may stand,
+and how the server tells a player who is reading from a client that has stopped being there. All of
+them live in the **server** file. The *continued* distance is not MCA's reach: opening a
+conversation still needs an ordinary interaction, so raising it lets you walk further while talking
+and never lets anybody start talking from further away. Chat mode keeps its own hearing radii in
+`[chat]`; they are a separate question and are unaffected by these.
+
+| Option | Default | Range | Meaning |
+|---|---|---|---|
+| `continueDistance` | `16.0` | 1.0-64.0 | How far apart you may be and go on talking, in three dimensions. Standing exactly this far apart is still in range. Was a fixed 8 blocks before 1.7.1 |
+| `immediateCloseDistance` | `24.0` | 1.0-128.0 | Past this the conversation ends at once, with no grace. A value below `continueDistance` is raised to it, which simply removes the grace band |
+| `distanceGraceTicks` | `20` | 0-1200 | How long you may stand between the two distances before the conversation ends (20 = 1 s). The window stays readable, but no answer or topic change may run from out there, and walking back inside clears the timer. `0` ends it the moment you separate |
+| `guiLeaseTicks` | `100` | 0-24000 | How long a dialogue window may go without reporting itself before the villager is released (100 = 5 s). This is what frees a villager from a crashed client or a window that vanished; an open window renews it continuously, so reading for minutes never expires it. `0` switches the lease off |
+| `holdVillagerDuringInteraction` | `true` |  | Hold a villager still and facing you while you are talking. Off gives up only the movement hold; every lifecycle rule still applies |
+| `attackReopenDelayTicks` | `100` | 0-24000 | How long after an attack before that villager will talk again (100 = 5 s). Ongoing danger keeps refusing regardless |
+| `attackedBehavior` | `NATIVE_COMBAT` |  | What an attacked villager is free to do once the conversation has ended. `NATIVE_COMBAT` leaves MCA's own reaction alone, so a guard is still a guard; `RETREAT` asks even a combat profession to break away first |
+| `interruptOnImmediateDanger` | `true` |  | End the conversation when the villager is in immediate danger, so they can flee rather than standing in a fight to finish a sentence |
+
+The heartbeat cadence the lease is renewed on is an internal constant (20 ticks), deliberately not a
+setting: it is an implementation detail of the window, and the lease above is the number that
+decides anything.
+
 ## `[chat]`
 
 > `chatModeRadius`, `chatModeAddressedRadius`, `chatModeStickinessTicks`, `chatModeGreetChance` and `chatModeAttentionTicks` live in the **server** file — they decide whether a villager answers at all. The rest lives in the **common** file.

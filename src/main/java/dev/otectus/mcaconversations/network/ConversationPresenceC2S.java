@@ -19,8 +19,9 @@ import java.util.function.Supplier;
  * only ever renew a discussion the sender actually owns; one naming a retired handle is recorded
  * nowhere and can neither revive that discussion nor take a villager from its current owner.
  *
- * <p><b>Recording only.</b> What expiry does with the timestamps is the presence lease, which is
- * separate work; this packet's contract is that the timestamp is honest and unspoofable.
+ * <p>The lease reads these timestamps and nothing else, which is what makes this packet's contract
+ * the whole of its security: the timestamp is honest and unspoofable, and a heartbeat that cannot be
+ * attributed to the sender's own live discussion is simply not recorded.
  */
 public record ConversationPresenceC2S(ConversationRef handle) {
 

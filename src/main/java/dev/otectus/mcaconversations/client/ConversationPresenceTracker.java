@@ -22,8 +22,10 @@ import net.minecraftforge.fml.common.Mod;
  * <p>Sends only while a handle exists <em>and</em> a screen is actually on top. A heartbeat from a
  * client with no window open would be exactly the lie this is meant to catch.
  *
- * <p><b>Recording only for now.</b> The server stores the timestamps; what expiry does with them is
- * the presence lease, which is separate work. Nothing here decides a lifetime.
+ * <p>What the server does with the timestamps is the presence lease: a discussion that stops
+ * reporting itself is closed and its villager released, so a crashed client cannot pin an NPC to a
+ * conversation nobody is in. Nothing here decides that — this end of it only tells the truth about
+ * whether a window is open.
  */
 @Mod.EventBusSubscriber(modid = McaConversations.MOD_ID, value = Dist.CLIENT)
 public final class ConversationPresenceTracker {

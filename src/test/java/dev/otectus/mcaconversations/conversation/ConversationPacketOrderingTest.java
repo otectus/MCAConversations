@@ -106,6 +106,14 @@ class ConversationPacketOrderingTest {
         assertFalse(ConversationPresence.heartbeat(PLAYER, theirs.sessionId(), VILLAGER, 311L));
         assertTrue(ConversationPresence.heartbeat(OTHER_PLAYER, theirs.sessionId(), VILLAGER, 312L));
         assertEquals(312L, ConversationPresence.lastHeartbeat(theirs).orElseThrow());
+
+        // Since 1.7.1 those timestamps are a lease, which makes the refusals load-bearing rather
+        // than merely tidy: a refused heartbeat must not buy the new owner's discussion more time,
+        // and the one heartbeat that was accepted must buy exactly the lease and no more.
+        assertFalse(ConversationPresence.leaseExpired(theirs, 412L, 100),
+                "the owner's own heartbeat renews their discussion");
+        assertTrue(ConversationPresence.leaseExpired(theirs, 413L, 100),
+                "and nothing the previous participant sent extended it");
     }
 
     // 4 --------------------------------------------------------------------------------------

@@ -256,12 +256,28 @@ public final class ConversationSessions {
         int removed = 0;
         for (Map.Entry<UUID, ConversationSession> entry : List.copyOf(SESSIONS.entrySet())) {
             if (!entry.getValue().hasPendingGuiOffer()
+                    && !leasedGui(entry.getKey())
                     && now - entry.getValue().lastActivityGameTime() > hardTimeout) {
                 close(entry.getKey(), CloseReason.TIMED_OUT);
                 removed++;
             }
         }
         return removed;
+    }
+
+    /**
+     * Whether this player's discussion is a graphical one the presence lease is already governing.
+     *
+     * <p>A player reading for several minutes with no offer in hand — between topics, or looking at
+     * the history drawer — is not an abandoned session, and the idle sweep has no way to tell the
+     * difference. The lease does: while the window is still reporting itself, that discussion ends
+     * when the lifecycle tick says it ends, not because a stopwatch ran out. A window that has gone
+     * quiet is expired by the lease within seconds, so nothing is left un-swept either way.
+     */
+    private static boolean leasedGui(UUID playerId) {
+        return ConversationPresence.ofPlayer(playerId)
+                .filter(handle -> handle.frontend() == ConversationSession.Frontend.GUI)
+                .isPresent();
     }
 
     /**
