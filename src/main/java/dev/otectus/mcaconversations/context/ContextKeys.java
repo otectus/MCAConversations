@@ -180,6 +180,21 @@ public final class ContextKeys {
     /** The title held before the recent change; unknown when there has not been one. */
     public static final ContextKey<String> CAPITAL_PREVIOUS_TITLE = ContextKey.of("capital.previous_title", String.class);
 
+    // --- Standing (MCA: Reputation public profiles; written only by ReputationContextSource) ---
+    // Every field here reads UNAVAILABLE without MCA: Reputation, without its profile layer, or for a
+    // villager whose community cannot be named, so a profile-gated scene self-hides rather than
+    // misfiring on a false. None of them is warmth: recognition says how widely a player is known,
+    // not how well they are liked, and no line may turn one into the other.
+    /** Whether this villager knows any public deed of the player's at all. The gate to open with. */
+    public static final ContextKey<Boolean> STANDING_SPEAKER_KNOWS_PLAYER =
+            ContextKey.of("standing.speaker_knows_player", Boolean.class);
+    /** The recognition tier this villager's own knowledge puts the player in, e.g. {@code noticed}. */
+    public static final ContextKey<String> STANDING_SPEAKER_RECOGNITION_TIER =
+            ContextKey.of("standing.speaker_recognition_tier", String.class);
+    /** At most three facet ids this villager would describe the player by, strongest first. */
+    public static final ContextKey<Set<String>> STANDING_SPEAKER_KNOWN_FOR =
+            ContextKey.generic("standing.speaker_known_for", Set.class);
+
     /**
      * Forces this class to initialise.
      *

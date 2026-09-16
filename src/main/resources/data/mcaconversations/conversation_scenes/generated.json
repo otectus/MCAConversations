@@ -4119,6 +4119,84 @@
         "opening_beat": "standing.friend_of_the_crown.open"
       }
     },
+    "topic.standing.known_for_courage": {
+      "purpose": "topic:standing",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "standing.speaker_knows_player",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "standing.speaker_known_for",
+            "has": "mcareputation:bravery",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 31,
+        "identity_values": [
+          "duty"
+        ],
+        "identity_styles": [
+          "direct"
+        ],
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.standing.known_for_courage.respond",
+        "opening_beat": "standing.known_for_courage.open"
+      }
+    },
+    "topic.standing.known_for_violence": {
+      "purpose": "topic:standing",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "standing.speaker_knows_player",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "standing.speaker_known_for",
+            "has": "mcareputation:violence",
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 38,
+        "identity_values": [
+          "mercy"
+        ],
+        "identity_styles": [
+          "direct"
+        ],
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.standing.known_for_violence.respond",
+        "opening_beat": "standing.known_for_violence.open"
+      }
+    },
     "topic.standing.marked_against_you": {
       "purpose": "topic:standing",
       "shape": "confide",

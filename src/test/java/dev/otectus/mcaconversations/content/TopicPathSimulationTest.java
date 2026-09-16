@@ -352,6 +352,9 @@ class TopicPathSimulationTest {
                 case "conversations_gossip":
                 case "conversations_reputation":
                 case "conversations_reputation_incident":
+                // A public profile is the same shape of question: this simulated villager knows the
+                // player for nothing, which is the state a brand-new world is in.
+                case "conversations_reputation_profile":
                 case "conversations_quest_available":
                 case "conversations_quest_active":
                 case "conversations_quest_ready":

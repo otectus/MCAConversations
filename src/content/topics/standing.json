@@ -746,6 +746,295 @@
       "vars_used": [],
       "epistemic": "inferred",
       "min_variants": 1
+    },
+    {
+      "name": "known_for_courage",
+      "subject": "standing.known_for_courage",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "ordinary",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "standing.speaker_knows_player",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "standing.speaker_known_for",
+          "has": "mcareputation:bravery",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 31,
+      "identity_values": [
+        "duty"
+      ],
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 4,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "What you heard I did.",
+        "pt": "O que você ouviu que eu fiz."
+      },
+      "lines": {
+        "en": [
+          "What reached me about you was a bad business somebody stood in front of. I can only repeat what I was told.",
+          "I heard you were the one who did not step back. That is the account I have, and it is not a measure of you.",
+          "The telling that got this far had you holding your ground. I was not there, so that is as far as I will take it."
+        ],
+        "pt": [
+          "O que chegou até mim falava de algo ruim que alguém encarou de frente. Só posso repetir o que me contaram.",
+          "Ouvi que você foi quem não recuou. É o relato que tenho, e não é uma medida de quem você é.",
+          "A versão que chegou aqui dizia que você se manteve firme. Eu não estava lá, então não vou além disso."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_who_told_them",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "How did that reach you?",
+            "pt": "Como isso chegou até você?"
+          },
+          "phrases": [
+            "how did that reach you",
+            "como isso chegou ate voce"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It came the way anything comes here. I would rather not name somebody who only passed it on."
+              ],
+              "pt": [
+                "Chegou do jeito que tudo chega aqui. Prefiro não citar quem só repassou."
+              ]
+            },
+            "predicate": "social_report",
+            "epistemic": "reported",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "reach",
+            "reached",
+            "chegou",
+            "ate",
+            "voce"
+          ]
+        },
+        {
+          "name": "say_it_was_smaller_than_that",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It was smaller than the telling.",
+            "pt": "Foi menor do que a versão contada."
+          },
+          "phrases": [
+            "it was smaller than the telling",
+            "foi menor do que a versao contada"
+          ],
+          "disposition": {
+            "respect": 1
+          },
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Then I will keep it the size you put it at. A telling grows on its own without help from me."
+              ],
+              "pt": [
+                "Então vou guardar no tamanho que você deu. Uma versão cresce sozinha, sem ajuda minha."
+              ]
+            },
+            "predicate": "social_report",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "smaller",
+            "telling",
+            "menor",
+            "versao",
+            "contada"
+          ]
+        }
+      ],
+      "vars_used": [],
+      "epistemic": "reported",
+      "min_variants": 3
+    },
+    {
+      "name": "known_for_violence",
+      "subject": "standing.known_for_violence",
+      "shape": "confide",
+      "act": "report",
+      "polarity": "negative",
+      "predicate": "social_report",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "standing.speaker_knows_player",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "standing.speaker_known_for",
+          "has": "mcareputation:violence",
+          "unknown": "fail"
+        }
+      ],
+      "base_priority": 38,
+      "identity_values": [
+        "mercy"
+      ],
+      "identity_styles": [
+        "direct"
+      ],
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Say what you have against me.",
+        "pt": "Diga o que você tem contra mim."
+      },
+      "lines": {
+        "en": [
+          "What came to me about you was somebody getting hurt. I am saying it to your face rather than behind your back.",
+          "I know of harm done, and I am not going to pretend I do not. What I do not know is the whole of it.",
+          "There is a hurt in what I was told about you. I would rather put it plainly than keep circling it."
+        ],
+        "pt": [
+          "O que chegou até mim sobre você foi alguém se ferindo. Estou dizendo na sua frente, não pelas suas costas.",
+          "Sei que houve dano, e não vou fingir que não sei. O que não sei é o todo da história.",
+          "Há uma ferida no que me contaram sobre você. Prefiro dizer isso direto a ficar rodeando."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_they_were_told",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What exactly were you told?",
+            "pt": "O que exatamente lhe contaram?"
+          },
+          "phrases": [
+            "what exactly were you told",
+            "o que exatamente lhe contaram"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "privacy": "confidential",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Only that it happened and that it was serious. I will not dress a rumour up as an eyewitness account."
+              ],
+              "pt": [
+                "Só que aconteceu e que foi sério. Não vou vestir um rumor de relato de testemunha."
+              ]
+            },
+            "predicate": "social_report",
+            "epistemic": "reported",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "exactly",
+            "told",
+            "exatamente",
+            "contaram"
+          ]
+        },
+        {
+          "name": "say_it_will_not_happen_again",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "appreciated",
+          "label": {
+            "en": "I intend to leave that behind me.",
+            "pt": "Pretendo deixar isso para trás."
+          },
+          "phrases": [
+            "i intend to leave that behind me",
+            "pretendo deixar isso para tras"
+          ],
+          "disposition": {
+            "respect": 1
+          },
+          "reaction": {
+            "id": "noted",
+            "act": "accept",
+            "polarity": "mixed",
+            "privacy": "discreet",
+            "shape": "confide",
+            "lines": {
+              "en": [
+                "Noted, and taken as said rather than as settled. Time is the part of this neither of us can shorten."
+              ],
+              "pt": [
+                "Anotado, e recebido como dito, não como resolvido. O tempo é a parte que nenhum de nós encurta."
+              ]
+            },
+            "predicate": "social_report",
+            "epistemic": "inferred",
+            "min_variants": 1
+          },
+          "requires_any": [
+            "intend",
+            "behind",
+            "pretendo",
+            "deixar",
+            "tras"
+          ]
+        }
+      ],
+      "vars_used": [],
+      "epistemic": "reported",
+      "min_variants": 3
     }
   ]
 }

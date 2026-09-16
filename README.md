@@ -146,8 +146,9 @@ The three world-level files — `mcaconversations_dispositions.dat`, `mcaconvers
 and `mcaconversations_progress.dat` — keep their names and their contents, so dispositions, gossip
 and conversation progress carry over untouched.
 
-MCA: Reputation integration is temporarily absent: that mod has no 1.21.1 NeoForge release yet.
-Reputation-aware dialogue scores zero and the reputation template variables fall back to their
+MCA: Reputation integration is live on this loader again: this release compiles against the NeoForge
+1.21.1 build of that mod's 0.6.0 compile-only API jar. Without MCA: Reputation installed, every
+reputation-aware condition still scores zero and the reputation template variables fall back to their
 existing text, exactly as they do on an install without the mod. Nothing else changes.
 
 ### Languages
@@ -158,7 +159,9 @@ base dialogue pool, every personality overlay, the age voices and the whole chat
 `en_us` alone; a narrow client-only hook widens that gate to the locales this mod ships complete
 overlays for, while preserving MCA's voice-pack and online-TTS restrictions untouched.
 
-Optional: **MCA: Quests** (quest-aware lines), **MCA: Capitals** (villages that are capitals speak
+Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public standing, villagers
+telling each other what you have done, and — from 0.6.0 — remarking on what *they* know you for),
+**MCA: Capitals** (villages that are capitals speak
 about their sovereign, heirs and court; court changes seed village gossip), **Serene Seasons**
 (real seasons; calendar fallback otherwise), and **Townstead** (villager work in progress scenes) — all soft dependencies; the mod works fully without them.
 

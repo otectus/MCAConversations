@@ -437,6 +437,14 @@ public final class ConversationsMcaRegistrar {
                                 .incident(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> incidentScore(query, player, villager));
 
+        // The public-profile condition (0.6.0): what the village, or this villager, knows the player
+        // for. Registered on the same unconditional terms as its two siblings.
+        McaHandles.registerCondition("conversations_reputation_profile",
+                (json, name) -> SafeParse.orNull("conversations_reputation_profile", json,
+                        () -> dev.otectus.mcaconversations.compat.ReputationQueryJson
+                                .profile(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> profileScore(query, player, villager));
+
         // --- Actions ---
 
         McaHandles.registerAction("conversations_record",
@@ -582,32 +590,30 @@ public final class ConversationsMcaRegistrar {
          *
          * The action names an INCIDENT DEFINITION; it never accepts a raw score delta. That is what
          * stops a datapack — or a player clicking the same apology repeatedly — from farming standing:
-         * how much an apology is worth is decided by the incident's own definition, and Reputation's
-         * dedupe key (built from the villager, the player, and the decision id) makes the second click
-         * a no-op. Generic small talk, navigation, and asking the opener cannot reach this action at
-         * all, because nothing authors it on them.
+         * how much an apology is worth is decided by the incident's own definition, and the delivery's
+         * operation identity makes the second click a no-op. Generic small talk, navigation, and
+         * asking the opener cannot reach this action at all, because nothing authors it on them.
+         *
+         * <p>Since 1.7.2 that identity no longer names the villager, so repeating an apology to a
+         * different resident is the same deed; {@code "binds": "known_incident"} ties it to the exact
+         * grievance this villager knows about, so one apology per incident stays payable once while a
+         * second, unrelated incident remains addressable; and {@code "supersedes"} names an earlier
+         * decision whose deed this one replaces rather than stacks. See
+         * {@code ReputationQueryJson#signal} for the whole shape.
          */
         McaHandles.registerAction("conversations_reputation_signal",
                 (json, name) -> SafeParse.orNull("conversations_reputation_signal", json,
-                        () -> json.getAsJsonObject()),
-                obj -> (villager, player) -> {
+                        () -> dev.otectus.mcaconversations.compat.ReputationQueryJson
+                                .signal(json.getAsJsonObject())),
+                signal -> (villager, player) -> {
                     try {
-                        var queries = dev.otectus.mcaconversations.compat.ReputationBridge.queries();
-                        if (obj == null || queries == null
-                                || !dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()) {
-                            return; // no Reputation: an authored signal is simply not recordable
+                        if (signal == null) {
+                            return; // a malformed signal records nothing rather than guessing
                         }
-                        var object = obj.getAsJsonObject();
-                        String incident = object.has("incident")
-                                ? object.get("incident").getAsString() : null;
-                        if (incident == null || incident.isBlank()) {
-                            return;
-                        }
-                        String visibility = object.has("visibility")
-                                ? object.get("visibility").getAsString() : null;
-                        String decision = object.has("decision")
-                                ? object.get("decision").getAsString() : incident;
-                        queries.recordSignal(player, villager, incident, visibility, decision);
+                        // No Reputation, or none that accepted the deed: the conversation carries on.
+                        // The parse happened at load time, so a pack error is reported once, there.
+                        dev.otectus.mcaconversations.compat.ReputationBridge
+                                .recordSignal(player, villager, signal);
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_reputation_signal failed; ignoring", t);
                     }
@@ -619,7 +625,7 @@ public final class ConversationsMcaRegistrar {
                 + "/conversations_gossip_say/conversations_disposition_apply/conversations_session"
                 + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open"
                 + "; reputation conditions conversations_reputation/conversations_reputation_incident"
-                + " and action conversations_reputation_signal");
+                + "/conversations_reputation_profile and action conversations_reputation_signal");
     }
 
     /**
@@ -780,6 +786,30 @@ public final class ConversationsMcaRegistrar {
             return queries.matchesStanding(player, villager, query) ? 1.0f : 0.0f;
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("conversations_reputation failed; defaulting 0", t);
+            return 0.0f;
+        }
+    }
+
+    /**
+     * Scores {@code conversations_reputation_profile} (0.6.0).
+     *
+     * <p>Three answers collapse to two here, and the collapse is deliberate: a condition can only
+     * score, so "no match" and "nobody could say" both score {@code 0} and the pack's authored
+     * fallback branch is what runs. What must never happen is the third possibility — answering a
+     * speaker's question from the village's profile — and that is refused one layer down, in the
+     * bridge and in Reputation itself.
+     */
+    private static float profileScore(dev.otectus.mcaconversations.compat.ReputationBridge.ProfileQuerySpec query,
+                                      net.minecraft.server.level.ServerPlayer player,
+                                      net.minecraft.world.entity.Entity villager) {
+        if (query == null) {
+            return 0.0f;
+        }
+        try {
+            return dev.otectus.mcaconversations.compat.ReputationBridge
+                    .matchesProfile(player, villager, query).matched() ? 1.0f : 0.0f;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("conversations_reputation_profile failed; defaulting 0", t);
             return 0.0f;
         }
     }

@@ -5,10 +5,67 @@ All notable changes to this project will be documented in this file. Format foll
 
 Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA Reborn
 `[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.8)`. As of 1.6.3, this release is built against the
-compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.4.1, vendored in `libs/api/` and hash-pinned by `gradle/sibling-apis.properties`; those jars are not packaged.
+compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.6.0, vendored in `libs/api/` and hash-pinned by `gradle/sibling-apis.properties`; those jars are not packaged.
 
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
+
+## [1.7.2] - unreleased
+
+MCA: Reputation 0.6.0 adoption. A village can now say what a player is *known for*, separately from
+how much it likes them — and this release is about villagers only ever drawing on the part of that
+they personally heard.
+
+### Added
+
+- **Villagers can remark on what they know you for.** With MCA: Reputation 0.6.0 installed, a
+  villager who has actually heard about something you did can raise it: the one who was told you
+  stood your ground says so, and the one who was told somebody got hurt says that instead, to your
+  face rather than behind your back. Both lines are filtered through what *that villager* knows, so a
+  resident who has heard nothing says nothing, and neither line is warmth: being widely known is not
+  being liked, and hearts, familiarity and who is willing to marry you are untouched by any of it.
+- **A new dialogue condition, `conversations_reputation_profile`.** Packs can ask what the village as
+  a whole can say about a player (`"scope": "community"`) or what one villager knows
+  (`"scope": "speaker"`, the default): a recognition floor or ceiling, a recognition tier, and up to
+  sixteen facet clauses with their own evidence requirements. Every clause is ANDed, an unknown facet
+  id fails closed, a facet with no evidence behind it does not satisfy a "not violent" gate by
+  accident, and a question nobody can answer scores zero so the pack's own fallback branch runs — it
+  never quietly becomes the village's answer to a villager's question. Registered with or without
+  MCA: Reputation installed, like its two siblings. See `DATAPACK.md`.
+- **Three context fields for the same facts**, usable from `conversations_context` and from scene
+  conditions: `standing.speaker_knows_player`, `standing.speaker_recognition_tier` and
+  `standing.speaker_known_for`. All three read unavailable without MCA: Reputation or without its
+  profile layer, so a profile-gated scene hides itself rather than firing on a false.
+
+### Changed
+
+- **An apology is paid for once, however many people you say it to.** The identity a conversation
+  deed was recorded under named the villager standing in front of you, so the same apology could be
+  repeated to a different resident for a fresh reward — while a second, unrelated grievance could not
+  be apologised for at all, because the menu decision alone was the whole identity. A conversation
+  deed is now delivered under an operation identity that names the decision and the exact incident it
+  answers: one apology per grievance, every other grievance still addressable, and a replay after a
+  reconnect or a reopened screen recovers the first answer instead of paying again. A decision that
+  amends an earlier one now supersedes its predecessor rather than stacking on it, and an apology for
+  something this villager has never heard of records nothing at all.
+- **The villager is a real witness and a real speaker.** A deed the villager was present for is
+  recorded with them as a witness, and the incident it answers is selected through their own
+  knowledge rather than from the village's ledger, so nothing a resident has not heard about can be
+  apologised for or reported to them.
+- **One standing term in a check, still, and now the facet-aware one.** Where MCA: Reputation can
+  answer per villager, that answer already carries their reading of what you are known for, so it
+  replaces the village-level term rather than adding to it — the ±8 ceiling on public standing in a
+  TRUST or RESPECT check is unchanged, and a check still cannot be carried by standing alone.
+- **Optional operations are negotiated, not guessed.** The integration asked MCA: Reputation once,
+  reflectively, whether it had one method; it now reads that mod's own capability report, so nine
+  optional operations are used when they exist and fall back cleanly when they do not. A build too old
+  to report its capabilities keeps the village-level behaviour it always had.
+- **A resolved or corrected story is not retold in its old form.** A deed a later one absorbed, or one
+  the village decided did not happen, is no longer offered as village talk.
+- Vendored MCA: Reputation API jar refreshed to the NeoForge 1.21.1 build of 0.6.0
+  (`libs/api/mcareputation-0.6.0-api.jar`, hash-pinned in `gradle/sibling-apis.properties`). The API
+  version it declares is still 2 — the NeoForge generation of that API — so this build's handshake
+  with it is unchanged, and MCA: Reputation remains entirely optional.
 
 ## [1.7.1] - unreleased
 
