@@ -75,6 +75,14 @@ public final class ConversationLifecycle {
         if (playerId == null || villagerId == null) {
             return Optional.empty();
         }
+        if (DangerLockout.locked(villagerId, now)) {
+            // Recently attacked: for attackReopenDelayTicks this villager talks to nobody. Without
+            // it the player who just swung is one right-click away from pinning the villager who is
+            // trying to get away from them (spec §5.3).
+            McaConversations.LOGGER.debug("refused a discussion with villager {}: {} ticks of danger "
+                    + "lockout left", villagerId, DangerLockout.remaining(villagerId, now));
+            return Optional.empty();
+        }
         ConversationHandle existing = ConversationPresence.ofPlayer(playerId).orElse(null);
         if (existing != null) {
             if (existing.isFor(playerId, villagerId) && existing.frontend() == frontend) {
@@ -242,6 +250,7 @@ public final class ConversationLifecycle {
      */
     public static void reset() {
         ConversationPresence.clear();
+        DangerLockout.clear();
         ConversationHandle.beginServerEpoch();
     }
 }

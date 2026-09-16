@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
+import dev.otectus.mcaconversations.chat.ConversationMovementController;
 import dev.otectus.mcaconversations.chat.GreetOnApproach;
 import dev.otectus.mcaconversations.chat.VillagerAttention;
 import dev.otectus.mcaconversations.command.ConversationsCommand;
@@ -13,6 +14,7 @@ import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.ServerEpoch;
 import dev.otectus.mcaconversations.conversation.CloseReason;
+import dev.otectus.mcaconversations.conversation.ConversationDanger;
 import dev.otectus.mcaconversations.conversation.ConversationDistancePolicy;
 import dev.otectus.mcaconversations.conversation.ConversationHandle;
 import dev.otectus.mcaconversations.conversation.ConversationLifecycle;
@@ -33,6 +35,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -87,6 +90,7 @@ public final class ConversationsEvents {
         // from the world that just stopped can ever equal one minted by the next.
         dev.otectus.mcaconversations.conversation.ConversationLifecycle.reset();
         dev.otectus.mcaconversations.network.ConversationLifecycleBridge.shutdown();
+        dev.otectus.mcaconversations.compat.NativeInteractionClose.shutdown();
         VillagerAttention.reset();
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
@@ -158,9 +162,11 @@ public final class ConversationsEvents {
         // out of this one, and it is owed regardless of whether chat mode is on.
         ServerEpoch.advance();
 
-        // The teardown coordinator's terminal payload. Registered here so conversation/ never has to
-        // import network/, and re-bound every start so an integrated world opened twice sends to the
-        // world that is actually running.
+        // Teardown stage 6 before stage 7: MCA's own interaction is closed first, then the client is
+        // told its window is gone. Both are registered here so conversation/ never has to import
+        // compat/ or network/, and both re-bind every start so an integrated world opened twice
+        // reaches the world that is actually running.
+        dev.otectus.mcaconversations.compat.NativeInteractionClose.install(event.getServer());
         dev.otectus.mcaconversations.network.ConversationLifecycleBridge.install(event.getServer());
 
         // Likewise owed regardless: history eviction must know who is mid-conversation before the
@@ -270,15 +276,60 @@ public final class ConversationsEvents {
 
     // --- Conversation states ---------------------------------------------------
 
+    /**
+     * Incoming damage — including a blow armour or a shield goes on to absorb entirely (spec §5.3).
+     *
+     * <p>This fires before any reduction, so it is the earliest and the most complete view of a
+     * villager being attacked, and a villager who was swung at is in exactly as much trouble as one
+     * who was cut. It shares the incident with {@link #onLivingDamage} below: {@link ConversationDanger}
+     * folds the two events of one blow into a single interruption.
+     *
+     * <p>Two separate concerns live here and only one of them is behind a switch. Ending the
+     * conversation is unconditional: being free to run away from whatever is hitting you is not a
+     * feature, and it is indifferent to who attacked — the zombie behind the villager is the case
+     * that matters most. Marking the villager annoyed at the player who hit them <em>is</em> a
+     * conversation-state feature, still gated on {@code enableStates} and still requiring the
+     * attacker to be that player.
+     *
+     * <p>Never cancels and never modifies the event.
+     */
     @SubscribeEvent
     public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
-        if (!McaBridge.isAvailable() || event.getEntity().level().isClientSide()
+        Entity target = event.getEntity();
+        interruptOnDamage(target);
+        if (!McaBridge.isAvailable() || target.level().isClientSide()
                 || !McaConversationsConfig.COMMON.enableStates.get()) {
             return;
         }
-        Entity target = event.getEntity();
         if (McaCompat.isMcaVillager(target) && event.getSource().getEntity() instanceof ServerPlayer player) {
             StateTracker.apply(target, player, ConversationState.ANNOYED);
+        }
+    }
+
+    /**
+     * Damage that survived every reduction and is about to be applied — the confirmed half of the
+     * blow, and the NeoForge counterpart of the Forge build's {@code LivingHurtEvent}.
+     *
+     * <p>Present as well as the incoming event because the two catch different things: a hit fully
+     * absorbed raises only the first, and a source that arrives without one would raise only the
+     * second. Between them one blow is seen once, which is what the incident deduplication is for.
+     */
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
+        interruptOnDamage(event.getEntity());
+    }
+
+    /** The half both damage events share: one incident, one interruption, one re-open delay. */
+    private static void interruptOnDamage(Entity target) {
+        if (!McaBridge.isAvailable() || target == null || target.level().isClientSide()
+                || target.getServer() == null || !McaCompat.isMcaVillager(target)) {
+            return;
+        }
+        try {
+            ConversationDanger.onAttacked(target, target.getUUID(),
+                    target.getServer().overworld().getGameTime());
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("attack interruption failed for {}", target.getUUID(), t);
         }
     }
 
@@ -360,12 +411,41 @@ public final class ConversationsEvents {
                 CloseReason reason = judgeDiscussion(server, handle, policy, leaseTicks, gameTime);
                 if (reason != null) {
                     ConversationLifecycle.terminate(handle, reason);
+                    continue;
                 }
+                holdStill(server, handle, gameTime);
             } catch (Throwable t) {
                 // A discussion that cannot be judged is not a discussion worth keeping a villager for.
                 McaConversations.LOGGER.debug("conversation tick failed for {}; closing it", handle, t);
                 ConversationLifecycle.terminate(handle, CloseReason.CONTAINED_ERROR);
             }
+        }
+    }
+
+    /**
+     * The stationary hold for one live graphical discussion, renewed for this tick (spec §5.2).
+     *
+     * <p>Here rather than in {@code VillagerAttention.tick} for two reasons. It is the only tick that
+     * knows the discussion is still legitimate — judged a line earlier against distance, lease and
+     * identity — and it runs whatever {@code enableChatMode} says, which is what makes a graphical
+     * conversation hold its villager on a server with chat mode switched off.
+     *
+     * <p>The controller decides; this method only acts on a decision to end the discussion, because
+     * ending one is the lifecycle's business and never the movement layer's.
+     */
+    private static void holdStill(net.minecraft.server.MinecraftServer server, ConversationHandle handle,
+                                  long gameTime) {
+        ServerPlayer player = server.getPlayerList().getPlayer(handle.playerId());
+        if (player == null) {
+            return;
+        }
+        Entity villager = player.serverLevel().getEntity(handle.villagerId());
+        ConversationMovementController.Stance stance =
+                ConversationMovementController.tickHold(handle, villager, player, gameTime);
+        if (stance == ConversationMovementController.Stance.REVOKE_ATTACKED) {
+            ConversationDanger.onAttacked(villager, handle.villagerId(), gameTime);
+        } else if (stance == ConversationMovementController.Stance.REVOKE_DANGER) {
+            ConversationDanger.onDanger(villager, handle.villagerId(), gameTime);
         }
     }
 

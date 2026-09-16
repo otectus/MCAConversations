@@ -108,6 +108,11 @@ class MixinTargetProbeTest {
         // 1.21.1 MCA: InteractionDialogueMessage is a record payload; the server entry point is
         // handleServer(ServerPlayer), which replaced the 1.20.1 receive(...).
         INJECTION_POINTS.put("InteractionDialogueMessageMixin", List.of("handleServer"));
+        // MCA's walk-toward-the-player step, cancelled while a managed discussion holds the villager.
+        // Private, and deliberately chosen over the Behavior lifecycle methods, whose names differ
+        // across the MCA line; followPlayer is the one name stable on every probed build of both
+        // lines, so a rename here has to fail the build rather than stop holding villagers.
+        INJECTION_POINTS.put("InteractTaskMovementMixin", List.of("followPlayer"));
         // MCA's tokenless close, a record payload on 1.21.1: handleServer(ServerPlayer) replaced the
         // 1.20.1 receive(...). Present on 7.7.33+1.21.1 and 7.7.36-beta.3+1.21.1; the guard is a
         // silent no-op if it is renamed, which is exactly what this entry turns into a build failure.

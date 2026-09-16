@@ -327,6 +327,19 @@ public final class McaBinding {
     // GUI interaction ---------------------------------------------------------------------------------
     public static final Member GET_INTERACTING_PLAYER =
             virtual(C_COMMAND_HANDLER, "getInteractingPlayer", Object.class, 0);
+    /**
+     * MCA's own end of an interaction: it clears the interacting-player reference and asks that
+     * player's client to close the screen it opened.
+     *
+     * <p>Bound because a managed discussion has to be able to end MCA's half of itself — teardown
+     * stage 6 — rather than leaving MCA believing a window is still open after this mod has closed
+     * it. It is called only through {@code McaHandles#stopInteractingIfOwned}, which first asks
+     * {@link #GET_INTERACTING_PLAYER} whether the interaction still belongs to the player whose
+     * discussion is ending; an unconditional native close would be exactly the "old participant
+     * closes the new owner's window" bug that {@code McaInteractionCloseMixin} exists to refuse.
+     */
+    public static final Member STOP_INTERACTING =
+            virtual(C_COMMAND_HANDLER, "stopInteracting", void.class, 0);
 
     // The dialogue engine, driven as a GUI click would -------------------------------------------------
     public static final Member DIALOGUES_GET_INSTANCE = statik(C_DIALOGUES, "getInstance", Object.class, 0);
@@ -437,7 +450,7 @@ public final class McaBinding {
             GET_RELATIONSHIP_WORLD, GET_RELATIONSHIP_UUID,
             FAMILY_TREE_GET, FAMILY_TREE_GET_OR_EMPTY, NODE_GET_NAME, NODE_SET_NAME,
             PLAYER_SAVE_GET, PLAYER_SAVE_ENTITY_DATA, PLAYER_SAVE_FAMILY_ENTRY,
-            GET_INTERACTING_PLAYER,
+            GET_INTERACTING_PLAYER, STOP_INTERACTING,
             DIALOGUES_GET_INSTANCE, DIALOGUES_SELECT_ANSWER, DIALOGUES_GET_QUESTION, QUESTION_GET_ANSWER,
             ANSWER_VALID_FOR_CONSTRAINT, CONSTRAINT_ALL_MATCHING,
             NETWORK_SEND_TO_PLAYER, QUESTION_RESPONSE_NEW, DIALOGUE_RESPONSE_NEW, QUESTION_RESPONSE_TEXT, QUESTION_RESPONSE_SILENT,

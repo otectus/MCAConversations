@@ -56,6 +56,24 @@ public final class AttentionLedger {
         public boolean releasableBy(UUID player) {
             return player != null && playerId.equals(player);
         }
+
+        /**
+         * True when this hold is entitled to stop the villager walking (spec §5.1).
+         *
+         * <p>An actual exchange owns movement; a glance never does. Somebody typing nearby, or being
+         * greeted in passing, gets a look and nothing more — a cosmetic glance that pinned villagers
+         * in place would freeze half a village around a player with the chat box open.
+         */
+        public boolean ownsMovement() {
+            return source == Source.CONVERSATION;
+        }
+
+        /** True when a still-live graphical discussion booked this hold. */
+        public boolean isGuiDiscussion() {
+            return owner != null
+                    && owner.frontend() == dev.otectus.mcaconversations.conversation
+                            .ConversationSession.Frontend.GUI;
+        }
     }
 
     private final Map<UUID, Hold> holds = new LinkedHashMap<>();
@@ -127,6 +145,21 @@ public final class AttentionLedger {
         }
         holds.remove(villagerId);
         return true;
+    }
+
+    /**
+     * Drops every hold this predicate accepts, and keeps the rest.
+     *
+     * <p>The one caller that needs it is chat mode being switched off mid-session: the chat
+     * engagements and the typing glances it created go, and a graphical discussion — which has
+     * nothing to do with chat mode and must keep working — stays exactly as it was.
+     *
+     * @return how many holds were dropped
+     */
+    public int releaseIf(java.util.function.Predicate<Hold> drop) {
+        int before = holds.size();
+        holds.entrySet().removeIf(e -> drop.test(e.getValue()));
+        return before - holds.size();
     }
 
     /** Drops only the TYPING holds aimed at {@code player} — conversation partners keep attending. */
