@@ -11,10 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DialogueChoicePresenterTest {
 
+    /** One villager for every offer in this class: identity is not what it is testing. */
+    private static final java.util.UUID VILLAGER = java.util.UUID.randomUUID();
+
     @Test
     void stationaryPointerDoesNotStealKeyboardFocusButMovementDoes() {
         ClientChoiceState state = new ClientChoiceState();
-        state.accept(new ClientChoiceState.ClientChoiceOffer(1, "q", List.of("a", "b"),
+        state.accept(new ClientChoiceState.ClientChoiceOffer(1, VILLAGER, "q", List.of("a", "b"),
                 ConversationSession.Frontend.GUI, 0));
         PreparedDialogueCard card = card();
         DialogueChoicePresenter presenter = new DialogueChoicePresenter();

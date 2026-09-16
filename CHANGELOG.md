@@ -10,6 +10,27 @@ integrations compile against those add-ons' compile-only API jars, vendored unde
 hash-pinned by `gradle/sibling-apis.properties` — MCA: Quests 1.6.4 and MCA: Reputation 0.4.1. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
 Serene Seasons, Townstead `[0.7.5,0.8)`.
 
+## [1.7.1] - unreleased
+
+Conversation stability. A dialogue that ends because the player walked away must end on the client
+too: the explanation belongs to the conversation that produced it, and nothing it leaves behind may
+follow the player to the next villager.
+
+### Fixed
+
+- **An explanation from one villager no longer takes over the next villager's screen.** Walking out
+  of range mid-answer clears the offer and leaves a short explanation in its place, deliberately, so
+  the card does not vanish under the cursor with nothing said. That shell has no offer attached, and
+  the screen's teardown only looked for a live offer, so closing the window left the sentence behind
+  on the client — and the ownership gate that decides who draws the dialogue never asked which
+  villager it belonged to. The next villager the player spoke to inherited it and showed the stale
+  explanation instead of their own dialogue, with MCA's own menu suppressed underneath. Offers and
+  the explanations they leave now name the villager whose screen received them; an interaction screen
+  shows only what its own villager owns, and closing one retires the offer and the explanation
+  together while leaving a chat conversation untouched. A screen that is replaced rather than closed
+  — MCA's family tree button does exactly that — is reconciled against the window, and a newly opened
+  screen inherits nothing from the one before it.
+
 ## [1.7.0] - unreleased
 
 Refinement release: all ten stages of the refinement plan, shipped as one version.

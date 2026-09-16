@@ -23,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class DialogueStyleHotSwitchTest {
 
+    /** One villager for every offer in this class: identity is not what it is testing. */
+    private static final java.util.UUID VILLAGER = java.util.UUID.randomUUID();
+
     private static final int ANSWERS = 18;
 
     private static ClientChoiceState acceptedOffer() {
@@ -31,7 +34,7 @@ class DialogueStyleHotSwitchTest {
             answerIds.add("answer" + i);
         }
         ClientChoiceState state = new ClientChoiceState();
-        state.accept(new ClientChoiceState.ClientChoiceOffer(7L, "question", answerIds,
+        state.accept(new ClientChoiceState.ClientChoiceOffer(7L, VILLAGER, "question", answerIds,
                 ConversationSession.Frontend.GUI, 0L));
         return state;
     }

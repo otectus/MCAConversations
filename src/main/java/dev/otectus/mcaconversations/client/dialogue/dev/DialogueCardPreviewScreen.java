@@ -62,7 +62,7 @@ public final class DialogueCardPreviewScreen extends Screen {
         for (int i = 0; i < fixture().answers().size(); i++) {
             answerIds.add(Integer.toString(i));
         }
-        state.accept(new ClientChoiceState.ClientChoiceOffer(revision, "preview", answerIds,
+        state.accept(new ClientChoiceState.ClientChoiceOffer(revision, null, "preview", answerIds,
                 ConversationSession.Frontend.GUI, 0L));
         renderer.reset();
     }

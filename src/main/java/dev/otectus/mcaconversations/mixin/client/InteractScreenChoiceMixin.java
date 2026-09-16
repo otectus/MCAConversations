@@ -66,6 +66,10 @@ public abstract class InteractScreenChoiceMixin {
                 mcaconversations$speaker = living;
             }
         }
+        // Claimed here, before any offer for this villager can arrive, and claiming drops whatever
+        // the previous screen left behind. A screen that was replaced rather than closed — MCA's own
+        // family tree button does exactly that — never runs the close path below.
+        ClientChoiceMessages.screenOpened(this, mcaconversations$villagerId);
     }
 
     @Inject(method = "setLastPhrase", at = @At("HEAD"), require = 0, remap = false)
@@ -135,7 +139,8 @@ public abstract class InteractScreenChoiceMixin {
         if (!mcaconversations$active()) {
             return;
         }
-        if (ClientChoiceMessages.state().lapseFor(ConversationSession.Frontend.GUI)) {
+        if (ClientChoiceMessages.state().lapseFor(ConversationSession.Frontend.GUI,
+                mcaconversations$villagerId)) {
             mcaconversations$renderer.lapseKey(keyCode);
             cir.setReturnValue(true);
             return;
@@ -238,9 +243,21 @@ public abstract class InteractScreenChoiceMixin {
 
     @Inject(method = {"onClose", "m_7379_"}, at = @At("TAIL"), require = 0, remap = false)
     private void mcaconversations$onClose(CallbackInfo ci) {
-        if (ClientChoiceMessages.state().activeFor(ConversationSession.Frontend.GUI)) {
-            ClientChoiceMessages.state().clearLocal();
-        }
+        mcaconversations$releaseScreen();
+    }
+
+    /**
+     * Retires everything this screen owned.
+     *
+     * <p>Unconditional, and both halves. The old guard asked whether a GUI offer was live, but a
+     * lapse has no offer — clearing it was exactly the case the guard excluded — so the explanation
+     * survived the close and was still on the state when the player opened the next villager's
+     * screen. Only the graphical frontend is dropped: a chat conversation is not this screen's.
+     */
+    @Unique
+    private void mcaconversations$releaseScreen() {
+        ClientChoiceMessages.state().clearLocal(ConversationSession.Frontend.GUI);
+        ClientChoiceMessages.screenClosed(this);
         mcaconversations$renderer.reset();
         mcaconversations$speaker = null;
     }
@@ -264,11 +281,17 @@ public abstract class InteractScreenChoiceMixin {
      * style through the controller, so a style change takes effect atomically per frame and per
      * event. Under MCA_ORIGINAL it answers false and MCA keeps its own question, answers, clicks,
      * wheel and digits.
+     *
+     * <p>A lapse must also name this screen's villager. One left by another conversation, or one
+     * that names nobody, is not this screen's to show: without that test the sentence explaining why
+     * the last villager stopped answering took over the next villager's screen, and MCA's own
+     * dialogue never appeared.
      */
     @Unique
     private boolean mcaconversations$active() {
         if (ClientChoiceController.numberingEnabled()
-                && ClientChoiceMessages.state().lapseFor(ConversationSession.Frontend.GUI)) {
+                && ClientChoiceMessages.state().lapseFor(ConversationSession.Frontend.GUI,
+                        mcaconversations$villagerId)) {
             return true;
         }
         if (!ClientChoiceController.numberingEnabled() || dialogQuestionText == null

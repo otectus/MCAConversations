@@ -13,8 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /** What the client keeps on screen after an answer is refused, and what it is allowed to offer. */
 class ClientChoiceLapseTest {
 
+    /** One villager for every offer in this class: identity is not what it is testing. */
+    private static final java.util.UUID VILLAGER = java.util.UUID.randomUUID();
+
     private static ClientChoiceState.ClientChoiceOffer offer(long revision) {
-        return new ClientChoiceState.ClientChoiceOffer(revision, "conversations.q",
+        return new ClientChoiceState.ClientChoiceOffer(revision, VILLAGER, "conversations.q",
                 List.of("a", "b"), ConversationSession.Frontend.GUI, 0L);
     }
 
