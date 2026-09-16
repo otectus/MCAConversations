@@ -136,23 +136,88 @@ public final class ConversationSessions {
      * lease aimed at the player, and cancels any reply still waiting in the delivery queue — a line
      * scheduled for a player who has logged out or died must never surface later.
      *
+     * <p>When the player is in an accepted discussion, this is {@link ConversationLifecycle#terminate}
+     * with that discussion's handle: the coordinator owns the stage order and the ownership checks,
+     * and only it may release a villager somebody might already have taken over. A session without a
+     * handle — chat mode's ambient exchanges, anything that predates the interaction boundary — takes
+     * the unmanaged path below, which does the same work keyed by the player instead.
+     *
      * @return the removed session, or empty when the player had none.
      */
     public static Optional<ConversationSession> close(UUID playerId, CloseReason reason) {
         if (playerId == null) {
             return Optional.empty();
         }
-        ConversationSession session = SESSIONS.remove(playerId);
+        Optional<ConversationHandle> handle = ConversationPresence.ofPlayer(playerId);
+        if (handle.isPresent()) {
+            return ConversationLifecycle.terminate(handle.get(), reason);
+        }
+        return closeUnmanaged(playerId, reason);
+    }
+
+    private static Optional<ConversationSession> closeUnmanaged(UUID playerId, CloseReason reason) {
+        ConversationSession session = detachSession(playerId, reason);
         if (session != null) {
-            session.endTopic();
-            session.noteClosed(reason);
-            VillagerAttention.release(session.villagerId());
+            // Conditional, not unconditional: a villager whose hold belongs to somebody else is in
+            // the middle of their conversation, and this player's ending is not entitled to end it.
+            VillagerAttention.releaseIfOwned(session.villagerId(), playerId);
         }
         VillagerAttention.clearPlayer(playerId);
         ChatModeScheduler.clearPlayer(playerId);
         McaConversations.LOGGER.debug("conversation session closed for {}: {} (had session: {})",
                 playerId, reason, session != null);
         return Optional.ofNullable(session);
+    }
+
+    /**
+     * Storage removal, guarded by handle. Deliberately separate from {@link #close} so the teardown
+     * coordinator can run it as one stage without calling back into the public close path (spec §4.5).
+     *
+     * <p>Refuses to remove a session that has already been re-attached to a newer discussion: that is
+     * how a late close for a retired handle is prevented from taking the successor's session with it.
+     *
+     * @return the detached session, or null when this handle no longer owns one
+     */
+    static ConversationSession detach(ConversationHandle handle, CloseReason reason) {
+        if (handle == null) {
+            return null;
+        }
+        ConversationSession session = SESSIONS.get(handle.playerId());
+        if (session == null) {
+            return null;
+        }
+        ConversationHandle owner = session.handle().orElse(null);
+        if (owner != null && !owner.equals(handle)) {
+            return null;
+        }
+        SESSIONS.remove(handle.playerId(), session);
+        finishSession(session, reason);
+        return session;
+    }
+
+    private static ConversationSession detachSession(UUID playerId, CloseReason reason) {
+        ConversationSession session = SESSIONS.remove(playerId);
+        if (session != null) {
+            finishSession(session, reason);
+        }
+        return session;
+    }
+
+    private static void finishSession(ConversationSession session, CloseReason reason) {
+        session.endTopic();
+        session.noteClosed(reason);
+    }
+
+    /**
+     * Binds a newly accepted discussion to this player's session, creating one if needed. Called by
+     * {@link ConversationLifecycle} alone — acquiring a handle is what begins a discussion.
+     */
+    static ConversationSession attach(ConversationHandle handle, long now) {
+        ConversationSession session = get(handle.playerId(), now);
+        session.setVillagerId(handle.villagerId());
+        session.setHandle(handle);
+        session.setFrontend(handle.frontend());
+        return session;
     }
 
     /** Drops a player's session entirely (logout, death). */
@@ -249,6 +314,7 @@ public final class ConversationSessions {
             close(playerId, reason);
         }
         SESSIONS.clear();
+        ConversationPresence.clear();
     }
 
     /** Test seam: forget every session. */

@@ -23,6 +23,7 @@ class ConversationSessionTest {
     @BeforeEach
     void reset() {
         ConversationSessions.clearAllForTesting();
+        ConversationPresence.clear();
     }
 
     @Test
@@ -276,5 +277,35 @@ class ConversationSessionTest {
         session.beginTopic("day", DepthClass.QUICK, 200);
         assertEquals(0, session.positiveApplied());
         assertEquals(200, session.startedGameTime());
+    }
+
+    @Test
+    @DisplayName("the session carries the discussion it belongs to, and drops it when the target changes")
+    void sessionCarriesItsHandle() {
+        ConversationHandle handle = ConversationLifecycle.begin(PLAYER, VILLAGER, "minecraft:overworld",
+                ConversationSession.Frontend.GUI, 100).orElseThrow();
+        ConversationSession session = ConversationSessions.raw(PLAYER).orElseThrow();
+        assertEquals(handle, session.handle().orElseThrow());
+        assertEquals(VILLAGER, session.villagerId());
+
+        // Turning to somebody else: the handle named the old villager, so it stops describing this
+        // session rather than lingering as an identity a stale close could match.
+        session.setVillagerId(OTHER_VILLAGER);
+        assertTrue(session.handle().isEmpty());
+    }
+
+    @Test
+    @DisplayName("ending a topic keeps the discussion; only a teardown ends it")
+    void endTopicLeavesTheHandleStanding() {
+        ConversationHandle handle = ConversationLifecycle.begin(PLAYER, VILLAGER, "minecraft:overworld",
+                ConversationSession.Frontend.GUI, 100).orElseThrow();
+        ConversationSessions.beginTopic(PLAYER, VILLAGER, "day", DepthClass.QUICK, 100);
+
+        ConversationSessions.endTopic(PLAYER, 110, CloseReason.COMPLETED);
+
+        ConversationSession session = ConversationSessions.raw(PLAYER).orElseThrow();
+        assertTrue(session.topicId().isEmpty(), "the topic is over");
+        assertEquals(handle, session.handle().orElseThrow(), "the player is still standing there");
+        assertTrue(ConversationPresence.ownsVillager(handle), "and the villager is still theirs");
     }
 }

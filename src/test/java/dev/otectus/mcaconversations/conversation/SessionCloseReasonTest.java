@@ -27,6 +27,7 @@ class SessionCloseReasonTest {
     @BeforeEach
     void reset() {
         ConversationSessions.clearAllForTesting();
+        ConversationPresence.clear();
         VillagerAttention.reset();
         ChatModeScheduler.reset();
     }
@@ -137,5 +138,55 @@ class SessionCloseReasonTest {
         assertEquals(CloseReason.COMPLETED,
                 ConversationSessions.raw(PLAYER).orElseThrow().lastCloseReason().orElse(null));
         assertEquals(1, ChatModeScheduler.pendingFor(PLAYER), "a farewell line still in flight is kept");
+    }
+
+    @Test
+    @DisplayName("every close reason has a permanent id of its own, and no ordinal is one of them")
+    void closeReasonWireIdsArePinnedAndUnique() {
+        // Pinned on purpose: these numbers go on the wire and into logs that a later version still
+        // has to read. Changing one silently turns an old close into a different ending, so a test
+        // that fails here is telling the truth — add a new constant instead of renumbering.
+        java.util.Map<CloseReason, Integer> pinned = new java.util.LinkedHashMap<>();
+        pinned.put(CloseReason.COMPLETED, 0);
+        pinned.put(CloseReason.PLAYER_LEFT, 1);
+        pinned.put(CloseReason.SPEAKER_DEAD, 2);
+        pinned.put(CloseReason.SPEAKER_UNAVAILABLE, 3);
+        pinned.put(CloseReason.OUT_OF_RANGE, 4);
+        pinned.put(CloseReason.DIMENSION_CHANGED, 5);
+        pinned.put(CloseReason.DISCONNECTED, 6);
+        pinned.put(CloseReason.TIMED_OUT, 7);
+        pinned.put(CloseReason.CONTENT_RELOADED, 8);
+        pinned.put(CloseReason.FEATURE_DISABLED, 9);
+        pinned.put(CloseReason.INVALID_OFFER, 10);
+        pinned.put(CloseReason.CONTAINED_ERROR, 11);
+        pinned.put(CloseReason.CLIENT_CLOSED, 12);
+        pinned.put(CloseReason.TARGET_CHANGED, 13);
+        pinned.put(CloseReason.TAKEN_OVER, 14);
+        pinned.put(CloseReason.ATTACKED, 15);
+        pinned.put(CloseReason.ENTITY_UNLOADED, 16);
+        pinned.put(CloseReason.DANGER, 17);
+
+        assertEquals(pinned.size(), CloseReason.values().length,
+                "a new ending needs a pinned id here too");
+        java.util.Set<Integer> seen = new java.util.HashSet<>();
+        for (CloseReason reason : CloseReason.values()) {
+            assertEquals(pinned.get(reason), reason.wireId(), "stable id for " + reason);
+            assertTrue(seen.add(reason.wireId()), "two endings share an id: " + reason);
+            assertEquals(reason, CloseReason.byWireId(reason.wireId()).orElse(null));
+        }
+        assertTrue(CloseReason.byWireId(9999).isEmpty(), "an unknown id is not guessed at");
+    }
+
+    @Test
+    @DisplayName("an accepted discussion tears down through its handle, leaving the same nothing")
+    void closingAnAcceptedDiscussion() {
+        ConversationHandle handle = ConversationLifecycle.begin(PLAYER, VILLAGER, "minecraft:overworld",
+                ConversationSession.Frontend.GUI, 100).orElseThrow();
+        ConversationSession session = engage();
+        ConversationSessions.close(PLAYER, CloseReason.CLIENT_CLOSED);
+
+        assertTornDown(session, CloseReason.CLIENT_CLOSED);
+        assertFalse(ConversationPresence.isCurrent(handle), "the villager is free for the next player");
+        assertTrue(ConversationPresence.ofVillager(VILLAGER).isEmpty());
     }
 }
