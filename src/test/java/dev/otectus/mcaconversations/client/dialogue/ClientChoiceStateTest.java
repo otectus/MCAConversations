@@ -9,10 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClientChoiceStateTest {
 
+    /** One villager for every offer in this class: identity is not what it is testing. */
+    private static final java.util.UUID VILLAGER = java.util.UUID.randomUUID();
+
     private static ClientChoiceState.ClientChoiceOffer offer(long revision, int count) {
         List<String> answers = java.util.stream.IntStream.range(0, count)
                 .mapToObj(i -> "answer_" + i).toList();
-        return new ClientChoiceState.ClientChoiceOffer(revision, "question", answers,
+        return new ClientChoiceState.ClientChoiceOffer(revision, VILLAGER, "question", answers,
                 ConversationSession.Frontend.GUI, 20L);
     }
 

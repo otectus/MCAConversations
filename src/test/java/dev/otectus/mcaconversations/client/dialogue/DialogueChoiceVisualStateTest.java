@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class DialogueChoiceVisualStateTest {
 
+    /** One villager for every offer in this class: identity is not what it is testing. */
+    private static final java.util.UUID VILLAGER = java.util.UUID.randomUUID();
+
     private static final ConversationMotionSpec FULL = new ConversationMotionSpec(
             McaConversationsConfig.MotionMode.FULL,
             4.0F, 3.0F, 2.5F, 2.0F, 1.5F, 2.0F, 3.0F, 2.0F,
@@ -48,7 +51,7 @@ class DialogueChoiceVisualStateTest {
 
     /** The next turn of the same conversation: a newer revision on the same open screen. */
     private static void offer(ClientChoiceState state, long revision, String... answers) {
-        state.accept(new ClientChoiceState.ClientChoiceOffer(revision, "q" + revision,
+        state.accept(new ClientChoiceState.ClientChoiceOffer(revision, VILLAGER, "q" + revision,
                 List.of(answers), ConversationSession.Frontend.GUI, 0));
     }
 

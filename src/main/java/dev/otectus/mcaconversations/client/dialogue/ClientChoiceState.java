@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /** Client-only focus, paging and one-shot lock state for a synchronized offer. */
 public final class ClientChoiceState {
@@ -14,7 +15,16 @@ public final class ClientChoiceState {
     @Deprecated(forRemoval = false)
     public static final int PAGE_SIZE = MAX_VISIBLE_SHORTCUTS;
 
-    public record ClientChoiceOffer(long revision, String questionId, List<String> answerIds,
+    /**
+     * An offer as the client holds it.
+     *
+     * <p>{@code villagerId} is the villager whose screen was open when the offer arrived, or null
+     * when nothing on this client owns it — a chat offer, or a graphical one that reached a client
+     * with no interaction screen. It is what lets the state left behind name the conversation it
+     * belonged to, instead of being inherited by whoever is spoken to next.
+     */
+    public record ClientChoiceOffer(long revision, UUID villagerId, String questionId,
+                                    List<String> answerIds,
                                     ConversationSession.Frontend frontend, long receivedClientTick) {
         public ClientChoiceOffer {
             answerIds = answerIds == null ? List.of() : List.copyOf(answerIds);
@@ -25,9 +35,13 @@ public final class ClientChoiceState {
      * What is left on screen after an offer was cleared with an explanation: the sentence to read
      * and the one action that is safe to take. Never interactive as a choice — the answers it
      * replaced are gone, and nothing here re-sends them.
+     *
+     * <p>It carries the villager the cleared offer belonged to. An explanation outlives the answers
+     * it replaced, so without that name the sentence outlives the conversation too and greets the
+     * next villager the player speaks to.
      */
-    public record Lapse(long revision, ChoiceClearS2C.Reason reason, boolean backToTopics,
-                        ConversationSession.Frontend frontend) {
+    public record Lapse(long revision, UUID villagerId, ChoiceClearS2C.Reason reason,
+                        boolean backToTopics, ConversationSession.Frontend frontend) {
     }
 
     private ClientChoiceOffer offer;
@@ -72,6 +86,8 @@ public final class ClientChoiceState {
         highestRevision = revision;
         ConversationSession.Frontend frontend = offer != null ? offer.frontend()
                 : lapse != null ? lapse.frontend() : null;
+        UUID villagerId = offer != null ? offer.villagerId()
+                : lapse != null ? lapse.villagerId() : null;
         boolean changed = offer != null || lapse != null && lapse.reason() != reason;
         offer = null;
         focusedIndex = 0;
@@ -79,7 +95,7 @@ public final class ClientChoiceState {
         lockedIndex = -1;
         pages = List.of();
         lapse = reason != null && reason.explained()
-                ? new Lapse(revision, reason, offersReturnToTopics(reason), frontend) : null;
+                ? new Lapse(revision, villagerId, reason, offersReturnToTopics(reason), frontend) : null;
         return changed;
     }
 
@@ -106,6 +122,19 @@ public final class ClientChoiceState {
         return lapse != null && lapse.frontend() == frontend;
     }
 
+    /**
+     * Whether a lapse is the given villager's to show.
+     *
+     * <p>The ownership rule the interaction screen asks before it draws or keys anything: the
+     * explanation belongs to one conversation, so a lapse left by another villager — or one that
+     * names no villager at all, which is a lapse no screen can claim — is not this screen's to
+     * display.
+     */
+    public boolean lapseFor(ConversationSession.Frontend frontend, UUID villagerId) {
+        return lapse != null && lapse.frontend() == frontend
+                && lapse.villagerId() != null && lapse.villagerId().equals(villagerId);
+    }
+
     /** Dismisses the explanation shell once the player has acted on it. */
     public boolean dismissLapse() {
         boolean had = lapse != null;
@@ -126,6 +155,30 @@ public final class ClientChoiceState {
         page = 0;
         lockedIndex = -1;
         pages = List.of();
+    }
+
+    /**
+     * Drops everything one frontend owns — offer and lapse alike — and leaves the other frontend's
+     * state alone.
+     *
+     * <p>What a closing screen has to retire. Both halves, unconditionally: a lapse has no offer, so
+     * a teardown that only looked for a live offer would leave the explanation behind.
+     */
+    public boolean clearLocal(ConversationSession.Frontend frontend) {
+        boolean cleared = false;
+        if (offer != null && offer.frontend() == frontend) {
+            offer = null;
+            focusedIndex = 0;
+            page = 0;
+            lockedIndex = -1;
+            pages = List.of();
+            cleared = true;
+        }
+        if (lapse != null && lapse.frontend() == frontend) {
+            lapse = null;
+            cleared = true;
+        }
+        return cleared;
     }
 
     /** Highest revision seen, so a caller can synthesise an offer that will not be rejected. */
