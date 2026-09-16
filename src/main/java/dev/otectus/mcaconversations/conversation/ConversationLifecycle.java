@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.conversation;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
+import dev.otectus.mcaconversations.chat.ConversationMovementController;
 import dev.otectus.mcaconversations.chat.VillagerAttention;
 
 import java.util.List;
@@ -84,11 +85,20 @@ public final class ConversationLifecycle {
             return Optional.empty();
         }
         ConversationHandle existing = ConversationPresence.ofPlayer(playerId).orElse(null);
+        if (existing != null && existing.isFor(playerId, villagerId) && existing.frontend() == frontend) {
+            // Not an open: the exchange is already this player's, so nothing is minted, nothing is
+            // taken over, and nothing is charged against the pair's allowance.
+            ConversationSessions.attach(existing, now);
+            return Optional.of(existing);
+        }
+        if (!OpenRateLimiter.accept(playerId, villagerId, now)) {
+            // Faster than anybody means it. Refuse before anything is torn down: a rate-limited open
+            // must leave the discussion the player is already in exactly as it was (spec §6).
+            McaConversations.LOGGER.debug("refused an open of villager {} for {}: {} opens already "
+                    + "accepted for this pair inside the window", villagerId, playerId, OpenRateLimiter.BURST);
+            return Optional.empty();
+        }
         if (existing != null) {
-            if (existing.isFor(playerId, villagerId) && existing.frontend() == frontend) {
-                ConversationSessions.attach(existing, now);
-                return Optional.of(existing);
-            }
             terminate(existing, CloseReason.TARGET_CHANGED);
         }
         ConversationHandle owner = ConversationPresence.ofVillager(villagerId).orElse(null);
@@ -107,26 +117,52 @@ public final class ConversationLifecycle {
      * Hands a villager from the player who owns it to one whose interaction the server has just
      * accepted (spec §6). The old discussion ends as {@link CloseReason#TAKEN_OVER}.
      *
-     * <p><b>Partial:</b> this is the identity half only. Transferring the movement hold without an
-     * unheld navigation tick, retiring MCA's own interaction before the new one is assigned, and
-     * telling the first player's screen why it closed all belong to the handoff work that follows;
-     * they attach through {@link #addTeardownHook} and the movement controller. What already holds
-     * is the guarantee that matters most: the transfer is driven by the exact handle that owns the
-     * villager, so a stale close or heartbeat from the first player cannot reach the second's hold.
+     * <p>One serialized operation on the server thread, in the order the spec fixes, because every
+     * step of it is a place where the villager could be left belonging to nobody:
+     *
+     * <ol>
+     *   <li><b>The hold moves first.</b> The attention hold is re-booked under the successor's handle
+     *       before anything releases the predecessor's, so there is no tick between the two owners in
+     *       which the villager is unheld and ordinary navigation resumes. The predecessor's teardown
+     *       then finds a hold it does not own and leaves it alone.</li>
+     *   <li><b>The successor claims the villager before the predecessor is retired</b>, for the same
+     *       reason: the villager index names an owner throughout, and the conditional removal in
+     *       {@link ConversationPresence#release} means the retirement cannot unseat the claim.</li>
+     *   <li><b>Then the predecessor ends</b>, as {@link CloseReason#TAKEN_OVER}: their offers and
+     *       queued lines go, their screen is closed by the terminal packet with a sentence saying
+     *       why, and MCA's own interaction is closed <em>only if MCA still says it is theirs</em>.
+     *       By the time this runs MCA has normally already made the new player the interacting one —
+     *       {@code EntityCommandHandler.interactAt} assigns it before the dialogue packet this path
+     *       is driven from — and {@code stopInteracting()} closes whoever is interacting <em>now</em>,
+     *       so an unconditional native close here would shut the successor's window instead.</li>
+     * </ol>
+     *
+     * <p>The successor's own interaction is MCA's to have assigned; this method only makes it this
+     * mod's discussion. Facing the new player, and the fresh offer they get, follow from the handle
+     * this returns.
      */
     public static ConversationHandle handoff(ConversationHandle from, UUID toPlayerId, String dimension,
                                              ConversationSession.Frontend frontend, long now) {
         if (from == null) {
             throw new IllegalArgumentException("handoff needs the handle being taken over");
         }
+        if (toPlayerId == null) {
+            throw new IllegalArgumentException("handoff needs the player taking over");
+        }
         if (!ConversationPresence.isCurrent(from)) {
             // Already retired: whoever holds the villager now does so legitimately, and the caller's
             // view of the world is one step behind. Never terminate on a stale view.
             McaConversations.LOGGER.debug("handoff from {} ignored: the handle is no longer current", from);
-        } else {
-            terminate(from, CloseReason.TAKEN_OVER);
+            return mintAndClaim(toPlayerId, from.villagerId(), dimension, frontend, now);
         }
-        return mintAndClaim(toPlayerId, from.villagerId(), dimension, frontend, now);
+        ConversationHandle to = ConversationHandle.mint(toPlayerId, from.villagerId(), dimension, frontend);
+        boolean held = ConversationMovementController.transfer(from, to, now);
+        ConversationPresence.claim(to, now);
+        terminate(from, CloseReason.TAKEN_OVER);
+        ConversationSessions.attach(to, now);
+        McaConversations.LOGGER.info("villager {} taken over by {}: {} ends, {} begins (hold carried: {})",
+                from.villagerId(), toPlayerId, from.sessionId(), to.sessionId(), held);
+        return to;
     }
 
     private static ConversationHandle mintAndClaim(UUID playerId, UUID villagerId, String dimension,
@@ -251,6 +287,7 @@ public final class ConversationLifecycle {
     public static void reset() {
         ConversationPresence.clear();
         DangerLockout.clear();
+        OpenRateLimiter.clear();
         ConversationHandle.beginServerEpoch();
     }
 }

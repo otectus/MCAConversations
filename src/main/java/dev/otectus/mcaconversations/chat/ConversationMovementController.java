@@ -161,6 +161,44 @@ public final class ConversationMovementController {
     }
 
     /**
+     * Moves an existing hold from the discussion that is ending to the one taking the villager over
+     * (spec §6 step 3).
+     *
+     * <p>The whole point is the absence of a gap. A takeover that released the first player's hold
+     * and then booked the second's would leave one tick in which the villager belongs to nobody —
+     * and one tick is enough for the brain to pick a walk target and set off, which is exactly the
+     * "villager wandered away as the second player opened the screen" failure. So the hold is
+     * <em>re-booked</em> under the successor's handle while the predecessor's teardown has not run
+     * yet; when it does run, it finds a hold it does not own and leaves it exactly where it is.
+     *
+     * <p>Never shortens the attention it inherits, and never takes a hold that belongs to some third
+     * discussion — if the villager is held by a handle other than the one being retired, this is not
+     * the takeover it was called for and nothing is touched.
+     *
+     * @return true when the successor now holds the villager
+     */
+    public static boolean transfer(ConversationHandle from, ConversationHandle to, long now) {
+        if (from == null || to == null || !from.villagerId().equals(to.villagerId())) {
+            return false;
+        }
+        AttentionLedger.Hold existing = VillagerAttention.activeHolds().get(to.villagerId());
+        if (existing != null && existing.owner() != null && !existing.owner().equals(from)) {
+            return false;
+        }
+        long inherited = existing == null ? 0L : existing.untilTick();
+        long until = Math.max(now + HOLD_REFRESH_TICKS, inherited);
+        if (existing != null && existing.playerId().equals(to.playerId()) && until <= inherited) {
+            // The ledger refuses to shorten one player's own hold, and would therefore refuse a
+            // rewrite that only changes its owner. One tick past the deadline it already has is
+            // enough to make this a genuine extension, so the successor's handle takes the hold.
+            until = inherited + 1;
+        }
+        VillagerAttention.hold(to.villagerId(), to.playerId(), until,
+                AttentionLedger.Source.CONVERSATION, to);
+        return true;
+    }
+
+    /**
      * One live discussion's hold, renewed and applied for this tick.
      *
      * <p>Books the attention hold under the discussion's own handle, so a villager taken over by

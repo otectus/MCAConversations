@@ -258,33 +258,44 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
      * for closing it is noise.
      */
     private static void explain(CloseReason reason) {
-        ChoiceClearS2C.Reason spoken = explanationOf(reason);
+        String key = explanationOf(reason);
         Minecraft minecraft = Minecraft.getInstance();
-        if (spoken != null && minecraft.player != null) {
-            minecraft.player.displayClientMessage(explanation(spoken), true);
+        if (key != null && minecraft.player != null) {
+            minecraft.player.displayClientMessage(Component.translatable(key), true);
         }
     }
 
     /**
-     * The existing refusal sentence an ending is explained with, or null for one said in silence.
+     * The translation key an ending is explained with, or null for one said in silence.
      *
-     * <p>Deliberately a reuse rather than a new set of strings: the player does not need one wording
-     * for "you are too far apart to go on" when an answer is refused and another when the window
-     * closes a second later. Reasons with nothing useful to say — the player closed it, they turned
-     * to somebody else, the conversation simply finished — map to null.
+     * <p>Mostly a reuse rather than a new set of strings: the player does not need one wording for
+     * "you are too far apart to go on" when an answer is refused and another when the window closes a
+     * second later. Reasons with nothing useful to say — the player closed it, they turned to
+     * somebody else, the conversation simply finished — map to null.
+     *
+     * <p>Being taken over is the one ending that gets a sentence of its own. "They can't carry on the
+     * conversation right now" is true of a villager who is dead, gone or fleeing and is exactly wrong
+     * here: the villager is standing right there, carrying on the conversation, with somebody else.
+     *
+     * <p>Pure: a reason in, a key out, no client state touched, so the mapping can be asserted
+     * against the shipped language files.
      */
-    static ChoiceClearS2C.Reason explanationOf(CloseReason reason) {
+    static String explanationOf(CloseReason reason) {
         if (reason == null) {
             return null;
         }
-        return switch (reason) {
+        if (reason == CloseReason.TAKEN_OVER) {
+            return "gui.mcaconversations.responses.taken_over";
+        }
+        ChoiceClearS2C.Reason spoken = switch (reason) {
             case OUT_OF_RANGE, DIMENSION_CHANGED -> ChoiceClearS2C.Reason.OUT_OF_RANGE;
-            case SPEAKER_DEAD, SPEAKER_UNAVAILABLE, ENTITY_UNLOADED, ATTACKED, DANGER, TAKEN_OVER ->
+            case SPEAKER_DEAD, SPEAKER_UNAVAILABLE, ENTITY_UNLOADED, ATTACKED, DANGER ->
                     ChoiceClearS2C.Reason.SPEAKER_UNAVAILABLE;
             case CONTENT_RELOADED -> ChoiceClearS2C.Reason.CONTENT_RELOADED;
             case CONTAINED_ERROR -> ChoiceClearS2C.Reason.EXECUTION_FAILED;
             default -> null;
         };
+        return spoken == null ? null : explanationKey(spoken);
     }
 
     /**
@@ -372,14 +383,19 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
 
     /** The sentence a refused answer is explained with. One per reason; never a generic lapse. */
     public static Component explanation(ChoiceClearS2C.Reason reason) {
-        return Component.translatable(switch (reason) {
+        return Component.translatable(explanationKey(reason));
+    }
+
+    /** The translation key behind {@link #explanation}, so an ending can reuse it by name. */
+    static String explanationKey(ChoiceClearS2C.Reason reason) {
+        return switch (reason) {
             case CONTENT_RELOADED -> "gui.mcaconversations.responses.content_reloaded";
             case SPEAKER_UNAVAILABLE -> "gui.mcaconversations.responses.speaker_unavailable";
             case OUT_OF_RANGE -> "gui.mcaconversations.responses.out_of_range";
             case REQUIREMENTS_CHANGED -> "gui.mcaconversations.responses.requirements_changed";
             case EXECUTION_FAILED -> "gui.mcaconversations.responses.execution_failed";
             default -> "gui.mcaconversations.responses.expired";
-        });
+        };
     }
 
     /** The one action a lapse shell offers: a revalidated way back, or simply out. */
