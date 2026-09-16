@@ -53,6 +53,14 @@ class ConversationMotionSpecTest {
             assertEquals(0.0F, spec.selectionPressDepth(), style.name());
             assertEquals(0.0F, spec.selectionSettleRise(), style.name());
             assertTrue(spec.enterTicks() > 0.0F, "a fade is still a fade");
+            assertTrue(spec.exitTicks() > 0.0F, "and a close may fade out the same way");
+            assertEquals(0.0F, spec.pageTicks(), style.name()
+                    + ": turning the page replaces content, it does not animate it");
+            assertEquals(0.0F, spec.focusTicks(), style.name() + ": focus is immediate");
+            assertEquals(0.0F, spec.focusExitTicks(), style.name());
+            assertEquals(0.0F, spec.rowEntryTicks(), style.name());
+            assertEquals(0.0F, spec.selectionPressTicks(), style.name() + ": selection is immediate");
+            assertEquals(0.0F, spec.selectionSettleTicks(), style.name());
         }
     }
 

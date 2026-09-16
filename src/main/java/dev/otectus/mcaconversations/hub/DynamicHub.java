@@ -9,10 +9,13 @@ import dev.otectus.mcaconversations.conversation.ConversationCatalog;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.history.EpisodeRecord;
 import dev.otectus.mcaconversations.history.History;
+import dev.otectus.mcaconversations.history.NarrativeCatalogLoader;
 import dev.otectus.mcaconversations.history.PairHistory;
 import dev.otectus.mcaconversations.history.PrivacyLevel;
 import dev.otectus.mcaconversations.history.SharedThreadRecord;
 import dev.otectus.mcaconversations.history.VillagerHistory;
+import dev.otectus.mcaconversations.scene.ContinuationResolver;
+import dev.otectus.mcaconversations.scene.SceneCatalogLoader;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
@@ -74,7 +77,10 @@ public final class DynamicHub {
             return HubPlan.EMPTY;
         }
         HubPlan plan = HubPlan.EMPTY;
-        try {
+        // Planning a hub reads the catalog, the scenes, the narrative templates and the age gate. One
+        // capture for the whole plan, so the entries on the menu are entries of one bundle.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
             if (McaConversationsConfig.dynamicFeature(FeatureId.DYNAMIC, false) && slotBudget() > 0
                     && villager != null) {
                 plan = planFor(villager, player, today);
@@ -125,7 +131,14 @@ public final class DynamicHub {
         }
         Optional<PairHistory> pair = history.get().peekPair(player.getUUID());
         List<EpisodeRecord> live = history.get().liveEpisodes(today);
-        HubPlan plan = build(pair.map(record -> record.resumable(today)).orElse(List.of()),
+        // Only threads that still have an authored way back are offered as something to continue. A
+        // ready thread whose template or resume scene left with a datapack would put a button on the
+        // menu that opens nothing, which is the one thing a standing offer must never do.
+        VillagerHistory records = history.get();
+        HubPlan plan = build(pair.map(record -> ContinuationResolver.continuable(record,
+                                NarrativeCatalogLoader.active(), SceneCatalogLoader.active(),
+                                records::episode, today))
+                        .orElse(List.of()),
                 live, player.getUUID(), slotBudget());
         return withoutTopicsTooOldFor(plan, McaCompat.ageGroup(villager));
     }

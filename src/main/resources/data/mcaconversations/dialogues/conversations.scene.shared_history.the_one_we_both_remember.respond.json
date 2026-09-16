@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "i_remember_it_too",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_one_we_both_remember.open.shared_the_memory"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_one_we_both_remember.shared_the_memory"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_stayed_with_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_one_we_both_remember.open.named_what_stayed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_one_we_both_remember.named_what_stayed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave_it_where_it_is",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_one_we_both_remember.open.left_where_it_is"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_one_we_both_remember.left_where_it_is"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,34 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-> **Since 1.1.0, asking a question is not what earns affection — answering one is.**
+Shared gameplay and content track 1.7.0. See [current parity evidence](docs/PARITY-1.7.0.md).
+
+## Features (1.7.0)
+
+- **The restrained card is now the one you get.** New installations default to
+  `dialogueMenuStyle = MINIMAL` and `motionMode = REDUCED`: the same numbered menu and the same
+  input, drawn as one flat panel with a hairline above the answers, a plain numeral, and a focus
+  mark in the row's gutter that moves no text. The full card is unchanged and one setting away.
+  Upgrading changes nothing — an existing `mcaconversations-client.toml` already states both keys,
+  and a stored `RESPONSIVE` or `FULL` is read as a choice, not as an old default.
+- **Reduced motion means reduced motion.** Under `REDUCED` the only animation left is a short fade
+  when the menu genuinely opens and closes. Focus, selection, expanding a clipped answer and turning
+  the page are immediate. The entrance belongs to the menu rather than to each question, so a pause
+  between two turns of a conversation is the card waiting, not the card closing and reopening.
+  As before, this governs Conversations' own effects; Townstead keeps its own screen, camera and
+  typewriter.
+
+- **The card can show its own working.** Two overlays open inside the response viewport without
+  moving anything: `H` lists the lines this client actually received and the responses it sent, each
+  with its real outcome, bounded and forgotten when you disconnect; `P` changes the menu style,
+  motion, reveal, interface sounds and control hints in place, and says plainly when the legacy
+  `numberedResponses = false` switch is overriding the style you configured. Neither can select a
+  response, and neither claims Townstead's own screen.
+- **An offered topic that cannot be opened says why.** Ask a villager about something their own menu
+  was showing you and you get a sentence — they are working, you already talked about it today, they
+  are not ready — instead of silence. The sentence is a description of a refusal that already
+  happened, never permission: selecting a topic still goes through the server's ordinary gate, and
+  nothing you have not been shown is ever mentioned.
 
 ## Features (1.1.0)
 

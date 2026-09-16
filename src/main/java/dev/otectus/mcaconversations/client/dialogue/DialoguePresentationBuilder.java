@@ -124,6 +124,19 @@ public final class DialoguePresentationBuilder {
     }
 
     public static PreparedDialogueCard page(Model model, ClientChoiceState state) {
+        return page(model, state, null);
+    }
+
+    /**
+     * Lays out the current page inside the fixed frame.
+     *
+     * <p>{@code reading} contributes only two things: which row is expanded to its full text, and how
+     * far the one response viewport is scrolled. Neither can change the panel, the question region or
+     * the footer, so expanding a response and collapsing it again returns the card to the pixels it
+     * started on.
+     */
+    public static PreparedDialogueCard page(Model model, ClientChoiceState state,
+                                            DialogueReadingState reading) {
         if (model.pageMap().pages().isEmpty()) {
             return null;
         }
@@ -132,18 +145,32 @@ public final class DialoguePresentationBuilder {
         DialogueChoiceLayout.ChoicePage page = model.pageMap().pages().get(pageIndex);
         boolean compact = model.pageMap().compact();
         List<Integer> sourceHeights = compact ? model.compactHeights() : model.normalHeights();
-        List<Integer> visibleHeights = sourceHeights.subList(page.firstInclusive(), page.lastExclusive());
+        int expanded = reading == null ? -1 : reading.expandedIndex();
+        int scroll = reading == null ? 0 : reading.responseScroll();
+        List<Integer> visibleHeights = new ArrayList<>(page.size());
+        for (int absolute = page.firstInclusive(); absolute < page.lastExclusive(); absolute++) {
+            visibleHeights.add(absolute == expanded
+                    ? DialogueChoiceLayout.rowHeight(model.answerLines().get(absolute).size(),
+                            model.fontLineHeight(), compact)
+                    : sourceHeights.get(absolute));
+        }
         DialogueChoiceLayout.Layout layout = DialogueChoiceLayout.create(
                 model.screenWidth(), model.screenHeight(), model.questionLines().size(),
                 model.fontLineHeight(), visibleHeights, model.footer(), compact,
-                pageIndex > 0, pageIndex + 1 < model.pageMap().pages().size(), model.header());
+                pageIndex > 0, pageIndex + 1 < model.pageMap().pages().size(), model.header(), scroll);
         List<PreparedChoiceRow> rows = new ArrayList<>(page.size());
         for (int i = 0; i < page.size(); i++) {
             int absolute = page.firstInclusive() + i;
             DialogueChoiceLayout.Rect rect = layout.rows().get(i);
+            // Every answer is laid out at its full height, so a row is never internally clipped.
+            // What can happen is that the document is taller than the viewport and part of a row is
+            // outside it; that is what the reading affordance is offered for.
+            DialogueChoiceLayout.Rect viewport = layout.responseViewport();
+            boolean outside = viewport != null && (rect.y() < viewport.y()
+                    || rect.y() + rect.height() > viewport.y() + viewport.height());
             rows.add(new PreparedChoiceRow(absolute, i + 1, rect, rect,
                     model.answers().get(absolute), model.answerLines().get(absolute),
-                    sourceHeights.get(absolute) > rect.height()));
+                    outside, absolute == expanded));
         }
         return new PreparedDialogueCard(model.offerRevision(), layout, model.questionLines(), rows,
                 DialogueChoiceLayout.lineStep(model.fontLineHeight()), model.numberColumn(), compact);

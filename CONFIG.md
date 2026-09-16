@@ -8,20 +8,53 @@ File: `config/mcaconversations-client.toml` (generated on first run).
 
 These are local player preferences: how the dialogue interface looks, feels, and responds. They are never sent to the server, and changing them does not affect your world or other players.
 
-### `[display]`
+## `[display]` (client)
+
+These options affect only the local player's dialogue presentation.
+
+Since 1.7.0 the defaults are `dialogueMenuStyle = MINIMAL` and `motionMode = REDUCED`: the same
+numbered menu, drawn flat, with motion limited to a fade when it opens and closes. The richer
+presentation is unchanged and one setting away (`dialogueMenuStyle = "RESPONSIVE"`,
+`motionMode = "FULL"`).
+
+**Upgrading changes nothing you have already set.** NeoForge writes every option into
+`mcaconversations-client.toml` the first time it saves the file, so an existing installation states
+these keys explicitly and keeps its own values — a stored `RESPONSIVE` or `FULL` is treated as a
+choice, never as a leftover default. Only a key that is absent from the file (a new installation, or
+one you have trimmed by hand) picks up the new default.
 
 | Option | Default | Meaning |
 |---|---|---|
-| `dialogueMenuStyle` | `RESPONSIVE` | `RESPONSIVE` uses the full MCA: Conversations responsive card with animations and a live speaker portrait. `MINIMAL` uses the responsive menu with simpler graphics and no portrait. `MCA_ORIGINAL` leaves the dialogue UI entirely to MCA Reborn |
+| `dialogueMenuStyle` | `MINIMAL` (`RESPONSIVE` before 1.7.0) | `MINIMAL` uses the same numbered menu drawn as flat rectangles: one panel, a hairline above the answers, a plain numeral, a stationary focus mark in the row's gutter, and no portrait or badge artwork. `RESPONSIVE` uses the full card with animations and a live speaker portrait. `MCA_ORIGINAL` leaves the dialogue UI entirely to MCA Reborn |
 | `numberedResponses` | `true` | Legacy compatibility switch from 1.4.x/1.5.1. When `false`, always uses `MCA_ORIGINAL` regardless of `dialogueMenuStyle`. New installations should normally leave this `true` |
 | `numericResponseShortcuts` | `true` | Allow number keys (1–9) to select visible dialogue choices. Disabled automatically when the dialogue style is `MCA_ORIGINAL` |
 | `chatNumericShortcuts` | `true` | Let unmodified digits select a pending chat response when the chat input is empty |
 | `showResponseControlHints` | `true` | Show keyboard and paging hints below the response list (for `RESPONSIVE` and `MINIMAL` only) |
-| `motionMode` | `FULL` | Conversation motion: `FULL` uses short state-driven animation, `REDUCED` uses fades only, `OFF` disables every dialogue animation instantly (including question reveal). `OFF` is the canonical way to disable all animation |
+| `motionMode` | `REDUCED` (`FULL` before 1.7.0) | Conversation motion: `REDUCED` fades the card in when it opens and out when it closes and changes everything else immediately, `FULL` uses short state-driven animation, `OFF` disables every dialogue animation instantly (including question reveal). `OFF` is the canonical way to disable all animation |
 | `uiSoundVolume` | `0.65` | Volume multiplier for response focus, page turn, and confirmation sounds. Set to `0.0` to disable all UI sounds |
 | `speakerNameAccent` | `true` | Render the speaking villager's name in bold and accent color when that makes the speaker unambiguous (`RESPONSIVE` and `MINIMAL` only) |
 | `showSpeakerPortrait` | `true` | Show the speaking villager's portrait in the dialogue card header where the style supports it. The `MINIMAL` style intentionally omits the portrait; `RESPONSIVE` shows it when this is enabled and space allows; `MCA_ORIGINAL` follows MCA's own behavior |
 | `questionRevealMode` | `OFF` | How the villager's line appears: `OFF` shows it at once; `FAST` reveals it over a few ticks (ignored when `motionMode` is `OFF` and in `MCA_ORIGINAL` mode). Any input completes the reveal instantly |
+| `deliveredHistoryEntries` | `64` | How many delivered lines and sent responses the card's history drawer keeps in memory. The drawer is collapsed by default, holds only what this client actually received, is cleared on disconnect and world change, and is never written to disk or exported. `0` disables the drawer |
+
+#### The two card utilities
+
+The response card carries two small overlays, opened from the buttons at the left of the footer strip
+or with `H` and `P`. Both are drawn inside the response viewport, so the panel, the villager's line
+and the footer stay exactly where they were; neither can submit a response, and while one is open no
+key or click reaches the answer list at all. `Back`, `Esc`, `Backspace` and `Tab` close the overlay
+and return the keyboard to the region it came from.
+
+- **`H` — recent lines.** Lines delivered to the dialogue screen and synchronized responses sent
+  during this connection: the speaker and their line, and your own response with its truthful status (*sent*, *accepted*, or *refused* with the
+  reason the server gave). One utterance is one entry however many surfaces it appeared on. Bounded
+  by `deliveredHistoryEntries` and cleared when the connection ends.
+- **`P` — presentation.** `dialogueMenuStyle`, `motionMode`, `questionRevealMode`, `uiSoundVolume`
+  and `showResponseControlHints`, changed with `Left`/`Right` and written straight to
+  `mcaconversations-client.toml`. When `numberedResponses = false` the style row states both the
+  configured style and the `MCA_ORIGINAL` it is being overridden to. `Reset to recommended` lists
+  what it would change and applies it only when chosen a second time. With Townstead installed the
+  pane says so: Townstead draws its own dialogue screen and these settings do not change it.
 
 #### Support: getting the exact MCA Reborn dialogue interface
 
@@ -62,6 +95,31 @@ Chat numeric shortcuts remain controlled by `chatNumericShortcuts`.
 **When using `MINIMAL`:**
 
 The live villager portrait is intentionally omitted regardless of `showSpeakerPortrait`. When `motionMode = FULL`, `MINIMAL` uses a restrained motion profile with no row cascade, no focus pop-out or lift, and no selection press movement, while entrance and page transitions keep a short 2-pixel slide. Other motion modes behave identically in both styles.
+
+Focus never moves anything under `MINIMAL`: the focused row is a fill plus a two-pixel mark in its
+own left gutter, the whole row is the click target, and the numeral and answer text keep the same
+coordinates focused or not. Confirming a choice adds a white outline, so the two states differ by
+more than a shade of grey.
+
+#### What each motion mode animates
+
+Scope: these are the effects MCA: Conversations draws on its own card. Where another mod owns the
+dialogue screen — Townstead in particular — its screen, camera work and typewriter are its own and
+are not governed by `motionMode`.
+
+| Event | `FULL` | `REDUCED` | `OFF` |
+|---|---|---|---|
+| Opening the menu | short entrance (a fade, plus a few pixels of movement under `RESPONSIVE`) | one brief fade | immediate |
+| A new question in the same conversation | text and answers replaced in place; under `RESPONSIVE` the rows still cascade in | immediate, panel does not move or re-fade | immediate |
+| Moving focus | short eased transition | immediate | immediate |
+| Selecting an answer | press and settle under `RESPONSIVE`; a colour change under `MINIMAL` | immediate | immediate |
+| Expanding a clipped answer | immediate | immediate | immediate |
+| Turning the answer page | short slide | immediate | immediate |
+| Revealing the villager's line | `questionRevealMode`, off by default | `questionRevealMode`, off by default | never |
+| Closing the menu | short fade out | the same fade out | immediate |
+
+The entrance belongs to the menu, not to each question: a pause between two turns of a conversation
+is the server thinking, and the card waits rather than closing and opening again.
 
 #### Resource pack behavior
 

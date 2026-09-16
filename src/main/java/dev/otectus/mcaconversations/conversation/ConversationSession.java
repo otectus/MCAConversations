@@ -82,6 +82,7 @@ public final class ConversationSession {
     private long offerGeneration = ContentGeneration.current();
     private long offerCreatedGameTime;
     private boolean offerConsumed;
+    private long topicReturnRevision = -1L;
     private Frontend offerFrontend = Frontend.GUI;
     private long startedGameTime;
     private long lastActivityGameTime;
@@ -171,7 +172,24 @@ public final class ConversationSession {
         this.offerFrontend = frontend == null ? Frontend.GUI : frontend;
         this.offerCreatedGameTime = now;
         this.offerConsumed = false;
+        this.topicReturnRevision = -1L;
         return currentOffer().orElseThrow();
+    }
+
+    /** Only the latest GUI refusal may authorize a fresh topic menu. */
+    public void allowTopicReturn(long revision) {
+        if (revision == offerRevision && offerFrontend == Frontend.GUI) {
+            topicReturnRevision = revision;
+        }
+    }
+
+    /** A recovery packet cannot replace a newer decision or reopen the menu twice. */
+    public boolean claimTopicReturn(long revision) {
+        if (revision < 0L || revision != topicReturnRevision) {
+            return false;
+        }
+        topicReturnRevision = -1L;
+        return true;
     }
 
     public Optional<ChoiceOffer> currentOffer() {

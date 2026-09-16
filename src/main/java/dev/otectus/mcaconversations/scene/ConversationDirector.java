@@ -6,6 +6,7 @@ import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.context.ContextKeys;
 import dev.otectus.mcaconversations.context.ConversationContextSnapshot;
+import dev.otectus.mcaconversations.history.CommitmentRecord;
 import dev.otectus.mcaconversations.history.EpisodeRecord;
 import dev.otectus.mcaconversations.history.History;
 import dev.otectus.mcaconversations.history.PairHistory;
@@ -23,12 +24,16 @@ import net.neoforged.fml.ModList;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * Decides which authored scene fits this villager, on this day, after this history (spec §9).
@@ -55,6 +60,12 @@ public final class ConversationDirector {
 
     /** How far below the leader a candidate may be and still be in the random band. */
     private static final int NEAR_TOP_BAND = 4;
+
+    /** Scored positions held for scenes that answer a due promise before ordinary priority runs. */
+    static final int RESERVED_DUE = 8;
+
+    /** Scored positions held for an unresolved rupture or a thread that is ready to be picked up. */
+    static final int RESERVED_CONTINUITY = 8;
 
     /** Scoring weights, gathered so tuning is one place rather than scattered through the method. */
     private static final int DUE_OBLIGATION_WEIGHT = 25;
@@ -125,33 +136,53 @@ public final class ConversationDirector {
         Optional<PairHistory> pair = History.pair(villager, player);
         TopicRecencyRecord recency = pair.map(PairHistory::recency).orElse(TopicRecencyRecord.EMPTY);
         ServerLevel level = villager.level() instanceof ServerLevel serverLevel ? serverLevel : null;
-        Gate gate = new Gate(villager, snapshot, profile, identity, recency, level, today);
+        Optional<dev.otectus.mcaconversations.history.VillagerHistory> villagerHistory = History.of(villager);
+        List<ContinuationResolver.Continuation> continuations = ContinuationResolver.resolve(pair.orElse(null),
+                dev.otectus.mcaconversations.history.NarrativeCatalogLoader.active(), catalog,
+                episodeId -> villagerHistory.flatMap(records -> records.episode(episodeId)), today);
+        Gate gate = new Gate(villager, snapshot, profile, identity, pair, continuations, recency, level, today);
 
-        // Stage 2-3: hard eligibility, then semantic eligibility through slot binding.
+        // Stage 2-3: hard eligibility, then semantic eligibility through slot binding — in admission
+        // order, so what this pair already has open is evaluated before the ordinary priority run
+        // rather than after the scored cap has already closed.
         List<Candidate> eligible = new ArrayList<>();
         Set<String> considered = new LinkedHashSet<>();
         Set<String> admitted = new LinkedHashSet<>();
         List<SceneDefinition> degraded = new ArrayList<>();
-        for (SceneDefinition scene : indexed) {
-            if (eligible.size() >= SceneCatalog.MAX_SCORED) {
-                explanation.note("scored set capped at " + SceneCatalog.MAX_SCORED
-                        + "; " + (indexed.size() - eligible.size()) + " candidate(s) not evaluated");
-                break;
-            }
+        Predicate<SceneDefinition> evaluator = scene -> {
             considered.add(scene.id());
             Candidate candidate = evaluate(scene, gate, explanation);
             if (candidate != null) {
                 eligible.add(candidate);
                 admitted.add(scene.id());
-            } else if (scene.hasFallback()) {
+                return true;
+            }
+            if (scene.hasFallback()) {
                 degraded.add(scene);
             }
+            return false;
+        };
+
+        // What this pair already has open, including the authored boundary a thread would be picked
+        // up at. Read through the same pinned bundle as the catalogs above, so a continuation is only
+        // ever offered into content this operation is actually running against.
+        Relevance relevance = pair.map(history -> relevanceOf(history, continuations, today))
+                .orElse(Relevance.NONE);
+        Admission admission = admission(catalog, indexed, purpose, topic, professionId, relevance);
+        Budget budget = new Budget(SceneCatalog.MAX_INDEXED);
+        AdmissionOutcome outcome = admit(admission, budget, evaluator);
+        explanation.reserved(outcome.reserved());
+        if (outcome.scored() >= SceneCatalog.MAX_SCORED) {
+            explanation.note("scored set capped at " + SceneCatalog.MAX_SCORED
+                    + "; " + Math.max(0, admission.ordinary().size() - considered.size())
+                    + " candidate(s) not evaluated");
         }
 
         // Stage 3b: a scene that could not be told degrades to the route its author named for exactly
         // this case — nearest hop first, every hop re-gated (spec §10.4). Reached only after the
         // preferred scene failed, so a fallback never competes with the scene that declared it.
-        for (SceneDefinition scene : degraded) {
+        List<SceneDefinition> degrading = List.copyOf(degraded);
+        for (SceneDefinition scene : degrading) {
             if (eligible.size() >= SceneCatalog.MAX_SCORED) {
                 break;
             }
@@ -159,19 +190,23 @@ public final class ConversationDirector {
                 if (admitted.contains(next.id())) {
                     break;
                 }
-                if (!considered.add(next.id())) {
+                if (considered.contains(next.id())) {
                     continue;
                 }
-                Candidate candidate = evaluate(next, gate, explanation);
-                if (candidate != null) {
+                // A degrade is evaluation like any other, so it is paid for out of the same budget:
+                // a long chain behind every failed scene must not become an unbounded second pass.
+                if (!budget.spend()) {
+                    break;
+                }
+                if (evaluator.test(next)) {
                     explanation.note("scene '" + scene.id() + "' degraded to '" + next.id() + "'");
-                    eligible.add(candidate);
-                    admitted.add(next.id());
                     break;
                 }
             }
         }
         explanation.afterHardFilters(eligible.size());
+        explanation.evaluated(budget.spent());
+        explanation.budgetExhausted(budget.exhausted());
         if (eligible.isEmpty()) {
             return Optional.empty();
         }
@@ -334,7 +369,8 @@ public final class ConversationDirector {
 
     /** The inputs every gate needs, gathered so evaluating one scene is one call (spec §9.1). */
     private record Gate(Entity villager, ConversationContextSnapshot snapshot, ProfessionProfile profile,
-                        Optional<VillagerIdentityRecord> identity, TopicRecencyRecord recency,
+                        Optional<VillagerIdentityRecord> identity, Optional<PairHistory> pair,
+                        List<ContinuationResolver.Continuation> continuations, TopicRecencyRecord recency,
                         ServerLevel level, long today) {
     }
 
@@ -349,7 +385,9 @@ public final class ConversationDirector {
     private static Candidate evaluate(SceneDefinition scene, Gate gate,
                                       SelectionExplanation explanation) {
         Optional<EpisodeRecord> episode = scene.needsEpisode()
-                ? History.liveEpisode(gate.villager(), scene.episodeKind(), gate.today())
+                ? SceneEpisodes.resolve(scene, gate.pair().orElse(null), gate.continuations(),
+                        id -> History.of(gate.villager()).flatMap(history -> history.episode(id)),
+                        () -> History.liveEpisode(gate.villager(), scene.episodeKind(), gate.today()), gate.today())
                 : Optional.empty();
 
         String reason = SceneEligibility.check(scene, gate.snapshot(), gate.profile(), gate.identity(),
@@ -416,6 +454,295 @@ public final class ConversationDirector {
         } catch (Throwable t) {
             return false;
         }
+    }
+
+    // --- Continuity admission (spec §9.1) ---------------------------------------------------------
+
+    /**
+     * What this pair already has open, as scene-matching keys.
+     *
+     * <p>Split into two classes because they are two different claims on a scored position: a promise
+     * whose day has come, and continuity that is merely unresolved. Keys are scene-specific — a thread
+     * template or a subject — rather than the purpose the caller asked for, because the due-promise and
+     * rupture bonuses in {@link #score} apply to every candidate of that purpose and so cannot tell one
+     * scene from another. A class carries a scene only when the scene itself names the thread or the
+     * subject at issue.
+     */
+    record Relevance(Set<String> dueThreads, Set<String> dueSubjects,
+                     Set<String> openThreads, Set<String> openSubjects,
+                     Set<String> resumeScenes) {
+
+        static final Relevance NONE = new Relevance(Set.of(), Set.of(), Set.of(), Set.of());
+
+        /** Relevance with no authored continuation resolved — the four record-derived classes only. */
+        Relevance(Set<String> dueThreads, Set<String> dueSubjects,
+                  Set<String> openThreads, Set<String> openSubjects) {
+            this(dueThreads, dueSubjects, openThreads, openSubjects, Set.of());
+        }
+
+        boolean isEmpty() {
+            return dueThreads.isEmpty() && dueSubjects.isEmpty()
+                    && openThreads.isEmpty() && openSubjects.isEmpty() && resumeScenes.isEmpty();
+        }
+    }
+
+    /** The evaluation order for one selection: reserved classes first, then ordinary priority. */
+    record Admission(List<SceneDefinition> due, List<SceneDefinition> continuity,
+                     List<SceneDefinition> ordinary) {
+    }
+
+    /** What admission actually spent, for the trace. */
+    record AdmissionOutcome(int evaluated, int scored, int reserved, boolean budgetExhausted) {
+    }
+
+    /** The shared evaluation allowance, so no pass — including a fallback chain — is unbounded. */
+    static final class Budget {
+        private final int allowance;
+        private int spent;
+
+        Budget(int allowance) {
+            this.allowance = Math.max(0, allowance);
+        }
+
+        /** Claims one evaluation; false once the allowance is gone. */
+        boolean spend() {
+            if (spent >= allowance) {
+                return false;
+            }
+            spent++;
+            return true;
+        }
+
+        int spent() {
+            return spent;
+        }
+
+        /**
+         * True once the allowance is gone.
+         *
+         * <p>Reported by reaching the bound rather than by being refused at it: a selection that spent
+         * its last evaluation on its last candidate is still a selection whose result cannot be read
+         * as "these were all the candidates there were".
+         */
+        boolean exhausted() {
+            return spent >= allowance;
+        }
+    }
+
+    /**
+     * Reads the pair's own state into the two relevance classes.
+     *
+     * <p>A due promise reaches a scene through the thread that carries it: a commitment names no topic
+     * of its own, so the thread waiting on it is what says which scene would be answering it.
+     */
+    static Relevance relevanceOf(PairHistory history, long today) {
+        if (history == null) {
+            return Relevance.NONE;
+        }
+        Set<String> dueCommitments = new TreeSet<>();
+        for (CommitmentRecord commitment : history.due(today)) {
+            dueCommitments.add(commitment.id());
+        }
+        Set<String> dueThreads = new TreeSet<>();
+        Set<String> dueSubjects = new TreeSet<>();
+        Set<String> openThreads = new TreeSet<>();
+        Set<String> openSubjects = new TreeSet<>();
+        for (SharedThreadRecord thread : history.threads()) {
+            if (thread.outstandingCommitment().filter(dueCommitments::contains).isPresent()) {
+                key(dueThreads, thread.templateId());
+                key(dueSubjects, thread.subject());
+            }
+        }
+        history.rupture().ifPresent(thread -> {
+            key(openThreads, thread.templateId());
+            key(openSubjects, thread.subject());
+        });
+        for (SharedThreadRecord thread : history.resumable(today)) {
+            key(openThreads, thread.templateId());
+            key(openSubjects, thread.subject());
+        }
+        // Deduplicated across classes: a thread that is both due and merely unresolved is one claim,
+        // and the stronger class keeps it.
+        openThreads.removeAll(dueThreads);
+        openSubjects.removeAll(dueSubjects);
+        return new Relevance(Set.copyOf(dueThreads), Set.copyOf(dueSubjects),
+                Set.copyOf(openThreads), Set.copyOf(openSubjects));
+    }
+
+    /**
+     * The same two classes, plus the scenes the pair's threads are authored to be picked up in.
+     *
+     * <p>A resume scene is not necessarily a scene that <em>opens</em> the thread, so the template and
+     * subject indexes cannot find it: an author writes "we left this unfinished" as its own scene, and
+     * until it is named by the thread template nothing points at it. Naming it here is what lets a
+     * continuation reach scoring at all; it changes no weight and skips no gate.
+     */
+    static Relevance relevanceOf(PairHistory history, dev.otectus.mcaconversations.history.NarrativeCatalog narrative,
+                                 SceneCatalog catalog, ContinuationResolver.Episodes episodes, long today) {
+        return relevanceOf(history, ContinuationResolver.resolve(history, narrative, catalog, episodes, today), today);
+    }
+
+    private static Relevance relevanceOf(PairHistory history,
+                                         List<ContinuationResolver.Continuation> continuations, long today) {
+        Relevance base = relevanceOf(history, today);
+        Set<String> resume = ContinuationResolver.resumeSceneIds(continuations);
+        return resume.isEmpty() ? base
+                : new Relevance(base.dueThreads(), base.dueSubjects(), base.openThreads(),
+                        base.openSubjects(), resume);
+    }
+
+    private static void key(Set<String> into, String value) {
+        if (value != null && !value.isEmpty()) {
+            into.add(value);
+        }
+    }
+
+    /**
+     * Orders the scenes this selection may evaluate: due-promise candidates, then unresolved
+     * continuity, then the ordinary priority run.
+     *
+     * <p>Reserved candidates are looked up through the catalog's continuity indexes rather than taken
+     * from the merged bucket, which is the point of the stage: a relevant scene must not be lost
+     * because {@value SceneCatalog#MAX_INDEXED} alphabetically earlier scenes share its leaf. Every
+     * reserved scene still has to be one this conversation could be having, so purpose, topic and
+     * profession are matched exactly as the index lookup matches them; everything else is left to the
+     * ordinary gates.
+     */
+    static Admission admission(SceneCatalog catalog, List<SceneDefinition> indexed,
+                               ScenePurpose purpose, String topic, String profession,
+                               Relevance relevance) {
+        List<SceneDefinition> due = List.of();
+        List<SceneDefinition> continuity = List.of();
+        if (catalog != null && !relevance.isEmpty()) {
+            due = relevant(catalog, purpose, topic, profession, Set.of(),
+                    relevance.dueThreads(), relevance.dueSubjects(), Set.of());
+            Set<String> taken = new LinkedHashSet<>();
+            due.forEach(scene -> taken.add(scene.id()));
+            continuity = relevant(catalog, purpose, topic, profession, relevance.resumeScenes(),
+                    relevance.openThreads(), relevance.openSubjects(), taken);
+        }
+
+        // The ordinary run is the indexed bucket plus any reserved scene the bucket did not hold, in
+        // one priority order. A reserved scene that overflows its class is therefore not dropped: it
+        // competes for an ordinary position like anything else.
+        Map<String, SceneDefinition> ordinary = new LinkedHashMap<>();
+        for (SceneDefinition scene : indexed) {
+            ordinary.putIfAbsent(scene.id(), scene);
+        }
+        for (SceneDefinition scene : due) {
+            ordinary.putIfAbsent(scene.id(), scene);
+        }
+        for (SceneDefinition scene : continuity) {
+            ordinary.putIfAbsent(scene.id(), scene);
+        }
+        List<SceneDefinition> run = new ArrayList<>(ordinary.values());
+        run.sort(Comparator.comparingInt((SceneDefinition scene) -> -scene.basePriority())
+                .thenComparing(SceneDefinition::id));
+        return new Admission(due, continuity, List.copyOf(run));
+    }
+
+    /**
+     * The candidates one relevance class names, most precisely matched first.
+     *
+     * <p>Order is fixed: the scene the thread's own template names as its way back, then a scene that
+     * opens the very thread at issue, then a scene that merely names its subject, then authored
+     * priority, then id. Nothing here depends on map iteration or on a clock, so an overflowing
+     * reservation drops the same scenes on every server.
+     */
+    private static List<SceneDefinition> relevant(SceneCatalog catalog, ScenePurpose purpose,
+                                                  String topic, String profession,
+                                                  Set<String> resumeScenes,
+                                                  Set<String> threads, Set<String> subjects,
+                                                  Set<String> exclude) {
+        Map<String, SceneDefinition> found = new LinkedHashMap<>();
+        Map<String, Integer> rank = new LinkedHashMap<>();
+        for (String sceneId : new TreeSet<>(resumeScenes)) {
+            catalog.scene(sceneId).ifPresent(scene ->
+                    collect(List.of(scene), 0, purpose, topic, profession, exclude, found, rank));
+        }
+        for (String thread : new TreeSet<>(threads)) {
+            collect(catalog.byThreadTemplate(thread), 1, purpose, topic, profession, exclude, found, rank);
+        }
+        for (String subject : new TreeSet<>(subjects)) {
+            collect(catalog.bySubject(subject), 2, purpose, topic, profession, exclude, found, rank);
+        }
+        List<SceneDefinition> out = new ArrayList<>(found.values());
+        out.sort(Comparator.comparingInt((SceneDefinition scene) -> rank.get(scene.id()))
+                .thenComparingInt(scene -> -scene.basePriority())
+                .thenComparing(SceneDefinition::id));
+        return out.size() > SceneCatalog.MAX_INDEXED
+                ? List.copyOf(out.subList(0, SceneCatalog.MAX_INDEXED)) : List.copyOf(out);
+    }
+
+    private static void collect(List<SceneDefinition> scenes, int rankValue, ScenePurpose purpose,
+                                String topic, String profession, Set<String> exclude,
+                                Map<String, SceneDefinition> found, Map<String, Integer> rank) {
+        for (SceneDefinition scene : scenes) {
+            if (exclude.contains(scene.id()) || !fits(scene, purpose, topic, profession)) {
+                continue;
+            }
+            if (found.putIfAbsent(scene.id(), scene) == null) {
+                rank.put(scene.id(), rankValue);
+            }
+        }
+    }
+
+    /** The index lookup's own filter, applied to a scene found outside the merged bucket. */
+    private static boolean fits(SceneDefinition scene, ScenePurpose purpose, String topic,
+                                String profession) {
+        if (scene.purpose() != purpose) {
+            return false;
+        }
+        String wantedTopic = topic == null ? "" : topic.trim().toLowerCase(Locale.ROOT);
+        if (wantedTopic.isEmpty() ? !scene.topic().isEmpty()
+                : !(scene.topic().isEmpty() || scene.topic().equals(wantedTopic))) {
+            return false;
+        }
+        String wantedProfession = profession == null ? "" : profession.trim().toLowerCase(Locale.ROOT);
+        return scene.professions().isEmpty()
+                || (!wantedProfession.isEmpty() && scene.professions().contains(wantedProfession));
+    }
+
+    /**
+     * Runs the admission order through one evaluator, honouring both bounds.
+     *
+     * <p>A reserved class holds <em>positions</em>, not outcomes: a reserved scene that fails a gate
+     * costs evaluation budget and nothing else, and the position stays open for the next relevant
+     * scene. Reservations are capped so at least
+     * {@code MAX_SCORED - RESERVED_DUE - RESERVED_CONTINUITY} positions remain for ordinary priority,
+     * and nothing is admitted twice.
+     *
+     * @param evaluate runs the full gate stack for one scene and reports whether it reached scoring
+     */
+    static AdmissionOutcome admit(Admission admission, Budget budget,
+                                  Predicate<SceneDefinition> evaluate) {
+        Set<String> seen = new LinkedHashSet<>();
+        int[] scored = {0};
+        int reserved = fill(admission.due(), RESERVED_DUE, seen, budget, evaluate, scored)
+                + fill(admission.continuity(), RESERVED_CONTINUITY, seen, budget, evaluate, scored);
+        fill(admission.ordinary(), SceneCatalog.MAX_SCORED, seen, budget, evaluate, scored);
+        return new AdmissionOutcome(budget.spent(), scored[0], reserved, budget.exhausted());
+    }
+
+    private static int fill(List<SceneDefinition> scenes, int classLimit, Set<String> seen,
+                            Budget budget, Predicate<SceneDefinition> evaluate, int[] scored) {
+        int admitted = 0;
+        for (SceneDefinition scene : scenes) {
+            if (admitted >= classLimit || scored[0] >= SceneCatalog.MAX_SCORED) {
+                break;
+            }
+            if (!seen.add(scene.id())) {
+                continue;
+            }
+            if (!budget.spend()) {
+                break;
+            }
+            if (evaluate.test(scene)) {
+                admitted++;
+                scored[0]++;
+            }
+        }
+        return admitted;
     }
 
     /** A candidate under evaluation: the scene, what it bound, and what it scored. */

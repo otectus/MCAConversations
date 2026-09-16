@@ -120,7 +120,7 @@ class GuiOfferLifetimeTest {
                 ConversationSession.Frontend.GUI, 100);
         assertEquals(ContentGeneration.current(), offer.generation());
 
-        ContentGeneration.advance();
+        ContentReloadCoordinator.advanceGenerationForTesting();
 
         assertTrue(ConversationGuard.rejectSubmission(PLAYER, VILLAGER, QUESTION, "yes", false, 101),
                 "content the answers came from no longer exists — nothing may run");

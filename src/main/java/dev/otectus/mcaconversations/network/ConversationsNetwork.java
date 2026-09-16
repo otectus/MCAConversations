@@ -4,7 +4,6 @@ import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -29,7 +28,15 @@ public final class ConversationsNetwork {
      * Bumped from the Forge channel's {@code "1"}: the payload id, encoding and framing all changed
      * with the loader, so nothing on the old protocol could have talked to this anyway.
      */
-    private static final String PROTOCOL = "2";
+    public static final String PROTOCOL = NetworkProtocol.version();
+
+    private static volatile ChoicePacketSink sink = ChoicePacketSink.NONE;
+
+    public static void installSink(ChoicePacketSink incoming) {
+        sink = incoming == null ? ChoicePacketSink.NONE : incoming;
+    }
+
+    static ChoicePacketSink sink() { return sink; }
 
     private static final java.util.Set<String> WARNED_OVERSIZED_OFFERS =
             java.util.concurrent.ConcurrentHashMap.newKeySet();
@@ -56,6 +63,8 @@ public final class ConversationsNetwork {
                 ChoiceSelectC2S.TYPE,
                 ChoiceSelectC2S.STREAM_CODEC,
                 ConversationsNetwork::handleSelect);
+        registrar.playToServer(ChoiceReturnC2S.TYPE, ChoiceReturnC2S.STREAM_CODEC,
+                ConversationsNetwork::handleReturn);
     }
 
     /**
@@ -77,26 +86,16 @@ public final class ConversationsNetwork {
     }
 
     private static void handleOffer(ChoiceOfferS2C payload, IPayloadContext context) {
-        try {
-            context.enqueueWork(() -> {
-                if (FMLEnvironment.dist.isClient()) {
-                    dev.otectus.mcaconversations.client.dialogue.ClientChoiceMessages.accept(payload);
-                }
-            });
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("choice offer handler failed; ignoring", t);
-        }
+        context.enqueueWork(() -> sink.offer(payload));
     }
 
     private static void handleClear(ChoiceClearS2C payload, IPayloadContext context) {
-        try {
-            context.enqueueWork(() -> {
-                if (FMLEnvironment.dist.isClient()) {
-                    dev.otectus.mcaconversations.client.dialogue.ClientChoiceMessages.clear(payload);
-                }
-            });
-        } catch (Throwable t) {
-            McaConversations.LOGGER.debug("choice clear handler failed; ignoring", t);
+        context.enqueueWork(() -> sink.clear(payload));
+    }
+
+    private static void handleReturn(ChoiceReturnC2S payload, IPayloadContext context) {
+        if (context.player() instanceof ServerPlayer sender) {
+            ChoiceSelectionService.returnToTopics(sender, payload.revision(), payload.villagerId());
         }
     }
 

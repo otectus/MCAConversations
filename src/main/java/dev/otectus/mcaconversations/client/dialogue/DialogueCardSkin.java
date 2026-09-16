@@ -2,7 +2,6 @@ package dev.otectus.mcaconversations.client.dialogue;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.List;
  *
  * <h2>Vanilla textures, not synthetic ones</h2>
  *
- * <p>The panel is the options-screen dirt and the two things that genuinely are buttons -- the number
+ * <p>The panel is a flat translucent backing and the two things that genuinely are buttons -- the number
  * badge and the page controls -- are drawn from vanilla's button sprites. A resource pack that
  * reskins Minecraft's menus therefore reskins this card, and the card has no colour scheme of its own
  * to fall out of step with the rest of the game. Everything else is a fill, exactly as a vanilla list
@@ -34,11 +33,6 @@ public final class DialogueCardSkin implements DialogueSkin {
 
     /** The one instance. The skin holds no state; it is an object only so a style can be chosen. */
     public static final DialogueSkin INSTANCE = new DialogueCardSkin();
-
-    private static final ResourceLocation DIRT = Screen.MENU_BACKGROUND;
-
-    /** Edge length of one dirt tile in GUI units, matching {@code Screen.renderMenuBackgroundTexture}. */
-    private static final int DIRT_TILE = 32;
 
     /** The button strip in {@code widgets.png}: 200x20 faces stacked from v=46. */
     private static final int BUTTON_WIDTH = 200;
@@ -73,9 +67,9 @@ public final class DialogueCardSkin implements DialogueSkin {
     @Override
     public void panel(GuiGraphics graphics, DialogueChoiceLayout.Rect panel,
                              DialogueChoiceLayout.Rect listBody, float alpha) {
-        dirt(graphics, panel, ConversationPalette.PANEL_TINT, alpha);
+        fill(graphics, panel, ConversationPalette.withAlpha(ConversationPalette.PANEL_BACKING, alpha));
         if (listBody != null && listBody.width() > 0 && listBody.height() > 0) {
-            dirt(graphics, listBody, ConversationPalette.LIST_TINT, alpha);
+            fill(graphics, listBody, ConversationPalette.withAlpha(ConversationPalette.LIST_BACKING, alpha));
             // The two shading bands vanilla puts at the ends of a list, standing in for the divider
             // rule and the footer rule the card used to draw.
             int shade = ConversationPalette.withAlpha(ConversationPalette.SHADE, alpha);
@@ -189,25 +183,6 @@ public final class DialogueCardSkin implements DialogueSkin {
         graphics.fill(rect.x(), rect.y(), rect.x() + thickness, rect.y() + rect.height(), color);
         graphics.fill(rect.x() + rect.width() - thickness, rect.y(),
                 rect.x() + rect.width(), rect.y() + rect.height(), color);
-    }
-
-    /** Tiles the options-screen dirt over {@code rect}, tinted and faded, then restores the tint. */
-    private static void dirt(GuiGraphics graphics, DialogueChoiceLayout.Rect rect,
-                             float tint, float alpha) {
-        if (rect.width() <= 0 || rect.height() <= 0) {
-            return;
-        }
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        try {
-            graphics.setColor(tint, tint, tint, Math.max(0.0F, Math.min(1.0F, alpha)));
-            // Sampled one texel per GUI unit so the tiling matches vanilla's dirt at every GUI scale.
-            graphics.blit(DIRT, rect.x(), rect.y(), rect.width(), rect.height(), 0.0F, 0.0F,
-                    rect.width(), rect.height(), DIRT_TILE, DIRT_TILE);
-        } finally {
-            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.disableBlend();
-        }
     }
 
     private static void button(GuiGraphics graphics, DialogueChoiceLayout.Rect rect, float alpha,

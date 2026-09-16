@@ -6551,6 +6551,61 @@
             {
               "chance": 900,
               "conversations_scene": {
+                "is": "work.mason.quick_apprentice.blocked"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "work.mason.quick_apprentice.blocked",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "episodes"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "work",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "work.mason.quick_apprentice.blocked"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.work",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.work.mason.quick_apprentice.blocked.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.blocked",
+              "slots": [
+                "pupil"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
                 "is": "work.mason.quick_apprentice.succeeded"
               }
             },

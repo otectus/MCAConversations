@@ -1,0 +1,140 @@
+{
+  "answers": [
+    {
+      "name": "say_what_id_do",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_view_i_wanted.open.weighed"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "respect": 2,
+                "trust": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "shared.advice",
+              "state": "succeeded"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_view_i_wanted.weighed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_which_way_they_lean",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_view_i_wanted.open.named_the_lean"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_view_i_wanted.named_the_lean"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_to_ask_around",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_view_i_wanted.open.accepted_the_offer"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_view_i_wanted.accepted_the_offer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave_the_choice_with_them",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "shared_history.the_view_i_wanted.open.left_with_me"
+            },
+            "conversations_disposition_apply": {
+              "topic": "shared_history.advice",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "shared_history.advice"
+            },
+            "next": "conversations.scene.shared_history.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.the_view_i_wanted.left_with_me"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.events",
+            "conversations_say": {
+              "phrase": "conversations.scene.shared_history.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

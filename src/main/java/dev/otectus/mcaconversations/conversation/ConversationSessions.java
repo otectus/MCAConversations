@@ -210,6 +210,35 @@ public final class ConversationSessions {
         return removed;
     }
 
+    /**
+     * Cancels the pending work a newly published bundle has just invalidated.
+     *
+     * <p>A session holding a live offer is deliberately left alone: the player is looking at answer
+     * buttons, and the truthful thing is for their click to be refused as {@code CONTENT_RELOADED} by
+     * the stale-offer checks rather than for the offer to vanish and be refused as "there is no live
+     * offer". Everything else content-dependent — a planned scene, a queued reply for a player who is
+     * between pages — goes through {@link #close}, which is the one teardown: it releases the
+     * villager's attention and drops the scheduled replies. {@link #endTopic} would do neither.
+     *
+     * @return how many sessions were closed
+     */
+    public static int closeForContentReload() {
+        int closed = 0;
+        for (UUID playerId : List.copyOf(SESSIONS.keySet())) {
+            ConversationSession session = SESSIONS.get(playerId);
+            if (session == null || session.currentOffer().isPresent()) {
+                continue;
+            }
+            if (session.topicId().isEmpty() && session.plan().isEmpty()) {
+                // Nothing content-dependent is outstanding; there is nothing to cancel.
+                continue;
+            }
+            close(playerId, CloseReason.CONTENT_RELOADED);
+            closed++;
+        }
+        return closed;
+    }
+
     public static int size() {
         return SESSIONS.size();
     }

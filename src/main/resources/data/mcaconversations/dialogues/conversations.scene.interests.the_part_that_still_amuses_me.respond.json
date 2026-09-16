@@ -1,0 +1,94 @@
+{
+  "answers": [
+    {
+      "name": "say_that_is_a_good_story",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_part_that_still_amuses_me.open.laughed_along"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.early_attempts",
+              "deltas": {
+                "warmth": 2,
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.the_part_that_still_amuses_me.laughed_along"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_how_it_ended",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_part_that_still_amuses_me.open.told_the_ending"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.early_attempts",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.the_part_that_still_amuses_me.told_the_ending"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_is_worth_keeping",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "interests.the_part_that_still_amuses_me.open.kept_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "interests.early_attempts",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.interests.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.the_part_that_still_amuses_me.kept_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

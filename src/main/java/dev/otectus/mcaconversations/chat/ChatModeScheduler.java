@@ -15,8 +15,17 @@ import java.util.PriorityQueue;
  */
 public final class ChatModeScheduler {
 
-    /** {@code player} is the recipient the entry belongs to, or null for a task owned by nobody. */
-    private record Scheduled(long tick, long seq, java.util.UUID player, Runnable task) {
+    /**
+     * {@code player} is the recipient the entry belongs to, or null for a task owned by nobody;
+     * {@code bundle} is the content the task was created under.
+     *
+     * <p>Stamping the bundle is what keeps a deferred line honest. The reply was already chosen and
+     * rendered when the task was queued; running it later against whatever content has been published
+     * since would let a humanized delivery delay smuggle a new catalog into a finished exchange.
+     */
+    private record Scheduled(long tick, long seq, java.util.UUID player,
+                             dev.otectus.mcaconversations.conversation.ConversationContentBundle bundle,
+                             Runnable task) {
     }
 
     private static final PriorityQueue<Scheduled> QUEUE = new PriorityQueue<>(
@@ -38,7 +47,8 @@ public final class ChatModeScheduler {
      * {@link #clearPlayer} can drop it when their conversation ends.
      */
     public static void schedule(java.util.UUID player, long deliverAtTick, Runnable task) {
-        QUEUE.add(new Scheduled(deliverAtTick, sequence++, player, task));
+        QUEUE.add(new Scheduled(deliverAtTick, sequence++, player,
+                dev.otectus.mcaconversations.conversation.ContentOperation.bundle(), task));
     }
 
     /** Keeps a player's spoken turns in order even when a later, shorter line has less typing delay. */
@@ -60,7 +70,8 @@ public final class ChatModeScheduler {
         while (!QUEUE.isEmpty() && QUEUE.peek().tick() <= now) {
             Scheduled next = QUEUE.poll();
             try {
-                next.task().run();
+                // Pinned to the bundle the task was queued under, not to whatever is committed now.
+                dev.otectus.mcaconversations.conversation.ContentOperation.run(next.bundle(), next.task());
             } catch (Throwable t) {
                 McaConversations.LOGGER.debug("chat-mode scheduled delivery failed; dropping", t);
             }

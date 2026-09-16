@@ -3919,6 +3919,54 @@
           }
         },
         {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.interests.the_part_that_still_amuses_me"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.interests.the_part_that_still_amuses_me",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "interests",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "interests.the_part_that_still_amuses_me.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.interests",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.interests.the_part_that_still_amuses_me.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.interests.the_part_that_still_amuses_me"
+            }
+          }
+        },
+        {
           "baseChance": 800,
           "conditions": [
             {
@@ -3939,6 +3987,12 @@
               "chance": -5000,
               "conversations_scene": {
                 "is": "topic.interests.the_one_who_shares_it"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.interests.the_part_that_still_amuses_me"
               }
             }
           ],

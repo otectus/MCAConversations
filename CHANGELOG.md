@@ -10,6 +10,241 @@ compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.4.1, vendored i
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
 
+## [1.7.0] - unreleased
+
+Refinement release: all ten stages of the refinement plan, shipped as one version.
+Stable dialogue geometry with keyboard reading and held-confirmation arming; named choice outcomes
+with one teardown path and client-free packets; the restrained card as the default presentation; a
+documented reload transaction boundary with probe fixtures; continuity-aware scene admission; the
+delivered history drawer, the presentation pane and plain-language availability sentences;
+identity-neutral authored voice; one reload, one published bundle; safe continuation through existing
+threads; and a bounded follow-through content slice, eight encounters in four topic packs and one
+profession pack, in both locales, in place of the deferred large expansion. The network protocol moves
+to 3 and the recommended presentation defaults change for new installs; stored settings are kept.
+
+### Changed
+
+- **Both loaders share the 1.7.0 behavior and content.** The NeoForge parity pass also carries
+  terminal-reply menu recovery, bystander eligibility and accepted-only single-item gift tracking
+  into both versions. See `docs/PARITY-1.7.0.md` for the complete validation record.
+- **History and presentation replace the response list while open.** The renderer previously drew
+  answers and number badges beneath the translucent utility surface, leaving both sets of text
+  visible. Only the active document is now drawn in the response viewport; closing the utility
+  restores the answers without moving the card or the villager's line.
+- **Coming back to a subject lands where its author said it should.** A thread template has always
+  declared the scenes a subject may be picked up in, and nothing read them: continuing depended on a
+  scene that happened to open the same thread, which meant the line written for returning after four
+  days was often not a candidate at all. The scenes a pair's own threads name are now evaluated
+  first, under the same gates, the same slot binding, the same recency suppression and the same work
+  bounds as everything else — an ordering, not a weight, and not an exemption. Nothing replays the
+  starter the player already answered, and nothing restores a response index: the resume scene is
+  where the conversation resumes.
+- **A continuation that cannot be established is declined, not improvised.** Before the villager
+  offers to continue anything, the thread is revalidated against the content actually loaded: the
+  template still exists, still describes the same subject under the same topic, still names a scene
+  the catalog holds, and its retained episode is unexpired and in a state that scene accepts. Cooldown, lapsing and the resume
+  budget are checked with it. Any of those failing means the subject is simply not raised — no
+  invented middle, no assumed check result, no follow-up fact the villager was never in a position
+  to observe. The same rule removes a menu entry that would have opened nothing.
+- **The continuation label says less.** The entry now reads as "about what we were discussing", with
+  the domain named only where the hub already allows it and the personal entry naming nothing at all.
+  A villager has no way of knowing whether the player left four days ago or was interrupted
+  mid-sentence, so the button no longer implies one; the authored scene says what was going on. Both
+  locales are updated, and the phrases chat mode matches follow the new wording.
+- **One reload publishes one body of content, or none of it.** Eleven datapack listeners each
+  published their own section the moment they had one, so a pack with a typo in it left the beats at
+  their old contents, the topics partially replaced, and the content generation advanced over the
+  top of both. A reload is now staged whole, cross-validated, and published as a single bundle with
+  a single generation. A rejected reload changes nothing: the previous topics, beats, scenes,
+  intents, professions, interiority, identity tokens, culture and narrative templates all stay in
+  force together, and so do the executable questions MCA parsed for them, so an answer card a player
+  is still looking at can still be answered. A malformed entry is a refusal rather than a silent
+  drop, because dropping it was how a working catalog got replaced by half of one.
+- **A reload diagnostic names the resource that caused it.** Every problem carries the attempt, the
+  generation it was aiming at, the listener, the directory, the resource, the pack it came from, a
+  JSON pointer to the offending member, and the line and column when the failure was a syntax error.
+  Fields that genuinely are not knowable are recorded as unknown rather than guessed. Each reload
+  ends with one summary naming the verdict, the previous and published generations, how many
+  executable questions were retained, and whether the retention hook was observed at all. A single
+  bad resource is reported once, not once per reference derived from it.
+- **A refused answer says which thing went wrong.** Every rejection used to clear the card as
+  "expired", whatever had happened. A reply is now refused as content reloaded, speaker unavailable,
+  out of range, requirements changed, or execution failed, and the card leaves the sentence on
+  screen with one safe action — back to topics where that is still viable, otherwise close.
+- **A failed action is never reported as a success.** The consumed signal used to be sent from a
+  `finally` block, so an answer whose action threw, and an answer MCA's engine declined to run, both
+  told the client they had worked. Execution now reports its own result on both frontends: an offer
+  is claimed exactly once before anything runs, a thrown or refused action ends the exchange through
+  the single teardown path as a contained error, and any follow-up card that a half-completed action
+  managed to schedule is cleared with it. Nothing is retried, replayed or assumed rolled back.
+- **A stale packet can no longer dismiss a live decision.** A rejection is matched to the offer it
+  answers, so a delayed refusal of an old card leaves a newer one standing, and a decision replaced
+  unanswered is reported as superseded rather than as consumed.
+- **Villagers stop broadcasting lines nobody classified.** An utterance's audience is decided before
+  it is scheduled, from that utterance and that speaker. Recorded confidences, personal disclosures,
+  sensitive static lines, and anything whose privacy is simply unknown are said to the player they
+  were said to; only lines classified as safe to overhear reach bystanders, and a second speaker's
+  line is never judged by another turn's metadata.
+- **The choice packets no longer name client code.** Both server-to-client choice packets handed
+  their payload to a client class directly. Decoding and channel registration stay common, and the
+  physical client installs the handler during client setup, so a dedicated server never has the
+  class in reach. The clear packet also carries stable result identifiers instead of enum ordinals,
+  and an identifier a build does not recognise clears silently rather than dropping the connection.
+  The channel protocol moves to 3, declared in `gradle.properties` like every other version string.
+
+- **The response card stops moving between turns.** The panel, the question region, the response
+  viewport and the footer are now computed from the window, the GUI scale, the font and the style
+  alone. They no longer follow the number of answers, the length of the question, the current page or
+  the offer revision, so an answer does not slide out from under the pointer when the villager says
+  something shorter, and paging no longer resizes the card. The frame is recomputed only when the
+  window, the GUI scale, the font, the resource pack, the language or the style changes.
+- **Every response is laid out in full.** The card reserves the response space for the whole offer
+  and shows each answer at its natural height inside one scrolling viewport; nothing shrinks the
+  font, shortens authored text or drops an answer. Pages are still packed to fit, and an answer taller
+  than the whole viewport scrolls inside it instead of being cut. The previous per-row scrollbar is
+  gone: there is one response scroll, so a long answer can be read without holding the pointer on it.
+- **The question has its own reading region.** A question longer than its region scrolls inside a
+  clipped area with its own scrollbar. The wheel belongs to whichever region it is over, including at
+  the top and bottom of that region: scrolling the question can no longer turn the answer page, and
+  neither can a wheel event the card does not otherwise use.
+
+- **The villager's own voice no longer assumes a gender.** The outlaw pack described itself as "a
+  woman doing sums at her own table" and thanked the player with the feminine "Obrigada", while its
+  applicability names only the profession and adult age. Those lines, the "woman who mends carts"
+  pair, a "says she has changed" self-reference and the plural-capable watcher slot lines were
+  rewritten identity-neutrally in both locales without flattening the character; the same class of
+  line was repaired in the mercenary, armorer, weaponsmith and werewolf-expert packs. Repairs live in
+  `src/content/` and the generated resources were regenerated. The remaining corpus-wide Portuguese
+  first-person agreement (`Obrigada/Obrigado`, `cansada`, `pronta`, ...) is recorded in the release
+  ledger as open coverage.
+- **New installations get the restrained card.** With no value recorded, `dialogueMenuStyle` is now
+  `MINIMAL` and `motionMode` is `REDUCED` — the same numbered menu, the same input, drawn flat and
+  animated only when it opens and closes. This reaches an absent key only: Forge writes every option
+  into `mcaconversations-client.toml` the first time it saves the file, so an existing installation
+  already states both keys and keeps them. A stored `RESPONSIVE` or `FULL` is a choice and is never
+  read as a stale default, and `numberedResponses = false` still overrides everything with MCA's own
+  menu.
+- **Reduced motion is now a fade and nothing else.** Under `REDUCED` the card fades in when the menu
+  genuinely opens and out when it closes; focus, selection, expanding a clipped answer and turning
+  the page happen at once. The entrance is keyed to the lifetime of the menu rather than to each
+  offer, so a slow turn between two questions is the card waiting rather than closing and reopening,
+  and a new question replaces the text without moving or re-fading the panel. Under `FULL` the
+  responsive card is unchanged, including its per-question row cascade.
+- **MINIMAL says more with the same few rectangles.** One hairline marks where the villager's line
+  ends and the answers begin, the backing carries more contrast behind the text, and a focused row is
+  a fill plus a two-pixel mark in its own left gutter: the whole row is the click target, and the
+  numeral and answer text sit at the same coordinates focused or not. A confirmed choice adds a white
+  outline, so the two states still differ by more than a shade of grey, and there is still no
+  portrait, no badge artwork and no pop-out.
+- **README describes the card that ships.** The panel is flat backing fills and gradients, not the
+  vanilla `options_background.png` dirt the README still claimed; the number badges and page buttons
+  are still nine-sliced from `widgets.png`. Motion settings are described as Conversations-owned
+  effects, and Townstead keeps its own screen, camera and typewriter.
+
+### Added
+
+- **The dialogue directory is validated before MCA applies it.** Half of this mod's shipped content
+  is dialogue JSON that MCA's own listener owns, and nothing here used to read it. The reload now
+  indexes the effective `dialogues/**` across namespaces, modelling MCA's own key, merge and
+  priority rules, so a pack that repoints an owned answer at a question nothing declares is a
+  refused reload rather than a dead button discovered mid-conversation. Routes out to MCA's own
+  questions stay legal and are recorded as what they are: a boundary this mod does not cover.
+
+- **The card can show what was actually said.** `H`, or the first button in the footer strip, opens a
+  drawer of the lines this client received and the responses it sent, each reply with its truthful
+  status: sent, accepted, or refused with the reason the server gave. It records the resolved line at
+  the moment the client receives it rather than looking an id up again, so a pooled line reads back
+  as the sentence that was spoken; one utterance is one entry however many surfaces it reached. The
+  drawer is collapsed by default, holds only this client's own deliveries, is bounded by the new
+  `deliveredHistoryEntries` client setting, and is cleared on disconnect and world change. Nothing is
+  written to disk and nothing can be exported.
+- **A presentation pane inside the card.** `P`, or the second footer button, changes the menu style,
+  motion, line reveal, interface sound volume and control hints in place, writing them to
+  `mcaconversations-client.toml`. When the legacy `numberedResponses = false` switch is forcing MCA's
+  own menu, the style row states both the style you configured and the one being drawn. "Reset to
+  recommended" lists exactly what it would change and applies it only when chosen again. With
+  Townstead installed the pane says that Townstead draws its own dialogue screen and these settings
+  do not govern it. Both overlays live inside the response viewport, so the panel and the villager's
+  line stay where they were; while one is open no key or click reaches the answer list, so opening a
+  utility can never select a response, and Back, Escape, Backspace or Tab hands the keyboard back to
+  the region it came from.
+- **An offered topic that cannot be opened says why.** Asking a villager about an entry their own
+  menu was showing now answers in plain words — they are working, the two of you already talked about
+  it today, they are not ready to talk about that — instead of falling through in silence. The
+  sentence names no topic id, no condition and no eligibility reason; it is produced only for
+  something the player was already offered, so nothing hidden, undiscovered or age-gated is ever
+  mentioned; and it describes a refusal that has already happened rather than granting anything.
+  Selecting the topic still goes through the server's ordinary gate. Network and execution problems
+  are not villager refusals and keep their existing lapse explanations.
+- **Keyboard reading and region focus.** Tab and Shift-Tab move between the question, the response
+  list and the page controls. In the question or while reading a response, the arrows, Home, End,
+  Page Up and Page Down read the text; in the ordinary list they still move the selection and turn
+  pages. `R` reads the focused response and stops reading it again, Escape leaves reading mode before
+  it closes the screen, and a keyboard selection is always scrolled into view. The reading action is
+  named in the footer hint and announced to the narrator.
+- **One model of the available controls.** The footer hint and the narrator are built from the same
+  description of what can actually be pressed. A disabled numeric shortcut is never advertised or
+  announced, narration says "Response 10 of 12. Shortcut 1." only when there is a shortcut, and the
+  hint is measured against the space left after the page text and the page controls, falling back to
+  shorter localized variants and finally to nothing rather than overlapping them.
+- **Held confirmation now needs a release.** Enter, keypad Enter, Space, the enabled digits and the
+  card's own pointer confirmation each confirm once per press. A key held across an immediately
+  available next question no longer walks the player through nodes they never read; the repeat is
+  consumed rather than falling through to a stale native control, and a release followed by a new
+  press works immediately, with no waiting interval. Releases are tracked while no offer is up, and
+  reconciled against the window so a release lost to a focus change or a screen swap recovers itself.
+
+- **Continuity has reserved seats in scene admission.** The director used to sort every eligible
+  scene by authored priority and score only the first 32, so a low-priority scene that carried a due
+  promise, an unresolved rupture or a ready thread could be cut before its continuity weight was ever
+  applied. Up to 8 scored positions are now reserved for scenes tied to a due obligation and up to 8
+  more for unresolved continuity, filled from load-time thread and subject indexes so the 128-entry
+  merge cap cannot hide them; the remaining positions follow ordinary priority. Every reserved scene
+  passes the same eligibility, privacy, recency and binding gates, a rejected one gives its seat back,
+  and one bounded evaluation budget now also covers the fallback traversal. The selection
+  explanation reports evaluated, rejected, reserved, scored and budget-exhausted counts. Scoring
+  itself is unchanged: relevance earns admission, not certainty.
+- **The reload transaction boundary is written down and probed.** `docs/RELOAD-TRANSACTION-BOUNDARY.md`
+  inventories every catalog this mod loads, which loaders retain their previous index and which
+  skip-and-publish, the add-on dialogue data that MCA's own `Dialogues` listener loads, MCA's
+  reload members per supported version, the ordering race between the two mods' reload handlers,
+  a recommended retention strategy and its eight documented limitations. `McaDialogueReloadProbeTest`
+  demonstrates the relevant `Dialogues` behaviour against every jar in `mca_probe_versions`, and
+  `ReloadTransactionBaselineTest` documents the old mixed loader verdicts and now verifies the staged
+  coordinator's replacement behavior. The investigation established the boundary used by the
+  transactional reload implementation in this release.
+
+- **A subject a villager asked your opinion about, and came back to.** `shared_history` gains
+  an episode family about advice: a small matter the villager puts to you while it is
+  undecided, and three authored ways back to it once it is not. They report what they did with your
+  answer — followed it, kept half of it, or went the other way for a reason they will state; they can
+  admit they took it more heavily than you meant it, and you can say what you actually meant, accept
+  their reading, or hold that it was only ever an opinion; and once it is long settled they name it
+  again as something the two of you worked out, and nothing else. Every page offers listening,
+  advice, practical help that promises nothing, respectful disagreement, a question, and a graceful
+  postponement, and only the reply that closes the subject settles the thread, so returning to it
+  cannot reopen what was finished or pay anything a second time. The scenes are the thread's authored
+  resume targets, so the continuation route added in this release has somewhere honest to land.
+- **A village change that has moved on since you last asked.** `village` gains a scene that only
+  plays when several days have passed, and says what became of the news rather than introducing it
+  again: it has stopped being the first thing anybody mentions, it sits heavier on the lane than it
+  did, or it now matters less than the state of a roof. You can ask what shifted, say that sounds
+  like a relief, or put it plainly that quieter is not the same as over — which the villager grants.
+- **Two harmless things to talk about.** A neighbour preparing to go to a gathering, three days into
+  deciding what to carry over, where offering to carry something is answered with "if you are about,
+  that is welcome; if you are not, nobody will be waiting on you" — an offer, stated as not a
+  promise. And, once you have known each other a while, the thing about their own hobby that still
+  makes them laugh: a misheard tune whistled all winter, a first attempt mostly worn by a
+  neighbour's cat, a drawer of very serious and very bad early evidence. No quest, no promise, no
+  repeatable reward; the payoff is learning something about the person.
+- **A mason and their apprentice, stuck on nothing important.** Asking whether the two of them ever
+  disagree about method opens a standing, friendly impasse — wet stone against dry, joint widths,
+  whether you point the seam the same day — where you can side with the apprentice, ask who taught
+  each habit, or say it sounds like a good site to work on. The wall goes up straight either way.
+- **Four of the new openings are written in a villager's own voice.** The warm, quiet, plainspoken
+  and bright families each carry an authored variant set for one of the new scenes, so the first line
+  of each is not narrated by the same voice for everyone.
+
 ## [1.6.3] - unreleased
 
 1.6.3 is a stabilization release that repairs correctness defects found by a September 2026 audit of

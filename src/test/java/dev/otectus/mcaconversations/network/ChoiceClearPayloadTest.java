@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * Port-only: pins the clear payload's id, byte order and, through the ordinal on the wire, the
- * declaration order of {@link ChoiceClearS2C.Reason}.
+ * Port-only: pins the clear payload's id, byte order and, through explicit identifiers on the wire, the
+ * stable reasons of {@link ChoiceClearS2C.Reason}.
  */
 class ChoiceClearPayloadTest {
 
@@ -24,7 +24,7 @@ class ChoiceClearPayloadTest {
 
     @Test
     void theByteOrderMatchesTheForgeEncoder() {
-        // varLong 5 | enum CONSUMED (varInt ordinal 1)
+        // varLong 5 | CONSUMED (explicit varInt identifier 1)
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
         ChoiceClearS2C.STREAM_CODEC.encode(buffer, new ChoiceClearS2C(5L, ChoiceClearS2C.Reason.CONSUMED));
         byte[] actual = new byte[buffer.readableBytes()];

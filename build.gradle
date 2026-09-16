@@ -466,12 +466,12 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mca_version: mca_version, mca_version_range: mca_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license,
-            mod_version: project.version.toString(),
+            mod_version: project.version.toString(), network_protocol: network_protocol,
             mod_authors: mod_authors, mod_description: mod_description,
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta', 'mcaconversations-network.properties']) {
         expand replaceProperties + [project: project]
     }
 }

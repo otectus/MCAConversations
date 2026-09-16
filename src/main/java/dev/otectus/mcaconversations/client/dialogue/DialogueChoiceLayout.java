@@ -16,6 +16,17 @@ public final class DialogueChoiceLayout {
     /** Below this panel width the portrait is dropped rather than narrowing the reading column. */
     public static final int PORTRAIT_MIN_PANEL_WIDTH = 260;
     public static final int PORTRAIT_GAP = 6;
+    /**
+     * Reading lines the question is always given, however many the question actually has.
+     *
+     * <p>The reservation cannot follow the text: a header that grows with one villager's phrase and
+     * shrinks with the next moves every answer under the pointer between two turns. A longer
+     * question scrolls inside the reservation instead.
+     */
+    public static final int MIN_QUESTION_LINES = 3;
+    public static final int MAX_QUESTION_LINES = 6;
+    /** Divider gap above and below the rule: the fixed chrome between question and answers. */
+    public static final int HEADER_GAP = 15;
 
     public record Rect(int x, int y, int width, int height) {
         public boolean contains(double mouseX, double mouseY) {
@@ -70,9 +81,23 @@ public final class DialogueChoiceLayout {
         }
     }
 
+    /**
+     * The card's outer frame: everything that must hold still for the whole presentation.
+     *
+     * <p>Nothing here is derived from the question's length, the number of answers, the current page
+     * or the offer revision, so a new turn of the same conversation lands on exactly the same
+     * pixels. Only the window, the GUI scale, the font, the style and the footer reservation move
+     * it.
+     */
+    public record Geometry(Rect panel, Rect header, Rect portrait, int questionX, int questionY,
+                           Rect questionViewport, int dividerY, Rect responseViewport, int footerY,
+                           Rect previousPage, Rect nextPage) {
+    }
+
     public record Layout(Rect panel, Rect header, Rect portrait, int questionX, int questionY,
                          int questionLines, int dividerY, List<Rect> rows, int footerY,
-                         Rect previousPage, Rect nextPage) {
+                         Rect previousPage, Rect nextPage, Rect questionViewport,
+                         Rect responseViewport, int documentHeight) {
         public Layout {
             rows = List.copyOf(rows);
         }
@@ -206,19 +231,23 @@ public final class DialogueChoiceLayout {
                 compactRowHeights, footer, HeaderSpec.NONE);
     }
 
+    /**
+     * {@code questionLines} is retained for callers that still pass it; the question's reservation no
+     * longer depends on the question, so packing no longer reads it.
+     */
     public static PageMap packPages(int screenHeight, int questionLines, int fontLineHeight,
                                     List<Integer> normalRowHeights, List<Integer> compactRowHeights,
                                     boolean footer, HeaderSpec header) {
         if (normalRowHeights == null || normalRowHeights.isEmpty()) {
             return new PageMap(List.of(), false, 0);
         }
-        int normalAvailable = availableRowsHeight(screenHeight, questionLines, fontLineHeight,
-                footer, false, header);
-        boolean compact = normalRowHeights.get(0) > normalAvailable;
+        // Density follows the window and font. A long first answer must scroll rather than change
+        // the panel's padding and move every region between two offers.
+        boolean compact = maxPanelHeight(screenHeight) < lineStep(fontLineHeight) * 18 + INNER_PADDING * 2;
         List<Integer> heights = compact && compactRowHeights != null
                 && compactRowHeights.size() == normalRowHeights.size()
                 ? compactRowHeights : normalRowHeights;
-        int available = availableRowsHeight(screenHeight, questionLines, fontLineHeight,
+        int available = availableRowsHeight(screenHeight, fontLineHeight,
                 footer, compact, header);
 
         List<ChoicePage> pages = new ArrayList<>();
@@ -274,22 +303,84 @@ public final class DialogueChoiceLayout {
         return maxPanelHeight(screenHeight) - padding * 2 - 16 - footerHeight - (step + 2);
     }
 
-    /** Height of the whole header block: the visible question lines, or the portrait if taller. */
-    private static int questionBlockHeight(int screenHeight, int questionLines, int fontLineHeight,
-                                           boolean footer, boolean compact, HeaderSpec header) {
-        int lines = visibleQuestionLines(screenHeight, questionLines, fontLineHeight, footer, compact);
-        return Math.max(lines * lineStep(fontLineHeight), header.minHeight());
+    private static int footerHeight(int fontLineHeight, boolean footer, boolean compact) {
+        return footer ? lineStep(fontLineHeight) + (compact ? 6 : 10) : 0;
     }
 
-    private static int availableRowsHeight(int screenHeight, int questionLines, int fontLineHeight,
-                                           boolean footer, boolean compact, HeaderSpec header) {
+    /** Question plus answers: the whole interior of the card once padding and footer are taken. */
+    private static int innerHeight(int screenHeight, int fontLineHeight,
+                                   boolean footer, boolean compact) {
         int step = lineStep(fontLineHeight);
-        int questionHeight = questionBlockHeight(screenHeight, questionLines, fontLineHeight,
-                footer, compact, header);
         int padding = compact ? 6 : INNER_PADDING;
-        int footerHeight = footer ? step + (compact ? 6 : 10) : 0;
-        int fixedChrome = padding + questionHeight + 16 + footerHeight + padding;
-        return Math.max(step + 2, maxPanelHeight(screenHeight) - fixedChrome);
+        return Math.max(step * 2 + 2, maxPanelHeight(screenHeight) - padding * 2
+                - footerHeight(fontLineHeight, footer, compact) - HEADER_GAP);
+    }
+
+    /**
+     * Height reserved for the question, before knowing what the question is. A taller card gives the
+     * reading region more lines, up to {@link #MAX_QUESTION_LINES}; a portrait raises the floor so
+     * the two never disagree about where the divider goes.
+     */
+    public static int questionViewportHeight(int screenHeight, int fontLineHeight, boolean footer,
+                                             boolean compact, HeaderSpec header) {
+        int step = lineStep(fontLineHeight);
+        int space = Math.max(step, questionSpace(screenHeight, fontLineHeight, footer, compact));
+        int fits = Math.max(1, space / step);
+        int lines = Math.min(Math.max(MIN_QUESTION_LINES, fits * 2 / 5), MAX_QUESTION_LINES);
+        int wanted = Math.max(Math.min(fits, lines) * step, header.minHeight());
+        int inner = innerHeight(screenHeight, fontLineHeight, footer, compact);
+        return Math.max(step, Math.min(Math.min(space, wanted), inner - (step + 2)));
+    }
+
+    /** Height of the one scrolling response viewport; the rest of the interior. */
+    public static int responseViewportHeight(int screenHeight, int fontLineHeight, boolean footer,
+                                             boolean compact, HeaderSpec header) {
+        return innerHeight(screenHeight, fontLineHeight, footer, compact)
+                - questionViewportHeight(screenHeight, fontLineHeight, footer, compact, header);
+    }
+
+    private static int availableRowsHeight(int screenHeight, int fontLineHeight,
+                                           boolean footer, boolean compact, HeaderSpec header) {
+        return responseViewportHeight(screenHeight, fontLineHeight, footer, compact, header);
+    }
+
+    /**
+     * The card's frame for one window, font and style. The question line count is deliberately not a
+     * parameter: this is the geometry that must survive the next answer, the next page and the next
+     * turn.
+     */
+    public static Geometry geometry(int screenWidth, int screenHeight, int fontLineHeight,
+                                    boolean footer, boolean compact, HeaderSpec header,
+                                    boolean paged) {
+        int width = panelWidth(screenWidth);
+        int step = lineStep(fontLineHeight);
+        int padding = compact ? 6 : INNER_PADDING;
+        int footerHeight = footerHeight(fontLineHeight, footer, compact);
+        int questionHeight = questionViewportHeight(screenHeight, fontLineHeight, footer, compact,
+                header);
+        int viewportHeight = responseViewportHeight(screenHeight, fontLineHeight, footer, compact,
+                header);
+        int height = padding * 2 + questionHeight + HEADER_GAP + viewportHeight + footerHeight;
+        int x = (screenWidth - width) / 2;
+        int y = Math.max(SAFE_TOP, SAFE_TOP + (maxPanelHeight(screenHeight) - height) / 2);
+        int questionY = y + padding;
+        int dividerY = questionY + questionHeight + 7;
+        int rowsTop = dividerY + 8;
+        int footerY = footer ? y + height - padding - footerHeight + (compact ? 3 : 5) : -1;
+        int controlY = footer ? y + height - padding - Math.max(18, step + 4) : -1;
+        Rect previous = paged ? new Rect(x + width - padding - 38, controlY, 18, 18) : null;
+        Rect next = paged ? new Rect(x + width - padding - 18, controlY, 18, 18) : null;
+        Rect portrait = header.hasPortrait()
+                ? new Rect(x + padding, questionY, header.portraitSize(), header.portraitSize())
+                : null;
+        return new Geometry(new Rect(x, y, width, height),
+                new Rect(x + 1, y + 1, width - 2, dividerY - y), portrait,
+                x + padding + header.portraitColumn(), questionY,
+                new Rect(x + padding + header.portraitColumn(), questionY,
+                        questionTextWidth(screenWidth, header), questionHeight),
+                dividerY,
+                new Rect(x + padding, rowsTop, width - padding * 2, viewportHeight),
+                footerY, previous, next);
     }
 
     /** Compatibility overload for callers/tests that use vanilla's historical nine-pixel line height. */
@@ -310,46 +401,40 @@ public final class DialogueChoiceLayout {
                                 int fontLineHeight, List<Integer> rowHeights, boolean footer,
                                 boolean compact, boolean hasPrevious, boolean hasNext,
                                 HeaderSpec header) {
-        int width = panelWidth(screenWidth);
+        return create(screenWidth, screenHeight, questionLines, fontLineHeight, rowHeights, footer,
+                compact, hasPrevious, hasNext, header, 0);
+    }
+
+    /**
+     * Places one page's rows inside the fixed frame, scrolled by {@code responseScroll} pixels.
+     *
+     * <p>The rows are a document inside the response viewport rather than the thing the card is
+     * sized from. A page packed by {@link #packPages} always fits; only an expanded answer makes the
+     * document taller than the viewport, and then it scrolls instead of moving the panel.
+     */
+    public static Layout create(int screenWidth, int screenHeight, int questionLines,
+                                int fontLineHeight, List<Integer> rowHeights, boolean footer,
+                                boolean compact, boolean hasPrevious, boolean hasNext,
+                                HeaderSpec header, int responseScroll) {
         int step = lineStep(fontLineHeight);
-        int padding = compact ? 6 : INNER_PADDING;
-        int visibleQuestionLines = visibleQuestionLines(screenHeight, questionLines, fontLineHeight,
-                footer, compact);
-        int questionHeight = questionBlockHeight(screenHeight, questionLines, fontLineHeight,
-                footer, compact, header);
-        int rowsAvailable = availableRowsHeight(screenHeight, questionLines, fontLineHeight,
-                footer, compact, header);
-        int rowsHeight = 0;
-        for (int i = 0; i < rowHeights.size(); i++) {
-            int remaining = Math.max(step + 2, rowsAvailable - rowsHeight - (i == 0 ? 0 : ROW_GAP));
-            rowsHeight += (i == 0 ? 0 : ROW_GAP) + Math.min(Math.max(1, rowHeights.get(i)), remaining);
-        }
-        int footerHeight = footer ? step + (compact ? 6 : 10) : 0;
-        int height = Math.min(maxPanelHeight(screenHeight),
-                padding + questionHeight + 16 + rowsHeight + footerHeight + padding);
-        int x = (screenWidth - width) / 2;
-        int y = Math.max(SAFE_TOP, SAFE_TOP + (maxPanelHeight(screenHeight) - height) / 2);
-        int questionY = y + padding;
-        int dividerY = questionY + questionHeight + 7;
-        int rowY = dividerY + 8;
-        int rowBottom = y + height - padding - footerHeight;
+        Geometry geometry = geometry(screenWidth, screenHeight, fontLineHeight, footer, compact,
+                header, footer && (hasPrevious || hasNext));
+        Rect viewport = geometry.responseViewport();
+        int visibleQuestionLines = Math.max(1, Math.min(Math.max(1, questionLines),
+                Math.max(1, geometry.questionViewport().height() / step)));
+        int rowY = viewport.y() - Math.max(0, responseScroll);
+        int documentHeight = 0;
         List<Rect> rows = new ArrayList<>(rowHeights.size());
-        for (int rowHeight : rowHeights) {
-            int actual = Math.min(Math.max(step + 2, rowHeight), Math.max(step + 2, rowBottom - rowY));
-            rows.add(new Rect(x + padding, rowY, width - padding * 2, actual));
+        for (int i = 0; i < rowHeights.size(); i++) {
+            int actual = Math.max(step + 2, Math.max(1, rowHeights.get(i)));
+            rows.add(new Rect(viewport.x(), rowY, viewport.width(), actual));
             rowY += actual + ROW_GAP;
+            documentHeight += (i == 0 ? 0 : ROW_GAP) + actual;
         }
-        int footerY = footer ? y + height - padding - footerHeight + (compact ? 3 : 5) : -1;
-        int controlY = footer ? y + height - padding - Math.max(18, step + 4) : -1;
-        boolean paged = footer && (hasPrevious || hasNext);
-        Rect previous = paged ? new Rect(x + width - padding - 38, controlY, 18, 18) : null;
-        Rect next = paged ? new Rect(x + width - padding - 18, controlY, 18, 18) : null;
-        Rect headerRect = new Rect(x + 1, y + 1, width - 2, dividerY - y);
-        Rect portrait = header.hasPortrait()
-                ? new Rect(x + padding, questionY, header.portraitSize(), header.portraitSize())
-                : null;
-        return new Layout(new Rect(x, y, width, height), headerRect, portrait,
-                x + padding + header.portraitColumn(), questionY,
-                visibleQuestionLines, dividerY, rows, footerY, previous, next);
+        return new Layout(geometry.panel(), geometry.header(), geometry.portrait(),
+                geometry.questionX(), geometry.questionY(), visibleQuestionLines,
+                geometry.dividerY(), rows, geometry.footerY(),
+                geometry.previousPage(), geometry.nextPage(),
+                geometry.questionViewport(), viewport, documentHeight);
     }
 }

@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -65,6 +66,19 @@ class MinimalSkinIsTextureFreeLintTest {
         assertTrue(offenders.isEmpty(),
                 () -> "the only GuiGraphics call a flat skin needs is fill:\n  "
                         + String.join("\n  ", offenders));
+    }
+
+    @Test
+    void theMinimalSkinStillDrawsNoBadgeArtworkAndNoPortrait() throws IOException {
+        // Both overrides exist only to say "nothing here". A refinement that fills one of them in is
+        // the exact way this style would grow back the decoration it was created without, and it
+        // would also invalidate the narrower gutter the layout gives a bare numeral.
+        String source = stripComments(Files.readString(MINIMAL_SKIN, StandardCharsets.UTF_8));
+        for (String method : List.of("badge", "portrait")) {
+            assertTrue(Pattern.compile("public void " + method + "\\([^)]*\\)\\s*\\{\\s*}",
+                            Pattern.DOTALL).matcher(source).find(),
+                    () -> "MinimalDialogueSkin." + method + " must remain an empty override");
+        }
     }
 
     /** Drops comments, so a rule fires on code and not on the prose explaining what is forbidden. */

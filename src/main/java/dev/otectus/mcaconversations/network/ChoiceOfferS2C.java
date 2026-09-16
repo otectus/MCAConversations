@@ -1,9 +1,9 @@
 package dev.otectus.mcaconversations.network;
 
-import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import io.netty.handler.codec.DecoderException;
 import net.minecraft.network.FriendlyByteBuf;
+import dev.otectus.mcaconversations.McaConversations;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -27,13 +27,6 @@ public record ChoiceOfferS2C(long revision, ConversationSession.Frontend fronten
             throw new IllegalArgumentException("choice offer exceeds protocol bounds");
         }
     }
-
-    public static final CustomPacketPayload.Type<ChoiceOfferS2C> TYPE =
-            new CustomPacketPayload.Type<>(
-                    ResourceLocation.fromNamespaceAndPath(McaConversations.MOD_ID, "choice_offer"));
-
-    public static final StreamCodec<FriendlyByteBuf, ChoiceOfferS2C> STREAM_CODEC =
-            StreamCodec.of(ChoiceOfferS2C::encode, ChoiceOfferS2C::decode);
 
     public static ChoiceOfferS2C from(ConversationSession.ChoiceOffer offer) {
         return new ChoiceOfferS2C(offer.revision(), offer.frontend(), offer.questionId(), offer.answerIds());
@@ -62,8 +55,12 @@ public record ChoiceOfferS2C(long revision, ConversationSession.Frontend fronten
         return new ChoiceOfferS2C(revision, frontend, question, answers);
     }
 
+
+    public static final CustomPacketPayload.Type<ChoiceOfferS2C> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(McaConversations.MOD_ID, "choice_offer"));
+    public static final StreamCodec<FriendlyByteBuf, ChoiceOfferS2C> STREAM_CODEC =
+            StreamCodec.of(ChoiceOfferS2C::encode, ChoiceOfferS2C::decode);
+
     @Override
-    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
-        return TYPE;
-    }
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() { return TYPE; }
 }

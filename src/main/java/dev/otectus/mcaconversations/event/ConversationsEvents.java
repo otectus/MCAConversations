@@ -2,7 +2,6 @@ package dev.otectus.mcaconversations.event;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
-import dev.otectus.mcaconversations.chat.ChatIntentLoader;
 import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.chat.ChatModeScheduler;
 import dev.otectus.mcaconversations.chat.ChatModeSession;
@@ -13,14 +12,10 @@ import dev.otectus.mcaconversations.compat.CapitalsBridge;
 import dev.otectus.mcaconversations.compat.McaBridge;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.compat.ServerEpoch;
-import dev.otectus.mcaconversations.conversation.BeatContractLoader;
 import dev.otectus.mcaconversations.conversation.CloseReason;
-import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.court.CourtNewsPoller;
 import dev.otectus.mcaconversations.disposition.DispositionSavedData;
-import dev.otectus.mcaconversations.interiority.Interiority;
-import dev.otectus.mcaconversations.profession.ProfessionProfileLoader;
 import dev.otectus.mcaconversations.progress.ProgressSavedData;
 import dev.otectus.mcaconversations.gossip.GossipDetectors;
 import dev.otectus.mcaconversations.history.ConversationHistorySavedData;
@@ -87,6 +82,10 @@ public final class ConversationsEvents {
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
         CapitalsBridge.Holder.clearCaches();
+        // The bundle holds MCA's parsed Question objects strongly, so it has to be dropped with the
+        // rest: a retained executable table belongs to one server lifecycle and must never be
+        // reachable from the next.
+        dev.otectus.mcaconversations.conversation.ContentReloadCoordinator.reset();
         // After the clear, not before: an entry written by a straggler between here and the next
         // start belongs to neither epoch and so can never be served.
         ServerEpoch.advance();
@@ -383,27 +382,31 @@ public final class ConversationsEvents {
     // --- Datapack listeners ------------------------------------------------------
 
     /**
-     * Registers this mod's datapack loaders — chat intents, the conversation catalog, the semantic beat
-     * contracts, the profession profiles and the per-personality interiority profiles, each merged across namespaces so packs can extend them.
-     * MCA-independent — these are our own resources — so they attach regardless of
+     * Registers this mod's one content listener.
+     *
+     * <p>Eleven listeners used to be registered here, each publishing its own section at its own
+     * moment. {@code ContentReloadCoordinator} stages all eleven plus the dialogue validation index
+     * and publishes once, so a reload lands as one decision rather than eleven.
+     *
+     * <p>{@code HIGH} rather than the default: MCA registers its {@code Dialogues} listener at
+     * {@code NORMAL} from its own mod constructor, and which of the two lands first in the NORMAL
+     * list was decided by a parallel-construction race at startup
+     * ({@code docs/RELOAD-TRANSACTION-BOUNDARY.md} §3.3). At {@code HIGH} this mod's listener is
+     * always earlier in the reload list, so its verdict is known at the one moment MCA's map can
+     * still be corrected.
+     *
+     * <p>MCA-independent — these are our own resources — so it attaches regardless of
      * {@link McaBridge#isAvailable()}; each loaded index is inert until its feature is on.
      */
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(new ChatIntentLoader());
-        event.addListener(new ConversationCatalogLoader());
-        event.addListener(new BeatContractLoader());
-        event.addListener(new ProfessionProfileLoader());
-        event.addListener(new Interiority());
-        // Living histories: identity tokens, conversation scenes, and the three narrative
-        // template directories. Inert until dynamic.enabled is on, like every other index here.
-        event.addListener(new dev.otectus.mcaconversations.identity.IdentityCatalogLoader());
-        event.addListener(new dev.otectus.mcaconversations.scene.SceneCatalogLoader());
-        event.addListener(new dev.otectus.mcaconversations.village.VillageCultureCatalogLoader());
-        dev.otectus.mcaconversations.history.NarrativeCatalogLoader.listeners()
-                .forEach(event::addListener);
-        // Last, always: listeners apply in registration order, so this is the point at which every
-        // catalog above has been published and one new content generation can be declared.
-        event.addListener(new dev.otectus.mcaconversations.conversation.ContentGenerationListener());
+        event.addListener(dev.otectus.mcaconversations.conversation.ContentReloadCoordinator.begin());
+    }
+
+    /** Observe completion after MCA's NORMAL-priority listener has had its apply turn. */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onAddReloadCompletionListener(AddReloadListenerEvent event) {
+        event.addListener(dev.otectus.mcaconversations.conversation.ContentReloadCoordinator
+                .completionListener());
     }
 }

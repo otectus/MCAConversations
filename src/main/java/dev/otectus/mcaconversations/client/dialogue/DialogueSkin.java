@@ -1,5 +1,6 @@
 package dev.otectus.mcaconversations.client.dialogue;
 
+import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.McaConversationsConfig.DialogueMenuStyle;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -51,7 +52,7 @@ public interface DialogueSkin {
      * render path is the wrong place to discover that.
      */
     static DialogueSkin of(DialogueMenuStyle style) {
-        return switch (style == null ? DialogueMenuStyle.RESPONSIVE : style) {
+        return switch (style == null ? McaConversationsConfig.DEFAULT_DIALOGUE_MENU_STYLE : style) {
             case MINIMAL -> MinimalDialogueSkin.INSTANCE;
             case RESPONSIVE, MCA_ORIGINAL -> DialogueCardSkin.INSTANCE;
         };

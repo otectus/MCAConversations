@@ -1,0 +1,24 @@
+package dev.otectus.mcaconversations.network;
+
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class ChoiceReturnCodecTest {
+    @Test
+    void returnRoundTripsTheRefusedRevisionAndSpeaker() {
+        var message = new ChoiceReturnC2S(Long.MAX_VALUE, UUID.randomUUID());
+        var buffer = new FriendlyByteBuf(Unpooled.buffer());
+        try {
+            ChoiceReturnC2S.encode(buffer, message);
+            assertEquals(message, ChoiceReturnC2S.decode(buffer));
+            assertEquals(0, buffer.readableBytes());
+        } finally {
+            buffer.release();
+        }
+    }
+}

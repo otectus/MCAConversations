@@ -138,6 +138,7 @@ public final class McaHandles {
     private static final MethodHandle H_ALL_MATCHING = R.handle(McaBinding.CONSTRAINT_ALL_MATCHING);
     private static final MethodHandle H_SEND_TO_PLAYER = R.handle(McaBinding.NETWORK_SEND_TO_PLAYER);
     private static final MethodHandle H_NEW_QUESTION_RESPONSE = R.handle(McaBinding.QUESTION_RESPONSE_NEW);
+    private static final MethodHandle H_NEW_DIALOGUE_RESPONSE = R.handle(McaBinding.DIALOGUE_RESPONSE_NEW);
     private static final MethodHandle H_QUESTION_TEXT = R.handle(McaBinding.QUESTION_RESPONSE_TEXT);
     private static final MethodHandle H_QUESTION_SILENT = R.handle(McaBinding.QUESTION_RESPONSE_SILENT);
     private static final MethodHandle H_RESPONSE_QUESTION = R.handle(McaBinding.DIALOGUE_RESPONSE_QUESTION);
@@ -428,6 +429,24 @@ public final class McaHandles {
         }
         try {
             H_SELECT_ANSWER.invoke(dialogues, villager, player, questionId, answerName);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /** Builds a fresh constraint-filtered menu through MCA's own response constructor. Runs no actions. */
+    public static boolean sendDialogueMenu(Object villager, ServerPlayer player, String questionId) {
+        if (!isVillager(villager) || player == null) {
+            return false;
+        }
+        Object question = ref(H_GET_QUESTION, dialogues(), questionId);
+        if (question == null) {
+            return false;
+        }
+        try {
+            Object packet = H_NEW_DIALOGUE_RESPONSE.invoke(question, player, villager);
+            H_SEND_TO_PLAYER.invoke(packet, player);
             return true;
         } catch (Throwable t) {
             return false;

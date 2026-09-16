@@ -2,13 +2,20 @@ package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.conversation.ContentReloadCoordinator;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
+import com.google.gson.JsonElement;
 
 import java.util.Map;
 
@@ -48,22 +55,80 @@ public abstract class DialoguesMixin {
     @Final
     private Map<String, Object> questions;
 
+    /**
+     * The owned-question lookup boundary.
+     *
+     * <p>{@code getQuestion} is MCA's single dialogue routing point — the interact init fetches
+     * {@code "root"}, every {@code next} action and {@code selectAnswer} resolve through it — which
+     * is exactly why it is the right place to answer for names this mod owns. For a
+     * {@code conversations}/{@code conversations.*} name, once a bundle has been committed, the
+     * committed bundle's executable question is returned and <b>absence is authoritative</b>: a
+     * newly parsed owned key the committed bundle never validated is never handed back, because
+     * doing so would combine old metadata with new actions, which is the exact mixing this
+     * transaction exists to prevent.
+     *
+     * <p>Before the first commit nothing is pinned, so every lookup falls straight through to MCA and
+     * behaviour is unchanged. External names always fall through and stay outside the guarantee.
+     *
+     * <p>The {@code "chat"} redirect is unchanged in effect, but its hub now comes from the same
+     * bundle rather than from whatever is in MCA's live map at that instant.
+     */
     @Inject(method = "getQuestion", at = @At("HEAD"), cancellable = true, require = 0)
-    private void mcaconversations$redirectChatToConversations(String name, CallbackInfoReturnable<Object> cir) {
+    private void mcaconversations$resolveOwnedQuestion(String name, CallbackInfoReturnable<Object> cir) {
         try {
-            if (!"chat".equals(name)) {
+            if ("chat".equals(name)) {
+                if (!McaConversationsConfig.hubEntryMode().replacesMcaChat()) {
+                    return;
+                }
+                Object hub = ContentReloadCoordinator.governsOwnedLookups()
+                        ? ContentReloadCoordinator.ownedQuestion("conversations")
+                        : questions.get("conversations");
+                if (hub != null) {
+                    cir.setReturnValue(hub);
+                }
+                // hub missing (e.g. a datapack removed it) -> fall through to MCA's vanilla chat.
                 return;
             }
-            if (!McaConversationsConfig.hubEntryMode().replacesMcaChat()) {
-                return;
+            ContentReloadCoordinator.OwnedLookup lookup = ContentReloadCoordinator.lookup(name);
+            if (lookup.intercepted()) {
+                cir.setReturnValue(lookup.question());
             }
-            Object hub = questions.get("conversations");
-            if (hub != null) {
-                cir.setReturnValue(hub);
-            }
-            // hub missing (e.g. a datapack removed it) -> fall through to MCA's vanilla chat.
         } catch (Throwable t) {
-            McaConversations.LOGGER.debug("Chat->Conversations redirect failed; falling back to vanilla chat", t);
+            McaConversations.LOGGER.debug("Owned question lookup failed; deferring to MCA's live map", t);
+        }
+    }
+
+    /**
+     * Binds the running reload attempt to this exact {@code Dialogues} instance before it parses
+     * anything, so a callback arriving from a superseded attempt or another server lifecycle is
+     * recognisable and cannot commit.
+     */
+    @Inject(method = "apply", at = @At("HEAD"), require = 0, remap = false)
+    private void mcaconversations$applyHead(Map<ResourceLocation, JsonElement> data, ResourceManager manager,
+                                            ProfilerFiller profiler, CallbackInfo ci) {
+        try {
+            ContentReloadCoordinator.onDialoguesApplyHead(this);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("reload attempt binding failed", t);
+        }
+    }
+
+    /**
+     * The publication point. The shadowed map is read directly here — the lookup boundary above is
+     * bypassed on purpose, because what is needed is exactly the newly parsed objects that boundary
+     * is hiding.
+     *
+     * <p>Totally guarded: an exception escaping an injection at this point fails the whole reload
+     * future, which is a crash during world load. A failure here means no publication, which means
+     * the previous bundle stays in force.
+     */
+    @Inject(method = "apply", at = @At("TAIL"), require = 0, remap = false)
+    private void mcaconversations$applyTail(Map<ResourceLocation, JsonElement> data, ResourceManager manager,
+                                            ProfilerFiller profiler, CallbackInfo ci) {
+        try {
+            ContentReloadCoordinator.onDialoguesApplyTail(this, questions);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.error("Dialogue retention hook failed; no content was published", t);
         }
     }
 }

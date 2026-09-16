@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "side_with_the_apprentice",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.quick_apprentice.blocked.granted_it"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.apprentices",
+              "deltas": {
+                "respect": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.quick_apprentice"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.blocked.granted_it"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_who_taught_which",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.quick_apprentice.blocked.traced_the_habit"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.apprentices",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.quick_apprentice"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.blocked.traced_the_habit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_sounds_like_a_good_site",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.quick_apprentice.blocked.took_the_compliment"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.apprentices",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.quick_apprentice"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.blocked.took_the_compliment"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.profession",
+            "conversations_say": {
+              "phrase": "conversations.work.prof.mason.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

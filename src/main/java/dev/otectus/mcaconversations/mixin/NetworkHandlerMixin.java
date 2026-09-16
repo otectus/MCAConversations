@@ -47,7 +47,10 @@ public abstract class NetworkHandlerMixin {
     @Inject(method = "sendToPlayer", at = @At("HEAD"), cancellable = true, require = 0)
     private static void mcaconversations$redirectDialogueToChat(@Coerce Object message, ServerPlayer player,
                                                                CallbackInfo ci) {
-        try {
+        // Minting an offer stamps it with a generation, and the same packet decides which answers
+        // the player will be able to submit. Both come from one captured bundle.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
             ChatModeSession.markRedirectInstalled();
             if (McaHandles.isQuestionResponse(message)) {
                 // questionText() re-parses the line out of JSON, so ask whether we are redirecting

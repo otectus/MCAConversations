@@ -84,7 +84,10 @@ public abstract class QuestionMixin {
      * <p>Soft-fail by design: anything unexpected leaves the list exactly as MCA built it, logged once.
      */
     private void mcaconversations$filterAnswersByAge(Object villager, List<String> answers) {
-        try {
+        // The age allow-list is catalog content, and it decides what goes on screen; the list a
+        // player is shown must come from one bundle.
+        try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
+                     dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
             String question = getName();
             if (!ConversationGuard.isOurQuestion(question) || !(villager instanceof Entity entity)) {
                 return;

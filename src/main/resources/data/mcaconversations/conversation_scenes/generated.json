@@ -1977,6 +1977,44 @@
         "opening_beat": "interests.the_one_who_shares_it.open"
       }
     },
+    "topic.interests.the_part_that_still_amuses_me": {
+      "purpose": "topic:interests",
+      "shape": "reminisce",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "time.days_since_first_met",
+            "min": 10,
+            "unknown": "fail"
+          },
+          {
+            "field": "player.relationship_band",
+            "any_of": [
+              "friend",
+              "confidant",
+              "family",
+              "partner"
+            ],
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 24,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.interests.the_part_that_still_amuses_me.respond",
+        "opening_beat": "interests.the_part_that_still_amuses_me.open"
+      }
+    },
     "topic.life.how_i_came_here": {
       "purpose": "topic:life",
       "shape": "reminisce",
@@ -2123,6 +2161,43 @@
       "route": {
         "question": "conversations.scene.memories.the_one_who_is_not_here.respond",
         "opening_beat": "memories.the_one_who_is_not_here.open"
+      }
+    },
+    "topic.neighbour.the_gathering_next_door": {
+      "purpose": "topic:neighbour",
+      "shape": "plan",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "time.band",
+            "any_of": [
+              "afternoon",
+              "dusk"
+            ],
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 22,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.neighbour.the_gathering_next_door.respond",
+        "opening_beat": "neighbour.the_gathering_next_door.open"
       }
     },
     "topic.neighbour.the_unthanked_kindness": {
@@ -3658,6 +3733,59 @@
         "opening_beat": "secret.holding_somebody_elses.open"
       }
     },
+    "topic.shared_history.i_took_it_the_wrong_way": {
+      "purpose": "topic:shared_history",
+      "shape": "repair",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "shared.advice",
+        "episode_state": [
+          "succeeded"
+        ],
+        "required_slots": {
+          "matter": "localized_token"
+        },
+        "conditions": [
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_last_talk",
+            "min": 5,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 32,
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.shared_history.i_took_it_the_wrong_way.respond",
+        "opening_beat": "shared_history.i_took_it_the_wrong_way.open"
+      },
+      "episode": {
+        "thread": "shared_history.advice"
+      }
+    },
     "topic.shared_history.the_date_nobody_marks": {
       "purpose": "topic:shared_history",
       "shape": "reminisce",
@@ -3707,6 +3835,59 @@
       "route": {
         "question": "conversations.scene.shared_history.the_date_nobody_marks.respond",
         "opening_beat": "shared_history.the_date_nobody_marks.open"
+      }
+    },
+    "topic.shared_history.the_one_we_both_remember": {
+      "purpose": "topic:shared_history",
+      "shape": "reminisce",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "shared.advice",
+        "episode_state": [
+          "remembered"
+        ],
+        "required_slots": {
+          "matter": "localized_token"
+        },
+        "conditions": [
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_last_talk",
+            "min": 6,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 24,
+        "cooldown_days": 6,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.shared_history.the_one_we_both_remember.respond",
+        "opening_beat": "shared_history.the_one_we_both_remember.open"
+      },
+      "episode": {
+        "thread": "shared_history.advice"
       }
     },
     "topic.shared_history.the_thing_we_avoid": {
@@ -3763,6 +3944,107 @@
       "route": {
         "question": "conversations.scene.shared_history.the_thing_we_avoid.respond",
         "opening_beat": "shared_history.the_thing_we_avoid.open"
+      }
+    },
+    "topic.shared_history.the_view_i_wanted": {
+      "purpose": "topic:shared_history",
+      "shape": "problem_solve",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "shared.advice",
+        "episode_state": [
+          "active"
+        ],
+        "required_slots": {
+          "matter": "localized_token"
+        },
+        "conditions": [
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.shared_history.the_view_i_wanted.respond",
+        "opening_beat": "shared_history.the_view_i_wanted.open"
+      },
+      "episode": {
+        "thread": "shared_history.advice"
+      }
+    },
+    "topic.shared_history.what_i_did_with_it": {
+      "purpose": "topic:shared_history",
+      "shape": "reminisce",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "shared.advice",
+        "episode_state": [
+          "succeeded"
+        ],
+        "required_slots": {
+          "matter": "localized_token"
+        },
+        "conditions": [
+          {
+            "field": "social.nearby",
+            "max": 0,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_first_met",
+            "min": 7,
+            "unknown": "fail"
+          },
+          {
+            "field": "work.activity",
+            "is": "panic",
+            "not": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "time.days_since_last_talk",
+            "min": 4,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.shared_history.what_i_did_with_it.respond",
+        "opening_beat": "shared_history.what_i_did_with_it.open"
+      },
+      "episode": {
+        "thread": "shared_history.advice"
       }
     },
     "topic.standing.before_the_crown": {
@@ -4203,6 +4485,44 @@
       "route": {
         "question": "conversations.scene.village.still_placing_it.respond",
         "opening_beat": "village.still_placing_it.open"
+      },
+      "episode": {
+        "thread": "village.change"
+      }
+    },
+    "topic.village.the_change_kept_its_distance": {
+      "purpose": "topic:village",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "episode_kind": "village.change",
+        "episode_state": [
+          "active"
+        ],
+        "required_slots": {
+          "change": "localized_token"
+        },
+        "conditions": [
+          {
+            "field": "time.days_since_last_talk",
+            "min": 5,
+            "unknown": "fail"
+          }
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 1
+      },
+      "route": {
+        "question": "conversations.scene.village.the_change_kept_its_distance.respond",
+        "opening_beat": "village.the_change_kept_its_distance.open"
       },
       "episode": {
         "thread": "village.change"
@@ -10370,6 +10690,48 @@
       "route": {
         "question": "conversations.scene.work.mason.quick_apprentice.active.respond",
         "opening_beat": "work.mason.quick_apprentice.active"
+      },
+      "episode": {
+        "thread": "work.mason.quick_apprentice"
+      },
+      "fallback": "work.mason.current_task.evergreen"
+    },
+    "work.mason.quick_apprentice.blocked": {
+      "purpose": "topic:work",
+      "shape": "debate",
+      "profile": {
+        "profession": [
+          "minecraft:mason"
+        ],
+        "ages": [
+          "adult"
+        ],
+        "subjects_any": [
+          "stone",
+          "the_quarry",
+          "foundations",
+          "a_wall_that_must_stand",
+          "apprentices",
+          "unfinished_work"
+        ]
+      },
+      "context": {
+        "episode_kind": "work.quick_apprentice",
+        "episode_state": [
+          "blocked"
+        ],
+        "required_slots": {
+          "pupil": "localized_token"
+        }
+      },
+      "selection": {
+        "base_priority": 24,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.work.mason.quick_apprentice.blocked.respond",
+        "opening_beat": "work.mason.quick_apprentice.blocked"
       },
       "episode": {
         "thread": "work.mason.quick_apprentice"

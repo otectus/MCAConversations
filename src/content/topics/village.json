@@ -1165,6 +1165,188 @@
       "vars_used": [],
       "epistemic": "inferred",
       "min_variants": 1
+    },
+    {
+      "name": "the_change_kept_its_distance",
+      "subject": "village.change",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "status_change",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "time.days_since_last_talk",
+          "min": 5,
+          "unknown": "fail"
+        }
+      ],
+      "episode_kind": "village.change",
+      "episode_state": [
+        "active"
+      ],
+      "slots_used": [
+        "change"
+      ],
+      "thread": "village.change",
+      "base_priority": 30,
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 1,
+      "prompt": {
+        "en": "Since we last spoke.",
+        "pt": "Desde a última conversa."
+      },
+      "lines": {
+        "en": [
+          "Since we spoke, %2$s has stopped being the first thing anybody says to me.",
+          "It has gone the other way since you asked: %2$s weighs more on the lane now, not less.",
+          "Honestly, %2$s matters less to me this week than the state of my roof."
+        ],
+        "pt": [
+          "Desde que conversamos, %2$s deixou de ser a primeira coisa que me dizem.",
+          "Foi para o outro lado desde que você perguntou: %2$s pesa mais na viela agora, não menos.",
+          "Sinceramente, %2$s me importa menos esta semana do que o estado do meu telhado."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_what_shifted",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What has shifted since then?",
+            "pt": "O que mudou desde então?"
+          },
+          "phrases": [
+            "what has shifted since then",
+            "what is different about it now"
+          ],
+          "requires_any": [
+            "shifted",
+            "different"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "named_the_shift",
+            "act": "explain",
+            "polarity": "mixed",
+            "predicate": "social_report",
+            "temporal": "current",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Nothing grand. People stopped needing to have an opinion about it in public.",
+                "Two households stopped speaking, and that is louder than the news itself was.",
+                "It turned ordinary. That happens faster here than anybody expects."
+              ],
+              "pt": [
+                "Nada grandioso. As pessoas deixaram de precisar ter opinião sobre isso em público.",
+                "Duas casas pararam de se falar, e isso é mais barulhento do que a notícia foi.",
+                "Virou rotina. Aqui isso acontece mais rápido do que qualquer um espera."
+              ]
+            }
+          }
+        },
+        {
+          "name": "say_that_is_a_relief",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "That sounds like a relief.",
+            "pt": "Parece um alívio."
+          },
+          "phrases": [
+            "that sounds like a relief",
+            "glad it weighs less now"
+          ],
+          "requires_any": [
+            "relief",
+            "weighs"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "eased_a_little",
+            "act": "accept",
+            "polarity": "positive",
+            "predicate": "social_report",
+            "temporal": "current",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "It is. I had not noticed it lifting until you made me say it out loud.",
+                "Mostly. I still check the square before I decide what mood to be in.",
+                "A relief, yes, and a small shame as well. It mattered, and now it does not."
+              ],
+              "pt": [
+                "É sim. Eu não tinha notado que estava aliviando até dizer isso em voz alta.",
+                "Quase. Ainda olho a praça antes de decidir de que humor estar.",
+                "Um alívio, sim, e uma pequena vergonha também. Importava, e agora não importa."
+              ]
+            }
+          }
+        },
+        {
+          "name": "it_may_be_quieter_not_over",
+          "stance": "respectful_disagreement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "qualified",
+          "label": {
+            "en": "It may be quieter without being over.",
+            "pt": "Pode estar mais quieto sem ter acabado."
+          },
+          "phrases": [
+            "it may be quieter without being over",
+            "settled is not the same as over"
+          ],
+          "requires_any": [
+            "quieter",
+            "settled"
+          ],
+          "disposition": {
+            "respect": 2
+          },
+          "reaction": {
+            "id": "granted_the_point",
+            "act": "qualify",
+            "polarity": "mixed",
+            "predicate": "social_report",
+            "temporal": "current",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "That is a fair correction. Quiet is what a village does instead of finishing things.",
+                "You may be right. I would rather be early about calling it settled than never call it anything.",
+                "Possibly. I will keep an eye on it and stop announcing the ending."
+              ],
+              "pt": [
+                "É uma correção justa. O silêncio é o que uma vila faz em vez de encerrar as coisas.",
+                "Pode ser que você tenha razão. Prefiro me adiantar em chamar de resolvido a nunca chamar de nada.",
+                "Talvez. Vou ficar de olho e parar de anunciar o fim."
+              ]
+            }
+          }
+        }
+      ],
+      "epistemic": "observed"
     }
   ],
   "slot_lang": {

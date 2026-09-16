@@ -349,6 +349,57 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.village.the_change_kept_its_distance"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.village.the_change_kept_its_distance",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "village",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "village.the_change_kept_its_distance.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.village",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.village.the_change_kept_its_distance.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.village.the_change_kept_its_distance",
+              "slots": [
+                "change"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 200,
               "conversations_progress": {
                 "arc": "village",
@@ -3008,6 +3059,54 @@
             "next": "conversations.scene.neighbour.the_unthanked_kindness.respond",
             "conversations_say": {
               "phrase": "conversations.scene.neighbour.the_unthanked_kindness"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.neighbour.the_gathering_next_door"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.neighbour.the_gathering_next_door",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "neighbour",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "neighbour.the_gathering_next_door.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.neighbour",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.neighbour.the_gathering_next_door.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.neighbour.the_gathering_next_door"
             }
           }
         },

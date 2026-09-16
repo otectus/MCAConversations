@@ -219,7 +219,8 @@ public final class History {
             Optional<SharedThreadRecord> existing = data.peek(villagerId)
                     .flatMap(history -> history.peekPair(playerId))
                     .flatMap(pairHistory -> pairHistory.thread(template.id()))
-                    .filter(thread -> !thread.status().isClosed());
+                    .filter(thread -> !thread.status().isClosed()
+                            || episodeId.isPresent() && thread.episodeId().equals(episodeId));
             if (existing.isPresent()) {
                 return existing;
             }

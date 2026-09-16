@@ -58,6 +58,39 @@
       ]
     },
     {
+      "name": "ask_if_you_ever_disagree",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "work.mason.quick_apprentice.active.admitted_the_standoff"
+            },
+            "conversations_disposition_apply": {
+              "topic": "work.mason.apprentices",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "conversations_episode": {
+              "op": "advance",
+              "kind": "work.quick_apprentice",
+              "state": "blocked"
+            },
+            "conversations_thread": {
+              "op": "open",
+              "template": "work.mason.quick_apprentice"
+            },
+            "next": "conversations.scene.work.mason.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.work.mason.quick_apprentice.active.admitted_the_standoff"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "leave",
       "results": [
         {

@@ -112,6 +112,20 @@ public record SharedThreadRecord(String templateId,
                 : Optional.empty();
     }
 
+    /**
+     * True when the authored template still describes the subject this thread was opened about.
+     *
+     * <p>Asked before a saved thread is offered as something to continue. A datapack may rename a
+     * template's topic or point it at another subject between one conversation and the next, and a
+     * thread that no longer agrees with its template is not a thread to pick up: the frame it was
+     * saved under has stopped meaning what it meant. Continuation declines rather than guessing which
+     * of the two is current.
+     */
+    public boolean agreesWith(ThreadTemplate template) {
+        return template != null && template.id().equals(templateId)
+                && template.topic().equals(topic) && template.subject().equals(subject);
+    }
+
     public long daysSinceMentioned(long today) {
         return Math.max(0L, today - lastMentionedDay);
     }

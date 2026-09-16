@@ -25,6 +25,34 @@ public final class ConversationGuard {
     }
 
     /**
+     * The stale-offer preflight, which must run before any content-dependent lookup.
+     *
+     * <p>{@link #evaluate} already refuses a submission whose offer was minted under content a reload
+     * has replaced, but it runs after MCA's constraint check and the catalog's age gate. Those are
+     * both content lookups, so asking them about an offer that is already known to be stale means
+     * resolving a question name against a body of content that no longer matches the answers the
+     * player is looking at. This is the same refusal, taken first; {@link #evaluate} keeps its own,
+     * because it is also reached from paths that do not come through here.
+     */
+    public static ChoiceOutcome preflight(UUID playerId, String question, long now) {
+        if (!isOurQuestion(question) || playerId == null) {
+            return ChoiceOutcome.CONSUMED;
+        }
+        ConversationSession session = ConversationSessions.raw(playerId).orElse(null);
+        if (session == null) {
+            return ChoiceOutcome.CONSUMED;
+        }
+        ConversationSession.ChoiceOffer offer = session.currentOffer().orElse(null);
+        if (offer == null || offer.generation() == ContentGeneration.current()) {
+            return ChoiceOutcome.CONSUMED;
+        }
+        session.clearOffer();
+        ConversationSessions.endTopic(playerId, now, CloseReason.CONTENT_RELOADED);
+        return reject(playerId, question, "<preflight>", ChoiceOutcome.CONTENT_RELOADED,
+                "content was reloaded after the offer was made");
+    }
+
+    /**
      * Decides whether to drop a submission.
      *
      * @param otherPlayerInteracting true when MCA reports a <em>different</em> player currently in a
@@ -34,32 +62,49 @@ public final class ConversationGuard {
      */
     public static boolean rejectSubmission(UUID playerId, UUID villagerId, String question, String answer,
                                            boolean otherPlayerInteracting, long now) {
+        return !evaluate(playerId, villagerId, question, answer, otherPlayerInteracting, now).ok();
+    }
+
+    /**
+     * The same decision, naming what was wrong instead of only that something was.
+     *
+     * <p>{@link ChoiceOutcome#CONSUMED} means "let it through" — including for a native MCA question,
+     * which this guard has no business judging. Every other value is a refusal the caller may explain
+     * to the player.
+     */
+    public static ChoiceOutcome evaluate(UUID playerId, UUID villagerId, String question, String answer,
+                                         boolean otherPlayerInteracting, long now) {
         if (!isOurQuestion(question)) {
-            return false;
+            return ChoiceOutcome.CONSUMED;
         }
         if (playerId == null || villagerId == null || answer == null) {
-            return true;
+            return ChoiceOutcome.INVALID_SUBMISSION;
         }
         if (otherPlayerInteracting) {
-            return reject(playerId, question, answer, "villager is mid-conversation with another player");
+            return reject(playerId, question, answer, ChoiceOutcome.OWNERSHIP_MISMATCH,
+                    "villager is mid-conversation with another player");
         }
         ConversationSession session = ConversationSessions.raw(playerId).orElse(null);
         if (session == null || session.currentQuestion() == null) {
-            return reject(playerId, question, answer, "there is no live offer");
+            return reject(playerId, question, answer, ChoiceOutcome.INVALID_SUBMISSION,
+                    "there is no live offer");
         }
         ConversationSession.ChoiceOffer offer = session.currentOffer().orElseThrow();
         if (offer.frontend() != ConversationSession.Frontend.GUI) {
-            return reject(playerId, question, answer, "a chat offer cannot be submitted as a GUI packet");
+            return reject(playerId, question, answer, ChoiceOutcome.INVALID_SUBMISSION,
+                    "a chat offer cannot be submitted as a GUI packet");
         }
         if (offer.villagerId() != null && !offer.villagerId().equals(villagerId)) {
-            return reject(playerId, question, answer, "offer belongs to another villager");
+            return reject(playerId, question, answer, ChoiceOutcome.OWNERSHIP_MISMATCH,
+                    "offer belongs to another villager");
         }
         if (!session.wasOffered(question, answer)) {
-            return reject(playerId, question, answer, "answer was not among the offered choices for "
-                    + session.currentQuestion());
+            return reject(playerId, question, answer, ChoiceOutcome.INVALID_SUBMISSION,
+                    "answer was not among the offered choices for " + session.currentQuestion());
         }
         if (!session.consumeOfferedAnswer(question, answer)) {
-            return reject(playerId, question, answer, "offer revision was already consumed");
+            return reject(playerId, question, answer, ChoiceOutcome.INVALID_SUBMISSION,
+                    "offer revision was already consumed");
         }
         if (offer.generation() != ContentGeneration.current()) {
             // The answers on screen were written by content a reload has since replaced. Drop the
@@ -67,14 +112,16 @@ public final class ConversationGuard {
             // ordinary reason instead of executing against a catalog that no longer exists.
             session.clearOffer();
             ConversationSessions.endTopic(playerId, now, CloseReason.CONTENT_RELOADED);
-            return reject(playerId, question, answer, "content was reloaded after the offer was made");
+            return reject(playerId, question, answer, ChoiceOutcome.CONTENT_RELOADED,
+                    "content was reloaded after the offer was made");
         }
         session.setVillagerId(villagerId);
         session.touch(now);
-        return false;
+        return ChoiceOutcome.CONSUMED;
     }
 
-    private static boolean reject(UUID playerId, String question, String answer, String why) {
+    private static ChoiceOutcome reject(UUID playerId, String question, String answer,
+                                        ChoiceOutcome outcome, String why) {
         if (debugBranching()) {
             McaConversations.LOGGER.info("[branch] rejected submission {}/{} from {}: {}",
                     question, answer, playerId, why);
@@ -82,7 +129,7 @@ public final class ConversationGuard {
             McaConversations.LOGGER.debug("rejected dialogue submission {}/{} from {}: {}",
                     question, answer, playerId, why);
         }
-        return true;
+        return outcome;
     }
 
     private static boolean debugBranching() {

@@ -1,0 +1,816 @@
+{
+  "release": "1.7.0",
+  "protocol": "3",
+  "files": {
+    "datapack_samples/02-new-category/data/sample_pastimes/dialogues/pastimes.games.respond.json": {
+      "forge": "7ec55a8ebefff6b3b69ed16cd27cb9969fd1a4376dcfebba58a01a3de6509091",
+      "neoforge": "d0cdfa3a51fb102fe9238653b7d9762caec084a969a3afba60ca348069fe1f3c",
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "datapack_samples/03-checks-and-dispositions/assets/mca_dialogue_confident/lang/en_us.json": {
+      "forge": "4ecda72a6f0961c684104d5b2e99c3095a118072aed76e2a2bfc49dd2df32def",
+      "neoforge": null,
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "datapack_samples/03-checks-and-dispositions/assets/mca_dialogue_extroverted/lang/en_us.json": {
+      "forge": null,
+      "neoforge": "770318a80c2742f7f9f243b6d438104caeecf54e18113c7b369e7e37dc9def51",
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "datapack_samples/03-checks-and-dispositions/data/sample_courage/interiority/sample_courage.json": {
+      "forge": "51c898ef7f9a87a41280e89d30b9f859f36b6a85eb1506e7415af898084909bd",
+      "neoforge": "0a960eccb42d29dd3d574f28cbb861e0f2b29967e0d0241d2d20880f74cc66a8",
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "datapack_samples/04-arcs-and-promises/data/sample_ledger/dialogues/ledger.respond.json": {
+      "forge": "fdbafd84c52810699729a22776bbcdee6bd4ee2decc27920699693d31e33a31c",
+      "neoforge": "c5c95baeca2beaa62f685a300a0b11bbb0df5fced569b0cadc693f0476d80713",
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "datapack_samples/06-village-culture/data/sample_commons/identity_tokens/sample_commons.json": {
+      "forge": "5657073c3415153198a515ab35d41a6e2c79eab140d596ededa3e14dddb866ec",
+      "neoforge": "a150b685b246437ed5ad8aeb68f581ca5024e547c5e8a768fa4f9bdeb113c3d8",
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "datapack_samples/08-profession-pack/data/sample_chandler/dialogues/chandler.respond.json": {
+      "forge": "39809fef7f61e3975fdee6b1147a66e422e85ec9ce00cd666762eb2407bd74bf",
+      "neoforge": "9fc395472071979914f2e2cb236e854eea05709f13cfbe038f5cfd5e4bf6dd0f",
+      "reason": "Tutorial uses MCA 1.21.1 canonical personality names in place of legacy aliases."
+    },
+    "src/main/java/dev/otectus/mcaconversations/FeatureId.java": {
+      "forge": "0121ce1c20179fb349b7b8cdc663113235f20c8a1b4ef01802b440f31c24c3e5",
+      "neoforge": "c863f9a29108f15773dcdf93083894ae122ad8236fb287117f9f0b85c298dae3",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/McaConversations.java": {
+      "forge": "0ab8285751eda01bf23870496461c08bea0211b2f9d67ddf047c277941b09aba",
+      "neoforge": "575280c3b237d178fd8bef857d1b6f1a534cd270c9bc5e0d0691b8343fbcad60",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/McaConversationsConfig.java": {
+      "forge": "126a670535a89689c290ee43480aa1205587ee37f35618fcabf5860b6b0cb66c",
+      "neoforge": "fc57b9a129001c446aaebbd31612f208fe7b9301cb100095591f909bb595fe25",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/chat/AcceptedChat.java": {
+      "forge": "a2f6a8839cc268ca84e6aa785dddc21d8bb8d6ed48fe9c4bba92b417a4ecd8a6",
+      "neoforge": "51fe4edf5b35a942b444be54944a5acf04561d1036ecb20c1e6017a57abe9397",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/chat/ChatModeDispatcher.java": {
+      "forge": "c87252abe782e467a3c6eab0e5be655c8e415d60cbf791b3b7027efac54d13fa",
+      "neoforge": "8e20ab56cd018429f037b18b4ac121018825fdca170cc93d9fa79c2c2c39587c",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/chat/ChatModePlayerState.java": {
+      "forge": "69dad0d8ea8fe42c0d3616ac79939c792222249ed42471038b681a3adad2c754",
+      "neoforge": "a1918b661302f04e97c5dba2d4be0d8fb158d6a2dda9ae548784d0fa3e49e2b7",
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/chat/ChatModePlayerStateProvider.java": {
+      "forge": "2547822a607138cc2e47a80751ea59bc6fba8dee42c9f6ddb9064a7afa589d21",
+      "neoforge": null,
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/chat/ChatModeSession.java": {
+      "forge": "701daaa1a7337eece8909043a0e2de360b05b6848c30bf9bddd1a88ea7624cea",
+      "neoforge": "d2915f01fa7a1127f931f8cc54e89313c3dd0fc1374f2b8dda220e3200b953d2",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/ChatTypingTracker.java": {
+      "forge": "5656b5fc69b50bdb38ac39817dbdc7a0c32874e40bcc6beaa5e04cad55c3aa35",
+      "neoforge": "74f95dcb447154b0c956b1a4f8954a67062085a8d4d0d7a9e1a8ae7780f625d3",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/ClientUiResourceGeneration.java": {
+      "forge": "286154d80e4d075993e8854361a60863b808d50453f5e90b46c7214cb07e1c64",
+      "neoforge": "f3bee18cd60bb7f2ed38ce1cd26d171f56c25c55a7c0750d6dc4737270bba72e",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/ConversationsClient.java": {
+      "forge": "311e285420b148bae0a927f17bacd71ca4f7035ec6a1ac78e27c5fa6d7b6a7da",
+      "neoforge": "973e304298381ea8144078bb6de06bd9c1e8093965ecd00894400a43ad90638b",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/ClientChoiceController.java": {
+      "forge": "b9935edc777b2f6b2832bb7ced57620575d3c5bb83e02e2a0d474e732219f694",
+      "neoforge": "f7081345311cfc9995af7e093eddc4c1256afcc11b677857307189f9cd94b561",
+      "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/ConfigPresentationStore.java": {
+      "forge": "8080b1e053fa8243f4a4413857a1f1002993d3ca7b84c2f94a4025bd9d3d5864",
+      "neoforge": "72303f5dc8dc394b0f929520eab2698e4f9125b093be6fea1e4a6682e40f3e92",
+      "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/DialogueCardSkin.java": {
+      "forge": "b821bfbb0395d406e6e93c1fe7a6e51408415ac1c58cbef5d6253551b5185662",
+      "neoforge": "c810695be9d8cf1d30bafc858659077d144b94b3e1346f81ab71a91cc7abe069",
+      "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/DialogueChoiceRenderer.java": {
+      "forge": "d790541a372249c3c036903aa0b6b96ae2e9a0f9f259e4c52cc95f00bfbd034a",
+      "neoforge": "769d0fb24ca12b7723083b2b9a4a4f81c3ae7bb6c705d36908af1c4fa5466bd7",
+      "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/dev/DialogueCardPreviewScreen.java": {
+      "forge": "32ba8696153e024f3fd1ca2c8092c912476261ed2815a89fed0accf60bdff2e7",
+      "neoforge": "b2e57fcc30323d9f69e725008d472e56ecf9e7e6c503724d6e41f097d0c0835d",
+      "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/dev/DialoguePreviewCommand.java": {
+      "forge": "4c4a4cb3c24fe734655e0680df455d645b4a30058332b1f22dbb63b3c335707e",
+      "neoforge": "cbd48a55c11922ddd30dd3f796618add371301e5e9f7485e5e62444477691b73",
+      "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/command/ConversationsCommand.java": {
+      "forge": "079813b2dc5d6c7c857d038db55790e8b8f2778216fe0cde946b231942d459a8",
+      "neoforge": "f5a87661161b657fd88b87abc04a61876c3327d0d1d6e004c40381fe35960946",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/CapitalsCompat.java": {
+      "forge": "d2f062884fdc6cfb385c29aed3d0583044a2d18fc373511c9d7e07896627d56d",
+      "neoforge": "701aac4f0002caf7febad406211cbab723a85b22b065f3b33ba7688632482210",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/McaBridge.java": {
+      "forge": "a8f2bd85bd51b3ff9386e3c89b66118a9ba139e4f57ff9546c07c3611c246213",
+      "neoforge": "008f86cc3a377cedb91a7d627e21098321d8c356368b38ab8713398044ebca77",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/QuestsBridge.java": {
+      "forge": "9820d04ad31c82ef985b148b1390ab5f8169cc551fc7f276311bedae312bd12a",
+      "neoforge": "4f9add2e5cdb3c7e6d3062056d8425f9b1a97e9b2bb2f3a2906696461a8eb288",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/ReputationBridge.java": {
+      "forge": "593a6b4ee5a1de5b2d27113cb9010ea5316c927a85a4e314b119101cba020df8",
+      "neoforge": "4fe6c038d8b1e8c63b44cc4bad58f6bad4a3784c2bc3db450545b9480f7556b9",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/SeasonsBridge.java": {
+      "forge": "d270ee0f39b0cef84cfd442ad0fcedf0e0090c19931661526f34c27e249d4dc8",
+      "neoforge": "e9c2d242339afca3c7f2f168216e20293b1e4b20002f4eb48e7b9bc8b9cb52ce",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/TownsteadCompat.java": {
+      "forge": "291e0a2aac0a2e5e8f31e0a98805570eaf74afc0f8db54d2413d7fffd593a454",
+      "neoforge": "fc75a7f1413bdbdb37bc6acb9670ff719e3c331933e6333c3f11ff9a08e3f7b3",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/mca/McaBinding.java": {
+      "forge": "7715f99fbbd14a7f4e8ca59012febc2a2347df9fc8763e4c616783df860995f4",
+      "neoforge": "471c49c901ccdb846637c508a2233f1ba43d03506e1e9189bc2d4de986aaec5f",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/mca/McaHandles.java": {
+      "forge": "0b345e78da828b1ae9144b11e686975edf016e0e06e78150402a171ae6f43348",
+      "neoforge": "323e7b03d3a320533b7414e1643d145c7cbab0e86b4bc3761d2502f0c7abe69a",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/quests/ConversationsQuestsCompat.java": {
+      "forge": "c5433f2fb3005e1e1d569c452e0e74698d2e2c08ab4b9276d3abcdc645517124",
+      "neoforge": "67341ca284be9f70a846fdc8ca2b7383bfdc714b74c1ace59a648a512b14088f",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/quests/ConversationsQuestsEvents.java": {
+      "forge": "3e629cd11eae150d51c8664aa4d1445b153e490f2656bfadd1693e989316a0c3",
+      "neoforge": "567a8ddbc0ab4beae943b32aa7886f8c7a4cf6af24db5874bc7a674215a15b68",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/quests/TalkAboutObjective.java": {
+      "forge": "e845125be89a2996ce7d522cb544205f031500b113180a5f3fdfdc84b1133f71",
+      "neoforge": "58d8e9634ad32b676476fbbe646a116e7eb600f1fe528fa55503d6545dd2cef2",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/quests/UnlockTopicReward.java": {
+      "forge": "da235d1d146498ac3babfdc9e7997331488747454243fc125106a74a5743eb17",
+      "neoforge": "b0993cf9b10985dac7d7ff54395ac95266efbe851c8658193ae17027efbe4a62",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/reputation/ConversationsReputationCompat.java": {
+      "forge": "5d47baf6fee6799f7a4a41dc7f0189ebd60ec8d990e44a64a15825fc6a3eb491",
+      "neoforge": "ebf03b4a6dfa5ade8e29108e80b442339a2e96f6f9fe1a2a033d26cb4b542624",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/reputation/ConversationsReputationEvents.java": {
+      "forge": "9e5dba39d81e4f05236dbaa0ad427dc745d449c58a84a436fa9078b5a64d2670",
+      "neoforge": "befb306f45f5691c3bfc108067e1b7635f2431cf24ef1788acbb32b27b90265c",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/compat/townstead/ReflectiveTownsteadBridge.java": {
+      "forge": "0aa9c57ce9fd10beddd893b03c77eede788ff2bf6a4ff6894eddc5179a113e4c",
+      "neoforge": "5c9709dff68ea7d745c2a4129ae06ea05ffe28e08c79c7f4d0f46fcd06883dcb",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
+    },
+    "src/main/java/dev/otectus/mcaconversations/conversation/ContentSources.java": {
+      "forge": "a1384f393ffda3ce8d03721ad8c4765a25a1f809476ff9716f05d67803500e07",
+      "neoforge": "6d750e4e121974e9d6907cb5de0d0b4621417cbfe872a77823a68db9a4eb0321",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/conversation/ConversationSessions.java": {
+      "forge": "e80234c8af23826f893483a6cfc052a26e6ae509c0851f585d801536cfe3c2fb",
+      "neoforge": "8b5bc351955c2fad48d17a9d63a0579f8f49fa58f7a8b779228f093279fd7099",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/court/CourtMemorySavedData.java": {
+      "forge": "a48b78943f25dff8d4535fe2535cce86e25ff6fd6e30f47d7e673aa814847b03",
+      "neoforge": "1bf42c999219d5dd76c044e8f1ed6f8dccf194a303c9511f2c439ae7168b815e",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/disposition/DispositionSavedData.java": {
+      "forge": "04ba4c1ecfdba0b9ca11107874b35dee8391f88b8be1d82dadfedaad503f6bad",
+      "neoforge": "608a44c5205f47a0e2467eea25f5152c852cd4fb8d3bc9340595da5949c2a58a",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/event/ConversationsEvents.java": {
+      "forge": "333397b4b5eb55d5de93145bf6077f7cb19585bc03bec5473a8794d8d0daa433",
+      "neoforge": "5512653fb55d479d7af9563d851d64b81ec7a4aa561b331d9434c6645298ebb8",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gift/ConversationsAttachments.java": {
+      "forge": null,
+      "neoforge": "633c88502204f9aa57a21fb3d3487eb109a2c6ce51c4669e9356a75bf781bd3b",
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gift/ConversationsCapabilities.java": {
+      "forge": "3de6185044da5b8cff6dc2b028292df6f60d0b3d254f07167eca7dcf11d43f93",
+      "neoforge": null,
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gift/ForgeCapsMigration.java": {
+      "forge": null,
+      "neoforge": "ec5395e3658fdba64f900b70e3a1035ea47056a1a16136e57f8a8497784d380a",
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gift/GiftMemoryData.java": {
+      "forge": "4d19706074e126ac32a6cd58fdf1e8a6b15e54b3d18f7cfdd29ab9ea0da8eb97",
+      "neoforge": "9c7c4e5ef3ef8cd5d60179d99634f1ea815751bab52fb615218a71f0e855c10e",
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gift/GiftMemoryProvider.java": {
+      "forge": "2c015b0fae0c389e6fb5f52843eb30de713d2ccf8a583a6b8998743b911abd43",
+      "neoforge": null,
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gift/GiftTracker.java": {
+      "forge": "0022a107b6dc42b9d85741b328729902c1c98f0987ae58af049e6641397e3019",
+      "neoforge": "26d2873e792c52089e5895bf720d1b551bd466b69bea8faa706778357355944a",
+      "reason": "NeoForge attachments and legacy ForgeCaps migration replace Forge capability providers."
+    },
+    "src/main/java/dev/otectus/mcaconversations/gossip/GossipSavedData.java": {
+      "forge": "cf2ac70b30f5b26c10aad29dbfbaf94fd0c73b0ca321f3bad0ba7ce9106b7cb8",
+      "neoforge": "9e996ecbc54cf3897485a9e59500ebe3cc8cd809920592242148d71357760385",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/history/CommitmentObserver.java": {
+      "forge": "8a2ee59683c3ba8b03d3945148fb7eb5a1c393fd9803dc9f68f7c91edf7e4ac6",
+      "neoforge": "dd22b2376c73e8ef191e93539e139711d2997b876d8529be5660a2395afd744d",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/history/ConversationHistoryBackupSavedData.java": {
+      "forge": "c03768e1d2ea5c84dd74eeb7a2ef95c353b41d98cb5b8a6cdea77c7d1bdaa58d",
+      "neoforge": "9551d602361b4a32caddad09927d62c2b1b830eb6b4e06ae4a13a94d8e2ef104",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/history/ConversationHistorySavedData.java": {
+      "forge": "175e714367942413b5b9794107c9aa9be04eb68a1679d626ae718e56e6477b9e",
+      "neoforge": "aee2bfbc5cb2a5a73bf04b96a7d61e3168fc48510e3515d3390a6ebe9e6b5652",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/identity/VillagerIdentitySavedData.java": {
+      "forge": "2c3871deecb0ae0a6b5e716660054115f4eef136edc36be6c06231a979c8810b",
+      "neoforge": "9dea17c490f53ccfcb0169a2314c0d612e06e48cc966cce451fe19be5de04081",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/BreedableRelationshipMixin.java": {
+      "forge": "7dad4371b3b05da8b1eaa9cf89246d99a21de292f7bc35f6d402d6b41504c8a1",
+      "neoforge": "a3648f84ad4572ad41bb42eb38b1cc75567536567b07b3a25979a878d6354fbf",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/DialoguesMixin.java": {
+      "forge": "c0477a7763e0179ed2f7f2d8b2428750b0a3fdfbfcc0296ad6a412fc520635c1",
+      "neoforge": "cb586f782f66ed0251e70a7c8fa16175987abe59d0ffaa7b7702cb6a668ced4b",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/InteractionDialogueMessageMixin.java": {
+      "forge": "7be62aa728c1d46b9b2b94d3db6b5d46eb0963e340e836c126a908b531ef7252",
+      "neoforge": "d917dcc22f349bd1f28ee76dfba07644a10cdb298d395e11c286c5f44d4c02e3",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/NetworkHandlerMixin.java": {
+      "forge": "75ca149be4bf39fb88349955e4bd5f939e58a37b99b3c7af8f3948805786629e",
+      "neoforge": "23cd4914d4e8c0f31123697b971a4db13d3f3298ffb1e07f60c83af481fa10e6",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/PlayerLegacyDataMixin.java": {
+      "forge": null,
+      "neoforge": "6b83bdfac576178741168fc94b78c68aac6f65563923cff0401e0fa7cec390a6",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/QuestionMixin.java": {
+      "forge": "688257357b405e935c89b2b893d5503c72c6f42b625d032689a62bb92601e5b2",
+      "neoforge": "0f031c42b30342a3d48faa425081b77cff8f4c309a3fbc11c1c1f55b1aa7d608",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/client/InteractScreenChoiceMixin.java": {
+      "forge": "c0f38c6c28164e97d6f5268d430a814f9f0295bb7be8406b5fe1673f6286b28d",
+      "neoforge": "d016ac2cc0a89a59b7b0b87736004cfd713a6c17a74642d964ae5504781b2428",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/client/MCAClientMixin.java": {
+      "forge": "0e564c7c3217d01b20ccdcfe1af37960fc46c3b03b5b35da0d8f0f04891c39bc",
+      "neoforge": "2c6f920e9077487ca4d871d71064c1435159ae0aaa8003e85e82b4c436d68e0f",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/client/TownsteadChoicePanelMixin.java": {
+      "forge": "2869810cc5e8be6ba7ad8b99eae239207909a436da929a784c5d113b52fce553",
+      "neoforge": "8ea06807ed00998840d89e6bd0254fc3c072d1b5400e0cca9f667842b757c8f3",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/client/TownsteadRpgDialogueScreenMixin.java": {
+      "forge": "44ad1467d731466aa239d91af8e37f77b5b39f253efd97a8b1d5db44685e153b",
+      "neoforge": "cccb8ac1a7a51b3fd3fe5afdd61be0010998c568c72ff1e49bf8853517827072",
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/client/VillagerMessageMixin.java": {
+      "forge": "39da6261fee2358771db21df4b8cce8b9115c15913b119a8d3782ee0dfe56156",
+      "neoforge": null,
+      "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/network/ChoiceClearS2C.java": {
+      "forge": "31c82af55d3d6b147f11cecead75539f519f9b2f96b6d74985af9c4f285cb60b",
+      "neoforge": "78935d1ddad05d27ab81dd4696c44612edb58275f87c1d0f1d492437d13b2f6a",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/network/ChoiceOfferS2C.java": {
+      "forge": "cf2c7fef5890ad5708c08aafdd8d7c71718f4e92945e779d639560bc68310701",
+      "neoforge": "0e53639c20323ffe589f3a77cd5b327548d968735f3d68e541e6e408fe6ca03f",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/network/ChoiceReturnC2S.java": {
+      "forge": "89ceccda80f00873458eac50fda7ee712c04ed2cb3f6a002ee343f548a2abeae",
+      "neoforge": "f8fb57d46b338724e25921112c5aaeacda5da93e35cc07720bbe704c14d663db",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/network/ChoiceSelectC2S.java": {
+      "forge": "cf14b3e349f7ce69ef1d8c1719cbf2af907153e22de838e9b56ffd93aa58060f",
+      "neoforge": "596fd6f5b6f3295139b8b410529236233c7be7607771c5457206473a75bef79a",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/network/ConversationsNetwork.java": {
+      "forge": "d67d21553e5bc514847d0f47a8b83a650c165fc85696e1856992d9a70b9f9517",
+      "neoforge": "becef08b3caf9f63adbf8dac15d3e0c49eded6c18efe285c26a9089aad86f3a0",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/network/TypingStatusC2S.java": {
+      "forge": null,
+      "neoforge": "0ff24b487e59d0335d0618bcfa34f8d8e12bfea049cb9efdbe2188c81c8fd54a",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes."
+    },
+    "src/main/java/dev/otectus/mcaconversations/personality/Personalities.java": {
+      "forge": "f8e1d9c8ff33ec50200f9c3a7dc813a71528a62a2c78217347abc16c77855676",
+      "neoforge": "bd574adecc0f2d18b8fc104feddebc97c9b2ea0bbed508acaf279847bb6ed22e",
+      "reason": "MCA 1.21.1 canonical personality registry; legacy aliases retained by normalization."
+    },
+    "src/main/java/dev/otectus/mcaconversations/progress/ProgressSavedData.java": {
+      "forge": "0c9a9b637fc032cab3f14652f526be8bb461a939efab76df707ccb0bb501d2e9",
+      "neoforge": "a5f36502905c1758e2df2fff7dbc226ea931a93b938a161d70946b27a20e5b70",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/java/dev/otectus/mcaconversations/scene/ConversationDirector.java": {
+      "forge": "1bfdf2166c9e679e0e169535fd5ad76dc8caf97ac49b9553f64c2c640c9e419a",
+      "neoforge": "f2ac668d3e40c2329b4e6cbe9f6e6cfac4f19298115b917b561b33943b563257",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/scene/WorkEpisodeGenerator.java": {
+      "forge": "97d1706d774d64b4caa3fa87e05279083ceee0f5b15a4a60b527300de6940d40",
+      "neoforge": "811a53404e184edf8f3a23863b5e977325e9520d0ff261799376609d7e4ba84b",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/template/SlotRenderer.java": {
+      "forge": "a3a40ddcb321250d45a99824df96a9212cd10cd245de0802686d1406c77ce5b7",
+      "neoforge": "795a68a662ef2efc2c6fc9a8ce59b4735e18149c9221c12e128b4814ac328f62",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/template/TemplateContextFactory.java": {
+      "forge": "826edff23dcc24cd54c14a9081ccfbd1ee8b4710b7d3931d3c3b8fafc277eb4f",
+      "neoforge": "3bd06efd2e0ea797bdf8892c9f044e9fa52aa543bb28038b6468425ec0ce775a",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/village/VillageCulture.java": {
+      "forge": "8c63aadbf1d1867dea61e6461f619d5a5e48e483fe52b6c3d856f8256cd7d01f",
+      "neoforge": "07b656cb6a0035e2ef9ee8a5c4329873d15bfe4a6714035ae990e76e3f4133c8",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
+    },
+    "src/main/java/dev/otectus/mcaconversations/village/VillageCultureSavedData.java": {
+      "forge": "e4898cf7a62d69bc3d547a2ea77ecaeb518fda68a4cedc5b11b6d96711e7e84e",
+      "neoforge": "01fa282de281a3845ce59c12c6dc8663b3467e232459a884e99183aefa3a517b",
+      "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
+    },
+    "src/main/resources/META-INF/mods.toml": {
+      "forge": "17312f31ed8f2a9495d4d3fa1ccd556fff332a61a282d2cf454d1aa8c45417c4",
+      "neoforge": null,
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format."
+    },
+    "src/main/resources/META-INF/neoforge.mods.toml": {
+      "forge": null,
+      "neoforge": "2d900fef069451fbf1072c614f8c977f8ed146b6e8de6d540fee1912728d1aa9",
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format."
+    },
+    "src/main/resources/mcaconversations.mixins.json": {
+      "forge": "da62be7fb5f0b7b83dd8d0fccfe2c6d0d8deedbaddeb5023c1fb726866f5256e",
+      "neoforge": "73d635ad6f03c10e0b47f237fe84ad1147fe75195ca196c8f2d6fe5c46a1ec67",
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format."
+    },
+    "src/main/resources/pack.mcmeta": {
+      "forge": "18c50663587d8c124e49471ba8605738cde39151a209c23f26ffbc94c022db4a",
+      "neoforge": "cd4c8fe98a96997ae84cf0f589eb6dc302201c6ac432cd5dd23f8f9a6fea44ad",
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format."
+    },
+    "src/test/java/dev/otectus/mcaconversations/ConfigSpecTest.java": {
+      "forge": "437a95930f0bba5989d05bd836f03def4f108b383aba391603ae2210aacefd2d",
+      "neoforge": "67234487d83a79a84fcc35887a8d4baa58e2195fc09954e98d2a4dc56a49fd70",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/FeatureIdTest.java": {
+      "forge": "9e4a9c6a48b960df68d2aa98863ff8d07ea3452bee3923f72785c78ba1977ec7",
+      "neoforge": "984b232dbab574b3e7fc9acc8c523b3ab058bdbbd58f4446d96e92f64241616d",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/HubEntryModeTest.java": {
+      "forge": "15b083222c0044bdce22359f4b2d7bd145bc4cab3e4fe57dcc834cc6ec2af1e2",
+      "neoforge": "13f94598bee7594fc3449e7c6f0f214783f334a21e9fe1f80c3b3b54f29d565d",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/MixinTargetProbeTest.java": {
+      "forge": "66bdddd42a7afd5175e8b46af35501739e1cd59c9314d833341045444b404aec",
+      "neoforge": "3daadfe6ddfaa71effe1624bcbaa645343ca07220a70d8f64db49bd22265a347",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/NoCapitalsStaticLinkTest.java": {
+      "forge": "26d64f8f2a84185d839a5a32f0e591e127b355b1d963309782fe9c306f44e839",
+      "neoforge": "d2d56ea0d9aac9ec803a421af97247982e8a658e4e4004da978268e11cdbfe19",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/NoMcaStaticLinkTest.java": {
+      "forge": "e6c68af1d77e9bceacd73ea91d811fdf1d486e3975f3e4f281dd8e2ae61d8416",
+      "neoforge": "9bafed16d9283d3aee2aa8123aa90427831919d2679467d7058ef2b4ea60262b",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/NoTownsteadStaticLinkTest.java": {
+      "forge": "d9574f908bfcbcd9287feaf3cb7647a8332d71507a912be12dc9a94ceeceb8e3",
+      "neoforge": "51df003fb032ac70c498192f63c042feeeb8b8c1db37f770485792631b9f7b79",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/authoring/CapitalsNarrativeContractTest.java": {
+      "forge": "7ef95c84d5e0053ab8c10f113e4013b614ec52c3a8fbf7821c59b3c5d3dddc67",
+      "neoforge": "ee5aa5e71882b9aa499e074e51b03ced14fd731c4848dbb158966c102078b961",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/authoring/ContentCompiler.java": {
+      "forge": "de14ef6fa6cd3f580776b142c2506025a579f4d8a8014d7020e648dd18fec9f3",
+      "neoforge": "8447ce08a2f1ae816c4152c316b121554282c20c208aa5fcf4d8dfd4af421b67",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/authoring/ContentCompilerTest.java": {
+      "forge": "51a1487b903e1d8b2fe7921384a96b0ab9c7c056d455061fdb45ccc59f78ca89",
+      "neoforge": "1c499221caf5ed241186353fb56cf086e0d2c678689132835496f1e4e372c48a",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/authoring/VoiceFamilyCompiler.java": {
+      "forge": "0ed6229c844bdb1abf2b9b87113d513a814902a22482cf1f9e3b2cced28a2c14",
+      "neoforge": "153617da840a215848b6cd396479913e9cf11916d0fcac74a4ba39a264510730",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/authoring/VoiceFamilyCompilerTest.java": {
+      "forge": "d43db75396f6d880f259b16f6b8a936f6c390693304b7d1f902c8085ef5190ce",
+      "neoforge": "2d58b9f0bc54b4bb9ecd11eeeaae959d655efa24300ec39874ae1aa81b4f037b",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/chat/ChatIntentTestData.java": {
+      "forge": "59cf32225e1523e799072462f61e4306f08f8b52e1179fbd6fe49aadb13cf79c",
+      "neoforge": "b0bb6a392831b2b43c16b360f8c8ceb98390ba6b76fe1b28dfae73398227e4a6",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/chat/IntentMatcherTest.java": {
+      "forge": "044def30ac6e40b969e781c24dabcc3d4da05d902328543ac965757afec3f9ce",
+      "neoforge": "e8f1b464cf8234796ac9d17978b1b2e26edb622cc3bb18f6d58c952d8149574b",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/chat/group/GroupConversationTest.java": {
+      "forge": "5c9315cec222ce4d164f0581e19820fb214c1318a1150e44f518af5e213819e8",
+      "neoforge": "7eb77a9c904a333c64ee1b4061da344632bed79a09446183931fbbb38badb049",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/CapitalsBindingProbeTest.java": {
+      "forge": "edb9e55a87f091d8b34ffff3510c1f86e1bb5141bd0e22b9b70705dd6597b99e",
+      "neoforge": "6caf4e264147bca4ec22929d76fd07f3a3bcee82c9b4318859b78f64b6790bc0",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/CapitalsBridgeTest.java": {
+      "forge": "5537b66019bef2a57d3521200efa5584413087cc985aa770fa3e559586276de1",
+      "neoforge": "0e57df14307a047821df71ce368b426542827ba83fa3f52c3cd9d5180ba7d792",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/CapitalsCacheLifetimeTest.java": {
+      "forge": "52155984e7782080e8c0bb9bda86ee1f0f413a178d319a20ae3f6e7556d21afb",
+      "neoforge": "a8ab2fd715a805e5a74b66c4f52d550881c19a52c14aaa522c3e05e596f4d4a2",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/ConstraintVocabularyProbeTest.java": {
+      "forge": "61a2812da7575116d8df708379aa5b3a62eed6e1f6b765eeb3af396872cae62f",
+      "neoforge": "6d1ee9334485dfde6cc65bdbf593624f024581fc566b5d918a10500cce85cbb6",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/McaBindingProbeTest.java": {
+      "forge": "719acf94642b815c55b62cf0b3855747a9085503ec94d52f6f653c3b9d6a379f",
+      "neoforge": "02acc3a8cfe412dc8ef4d56bde9d111a8a2c8145549271529442423af953ce0e",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/McaDialogueReloadProbeTest.java": {
+      "forge": "469f81cad36311fa31e6cb5cded0757c5ac83bd7b658156a5b9eaca1a8256b39",
+      "neoforge": "fc4dc78c3939ef3e493bd24c0359a9a0f0ab990f74793def3fb0dc8db2f8ce4c",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/McaHidingClassLoader.java": {
+      "forge": null,
+      "neoforge": "ff4a969941b3188c25b4d33b91fddcc78a2031f69b037c16cc05f5631ff50729",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/ReputationIntegrationTest.java": {
+      "forge": "eb568e1c971927e23babaa5956af55e0ae6a9edeebbf98fa5f3a835392e6291f",
+      "neoforge": "506683fb43c84deb5e90d7579ac8bf6bbec5bdd54cac587e3485c80b2d184b44",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/TownsteadBindingProbeTest.java": {
+      "forge": "366252193a06f74932094dfa286d3a61206c47f7c8fd7082de19f88692c422bb",
+      "neoforge": "d790bc1546efd9678f96bea69b633fbca6ddcfb0d19e21c6917fb25ea6a57625",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/TownsteadBridgeTest.java": {
+      "forge": "82085bcb730f440ab044a746c8019010fe9b35c2d52c5251c6746e870578a0c8",
+      "neoforge": "2c0d29c07cf9617cc327fa6f289fc66cb00dc3d523a374e2b71adc41cf4e4181",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/compat/TownsteadUiMixinProbeTest.java": {
+      "forge": "2318b5391603fbb0637f64ed2a176f4164ffac896eb411acc1029594d340d506",
+      "neoforge": "164be71c69da5501602a50d89902357a04429cc544321503429e8e19ca82d941",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/BeatContractLintTest.java": {
+      "forge": "7485c36b7d93a951feb5f2fa3fd646472a2e2c94d6dfb995aa70f2c3bb77237b",
+      "neoforge": "a9003e86308e5c3f6250c6b554032c8470eb0a467687cd8755f30e9824dc4bfa",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ChatCoverageTest.java": {
+      "forge": "eba9c8a19c3775cc67974265740720dcfe20e4572d89c60323187fc2ab18c39b",
+      "neoforge": "c382a06a208164dcbed52820fa997423cca39cb9426d6b53fa06bd89b68ccd7c",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ChatIntentLintTest.java": {
+      "forge": "56f87623508a4ae319a90d5982201901eca7cf4a92fcb32797e142dfa97faa05",
+      "neoforge": "24906ee3d480753795a106a3103829c86b317d95fea300fbff666c9c9f708c18",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ContentCoverageReportTest.java": {
+      "forge": "3cb3bca6545f63aacd093424253cdd48843b23c962157e671ba2b49adb59ec39",
+      "neoforge": "2aaae815d93adaab035584de35b776981bb22656a04f4e51f25c0ecd1ddcb514",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ContentFixture.java": {
+      "forge": "3d2ccdef614b808e4b9f0c60b35f422dab1adc56dbf219e1f33228484dfbe19f",
+      "neoforge": "2f604e12d1e45fb421eced264c4029db1e30c9dd00d11d8f643b7817f2cd35b8",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ContentLintTest.java": {
+      "forge": "b771e7354ab8adcfeaaa8d31d80fd84dfe67ccff0988887889e89c37aa8a6f6a",
+      "neoforge": "d9742fbae10012a41346398532a9e4fbf5b270a82fb6b1f286e937698279539a",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ConversationGraphLintTest.java": {
+      "forge": "7fe60942b76700e674a31da39e99aa909a202049fde4ee3b88d1c1754d77b2d9",
+      "neoforge": "60a957cf0bffa92633e93df111e91ed449b02b864ffc42f1c6c592be68450d39",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ConversationTraceGenerationTest.java": {
+      "forge": "5c286444d9e4d13b94d98ad4574e641d9b3206b30be0a37e9cad2e7aec32af3b",
+      "neoforge": "5926bbb3d1d2b55ff51737a4de64465f55e226375cd24fd7606d5b398310582a",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/DedicatedServerSafetyTest.java": {
+      "forge": "cb43cf4faf0df2060c3e325e1eb9f520ebcedbfb233bbf690aaaf19156cafe81",
+      "neoforge": "52306f381399e18633bf7e2335b8b215369d6d96ec834259eca72e9f23b52245",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/FeatureOffLintTest.java": {
+      "forge": "fc1e5e5a57cd39c459581f4155acea00dcaf33d41572161653a3bda3bdbf29d9",
+      "neoforge": "b74c7bdf87de441313563ea3e3571fefc57057c4d0e8deb41ab4863947a93815",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/LivingHistoriesReportTest.java": {
+      "forge": "365e60495ae93fd482404085da53e34f29a65941cf473bf3bb688451d0b2887e",
+      "neoforge": "a1c0d717ade96e20e9695627360aa14d5f47fe29432834e0fe71ed605e8a4fd4",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/LocaleParityTest.java": {
+      "forge": "2ea7c9e952bc27762b3d853cd461f07dcb73f1e88a6b5caad3e40ada427b4d3c",
+      "neoforge": "1cbf0d40c67fa3aaf4b216f20edca3779d5ecd0a754b1a75dfd8101206506df8",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/MinimalSkinIsTextureFreeLintTest.java": {
+      "forge": "3de4a92521321895a030a70b03fb460f69084ce685382fb6b5dede96c9a5a6a8",
+      "neoforge": "883c2e3e30dab2c08ec8b5668bded396d173b011716a7118f8352e315eacec92",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/MixinsJsonLintTest.java": {
+      "forge": "8d84a5e813c592d842b254972dc6d86cf147b2db120bc4adc51fb2dd16e2e952",
+      "neoforge": "e5c2ef8d3d00ea9d0e497472b52c09ac20029787aa3338db998cad28f54be106",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/NarrativeInventoryReportTest.java": {
+      "forge": "8bddaef17a14dfde6f41d9b95f06e52fc2d0909b334d3d6f957ec777dcd84ef2",
+      "neoforge": "b0b5e65a20b82801d9aa93a4f51264d4d7ac329d79fa39135c65ea339d98f449",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/NativeConstraintTokens.java": {
+      "forge": "1bbc9f44186267faedde9ef9a9a350ececcd2a990e2073cb568d0c4c23593553",
+      "neoforge": "4208ae078a838cea51370200264a10ddfca5e2d42433e35588de2f744b71fb6e",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/NeoForgePortLintTest.java": {
+      "forge": null,
+      "neoforge": "dc910addc84548df554dbed7d08f7baa66475fc4827ce222270d3a7d9927f40d",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/NoBareSayLintTest.java": {
+      "forge": "cb2cda0e7e7ed426a4e5c8a95a4a92fea0f0b634ea50d9632e1b82a43d86517c",
+      "neoforge": "a0a2398bcb5003b1d1813be92e35b1557dec04b455f028bb4de2931e3698bc52",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/OptionalProfessionIsolationTest.java": {
+      "forge": "7bda804ef87a8c02a4a41d3385b799436fd7628e2c4a9765e4055f372ef89542",
+      "neoforge": "8c31ad084e483813361e6b472a3ddf400d575dfddc146eae8796400942156c5e",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/OverlayLintTest.java": {
+      "forge": "edaa229c3bcf3de8833386e13b9f5c6fb8b43e04b93bd1a238f64ad32911e203",
+      "neoforge": "640becffd7df046edfc653093698c19848a932b652ba0a578041f71eee40f152",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ProfessionCoverageTest.java": {
+      "forge": "5f16e7234a2c90eaad652efcf6680935baee8df165512492fa205a0528564e68",
+      "neoforge": "a864cbae22a3d4fe89315ef05a2f1240340a32fd977dcd292db61969fac5a48b",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/ReloadFixture.java": {
+      "forge": "e277547b83b4226ffcbd420653238999f8e1b365bb831e6795a2ad4a5001b708",
+      "neoforge": "6100a7e814a69782b8c7cd3dbcb8e5c9b1637b7addd968d16926beae73ff52eb",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/SavedDataContractTest.java": {
+      "forge": null,
+      "neoforge": "77b36f6de64a8c9ffa83cf7aea75a2ed2e083e81b493408c69cb34db46cd79f8",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/SceneCatalogLintTest.java": {
+      "forge": "8e7183de239abdd63a08d5c3308b5e8dbddc04725406ba7a22bb603582198837",
+      "neoforge": "0f8eab3b965e41c74654f4409824180bc11a64c569e5258811985b10ee9b2ef2",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/SignatureOverlayLintTest.java": {
+      "forge": "b430fdcf8d2f6802eda550756549cacb8f20f558d46b5ae2993e085e9e21f84d",
+      "neoforge": "4ac652ac1601707a54e101cb7742e6c916a777206ed6b7464548bde032b651f5",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/SourceNarrativeLintTest.java": {
+      "forge": "8fac7dbe88e1e57df714029e2f5cc9c0a0aef2eb57bf15648f0c32c89e3e488e",
+      "neoforge": "c09435b8ad7a70a63103dc7cba1450e3855136c41330748146f94626ac05a649",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/TopicDepthTest.java": {
+      "forge": "c9c815b2f95b445f509b98bd9c0d6e903b245b207efccc4a584e0f232d877816",
+      "neoforge": "15e140ccf76299a57a152df3fb61b8c3ee094fc3239ef84a2ce3daf9ba46fad3",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/TopicPathSimulationTest.java": {
+      "forge": "fcd81c0dfa60cbf7e9ed79679fac902a20d2bc0babac76d45bd286dbab962696",
+      "neoforge": "57b6b12457933d02f199d7c4a36c47f272fa83ffebbe0e1ddbd350407d4c6de1",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/VerbalTicLintTest.java": {
+      "forge": "9e91bd5d3599e55f15c3afb716d4baced4c1a2a1fb9c4ae78ef5e985dac66d52",
+      "neoforge": "39d3e412e61539ef87c09584543db591e353996ea5869afd9173b0d8f3b98497",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/context/ContextKeyOwnershipTest.java": {
+      "forge": "493a08edce84d70cead351e474d7b439aa871af70d0520fdf0cf534ec35dc2ba",
+      "neoforge": "6dc97a5f9fd73924b354bb1785d3d48adc8651711df1978f0555b336de85d192",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/conversation/ConversationSessionTest.java": {
+      "forge": "b287ed294a5da2512c29d5f03f389ac68d22bba45fa2362aa53ac969695611f1",
+      "neoforge": "ebfb0c37eb06241e87b7d1d41b876b856cb294327a3c435a1779f6571b676388",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/conversation/TopicAgeGateTest.java": {
+      "forge": "2d969e19c2a65c064f8d6c61e73b99dbd4fd6113edfaa1d1f3e9067fe2cbe5c4",
+      "neoforge": "45fb884b33cda5fccbc374747196305f105a3eadf5add1e7b130ed9e32ebce16",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/gift/AttachmentNbtRoundTripTest.java": {
+      "forge": null,
+      "neoforge": "e9490d524b352fb188af234e9f00e97233746f1e61a6b40e0b5d5e0f3c76e513",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/gift/ForgeCapsFixtures.java": {
+      "forge": null,
+      "neoforge": "a8aae562bf2f8ea826ab0b5524279586c21bddcc5b6aaf2db9044806e74656cc",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/gift/ForgeCapsMigrationTest.java": {
+      "forge": null,
+      "neoforge": "9f0c38d126905c80beb3b41de12dcb7aef1a5779e2ccf6117703585e8362f1ee",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/hub/DynamicHubTest.java": {
+      "forge": "4fd9bc9795500efd7f5568188ff2b7e6c3c0c59fb9a8be6eaf6e6b6623ea354b",
+      "neoforge": "d97e3d15eecf3e78536994caf117e87d7cb3a85400b32785218f3c9de8464c15",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/identity/VillagerIdentityGeneratorTest.java": {
+      "forge": "833116842d895dbe2514251d129594602691a2615ada1693e5713467242e40df",
+      "neoforge": "8fb64f0b2f73980f1ffaeab6294e39b19a1968ff9e31d7850388b2ffe55da60b",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/interiority/InteriorityTest.java": {
+      "forge": "b282f1ef23b3ce08866ad7d564ea49b9785a2dfcfb7adc8c1bb6653301cb89f9",
+      "neoforge": "949440b26ffca81d454119a24f0497d19166a93b16b7a271ec8c3bb2097b7f2c",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/ChoiceClearCodecTest.java": {
+      "forge": "0282f1647a6749c49dc72c46f4ca0db001a451da88dff21d8edda761a9401861",
+      "neoforge": "9caed9612bc45f5f4f494d449ab4bd4f0dc17a365350ce24358914398e4abdee",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/ChoiceClearPayloadTest.java": {
+      "forge": null,
+      "neoforge": "1b079b8e42eefc75571bca65bf0514babeb63d2a99e952e71ff8e8817dabfef7",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/ChoiceOfferCodecTest.java": {
+      "forge": "42eac40afe71beae70bbaa89b4a34964c574491f1a2af558a287854db492a340",
+      "neoforge": "148257326f20ffad34f862736776f4b63a5252fe2172ad68604ddd81bd844517",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/ChoiceOfferPayloadTest.java": {
+      "forge": null,
+      "neoforge": "a22c6dbb9db2df2c920a365c9ea8537d556282566cbf2fb3eb8ff6d86814ca3a",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/ChoiceReturnCodecTest.java": {
+      "forge": "78271e1c16583e5fa8d8b41478f07d9d506a10e3b68eb507443ec6f2a2994169",
+      "neoforge": "bf18c3c8ac4980fce964119ea97ada117e7648acf17160606dcc458dfdf82aea",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/ChoiceSelectPayloadTest.java": {
+      "forge": null,
+      "neoforge": "ba40dfe851af01a2fd9842aee9494ca33400813aaca40dd25e506c36f38224a3",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/network/TypingStatusPayloadTest.java": {
+      "forge": null,
+      "neoforge": "1e2c82ac2f9c1326e4ef759592116db26527df795bcbe9485a976ab2f133eb32",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/personality/PersonalitiesTest.java": {
+      "forge": "8e80253a4c1221544cfe974438bf0d7c0fe44db3f46cdb0c75e61d17d98a5289",
+      "neoforge": "230b66e9760d337797de02b5572fc815112c17bea8977e04a4292ccdbeb6c266",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/scene/SceneEpisodesTest.java": {
+      "forge": "41ae68d5207981875edeca5ab9e360289ef002b03e8aefd8020c1e166d6169ec",
+      "neoforge": "41c54f511942e0078d1b80b83ca45ac2469fc0b0b0a94362438604a7845ea3d3",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/support/MixinClassLoader.java": {
+      "forge": null,
+      "neoforge": "51500014b3f58bd3effa274e74abde41a34bf7cea5564ba87e0966dbee7cdbd0",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/support/TestPaths.java": {
+      "forge": "d3faa865c0a2dc1e0d5a075d38e794635d30569c544513e2aa894397d3607fd9",
+      "neoforge": "87059835a650733146a76fa8670d7836db6ce229f5e4612ae4c981b6b6e8b809",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/template/TemplateEngineTest.java": {
+      "forge": "a0a2c8faa86c638afe433f974611116da78ac54ebd8d63182584672c2f123a86",
+      "neoforge": "181ba9e401d2d07a95fe8657878fa82af1e9e649dcafdf942984c73e44f85853",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/village/VillageCultureTest.java": {
+      "forge": "e2efc97e7d94da25d1f5e479f9893fa08728e3dcab3e2d87b4629abcbca28125",
+      "neoforge": "fc06d73ce1b54cec012ab897d4bf96eca3c2b5e7d4f7808f7688f67a259d05b9",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    }
+  }
+}
