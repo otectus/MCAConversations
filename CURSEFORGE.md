@@ -13,6 +13,30 @@ what you've talked about before.
 
 ---
 
+## New in 1.7.3
+
+### 🏰 Kingdoms and guilds (with Ultima Kingdoms)
+
+Some things are only talked about in the right place. A topic can now belong to a kingdom — offered
+only to villagers who live there, or who came from there — and villagers appointed to speak for a
+guild can explain what it does and put in a request on your behalf. The guild decides; the villager
+tells you its answer and nobody else. Without Ultima Kingdoms none of this appears.
+
+## Since 1.5.1, in brief
+
+- **1.7.2 — known for something.** With MCA: Reputation 0.6.0, a villager who has heard what you did
+  can say so, and an apology is paid for once however many people you say it to.
+- **1.7.1 — they stay and listen.** Villagers stand still and face you for the whole conversation,
+  you can walk up to sixteen blocks while talking, an attack ends the conversation so the villager can
+  flee, and another player can take a villager over cleanly. Update client and server together.
+- **1.7.0 — a calmer card.** The restrained Minimal style and reduced motion are the new defaults,
+  `H` shows what was actually said, `P` changes presentation in place, and a topic you cannot open
+  now tells you why.
+- **1.6.x — capitals and stability.** With MCA Capitals, capitals talk about their sovereign, heirs
+  and court; a long stabilization pass fixed chat range, age gates, save limits and reloads.
+
+---
+
 ## New in 1.5.1
 
 ### 🪟 The conversation card is painted with Minecraft's own menus
@@ -250,11 +274,13 @@ about our future? Is anything weighing on you?*
 | **Only if MCA needs it** | [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api) — required by MCA 7.6, dropped by MCA 7.7. This mod never asks for it |
 | **Optional** | **MCA: Quests** `[0.8,)` — quest-aware conversation lines |
 | **Optional** | **MCA: Reputation** `[0.2,)` — public standing, and villagers telling each other what you've done |
-| **Optional** | **Townstead** `[0.7.5,0.8)` — its schedules, buildings and village culture, inside its own RPG screen |
+| **Optional** | **MCA Capitals** `[1.3,)` — capitals talk about their sovereign, heirs, houses and court |
+| **Optional** | **Ultima Kingdoms** `[0.1,)` — kingdom-specific topics and guild contacts |
+| **Optional** | **Townstead** `[0.7.5,0.8)` — numbered choices in its own RPG dialogue screen; deeper Townstead support is planned |
 | **Optional** | **Serene Seasons** — villagers track the real season (calendar fallback otherwise) |
 
 **Languages:** English and Brazilian Portuguese, both complete — menus, dialogue, every personality
-voice and the whole chat-mode vocabulary. 36,397 key/value entries per locale, across 23 namespaces.
+voice and the whole chat-mode vocabulary. 37,915 key/value entries per locale, across 23 namespaces.
 
 > This is an **add-on** — MCA Reborn must be installed for it to do anything. Every optional mod above
 > is a soft dependency: install any, all, or none of them.

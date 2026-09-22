@@ -95,11 +95,13 @@ Run `check_mod.py` for a full consistency check (missing models, lang keys, text
 
 ## Current focus
 
-_What you are working on right now. One or two lines._
+1.7.3 (Ultima Kingdoms gates and guild contacts) is committed on both loaders and unpublished; next
+are the 1.8.0 social-behaviour work and the in-game acceptance campaign.
 
 ## Roadmap
 
-- [ ] …
+Open work, runtime checks not yet performed, and what was run per release live in
+[`docs/ROADMAP.md`](docs/ROADMAP.md). Release parity manifests live in `tools/parity/`.
 
 ## Decisions
 
@@ -112,7 +114,10 @@ corpus. Two Gradle tasks compile them into committed runtime resources (`build.g
 
 - `generateConversationContent` runs `authoring.ContentCompiler` (`src/content` → `src/main/resources`),
   owning `conversations.scene.*` dialogues, `scene_*.json` contracts/intents and the five
-  narrative-template directories.
+  narrative-template directories. It also mirrors a topic pack's `kingdom_gate` / `civic_contact`
+  into that topic's `conversation_catalog/topics.json` row, and rewrites
+  `assets/mcaconversations/lang/*.json` in sorted key order — a hand-added key survives, but the
+  drift gate fails until the generator has re-sorted it.
 - `generateVoiceOverlays` runs `authoring.VoiceFamilyCompiler` (`src/content/voices` →
   `src/main/resources/assets`), expanding the six authored voices into every personality overlay
   namespace in both locales.
@@ -130,4 +135,8 @@ generator reference to those files, only test fixtures that use the ids).
 
 ## Known issues
 
-_Bugs you know about but have not fixed, with the symptom and any lead._
+- Capitals chronicle text quoted in gossip renders in the server's locale, not the player's.
+- `event_observed` commitment resolver is reserved and never resolves (no generic observer).
+- 17 of the 18 `[townstead]` config keys have no reader; only `enabled` is live.
+- `GroupDirector` builds a new group session per interjection, so the three-speaker cap cannot hold
+  across an exchange (group chat is off by default).

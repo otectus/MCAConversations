@@ -402,7 +402,13 @@ village spirit all stay Townstead's to own. The three things Conversations does 
 measured heart change, a typed-chat conversation opening and closing, and an authored, heart-neutral
 reaction.
 
-Run `/conversations compat townstead status` in game to see what actually bound.
+**What works today, and what does not yet.** The binding is real: with Townstead installed, one
+startup log line names its version and how many of its fourteen capabilities bound, or lists the
+members that did not. Townstead's own RPG dialogue screen gains numbered choices. `enabled` is live.
+**Every other key below is declared but not yet read by anything** — the conditions, template
+variables, calendar source, reactions, gossip and topics they govern are the planned Townstead
+release, tracked in [`docs/ROADMAP.md`](docs/ROADMAP.md) §3.2. Setting them changes nothing yet. The
+`/conversations compat townstead` diagnostics are part of that same release and do not exist yet.
 
 | Option | Default | Range | Meaning |
 |---|---|---|---|

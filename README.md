@@ -8,6 +8,38 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
+## Features (1.7.3)
+
+- **Topics that belong to a kingdom.** With Ultima Kingdoms installed, a topic can be offered only to
+  villagers of the right kingdom, judged by where they live or where they came from, and only while
+  the player stands well enough with its faction. The restriction holds on every way into a
+  conversation — the dialogue screen, a numbered reply, typed chat, the dynamic hub, a crafted packet —
+  and a gate Ultima cannot answer hides what it guards.
+- **Guild contacts.** A villager appointed to speak for a guild can explain what the guild does and
+  put in a request for an introduction or for its commissions. Ultima decides; the villager relays
+  its answer to you alone and never repeats where an introduction leads.
+
+## Features (1.7.2)
+
+- **Villagers remark on what they know you for.** With MCA: Reputation 0.6.0, a villager who has
+  heard that you stood your ground, or that somebody got hurt, can say so — filtered through what
+  *that villager* knows, and never mistaken for liking you.
+- **An apology is paid for once.** A conversation deed is recorded against the decision and the exact
+  grievance it answers, not against whoever you said it to, and a fuller apology supersedes a partial
+  one instead of stacking on it.
+
+## Features (1.7.1)
+
+- **Villagers stay put and face you** for the whole of a discussion, including minutes of reading,
+  and are handed straight back to their schedule when it ends.
+- **Sixteen blocks to keep talking**, with a second's grace out to twenty-four; nothing can be *done*
+  from out of range, and opening a conversation still takes MCA's ordinary reach.
+- **An attack ends the conversation for good**, and the villager is free to flee; a guard still
+  fights back unless the server asks otherwise.
+- **Another player can take the villager over** cleanly: the first player's window closes saying so,
+  and nothing from it can reach the new conversation. The choice channel is protocol 4, so update
+  client and server together.
+
 ## Features (1.7.0)
 
 - **The restrained card is now the one you get.** New installations default to
@@ -234,7 +266,7 @@ Built and tested against **MCA 7.7.0-beta.2**; verified to still start and run o
 
 **English (`en_us`)** and **Brazilian Portuguese (`pt_br`)** — both complete: UI strings, the full
 base dialogue pool, every personality overlay, the age voices and the whole chat-mode vocabulary
-(36,255 key/value entries per locale across 23 namespaces, of which 12,961 are the base
+(37,915 key/value entries per locale across 23 namespaces, of which 14,042 are the base
 `mca_dialogue` pool). MCA gates per-personality dialogue to `en_us`/`ru_ru`; a narrow
 client-only hook widens that gate to the locales this mod ships complete overlays for, while
 preserving MCA's voice-pack and online-TTS restrictions untouched.
@@ -305,15 +337,13 @@ a valid test of MCA integration. See the in-world checklist in [CHANGELOG.md](CH
 
 CI runs the unit/lint suites and the real-jar binding probes (`McaBindingProbeTest` and friends)
 against the MCA versions in `gradle.properties`/`mca_probe_versions`. It does not run the game.
-In-game production checks — a real client and dedicated server on the supported loaders — are listed
-per release in `docs/RELEASE-<version>-LEDGER.md`; a passing CI run is not a claim that any of those
-checks were performed. Optional radius-local chat (`chatModeLocalChat`, off by default) is
-experimental for the same reason: see `docs/RELEASE-1.6.3-LEDGER.md` §c, finding F05, for the
-production check that has not yet been exercised in a running game.
+In-game production checks — a real client and dedicated server on the supported loaders — are listed,
+with what has and has not been run for each release, in [`docs/ROADMAP.md`](docs/ROADMAP.md); a
+passing CI run is not a claim that any of those checks were performed. Optional radius-local chat
+(`chatModeLocalChat`, off by default) is experimental for the same reason: its production check
+(finding F05) has not yet been exercised in a running game.
 
 ## License
 
 GPL-3.0-only, matching MCA Reborn, whose internals this mod links against.
 
-
-See [the stabilization and narrative review](docs/STABILIZATION-2026-09.md) for the latest fixes, reproducible validation commands, optional API build paths, and remaining production checks.
