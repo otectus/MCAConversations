@@ -165,8 +165,12 @@ public final class ChoiceSelectionService {
             } else {
                 dev.otectus.mcaconversations.scene.ConversationPlanner
                         .onAnswerSubmitted(villager, player, question, answer);
-                outcome = McaCompat.selectAnswer(villager, player, question, answer)
-                        ? ChoiceOutcome.CONSUMED : ChoiceOutcome.EXECUTION_FAILED;
+                try (ConversationOutcomes.Submission submission = ConversationOutcomes.begin(villager, player,
+                        question, answer, ConversationSession.Frontend.GUI)) {
+                    boolean ran = McaCompat.selectAnswer(villager, player, question, answer);
+                    submission.succeeded(ran);
+                    outcome = ran ? ChoiceOutcome.CONSUMED : ChoiceOutcome.EXECUTION_FAILED;
+                }
             }
         } catch (Throwable t) {
             McaConversations.LOGGER.error("numbered response execution failed for {}/{}", question, answer, t);

@@ -93,6 +93,33 @@ and without Townstead installed nothing below changes a line.
   no longer collapsed onto its bare path, so two packs' `reserved_scholar` are two profiles. A
   Townstead custom personality uses its own profile when a pack authored one, then the profile of the
   MCA personality it is based on.
+- **Villagers react to how a conversation went.** A reply that lands, amuses, helps, stings, is
+  refused or goes awkwardly can now play one of thirteen heart-neutral Townstead reactions — a wave
+  on greeting and farewell, a clap, a pointed finger, a facepalm, tears. Content may name one with
+  the new `conversations_townstead_react` action; otherwise the reply's check tier, outcome and stance
+  choose, and an ordinary accepted line plays nothing. Each reply settles once, after all of its
+  actions have run, and plays at most one reaction, whatever order the actions were written in.
+  Reactions need Emotecraft, which is the only animation backend Townstead has; without it nothing
+  plays and nothing else changes.
+- **Townstead sees the hearts you actually got.** After a conversation changes hearts, Townstead is
+  told the measured change — what MCA really applied, including a sensitive villager's doubled
+  loss — so its `heart_increased` and `heart_decreased` tags are true.
+- **Chat counts as a conversation.** A typed-chat conversation now opens and closes Townstead's
+  dialogue state the way its own dialogue screen does, and closes it on farewell, mute, a new
+  partner, logout, the conversation ending, or the chat window lapsing.
+- **A villager's day shapes chat.** Someone asleep, collapsed, in a need emergency, in danger or in
+  another player's conversation no longer greets you as you pass, and the day's greeting is kept for
+  later rather than spent. Ask a villager at work, or worn out, for a long or personal conversation
+  and they say they are in the middle of something instead of starting it; small talk still works,
+  and a collapsed villager manages nothing more. Collapsed and mid-reaction villagers do not answer a
+  remark to the crowd, at most one villager at work does, and chat attention never stops a villager
+  Townstead is animating, and only turns one at work to face you rather than stopping them. All of it
+  follows `scheduleRespectEnabled`.
+- **A gift that helped is known to have helped.** A tick after a gift is accepted, the villager's
+  needs are read again; only if Townstead's own hunger, thirst or fatigue improved does the villager
+  remember it (`mcaconversations.gift.relieved_hunger`, `relieved_thirst`, `helped_recovery`, for a
+  quarter of a day) and look grateful. Conversations never fills a need, and a helpful gift earns no
+  extra heart.
 - **Diagnostics.** `/conversations compat townstead status` for anyone; `probe`, `snapshot` and
   `explain <question> <answer>` for operators, and `snapshot genes` at level 3 for heritage and
   inheritance detail; `/conversations compat namespace` names the MCA package root this build bound.

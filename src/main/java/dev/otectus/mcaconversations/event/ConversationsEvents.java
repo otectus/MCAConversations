@@ -121,6 +121,8 @@ public final class ConversationsEvents {
         GreetOnApproach.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
         CapitalsBridge.Holder.clearCaches();
+        dev.otectus.mcaconversations.compat.Townstead.clearCaches();
+        dev.otectus.mcaconversations.gift.GiftNeedObservation.reset();
         // The bundle holds MCA's parsed Question objects strongly, so it has to be dropped with the
         // rest: a retained executable table belongs to one server lifecycle and must never be
         // reachable from the next.
@@ -387,6 +389,13 @@ public final class ConversationsEvents {
                 && (McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()
                         || McaConversationsConfig.maxInitiativesPerVillagerPlayerDay() > 0)) {
             GreetOnApproach.scan(event.getServer());
+        }
+        // Typed-chat conversations Townstead was told about, closed once their sticky window lapses
+        // without a farewell (an unanswered greeting, a player who simply walked off).
+        if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0) {
+            dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.sweep((playerId, villagerId) ->
+                    dev.otectus.mcaconversations.chat.ChatModeDispatcher.chatConversationLapsed(playerId,
+                            villagerId, gameTime));
         }
 
         // Court news rides its own cadence, deliberately not the gossip sweep's: a capital's chronicle

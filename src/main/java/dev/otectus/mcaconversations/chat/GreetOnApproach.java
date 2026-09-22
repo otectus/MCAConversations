@@ -130,6 +130,13 @@ public final class GreetOnApproach {
             if (!rollGreet(c.entity().getUUID(), player.getUUID(), gameDay, baseChance * weight)) {
                 continue; // not the greeting type today — no memory spent, tomorrow re-rolls
             }
+            // What the villager is doing right now decides whether the hello plays at all, after the
+            // roll and before the day's memory is spent: a suppressed greeting keeps its chance.
+            TownsteadChatPolicy.Greeting greeting =
+                    TownsteadChatPolicy.greeting(TownsteadChatPolicy.Facts.of(c.entity(), player));
+            if (greeting == TownsteadChatPolicy.Greeting.SUPPRESS) {
+                continue;
+            }
             // Mute, what the villager is in the middle of, and the short real-time cooldown are
             // all one policy and live in one place. A hail is a bark rather than a full initiative,
             // so it does not spend the day's one chance to raise something that needs an answer.
@@ -137,7 +144,7 @@ public final class GreetOnApproach {
                     InitiativeGate.Weight.BARK, gameDay, now).refused()) {
                 continue;
             }
-            ChatModeDispatcher.proactiveGreet(c, player, now);
+            ChatModeDispatcher.proactiveGreet(c, player, now, greeting == TownsteadChatPolicy.Greeting.BRIEF);
             LAST_AMBIENT_GREET.put(player.getUUID(), now);
             InitiativeGate.record(c.entity(), player, ScenePurpose.GREETING,
                     InitiativeGate.Weight.BARK, gameDay, now);

@@ -207,7 +207,7 @@ public final class VillagerAttention {
                 Entity villager = VILLAGERS.get(e.getKey());
                 ServerPlayer player = server.getPlayerList().getPlayer(hold.playerId());
                 ConversationMovementController.Stance stance =
-                        ConversationMovementController.judge(villager, player, hold.ownsMovement());
+                        ConversationMovementController.judge(villager, player, hold.ownsMovement(), true);
                 switch (stance) {
                     case DROP -> drop.add(e.getKey());
                     case REVOKE_ATTACKED, REVOKE_DANGER -> revoke.add(e.getKey());

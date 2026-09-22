@@ -100,6 +100,46 @@ import net.minecraft.network.chat.Component;
  */
 public final class ConversationsMcaRegistrar {
 
+    /**
+     * Parses {@code conversations_townstead_react}: a shipped semantic by key, or an explicit reaction
+     * id with an optional semantic for its tag. An unknown semantic is refused rather than dropped.
+     */
+    static dev.otectus.mcaconversations.conversation.ConversationOutcomes.ReactionRequest reactionRequest(
+            com.google.gson.JsonElement json) {
+        String semantic = null;
+        String reaction = null;
+        if (json != null && json.isJsonPrimitive()) {
+            semantic = json.getAsString();
+        } else if (json != null && json.isJsonObject()) {
+            for (String key : json.getAsJsonObject().keySet()) {
+                if (!key.equals("semantic") && !key.equals("reaction")) {
+                    throw new IllegalArgumentException("unknown conversations_townstead_react field: " + key);
+                }
+            }
+            if (json.getAsJsonObject().has("semantic")) {
+                semantic = json.getAsJsonObject().get("semantic").getAsString();
+            }
+            if (json.getAsJsonObject().has("reaction")) {
+                reaction = json.getAsJsonObject().get("reaction").getAsString();
+            }
+        } else {
+            throw new IllegalArgumentException("conversations_townstead_react needs a semantic or a reaction");
+        }
+        if (reaction == null) {
+            var shipped = dev.otectus.mcaconversations.conversation.ReactionSemantic.byKey(semantic)
+                    .orElseThrow(() -> new IllegalArgumentException("unknown reaction semantic: " + json));
+            return new dev.otectus.mcaconversations.conversation.ConversationOutcomes.ReactionRequest(
+                    net.minecraft.resources.ResourceLocation.tryParse(shipped.reactionId()), shipped.key());
+        }
+        net.minecraft.resources.ResourceLocation id = reaction.contains(":")
+                ? net.minecraft.resources.ResourceLocation.tryParse(reaction) : null;
+        if (id == null) {
+            throw new IllegalArgumentException("reaction must be a namespaced id: " + reaction);
+        }
+        return new dev.otectus.mcaconversations.conversation.ConversationOutcomes.ReactionRequest(id,
+                semantic == null || semantic.isBlank() ? id.getPath() : semantic);
+    }
+
     /** A Townstead condition's score: 1 or 0, and 0 on any failure — never a thrown evaluation. */
     private static float townsteadScore(java.util.function.BooleanSupplier test) {
         try {
@@ -405,6 +445,10 @@ public final class ConversationsMcaRegistrar {
                         return CheckContextFactory.assemble(villager, player, check)
                                 .map(inputs -> {
                                     CheckTier tier = CheckResolver.resolve(inputs);
+                                    // Every tier result of one check resolves the same tier, so
+                                    // recording it from whichever is scored first is exact.
+                                    dev.otectus.mcaconversations.conversation.ConversationOutcomes
+                                            .recordCheckTier(tier);
                                     if (tier == check.tier()
                                             && McaConversationsConfig.COMMON.debugRpg.get()) {
                                         McaConversations.LOGGER.info("[rpg] check {} -> {} inputs={}",
@@ -561,6 +605,21 @@ public final class ConversationsMcaRegistrar {
                         }
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_session failed; ignoring", t);
+                    }
+                });
+
+        // A heart-neutral Townstead reaction for this reply (Townstead spec §12.3). Queued, never fired
+        // from here: the reply settles once, after every action has run, and plays at most one. Accepts
+        // a shipped semantic ("warm") or {"semantic": "warm"} / {"reaction": "pack:id", "semantic": ...}.
+        McaHandles.registerAction("conversations_townstead_react",
+                (json, name) -> SafeParse.orNull("conversations_townstead_react", json,
+                        () -> reactionRequest(json)),
+                request -> (villager, player) -> {
+                    try {
+                        dev.otectus.mcaconversations.conversation.ConversationOutcomes
+                                .requestReaction(villager, player, request);
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_townstead_react failed; ignoring", t);
                     }
                 });
 
@@ -742,6 +801,7 @@ public final class ConversationsMcaRegistrar {
             return;
         }
         ConversationSessions.get(player.getUUID(), now).enterBeat(beat);
+        dev.otectus.mcaconversations.conversation.ConversationOutcomes.recordBeat(beat);
         if (McaConversationsConfig.COMMON.debugBranching.get()) {
             McaConversations.LOGGER.info("[branch] beat={} subject={} act={} openness={} outcome={}",
                     beat.id(), beat.subject(), beat.npcAct().key(), beat.openness().key(),

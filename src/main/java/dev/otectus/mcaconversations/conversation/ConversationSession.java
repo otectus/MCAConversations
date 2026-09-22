@@ -104,6 +104,8 @@ public final class ConversationSession {
     private final Set<SemanticFact> turnFacts = new LinkedHashSet<>();
     private final Deque<String> recentBeats = new ArrayDeque<>();
     private final Deque<String> transactions = new ArrayDeque<>();
+    private long submissionSeq;
+    private final Set<String> claimedSideEffects = new java.util.HashSet<>();
 
     ConversationSession(UUID playerId, long now) {
         this.playerId = playerId;
@@ -508,6 +510,29 @@ public final class ConversationSession {
             transactions.removeFirst();
         }
         return true;
+    }
+
+    /**
+     * Starts the next submission: a validated reply about to run (Townstead spec §12.1). Transient and
+     * monotonic; it exists so an effect that must happen once per reply — a reaction, a heart
+     * notification — can be claimed once, however many times the actions behind it run.
+     *
+     * <p>Deliberately separate from {@link #claimTransaction}, which is the duplicate-packet guard
+     * and must not be consumed by anything else.
+     */
+    public long beginSubmission() {
+        submissionSeq++;
+        claimedSideEffects.clear();
+        return submissionSeq;
+    }
+
+    public long submissionSeq() {
+        return submissionSeq;
+    }
+
+    /** True the first time a side effect is claimed in the current submission, false after. */
+    public boolean claimSideEffect(String namespace, String semanticKey) {
+        return claimedSideEffects.add(namespace + "|" + semanticKey);
     }
 
     /** An unanswered GUI page retains its semantic context and budget while the player reads. */
