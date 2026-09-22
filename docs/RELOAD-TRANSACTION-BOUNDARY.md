@@ -19,6 +19,11 @@ against all three jars on every `test` run. Claims not marked pinned are decompi
 
 ### 1.1 The catalogs it loads
 
+> **Since 1.8.0** the coordinator stages a twelfth section, `townstead_holidays`, with the same
+> all-or-nothing verdict as the other eleven; `ContentSection` and
+> `ReloadTransactionBaselineTest#everySectionParticipatesAndTheDialogueDirectoryIsReadAsMetadata`
+> name all twelve. The table below is the pre-coordinator baseline this note was written against.
+
 All eleven are `SimpleJsonResourceReloadListener`s registered from one
 `AddReloadListenerEvent` handler, `event/ConversationsEvents.java:413`, in this order. The class is
 `@Mod.EventBusSubscriber(modid = ...)` with no priority given (`:53`), i.e. `EventPriority.NORMAL` on

@@ -18,6 +18,16 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
   sibling finally counts as family. Worlds from before this version keep the friendships they had.
 - **Walking through the village is quieter.** Friends greet you more often than strangers, one
   greeting at a time, and a villager who says hello as you pass keeps walking unless you answer.
+- **Nobody knows your name before you have met.** Strangers greet and see you off without it, a
+  respected stranger gets courtesy and nothing presumed, partners and family have greetings of their
+  own, and every personality voices the stranger and "hello again" greetings in character.
+- **Townstead villagers live their Townstead lives in conversation.** With Townstead installed, a
+  *Life here* category of eight topics — how they are keeping, their day, their trade, the years,
+  their people, their places, what the village is becoming, the calendar — answers to their real
+  needs, shift, trade level, building, village spirit and calendar. Villagers at work or worn out put
+  off long talks in chat, collapsed ones do not greet you, a gift only counts as having helped when it did,
+  the village gossips about crises, promotions, birthdays and new buildings, and a reply can play a
+  heart-neutral reaction (with Emotecraft). Without Townstead, none of it appears.
 
 ## Features (1.7.3)
 
@@ -286,8 +296,10 @@ Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public stand
 telling each other what you have done, and — from 0.6.0 — remarking on what *they* know you for), **MCA: Capitals** `[1.3,)` (villages that are capitals speak
 about their sovereign, heirs and court; court changes seed village gossip), **Ultima Kingdoms** `[0.1,)`
 (topics offered only in the right kingdom, and guild contacts who relay requests to their guild),
-**Townstead** `[0.7.5,0.8)` (its RPG dialogue screen gains numbered choices; the rest of the
-integration is still to come — see `docs/ROADMAP.md`) and **Serene Seasons** (real seasons; calendar
+**Townstead** `[0.7.5,0.8)` (needs, schedules, trades, life stages, roots, buildings, village
+spirit and calendar become conversation state, with a *Life here* topic category, reactions,
+gossip, and numbered choices in its RPG dialogue screen; **Emotecraft** is needed for reactions to
+play) and **Serene Seasons** (real seasons; calendar
 fallback otherwise) — all soft dependencies; the mod works fully without any of them.
 
 ## How it works
@@ -324,8 +336,9 @@ screen and command; its classes ship in the jar same as any other, but the comma
 when `FMLLoader.isProduction()` is false, so it never appears in a production build. `client.townstead` bridges Townstead's own RPG
 dialogue screen, and the two Townstead client mixins (`TownsteadChoicePanelMixin`,
 `TownsteadRpgDialogueScreenMixin`) give its choice panel and RPG dialogue screen numbered digit
-selection without touching its camera, typewriter or native selection routine. The remaining four
-client mixins are `ChatScreenChoiceMixin` (vanilla `ChatScreen`, an empty-chat-field digit shortcut
+selection without touching its camera, typewriter or native selection routine, and a third
+(`TownsteadEmotionTagOverridesMixin`) lets its typewriter find Conversations' emotion tags when it
+has none of its own. The remaining four client mixins are `ChatScreenChoiceMixin` (vanilla `ChatScreen`, an empty-chat-field digit shortcut
 for chat mode's numbered choices), `InteractScreenChoiceMixin` (MCA's own interaction screen, the
 same responsive-choice rendering as the dialogue-screen response card), and `VillagerMessageMixin`
 and `MCAClientMixin`, covering pooled-dialogue-variant stability and the personality-locale widening

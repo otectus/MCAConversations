@@ -51,6 +51,32 @@ integrated and dedicated, on both loaders.
 - A parent, child or sibling reads as family, including in the middle of a quarrel.
 - A volunteered greeting does not stop the villager; answering it does.
 - Switching chat mode off in a config reload closes live chat conversations; GUI ones continue.
+- A stranger is never named: greeting, farewell, hub prompt, a typed "how have you been" (stranger
+  check-in). A spouse, a relative and — with MCA: Reputation — a well-regarded stranger each get
+  their own greeting; a toddler's is its own.
+- Opening the chat box turns at most three heads; a sleeping or fleeing villager does not turn.
+- A villager who falls asleep mid-discussion closes it as `SPEAKER_UNAVAILABLE`.
+
+### 1.8.0 — Townstead (Townstead 0.7.6 and 0.7.7, with and without Emotecraft)
+- `/conversations compat townstead status` reports `full` with 14 capabilities; `snapshot` matches
+  the villager's Townstead card; `explain` names each Townstead condition on a known answer.
+- *Life here* is listed only with Townstead; each topic opens by click and by typing; the hungry,
+  worn-out, mid-shift, trade-level, building, spirit, date and festival scenes appear when their
+  state holds, and the funnel opener otherwise.
+- A reply that lands, amuses or stings plays one reaction with Emotecraft, none without, and never
+  changes hearts; Townstead's `heart_increased` tag appears after a measured heart change.
+- Typed chat sets and clears Townstead's `in_dialogue_with_player`; a farewell, a mute, a new partner
+  and a lapsed window all clear it.
+- A villager at work defers a deep typed topic with "give me a moment"; a collapsed one greets nobody
+  and is not stopped by chat attention; one mid-reaction is left alone.
+- Food given to a hungry villager is remembered as relief a tick later; a gift that changes nothing
+  is not.
+- Gossip: a crisis, a collapse and recovery, a promotion, a new skill, a birthday, a new and a
+  demolished building (after two sweeps), a village spirit change — each once, none on first sight.
+- A Townstead calendar drives the season and the mapped festivals; an unmapped day is no festival.
+- The typewriter plays the sidecar's `<sleepy>` lines in Townstead's screen and nowhere else.
+- Removing Townstead from a world that had it: the world loads, *Life here* disappears, gossip
+  already told stays readable, custom personalities fall back; re-adding it resumes.
 
 ### 1.7.3 — kingdom gates and guild contacts
 - A `kingdom_gate` topic is absent for a villager outside the kingdom in the GUI, a crafted packet,
@@ -108,55 +134,56 @@ integrated and dedicated, on both loaders.
 
 ## 3. Open work
 
-### 3.1 Social behaviour — 1.8.0 first part shipped; the rest open
+### 3.1 Social behaviour — delivered in 1.8.0; what remains
 
 `MCAConversations_Conversation_Stability_and_Social_Behavior_Implementation.md` §1.2, §8–§11,
 work packages WP7–WP9.
 
 **Delivered in 1.8.0:** real family roles and ruptures in the band (`conversation/Relationships`,
 `SocialPolicy`); the §8.4 ladder with contact days, familiarity and trust, configurable under
-`[social]`; meaningful-contact accounting on `PairHistory` (no schema bump) credited from executed
-replies on both frontends and accepted gifts; the §11.2 one-time legacy import for upgraded worlds;
-`social.contact`, `social.contact_days`, `social.attitude` and the three role fields; stranger /
-recognised / familiar / cold greeting pools with toddler variants; relationship-scaled greeting
-frequency and the per-player ambient cooldown; volunteered greetings no longer hold the villager;
-`CloseReason.FEATURE_DISABLED` used when a config reload switches chat mode off.
+`[social]`; meaningful-contact accounting on `PairHistory` (no schema bump); the §11.2 one-time
+legacy import; `social.*` context fields and the three role fields; greeting families for stranger,
+respected stranger (MCA: Reputation respect bias, courtesy only), recognised, familiar, partner,
+family and cold, with toddler variants; stranger and recognised greetings voiced by all six
+personality families; stranger farewells; relationship-scaled greeting frequency and the per-player
+ambient cooldown; volunteered greetings no longer hold the villager; typing attention capped at three
+awake, non-fleeing villagers (§10.2); the stranger check-in; name-free hub prompts, deflections and
+greet-pool extensions in every personality; `SocialContract` scene metadata (§9.3) with compiler
+validation; the checked surface manifest (§9.4, `src/test/resources/social_surface_manifest.json`);
+`/conversations social inspect` (§14.1); `CloseReason.FEATURE_DISABLED` and `SPEAKER_UNAVAILABLE` in
+use, `INVALID_OFFER` documented as never closing by design.
 
 **Still open:**
-- §9.3 social metadata on authored line families and scenes (`claims`, `requires_known_player_name`,
-  fallback chains) and its compiler validation; §9.4's checked coverage manifest of every surface.
-- §9.2/§9.4 corpus: only greetings were split. Check-ins, topic openers, farewells and category
-  prompts have not been audited for familiarity a stranger has not earned; no `respected_stranger`,
-  `partner` or `family` greeting families; no personality overlays for the two new greeting pools.
-- §10.2 typing attention still stops every nearby villager; no per-player candidate cap.
-- §8.7 Reputation-driven courtesy for a respected stranger.
-- §14.1 diagnostics: `/conversations` does not yet show the facts, band and attitude it derived.
+- The partner, family and respected-stranger greetings are base-voiced only; no personality overlays.
+- §9.2's other semantic families (acquaintance, friend, confidant, guarded greetings as separate
+  pools) — friend and confidant share the familiar pool; guarded and hostile share the cold one.
+- Third-party packs without `social` metadata are structurally compatible but not semantically
+  audited (by design, §9.3); native MCA and other add-ons' lines are not owned.
 - Limitation: a pre-1.8.0 world that never wrote a history file (history switched off) is treated
   as a new world, so no legacy import happens there.
-- `CloseReason` `SPEAKER_UNAVAILABLE` and `INVALID_OFFER` remain reserved and unused.
 
-### 3.2 Townstead — planned 1.9.0
+### 3.2 Townstead — delivered in 1.8.0; what remains
 
-`MCAConversations-Townstead-1.20.1-Compatibility-Implementation-Spec.md`. What exists: the reflective
-binding (14 capabilities, `compat/townstead/*`), its probes, the two client mixins that number
-Townstead's RPG choices, a `season/CalendarSource` enum nothing reads, and the `[townstead]` config
-section. Seventeen of its eighteen keys have no reader; only `enabled` is read. Spec §6 (variant jars) is superseded by the
-single reflective jar and is not planned.
+`MCAConversations-Townstead-1.20.1-Compatibility-Implementation-Spec.md`, folded into 1.8.0 on
+2026-09-22. Spec §6 (variant jars) is superseded by the single reflective jar and is not planned.
 
 | Spec | Requirement | State |
 |---|---|---|
-| §8 | `conversations_townstead_available`, `_townstead`, `_tags`, `_spirit`, `_skill`, `_react` | Not registered |
-| §9 | `townstead_fit` check term; structural gates (collapsed, sleeping, raid, work shift) | Not built |
-| §10 | Custom personality → interiority profile, then MCA base | Not built |
-| §11 | 23 `townstead_*` template variables; calendar precedence; `townstead_holidays/` | Not built |
-| §12 | Outcome coordinator; measured heart notification; heart-neutral reactions; typed-chat dialogue tracking | Not built — every bridge query has no caller |
-| §13–§14 | Schedule/need-aware greetings, attention and responders; gift need observation | Not built |
-| §15–§16 | Gossip events and save schema; "Life here" category with eight topics; existing-topic variants | Not built |
-| §17.3 | Emotion-tag sidecar and guarded client mixin | Not built |
-| §20 | `/conversations compat townstead status\|probe\|snapshot\|explain` | Not built (promised in 1.3.0's notes) |
-| §21, §24–§25 | Removal/re-add safety, verification matrix, release criteria | Not run |
+| §8 | `conversations_townstead_available`, `_townstead`, `_tags`, `_spirit`, `_skill`, `_react` | Delivered (`compat/TownsteadConditions`, registrar) |
+| §9 | `townstead_fit` check term | Delivered. Structural gates: chat defers deep topics for working, tired, collapsed or desperate villagers (`chat/TownsteadChatPolicy`); scenes gate on `townstead.*` fields. The dialogue screen is not gated by shift |
+| §10 | Custom personality → interiority profile, then MCA base | Delivered |
+| §11 | 23 template variables; calendar precedence; `townstead_holidays/` | Delivered, with mappings for Townstead's four profiles |
+| §12 | Outcome coordinator; measured heart notification; reactions; typed-chat dialogue tracking | Delivered (`conversation/ConversationOutcomes`, 13 reactions) |
+| §13–§14 | Schedule/need-aware greetings, attention and responders; gift need observation | Delivered |
+| §15–§16 | Gossip events and save schema; "Life here" with eight topics; existing-topic variants | Delivered (variants in `day`, `season`, `life`) |
+| §17.1 | `hubEntryMode` matrix in Townstead's screen, scripted | Not run |
+| §17.3 | Emotion-tag sidecar and guarded client mixin | Delivered; not seen in a live client |
+| §20 | `/conversations compat townstead status\|probe\|snapshot\|explain`, `compat namespace` | Delivered |
+| §21, §24–§25 | Removal/re-add in a running world, verification matrix, release criteria | Not run (see §2) |
 
-Emotecraft is required for any reaction to play; without it reactions degrade to none.
+Reactions use Emotecraft's built-in emotes (`waving`, `clap`, `here`, `point`, `palm`, `crying`),
+which Townstead's backend knows; how each reads on a villager has not been seen. Emotecraft is
+documented as needed for reactions and is not declared in `mods.toml`.
 
 ### 3.3 MCA: Reputation 0.6.0 follow-ups (recorded divergences of 1.7.2)
 
@@ -223,9 +250,8 @@ content: every new scene must budget voice-family variants with it.
 
 ### 3.8 Documentation debt
 
-- `README.md`'s feature list stops at 1.7.0; `CURSEFORGE.md` stops at 1.5.1.
-- `docs/conversation-templates/` was generated from the 1.5.1 corpus and lacks the Capitals topics
-  and `guild_contact`.
+- `docs/conversation-templates/` was generated from the 1.5.1 corpus and lacks the Capitals topics,
+  `guild_contact` and the eight *Life here* topics.
 
 ---
 
@@ -233,9 +259,10 @@ content: every new scene must budget voice-family variants with it.
 
 1. Regenerate `docs/conversation-templates/` per release (about 23 MB of churn) or drop it and keep
    only `generate-templates.py`.
-2. Townstead as its own 1.9.0, and whether Emotecraft is named as an optional dependency.
+2. ~~Townstead as its own 1.9.0~~ — decided 2026-09-22: folded into 1.8.0. Emotecraft is documented,
+   not declared in `mods.toml`.
 3. Design the romance vertical or remove the `flirtation` / `attraction` scaffolding.
-4. Accept the one-time legacy relationship import for upgraded worlds (Stability spec §11.2).
+4. ~~Accept the one-time legacy relationship import~~ — accepted 2026-09-22 and shipped in 1.8.0.
 
 ---
 

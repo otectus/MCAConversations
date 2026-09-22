@@ -109,9 +109,9 @@ public final class TownsteadCommand {
                     + "and no Townstead state is read.");
             return Command.SINGLE_SUCCESS;
         }
-        Set<TownsteadCapability> missing = EnumSet.allOf(TownsteadCapability.class);
+        Set<TownsteadCapability> missing = EnumSet.copyOf(TownsteadCapability.serverSide());
         missing.removeAll(bridge.capabilities());
-        say(source, "  capabilities " + bridge.capabilities().size() + "/" + TownsteadCapability.values().length
+        say(source, "  capabilities " + bridge.capabilities().size() + "/" + TownsteadCapability.serverSide().size()
                 + (missing.isEmpty() ? "" : "; missing " + keys(missing)));
         int backends = bridge.reactionBackendCount();
         say(source, "  reactions " + (backends > 0 ? backends + " backend(s)"
@@ -170,7 +170,9 @@ public final class TownsteadCommand {
                 + ", version " + (bridge.detectedVersion().isEmpty() ? "-" : bridge.detectedVersion())
                 + ", MCA root " + bridge.variant().orElse("-"));
         for (TownsteadCapability capability : TownsteadCapability.values()) {
-            say(source, "  " + (bridge.has(capability) ? "bound   " : "MISSING ") + capability.key());
+            String state = !TownsteadCapability.serverSide().contains(capability) ? "client  "
+                    : bridge.has(capability) ? "bound   " : "MISSING ";
+            say(source, "  " + state + capability.key());
         }
         for (String member : bridge.unresolvedMembers()) {
             say(source, "  unresolved " + member);

@@ -500,6 +500,137 @@ other field is UNKNOWN.
 | `civic.introduction_reasons` / `civic.commission_reasons` | list of strings | Ultima's reason keys for the current qualification answer (at most eight each) |
 | `civic.state_revision` / `civic.policy_revision` | long | Ultima's revision counters, for scene conditions that must notice a change |
 
+## Townstead (optional, 1.8.0)
+
+Everything here reads Townstead and never writes it; without Townstead installed every condition is
+false, every field is unavailable, every template value uses its fallback and nothing is offered.
+Switches are under `[townstead]` in `CONFIG.md`; `/conversations compat townstead
+status|probe|snapshot|explain` shows what bound and what a given answer would see.
+
+### Conditions
+
+All five are registered on every install, so a pack using them loads everywhere. A malformed body is
+refused, never read as true.
+
+| Condition | Body | True when |
+|---|---|---|
+| `conversations_townstead_available` | `"read_needs"`, a list, or `{"all": [...], "any": [...]}` of capability ids | those Townstead capabilities bound. An unknown id never matches |
+| `conversations_townstead` | `{"source", "path", "op", "value"?, "allow_bare"?}` | one allow-listed field compares true (table below) |
+| `conversations_townstead_tags` | `{"all": [...], "any": [...], "none": [...]}` | Townstead's own context tags for the villager satisfy all three; no tags known matches nothing |
+| `conversations_townstead_spirit` | `classification` (`settlement`, `single`, `blend`, `mixed`), `min_tier`, `max_tier`, `primary`, `secondary`, `spirit` + `min_points`/`max_points`/`min_share`/`max_share`, `min_buildings` | the villager's village spirit matches every clause given |
+| `conversations_townstead_skill` | `{"has": "ns:id"}`, `{"any": [...]}`, `{"all": [...]}` | the villager has learned those skills (ids exact and namespaced) |
+
+`conversations_townstead` sources and paths — `op` is one of `exists`, `missing`, `eq`, `ne`, `lt`,
+`lte`, `gt`, `gte`, `contains` (strings, sets, maps), `in`, `not_in`, `matches_id`, checked against the
+field's type when the pack loads:
+
+| Source | Paths |
+|---|---|
+| `villager` | `needs.hunger`, `needs.thirst`, `needs.fatigue`, `needs.energy` (int); `needs.collapsed`, `needs.in_crisis`, `needs.thirst_active` (bool); `needs.hunger_state`, `needs.thirst_state`, `needs.fatigue_state`, `needs.primary` (string); `schedule.activity`, `schedule.planned`, `schedule.template` (string), `schedule.on_schedule`, `schedule.custom` (bool), `schedule.hour` (int); `life.root`, `life.stage`, `life.age_description` (string), `life.age_days`, `life.apparent_age` (int), `life.senior`, `life.ageless`, `life.immortal` (bool); `profession.id` (string), `profession.employed` (bool), `profession.level`, `profession.xp` (int), `profession.skills` (set); `personality.id`, `personality.base` (string), `personality.custom` (bool); `heritage` (map), `heritage.dominant` (string), `genes.carried` (map), `genes.expressed` (set) |
+| `calendar` | `profile`, `season` (string); `year`, `month`, `day`, `day_of_year`, `weekday`, `world_day` (int) — month and day are 1-based, weekday 0-based, season may be empty |
+| `building` | `present` (bool), `type`, `family` (string), `level`, `size` (int) — the registered building the villager stands in |
+| `origin` | `id`, `species`, `ancestry`, `lineage` (string) |
+| `spirit` | `tier`, `total`, `buildings` (int), `classification`, `primary`, `secondary` (string), `points` (map) |
+
+The need bands are Townstead's own: hunger `starving`/`famished`/`hungry`/`adequate`/`well_fed`,
+thirst `dehydrated`/`parched`/`thirsty`/`hydrated`/`quenched` (always `quenched` without a thirst mod),
+fatigue `exhausted`/`drowsy`/`tired`/`rested`; `needs.primary` is `none`, `hunger`, `thirst`,
+`fatigue` or `collapsed`. Genes and heritage are queryable, but no shipped line or gossip speaks them.
+
+### Check term
+
+A `conversations_check` may add `"townstead_fit": {"good_if_any": [tags], "good": 6, "bad_if_any":
+[tags], "bad": -6}`. The term is clamped to `maxCheckFit` and is exactly 0 without Townstead.
+
+### Context fields
+
+`townstead.present`, `townstead.activity`*, `townstead.need`*, `townstead.need_crisis`*,
+`townstead.hunger`*, `townstead.thirst`*, `townstead.fatigue`* (the bands above),
+`townstead.life_stage`, `townstead.age` (`child`, `young`, `adult`, `senior`, `ageless`),
+`townstead.profession_level`, `townstead.skills`, `townstead.building`* (building family, `none`
+outside one), `townstead.species`, `townstead.spirit_tier`, `townstead.spirit`,
+`townstead.spirit_kind`, `townstead.month`, `townstead.weekday`. Starred fields are volatile.
+
+### Template values
+
+`%townstead_root%`, `_species`, `_ancestry`, `_lineage`, `_life_stage`, `_apparent_age`,
+`_age_description`, `_personality`, `_profession_tier`, `_profession_xp`, `_need_state`,
+`_schedule_activity`, `_schedule_template`, `_calendar_date`, `_calendar_month`, `_calendar_weekday`,
+`_season`, `_building`, `_spirit_readout`, `_spirit_tier`, `_primary_spirit`, `_secondary_spirit`,
+`_heritage_summary` — each with a neutral `mcaconversations.fallback.townstead_*` line. Buildings,
+spirits and trade levels render through Townstead's and MCA's own translations.
+
+### Calendar and festivals (`townstead_holidays/`)
+
+`calendarSource` picks one season source: in `AUTO`, Townstead's calendar when it reports a season,
+then Serene Seasons, then the built-in cycle. Festivals on a Townstead calendar come from
+`data/<ns>/townstead_holidays/*.json`:
+
+```json
+{"holidays": {"midsummer": {"profile": "townstead_calendar:default", "month": 6, "day": 21, "span": 2,
+                            "holiday": "midsummer"}}}
+```
+
+Key by `profile` (exact, or `"*"`) and either `month` + `day` or `day_of_year`; `span` defaults to 1;
+`holiday` must be `spring_bloom`, `midsummer`, `harvest_festival` or `midwinter`. An exact profile
+outranks `"*"`. A day no mapping names is no festival, unless `useLegacyHolidayFallbackWithTownstead`.
+Mappings ship for `townstead_calendar:default`, `:tfc`, `:serene` and `:ecliptic`. A malformed entry
+refuses the reload like any other section.
+
+### Custom personalities
+
+An interiority profile keyed by a namespaced id (`"mypack:reserved_scholar"`) is that custom
+personality's own. For a villager Townstead describes, the lookup is the exact custom profile, then
+the MCA personality the custom one is based on, then MCA's reading, then neutral
+(`customPersonalityProfilesEnabled`). Ids under `mca` or `minecraft` reduce to the bare MCA voice.
+
+### Reactions (`conversations_townstead_react`)
+
+```json
+"conversations_townstead_react": "warm"
+"conversations_townstead_react": {"reaction": "mypack:bow", "semantic": "respect"}
+```
+
+Queues a heart-neutral Townstead reaction for this reply. Each reply settles once, after all its
+actions run: Townstead is told the measured heart change, then at most one reaction plays — the first
+requested, or one derived from the reply's check tier, outcome and stance. Thirteen ship under
+`data/mcaconversations/townstead/reactions/conversation_<semantic>.json` (`greeting`, `warm`,
+`amused`, `acknowledge`, `grateful`, `disclosure`, `boundary`, `awkward`, `rebuff`, `hurt`, `repair`,
+`farewell`, `news`), all `hearts: 0`, no triggers, no mirroring, Emotecraft built-in emotes only.
+They fire with tags `mcaconversations:topic/…`, `stance/…`, `outcome/crit|success|partial|rebuff`,
+`frontend/gui|chat`, `heart/increased|decreased|unchanged` and `semantic/…`. Townstead can only play
+a reaction through Emotecraft; without it nothing plays.
+
+### Gifts
+
+A tick after a gift is accepted the villager's needs are read again. Only if Townstead's own hunger,
+thirst or fatigue improved does the villager remember `mcaconversations.gift.relieved_hunger`,
+`.relieved_thirst` or `.helped_recovery` (player-scoped, a quarter of a day) for gratitude lines to
+consult.
+
+### Gossip
+
+Ten event types — `need_crisis`, `collapse`, `recovery`, `profession_tier_up`, `skill_learned`,
+`life_stage_changed`, `birthday`, `building_registered`, `building_removed`,
+`spirit_identity_changed` — told through `dialogue.<prefix>.<type>` like every other gossip, with
+lines for every shipped prefix. An event may carry `a_key`/`b_key` attributes naming a translation for
+a subject that is a thing (a building, a spirit), rendered with the cached name as fallback.
+
+### Life here
+
+The hub category `conversations.cat.townstead` holds eight topics (`wellbeing`, `daily_rhythm`,
+`mastery`, `age_and_life`, `roots`, `home_and_place`, `community`, `calendar`). A catalog topic with
+`"townstead": true` (a strict boolean) is offered only while Townstead's content is live, and the
+category itself is hidden with it. Scenes that read `townstead.*` fields declare
+`"integrations": ["townstead"]`.
+
+### Emotion tags in Townstead's dialogue screen
+
+`assets/mcaconversations/townstead_emotions/<locale>.json` maps a translation key to a tagged version
+of its line (`<sleepy>…</sleepy>`, `<whisper>`, `<sad>`, `<happy>`, `<angry>`, …). Only Townstead's
+RPG typewriter ever sees the tags, and only when Townstead itself has none for the line. A tagged value
+must strip to exactly the shipped line.
+
 ## The disposition vector & dialogue checks (v0.7.0)
 
 ### The vector
@@ -883,6 +1014,50 @@ The same facts, as context fields (owned by `context/McaContextSource`):
 | `social.contact` | string | `unmet` or `recognized` — whether this villager has actually met the player |
 | `social.contact_days` | integer | Separate days with a real exchange; UNAVAILABLE without the history store |
 | `social.attitude` | string | `hostile`, `guarded`, `neutral`, `cordial`, `warm` or `affectionate` |
+
+### Greetings, farewells and names
+
+Chat mode's hello and goodbye are chosen by `chat/GreetingPolicy` from the same facts:
+
+| Pool | Used for |
+|---|---|
+| `chatmode.hail.stranger` | never met |
+| `chatmode.hail.respected_stranger` | never met, but MCA: Reputation's respect bias for this villager's community is positive — courtesy, and no claim of any deed |
+| `chatmode.hail.recognized` | met, nothing more (a stranger they have met, or an acquaintance) |
+| `chatmode.hail` | friend or confidant; may use the player's name |
+| `chatmode.hail.partner` / `chatmode.hail.family` | spouse / parent, child or sibling |
+| `chatmode.hail_cold` | tense or hostile |
+| `chatmode.farewell.stranger` / `chatmode.farewell` | goodbye to somebody never met / to anybody else |
+
+A toddler speaks each family's `.toddler` variant, and greets a respected stranger with the plain
+stranger lines. **A line a never-met villager can say may not use the player's name (`%1$s`)** — MCA
+passes the name to every line, which does not mean the villager was told it. The stranger pools, the
+chat deflections, the hub and category prompts and this mod's additions to MCA's greet pools are
+held to that in every personality by `StrangerSafeSurfaceLintTest`; `src/test/resources/social_surface_manifest.json`
+lists every surface, its producer, policy, fallback and test.
+
+### Declaring what a scene assumes (`social`)
+
+A scene's `context` may carry a `social` block. Each part becomes an ordinary context condition, so
+a scene whose assumptions do not hold is not a candidate at all:
+
+```json
+"context": {"social": {"contact": ["recognized"], "attitudes": ["warm", "affectionate"],
+                       "claims": ["personal_friendship"], "requires_known_player_name": true}}
+```
+
+| Key | Means |
+|---|---|
+| `contact` | `unmet` / `recognized` — `social.contact` must be one of these |
+| `attitudes` | `social.attitude` must be one of these |
+| `requires_known_player_name` | the scene uses the player's name, so the villager must have met them (or be family) |
+| `claims` | what the lines assert: `prior_meeting` (met), `personal_friendship` (warm or affectionate), `romantic_relationship` (spouse), `family_tie` (family), `unresolved_rupture` (a recorded rupture), `shared_episode` (the scene must bind an `episode_kind`) |
+
+An unknown key, contact, attitude or claim is never ignored: the scene is refused, and the reload
+with it, like any other malformed entry. In
+`src/content/topics` packs the block goes on the scene itself; the compiler also refuses any scene
+line that uses `%1$s` without `requires_known_player_name`, and any funnel line that does at all,
+because a topic's funnel reaches everybody.
 
 ## Personality overlays and voice families
 

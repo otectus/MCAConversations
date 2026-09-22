@@ -22,42 +22,42 @@ Machine-generated map of this mod. Read this first when picking the project up.
 
 ```
 dev.otectus.mcaconversations                         4 files
-dev.otectus.mcaconversations.chat                    26 files
+dev.otectus.mcaconversations.chat                    27 files
 dev.otectus.mcaconversations.chat.group              5 files
-dev.otectus.mcaconversations.check                   7 files
+dev.otectus.mcaconversations.check                   8 files
 dev.otectus.mcaconversations.client                  4 files
 dev.otectus.mcaconversations.client.dialogue         32 files
 dev.otectus.mcaconversations.client.dialogue.dev     3 files
-dev.otectus.mcaconversations.client.townstead        2 files
-dev.otectus.mcaconversations.command                 2 files
-dev.otectus.mcaconversations.compat                  37 files
+dev.otectus.mcaconversations.client.townstead        3 files
+dev.otectus.mcaconversations.command                 4 files
+dev.otectus.mcaconversations.compat                  46 files
 dev.otectus.mcaconversations.compat.capitals         3 files
 dev.otectus.mcaconversations.compat.mca              4 files
 dev.otectus.mcaconversations.compat.quests           7 files
 dev.otectus.mcaconversations.compat.reputation       2 files
 dev.otectus.mcaconversations.compat.seasons          1 file
 dev.otectus.mcaconversations.compat.townstead        3 files
-dev.otectus.mcaconversations.context                 21 files
-dev.otectus.mcaconversations.conversation            71 files
+dev.otectus.mcaconversations.context                 22 files
+dev.otectus.mcaconversations.conversation            74 files
 dev.otectus.mcaconversations.court                   5 files
 dev.otectus.mcaconversations.debug                   3 files
 dev.otectus.mcaconversations.disposition             9 files
 dev.otectus.mcaconversations.event                   1 file
-dev.otectus.mcaconversations.gift                    4 files
-dev.otectus.mcaconversations.gossip                  11 files
+dev.otectus.mcaconversations.gift                    5 files
+dev.otectus.mcaconversations.gossip                  14 files
 dev.otectus.mcaconversations.history                 36 files
 dev.otectus.mcaconversations.hub                     6 files
 dev.otectus.mcaconversations.identity                10 files
 dev.otectus.mcaconversations.interiority             2 files
 dev.otectus.mcaconversations.locale                  3 files
 dev.otectus.mcaconversations.mixin                   7 files
-dev.otectus.mcaconversations.mixin.client            6 files
+dev.otectus.mcaconversations.mixin.client            7 files
 dev.otectus.mcaconversations.network                 13 files
 dev.otectus.mcaconversations.personality             3 files
 dev.otectus.mcaconversations.profession              4 files
 dev.otectus.mcaconversations.progress                13 files
 dev.otectus.mcaconversations.scene                   21 files
-dev.otectus.mcaconversations.season                  3 files
+dev.otectus.mcaconversations.season                  4 files
 dev.otectus.mcaconversations.state                   5 files
 dev.otectus.mcaconversations.template                8 files
 dev.otectus.mcaconversations.util                    1 file
@@ -95,9 +95,11 @@ Run `check_mod.py` for a full consistency check (missing models, lang keys, text
 
 ## Current focus
 
-1.8.0, the first part of the social-behaviour work (relationship bands from contact days, family
-roles and ruptures; stranger-safe greetings), on `feature/social-1.8.0`. 1.7.3 is published to
-`main` and `neoforge/1.21.1`. Next: the rest of the social spec, Townstead, the in-game campaign.
+1.8.0 on `feature/social-1.8.0`: the social-behaviour work (relationship bands from contact days,
+family roles and ruptures; stranger-safe greetings, farewells and surfaces; `SocialContract` scene
+metadata) and the full Townstead integration (conditions, check fit, context, templates, calendar,
+outcomes and reactions, chat policy, gifts, gossip, *Life here*, emotion sidecar, diagnostics).
+1.7.3 is published to `main` and `neoforge/1.21.1`. Next: the in-game campaign (`docs/ROADMAP.md` §2).
 
 ## Roadmap
 
@@ -115,8 +117,8 @@ corpus. Two Gradle tasks compile them into committed runtime resources (`build.g
 
 - `generateConversationContent` runs `authoring.ContentCompiler` (`src/content` → `src/main/resources`),
   owning `conversations.scene.*` dialogues, `scene_*.json` contracts/intents and the five
-  narrative-template directories. It also mirrors a topic pack's `kingdom_gate` / `civic_contact`
-  into that topic's `conversation_catalog/topics.json` row, and rewrites
+  narrative-template directories. It also mirrors a topic pack's `kingdom_gate` / `civic_contact` /
+  `townstead` into that topic's `conversation_catalog/topics.json` row, and rewrites
   `assets/mcaconversations/lang/*.json` in sorted key order — a hand-added key survives, but the
   drift gate fails until the generator has re-sorted it.
 - `generateVoiceOverlays` runs `authoring.VoiceFamilyCompiler` (`src/content/voices` →

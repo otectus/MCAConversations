@@ -13,16 +13,30 @@ what you've talked about before.
 
 ---
 
-## New in 1.7.3
+## New in 1.8.0
 
-### 🏰 Kingdoms and guilds (with Ultima Kingdoms)
+### 🤝 Strangers are strangers, friends have to be made
 
-Some things are only talked about in the right place. A topic can now belong to a kingdom — offered
-only to villagers who live there, or who came from there — and villagers appointed to speak for a
-guild can explain what it does and put in a request on your behalf. The guild decides; the villager
-tells you its answer and nobody else. Without Ultima Kingdoms none of this appears.
+A villager meeting you for the first time now sounds like it: a plain hello, no name they were never
+told, and a polite goodbye. Someone you have met says "hello again". Friendship takes separate days
+of real conversation as well as hearts; your spouse, parents, children and siblings greet you as
+family; and if the village thinks well of you, a stranger is courteous without pretending to know
+what you did. Every personality voices all of it in character, and old worlds keep the friendships
+they already had.
+
+### 🏡 Townstead villagers talk about their lives (with Townstead)
+
+Ask how they are keeping and a hungry villager says so; ask about their day and one on shift keeps
+working while they talk. A new **Life here** category covers wellbeing, daily rhythm, their trade,
+the years, their people, their places, what the village is becoming and the calendar. Villagers at
+work put off long talks in chat, a gift only counts as having helped when it really did, the village gossips
+about crises, promotions, birthdays and new buildings, and with Emotecraft a good reply can earn a
+wave, a clap or a tear. Without Townstead none of this appears.
 
 ## Since 1.5.1, in brief
+
+- **1.7.3 — kingdoms and guilds.** With Ultima Kingdoms, topics can belong to a kingdom, and guild
+  contacts relay requests to their guild.
 
 - **1.7.2 — known for something.** With MCA: Reputation 0.6.0, a villager who has heard what you did
   can say so, and an apology is paid for once however many people you say it to.
@@ -276,7 +290,7 @@ about our future? Is anything weighing on you?*
 | **Optional** | **MCA: Reputation** `[0.2,)` — public standing, and villagers telling each other what you've done |
 | **Optional** | **MCA Capitals** `[1.3,)` — capitals talk about their sovereign, heirs, houses and court |
 | **Optional** | **Ultima Kingdoms** `[0.1,)` — kingdom-specific topics and guild contacts |
-| **Optional** | **Townstead** `[0.7.5,0.8)` — numbered choices in its own RPG dialogue screen; deeper Townstead support is planned |
+| **Optional** | **Townstead** `[0.7.5,0.8)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
 | **Optional** | **Serene Seasons** — villagers track the real season (calendar fallback otherwise) |
 
 **Languages:** English and Brazilian Portuguese, both complete — menus, dialogue, every personality

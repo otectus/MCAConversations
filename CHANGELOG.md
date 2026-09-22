@@ -12,9 +12,12 @@ Serene Seasons, Townstead `[0.7.5,0.8)`, Ultima Kingdoms `[0.1,)`.
 
 ## [1.8.0] - unreleased
 
-Social behaviour, first part. A villager meeting you for the first time now sounds like somebody
-meeting you for the first time, and becoming friends takes being around rather than a pile of gifts.
-Hearts are still the one number you see; what changed is what a villager may *assume* about you.
+Social behaviour, and Townstead. A villager meeting you for the first time now sounds like somebody
+meeting you for the first time — no name they were never told, no friendship they never had — and
+becoming friends takes being around rather than a pile of gifts. Hearts are still the one number you
+see; what changed is what a villager may *assume* about you. And with Townstead installed, its
+villagers' needs, shifts, trades, years, roots, buildings, village spirit and calendar become
+something they talk about, act on and gossip about.
 
 ### Changed
 
@@ -137,8 +140,8 @@ and without Townstead installed nothing below changes a line.
   partner, logout, the conversation ending, or the chat window lapsing.
 - **A villager's day shapes chat.** Someone asleep, collapsed, in a need emergency, in danger or in
   another player's conversation no longer greets you as you pass, and the day's greeting is kept for
-  later rather than spent. Ask a villager at work, or worn out, for a long or personal conversation
-  and they say they are in the middle of something instead of starting it; small talk still works,
+  later rather than spent. Ask a villager at work, or worn out, in chat for a long or personal
+  conversation and they say they are in the middle of something instead of starting it; small talk still works,
   and a collapsed villager manages nothing more. Collapsed and mid-reaction villagers do not answer a
   remark to the crowd, at most one villager at work does, and chat attention never stops a villager
   Townstead is animating, and only turns one at work to face you rather than stopping them. All of it

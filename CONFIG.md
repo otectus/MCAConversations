@@ -429,18 +429,16 @@ village spirit all stay Townstead's to own. The three things Conversations does 
 measured heart change, a typed-chat conversation opening and closing, and an authored, heart-neutral
 reaction.
 
-**What works today, and what does not yet.** The binding is real: with Townstead installed, one
-startup log line names its version and how many of its fourteen capabilities bound, or lists the
-members that did not. Townstead's own RPG dialogue screen gains numbered choices. `enabled` is live.
-**Every other key below is declared but not yet read by anything** — the conditions, template
-variables, calendar source, reactions, gossip and topics they govern are the planned Townstead
-release, tracked in [`docs/ROADMAP.md`](docs/ROADMAP.md) §3.2. Setting them changes nothing yet. The
-`/conversations compat townstead` diagnostics are part of that same release and do not exist yet.
+**Everything below is live.** With Townstead installed, one startup log line names its version and
+how many of its fourteen capabilities bound, or lists the members that did not, and
+`/conversations compat townstead status` shows the same at any time (`probe`, `snapshot` and
+`explain` go deeper for operators). Townstead's own RPG dialogue screen gains numbered choices. What
+each switch governs is described in [`DATAPACK.md`](DATAPACK.md) under *Townstead*.
 
 | Option | Default | Range | Meaning |
 |---|---|---|---|
 | `enabled` | `true` | | master switch. Off, Conversations behaves exactly as though Townstead were absent |
-| `contentEnabled` | `true` | | offer the Townstead conversation topics (wellbeing, daily rhythm, work and mastery, age and life, roots, home and place, community identity, calendar) |
+| `contentEnabled` | `true` | | offer the *Life here* hub category and its eight topics (wellbeing, daily rhythm, work and mastery, age and life, roots, home and place, community, calendar), the Townstead-aware scenes in existing topics, and the `townstead.*` context fields |
 | `contextConditionsEnabled` | `true` | | let the `conversations_townstead*` dialogue conditions read Townstead state. Off, they score `0` and authored fallback branches fire instead |
 | `contextCheckFitEnabled` | `true` | | let an authored `townstead_fit` block colour a dialogue check. Off, the term is exactly `0` |
 | `reactionsEnabled` | `true` | | fire Townstead reactions on conversation outcomes. Every bundled reaction is heart-neutral. **Townstead can only play a reaction through Emotecraft**, so without that mod this degrades to no reaction rather than to an error |
@@ -456,7 +454,7 @@ release, tracked in [`docs/ROADMAP.md`](docs/ROADMAP.md) §3.2. Setting them cha
 | `contextCacheTicks` | `20` | 1–100 | how long a Townstead context read is reused by the chat scans. Dialogue evaluation always caches for exactly one tick regardless, because MCA scores many candidate results for a single click |
 | `needCrisisCooldownDays` | `2` | 0–60 | days before the same villager can produce another need-crisis rumour |
 | `buildingRemovalConfirmScans` | `2` | 1–10 | how many consecutive sweeps must agree a known building is gone before that becomes news. Guards against a reload transient reading as a demolition |
-| `debug` | `false` | | verbose logging for Townstead binding, context reads and reactions |
+| `debug` | `false` | | log every Townstead reaction attempt (played or declined, with its tags) and every gift observation |
 
 ## `[capitals]`
 
