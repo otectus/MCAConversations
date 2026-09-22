@@ -276,12 +276,15 @@ real-jar probes, which need jar paths that were not supplied.
 
 | Check | Forge | NeoForge |
 |---|---|---|
-| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-171110.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-build-20260922-171320.log` (with `verifyJarContents`) |
-| `:test` | executed; 1,630 tests, 0 failures, 6 skipped (25 new; one obsolete lint removed) | executed; 1,673 tests, 0 failures, 6 skipped |
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-193349.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-build-20260922-194008.log` (with `verifyJarContents`) |
+| `:test` | executed; 1,695 tests, 0 failures, 6 skipped | executed; 1,738 tests, 0 failures, 6 skipped |
+| `townsteadProbeTest` against real jars | PASS on 0.7.7 modern (`-193435.log`), 0.7.7 legacy (`-193444.log`) and 0.7.6 (`-193452.log`); each 6 tests, 0 skipped, root `forge.net.conczin.mca`, 14 server capabilities | PASS on the 1.21.1 build (`/tmp/gradle-MCAConversations_1.21.1-townsteadProbeTest-20260922-194113.log`); 6 tests, 0 skipped, root `net.conczin.mca`, 14 server capabilities |
 | Jar | `mcaconversations-1.8.0.jar`, protocol 4 | `mcaconversations-neoforge-1.8.0+1.21.1.jar`, protocol 4 |
 | `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
-| Parity, from both copies | 1,911 identical, 178 reviewed adaptations, verified | same |
+| Parity, from both copies | 2,016 identical, 184 reviewed adaptations, verified | same |
 | In-game | **not run** | **not run** |
+
+The Forge probe logs are `/tmp/gradle-MCAConversations-townsteadProbeTest-20260922-<time>.log`.
 
 ### 1.7.3 — 2026-09-22
 
