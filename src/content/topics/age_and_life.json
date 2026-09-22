@@ -1,0 +1,709 @@
+{
+ "_comment": [
+  "Townstead life stages as lived experience: the later years, an ageless life. Never a number, never a claim about adulthood; MCA's own age gates stay in charge."
+ ],
+ "topic": "age_and_life",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "age_and_life"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Time's kind, mostly.",
+   "Mind the years, they go quick.",
+   "Thank you for asking about it."
+  ],
+  "pt": [
+   "O tempo é gentil, quase sempre.",
+   "Cuidado com os anos, eles passam rápido.",
+   "Agradeço por perguntar disso."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "I'll leave you to it.",
+  "pt": "Vou deixar você em paz."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about the years?",
+   "pt": "Mais alguma coisa sobre os anos?"
+  },
+  "leave": {
+   "en": "I'll leave you to it.",
+   "pt": "Vou deixar você em paz."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "Every age has its own weather. You learn to dress for it.",
+    "I'm the age I am. Some days I feel it more than others.",
+    "Life goes in seasons. I try not to wish any of them away."
+   ],
+   "pt": [
+    "Cada idade tem seu próprio clima. A gente aprende a se vestir pra ele.",
+    "Tenho a idade que tenho. Tem dias que sinto mais que outros.",
+    "A vida vem em estações. Tento não desejar que nenhuma passe logo."
+   ]
+  },
+  "open": {
+   "subject": "age_and_life.where_i_am",
+   "act": "report",
+   "polarity": "mixed",
+   "predicate": "opinion",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "This time of your life.",
+    "pt": "Esta fase da sua vida."
+   },
+   "lines": {
+    "en": [
+     "I'm at the age where I know what I do well and what I never will.",
+     "Young folk think I've got it all worked out. I let them.",
+     "Time's moving the way it does. I've made my peace with most of it."
+    ],
+    "pt": [
+     "Estou na idade em que sei o que faço bem e o que nunca vou fazer.",
+     "Os mais novos acham que tenho tudo resolvido. Deixo que achem.",
+     "O tempo anda do jeito dele. Já fiz as pazes com quase tudo."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_best_age",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What's been the best age so far?",
+      "pt": "Qual foi a melhor idade até agora?"
+     },
+     "phrases": [
+      "whats been the best age so far"
+     ],
+     "phrases_pt": [
+      "qual foi a melhor idade ate agora"
+     ],
+     "requires_any": [
+      "best",
+      "age",
+      "melhor",
+      "idade"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "This one, I think. I know more, and I worry about less.",
+        "The one where I stopped needing everyone to like me."
+       ],
+       "pt": [
+        "Esta, eu acho. Sei mais e me preocupo com menos.",
+        "Aquela em que parei de precisar que todo mundo gostasse de mim."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "say_it_suits",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "It seems to suit you.",
+      "pt": "Parece que combina com você."
+     },
+     "phrases": [
+      "it seems to suit you"
+     ],
+     "phrases_pt": [
+      "parece que combina com voce"
+     ],
+     "requires_any": [
+      "suit",
+      "combina"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "affection": {
+      "decision": "topic.age_and_life.complimented",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Kind of you. It suits me better than it used to.",
+        "I'll take that. Thank you."
+       ],
+       "pt": [
+        "Gentileza sua. Combina mais do que antes.",
+        "Aceito. Agradeço."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "tease_the_years",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "The years are catching up with you, aren't they?",
+      "pt": "Os anos já estão pesando, não?"
+     },
+     "phrases": [
+      "the years are catching up with you arent they"
+     ],
+     "phrases_pt": [
+      "os anos ja estao pesando nao"
+     ],
+     "requires_any": [
+      "catching",
+      "pesando"
+     ],
+     "disposition": {
+      "warmth": -2,
+      "tension": 1
+     },
+     "affection": {
+      "decision": "topic.age_and_life.teased",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "qualify",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "They catch us all. I'm just further along the road.",
+        "Charming. I'll remember you said that."
+       ],
+       "pt": [
+        "Eles pegam todo mundo. Só cheguei mais adiante na estrada.",
+        "Que charme. Vou lembrar que você disse isso."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "age_and_life.what_i_carry",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "What the years have taught you.",
+    "pt": "O que os anos te ensinaram."
+   },
+   "lines": {
+    "en": [
+     "The years took some people from me. I carry them along; it's lighter than you'd think.",
+     "I used to be in such a hurry. I'm not sure now what I was racing toward.",
+     "I'm less afraid than I was. I didn't expect that."
+    ],
+    "pt": [
+     "Os anos me tiraram algumas pessoas. Carrego elas comigo; é mais leve do que parece.",
+     "Eu vivia com tanta pressa. Agora nem sei pra onde estava correndo.",
+     "Tenho menos medo do que tinha. Não esperava isso."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_who",
+     "stance": "empathy",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "Who do you carry with you?",
+      "pt": "Quem você carrega com você?"
+     },
+     "phrases": [
+      "who do you carry with you"
+     ],
+     "phrases_pt": [
+      "quem voce carrega com voce"
+     ],
+     "requires_any": [
+      "carry",
+      "carrega"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.age_and_life.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "People who taught me things. I hear them when I'm working.",
+        "Some I loved, some I argued with. Both kinds stay."
+       ],
+       "pt": [
+        "Gente que me ensinou coisas. Escuto essas vozes quando trabalho.",
+        "Alguns eu amei, com outros eu discuti. Os dois tipos ficam."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "thank_them",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Thank you for telling me that.",
+      "pt": "Agradeço por me contar isso."
+     },
+     "phrases": [
+      "thank you for telling me that"
+     ],
+     "phrases_pt": [
+      "agradeco por me contar isso"
+     ],
+     "requires_any": [
+      "telling",
+      "contar"
+     ],
+     "disposition": {
+      "warmth": 3,
+      "trust": 1
+     },
+     "reaction": {
+      "id": "acknowledged",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Thank you for listening. Not everyone does.",
+        "It's easier said to someone who hears it."
+       ],
+       "pt": [
+        "Agradeço por ouvir. Nem todo mundo ouve.",
+        "É mais fácil dizer pra quem escuta."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "too_gloomy",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "That's too gloomy for me.",
+      "pt": "Isso é triste demais pra mim."
+     },
+     "phrases": [
+      "thats too gloomy for me"
+     ],
+     "phrases_pt": [
+      "isso e triste demais pra mim"
+     ],
+     "requires_any": [
+      "gloomy",
+      "triste"
+     ],
+     "disposition": {
+      "warmth": -2
+     },
+     "affection": {
+      "decision": "topic.age_and_life.waved_off",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "deflect",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Then I'll keep the rest to myself.",
+        "It wasn't meant gloomily. Never mind."
+       ],
+       "pt": [
+        "Então guardo o resto pra mim.",
+        "Não era pra ser triste. Deixe pra lá."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "the_later_years",
+   "subject": "age_and_life.elder",
+   "shape": "observe",
+   "act": "reminisce",
+   "polarity": "mixed",
+   "predicate": "opinion",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.age",
+     "is": "senior",
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 38,
+   "cooldown_days": 4,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "The later years.",
+    "pt": "Os anos mais tardios."
+   },
+   "lines": {
+    "en": [
+     "I've more years behind me than in front. It makes the mornings precious.",
+     "The young ones ask me things now. I'm not sure when that started."
+    ],
+    "pt": [
+     "Tenho mais anos atrás do que pela frente. Isso deixa as manhãs preciosas.",
+     "Os mais novos me perguntam coisas agora. Não sei quando isso começou."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_advice",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What would you tell someone younger?",
+      "pt": "O que você diria a alguém mais novo?"
+     },
+     "phrases": [
+      "what would you tell someone younger"
+     ],
+     "phrases_pt": [
+      "o que voce diria a alguem mais novo"
+     ],
+     "requires_any": [
+      "younger",
+      "diria"
+     ],
+     "disposition": {
+      "familiarity": 2,
+      "respect": 1
+     },
+     "reaction": {
+      "id": "advised",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Don't wait to say the kind things. There's less time than it looks.",
+        "Rest before you need to. Nobody told me that."
+       ],
+       "pt": [
+        "Não espere pra dizer as coisas gentis. Há menos tempo do que parece.",
+        "Descanse antes de precisar. Ninguém me disse isso."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "lucky_to_have_you",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "The village is lucky to have you.",
+      "pt": "O vilarejo tem sorte de ter você."
+     },
+     "phrases": [
+      "the village is lucky to have you"
+     ],
+     "phrases_pt": [
+      "o vilarejo tem sorte de ter voce"
+     ],
+     "requires_any": [
+      "lucky",
+      "sorte"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.age_and_life.honoured",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Lucky, or stuck with me. Either way, thank you.",
+        "That's a warm thing to hear at my age."
+       ],
+       "pt": [
+        "Sorte, ou não tem como se livrar de mim. De todo jeito, agradeço.",
+        "É bom ouvir isso na minha idade."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  },
+  {
+   "name": "time_passes_others",
+   "subject": "age_and_life.ageless",
+   "shape": "confide",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.age",
+     "is": "ageless",
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 40,
+   "cooldown_days": 5,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "Time, for you.",
+    "pt": "O tempo, pra você."
+   },
+   "lines": {
+    "en": [
+     "Time doesn't take hold of me the way it does the others. It's lonelier than it sounds.",
+     "I've watched this village change more than once. I try not to say so too often."
+    ],
+    "pt": [
+     "O tempo não me pega do jeito que pega os outros. É mais solitário do que parece.",
+     "Já vi este vilarejo mudar mais de uma vez. Tento não falar disso com frequência."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_what_its_like",
+     "stance": "empathy",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What's that like, watching it all change?",
+      "pt": "Como é ver tudo mudar?"
+     },
+     "phrases": [
+      "whats that like watching it all change"
+     ],
+     "phrases_pt": [
+      "como e ver tudo mudar"
+     ],
+     "requires_any": [
+      "watching",
+      "change",
+      "mudar"
+     ],
+     "disposition": {
+      "familiarity": 2,
+      "trust": 1
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "Like a long evening. Lovely, and you know it's ending for everyone but you.",
+        "You learn to love things knowing you'll outlast them."
+       ],
+       "pt": [
+        "Como um fim de tarde comprido. Bonito, e você sabe que vai acabar pra todos menos pra você.",
+        "A gente aprende a amar sabendo que vai durar mais que as coisas."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "keep_them_company",
+     "stance": "practical_help",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Then I'll make sure you're not lonely today.",
+      "pt": "Então hoje eu garanto que você não fique só."
+     },
+     "phrases": [
+      "then ill make sure youre not lonely today"
+     ],
+     "phrases_pt": [
+      "entao hoje eu garanto que voce nao fique so"
+     ],
+     "requires_any": [
+      "sure",
+      "garanto"
+     ],
+     "disposition": {
+      "warmth": 3
+     },
+     "affection": {
+      "decision": "topic.age_and_life.kept_company",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Today, then. That's enough.",
+        "That's a gift, you know. Thank you."
+       ],
+       "pt": [
+        "Hoje, então. Já basta.",
+        "Isso é um presente, sabia? Agradeço."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2,
+   "privacy": "discreet"
+  }
+ ]
+}

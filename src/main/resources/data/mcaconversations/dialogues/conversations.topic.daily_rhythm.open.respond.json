@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_best_hour",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "daily_rhythm.open.named"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.the_shape",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.daily_rhythm.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.daily_rhythm.open.named"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_when_free",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "daily_rhythm.open.agreed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.daily_rhythm.asked_when",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.the_shape",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.daily_rhythm.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.daily_rhythm.open.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "call_it_dreary",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "daily_rhythm.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.daily_rhythm.dismissed",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.the_shape",
+              "deltas": {
+                "warmth": -2,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.daily_rhythm.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.daily_rhythm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

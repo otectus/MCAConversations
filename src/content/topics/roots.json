@@ -1,0 +1,559 @@
+{
+ "_comment": [
+  "Townstead roots and lineage, privacy-safe: stories and customs only. No heritage fractions, genes or species claims are ever spoken."
+ ],
+ "topic": "roots",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "roots"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Thank you for asking kindly.",
+   "Some stories keep better told slowly.",
+   "Another time, I'll tell you more."
+  ],
+  "pt": [
+   "Agradeço por perguntar com jeito.",
+   "Algumas histórias se guardam melhor contadas devagar.",
+   "Outra hora eu conto mais."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "Thank you for sharing that.",
+  "pt": "Agradeço por compartilhar isso."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about your people?",
+   "pt": "Mais alguma coisa sobre sua gente?"
+  },
+  "leave": {
+   "en": "Another time, then.",
+   "pt": "Outra hora, então."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "My people came from somewhere else once. Everyone's did.",
+    "Where you're from matters less than where you're going. Mostly.",
+    "I carry a bit of my family's old ways. Not all of them."
+   ],
+   "pt": [
+    "Meu povo veio de outro lugar um dia. O de todo mundo veio.",
+    "De onde você vem importa menos do que pra onde vai. Quase sempre.",
+    "Carrego um pouco dos costumes antigos da minha família. Não todos."
+   ]
+  },
+  "open": {
+   "subject": "roots.where_from",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "Where your people come from.",
+    "pt": "De onde vem sua gente."
+   },
+   "lines": {
+    "en": [
+     "My family's roots go back further than this village. I only know pieces of the story.",
+     "There are old ways in my family I still keep, even when I don't know why.",
+     "I've heard the stories of where we came from. Some of them might even be true."
+    ],
+    "pt": [
+     "As raízes da minha família vão mais longe que este vilarejo. Só conheço pedaços da história.",
+     "Tem costumes antigos na minha família que ainda sigo, mesmo sem saber por quê.",
+     "Ouvi as histórias de onde viemos. Algumas talvez até sejam verdade."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_a_story",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "Tell me one of the old stories.",
+      "pt": "Me conte uma das histórias antigas."
+     },
+     "phrases": [
+      "tell me one of the old stories"
+     ],
+     "phrases_pt": [
+      "me conte uma das historias antigas"
+     ],
+     "requires_any": [
+      "stories",
+      "historias",
+      "antigas"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "There's one about a long walk and a river that wouldn't let anyone cross. We crossed anyway, the story says.",
+        "My grandmother said we came with nothing but a song. I still know the first verse."
+       ],
+       "pt": [
+        "Tem uma sobre uma longa caminhada e um rio que não deixava ninguém atravessar. Atravessamos mesmo assim, diz a história.",
+        "Minha avó dizia que chegamos só com uma canção. Ainda sei o primeiro verso."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "respect_the_ways",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "It's good that you keep those ways.",
+      "pt": "É bom que você mantenha esses costumes."
+     },
+     "phrases": [
+      "its good that you keep those ways"
+     ],
+     "phrases_pt": [
+      "e bom que voce mantenha esses costumes"
+     ],
+     "requires_any": [
+      "ways",
+      "costumes"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.roots.respected",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I think so too. Somebody has to remember.",
+        "Thank you. Not everyone sees the point."
+       ],
+       "pt": [
+        "Também acho. Alguém tem que lembrar.",
+        "Agradeço. Nem todo mundo vê sentido nisso."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "stories_dont_matter",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Old stories don't matter much.",
+      "pt": "Histórias antigas não importam muito."
+     },
+     "phrases": [
+      "old stories dont matter much"
+     ],
+     "phrases_pt": [
+      "historias antigas nao importam muito"
+     ],
+     "requires_any": [
+      "stories",
+      "historias"
+     ],
+     "disposition": {
+      "warmth": -2
+     },
+     "affection": {
+      "decision": "topic.roots.dismissed",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "resist",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "They matter to me. That'll have to do.",
+        "Maybe not to you. I'll keep them anyway."
+       ],
+       "pt": [
+        "Importam pra mim. Isso vai ter que bastar.",
+        "Pra você, talvez não. Vou guardar mesmo assim."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "roots.what_i_keep",
+   "act": "disclose",
+   "polarity": "positive",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "What you keep from them.",
+    "pt": "O que você guarda deles."
+   },
+   "lines": {
+    "en": [
+     "I keep one custom from my family that nobody here shares. It's small, but it's mine.",
+     "Sometimes I feel like I belong to two places and fully to neither.",
+     "I don't talk about my family's past much. People make it into more than it was."
+    ],
+    "pt": [
+     "Guardo um costume da minha família que ninguém aqui tem. É pequeno, mas é meu.",
+     "Às vezes sinto que pertenço a dois lugares e a nenhum por inteiro.",
+     "Não falo muito do passado da minha família. As pessoas aumentam as coisas."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_the_custom",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What's the custom you keep?",
+      "pt": "Qual é o costume que você guarda?"
+     },
+     "phrases": [
+      "whats the custom you keep"
+     ],
+     "phrases_pt": [
+      "qual e o costume que voce guarda"
+     ],
+     "requires_any": [
+      "custom",
+      "costume"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.roots.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "I light a candle on the first evening of the year for the ones before me. Nothing more.",
+        "A word said before meals. I'll not tell you the word — it's ours."
+       ],
+       "pt": [
+        "Acendo uma vela na primeira noite do ano pros que vieram antes de mim. Nada mais.",
+        "Uma palavra dita antes das refeições. Não vou dizer qual — é nossa."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "you_belong_here",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "You belong here as much as anyone.",
+      "pt": "Você pertence a este lugar tanto quanto qualquer um."
+     },
+     "phrases": [
+      "you belong here as much as anyone"
+     ],
+     "phrases_pt": [
+      "voce pertence a este lugar tanto quanto qualquer um"
+     ],
+     "requires_any": [
+      "belong",
+      "pertence"
+     ],
+     "disposition": {
+      "warmth": 3,
+      "trust": 1
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "That's kind. I needed to hear it more than I'd admit.",
+        "Thank you. It helps, coming from you."
+       ],
+       "pt": [
+        "Gentileza sua. Precisava ouvir isso mais do que admito.",
+        "Agradeço. Ajuda, vindo de você."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "demand_everything",
+     "stance": "boundary_push",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "boundary_closed",
+     "label": {
+      "en": "Come on, tell me everything about your family.",
+      "pt": "Vamos, me conte tudo sobre sua família."
+     },
+     "phrases": [
+      "come on tell me everything about your family"
+     ],
+     "phrases_pt": [
+      "vamos me conte tudo sobre sua familia"
+     ],
+     "requires_any": [
+      "everything",
+      "family",
+      "tudo",
+      "familia"
+     ],
+     "disposition": {
+      "trust": -2,
+      "tension": 2
+     },
+     "affection": {
+      "decision": "topic.roots.pried",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "resist",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "No. Some of it isn't for telling.",
+        "That's mine to share or not. Not today."
+       ],
+       "pt": [
+        "Não. Uma parte não é pra contar.",
+        "Isso é meu pra contar ou não. Hoje não."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "a_long_line",
+   "subject": "roots.lineage",
+   "shape": "observe",
+   "act": "reminisce",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.species",
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 34,
+   "cooldown_days": 5,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "Your line.",
+    "pt": "Sua linhagem."
+   },
+   "lines": {
+    "en": [
+     "My line goes back a long way. My grandmother could name eleven of them; I manage six.",
+     "We've always been the kind who stay put and put down roots. Literally, in my family's case."
+    ],
+    "pt": [
+     "Minha linhagem vem de longe. Minha avó sabia o nome de onze; eu lembro de seis.",
+     "Sempre fomos do tipo que fica e cria raízes. No caso da minha família, literalmente."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_names",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "Do you remember any of their names?",
+      "pt": "Você lembra do nome de algum deles?"
+     },
+     "phrases": [
+      "do you remember any of their names"
+     ],
+     "phrases_pt": [
+      "voce lembra do nome de algum deles"
+     ],
+     "requires_any": [
+      "remember",
+      "names",
+      "lembra",
+      "nome"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "A few. I say them over sometimes, so they stay said.",
+        "The first one, and the last one before me. The middle is fog."
+       ],
+       "pt": [
+        "Alguns. Repito de vez em quando, pra continuarem ditos.",
+        "O primeiro, e o último antes de mim. O meio é neblina."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "proud_line",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "That's a lot to be proud of.",
+      "pt": "É muita coisa pra se orgulhar."
+     },
+     "phrases": [
+      "thats a lot to be proud of"
+     ],
+     "phrases_pt": [
+      "e muita coisa pra se orgulhar"
+     ],
+     "requires_any": [
+      "proud",
+      "orgulhar"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "It is. I try to add something worth remembering to it.",
+        "Thank you. I'll tell them you said so."
+       ],
+       "pt": [
+        "É. Tento acrescentar algo que valha lembrar.",
+        "Agradeço. Vou dizer a eles que você disse isso."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  }
+ ]
+}

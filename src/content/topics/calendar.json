@@ -1,0 +1,710 @@
+{
+ "_comment": [
+  "Townstead's calendar in conversation: the date, the season's jobs, a festival from the townstead_holidays mapping. A plan is never an appointment."
+ ],
+ "topic": "calendar",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "calendar"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Mind the date, then.",
+   "The days will keep coming.",
+   "See you before the season turns."
+  ],
+  "pt": [
+   "Cuidado com a data, então.",
+   "Os dias vão continuar vindo.",
+   "Até antes da estação virar."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "I'll let you get on with the day.",
+  "pt": "Vou deixar você seguir com o dia."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about the season?",
+   "pt": "Mais alguma coisa sobre a estação?"
+  },
+  "leave": {
+   "en": "See you before the season turns.",
+   "pt": "Até antes da estação virar."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "Days go by whether you count them or not.",
+    "I keep track of the date. Someone has to.",
+    "Every season has its jobs. I like knowing which one we're in."
+   ],
+   "pt": [
+    "Os dias passam, contando ou não.",
+    "Eu acompanho a data. Alguém tem que acompanhar.",
+    "Cada estação tem suas tarefas. Gosto de saber em qual estamos."
+   ]
+  },
+  "open": {
+   "subject": "calendar.the_time_of_year",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "The time of year.",
+    "pt": "A época do ano."
+   },
+   "lines": {
+    "en": [
+     "I keep the days in my head like a ledger. It's a comfort, knowing where we are.",
+     "There's a rhythm to the year. Planting, working, gathering, resting. Round again.",
+     "Ask me what day it is and I'll tell you what needs doing on it."
+    ],
+    "pt": [
+     "Guardo os dias na cabeça como um livro de contas. É um conforto saber onde estamos.",
+     "O ano tem um ritmo. Plantar, trabalhar, colher, descansar. E de novo.",
+     "Me pergunte que dia é e eu digo o que precisa ser feito nele."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_favourite_time",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What's your favourite time of year?",
+      "pt": "Qual é sua época preferida do ano?"
+     },
+     "phrases": [
+      "whats your favourite time of year",
+      "what is your favorite time of year"
+     ],
+     "phrases_pt": [
+      "qual e sua epoca preferida do ano"
+     ],
+     "requires_any": [
+      "favourite",
+      "favorite",
+      "preferida"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "The turn of the season, when you can smell the next one coming.",
+        "The middle of winter, when there's nothing to do but talk."
+       ],
+       "pt": [
+        "A virada da estação, quando dá pra sentir o cheiro da próxima chegando.",
+        "O meio do inverno, quando não há nada pra fazer além de conversar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "invite_to_feast",
+     "stance": "practical_help",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Tell me when there's a feast — I'll come.",
+      "pt": "Me avise quando tiver festa — eu venho."
+     },
+     "phrases": [
+      "tell me when theres a feast ill come"
+     ],
+     "phrases_pt": [
+      "me avise quando tiver festa eu venho"
+     ],
+     "requires_any": [
+      "feast",
+      "festa"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "affection": {
+      "decision": "topic.calendar.invited_self",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "agreed",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I'll hold you to that. Bring an appetite.",
+        "You'll hear about it. Everyone does."
+       ],
+       "pt": [
+        "Vou cobrar. Traga apetite.",
+        "Você vai ficar sabendo. Todo mundo fica."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "every_day_the_same",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "One day's the same as another.",
+      "pt": "Um dia é igual ao outro."
+     },
+     "phrases": [
+      "one days the same as another"
+     ],
+     "phrases_pt": [
+      "um dia e igual ao outro"
+     ],
+     "requires_any": [
+      "same",
+      "igual"
+     ],
+     "disposition": {
+      "warmth": -1
+     },
+     "affection": {
+      "decision": "topic.calendar.dismissed",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "qualify",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Not to a farmer, it isn't. Not to anyone who works.",
+        "Then you've never missed a planting."
+       ],
+       "pt": [
+        "Não pra quem planta. Nem pra quem trabalha.",
+        "Então você nunca perdeu uma época de plantio."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "calendar.a_date_i_keep",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "A date you keep.",
+    "pt": "Uma data que você guarda."
+   },
+   "lines": {
+    "en": [
+     "There's one day each year I keep to myself. I don't mark it; I just remember.",
+     "I note the day I came here, every year. Nobody else does, and that's fine.",
+     "There's a date in autumn that's heavier than the rest. I get through it."
+    ],
+    "pt": [
+     "Tem um dia por ano que guardo só pra mim. Não marco; só lembro.",
+     "Anoto o dia em que cheguei aqui, todo ano. Ninguém mais anota, e tudo bem.",
+     "Tem uma data no outono mais pesada que as outras. Eu atravesso."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_gently",
+     "stance": "empathy",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "Do you want to tell me about it?",
+      "pt": "Quer me contar sobre isso?"
+     },
+     "phrases": [
+      "do you want to tell me about it"
+     ],
+     "phrases_pt": [
+      "quer me contar sobre isso"
+     ],
+     "requires_any": [
+      "want",
+      "tell",
+      "quer",
+      "contar"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.calendar.asked_gently",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "Not the whole of it. But thank you for asking the way you did.",
+        "It's the day I lost someone. That's enough to say."
+       ],
+       "pt": [
+        "Não inteiro. Mas agradeço o jeito como perguntou.",
+        "É o dia em que perdi alguém. Isso basta dizer."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "keep_them_company",
+     "stance": "practical_help",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Next year, tell me the day. I'll keep you company.",
+      "pt": "Ano que vem, me diga o dia. Eu te faço companhia."
+     },
+     "phrases": [
+      "next year tell me the day ill keep you company"
+     ],
+     "phrases_pt": [
+      "ano que vem me diga o dia eu te faco companhia"
+     ],
+     "requires_any": [
+      "company",
+      "companhia"
+     ],
+     "disposition": {
+      "warmth": 3,
+      "trust": 1
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I might. That would be a different kind of day.",
+        "That's kind. I'll think about it."
+       ],
+       "pt": [
+        "Talvez eu diga. Seria um dia diferente.",
+        "Gentileza sua. Vou pensar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "stop_dwelling",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Dwelling on dates won't help.",
+      "pt": "Ficar remoendo datas não ajuda."
+     },
+     "phrases": [
+      "dwelling on dates wont help"
+     ],
+     "phrases_pt": [
+      "ficar remoendo datas nao ajuda"
+     ],
+     "requires_any": [
+      "dwelling",
+      "remoendo"
+     ],
+     "disposition": {
+      "warmth": -2
+     },
+     "affection": {
+      "decision": "topic.calendar.waved_off",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "deflect",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "It's not dwelling. It's remembering. Never mind.",
+        "Perhaps not. I'll keep it anyway."
+       ],
+       "pt": [
+        "Não é remoer. É lembrar. Deixe pra lá.",
+        "Talvez não. Vou guardar mesmo assim."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "todays_date",
+   "subject": "calendar.today",
+   "shape": "observe",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.month",
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 34,
+   "cooldown_days": 3,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [
+    "townstead_calendar_date"
+   ],
+   "prompt": {
+    "en": "Today's date.",
+    "pt": "A data de hoje."
+   },
+   "lines": {
+    "en": [
+     "It's %2$s, if you're keeping count. I always am.",
+     "%2$s today. The year's moving quicker than I'd like."
+    ],
+    "pt": [
+     "Hoje é %2$s, se estiver contando. Eu sempre estou.",
+     "Hoje, %2$s. O ano está andando mais rápido do que eu queria."
+    ]
+   },
+   "replies": [
+    {
+     "name": "whats_due_now",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What needs doing at this time of year?",
+      "pt": "O que precisa ser feito nesta época do ano?"
+     },
+     "phrases": [
+      "what needs doing at this time of year"
+     ],
+     "phrases_pt": [
+      "o que precisa ser feito nesta epoca do ano"
+     ],
+     "requires_any": [
+      "doing",
+      "feito",
+      "epoca"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "explained",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Mending, mostly. Whatever broke last season, before the next one breaks it again.",
+        "Stores. Always the stores. Count, check, count again."
+       ],
+       "pt": [
+        "Consertos, principalmente. O que quebrou na estação passada, antes que a próxima quebre de novo.",
+        "Estoques. Sempre os estoques. Contar, conferir, contar de novo."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "good_to_keep_track",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Good to have someone who keeps track.",
+      "pt": "Bom ter alguém que acompanha as datas."
+     },
+     "phrases": [
+      "good to have someone who keeps track"
+     ],
+     "phrases_pt": [
+      "bom ter alguem que acompanha as datas"
+     ],
+     "requires_any": [
+      "track",
+      "acompanha"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Someone has to. It may as well be someone who enjoys it.",
+        "Thank you. Usually nobody notices until I'm wrong."
+       ],
+       "pt": [
+        "Alguém precisa. Que seja alguém que gosta disso.",
+        "Agradeço. A maioria só repara quando eu erro."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  },
+  {
+   "name": "festival_days",
+   "subject": "calendar.festival",
+   "shape": "observe",
+   "act": "celebrate",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.month",
+     "unknown": "fail"
+    },
+    {
+     "field": "time.holiday",
+     "is": "none",
+     "not": true,
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 44,
+   "cooldown_days": 1,
+   "max_mentions_per_7_days": 3,
+   "vars_used": [
+    "holiday"
+   ],
+   "prompt": {
+    "en": "The festival.",
+    "pt": "O festejo."
+   },
+   "lines": {
+    "en": [
+     "It's %2$s! Or near enough. Everyone's in a better mood, have you noticed?",
+     "%2$s is here. I've been looking forward to it for weeks.",
+     "It's %2$s — you can smell it from the bakery, can't you?"
+    ],
+    "pt": [
+     "É %2$s! Ou quase. Todo mundo está de bom humor, reparou?",
+     "Chegou %2$s. Faz semanas que espero por isso.",
+     "É %2$s — dá pra sentir o cheiro da padaria, não dá?"
+    ]
+   },
+   "replies": [
+    {
+     "name": "how_you_celebrate",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "How do you celebrate it here?",
+      "pt": "Como vocês comemoram aqui?"
+     },
+     "phrases": [
+      "how do you celebrate it here"
+     ],
+     "phrases_pt": [
+      "como voces comemoram aqui"
+     ],
+     "requires_any": [
+      "celebrate",
+      "comemoram"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Food, mostly, and a lot of people pretending they can dance.",
+        "Everyone stops work early, which is the real celebration."
+       ],
+       "pt": [
+        "Comida, principalmente, e muita gente fingindo que sabe dançar.",
+        "Todo mundo para de trabalhar mais cedo, que é a comemoração de verdade."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "happy_festival",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Happy festival to you.",
+      "pt": "Boas festas pra você."
+     },
+     "phrases": [
+      "happy festival to you"
+     ],
+     "phrases_pt": [
+      "boas festas pra voce"
+     ],
+     "requires_any": [
+      "happy",
+      "festival",
+      "festas"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "affection": {
+      "decision": "topic.calendar.wished",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "And to you! Stay for the food, at least.",
+        "Thank you. It's better shared."
+       ],
+       "pt": [
+        "Pra você também! Fique pelo menos pra comida.",
+        "Agradeço. É melhor dividido."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 3
+  }
+ ]
+}

@@ -54,4 +54,29 @@ class TopicGateTest {
         assertFalse(TopicGate.allows(catalog, "village", "guild_contact", AgeGroup.CHILD,
                 gate -> true, () -> true));
     }
+
+    @Test
+    void townsteadTopicIsOfferedOnlyWhileTownsteadContentIsLive() {
+        TopicEntry entry = TopicEntry.fromJson("wellbeing", JsonParser.parseString("""
+                {"entry":{"question":"conversations.cat.townstead","answer":"wellbeing"},"depth":"quick",
+                 "return_question":"conversations.cat.townstead","ages":["teen","adult"],
+                 "required_stance_families":["exit"],"townstead":true}
+                """).getAsJsonObject());
+        ConversationCatalog catalog = ConversationCatalog.build(List.of(entry));
+        assertFalse(TopicGate.allows(catalog, "conversations.cat.townstead", "wellbeing", AgeGroup.ADULT,
+                gate -> true, () -> false, () -> false));
+        assertTrue(TopicGate.allows(catalog, "conversations.cat.townstead", "wellbeing", AgeGroup.ADULT,
+                gate -> true, () -> false, () -> true));
+        assertFalse(TopicGate.allows(catalog, "conversations.cat.townstead", "wellbeing", AgeGroup.ADULT,
+                gate -> true), "the default seam is an install without Townstead");
+    }
+
+    @Test
+    void townsteadFlagIsAStrictBoolean() {
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TopicEntry.fromJson("x",
+                JsonParser.parseString("""
+                {"entry":{"question":"q","answer":"a"},"depth":"quick","return_question":"q",
+                 "ages":["adult"],"required_stance_families":["exit"],"townstead":"yes"}
+                """).getAsJsonObject()));
+    }
 }

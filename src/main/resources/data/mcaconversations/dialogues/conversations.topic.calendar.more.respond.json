@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_gently",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "calendar.more.told"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.calendar.asked_gently",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.a_date_i_keep",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.calendar.more.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_them_company",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "calendar.more.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.a_date_i_keep",
+              "deltas": {
+                "warmth": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.calendar.more.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "stop_dwelling",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "calendar.more.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.calendar.waved_off",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.a_date_i_keep",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.calendar.more.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

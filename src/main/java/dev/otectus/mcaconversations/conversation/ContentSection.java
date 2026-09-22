@@ -1,12 +1,13 @@
 package dev.otectus.mcaconversations.conversation;
 
 /**
- * The eleven datapack sections this mod owns, with the directory each is read from and the class the
+ * The twelve datapack sections this mod owns, with the directory each is read from and the class the
  * boundary note inventories it under. One enum so the coordinator, the diagnostics and the inventory
- * test all name the same eleven things in the same order.
+ * test all name the same twelve things in the same order.
  *
  * <p>The order is the registration order the eleven separate listeners used to have, preserved so a
- * log read against the old boundary note still lines up.
+ * log read against the old boundary note still lines up; the Townstead holiday mapping, added in
+ * 1.8.0, comes last.
  */
 public enum ContentSection {
 
@@ -20,7 +21,8 @@ public enum ContentSection {
     VILLAGE_CULTURE("village_culture", "VillageCultureCatalogLoader"),
     EPISODE_TEMPLATES("episode_templates", "NarrativeCatalogLoader$Episodes"),
     THREAD_TEMPLATES("thread_templates", "NarrativeCatalogLoader$Threads"),
-    COMMITMENT_TEMPLATES("commitment_templates", "NarrativeCatalogLoader$Commitments");
+    COMMITMENT_TEMPLATES("commitment_templates", "NarrativeCatalogLoader$Commitments"),
+    TOWNSTEAD_HOLIDAYS("townstead_holidays", "TownsteadHolidays");
 
     private final String directory;
     private final String listener;

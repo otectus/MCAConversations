@@ -60,6 +60,10 @@ public final class ConversationsCommand {
         for (var subtree : LivingHistoriesCommand.subtrees()) {
             dispatcher.register(Commands.literal("conversations").then(subtree));
         }
+
+        // Optional-mod diagnostics (Townstead spec §20): status is player-safe, detail is level 2.
+        dispatcher.register(Commands.literal("conversations").then(TownsteadCommand.subtree()));
+        dispatcher.register(Commands.literal("conversations").then(SocialCommand.subtree()));
     }
 
     // --- gossip (op) ----------------------------------------------------------

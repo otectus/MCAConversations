@@ -75,6 +75,9 @@ class ContentStagingTest {
             case COMMITMENT_TEMPLATES -> """
                     {"commitments": {"day.probe": {"resolver": "gift_tag_received",
                      "target": "registry_id:minecraft:torch", "due_after_days": 3, "made_by": "player"}}}""";
+            case TOWNSTEAD_HOLIDAYS -> """
+                    {"holidays": {"probe": {"profile": "townstead_calendar:default", "month": 6, "day": 21,
+                     "holiday": "midsummer"}}}""";
         };
     }
 
@@ -89,6 +92,7 @@ class ContentStagingTest {
             case EPISODE_TEMPLATES -> "episodes";
             case THREAD_TEMPLATES -> "threads";
             case COMMITMENT_TEMPLATES -> "commitments";
+            case TOWNSTEAD_HOLIDAYS -> "holidays";
         };
     }
 

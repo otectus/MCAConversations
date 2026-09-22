@@ -12,9 +12,12 @@ separate download and is not superseded by this one.
 
 ## [1.8.0] - unreleased
 
-Social behaviour, first part. A villager meeting you for the first time now sounds like somebody
-meeting you for the first time, and becoming friends takes being around rather than a pile of gifts.
-Hearts are still the one number you see; what changed is what a villager may *assume* about you.
+Social behaviour, and Townstead. A villager meeting you for the first time now sounds like somebody
+meeting you for the first time — no name they were never told, no friendship they never had — and
+becoming friends takes being around rather than a pile of gifts. Hearts are still the one number you
+see; what changed is what a villager may *assume* about you. And with Townstead installed, its
+villagers' needs, shifts, trades, years, roots, buildings, village spirit and calendar become
+something they talk about, act on and gossip about.
 
 ### Changed
 
@@ -53,6 +56,26 @@ Hearts are still the one number you see; what changed is what a villager may *as
   villager greets you, the others wait ten seconds (`ambientPlayerCooldownTicks`) before any of them
   may, on top of each villager's once-a-day limit. A greeting a villager volunteers no longer stops
   them in their tracks for half a minute: they carry on unless you answer.
+- **Partners, family and respected strangers have their own greetings.** A spouse, a parent, child
+  or sibling, and — with MCA: Reputation — a stranger from a village that thinks well of you each get
+  a greeting of their own. The respected stranger's is courtesy only: it never claims this villager
+  saw what you did, and a toddler still just peeks at you from behind a barrel. Friends and
+  confidants keep the familiar greetings; family has toddler versions. Both locales.
+- **Strangers and acquaintances greet in character.** The stranger and "hello again" greetings are
+  now voiced by every personality family — the shy villager murmurs, the blunt one wants to know
+  your business — without any of them claiming a friendship that is not there.
+- **Nobody is addressed by a name they never gave.** MCA hands every line the player's name, but a
+  villager who has never met you no longer uses it: goodbyes to strangers are nameless, and the
+  Conversations hub's opening line, chat's small replies ("I'm not sure what you mean", "as you
+  like", "I'll leave you be") and this mod's own additions to MCA's greeting lines no longer name you
+  or claim an acquaintance, in any personality. Ask a stranger "how have you been?" and you get an
+  honest answer from somebody who has not met you yet, rather than "you asked me that this
+  morning". Both locales.
+- **Opening the chat box turns a few heads, not the whole square.** Typing now draws a glance from
+  at most the three nearest villagers, and never from one who is asleep or fleeing.
+- **A villager who falls asleep ends the conversation.** A dialogue-screen discussion with a villager
+  who goes to bed now closes, as `SPEAKER_UNAVAILABLE`, rather than waiting on somebody who is no
+  longer there.
 - **Switching chat mode off ends chat conversations cleanly.** A chat conversation that was live when
   a config reload switched chat mode off is now closed on the spot, with its own reason, instead of
   being left for its next reply to be refused. Conversations on the dialogue screen are untouched.
@@ -63,6 +86,101 @@ Hearts are still the one number you see; what changed is what a villager may *as
   `social.contact_days`, and `social.attitude` (`hostile`, `guarded`, `neutral`, `cordial`, `warm` or
   `affectionate`). Documented in `DATAPACK.md` under *Relationship bands*.
 - A `[social]` section in the server config. Documented in `CONFIG.md`.
+- A `social` block on scenes — `contact`, `attitudes`, `claims` (`prior_meeting`,
+  `personal_friendship`, `romantic_relationship`, `family_tie`, `unresolved_rupture`,
+  `shared_episode`) and `requires_known_player_name` — declares what a scene assumes about the pair
+  and becomes hard eligibility: a scene whose assumptions do not hold is not a candidate at all. An
+  unknown claim is refused rather than ignored, and the bundled content compiler refuses a line that
+  names the player without declaring it. Documented in `DATAPACK.md`.
+- `/conversations social inspect` (operators): the facts, roles, band, contact, attitude, greeting
+  pool and thresholds the social model derived for the nearest villager and you.
+
+### Townstead
+
+Townstead's needs, schedules, calendar, roots, professions, skills, buildings and village spirit are
+now conversation state. Conversations only reads them: Townstead stays the authority on every one,
+and without Townstead installed nothing below changes a line.
+
+- **Five dialogue conditions.** `conversations_townstead_available` gates on a bound capability,
+  `conversations_townstead` compares one allow-listed field (needs, schedule, life stage, profession,
+  personality, calendar, building, origin, spirit) with a typed operator, and
+  `conversations_townstead_tags`, `conversations_townstead_spirit` and `conversations_townstead_skill`
+  read Townstead's own context tags, village spirit and learned skills. They are registered on every
+  install, so a pack using them loads without Townstead; there each one is simply false, and a
+  malformed one is refused rather than read as true.
+- **A `townstead_fit` check term.** A dialogue check may name Townstead tags that help or hinder it —
+  a well-fed villager hears a request more kindly, an exhausted one less. The term is clamped to
+  `maxCheckFit` and is exactly zero without Townstead, so no existing check moves.
+- **Eighteen `townstead.*` context fields and twenty-three `%townstead_*%` template values** — the
+  need to speak about first, the current activity, life stage, trade level, building, species, village
+  spirit, month and weekday among them — each with a neutral fallback line in both locales.
+- **One calendar, not two.** `calendarSource` now decides who says what season it is: in `AUTO`,
+  Townstead's calendar when it names a season, then Serene Seasons, then the built-in cycle. Festivals
+  on a Townstead calendar come from a new reloadable `townstead_holidays` mapping, shipped for
+  Townstead's four calendar profiles. A day no mapping names is no festival at all, rather than the
+  old fixed cycle laid over an unrelated calendar, unless `useLegacyHolidayFallbackWithTownstead` is
+  set.
+- **Custom personalities keep their names.** An interiority profile for a namespaced personality is
+  no longer collapsed onto its bare path, so two packs' `reserved_scholar` are two profiles. A
+  Townstead custom personality uses its own profile when a pack authored one, then the profile of the
+  MCA personality it is based on.
+- **Villagers react to how a conversation went.** A reply that lands, amuses, helps, stings, is
+  refused or goes awkwardly can now play one of thirteen heart-neutral Townstead reactions — a wave
+  on greeting and farewell, a clap, a pointed finger, a facepalm, tears. Content may name one with
+  the new `conversations_townstead_react` action; otherwise the reply's check tier, outcome and stance
+  choose, and an ordinary accepted line plays nothing. Each reply settles once, after all of its
+  actions have run, and plays at most one reaction, whatever order the actions were written in.
+  Reactions need Emotecraft, which is the only animation backend Townstead has; without it nothing
+  plays and nothing else changes.
+- **Townstead sees the hearts you actually got.** After a conversation changes hearts, Townstead is
+  told the measured change — what MCA really applied, including a sensitive villager's doubled
+  loss — so its `heart_increased` and `heart_decreased` tags are true.
+- **Chat counts as a conversation.** A typed-chat conversation now opens and closes Townstead's
+  dialogue state the way its own dialogue screen does, and closes it on farewell, mute, a new
+  partner, logout, the conversation ending, or the chat window lapsing.
+- **A villager's day shapes chat.** Someone asleep, collapsed, in a need emergency, in danger or in
+  another player's conversation no longer greets you as you pass, and the day's greeting is kept for
+  later rather than spent. Ask a villager at work, or worn out, in chat for a long or personal
+  conversation and they say they are in the middle of something instead of starting it; small talk still works,
+  and a collapsed villager manages nothing more. Collapsed and mid-reaction villagers do not answer a
+  remark to the crowd, at most one villager at work does, and chat attention never stops a villager
+  Townstead is animating, and only turns one at work to face you rather than stopping them. All of it
+  follows `scheduleRespectEnabled`.
+- **A gift that helped is known to have helped.** A tick after a gift is accepted, the villager's
+  needs are read again; only if Townstead's own hunger, thirst or fatigue improved does the villager
+  remember it (`mcaconversations.gift.relieved_hunger`, `relieved_thirst`, `helped_recovery`, for a
+  quarter of a day) and look grateful. Conversations never fills a need, and a helpful gift earns no
+  extra heart.
+- **The village talks about its own.** The gossip sweep now notices ten kinds of Townstead news: a
+  neighbour in a real hunger, thirst or exhaustion emergency, a collapse, a recovery from either, a
+  step up in a trade, a newly learned skill, a new stage of life, a birthday, a building finished or
+  gone, and the village's spirit changing character. Every one has lines in all five gossip voices
+  (ordinary, discreet, teenage, childish and close-neighbour) in both locales. It is kept quiet on
+  purpose: the first sight of anybody or anything says nothing, a crisis is news once and stays a
+  crisis until every need is comfortable again, the same villager's next crisis waits
+  `needCrisisCooldownDays`, a recovery is news only after a crisis was, a building is gone only once
+  `buildingRemovalConfirmScans` sweeps agree, and a villager who could not be read has not changed.
+  Nobody gossips about fertility, genes, heritage or a need's actual numbers. Buildings and spirits
+  are named in the listener's language through Townstead's and MCA's own translations.
+- **"Life here".** With Townstead running, the conversation hub gains a *Life here* category of
+  eight topics — how a villager is keeping, how their days run, their trade, the years, their
+  people, the places they call home, what the village is becoming, and the calendar — each with an
+  always-available opener and scenes that answer to Townstead's own state: somebody running on an
+  empty stomach, somebody so tired the ground looks soft, somebody mid-shift, a trade level named in
+  Townstead's words, the building they are standing in, the village's spirit, today's date, a
+  festival. All eight can be typed in chat as well as clicked, in both locales, and each has a
+  personality voice for its opening lines. Without Townstead the category and its topics are not
+  offered at all.
+- **Townstead in familiar conversations too.** *How's your day* knows when a villager is mid-shift,
+  *the season* can go by Townstead's calendar, and *life* has something to say from the later years.
+- **Emotion in Townstead's dialogue screen.** Some of these lines carry Townstead's typewriter
+  effects — a sleepy drawl, a whisper, a flash of temper — inside Townstead's own dialogue screen
+  only. The tags live in a separate client file (`assets/mcaconversations/townstead_emotions/`), so
+  chat mode, system chat, text-to-speech and MCA's screen still show clean text; Townstead's own
+  tags always win; and with Townstead absent or changed, the screen simply shows the plain line.
+- **Diagnostics.** `/conversations compat townstead status` for anyone; `probe`, `snapshot` and
+  `explain <question> <answer>` for operators, and `snapshot genes` at level 3 for heritage and
+  inheritance detail; `/conversations compat namespace` names the MCA package root this build bound.
 
 ### Compatibility
 
@@ -74,6 +192,20 @@ Hearts are still the one number you see; what changed is what a villager may *as
   unchanged at 4.
 - Content gated on `conversations_relationship` sees the new bands. In an upgraded world the
   heart-based bands are preserved for existing relationships; new ones have to be lived.
+- Interiority: a profile authored under a namespace other than `mca` or `minecraft` (for example
+  `mypack:odd`) used to replace the bare `odd` profile, and now defines a profile of its own. A
+  profile id that is not a valid personality id is refused with the rest of the reload.
+- A new datapack directory, `townstead_holidays`, is staged with the rest of the content bundle: a
+  malformed mapping refuses the reload like any other section.
+- Gossip saves: the gossip file gains a format number, a `townstead` section of plain observed
+  values, and optional bounded attributes on an event. A pre-1.8.0 gossip file loads as before. A
+  1.7.x build skips the new event types, ignores the rest, and drops them if it saves the world.
+  Removing Townstead leaves the section untouched, so re-adding it carries on where it stopped.
+- Catalog topics accept a strict boolean `townstead`; a topic carrying it is offered only while
+  Townstead's content is live. The `village` chat intent no longer answers questions about a
+  village's *spirit*, which now belong to *Life here*.
+- The MCA binding gains two members, `Village.getBuildings` and `Building.getId`, present in every
+  supported MCA version (checked against 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2).
 
 ## [1.7.3] - unreleased
 

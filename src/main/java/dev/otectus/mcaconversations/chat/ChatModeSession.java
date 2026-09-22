@@ -143,12 +143,14 @@ public final class ChatModeSession {
      */
     public static void detach(UUID playerId) {
         SESSIONS.remove(playerId);
+        dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.close(playerId);
     }
 
     /** Release server-owned references before an integrated server is stopped or replaced. */
     public static void reset(dev.otectus.mcaconversations.conversation.CloseReason reason) {
         SESSIONS.clear();
         LAST_AMBIENT.clear();
+        dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.reset();
         activeScope = null;
         ConversationSessions.clearAll(reason);
     }

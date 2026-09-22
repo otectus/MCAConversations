@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_best_age",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "age_and_life.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "age_and_life.where_i_am",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.age_and_life.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.age_and_life.open.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "say_it_suits",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "age_and_life.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.age_and_life.complimented",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "age_and_life.where_i_am",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.age_and_life.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.age_and_life.open.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tease_the_years",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "age_and_life.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.age_and_life.teased",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "age_and_life.where_i_am",
+              "deltas": {
+                "warmth": -2,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.age_and_life.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.age_and_life.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

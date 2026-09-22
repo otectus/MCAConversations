@@ -333,6 +333,7 @@ public final class ChatModeDispatcher {
                         voiced(target.entity(), player, "chatmode.attentive"),
                         UtteranceAudience.ofStaticLine("chatmode.attentive"));
                 ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+                dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.open(player, target.entity());
                 attend(target, player, now);
             }
             return;
@@ -439,6 +440,10 @@ public final class ChatModeDispatcher {
             if (interacting.isPresent() && !interacting.get().equals(player.getUUID())) {
                 continue; // busy with another player's GUI — silently skip in ambient
             }
+            TownsteadChatPolicy.Facts facts = TownsteadChatPolicy.Facts.of(c.entity(), player);
+            if (!TownsteadChatPolicy.ambientEligible(facts)) {
+                continue; // asleep, collapsed, panicking or mid-reaction: nobody shouts back from there
+            }
             List<Scored> eligible = new ArrayList<>();
             for (Scored s : ranked) {
                 if (GatePreview.eligible(c.entity(), player, s)) {
@@ -448,7 +453,8 @@ public final class ChatModeDispatcher {
             Decision d = IntentMatcher.decide(eligible, false, minScore, ambientMinScore);
             if (d.outcome() == IntentMatcher.Outcome.MATCH && ambientAnswerable(d.chosen())) {
                 chosenByCandidate[i] = d.chosen();
-                pool.add(new AmbientSelection.Responder(i, d.chosen().score(), c.distSqr()));
+                pool.add(new AmbientSelection.Responder(i,
+                        d.chosen().score() * TownsteadChatPolicy.ambientWeight(facts), c.distSqr(), facts.working()));
             }
         }
         if (pool.isEmpty()) {
@@ -456,7 +462,8 @@ public final class ChatModeDispatcher {
         }
 
         int maxResponders = McaConversationsConfig.COMMON.chatModeMaxResponders.get();
-        List<AmbientSelection.Responder> responders = AmbientSelection.select(pool, maxResponders);
+        List<AmbientSelection.Responder> responders = AmbientSelection.select(pool, maxResponders,
+                TownsteadChatPolicy.MAX_WORKING_RESPONDERS);
         for (int rank = 0; rank < responders.size(); rank++) {
             AmbientSelection.Responder r = responders.get(rank);
             VillagerCandidate c = candidates.get(r.candidateIndex());
@@ -468,6 +475,7 @@ public final class ChatModeDispatcher {
                 // One player can answer one live exchange. A later terminal-only voice may speak,
                 // but it must never replace this villager's question, budget or frozen context.
                 ChatModeSession.recordExchange(player.getUUID(), c.entity().getUUID(), now);
+                dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.open(player, c.entity());
                 break;
             }
         }
@@ -632,12 +640,21 @@ public final class ChatModeDispatcher {
 
     /** Goodbye line + end stickiness (spec §9): the villager stops being the default target. */
     private static void farewell(VillagerCandidate target, ServerPlayer player) {
-        deflect(target, player, "farewell");
+        dev.otectus.mcaconversations.conversation.SocialFacts facts =
+                dev.otectus.mcaconversations.conversation.Relationships.facts(target.entity(), player);
+        String pool = GreetingPolicy.farewell(
+                dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
+                        McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
+        deflect(target, player, pool.substring("chatmode.".length()));
         Session s = ChatModeSession.get(player.getUUID());
         s.villagerId = null;
         s.clearQuestion();
         s.consecutiveMisses = 0;
         VillagerAttention.releaseIfOwned(target.entity(), player); // conversation over — back to their day
+        dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.close(player.getUUID());
+        dev.otectus.mcaconversations.conversation.ConversationOutcomes.react(target.entity(), player,
+                dev.otectus.mcaconversations.conversation.ReactionSemantic.FAREWELL, ConversationSession.Frontend.CHAT);
     }
 
     /** "Stop talking" (spec §11): mute this villager↔player pairing for {@code chatModeMuteTicks}. */
@@ -648,6 +665,7 @@ public final class ChatModeDispatcher {
         s.clearQuestion();
         deflect(target, player, "muted");
         VillagerAttention.releaseIfOwned(target.entity(), player); // asked to leave the player be — walks off too
+        dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.close(player.getUUID());
     }
 
     /** "Never mind" (spec §11): drop the open sub-question; never counts as a miss. */
@@ -751,6 +769,18 @@ public final class ChatModeDispatcher {
             return dev.otectus.mcaconversations.conversation.ChoiceOutcome.REQUIREMENTS_CHANGED;
         }
 
+        // A villager on shift or worn out puts off a long or personal topic with a line instead of
+        // ignoring the player; a collapsed or desperate one opens nothing past small talk (Townstead
+        // spec §13.3). Only a new topic is deferred: a reply inside one already open carries on.
+        java.util.Optional<dev.otectus.mcaconversations.conversation.TopicEntry> opening =
+                dev.otectus.mcaconversations.conversation.ConversationCatalogLoader.active().byStarter(question, answer);
+        if (opening.isPresent() && TownsteadChatPolicy.defersTopic(
+                TownsteadChatPolicy.Facts.of(target.entity(), player), opening.get().depth())) {
+            deflect(target, player, "busy");
+            ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+            return dev.otectus.mcaconversations.conversation.ChoiceOutcome.SPEAKER_UNAVAILABLE;
+        }
+
         // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
         // planning hook never fires here. Calling it explicitly is what keeps the two frontends
         // behaviourally equivalent: the same topic opens the same scene whichever way it was asked
@@ -764,8 +794,12 @@ public final class ChatModeDispatcher {
                 .flatMap(ConversationSession::currentOffer)
                 .map(ConversationSession.ChoiceOffer::revision)
                 .orElse(-1L);
-        try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity(), stagger)) {
+        try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity(), stagger);
+             dev.otectus.mcaconversations.conversation.ConversationOutcomes.Submission submission =
+                     dev.otectus.mcaconversations.conversation.ConversationOutcomes.begin(target.entity(), player,
+                             question, answer, ConversationSession.Frontend.CHAT)) {
             ok = McaCompat.selectAnswer(target.entity(), player, question, answer);
+            submission.succeeded(ok);
             if (showHearts && ok) {
                 // Delivery is deferred through the scheduler, so the delta lands before the line renders.
                 scope.heartsDelta = McaCompat.getHearts(player, target.entity()) - heartsBefore;
@@ -796,6 +830,7 @@ public final class ChatModeDispatcher {
             // recordExchange marks the sticky target + resets the miss ladder without clearing it.
             if (makeSticky) {
                 ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+                dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.open(player, target.entity());
             }
             attend(target, player, now);
             // The one place a bystander may join in. Off by default, capped at one voice per
@@ -1128,8 +1163,12 @@ public final class ChatModeDispatcher {
         dev.otectus.mcaconversations.scene.ConversationPlanner
                 .onAnswerSubmitted(target.entity(), player, questionId, answerName);
         boolean ok;
-        try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity())) {
+        try (ChatModeSession.Scope scope = ChatModeSession.open(player, target.entity());
+             dev.otectus.mcaconversations.conversation.ConversationOutcomes.Submission submission =
+                     dev.otectus.mcaconversations.conversation.ConversationOutcomes.begin(target.entity(), player,
+                             questionId, answerName, ConversationSession.Frontend.CHAT)) {
             ok = McaCompat.selectAnswer(target.entity(), player, questionId, answerName);
+            submission.succeeded(ok);
         }
         if (!ok) {
             return "selectAnswer failed for (" + questionId + ", " + answerName + ") — see debug log.";
@@ -1137,6 +1176,7 @@ public final class ChatModeDispatcher {
         MinecraftServer server = player.getServer();
         long now = server != null ? server.overworld().getGameTime() : 0L;
         ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+        dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.open(player, target.entity());
         String name = target.name().isBlank() ? "villager" : target.name();
         String redirect = ChatModeSession.redirectionAvailable() ? "" : " (warning: delivery redirect not active)";
         return "Asked " + name + " (" + questionId + " / " + answerName + ")." + redirect;
@@ -1149,8 +1189,9 @@ public final class ChatModeDispatcher {
      * hello as you pass carries on with their day unless you answer (Stability spec §10.2). Replying
      * reaches the ordinary path, which holds them then.
      */
-    static void proactiveGreet(VillagerCandidate target, ServerPlayer player, long now) {
-        hail(target, player, now, 0, true, false);
+    static void proactiveGreet(VillagerCandidate target, ServerPlayer player, long now, boolean brief) {
+        // Brief: a villager at work says hello without a gesture that could interrupt the job.
+        hail(target, player, now, 0, true, false, !brief);
     }
 
     /**
@@ -1209,11 +1250,11 @@ public final class ChatModeDispatcher {
      */
     private static void hail(VillagerCandidate target, ServerPlayer player, long now, int stagger,
                              boolean makeSticky) {
-        hail(target, player, now, stagger, makeSticky, true);
+        hail(target, player, now, stagger, makeSticky, true, true);
     }
 
     private static void hail(VillagerCandidate target, ServerPlayer player, long now, int stagger,
-                             boolean makeSticky, boolean holdAttention) {
+                             boolean makeSticky, boolean holdAttention, boolean react) {
         // What the villager may assume decides the words: a first meeting never draws the pool that
         // greets old friends by name (Stability spec §9.2).
         dev.otectus.mcaconversations.conversation.SocialFacts facts =
@@ -1221,15 +1262,50 @@ public final class ChatModeDispatcher {
         String pool = GreetingPolicy.pool(
                 dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
                         McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
-                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts),
+                publiclyRespected(target.entity(), player));
         ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger,
                 UtteranceAudience.ofStaticLine(pool));
         if (makeSticky) {
             ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
+            dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.open(player, target.entity());
         }
         if (holdAttention) {
             attend(target, player, now);
         }
+        if (react && !pool.startsWith("chatmode.hail_cold")) {
+            // A brush-off is not a wave.
+            dev.otectus.mcaconversations.conversation.ConversationOutcomes.react(target.entity(), player,
+                    dev.otectus.mcaconversations.conversation.ReactionSemantic.GREETING,
+                    ConversationSession.Frontend.CHAT);
+        }
+    }
+
+    /**
+     * The villager's community thinks well of the player (Stability spec §8.7): MCA: Reputation's
+     * standing bias on respect is positive. Courtesy only — it is never evidence that this villager
+     * saw anything, and without Reputation it is simply false.
+     */
+    private static boolean publiclyRespected(Entity villager, ServerPlayer player) {
+        try {
+            return dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()
+                    && dev.otectus.mcaconversations.compat.ReputationBridge.publicStandingFit(player, villager, "respect") > 0;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /**
+     * True when this player's chat conversation with this villager has lapsed: the sticky pointer
+     * moved or was dropped, or its window ran out. What the Townstead dialogue sweep asks.
+     */
+    public static boolean chatConversationLapsed(UUID playerId, UUID villagerId, long now) {
+        Session session = ChatModeSession.peek(playerId);
+        if (session == null || session.villagerId == null || !session.villagerId.equals(villagerId)) {
+            return true;
+        }
+        int stickinessTicks = McaConversationsConfig.chatModeStickinessTicks();
+        return stickinessTicks > 0 && now - session.lastExchangeGameTime >= stickinessTicks;
     }
 
     /**

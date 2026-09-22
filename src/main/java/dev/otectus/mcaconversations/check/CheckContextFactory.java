@@ -60,9 +60,16 @@ public final class CheckContextFactory {
         int arcStage = check.arc().map(arcId -> Progress.arcStage(villager, player, arcId)).orElse(0);
         int roll = CheckSeed.roll(villager.getUUID(), player.getUUID(), check.id(), arcStage,
                 villager.level().getDayTime());
+        // The villager's Townstead situation, only where the check authored a fit and the operator
+        // allows it; read from the same one-tick snapshot the Townstead conditions use.
+        int townsteadFit = check.townsteadFit()
+                .filter(fit -> dev.otectus.mcaconversations.compat.Townstead.checkFitEnabled())
+                .map(fit -> fit.score(dev.otectus.mcaconversations.compat.Townstead.snapshot(villager).tags(),
+                        dev.otectus.mcaconversations.compat.Townstead.maxCheckFit()))
+                .orElse(0);
         return Optional.of(new CheckInputs(axisValue, hearts, personalityFit, publicStandingFit,
                 moodAdjust, roll, check.difficulty(),
-                McaConversationsConfig.COMMON.enableCheckTiers.get(), vectorEnabled));
+                McaConversationsConfig.COMMON.enableCheckTiers.get(), vectorEnabled, townsteadFit));
     }
 
     private static boolean hasState(Entity villager, ServerPlayer player, ConversationState state) {

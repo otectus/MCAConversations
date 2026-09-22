@@ -7,6 +7,195 @@
     "and everything else is the rule for when the director should choose them."
   ],
   "scenes": {
+    "topic.age_and_life.the_later_years": {
+      "purpose": "topic:age_and_life",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.age",
+            "is": "senior",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 38,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.age_and_life.the_later_years.respond",
+        "opening_beat": "age_and_life.the_later_years.open"
+      }
+    },
+    "topic.age_and_life.time_passes_others": {
+      "purpose": "topic:age_and_life",
+      "shape": "confide",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.age",
+            "is": "ageless",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.age_and_life.time_passes_others.respond",
+        "opening_beat": "age_and_life.time_passes_others.open"
+      }
+    },
+    "topic.calendar.festival_days": {
+      "purpose": "topic:calendar",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.month",
+            "unknown": "fail"
+          },
+          {
+            "field": "time.holiday",
+            "is": "none",
+            "not": true,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 44,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "conversations.scene.calendar.festival_days.respond",
+        "opening_beat": "calendar.festival_days.open"
+      }
+    },
+    "topic.calendar.todays_date": {
+      "purpose": "topic:calendar",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.month",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.calendar.todays_date.respond",
+        "opening_beat": "calendar.todays_date.open"
+      }
+    },
+    "topic.community.how_far_we_came": {
+      "purpose": "topic:community",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.spirit_tier",
+            "min": 3,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.community.how_far_we_came.respond",
+        "opening_beat": "community.how_far_we_came.open"
+      }
+    },
+    "topic.community.what_they_call_us": {
+      "purpose": "topic:community",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.spirit",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "cooldown_days": 4,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.community.what_they_call_us.respond",
+        "opening_beat": "community.what_they_call_us.open"
+      }
+    },
     "topic.court.a_decree_changes_lives": {
       "purpose": "topic:court",
       "shape": "observe",
@@ -903,6 +1092,102 @@
         "opening_beat": "crown.you_wear_it.open"
       }
     },
+    "topic.daily_rhythm.off_duty": {
+      "purpose": "topic:daily_rhythm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.activity",
+            "any_of": [
+              "meet",
+              "rest"
+            ],
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "cooldown_days": 2,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.daily_rhythm.off_duty.respond",
+        "opening_beat": "daily_rhythm.off_duty.open"
+      }
+    },
+    "topic.daily_rhythm.on_shift": {
+      "purpose": "topic:daily_rhythm",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.activity",
+            "is": "work",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.daily_rhythm.on_shift.respond",
+        "opening_beat": "daily_rhythm.on_shift.open"
+      }
+    },
+    "topic.day.a_long_shift": {
+      "purpose": "topic:day",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.activity",
+            "is": "work",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 28,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.day.a_long_shift.respond",
+        "opening_beat": "day.a_long_shift.open"
+      }
+    },
     "topic.day.before_the_light": {
       "purpose": "topic:day",
       "shape": "observe",
@@ -1706,6 +1991,38 @@
         "opening_beat": "happy.glad_of_you.open"
       }
     },
+    "topic.home_and_place.this_building": {
+      "purpose": "topic:home_and_place",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.building",
+            "is": "none",
+            "not": true,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 36,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.home_and_place.this_building.respond",
+        "opening_beat": "home_and_place.this_building.open"
+      }
+    },
     "topic.hopes.spring_list": {
       "purpose": "topic:hopes",
       "shape": "plan",
@@ -2145,6 +2462,36 @@
         "opening_beat": "interests.the_part_that_still_amuses_me.open"
       }
     },
+    "topic.life.a_long_life": {
+      "purpose": "topic:life",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.age",
+            "is": "senior",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 30,
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.life.a_long_life.respond",
+        "opening_beat": "life.a_long_life.open"
+      }
+    },
     "topic.life.how_i_came_here": {
       "purpose": "topic:life",
       "shape": "reminisce",
@@ -2205,6 +2552,68 @@
       "route": {
         "question": "conversations.scene.life.the_chapter_im_in.respond",
         "opening_beat": "life.the_chapter_im_in.open"
+      }
+    },
+    "topic.mastery.recognised": {
+      "purpose": "topic:mastery",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.profession_level",
+            "min": 3,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.mastery.recognised.respond",
+        "opening_beat": "mastery.recognised.open"
+      }
+    },
+    "topic.mastery.still_learning": {
+      "purpose": "topic:mastery",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.profession_level",
+            "max": 2,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.mastery.still_learning.respond",
+        "opening_beat": "mastery.still_learning.open"
       }
     },
     "topic.memories.the_house_as_it_was": {
@@ -3463,6 +3872,36 @@
         "opening_beat": "regrets.the_small_one.open"
       }
     },
+    "topic.roots.a_long_line": {
+      "purpose": "topic:roots",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.species",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 34,
+        "cooldown_days": 5,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.roots.a_long_line.respond",
+        "opening_beat": "roots.a_long_line.open"
+      }
+    },
     "topic.routine.after_the_work": {
       "purpose": "topic:routine",
       "shape": "observe",
@@ -3694,6 +4133,36 @@
       "route": {
         "question": "conversations.scene.rumors.whispers_out_of_the_hall.respond",
         "opening_beat": "rumors.whispers_out_of_the_hall.open"
+      }
+    },
+    "topic.season.by_the_calendar": {
+      "purpose": "topic:season",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.month",
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 26,
+        "cooldown_days": 3,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.season.by_the_calendar.respond",
+        "opening_beat": "season.by_the_calendar.open"
       }
     },
     "topic.season.deep_winter": {
@@ -4837,6 +5306,75 @@
       "route": {
         "question": "conversations.scene.weather.working_in_the_wet.respond",
         "opening_beat": "weather.working_in_the_wet.open"
+      }
+    },
+    "topic.wellbeing.running_on_empty": {
+      "purpose": "topic:wellbeing",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.hunger",
+            "any_of": [
+              "starving",
+              "famished",
+              "hungry"
+            ],
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 42,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.wellbeing.running_on_empty.respond",
+        "opening_beat": "wellbeing.running_on_empty.open"
+      }
+    },
+    "topic.wellbeing.worn_out": {
+      "purpose": "topic:wellbeing",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "teen",
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "townstead.fatigue",
+            "any_of": [
+              "drowsy",
+              "exhausted"
+            ],
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "townstead"
+        ]
+      },
+      "selection": {
+        "base_priority": 41,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 2
+      },
+      "route": {
+        "question": "conversations.scene.wellbeing.worn_out.respond",
+        "opening_beat": "wellbeing.worn_out.open"
       }
     },
     "topic.worries.the_late_one": {

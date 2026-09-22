@@ -144,6 +144,20 @@ public final class GossipDetectors {
 
         // --- Residency diff (arrival/departure) over the FULL, load-independent residency set ---
         scanResidency(data, level, villageId, now, recentlyDead, births);
+
+        // --- Townstead: needs, trades, life and the village's buildings and spirit (1.8.0) ---
+        TownsteadGossip.scan(data, level, villageId, now, residents, d -> {
+            if (recentlyDead.contains(d.aUuid())) {
+                return;
+            }
+            GossipEvent event = new GossipEvent(UUID.randomUUID(), d.type(), villageId, now,
+                    d.aUuid(), d.aName(), Optional.empty(), d.bName(), d.attributes());
+            if (data.addEvent(event, McaConversationsConfig.COMMON.maxEventsPerVillage.get())
+                    && McaConversationsConfig.COMMON.debugLogging.get()) {
+                McaConversations.LOGGER.info("Gossip: {} in village {}: {} {}", d.type(), villageId, d.aName(),
+                        d.attributes());
+            }
+        });
     }
 
     /**

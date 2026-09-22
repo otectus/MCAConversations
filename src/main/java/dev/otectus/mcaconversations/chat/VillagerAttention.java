@@ -36,6 +36,9 @@ public final class VillagerAttention {
     /** How long one typing ping holds attention; the client re-pings while the chat screen is open. */
     static final int TYPING_HOLD_TICKS = 60;
 
+    /** How many villagers one player's open chat box may turn to look (Stability spec §10.2). */
+    static final int MAX_TYPING_GLANCES = 3;
+
     private static final AttentionLedger LEDGER = new AttentionLedger();
     private static final Map<UUID, Entity> VILLAGERS = new ConcurrentHashMap<>();
 
@@ -131,9 +134,30 @@ public final class VillagerAttention {
     /** A typing ping from {@code player}: nearby villagers glance over until the pings stop. */
     public static void playerTyping(ServerPlayer player, long now) {
         double radius = McaConversationsConfig.chatModeRadius();
-        for (VillagerCandidate c : VillagerFinder.candidates(player, radius)) {
+        for (VillagerCandidate c : typingGlances(VillagerFinder.candidates(player, radius))) {
             hold(c.entity(), player, now + TYPING_HOLD_TICKS, Source.TYPING);
         }
+    }
+
+    /**
+     * Opening the chat box near a market turns a few heads, not the whole square (Stability spec
+     * §10.2): the {@link #MAX_TYPING_GLANCES} nearest villagers who are awake and not fleeing. A
+     * glance is only ever a glance — the ledger never lets it displace a conversation — and a
+     * panicking villager is left alone rather than given a hold the danger rule would then revoke.
+     */
+    static List<VillagerCandidate> typingGlances(List<VillagerCandidate> nearestFirst) {
+        List<VillagerCandidate> out = new ArrayList<>(Math.min(MAX_TYPING_GLANCES, nearestFirst.size()));
+        for (VillagerCandidate c : nearestFirst) {
+            if (out.size() >= MAX_TYPING_GLANCES) {
+                break;
+            }
+            if (c.entity() instanceof net.minecraft.world.entity.Mob mob
+                    && (mob.isSleeping() || mob.getBrain().isActive(net.minecraft.world.entity.schedule.Activity.PANIC))) {
+                continue;
+            }
+            out.add(c);
+        }
+        return out;
     }
 
     /** The player closed the chat screen: drop their TYPING holds (conversations keep attending). */
@@ -207,7 +231,7 @@ public final class VillagerAttention {
                 Entity villager = VILLAGERS.get(e.getKey());
                 ServerPlayer player = server.getPlayerList().getPlayer(hold.playerId());
                 ConversationMovementController.Stance stance =
-                        ConversationMovementController.judge(villager, player, hold.ownsMovement());
+                        ConversationMovementController.judge(villager, player, hold.ownsMovement(), true);
                 switch (stance) {
                     case DROP -> drop.add(e.getKey());
                     case REVOKE_ATTACKED, REVOKE_DANGER -> revoke.add(e.getKey());

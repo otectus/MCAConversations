@@ -100,6 +100,56 @@ import net.minecraft.network.chat.Component;
  */
 public final class ConversationsMcaRegistrar {
 
+    /**
+     * Parses {@code conversations_townstead_react}: a shipped semantic by key, or an explicit reaction
+     * id with an optional semantic for its tag. An unknown semantic is refused rather than dropped.
+     */
+    static dev.otectus.mcaconversations.conversation.ConversationOutcomes.ReactionRequest reactionRequest(
+            com.google.gson.JsonElement json) {
+        String semantic = null;
+        String reaction = null;
+        if (json != null && json.isJsonPrimitive()) {
+            semantic = json.getAsString();
+        } else if (json != null && json.isJsonObject()) {
+            for (String key : json.getAsJsonObject().keySet()) {
+                if (!key.equals("semantic") && !key.equals("reaction")) {
+                    throw new IllegalArgumentException("unknown conversations_townstead_react field: " + key);
+                }
+            }
+            if (json.getAsJsonObject().has("semantic")) {
+                semantic = json.getAsJsonObject().get("semantic").getAsString();
+            }
+            if (json.getAsJsonObject().has("reaction")) {
+                reaction = json.getAsJsonObject().get("reaction").getAsString();
+            }
+        } else {
+            throw new IllegalArgumentException("conversations_townstead_react needs a semantic or a reaction");
+        }
+        if (reaction == null) {
+            var shipped = dev.otectus.mcaconversations.conversation.ReactionSemantic.byKey(semantic)
+                    .orElseThrow(() -> new IllegalArgumentException("unknown reaction semantic: " + json));
+            return new dev.otectus.mcaconversations.conversation.ConversationOutcomes.ReactionRequest(
+                    net.minecraft.resources.ResourceLocation.tryParse(shipped.reactionId()), shipped.key());
+        }
+        net.minecraft.resources.ResourceLocation id = reaction.contains(":")
+                ? net.minecraft.resources.ResourceLocation.tryParse(reaction) : null;
+        if (id == null) {
+            throw new IllegalArgumentException("reaction must be a namespaced id: " + reaction);
+        }
+        return new dev.otectus.mcaconversations.conversation.ConversationOutcomes.ReactionRequest(id,
+                semantic == null || semantic.isBlank() ? id.getPath() : semantic);
+    }
+
+    /** A Townstead condition's score: 1 or 0, and 0 on any failure — never a thrown evaluation. */
+    private static float townsteadScore(java.util.function.BooleanSupplier test) {
+        try {
+            return test.getAsBoolean() ? 1.0f : 0.0f;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("Townstead condition failed; scoring 0", t);
+            return 0.0f;
+        }
+    }
+
     private ConversationsMcaRegistrar() {
     }
 
@@ -310,6 +360,17 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // --- Townstead (1.8.0). Registered whether or not Townstead is installed, so a pack using
+        // them loads everywhere; each scores 0 unless Townstead is live and its context conditions
+        // are switched on. Parsing is strict: a malformed query is refused, never read as "true".
+        for (String type : dev.otectus.mcaconversations.compat.TownsteadConditions.TYPES) {
+            McaHandles.registerCondition(type,
+                    (json, name) -> SafeParse.orNull(type, json,
+                            () -> dev.otectus.mcaconversations.compat.TownsteadConditions.parse(type, json)),
+                    query -> (villager, stack, player) -> townsteadScore(() ->
+                            dev.otectus.mcaconversations.compat.TownsteadConditions.test(query, villager)));
+        }
+
         // --- RPG layer (1.0.0): disposition vector + dialogue checks ---
 
         // Matches while the decayed axis value lies in [min, max]. Never matches when the vector
@@ -384,6 +445,10 @@ public final class ConversationsMcaRegistrar {
                         return CheckContextFactory.assemble(villager, player, check)
                                 .map(inputs -> {
                                     CheckTier tier = CheckResolver.resolve(inputs);
+                                    // Every tier result of one check resolves the same tier, so
+                                    // recording it from whichever is scored first is exact.
+                                    dev.otectus.mcaconversations.conversation.ConversationOutcomes
+                                            .recordCheckTier(tier);
                                     if (tier == check.tier()
                                             && McaConversationsConfig.COMMON.debugRpg.get()) {
                                         McaConversations.LOGGER.info("[rpg] check {} -> {} inputs={}",
@@ -543,6 +608,21 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // A heart-neutral Townstead reaction for this reply (Townstead spec §12.3). Queued, never fired
+        // from here: the reply settles once, after every action has run, and plays at most one. Accepts
+        // a shipped semantic ("warm") or {"semantic": "warm"} / {"reaction": "pack:id", "semantic": ...}.
+        McaHandles.registerAction("conversations_townstead_react",
+                (json, name) -> SafeParse.orNull("conversations_townstead_react", json,
+                        () -> reactionRequest(json)),
+                request -> (villager, player) -> {
+                    try {
+                        dev.otectus.mcaconversations.conversation.ConversationOutcomes
+                                .requestReaction(villager, player, request);
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_townstead_react failed; ignoring", t);
+                    }
+                });
+
         // The one guarded route from authored content to a visible heart change. Runs the full chain:
         // duplicate-transaction refusal, replay policy, per-conversation budget, per-day budget, then
         // MCA's own rewardHearts. Content must never use native positive/negative inside a branch.
@@ -656,7 +736,7 @@ public final class ConversationsMcaRegistrar {
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
                 + "/conversations_weather/conversations_season/conversations_holiday/conversations_personality/conversations_disposition"
-                + "/conversations_check/conversations_progress/conversations_kingdom/conversations_quest_* and actions conversations_record/conversations_say"
+                + "/conversations_check/conversations_progress/conversations_kingdom/conversations_townstead*/conversations_quest_* and actions conversations_record/conversations_say"
                 + "/conversations_gossip_say/conversations_disposition_apply/conversations_session"
                 + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open"
                 + "/conversations_civic"
@@ -721,6 +801,7 @@ public final class ConversationsMcaRegistrar {
             return;
         }
         ConversationSessions.get(player.getUUID(), now).enterBeat(beat);
+        dev.otectus.mcaconversations.conversation.ConversationOutcomes.recordBeat(beat);
         if (McaConversationsConfig.COMMON.debugBranching.get()) {
             McaConversations.LOGGER.info("[branch] beat={} subject={} act={} openness={} outcome={}",
                     beat.id(), beat.subject(), beat.npcAct().key(), beat.openness().key(),

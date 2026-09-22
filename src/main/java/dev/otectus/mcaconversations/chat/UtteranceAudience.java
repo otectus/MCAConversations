@@ -35,9 +35,11 @@ public record UtteranceAudience(Scope scope, String basis) {
      */
     private static final Set<String> PUBLIC_STATIC_LINES = Set.of(
             "chatmode.hail", "chatmode.hail.recognized", "chatmode.hail.stranger",
+            "chatmode.hail.respected_stranger", "chatmode.hail.partner", "chatmode.hail.family",
             "chatmode.hail_cold", "chatmode.attentive", "chatmode.busy",
             "chatmode.clarify", "chatmode.confused", "chatmode.hint", "chatmode.shrug",
-            "chatmode.babble", "chatmode.dropped", "chatmode.farewell", "chatmode.muted");
+            "chatmode.babble", "chatmode.dropped", "chatmode.farewell", "chatmode.farewell.stranger",
+            "chatmode.muted");
 
     public UtteranceAudience {
         scope = scope == null ? Scope.PARTICIPANT_ONLY : scope;

@@ -88,7 +88,14 @@ public final class ConversationMovementController {
      */
     public record Situation(boolean villagerUsable, boolean playerUsable, boolean hurt,
                             boolean panicking, boolean ownsMovement, boolean holdEnabled,
-                            boolean interruptOnDanger) {
+                            boolean interruptOnDanger, boolean townsteadLeave, boolean townsteadLookOnly) {
+
+        /** A situation Townstead has nothing to say about: the policy as it was before 1.8.0. */
+        public Situation(boolean villagerUsable, boolean playerUsable, boolean hurt, boolean panicking,
+                         boolean ownsMovement, boolean holdEnabled, boolean interruptOnDanger) {
+            this(villagerUsable, playerUsable, hurt, panicking, ownsMovement, holdEnabled, interruptOnDanger,
+                    false, false);
+        }
     }
 
     private ConversationMovementController() {
@@ -115,7 +122,13 @@ public final class ConversationMovementController {
         if (s.panicking()) {
             return s.interruptOnDanger() ? Stance.REVOKE_DANGER : Stance.LEAVE;
         }
-        if (!s.ownsMovement() || !s.holdEnabled()) {
+        // Townstead (spec §13.1): a collapsed villager, or one Townstead is animating, is not
+        // turned or stopped — attention must never fight a reaction lock. One at work is looked at
+        // but not stopped, so the work AI keeps its walk target.
+        if (s.townsteadLeave()) {
+            return Stance.LEAVE;
+        }
+        if (!s.ownsMovement() || !s.holdEnabled() || s.townsteadLookOnly()) {
             return Stance.FACE;
         }
         return Stance.HOLD;
@@ -123,13 +136,25 @@ public final class ConversationMovementController {
 
     /** Reads the live pair and the server config into a {@link Situation}, then {@link #decide}s. */
     public static Stance judge(Entity villager, ServerPlayer player, boolean ownsMovement) {
+        return judge(villager, player, ownsMovement, false);
+    }
+
+    /**
+     * As above. {@code chat} is true for a chat engagement, the only kind a Townstead work shift
+     * demotes to facing: a villager in an open dialogue screen who walked back to work mid-sentence
+     * would end that conversation by distance, which is worse than a short pause in the shift.
+     */
+    public static Stance judge(Entity villager, ServerPlayer player, boolean ownsMovement, boolean chat) {
         boolean usable = villager instanceof Mob mob && !mob.isRemoved() && mob.isAlive()
                 && !mob.isSleeping();
         boolean hurt = usable && ((Mob) villager).hurtTime > 0;
         boolean panicking = usable && ((Mob) villager).getBrain().isActive(Activity.PANIC);
+        TownsteadChatPolicy.Facts townstead = usable ? TownsteadChatPolicy.Facts.townstead(villager)
+                : TownsteadChatPolicy.Facts.NONE;
         return decide(new Situation(usable, player != null && !player.hasDisconnected(), hurt,
                 panicking, ownsMovement, McaConversationsConfig.holdVillagerDuringInteraction(),
-                McaConversationsConfig.interruptOnImmediateDanger()));
+                McaConversationsConfig.interruptOnImmediateDanger(),
+                townstead.collapsed() || townstead.reactionLocked(), chat && townstead.working()));
     }
 
     /**

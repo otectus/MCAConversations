@@ -1,0 +1,706 @@
+{
+ "_comment": [
+  "Townstead shift schedules as a person lives them: at work, off work, the hour kept back. No appointment is ever promised."
+ ],
+ "topic": "daily_rhythm",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "daily_rhythm"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Back to it, then.",
+   "Same time tomorrow, near enough.",
+   "The day keeps its own pace."
+  ],
+  "pt": [
+   "De volta ao trabalho, então.",
+   "Amanhã no mesmo horário, mais ou menos.",
+   "O dia tem seu próprio ritmo."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "I'll let you get back to it.",
+  "pt": "Vou deixar você voltar ao que fazia."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about your day?",
+   "pt": "Mais alguma coisa sobre seu dia?"
+  },
+  "leave": {
+   "en": "Back to it, then.",
+   "pt": "De volta ao trabalho, então."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "Work, a meal, a bit of company, sleep. Round it goes.",
+    "My days have a shape to them. I like knowing it.",
+    "Busy, then less busy. That's most days."
+   ],
+   "pt": [
+    "Trabalho, uma refeição, um pouco de companhia, sono. E assim vai.",
+    "Meus dias têm um formato. Gosto de conhecer esse formato.",
+    "Correria, depois menos correria. É assim a maioria dos dias."
+   ]
+  },
+  "open": {
+   "subject": "daily_rhythm.the_shape",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "How your days run.",
+    "pt": "Como correm seus dias."
+   },
+   "lines": {
+    "en": [
+     "There's a time for work and a time for people, and I try not to mix them up.",
+     "Mornings are for the job. Evenings are for whoever wants to talk.",
+     "I know where I'll be at most hours. It's restful, oddly."
+    ],
+    "pt": [
+     "Tem hora pro trabalho e hora pras pessoas, e tento não misturar.",
+     "As manhãs são do serviço. As noites são de quem quiser conversar.",
+     "Sei onde vou estar na maior parte das horas. Descansa, de um jeito estranho."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_best_hour",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "Which part of the day do you like best?",
+      "pt": "Que parte do dia você mais gosta?"
+     },
+     "phrases": [
+      "which part of the day do you like best"
+     ],
+     "phrases_pt": [
+      "que parte do dia voce mais gosta"
+     ],
+     "requires_any": [
+      "part",
+      "best",
+      "parte",
+      "gosta"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "named",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "The hour after work, before supper. Nothing's asked of me then.",
+        "Early morning, before anyone needs anything."
+       ],
+       "pt": [
+        "A hora depois do trabalho, antes do jantar. Ninguém me pede nada nessa hora.",
+        "De manhãzinha, antes de alguém precisar de algo."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "ask_when_free",
+     "stance": "practical_help",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "When are you free to talk properly?",
+      "pt": "Quando você tem tempo pra conversar direito?"
+     },
+     "phrases": [
+      "when are you free to talk properly"
+     ],
+     "phrases_pt": [
+      "quando voce tem tempo pra conversar direito"
+     ],
+     "requires_any": [
+      "free",
+      "properly",
+      "tempo",
+      "direito"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "affection": {
+      "decision": "topic.daily_rhythm.asked_when",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "agreed",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Evenings, when the work's put away. Find me then.",
+        "After the shift. I'm better company when I'm not counting things."
+       ],
+       "pt": [
+        "À noite, quando o trabalho fica pra trás. Me procure nessa hora.",
+        "Depois do turno. Sou companhia melhor quando não estou contando coisas."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "call_it_dreary",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Same thing every day sounds dreary.",
+      "pt": "A mesma coisa todo dia parece monótono."
+     },
+     "phrases": [
+      "same thing every day sounds dreary"
+     ],
+     "phrases_pt": [
+      "a mesma coisa todo dia parece monotono"
+     ],
+     "requires_any": [
+      "dreary",
+      "monotono"
+     ],
+     "disposition": {
+      "warmth": -2,
+      "tension": 1
+     },
+     "affection": {
+      "decision": "topic.daily_rhythm.dismissed",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "qualify",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "It's steady. Steady isn't the same as dreary.",
+        "Maybe to you. I like knowing what comes next."
+       ],
+       "pt": [
+        "É estável. Estável não é o mesmo que monótono.",
+        "Pra você, talvez. Eu gosto de saber o que vem depois."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "daily_rhythm.the_hour_i_keep",
+   "act": "disclose",
+   "polarity": "positive",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "The hour you keep for yourself.",
+    "pt": "A hora que você guarda pra si."
+   },
+   "lines": {
+    "en": [
+     "There's one hour I don't give to anyone. I sit, and I don't plan anything.",
+     "When my shift ends I walk the long way home. Nobody knows that but you now.",
+     "I keep a little time before sleep that belongs to nobody else."
+    ],
+    "pt": [
+     "Tem uma hora que não dou pra ninguém. Sento e não planejo nada.",
+     "Quando meu turno acaba, volto pra casa pelo caminho mais longo. Agora você sabe disso.",
+     "Guardo um pouco de tempo antes de dormir que não pertence a mais ninguém."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_what_you_do",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What do you do with that time?",
+      "pt": "O que você faz com esse tempo?"
+     },
+     "phrases": [
+      "what do you do with that time"
+     ],
+     "phrases_pt": [
+      "o que voce faz com esse tempo"
+     ],
+     "requires_any": [
+      "time",
+      "tempo"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.daily_rhythm.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "Nothing useful. That's rather the point.",
+        "I watch the light go. It's the only thing I don't try to improve."
+       ],
+       "pt": [
+        "Nada de útil. É justamente essa a graça.",
+        "Fico vendo a luz ir embora. É a única coisa que não tento melhorar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "keep_that_hour",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Keep that hour. It sounds like it matters.",
+      "pt": "Guarde essa hora. Parece que ela importa."
+     },
+     "phrases": [
+      "keep that hour it sounds like it matters"
+     ],
+     "phrases_pt": [
+      "guarde essa hora parece que ela importa"
+     ],
+     "requires_any": [
+      "keep",
+      "hour",
+      "guarde",
+      "hora"
+     ],
+     "disposition": {
+      "warmth": 3
+     },
+     "reaction": {
+      "id": "acknowledged",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I will. It's good to hear someone say so.",
+        "It does. Thank you for not laughing."
+       ],
+       "pt": [
+        "Vou guardar. É bom ouvir alguém dizer isso.",
+        "Importa sim. Agradeço por não rir."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "wasted_time",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Sounds like wasted time to me.",
+      "pt": "Pra mim parece tempo perdido."
+     },
+     "phrases": [
+      "sounds like wasted time to me"
+     ],
+     "phrases_pt": [
+      "pra mim parece tempo perdido"
+     ],
+     "requires_any": [
+      "wasted",
+      "perdido"
+     ],
+     "disposition": {
+      "warmth": -2,
+      "tension": 1
+     },
+     "affection": {
+      "decision": "topic.daily_rhythm.scoffed",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "deflect",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Then it's lucky it's mine to waste.",
+        "We'll count time differently, you and I."
+       ],
+       "pt": [
+        "Então sorte que o tempo é meu pra perder.",
+        "A gente conta o tempo de jeitos diferentes, você e eu."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "on_shift",
+   "subject": "daily_rhythm.on_shift",
+   "shape": "observe",
+   "act": "report",
+   "polarity": "neutral",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.activity",
+     "is": "work",
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 40,
+   "cooldown_days": 1,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "Mid-shift.",
+    "pt": "No meio do turno."
+   },
+   "lines": {
+    "en": [
+     "I'm on shift, so I'll talk and work at once, if you don't mind.",
+     "Can't stop long — the work doesn't wait. But go on.",
+     "My hands are busy, but my mouth isn't. Walk with me."
+    ],
+    "pt": [
+     "Estou no turno, então vou conversar e trabalhar ao mesmo tempo, se não se importar.",
+     "Não posso parar muito — o trabalho não espera. Mas fale.",
+     "As mãos estão ocupadas, mas a boca está livre. Vem comigo."
+    ]
+   },
+   "replies": [
+    {
+     "name": "walk_with_them",
+     "stance": "practical_help",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "I'll walk with you while you work.",
+      "pt": "Eu te acompanho enquanto você trabalha."
+     },
+     "phrases": [
+      "ill walk with you while you work"
+     ],
+     "phrases_pt": [
+      "eu te acompanho enquanto voce trabalha"
+     ],
+     "requires_any": [
+      "walk",
+      "acompanho"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Company makes the hours shorter. Mind the tools.",
+        "Kind of you. I'll talk, you keep up."
+       ],
+       "pt": [
+        "Companhia encurta as horas. Cuidado com as ferramentas.",
+        "Gentileza sua. Eu falo, você acompanha."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "ask_when_done",
+     "stance": "curiosity",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "When does your shift end?",
+      "pt": "Quando acaba seu turno?"
+     },
+     "phrases": [
+      "when does your shift end"
+     ],
+     "phrases_pt": [
+      "quando acaba seu turno"
+     ],
+     "requires_any": [
+      "shift",
+      "end",
+      "acaba",
+      "turno"
+     ],
+     "disposition": {
+      "familiarity": 1
+     },
+     "reaction": {
+      "id": "explained",
+      "act": "explain",
+      "polarity": "neutral",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Not soon enough. Come find me after — I'll be better company.",
+        "When the work's done, which keeps its own clock."
+       ],
+       "pt": [
+        "Não tão cedo quanto eu queria. Me procure depois — vou ser companhia melhor.",
+        "Quando o trabalho acabar, que tem seu próprio relógio."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 3
+  },
+  {
+   "name": "off_duty",
+   "subject": "daily_rhythm.off_duty",
+   "shape": "observe",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.activity",
+     "any_of": [
+      "meet",
+      "rest"
+     ],
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 36,
+   "cooldown_days": 2,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "Off duty.",
+    "pt": "Fora do turno."
+   },
+   "lines": {
+    "en": [
+     "Work's done for now. I've got time, if you have.",
+     "This is my hour for company. Good timing."
+    ],
+    "pt": [
+     "O trabalho acabou por ora. Tenho tempo, se você tiver.",
+     "Esta é minha hora de companhia. Chegou na hora certa."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_about_the_day",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "How was the work today?",
+      "pt": "Como foi o trabalho hoje?"
+     },
+     "phrases": [
+      "how was the work today"
+     ],
+     "phrases_pt": [
+      "como foi o trabalho hoje"
+     ],
+     "requires_any": [
+      "work",
+      "today",
+      "trabalho",
+      "hoje"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Long, but honest. I've no complaints I'd bother you with.",
+        "Better than yesterday. That's all I ask of a day."
+       ],
+       "pt": [
+        "Comprido, mas honesto. Não tenho queixa que valha te incomodar.",
+        "Melhor que ontem. É tudo que peço de um dia."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "enjoy_it",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Enjoy it — you've earned it.",
+      "pt": "Aproveite — você mereceu."
+     },
+     "phrases": [
+      "enjoy it youve earned it"
+     ],
+     "phrases_pt": [
+      "aproveite voce mereceu"
+     ],
+     "requires_any": [
+      "enjoy",
+      "earned",
+      "aproveite",
+      "mereceu"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I mean to. Sit a while, if you like.",
+        "Thank you. It's nicer with someone to share it."
+       ],
+       "pt": [
+        "É o plano. Sente um pouco, se quiser.",
+        "Agradeço. É melhor com alguém pra dividir."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  }
+ ]
+}

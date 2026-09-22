@@ -103,6 +103,54 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.day.a_long_shift"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.day.a_long_shift",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "day",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "day.a_long_shift.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.day",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.day.a_long_shift.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.a_long_shift"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.day",
@@ -1724,6 +1772,57 @@
             "next": "conversations.scene.season.deep_winter.respond",
             "conversations_say": {
               "phrase": "conversations.scene.season.deep_winter"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.season.by_the_calendar"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.season.by_the_calendar",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "season",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "season.by_the_calendar.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.season",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.season.by_the_calendar.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.season.by_the_calendar",
+              "vars": [
+                "townstead_calendar_month"
+              ]
             }
           }
         },

@@ -13,6 +13,28 @@ what you've talked about before.
 
 ---
 
+## New in 1.8.0
+
+### 🤝 Strangers are strangers, friends have to be made
+
+A villager meeting you for the first time now sounds like it: a plain hello, no name they were never
+told, and a polite goodbye. Someone you have met says "hello again". Friendship takes separate days
+of real conversation as well as hearts; your spouse, parents, children and siblings greet you as
+family; and if the village thinks well of you, a stranger is courteous without pretending to know
+what you did. Every personality voices all of it in character, and old worlds keep the friendships
+they already had.
+
+### 🏡 Townstead villagers talk about their lives (with Townstead)
+
+Ask how they are keeping and a hungry villager says so; ask about their day and one on shift keeps
+working while they talk. A new **Life here** category covers wellbeing, daily rhythm, their trade,
+the years, their people, their places, what the village is becoming and the calendar. Villagers at
+work put off long talks in chat, a gift only counts as having helped when it really did, the village gossips
+about crises, promotions, birthdays and new buildings, and with Emotecraft a good reply can earn a
+wave, a clap or a tear. Without Townstead none of this appears.
+
+---
+
 ## What it does
 
 ### 💬 It's a conversation, not a vending machine *(new in 1.1.0)*
@@ -176,6 +198,7 @@ about our future? Is anything weighing on you?*
 | **Java** | 21 |
 | **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.7.36-beta.3` for NeoForge |
 | **Optional** | Serene Seasons — villagers track the real season when installed (calendar fallback otherwise) |
+| **Optional** | **Townstead** `[0.7.5,0.8)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
 | **Temporarily unavailable** | MCA: Quests and MCA: Reputation integrations — neither sibling has a 1.21.1 NeoForge release yet |
 
 > This is an **add-on** — MCA Reborn must be installed for it to do anything.

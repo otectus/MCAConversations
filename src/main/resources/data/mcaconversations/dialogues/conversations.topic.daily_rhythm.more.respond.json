@@ -1,0 +1,107 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_you_do",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "daily_rhythm.more.told"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.daily_rhythm.asked_after",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.the_hour_i_keep",
+              "deltas": {
+                "familiarity": 3,
+                "trust": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.daily_rhythm.more.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_that_hour",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "daily_rhythm.more.acknowledged"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.the_hour_i_keep",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.daily_rhythm.more.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "wasted_time",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "daily_rhythm.more.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.daily_rhythm.scoffed",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.the_hour_i_keep",
+              "deltas": {
+                "warmth": -2,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.daily_rhythm.more.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.daily_rhythm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

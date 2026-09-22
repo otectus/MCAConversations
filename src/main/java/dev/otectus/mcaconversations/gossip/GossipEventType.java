@@ -37,7 +37,31 @@ public enum GossipEventType {
     /** The village became a capital (1.6.0 — only seeded when MCA Capitals is present). */
     CAPITAL_FOUNDED,
     /** Court news with no better type: the chronicle said something and the herald read it out (1.6.0 — only seeded when MCA Capitals is present). */
-    COURT_NEWS;
+    COURT_NEWS,
+
+    // Townstead (1.8.0 — only seeded when Townstead is present and its gossip is on). What a village
+    // notices about its own people and places; never fertility, genes, heritage or a need's number.
+
+    /** Somebody went into a real hunger, thirst or exhaustion emergency. */
+    NEED_CRISIS,
+    /** Somebody collapsed from exhaustion. */
+    COLLAPSE,
+    /** Somebody who was seen in a crisis or collapsed is well again. */
+    RECOVERY,
+    /** Somebody rose a level in their trade. */
+    PROFESSION_TIER_UP,
+    /** Somebody learned a new skill of their trade. */
+    SKILL_LEARNED,
+    /** Somebody moved into a new stage of life. */
+    LIFE_STAGE_CHANGED,
+    /** Somebody had a birthday. */
+    BIRTHDAY,
+    /** A new building was finished in the village. */
+    BUILDING_REGISTERED,
+    /** A building the village had is gone. */
+    BUILDING_REMOVED,
+    /** The village's spirit — its character, its tier, what it is known for — changed. */
+    SPIRIT_IDENTITY_CHANGED;
 
     /** JSON/lang name, e.g. {@code marriage}. */
     public String jsonName() {

@@ -1,0 +1,698 @@
+{
+ "_comment": [
+  "Townstead village spirit as the village's character, in the villagers' own words. Tier thresholds are Townstead's; nothing here copies them."
+ ],
+ "topic": "community",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "community"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "We'll see what we become.",
+   "Come back in a season and see.",
+   "Good to talk about the place."
+  ],
+  "pt": [
+   "Vamos ver no que nos tornamos.",
+   "Volte daqui a uma estação e veja.",
+   "Foi bom falar do lugar."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "Thanks for the talk.",
+  "pt": "Agradeço a conversa."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about the village?",
+   "pt": "Mais alguma coisa sobre o vilarejo?"
+  },
+  "leave": {
+   "en": "We'll see what we become.",
+   "pt": "Vamos ver no que nos tornamos."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "A village becomes whatever its people keep doing.",
+    "We're turning into something here. I'm curious what.",
+    "Every place gets a reputation. We're earning ours."
+   ],
+   "pt": [
+    "Um vilarejo vira aquilo que seu povo continua fazendo.",
+    "Estamos virando alguma coisa aqui. Tenho curiosidade de saber o quê.",
+    "Todo lugar ganha uma fama. Estamos conquistando a nossa."
+   ]
+  },
+  "open": {
+   "subject": "community.what_we_are",
+   "act": "report",
+   "polarity": "mixed",
+   "predicate": "opinion",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "What kind of place this is.",
+    "pt": "Que tipo de lugar é este."
+   },
+   "lines": {
+    "en": [
+     "You can tell a lot about a village by what it builds first.",
+     "We've a character, this place. Visitors notice it before we do.",
+     "What we're becoming depends on what we keep choosing. I like most of the choices."
+    ],
+    "pt": [
+     "Dá pra saber muito de um vilarejo pelo que ele constrói primeiro.",
+     "Este lugar tem personalidade. Os visitantes percebem antes da gente.",
+     "O que estamos virando depende do que continuamos escolhendo. Gosto da maioria das escolhas."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_what_becoming",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What kind of place is this becoming?",
+      "pt": "Que tipo de lugar este está virando?"
+     },
+     "phrases": [
+      "what kind of place is this becoming"
+     ],
+     "phrases_pt": [
+      "que tipo de lugar este esta virando"
+     ],
+     "requires_any": [
+      "becoming",
+      "virando"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "A working place, I think. Busy hands and not much idle talk. Except mine.",
+        "One where people stay. That's the best thing a village can become."
+       ],
+       "pt": [
+        "Um lugar de trabalho, eu acho. Mãos ocupadas e pouca conversa fiada. Menos a minha.",
+        "Um lugar onde as pessoas ficam. É a melhor coisa que um vilarejo pode virar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "be_proud",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "You should be proud of what you've made here.",
+      "pt": "Vocês deviam se orgulhar do que fizeram aqui."
+     },
+     "phrases": [
+      "you should be proud of what youve made here"
+     ],
+     "phrases_pt": [
+      "voces deviam se orgulhar do que fizeram aqui"
+     ],
+     "requires_any": [
+      "proud",
+      "orgulhar"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.community.praised",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Some days we are. It's good to hear it from outside.",
+        "Thank you. It's everyone's doing, not mine."
+       ],
+       "pt": [
+        "Tem dias em que sim. É bom ouvir isso de fora.",
+        "Agradeço. É obra de todos, não minha."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "nothing_special",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "It's an ordinary sort of place.",
+      "pt": "É um lugar comum."
+     },
+     "phrases": [
+      "its an ordinary sort of place"
+     ],
+     "phrases_pt": [
+      "e um lugar comum"
+     ],
+     "requires_any": [
+      "ordinary",
+      "comum"
+     ],
+     "disposition": {
+      "warmth": -2
+     },
+     "affection": {
+      "decision": "topic.community.dismissed",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "resist",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "It is to the people who live here.",
+        "Then you've not stayed long enough."
+       ],
+       "pt": [
+        "É especial pra quem mora aqui.",
+        "Então você não ficou tempo suficiente."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "community.what_i_would_change",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "What you'd change.",
+    "pt": "O que você mudaria."
+   },
+   "lines": {
+    "en": [
+     "If I could change one thing, I'd have us argue less about fences and more about what's worth building.",
+     "I worry we're growing faster than we're getting to know each other.",
+     "I'd want one more place for people to simply sit together."
+    ],
+    "pt": [
+     "Se eu pudesse mudar uma coisa, a gente discutiria menos sobre cercas e mais sobre o que vale construir.",
+     "Me preocupa que estejamos crescendo mais rápido do que nos conhecendo.",
+     "Eu queria mais um lugar pra as pessoas simplesmente sentarem juntas."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_what_to_build",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What would you build, if it were up to you?",
+      "pt": "O que você construiria, se dependesse de você?"
+     },
+     "phrases": [
+      "what would you build if it were up to you"
+     ],
+     "phrases_pt": [
+      "o que voce construiria se dependesse de voce"
+     ],
+     "requires_any": [
+      "build",
+      "construiria"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.community.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "A place with a long table. Everything else follows from a long table.",
+        "Somewhere the children could be loud without anyone minding."
+       ],
+       "pt": [
+        "Um lugar com uma mesa comprida. Todo o resto vem de uma mesa comprida.",
+        "Um lugar onde as crianças pudessem fazer barulho sem ninguém se importar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "help_make_it",
+     "stance": "practical_help",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Maybe I could help make that happen.",
+      "pt": "Talvez eu possa ajudar a fazer isso acontecer."
+     },
+     "phrases": [
+      "maybe i could help make that happen"
+     ],
+     "phrases_pt": [
+      "talvez eu possa ajudar a fazer isso acontecer"
+     ],
+     "requires_any": [
+      "help",
+      "happen",
+      "ajudar",
+      "acontecer"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "trust": 1
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I'd like that. Ideas are cheap; hands aren't.",
+        "Would you? Then it's not just talk anymore."
+       ],
+       "pt": [
+        "Eu ia gostar. Ideia é barato; mão de obra não.",
+        "Faria isso? Então não é mais só conversa."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "not_my_concern",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Village business isn't my concern.",
+      "pt": "Assunto do vilarejo não é problema meu."
+     },
+     "phrases": [
+      "village business isnt my concern"
+     ],
+     "phrases_pt": [
+      "assunto do vilarejo nao e problema meu"
+     ],
+     "requires_any": [
+      "business",
+      "assunto"
+     ],
+     "disposition": {
+      "warmth": -2
+     },
+     "affection": {
+      "decision": "topic.community.shrugged",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "deflect",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Fair enough. You're only passing through, I suppose.",
+        "No. It's ours. I forget that sometimes."
+       ],
+       "pt": [
+        "Justo. Você só está de passagem, suponho.",
+        "Não. É nosso. Às vezes eu esqueço."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "what_they_call_us",
+   "subject": "community.spirit",
+   "shape": "observe",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "opinion",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.spirit",
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 36,
+   "cooldown_days": 4,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [
+    "townstead_primary_spirit"
+   ],
+   "prompt": {
+    "en": "What we're known for.",
+    "pt": "Pelo que somos conhecidos."
+   },
+   "lines": {
+    "en": [
+     "They're calling us %2$s now, up and down the road. I think it fits.",
+     "%2$s — that's the word for this place lately. We earned it."
+    ],
+    "pt": [
+     "Estão nos chamando de %2$s agora, estrada acima e abaixo. Acho que combina.",
+     "%2$s — é a palavra pra este lugar ultimamente. Fizemos por merecer."
+    ]
+   },
+   "replies": [
+    {
+     "name": "why_it_fits",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "Why do you think it fits?",
+      "pt": "Por que você acha que combina?"
+     },
+     "phrases": [
+      "why do you think it fits"
+     ],
+     "phrases_pt": [
+      "por que voce acha que combina"
+     ],
+     "requires_any": [
+      "fits",
+      "combina"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "explained",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Look at what we build and what we don't. A place tells you what it cares about.",
+        "Because nobody decided it. It just happened, one choice at a time."
+       ],
+       "pt": [
+        "Veja o que construímos e o que não construímos. Um lugar mostra com o que se importa.",
+        "Porque ninguém decidiu. Simplesmente aconteceu, uma escolha de cada vez."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "it_suits_the_place",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "It suits the place.",
+      "pt": "Combina com o lugar."
+     },
+     "phrases": [
+      "it suits the place"
+     ],
+     "phrases_pt": [
+      "combina com o lugar"
+     ],
+     "requires_any": [
+      "suits",
+      "lugar"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I think so too. Good to have it said.",
+        "It does. We'll try to keep deserving it."
+       ],
+       "pt": [
+        "Também acho. Bom ouvir alguém dizer.",
+        "Combina. Vamos tentar continuar merecendo."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  },
+  {
+   "name": "how_far_we_came",
+   "subject": "community.growing",
+   "shape": "observe",
+   "act": "celebrate",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.spirit_tier",
+     "min": 3,
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 34,
+   "cooldown_days": 5,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "How far we've come.",
+    "pt": "O quanto avançamos."
+   },
+   "lines": {
+    "en": [
+     "We've come a long way. I remember when this was three houses and a well.",
+     "The village has grown into itself. It feels like somewhere, now."
+    ],
+    "pt": [
+     "Avançamos muito. Lembro quando isto era três casas e um poço.",
+     "O vilarejo encontrou a si mesmo. Agora parece um lugar de verdade."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_the_start",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What was it like at the start?",
+      "pt": "Como era no começo?"
+     },
+     "phrases": [
+      "what was it like at the start"
+     ],
+     "phrases_pt": [
+      "como era no comeco"
+     ],
+     "requires_any": [
+      "start",
+      "comeco"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Mud, mostly. And a lot of people saying it'd never last.",
+        "Quiet. You could hear one hammer from the other end of the village."
+       ],
+       "pt": [
+        "Lama, principalmente. E muita gente dizendo que não ia durar.",
+        "Silencioso. Dava pra ouvir um martelo do outro lado do vilarejo."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "worth_celebrating",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "That's something to celebrate.",
+      "pt": "Isso merece comemoração."
+     },
+     "phrases": [
+      "thats something to celebrate"
+     ],
+     "phrases_pt": [
+      "isso merece comemoracao"
+     ],
+     "requires_any": [
+      "celebrate",
+      "comemoracao"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "affection": {
+      "decision": "topic.community.celebrated",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "It is. Bring something to drink next time and we will.",
+        "We should, shouldn't we? We never do."
+       ],
+       "pt": [
+        "Merece. Traga algo pra beber da próxima vez e a gente comemora.",
+        "Devíamos, não é? A gente nunca comemora."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  }
+ ]
+}

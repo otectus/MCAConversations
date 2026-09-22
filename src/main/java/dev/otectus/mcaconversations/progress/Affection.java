@@ -4,6 +4,7 @@ import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.ConversationOutcomes;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.conversation.DepthClass;
@@ -64,6 +65,12 @@ public final class Affection {
             if (outcome.granted() != 0) {
                 measured = McaCompat.rewardHearts(villager, player, outcome.granted());
                 session.recordApplied(outcome.granted());
+                // The measured figure, never the authored or granted one: MCA doubles a negative for a
+                // sensitive villager, and only what the player received is what Townstead should see
+                // (Townstead spec §12.2). Inside a reply it is reported once when the reply settles.
+                if (measured != 0 && !ConversationOutcomes.recordHearts(measured)) {
+                    ConversationOutcomes.markHeartChangeNow(villager, measured);
+                }
             }
             session.touch(now);
 

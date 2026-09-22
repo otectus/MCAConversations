@@ -77,11 +77,16 @@ public final class ReflectiveTownsteadBridge implements TownsteadBridge {
     /**
      * How many reaction backends Townstead has registered. Zero means every reaction is inert,
      * whatever else bound, because Townstead can only play one through a backend and ships exactly
-     * one, for Emotecraft. Surfaced for the status command; not part of the bridge contract, because
-     * no other caller should have to know why a reaction declined.
+     * one, for Emotecraft. Surfaced for the status command; nothing decides behaviour from it.
      */
+    @Override
     public int reactionBackendCount() {
         return TownsteadHandles.reactionBackendCount();
+    }
+
+    @Override
+    public List<String> failedReads() {
+        return TownsteadHandles.failedReads();
     }
 
     // --- reads -----------------------------------------------------------------------------------

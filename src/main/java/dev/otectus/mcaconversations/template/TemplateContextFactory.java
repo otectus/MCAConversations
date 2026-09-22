@@ -116,6 +116,7 @@ public final class TemplateContextFactory {
                         capitalVariable(context, var, villager);
                 case CIVIC_ORGANIZATION -> CivicBridge.speakerContext(player, villager)
                         .ifPresent(contact -> context.with(var, Component.translatable(contact.nameKey())));
+                case TOWNSTEAD_ROOT, TOWNSTEAD_SPECIES, TOWNSTEAD_ANCESTRY, TOWNSTEAD_LINEAGE, TOWNSTEAD_LIFE_STAGE, TOWNSTEAD_APPARENT_AGE, TOWNSTEAD_AGE_DESCRIPTION, TOWNSTEAD_PERSONALITY, TOWNSTEAD_PROFESSION_TIER, TOWNSTEAD_PROFESSION_XP, TOWNSTEAD_NEED_STATE, TOWNSTEAD_SCHEDULE_ACTIVITY, TOWNSTEAD_SCHEDULE_TEMPLATE, TOWNSTEAD_CALENDAR_DATE, TOWNSTEAD_CALENDAR_MONTH, TOWNSTEAD_CALENDAR_WEEKDAY, TOWNSTEAD_SEASON, TOWNSTEAD_BUILDING, TOWNSTEAD_SPIRIT_READOUT, TOWNSTEAD_SPIRIT_TIER, TOWNSTEAD_PRIMARY_SPIRIT, TOWNSTEAD_SECONDARY_SPIRIT, TOWNSTEAD_HERITAGE_SUMMARY -> townsteadVariable(context, var, villager);
             }
         }
         return context;
@@ -195,6 +196,163 @@ public final class TemplateContextFactory {
     }
 
     /** Sets a literal value, or leaves the variable unset so its fallback text is used. */
+    /**
+     * One Townstead variable (Townstead spec §11.1). Townstead's own translation keys are used where
+     * it ships them — spirit names and tiers, profession levels, seasons, building types — and this
+     * mod's neutral wording where it does not; Townstead's month and weekday names are per-calendar
+     * server data it does not expose, so those render as numbers in this mod's own words. Numbers
+     * appear only in the variables whose whole point is a number. Left unset on any failure, so the
+     * variable's fallback is used.
+     */
+    private static void townsteadVariable(TemplateContext context, TemplateVariable var, Entity villager) {
+        if (villager == null || !dev.otectus.mcaconversations.compat.Townstead.contentEnabled()) {
+            return;
+        }
+        try {
+            var s = dev.otectus.mcaconversations.compat.Townstead.snapshot(villager);
+            var v = s.villager();
+            switch (var) {
+                case TOWNSTEAD_ROOT -> literal(context, var, s.origin().displayName());
+                case TOWNSTEAD_SPECIES -> literal(context, var, humanize(s.origin().effectiveSpecies()));
+                case TOWNSTEAD_ANCESTRY -> literal(context, var, humanize(s.origin().ancestry()));
+                case TOWNSTEAD_LINEAGE -> literal(context, var, humanize(s.origin().lineage()));
+                case TOWNSTEAD_LIFE_STAGE -> {
+                    String stage = v.life().lifeStage();
+                    if (!stage.isBlank()) {
+                        String label = s.origin().lifeStages().stream()
+                                .filter(ls -> ls.id().equalsIgnoreCase(stage))
+                                .map(dev.otectus.mcaconversations.compat.TownsteadLifeStageView::label)
+                                .filter(l -> l != null && !l.isBlank())
+                                .findFirst().orElse("");
+                        context.with(var, label.isEmpty() ? Component.literal(humanize(stage))
+                                : Component.translatableWithFallback(label, humanize(stage)));
+                    }
+                }
+                case TOWNSTEAD_APPARENT_AGE -> {
+                    if (v.life().apparentAgeYears() > 0) {
+                        literal(context, var, Integer.toString(v.life().apparentAgeYears()));
+                    }
+                }
+                case TOWNSTEAD_AGE_DESCRIPTION -> {
+                    if (!v.isEmpty()) {
+                        context.with(var, Component.translatable(
+                                "mcaconversations.townstead.age." + v.life().ageDescription()));
+                    }
+                }
+                case TOWNSTEAD_PERSONALITY -> {
+                    var p = v.personality();
+                    if (p.displayName() != null) {
+                        context.with(var, p.displayName());
+                    } else if (!p.baseId().isBlank()) {
+                        literal(context, var, humanize(p.baseId()));
+                    }
+                }
+                case TOWNSTEAD_PROFESSION_TIER -> {
+                    int level = v.profession().level();
+                    if (v.profession().employed() && level >= 1 && level <= 5) {
+                        context.with(var, Component.translatable("townstead.profession.level." + level));
+                    }
+                }
+                case TOWNSTEAD_PROFESSION_XP -> {
+                    if (v.profession().employed()) {
+                        literal(context, var, Integer.toString(v.profession().xp()));
+                    }
+                }
+                case TOWNSTEAD_NEED_STATE -> {
+                    if (!v.isEmpty()) {
+                        context.with(var, Component.translatable(
+                                "mcaconversations.townstead.need." + v.needs().primaryNeed()));
+                    }
+                }
+                case TOWNSTEAD_SCHEDULE_ACTIVITY -> {
+                    String activity = v.schedule().currentActivity();
+                    if (!v.isEmpty() && java.util.Set.of("work", "meet", "rest", "idle").contains(activity)) {
+                        context.with(var, Component.translatable("mcaconversations.townstead.activity." + activity));
+                    }
+                }
+                case TOWNSTEAD_SCHEDULE_TEMPLATE -> literal(context, var, humanize(v.schedule().currentTemplateId()));
+                case TOWNSTEAD_CALENDAR_DATE -> {
+                    var c = s.calendar();
+                    if (!c.isEmpty()) {
+                        context.with(var, Component.translatable("mcaconversations.townstead.date",
+                                c.day(), c.month(), c.year()));
+                    }
+                }
+                case TOWNSTEAD_CALENDAR_MONTH -> {
+                    if (!s.calendar().isEmpty()) {
+                        context.with(var, Component.translatable("mcaconversations.townstead.month",
+                                s.calendar().month()));
+                    }
+                }
+                case TOWNSTEAD_CALENDAR_WEEKDAY -> {
+                    if (!s.calendar().isEmpty()) {
+                        context.with(var, Component.translatable("mcaconversations.townstead.weekday",
+                                s.calendar().dayOfWeek() + 1));
+                    }
+                }
+                case TOWNSTEAD_SEASON -> {
+                    String season = s.calendar().season();
+                    if (season != null && !season.isBlank()) {
+                        context.with(var, Component.translatable("townstead.calendar.season." + season));
+                    }
+                }
+                case TOWNSTEAD_BUILDING -> {
+                    var b = s.building();
+                    if (b.present() && !b.type().isBlank()) {
+                        context.with(var, Component.translatableWithFallback(
+                                "buildingType." + b.type(), humanize(b.family())));
+                    }
+                }
+                case TOWNSTEAD_SPIRIT_READOUT -> s.spirit().readoutOpt().ifPresent(r -> context.with(var, r));
+                case TOWNSTEAD_SPIRIT_TIER -> {
+                    var sp = s.spirit();
+                    if (!sp.isEmpty() && sp.tier() > 0 && !sp.primaryId().isBlank()) {
+                        context.with(var, Component.translatableWithFallback(
+                                "townstead.spirit.tier." + sp.primaryId().substring(sp.primaryId().lastIndexOf(':') + 1)
+                                        + "." + sp.tier(),
+                                humanize(sp.primaryId())));
+                    }
+                }
+                case TOWNSTEAD_PRIMARY_SPIRIT -> spiritName(context, var, s.spirit().primaryId());
+                case TOWNSTEAD_SECONDARY_SPIRIT -> spiritName(context, var, s.spirit().secondaryId());
+                case TOWNSTEAD_HERITAGE_SUMMARY -> {
+                    if (!v.isEmpty()) {
+                        // Only a dominant heritage is named, never a fraction (spec §11.1).
+                        context.with(var, v.dominantHeritage()
+                                .<Component>map(id -> Component.literal(humanize(id)))
+                                .orElse(Component.translatable("mcaconversations.townstead.heritage.mixed")));
+                    }
+                }
+                default -> {
+                }
+            }
+        } catch (Throwable t) {
+            dev.otectus.mcaconversations.McaConversations.LOGGER.debug(
+                    "Townstead template variable {} failed; using its fallback", var, t);
+        }
+    }
+
+    private static void spiritName(TemplateContext context, TemplateVariable var, String id) {
+        if (id != null && !id.isBlank()) {
+            context.with(var, Component.translatableWithFallback(spiritKey(id), humanize(id)));
+        }
+    }
+
+    /** Townstead names a spirit by its bare path: {@code townstead.spirit.industrious}. */
+    public static String spiritKey(String id) {
+        return "townstead.spirit." + id.substring(id.lastIndexOf(':') + 1);
+    }
+
+    /** {@code mypack:reserved_scholar} → {@code reserved scholar}; a last resort for raw ids. */
+    public static String humanize(String id) {
+        if (id == null || id.isBlank()) {
+            return "";
+        }
+        String path = id.substring(id.lastIndexOf(':') + 1);
+        path = path.substring(path.lastIndexOf('/') + 1);
+        return path.replace('_', ' ').replace('.', ' ').trim();
+    }
+
     private static void literal(TemplateContext context, TemplateVariable var, String value) {
         if (value != null && !value.isBlank()) {
             context.with(var, Component.literal(value));

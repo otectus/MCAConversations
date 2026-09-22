@@ -36,6 +36,7 @@ public final class ContextSources {
         register(new CapitalContextSource());
         register(new ReputationContextSource());
         register(new CivicContextSource());
+        register(new TownsteadContextSource());
     }
 
     private ContextSources() {

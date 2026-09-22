@@ -21,6 +21,16 @@ lives in `tools/parity/`.
   sibling finally counts as family. Worlds from before this version keep the friendships they had.
 - **Walking through the village is quieter.** Friends greet you more often than strangers, one
   greeting at a time, and a villager who says hello as you pass keeps walking unless you answer.
+- **Nobody knows your name before you have met.** Strangers greet and see you off without it, a
+  respected stranger gets courtesy and nothing presumed, partners and family have greetings of their
+  own, and every personality voices the stranger and "hello again" greetings in character.
+- **Townstead villagers live their Townstead lives in conversation.** With Townstead installed, a
+  *Life here* category of eight topics — how they are keeping, their day, their trade, the years,
+  their people, their places, what the village is becoming, the calendar — answers to their real
+  needs, shift, trade level, building, village spirit and calendar. Villagers at work or worn out put
+  off long talks in chat, collapsed ones do not greet you, a gift only counts as having helped when it did,
+  the village gossips about crises, promotions, birthdays and new buildings, and a reply can play a
+  heart-neutral reaction (with Emotecraft). Without Townstead, none of it appears.
 
 ## Features (1.7.3)
 
@@ -208,8 +218,10 @@ Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public stand
 telling each other what you have done, and — from 0.6.0 — remarking on what *they* know you for),
 **MCA: Capitals** (villages that are capitals speak
 about their sovereign, heirs and court; court changes seed village gossip), **Serene Seasons**
-(real seasons; calendar fallback otherwise), **Townstead** (its RPG dialogue screen gains numbered
-choices; the rest of the integration is still to come) and **Ultima Kingdoms** (kingdom-gated topics
+(real seasons; calendar fallback otherwise), **Townstead** (needs, schedules, trades, life stages,
+roots, buildings, village spirit and calendar become conversation state, with a *Life here* topic
+category, reactions, gossip, and numbered choices in its RPG dialogue screen; **Emotecraft** is needed
+for reactions to play) and **Ultima Kingdoms** (kingdom-gated topics
 and guild contacts; inert on this port until Ultima Kingdoms ships for NeoForge 1.21.1) — all soft
 dependencies; the mod works fully without them.
 
@@ -230,24 +242,26 @@ a GUI submission guard (`InteractionDialogueMessageMixin`), the hub/age answer-l
 (`QuestionMixin`), a guard on MCA's tokenless interaction-close request so a player who does not own a
 managed discussion cannot end it (`McaInteractionCloseMixin`), a cancel of
 `InteractTask#followPlayer` while a managed hold owns the villager (`InteractTaskMovementMixin`),
-and the 1.20.1-save import (`PlayerLegacyDataMixin`) — and five to the client: a
+and the 1.20.1-save import (`PlayerLegacyDataMixin`) — and six to the client: a
 digit-shortcut adapter for vanilla's own chat screen (`ChatScreenChoiceMixin`) and one for MCA's own
 `InteractScreen` (`InteractScreenChoiceMixin`),
-the personality-locale gate widener (`MCAClientMixin`), and two Townstead-cooperation mixins
-(`TownsteadChoicePanelMixin`, `TownsteadRpgDialogueScreenMixin`). Chat mode's matcher is a
+the personality-locale gate widener (`MCAClientMixin`), and three Townstead-cooperation mixins
+(`TownsteadChoicePanelMixin`, `TownsteadRpgDialogueScreenMixin`, and
+`TownsteadEmotionTagOverridesMixin`, which lets its typewriter find Conversations' emotion tags). Chat mode's matcher is a
 second *frontend* to the same engine: free text resolves to the exact `(question, answer)` a GUI click
 would send, so parity is structural, not re-implemented; its intents live in
 `data/<any-namespace>/chat_intents/*.json` and are fully datapack-extensible (including synonym packs).
 
-Client-side code is not limited to a typing ping: `client/` holds 29 files. The typing tracker
+Client-side code is not limited to a typing ping: `client/` holds 42 files. The typing tracker
 (`ChatTypingTracker`) is still the only one that reports anything back to the server — it edge-detects
 the vanilla chat screen so nearby villagers can turn toward a typing player — but the rest render or
-read local state: `client/dialogue` (22 files) builds the three configurable dialogue styles
+read local state: `client/dialogue` (32 files) builds the three configurable dialogue styles
 (`RESPONSIVE`, `MINIMAL`, `MCA_ORIGINAL` — `McaConversationsConfig.DialogueMenuStyle`), with portrait
 rendering, paging, digit-key shortcuts, transition-only narrator output and a per-character text
 reveal; `client/dialogue/dev` (3 files) is a dev-only in-game preview screen and command for the
-dialogue card; `client/townstead` (2 files) let Townstead's own choice panel accept the same
-numbered-digit shortcuts through a reflective adapter, without linking Townstead's classes in.
+dialogue card; `client/townstead` (3 files) let Townstead's own choice panel accept the same
+numbered-digit shortcuts through a reflective adapter, without linking Townstead's classes in, and
+index Conversations' emotion-tag sidecar for Townstead's typewriter.
 
 The relationship vector lives in its own versioned world save data and
 **never touches hearts**: MCA's hearts remain the only authoritative, visible relationship number,

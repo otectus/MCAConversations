@@ -19,8 +19,15 @@ public final class AmbientSelection {
     private AmbientSelection() {
     }
 
-    /** A candidate that matched an ambient message: its index in the candidate list, score, distance². */
-    public record Responder(int candidateIndex, double score, double distSqr) {
+    /**
+     * A candidate that matched an ambient message: its index in the candidate list, score, distance²,
+     * and whether they are at work (Townstead), which caps how many of them answer.
+     */
+    public record Responder(int candidateIndex, double score, double distSqr, boolean working) {
+
+        public Responder(int candidateIndex, double score, double distSqr) {
+            this(candidateIndex, score, distSqr, false);
+        }
     }
 
     /**
@@ -28,13 +35,32 @@ public final class AmbientSelection {
      * input is assumed already threshold-filtered by the caller (via {@code IntentMatcher.decide}).
      */
     public static List<Responder> select(List<Responder> matched, int maxResponders) {
+        return select(matched, maxResponders, Integer.MAX_VALUE);
+    }
+
+    /**
+     * As above, with at most {@code maxWorking} of the answers coming from villagers at work (Townstead
+     * spec §13.4). The order among those kept is unchanged.
+     */
+    public static List<Responder> select(List<Responder> matched, int maxResponders, int maxWorking) {
         List<Responder> sorted = new ArrayList<>(matched);
         sorted.sort(Comparator.comparingDouble(Responder::score).reversed()
                 .thenComparingDouble(Responder::distSqr));
-        if (maxResponders > 0 && sorted.size() > maxResponders) {
-            return new ArrayList<>(sorted.subList(0, maxResponders));
+        List<Responder> kept = new ArrayList<>();
+        int working = 0;
+        for (Responder responder : sorted) {
+            if (maxResponders > 0 && kept.size() >= maxResponders) {
+                break;
+            }
+            if (responder.working()) {
+                if (working >= maxWorking) {
+                    continue;
+                }
+                working++;
+            }
+            kept.add(responder);
         }
-        return sorted;
+        return kept;
     }
 
     /**

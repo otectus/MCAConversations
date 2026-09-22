@@ -24,7 +24,15 @@ import java.util.Optional;
  * a never-matching condition.
  */
 public record CheckDefinition(String id, CheckTier tier, DispositionAxis axis, int difficulty,
-                              Optional<StanceFamily> stance, Optional<String> arc) {
+                              Optional<StanceFamily> stance, Optional<String> arc,
+                              Optional<TownsteadFit> townsteadFit) {
+
+    /** A check with no Townstead term — every definition written before 1.8.0. */
+    public CheckDefinition(String id, CheckTier tier, DispositionAxis axis, int difficulty,
+                           Optional<StanceFamily> stance, Optional<String> arc) {
+        this(id, tier, axis, difficulty, stance, arc, Optional.empty());
+    }
+
 
     public static CheckDefinition fromJson(JsonObject json) {
         if (!json.has("id") || json.get("id").getAsString().isEmpty()) {
@@ -65,6 +73,8 @@ public record CheckDefinition(String id, CheckTier tier, DispositionAxis axis, i
             arc = Optional.of(arcId);
         }
 
-        return new CheckDefinition(json.get("id").getAsString(), tier, axis, difficulty, stance, arc);
+        Optional<TownsteadFit> fit = json.has("townstead_fit")
+                ? Optional.of(TownsteadFit.fromJson(json.get("townstead_fit"))) : Optional.empty();
+        return new CheckDefinition(json.get("id").getAsString(), tier, axis, difficulty, stance, arc, fit);
     }
 }

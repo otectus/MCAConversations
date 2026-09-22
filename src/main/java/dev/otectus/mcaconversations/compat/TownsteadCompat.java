@@ -92,7 +92,7 @@ public final class TownsteadCompat {
                             + "status' to see which, and report it with your Townstead version. "
                             + "Unresolved: {}",
                     version, variant, bridge.capabilities().size(),
-                    TownsteadCapability.values().length, bridge.unresolvedMembers());
+                    TownsteadCapability.serverSide().size(), bridge.unresolvedMembers());
             case INCOMPATIBLE -> McaConversations.LOGGER.warn(
                     "Townstead {} is installed but none of its API could be bound, so the integration "
                             + "is off. This usually means an unsupported Townstead version. Run "

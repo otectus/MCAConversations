@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_about_the_day",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "daily_rhythm.off_duty.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.off_duty",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.daily_rhythm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.daily_rhythm.off_duty.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "enjoy_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "daily_rhythm.off_duty.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "daily_rhythm.off_duty",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.daily_rhythm.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.daily_rhythm.off_duty.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.daily_rhythm.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

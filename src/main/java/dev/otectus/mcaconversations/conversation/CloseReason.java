@@ -29,7 +29,7 @@ public enum CloseReason {
     PLAYER_LEFT(1),
     /** The villager being talked to died or was removed. */
     SPEAKER_DEAD(2),
-    /** The villager is alive but can no longer hold the conversation (asleep, panicking, gone). Reserved: nothing closes for this reason yet. */
+    /** The villager is alive but can no longer hold the conversation: since 1.8.0, they fell asleep mid-discussion. */
     SPEAKER_UNAVAILABLE(3),
     /** The pair drifted outside the conversation radius. */
     OUT_OF_RANGE(4),
@@ -41,9 +41,13 @@ public enum CloseReason {
     TIMED_OUT(7),
     /** A datapack reload replaced the content the open offer was minted from. */
     CONTENT_RELOADED(8),
-    /** The feature driving the conversation was switched off mid-exchange. Reserved: nothing closes for this reason yet. */
+    /** The feature driving the conversation was switched off mid-exchange: since 1.8.0, chat mode turned off by a config reload. */
     FEATURE_DISABLED(9),
-    /** The offer being answered did not exist, was consumed, or belonged to someone else. Reserved: the offer paths reject without closing. */
+    /**
+     * The offer being answered did not exist, was consumed, or belonged to someone else. Never used to
+     * close, by design: a refused reply is a refusal and not an ending, so a stale or duplicated click
+     * can never tear down the discussion the player is still in. The id stays because ids are permanent.
+     */
     INVALID_OFFER(10),
     /**
      * A contained failure ended the exchange rather than propagating: the dialogue engine threw, or

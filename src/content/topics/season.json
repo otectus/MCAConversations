@@ -319,6 +319,144 @@
         }
       ],
       "epistemic": "inferred"
+    },
+    {
+      "name": "by_the_calendar",
+      "subject": "season.by_the_calendar",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "positive",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "townstead.month",
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "townstead"
+      ],
+      "base_priority": 26,
+      "cooldown_days": 3,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [
+        "townstead_calendar_month"
+      ],
+      "prompt": {
+        "en": "By the calendar.",
+        "pt": "Pelo calendário."
+      },
+      "lines": {
+        "en": [
+          "It's %2$s by the calendar. The fields agree, mostly.",
+          "%2$s already. I keep the count on the kitchen wall.",
+          "By the calendar it's %2$s. My knees knew before the calendar did."
+        ],
+        "pt": [
+          "Pelo calendário, é o %2$s. Os campos concordam, quase sempre.",
+          "Já é o %2$s. Marco a contagem na parede da cozinha.",
+          "Pelo calendário é o %2$s. Meus joelhos souberam antes do calendário."
+        ]
+      },
+      "replies": [
+        {
+          "name": "what_this_time_brings",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does this time of year bring?",
+            "pt": "O que esta época do ano traz?"
+          },
+          "phrases": [
+            "what does this time of year bring"
+          ],
+          "phrases_pt": [
+            "o que esta epoca do ano traz"
+          ],
+          "requires_any": [
+            "bring",
+            "traz"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Work, mostly. And one good evening, if we're lucky.",
+                "The same jobs as last year, and I'm glad of it."
+              ],
+              "pt": [
+                "Trabalho, principalmente. E uma boa noite, se tivermos sorte.",
+                "As mesmas tarefas do ano passado, e fico contente com isso."
+              ]
+            },
+            "epistemic": "inferred",
+            "temporal": "current",
+            "min_variants": 2
+          }
+        },
+        {
+          "name": "offer_a_hand_with_it",
+          "stance": "practical_help",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "Need a hand with the season's work?",
+            "pt": "Precisa de ajuda com o trabalho da estação?"
+          },
+          "phrases": [
+            "need a hand with the seasons work"
+          ],
+          "phrases_pt": [
+            "precisa de ajuda com o trabalho da estacao"
+          ],
+          "requires_any": [
+            "hand",
+            "ajuda"
+          ],
+          "disposition": {
+            "warmth": 2
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I might, at that. I'll remember you offered.",
+                "Kind of you. The harvest always needs more hands."
+              ],
+              "pt": [
+                "Talvez precise, sim. Vou lembrar que você ofereceu.",
+                "Gentileza sua. A colheita sempre precisa de mais mãos."
+              ]
+            },
+            "epistemic": "inferred",
+            "temporal": "current",
+            "min_variants": 2
+          }
+        }
+      ],
+      "epistemic": "inferred",
+      "min_variants": 3
     }
   ]
 }

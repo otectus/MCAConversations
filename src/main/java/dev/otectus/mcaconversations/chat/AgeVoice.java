@@ -33,7 +33,15 @@ public final class AgeVoice {
             "chatmode.confused", "chatmode.hint", "chatmode.shrug", "chatmode.clarify",
             "chatmode.dropped", "chatmode.busy", "chatmode.muted", "chatmode.farewell",
             "chatmode.insult", "chatmode.hail", "chatmode.hail.recognized", "chatmode.hail.stranger",
-            "chatmode.hail_cold", "chatmode.attentive");
+            "chatmode.hail_cold", "chatmode.attentive", "chatmode.hail.family",
+            "chatmode.farewell.stranger");
+
+    /**
+     * Families a toddler speaks through another family's toddler lines. A small child does not
+     * greet a stranger by their reputation; they peek out from behind a barrel.
+     */
+    static final java.util.Map<String, String> TODDLER_BORROWS = java.util.Map.of(
+            "chatmode.hail.respected_stranger", "chatmode.hail.stranger");
 
     private AgeVoice() {
     }
@@ -50,6 +58,9 @@ public final class AgeVoice {
         String age = ageGroup.orElse("");
         if ("baby".equals(age) && family.startsWith("chatmode.")) {
             return BABBLE;
+        }
+        if ("toddler".equals(age) && TODDLER_BORROWS.containsKey(family)) {
+            return TODDLER_BORROWS.get(family) + ".toddler";
         }
         if ("toddler".equals(age) && TODDLER_VOICED.contains(family)) {
             return family + ".toddler";

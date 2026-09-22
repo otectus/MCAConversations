@@ -112,6 +112,13 @@ public final class ContentCompiler {
         topicCivicContacts.put(topic, required);
     }
 
+    /** Topics offered only while Townstead's content is live; written to the catalog row as a flag. */
+    private final Map<String, Boolean> topicTownstead = new TreeMap<>();
+
+    void ownTopicTownstead(String topic, boolean required) {
+        topicTownstead.put(topic, required);
+    }
+
     /** Matcher fixtures the intent test asserts, so every generated reply is typable. */
     private final List<String[]> matcherFixtures = new ArrayList<>();
     /** Answer names offered on each generated page, so a fixture is ranked the way play ranks it. */
@@ -552,7 +559,8 @@ public final class ContentCompiler {
 
     /** Mirrors all top-level provider gates from authored topic sources into the runtime catalog. */
     void syncTopicGates(Path catalogFile) throws IOException {
-        if (topicKingdomGates.isEmpty() && topicCivicContacts.isEmpty() || !Files.exists(catalogFile)) return;
+        if (topicKingdomGates.isEmpty() && topicCivicContacts.isEmpty() && topicTownstead.isEmpty()
+                || !Files.exists(catalogFile)) return;
         JsonObject root = JsonParser.parseString(Files.readString(catalogFile)).getAsJsonObject();
         JsonObject topics = root.getAsJsonObject("topics");
         if (topics == null) throw new IllegalStateException(catalogFile + " has no topics object");
@@ -582,6 +590,19 @@ public final class ContentCompiler {
             if (before == authored.getValue() && (authored.getValue() || !row.has("civic_contact"))) continue;
             if (authored.getValue()) row.addProperty("civic_contact", true);
             else row.remove("civic_contact");
+            changed = true;
+        }
+        for (Map.Entry<String, Boolean> authored : topicTownstead.entrySet()) {
+            JsonObject row = topics.has(authored.getKey()) && topics.get(authored.getKey()).isJsonObject()
+                    ? topics.getAsJsonObject(authored.getKey()) : null;
+            if (row == null) {
+                throw new IllegalStateException("authored topic '" + authored.getKey()
+                        + "' has no runtime catalog row");
+            }
+            boolean before = row.has("townstead") && row.get("townstead").getAsBoolean();
+            if (before == authored.getValue() && (authored.getValue() || !row.has("townstead"))) continue;
+            if (authored.getValue()) row.addProperty("townstead", true);
+            else row.remove("townstead");
             changed = true;
         }
         if (changed) writeJson(catalogFile, root);

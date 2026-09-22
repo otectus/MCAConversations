@@ -18,4 +18,17 @@ public enum SocialContact {
     public String key() {
         return name().toLowerCase(Locale.ROOT);
     }
+
+    /** The constant with this lowercase key, or empty. */
+    public static java.util.Optional<SocialContact> byKey(String raw) {
+        if (raw == null) {
+            return java.util.Optional.empty();
+        }
+        for (SocialContact value : values()) {
+            if (value.key().equals(raw.trim().toLowerCase(Locale.ROOT))) {
+                return java.util.Optional.of(value);
+            }
+        }
+        return java.util.Optional.empty();
+    }
 }

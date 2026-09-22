@@ -48,6 +48,9 @@ public abstract class QuestionMixin {
     /** The question our {@code main.json} merges into, and the answer name it adds. */
     private static final String MAIN_QUESTION = "main";
     private static final String CONVERSATIONS_ANSWER = "conversations";
+    /** The hub page, and the Townstead category on it (1.8.0). */
+    private static final String HUB_QUESTION = "conversations";
+    private static final String TOWNSTEAD_CATEGORY = "townstead";
 
     @Shadow
     public abstract String getName();
@@ -68,6 +71,11 @@ public abstract class QuestionMixin {
                     // same-named answer in any other question (ours or a third-party pack's) is left be.
                     && MAIN_QUESTION.equals(getName())) {
                 answers.remove(CONVERSATIONS_ANSWER);
+            }
+            // "Life here" is Townstead's category: listed only while its content is live.
+            if (HUB_QUESTION.equals(getName())
+                    && !dev.otectus.mcaconversations.compat.Townstead.contentEnabled()) {
+                answers.remove(TOWNSTEAD_CATEGORY);
             }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("Hub-button visibility filter failed; leaving answer visible", t);
@@ -103,7 +111,8 @@ public abstract class QuestionMixin {
             try {
                 String question = getName();
                 answers.removeIf(answer -> ConversationCatalogLoader.active().byStarter(question, answer)
-                        .map(entry -> entry.kingdomGate().isPresent() || entry.civicContact()).orElse(false));
+                        .map(entry -> entry.kingdomGate().isPresent() || entry.civicContact()
+                                || entry.townstead()).orElse(false));
                 if (!mcaconversations$topicFilterWarned) {
                     mcaconversations$topicFilterWarned = true;
                     McaConversations.LOGGER.warn("Topic gate failed; explicitly provider-gated answers were hidden", t);

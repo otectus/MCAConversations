@@ -8,6 +8,7 @@ import dev.otectus.mcaconversations.interiority.InteriorityProfile;
 import dev.otectus.mcaconversations.profession.ProfessionProfiles;
 import dev.otectus.mcaconversations.scene.SceneCatalog;
 import dev.otectus.mcaconversations.village.VillageCultureCatalog;
+import dev.otectus.mcaconversations.season.TownsteadHolidays;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ public record ConversationContentBundle(long generation,
                                         SceneCatalog scenes,
                                         VillageCultureCatalog culture,
                                         NarrativeCatalog narrative,
+                                        TownsteadHolidays townsteadHolidays,
                                         DialogueResourceIndex dialogues,
                                         Map<String, Object> ownedQuestions,
                                         boolean ownedQuestionsKnown,
@@ -63,12 +65,15 @@ public record ConversationContentBundle(long generation,
             SceneCatalog.EMPTY,
             VillageCultureCatalog.EMPTY,
             NarrativeCatalog.EMPTY,
+            TownsteadHolidays.EMPTY,
             DialogueResourceIndex.empty(),
             Map.of(),
             false,
             List.of());
 
     public ConversationContentBundle {
+        townsteadHolidays = townsteadHolidays == null
+                ? TownsteadHolidays.EMPTY : townsteadHolidays;
         interiority = interiority == null ? Map.of() : Map.copyOf(interiority);
         ownedQuestions = ownedQuestions == null ? Map.of() : Map.copyOf(ownedQuestions);
         problems = problems == null ? List.of() : List.copyOf(problems);
@@ -88,55 +93,61 @@ public record ConversationContentBundle(long generation,
 
     public ConversationContentBundle withIntents(IntentIndex value) {
         return new ConversationContentBundle(generation, available, attempt, value, topics, beats,
-                professions, interiority, identity, scenes, culture, narrative, dialogues,
+                professions, interiority, identity, scenes, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withTopics(ConversationCatalog value) {
         return new ConversationContentBundle(generation, available, attempt, intents, value, beats,
-                professions, interiority, identity, scenes, culture, narrative, dialogues,
+                professions, interiority, identity, scenes, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withBeats(BeatCatalog value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, value,
-                professions, interiority, identity, scenes, culture, narrative, dialogues,
+                professions, interiority, identity, scenes, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withProfessions(ProfessionProfiles value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
-                value, interiority, identity, scenes, culture, narrative, dialogues,
+                value, interiority, identity, scenes, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withInteriority(Map<String, InteriorityProfile> value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
-                professions, value, identity, scenes, culture, narrative, dialogues,
+                professions, value, identity, scenes, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withIdentity(IdentityCatalog value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
-                professions, interiority, value, scenes, culture, narrative, dialogues,
+                professions, interiority, value, scenes, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withScenes(SceneCatalog value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
-                professions, interiority, identity, value, culture, narrative, dialogues,
+                professions, interiority, identity, value, culture, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withCulture(VillageCultureCatalog value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
-                professions, interiority, identity, scenes, value, narrative, dialogues,
+                professions, interiority, identity, scenes, value, narrative, townsteadHolidays, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
     public ConversationContentBundle withNarrative(NarrativeCatalog value) {
         return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
-                professions, interiority, identity, scenes, culture, value, dialogues,
+                professions, interiority, identity, scenes, culture, value, townsteadHolidays, dialogues,
+                ownedQuestions, ownedQuestionsKnown, problems);
+    }
+
+    public ConversationContentBundle withTownsteadHolidays(TownsteadHolidays value) {
+        return new ConversationContentBundle(generation, available, attempt, intents, topics, beats,
+                professions, interiority, identity, scenes, culture, narrative, value, dialogues,
                 ownedQuestions, ownedQuestionsKnown, problems);
     }
 
@@ -145,7 +156,7 @@ public record ConversationContentBundle(long generation,
                                                Map<String, Object> owned, boolean ownedKnown,
                                                List<ContentProblem> attemptProblems) {
         return new ConversationContentBundle(publishedGeneration, true, publishedAttempt, intents, topics,
-                beats, professions, interiority, identity, scenes, culture, narrative, dialogues,
+                beats, professions, interiority, identity, scenes, culture, narrative, townsteadHolidays, dialogues,
                 owned, ownedKnown, attemptProblems);
     }
 }

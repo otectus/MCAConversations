@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_becoming",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "community.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "community.what_we_are",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.community.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.community.open.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "be_proud",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "community.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.community.praised",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "community.what_we_are",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.community.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.community.open.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "nothing_special",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "community.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.community.dismissed",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "community.what_we_are",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.community.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.community.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

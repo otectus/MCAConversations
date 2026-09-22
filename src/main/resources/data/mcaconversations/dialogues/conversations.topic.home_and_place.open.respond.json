@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_favourite_spot",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "home_and_place.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "home_and_place.my_places",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.home_and_place.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.home_and_place.open.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "admire_the_village",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "home_and_place.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.home_and_place.admired",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "home_and_place.my_places",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.home_and_place.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.home_and_place.open.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "any_other_village",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "home_and_place.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.home_and_place.belittled",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "home_and_place.my_places",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.home_and_place.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.home_and_place.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

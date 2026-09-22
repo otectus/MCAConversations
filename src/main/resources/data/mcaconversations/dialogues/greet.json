@@ -7,6 +7,62 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 2000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.stranger"
+            }
+          }
+        },
+        {
+          "baseChance": -1500,
+          "conditions": [
+            {
+              "chance": 1000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
+            },
+            {
+              "chance": 1000,
+              "age_group": "toddler"
+            }
+          ],
+          "actions": {
+            "conversations_record": {
+              "id": "mcaconversations.greet.today",
+              "var": "player",
+              "time": 12000
+            },
+            "next": "main",
+            "conversations_say": {
+              "phrase": "conversations.checkin.stranger.toddler"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 100,
               "time_min": 13000
             },
@@ -29,6 +85,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -67,6 +131,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -104,6 +176,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -146,6 +226,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -188,6 +276,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -250,6 +346,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -318,6 +422,14 @@
             {
               "chance": -2000,
               "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {
@@ -345,6 +457,14 @@
             {
               "chance": -2000,
               "conversations_enabled": "branching"
+            },
+            {
+              "chance": -5000,
+              "conversations_context": {
+                "field": "social.contact",
+                "is": "unmet",
+                "unknown": "fail"
+              }
             }
           ],
           "actions": {

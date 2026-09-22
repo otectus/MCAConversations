@@ -31,6 +31,7 @@ public final class TopicGate {
     public static boolean allows(TopicEntry entry, Entity villager, ServerPlayer player) {
         if (entry == null) return true;
         if (villager == null || !entry.allowsAge(McaCompat.ageGroup(villager))) return false;
+        if (entry.townstead() && !dev.otectus.mcaconversations.compat.Townstead.contentEnabled()) return false;
         if (entry.kingdomGate().map(gate -> KingdomBridge.allows(gate, player, villager)).orElse(true) == false) {
             return false;
         }
@@ -52,9 +53,17 @@ public final class TopicGate {
     static boolean allows(ConversationCatalog catalog, String question, String answer, AgeGroup age,
                           Predicate<KingdomGateSpec> kingdomEvaluator,
                           java.util.function.BooleanSupplier civicContactEvaluator) {
+        return allows(catalog, question, answer, age, kingdomEvaluator, civicContactEvaluator, () -> false);
+    }
+
+    static boolean allows(ConversationCatalog catalog, String question, String answer, AgeGroup age,
+                          Predicate<KingdomGateSpec> kingdomEvaluator,
+                          java.util.function.BooleanSupplier civicContactEvaluator,
+                          java.util.function.BooleanSupplier townsteadEvaluator) {
         if (catalog == null || question == null || answer == null) return true;
         return catalog.byStarter(question, answer)
                 .map(entry -> entry.allowsAge(age)
+                        && (!entry.townstead() || townsteadEvaluator.getAsBoolean())
                         && entry.kingdomGate().map(kingdomEvaluator::test).orElse(true)
                         && (!entry.civicContact() || civicContactEvaluator.getAsBoolean()))
                 .orElse(true);

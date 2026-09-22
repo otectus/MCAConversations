@@ -62,6 +62,17 @@ public enum TownsteadCapability {
     private static final Map<String, TownsteadCapability> BY_NAME = Arrays.stream(values())
             .collect(Collectors.toUnmodifiableMap(TownsteadCapability::key, Function.identity()));
 
+    /**
+     * The capabilities the server-side binding measures itself against: every one except
+     * {@link #RPG_EMOTION_TAGS}, which is a client mixin rather than a method handle and never
+     * appears in a server bridge's bound set. Status and diagnostics count against these.
+     */
+    public static java.util.Set<TownsteadCapability> serverSide() {
+        java.util.EnumSet<TownsteadCapability> set = java.util.EnumSet.allOf(TownsteadCapability.class);
+        set.remove(RPG_EMOTION_TAGS);
+        return java.util.Collections.unmodifiableSet(set);
+    }
+
     /** The lowercase id a datapack writes. */
     public String key() {
         return name().toLowerCase(Locale.ROOT);

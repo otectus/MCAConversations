@@ -1,0 +1,108 @@
+{
+  "answers": [
+    {
+      "name": "ask_how_learned",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "mastery.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "mastery.the_craft",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.mastery.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.mastery.open.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "praise_the_work",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "mastery.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.mastery.praised",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "mastery.the_craft",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.mastery.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.mastery.open.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "anyone_could",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "mastery.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.mastery.belittled",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "mastery.the_craft",
+              "deltas": {
+                "warmth": -2,
+                "respect": -1,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.mastery.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.mastery.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

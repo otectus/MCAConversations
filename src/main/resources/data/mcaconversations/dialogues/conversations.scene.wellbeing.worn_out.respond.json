@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "tell_them_to_rest",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "wellbeing.worn_out.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.wellbeing.sent_to_rest",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "wellbeing.worn_out",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.wellbeing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.wellbeing.worn_out.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "keep_them_talking",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "wellbeing.worn_out.open.qualified"
+            },
+            "conversations_disposition_apply": {
+              "topic": "wellbeing.worn_out",
+              "deltas": {
+                "tension": 1
+              }
+            },
+            "next": "conversations.scene.wellbeing.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.wellbeing.worn_out.qualified"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.wellbeing.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

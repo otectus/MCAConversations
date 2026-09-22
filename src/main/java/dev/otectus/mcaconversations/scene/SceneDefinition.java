@@ -198,7 +198,14 @@ public record SceneDefinition(String id,
         }
 
         List<ContextQuery> contextConditions = new ArrayList<>();
-        for (JsonObject entry : objects(context, "conditions")) {
+        List<JsonObject> conditionJson = new ArrayList<>(objects(context, "conditions"));
+        // A declared social contract is hard eligibility like any other condition (Stability spec §9.3).
+        dev.otectus.mcaconversations.conversation.SocialContract social = context != null && context.has("social")
+                ? dev.otectus.mcaconversations.conversation.SocialContract.fromJson(context.get("social")) : null;
+        if (social != null) {
+            conditionJson.addAll(social.conditions());
+        }
+        for (JsonObject entry : conditionJson) {
             ContextQuery query = ContextQuery.fromJson(entry);
             if (!query.isValid()) {
                 throw new IllegalArgumentException("scene '" + sceneId
@@ -219,6 +226,10 @@ public record SceneDefinition(String id,
 
         String episodeKind = context != null && context.has("episode_kind")
                 ? context.get("episode_kind").getAsString() : "";
+        if (social != null && social.needsEpisode() && episodeKind.isEmpty()) {
+            throw new IllegalArgumentException("scene '" + sceneId + "' claims a shared_episode but binds no "
+                    + "episode_kind, so nothing would stand behind the claim");
+        }
         if (!episodeKind.isEmpty() && states.isEmpty()) {
             throw new IllegalArgumentException("scene '" + sceneId + "' binds episode kind '"
                     + episodeKind + "' but declares no episode_state, so it would claim to be true in "

@@ -173,6 +173,8 @@ public final class McaHandles {
     private static final MethodHandle H_VILLAGE_POPULATION = R.handle(McaBinding.VILLAGE_GET_POPULATION);
     private static final MethodHandle H_BUILDING_AT = R.handle(McaBinding.VILLAGE_BUILDING_AT);
     private static final MethodHandle H_BUILDING_TYPE = R.handle(McaBinding.BUILDING_GET_TYPE);
+    private static final MethodHandle H_VILLAGE_BUILDINGS = R.handle(McaBinding.VILLAGE_GET_BUILDINGS);
+    private static final MethodHandle H_BUILDING_ID = R.handle(McaBinding.BUILDING_GET_ID);
 
     // ==============================================================================================
     // Type tests
@@ -1064,6 +1066,31 @@ public final class McaHandles {
         return ref(H_BUILDING_TYPE, building) instanceof String type && !type.isBlank()
                 ? Optional.of(type.toLowerCase(Locale.ROOT))
                 : Optional.empty();
+    }
+
+    /**
+     * Every building MCA has registered for a village, as id to lowercase type token. Empty when the
+     * village cannot be read — which callers must treat as "unknown", never as "everything is gone".
+     */
+    public static Optional<Map<Integer, String>> villageBuildings(ServerLevel level, int villageId) {
+        Object village = village(level, villageId);
+        if (village == null) {
+            return Optional.empty();
+        }
+        try {
+            if (!(H_VILLAGE_BUILDINGS.invoke(village) instanceof Map<?, ?> buildings)) {
+                return Optional.empty();
+            }
+            Map<Integer, String> out = new java.util.TreeMap<>();
+            for (Object building : List.copyOf(buildings.values())) {
+                if (building != null && ref(H_BUILDING_TYPE, building) instanceof String type && !type.isBlank()) {
+                    out.put((int) H_BUILDING_ID.invoke(building), type.toLowerCase(Locale.ROOT));
+                }
+            }
+            return Optional.of(out);
+        } catch (Throwable t) {
+            return Optional.empty();
+        }
     }
 
     private static Object familyNode(ServerLevel level, UUID villagerUuid) {

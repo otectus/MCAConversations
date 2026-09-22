@@ -72,6 +72,16 @@ class IntentMatcherTest {
         t.put("do you like to cook", "chitchat.food");
         t.put("what food do you like", "chitchat.food");
         t.put("are you hungry", "chitchat.food");
+        // Townstead's "Life here" (1.8.0): typed entries into the same catalog rows the GUI offers.
+        t.put("are you thirsty", "townstead.wellbeing");
+        t.put("you look exhausted", "townstead.wellbeing");
+        t.put("how is your shift", "townstead.daily_rhythm");
+        t.put("what skills have you learned", "townstead.mastery");
+        t.put("when is your birthday", "townstead.age_and_life");
+        t.put("where are your roots", "townstead.roots");
+        t.put("tell me about this building", "townstead.home_and_place");
+        t.put("what is the spirit of this village", "townstead.community");
+        t.put("what is the date today", "townstead.calendar");
         // chit-chat: weather
         t.put("what is the weather like", "chitchat.weather");
         t.put("is it going to rain", "chitchat.weather");

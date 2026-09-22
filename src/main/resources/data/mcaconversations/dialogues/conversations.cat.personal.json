@@ -103,6 +103,54 @@
           "baseChance": 0,
           "conditions": [
             {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.life.a_long_life"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.life.a_long_life",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "life",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "life.a_long_life.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.life",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.life.a_long_life.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.life.a_long_life"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
               "chance": 1000,
               "memory": {
                 "id": "mcaconversations.cooldown.life",
