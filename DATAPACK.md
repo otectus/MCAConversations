@@ -717,6 +717,65 @@ merge) with `{"chance": 100, "profession": "yourmod:yourprofession"}` and their 
 Conditions naming professions from uninstalled mods never match and never crash. Professions with
 no hand-written result fall through to the generic templated line (`profession_name` var).
 
+## Relationship bands (`conversations_relationship`)
+
+Dialogue asks how close two people are by name, never by heart number. Since 1.8.0 the band is
+decided in one place, `conversation/SocialPolicy`, from hearts **and** from evidence that the two
+actually know each other: separate days with a real exchange, and the disposition vector's
+familiarity and trust. The thresholds are server settings (`[social]` in `CONFIG.md`).
+
+```json
+{"chance": 100, "conversations_relationship": {"at_least": "friend"}}
+{"chance": 100, "conversations_relationship": ["stranger", "tense", "hostile"]}
+{"chance": 100, "conversations_relationship": {"at_least": "friend", "not": ["partner"]}}
+```
+
+- Bands on the warmth line, with their default evidence:
+
+  | Band | Needs |
+  |---|---|
+  | `stranger` | nothing — the default |
+  | `acquaintance` | familiarity 8 and a real exchange on 2 separate days; hearts may be zero |
+  | `friend` | 60 hearts, familiarity 20, 4 separate days, trust not below the villager's resting trust |
+  | `confidant` | 80 hearts, familiarity 40, 8 separate days, trust 10 above the resting trust |
+
+  Hearts alone never climb this ladder: a generous gift to somebody met once earns gratitude, not a
+  confidant.
+- Roles: `partner` (married to this player) and `family` (the player is the villager's parent, child
+  or sibling in MCA's family tree, matched by UUID). `tense` (negative hearts, or an unrepaired
+  rupture between them) and `hostile` (−50 hearts or below) for a relationship that has gone wrong.
+- Precedence: hostile, then tense, then partner, then family, then the warmth line. A spouse in the
+  middle of a quarrel is `tense` — and still a spouse, which `player.is_spouse` keeps saying.
+- `at_least` counts `partner` and `family` as at least `confidant` — a spouse or a relative may hear
+  anything a confidant may. The ruptured bands are never "at least" anything.
+- **Upgraded worlds.** In a world whose history predates 1.8.0, a pair with positive hearts or a
+  family role keeps the heart-based band it always had, so an old friend is not reintroduced as a
+  stranger. The decision is recorded once, at the pair's first exchange after the upgrade, and never
+  revisited — hearts earned later cannot make a pair retroactively "legacy". Nothing is invented: no
+  meeting, date or visit count. Zero-heart pairs stay strangers, and a new world imports nothing.
+  `legacyRelationshipMigration = false` turns the import off.
+- Degraded modes: with `relationshipAwareDialogue` off, or the history store unreadable, bands fall
+  back to hearts, roles and ruptures alone. With the disposition vector off, familiarity is read as
+  four per contact day and the trust clauses are skipped.
+- It fails soft: an unreadable relationship resolves to `stranger`, the band that discloses least.
+
+A "contact day" is a game day on which the player got a real reply — a reply to one of this mod's
+questions or a catalog starter executed, on either frontend — or the villager accepted a gift from
+them. Opening the hub, choosing a category, pressing back, greetings, reading and heartbeats never
+count, and at most one day is counted per game day. Familiarity itself still moves only through
+authored `conversations_disposition_apply` deltas under the daily axis cap, so nothing pays twice.
+
+The same facts, as context fields (owned by `context/McaContextSource`):
+
+| Field | Type | Meaning |
+|---|---|---|
+| `player.relationship_band` | string | The band above |
+| `player.is_spouse` / `player.is_family` | boolean | Roles, independent of the band; `is_family` is true for a relative the villager is currently quarrelling with |
+| `player.is_parent` / `player.is_child` / `player.is_sibling` | boolean | The player is this villager's parent, child or sibling |
+| `social.contact` | string | `unmet` or `recognized` — whether this villager has actually met the player |
+| `social.contact_days` | integer | Separate days with a real exchange; UNAVAILABLE without the history store |
+| `social.attitude` | string | `hostile`, `guarded`, `neutral`, `cordial`, `warm` or `affectionate` |
+
 ## Chat-mode intents (`chat_intents/`, chat-mode feature)
 
 When `enableChatMode` is on, free-typed chat is matched to dialogue answers by intents loaded from

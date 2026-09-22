@@ -8,7 +8,52 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-Shared gameplay and content track 1.7.1. See [current parity evidence](docs/PARITY-1.7.1.md).
+Shared gameplay and content track the Forge 1.20.1 line at 1.8.0. The parity manifest for each release
+lives in `tools/parity/`.
+
+## Features (1.8.0)
+
+- **A first meeting sounds like one.** A villager who has never met you says a plain hello rather
+  than greeting you by name like an old friend; someone you have met says "hello again"; friends and
+  family get the warm greetings in their own personality's voice.
+- **Friendship has to be lived.** How close a villager treats you now needs separate days of actually
+  talking and the familiarity you have built, not just hearts — and being their parent, child or
+  sibling finally counts as family. Worlds from before this version keep the friendships they had.
+- **Walking through the village is quieter.** Friends greet you more often than strangers, one
+  greeting at a time, and a villager who says hello as you pass keeps walking unless you answer.
+
+## Features (1.7.3)
+
+- **Topics that belong to a kingdom.** With Ultima Kingdoms installed (it has no NeoForge 1.21.1
+  build yet, so on this port the integration waits for it), a topic can be offered only to
+  villagers of the right kingdom, judged by where they live or where they came from, and only while
+  the player stands well enough with its faction. The restriction holds on every way into a
+  conversation — the dialogue screen, a numbered reply, typed chat, the dynamic hub, a crafted packet —
+  and a gate Ultima cannot answer hides what it guards.
+- **Guild contacts.** A villager appointed to speak for a guild can explain what the guild does and
+  put in a request for an introduction or for its commissions. Ultima decides; the villager relays
+  its answer to you alone and never repeats where an introduction leads.
+
+## Features (1.7.2)
+
+- **Villagers remark on what they know you for.** With MCA: Reputation 0.6.0, a villager who has
+  heard that you stood your ground, or that somebody got hurt, can say so — filtered through what
+  *that villager* knows, and never mistaken for liking you.
+- **An apology is paid for once.** A conversation deed is recorded against the decision and the exact
+  grievance it answers, not against whoever you said it to, and a fuller apology supersedes a partial
+  one instead of stacking on it.
+
+## Features (1.7.1)
+
+- **Villagers stay put and face you** for the whole of a discussion, including minutes of reading,
+  and are handed straight back to their schedule when it ends.
+- **Sixteen blocks to keep talking**, with a second's grace out to twenty-four; nothing can be *done*
+  from out of range, and opening a conversation still takes MCA's ordinary reach.
+- **An attack ends the conversation for good**, and the villager is free to flee; a guard still
+  fights back unless the server asks otherwise.
+- **Another player can take the villager over** cleanly: the first player's window closes saying so,
+  and nothing from it can reach the new conversation. The choice channel is protocol 4, so update
+  client and server together.
 
 ## Features (1.7.0)
 

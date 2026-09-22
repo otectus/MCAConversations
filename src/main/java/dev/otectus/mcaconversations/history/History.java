@@ -570,6 +570,47 @@ public final class History {
         }
     }
 
+    /**
+     * Credits a meaningful exchange between this villager and player today (Stability spec §8.5).
+     *
+     * <p>Called only from server behaviour that actually happened — an executed reply, an accepted
+     * gift — never from opening a menu, a heartbeat or a greeting. At most one day is credited per
+     * game day. {@code legacyAtInit} is consulted only on the pair's first credit; see
+     * {@link PairHistory#recordContact}.
+     */
+    public static void recordContact(Entity villager, ServerPlayer player, boolean legacyAtInit) {
+        if (!enabled() || villager == null || player == null || villager.level() == null) {
+            return;
+        }
+        MinecraftServer server = villager.getServer();
+        if (server == null) {
+            return;
+        }
+        long gameDay = villager.level().getGameTime() / 24000L;
+        try {
+            UUID playerId = player.getUUID();
+            ConversationHistorySavedData.get(server).mutate(villager.getUUID(),
+                    history -> history.pair(playerId).recordContact(gameDay, legacyAtInit), true);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("contact write failed; ignoring", t);
+        }
+    }
+
+    /** Whether this world's history predates the social model. False when history cannot be read. */
+    public static boolean legacyImportWorld(MinecraftServer server) {
+        if (!enabled() || server == null) {
+            return false;
+        }
+        try {
+            return ConversationHistorySavedData.peek(server)
+                    .map(data -> data.store().legacyImportWorld())
+                    .orElse(false);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("history world flag unreadable; treating as a new world", t);
+            return false;
+        }
+    }
+
     /** Days since this pair last spoke; empty on a first meeting rather than zero. */
     public static OptionalLong daysSinceLastTalk(Entity villager, ServerPlayer player, long today) {
         return pair(villager, player)

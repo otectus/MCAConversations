@@ -10,6 +10,71 @@ compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.6.0, vendored i
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
 
+## [1.8.0] - unreleased
+
+Social behaviour, first part. A villager meeting you for the first time now sounds like somebody
+meeting you for the first time, and becoming friends takes being around rather than a pile of gifts.
+Hearts are still the one number you see; what changed is what a villager may *assume* about you.
+
+### Changed
+
+- **Strangers greet you like strangers.** The greeting a villager used for everyone who was not
+  actively disliked called you by name and said things like "I was hoping I'd run into you" — to
+  somebody they had never met. Greetings now come in four kinds: a neutral hello for someone they
+  have never met, a plain "hello again" for someone they have, the familiar greetings (and every
+  personality's voice for them) for friends and family, and the curt ones for somebody they are on
+  bad terms with. Toddlers get their own versions of the first two. Both locales.
+- **Friendship needs time as well as hearts.** How close a villager treats you is now decided from
+  hearts *and* from evidence that you know each other: separate days on which you actually talked,
+  and the familiarity and trust the hidden disposition vector has built up. An acquaintance needs a
+  little familiarity and two separate days, and no hearts at all; a friend needs sixty hearts and four
+  days; a confidant eighty hearts, eight days and real trust. A generous gift to somebody you met once
+  earns gratitude, not a confidant. Every threshold is a server setting under `[social]`.
+- **A day counts only if something was said.** A contact day is credited when a villager actually
+  answers something you chose to say, on either the dialogue screen or in chat, or accepts a gift from
+  you — at most one a day, on a clock `/time set` cannot move. Opening the menu, picking a category,
+  going back, being greeted, reading and the window's liveness pings count for nothing. Familiarity
+  itself still moves only through the authored conversation deltas under the existing daily cap, so
+  nothing is paid twice.
+- **Family is family.** Being a villager's parent, child or sibling in MCA's family tree now makes
+  you family, matched by UUID — the relationship band that was defined but could never be reached
+  before. A relative, like a spouse, stays a relative in the middle of a quarrel: the band says how
+  they speak to you right now, and the new `player.is_parent`, `player.is_child` and
+  `player.is_sibling` fields, and `player.is_family`, keep saying who you are to them.
+- **An unrepaired rupture now shows.** A rupture recorded between you and a villager makes them
+  guarded whatever the heart total says, where before it was ignored when choosing the band.
+- **Your old friends still know you.** In a world that existed before this version, a villager who
+  already had positive hearts with you, or is family, keeps treating you as they did. The decision is
+  written once, at your first exchange after the upgrade, and nothing is invented to support it — no
+  meeting, date or number of visits. Villagers you had never warmed to stay strangers, a new world
+  never imports anything, and `legacyRelationshipMigration` turns the import off.
+- **Greetings follow the relationship, and a busy square is not a chorus.** Friends greet you as you
+  pass far more often than strangers do; somebody you have hurt mostly lets you walk by. After one
+  villager greets you, the others wait ten seconds (`ambientPlayerCooldownTicks`) before any of them
+  may, on top of each villager's once-a-day limit. A greeting a villager volunteers no longer stops
+  them in their tracks for half a minute: they carry on unless you answer.
+- **Switching chat mode off ends chat conversations cleanly.** A chat conversation that was live when
+  a config reload switched chat mode off is now closed on the spot, with its own reason, instead of
+  being left for its next reply to be refused. Conversations on the dialogue screen are untouched.
+
+### Added
+
+- Three context fields for dialogue and scenes: `social.contact` (`unmet` or `recognized`),
+  `social.contact_days`, and `social.attitude` (`hostile`, `guarded`, `neutral`, `cordial`, `warm` or
+  `affectionate`). Documented in `DATAPACK.md` under *Relationship bands*.
+- A `[social]` section in the server config. Documented in `CONFIG.md`.
+
+### Compatibility
+
+- Saves: each pair gains an optional `contact` record, written only after its first credited
+  exchange, and the history store gains one flag marking whether the world predates the social model.
+  The history schema is still 1, so this build and 1.7.x read each other's files. A 1.7.x build
+  ignores the new keys, and drops them if it saves the world; opened again under 1.8.0, such a world
+  is treated as an upgraded one and each pair's contact record starts over. Network protocol
+  unchanged at 4.
+- Content gated on `conversations_relationship` sees the new bands. In an upgraded world the
+  heart-based bands are preserved for existing relationships; new ones have to be lived.
+
 ## [1.7.3] - unreleased
 
 Ultima Kingdoms support. Villages now belong to kingdoms and guilds have villagers who speak for

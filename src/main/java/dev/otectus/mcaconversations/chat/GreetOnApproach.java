@@ -53,6 +53,13 @@ public final class GreetOnApproach {
     /** Villagers each player was already near at the previous scan (edge-detection baseline). */
     private static final Map<UUID, Set<UUID>> INSIDE_LAST_SCAN = new ConcurrentHashMap<>();
 
+    /**
+     * When any villager last greeted each player (Stability spec §10.1). Crossing a busy square should
+     * get a greeting, not one from every villager the scan passes; each villager's own once-a-day
+     * limit still applies on top of this.
+     */
+    private static final Map<UUID, Long> LAST_AMBIENT_GREET = new ConcurrentHashMap<>();
+
     private GreetOnApproach() {
     }
 
@@ -108,7 +115,18 @@ public final class GreetOnApproach {
             if (McaCompat.hasMemory(c.entity(), memoryId)) {
                 continue; // already hailed this player today
             }
-            double weight = personalityWeight(McaCompat.getPersonality(c.entity()).orElse(""));
+            Long lastGreet = LAST_AMBIENT_GREET.get(player.getUUID());
+            if (lastGreet != null && now - lastGreet < McaConversationsConfig.ambientPlayerCooldownTicks()) {
+                continue; // another villager greeted this player moments ago
+            }
+            dev.otectus.mcaconversations.conversation.SocialFacts facts =
+                    dev.otectus.mcaconversations.conversation.Relationships.facts(c.entity(), player);
+            double weight = personalityWeight(McaCompat.getPersonality(c.entity()).orElse(""))
+                    * GreetingPolicy.frequency(
+                            dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
+                                    McaConversationsConfig.socialThresholds(),
+                                    McaConversationsConfig.relationshipAwareDialogue()),
+                            dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
             if (!rollGreet(c.entity().getUUID(), player.getUUID(), gameDay, baseChance * weight)) {
                 continue; // not the greeting type today — no memory spent, tomorrow re-rolls
             }
@@ -120,6 +138,7 @@ public final class GreetOnApproach {
                 continue;
             }
             ChatModeDispatcher.proactiveGreet(c, player, now);
+            LAST_AMBIENT_GREET.put(player.getUUID(), now);
             InitiativeGate.record(c.entity(), player, ScenePurpose.GREETING,
                     InitiativeGate.Weight.BARK, gameDay, now);
             McaCompat.remember(c.entity(), memoryId, GREET_MEMORY_TICKS);
@@ -181,10 +200,12 @@ public final class GreetOnApproach {
     /** Forgets proximity edges when the server stops. */
     public static void reset() {
         INSIDE_LAST_SCAN.clear();
+        LAST_AMBIENT_GREET.clear();
     }
 
     /** Drops a player's tracking on logout (mirrors {@code ChatModeSession.clear}). */
     public static void clear(UUID playerId) {
         INSIDE_LAST_SCAN.remove(playerId);
+        LAST_AMBIENT_GREET.remove(playerId);
     }
 }

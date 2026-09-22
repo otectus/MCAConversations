@@ -34,7 +34,8 @@ public record UtteranceAudience(Scope scope, String basis) {
      * <em>not</em> told you anything — so they are the explicit public classification.
      */
     private static final Set<String> PUBLIC_STATIC_LINES = Set.of(
-            "chatmode.hail", "chatmode.hail_cold", "chatmode.attentive", "chatmode.busy",
+            "chatmode.hail", "chatmode.hail.recognized", "chatmode.hail.stranger",
+            "chatmode.hail_cold", "chatmode.attentive", "chatmode.busy",
             "chatmode.clarify", "chatmode.confused", "chatmode.hint", "chatmode.shrug",
             "chatmode.babble", "chatmode.dropped", "chatmode.farewell", "chatmode.muted");
 

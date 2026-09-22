@@ -314,6 +314,37 @@ public final class McaConversationsConfig {
         return serverInt(SERVER.guiLeaseTicks, 100);
     }
 
+    /** relationshipAwareDialogue, or true while the server spec is unavailable. */
+    public static boolean relationshipAwareDialogue() {
+        return serverBool(SERVER.relationshipAwareDialogue, true);
+    }
+
+    /** legacyRelationshipMigration, or true while the server spec is unavailable. */
+    public static boolean legacyRelationshipMigration() {
+        return serverBool(SERVER.legacyRelationshipMigration, true);
+    }
+
+    /** The band thresholds, normalised into a coherent ladder; the defaults while unavailable. */
+    public static dev.otectus.mcaconversations.conversation.SocialThresholds socialThresholds() {
+        dev.otectus.mcaconversations.conversation.SocialThresholds d =
+                dev.otectus.mcaconversations.conversation.SocialThresholds.DEFAULTS;
+        return new dev.otectus.mcaconversations.conversation.SocialThresholds(
+                serverInt(SERVER.acquaintanceFamiliarity, d.acquaintanceFamiliarity()),
+                serverInt(SERVER.acquaintanceDays, d.acquaintanceDays()),
+                serverInt(SERVER.friendHearts, d.friendHearts()),
+                serverInt(SERVER.friendFamiliarity, d.friendFamiliarity()),
+                serverInt(SERVER.friendDays, d.friendDays()),
+                serverInt(SERVER.confidantHearts, d.confidantHearts()),
+                serverInt(SERVER.confidantFamiliarity, d.confidantFamiliarity()),
+                serverInt(SERVER.confidantDays, d.confidantDays()),
+                serverInt(SERVER.confidantTrustMargin, d.confidantTrustMargin()));
+    }
+
+    /** ambientPlayerCooldownTicks, or 200 while the server spec is unavailable. */
+    public static int ambientPlayerCooldownTicks() {
+        return serverInt(SERVER.ambientPlayerCooldownTicks, 200);
+    }
+
     /** holdVillagerDuringInteraction, or true while the server spec is unavailable. */
     public static boolean holdVillagerDuringInteraction() {
         return serverBool(SERVER.holdVillagerDuringInteraction, true);
@@ -933,6 +964,19 @@ public final class McaConversationsConfig {
         public final ModConfigSpec.EnumValue<AttackedBehavior> attackedBehavior;
         public final ModConfigSpec.BooleanValue interruptOnImmediateDanger;
 
+        public final ModConfigSpec.BooleanValue relationshipAwareDialogue;
+        public final ModConfigSpec.BooleanValue legacyRelationshipMigration;
+        public final ModConfigSpec.IntValue acquaintanceFamiliarity;
+        public final ModConfigSpec.IntValue acquaintanceDays;
+        public final ModConfigSpec.IntValue friendHearts;
+        public final ModConfigSpec.IntValue friendFamiliarity;
+        public final ModConfigSpec.IntValue friendDays;
+        public final ModConfigSpec.IntValue confidantHearts;
+        public final ModConfigSpec.IntValue confidantFamiliarity;
+        public final ModConfigSpec.IntValue confidantDays;
+        public final ModConfigSpec.IntValue confidantTrustMargin;
+        public final ModConfigSpec.IntValue ambientPlayerCooldownTicks;
+
         public final ModConfigSpec.DoubleValue dispositionGainMultiplier;
         public final ModConfigSpec.DoubleValue dispositionDecayMultiplier;
         public final ModConfigSpec.IntValue dispositionDailyAxisCap;
@@ -1050,6 +1094,47 @@ public final class McaConversationsConfig {
                     "End the conversation when the villager is in immediate danger, so they are free to",
                     "flee rather than standing in a fight to finish a sentence.")
                     .define("interruptOnImmediateDanger", true);
+            b.pop();
+
+            b.push("social");
+            b.comment("How well a villager knows you. Hearts stay MCA's one visible relationship number; these",
+                    "settings decide what a villager may assume about you, so a first meeting sounds like one.");
+            relationshipAwareDialogue = b.comment(
+                    "Let familiarity and repeated meetings, not hearts alone, decide how close a villager",
+                    "treats you. Off keeps the older heart-only bands. Family roles, ruptures and the",
+                    "stranger-safe greetings apply either way.")
+                    .define("relationshipAwareDialogue", true);
+            legacyRelationshipMigration = b.comment(
+                    "In a world that existed before 1.8.0, treat a villager who already had positive hearts",
+                    "with you, or is family, as someone you know - once, the first time you speak after the",
+                    "upgrade. No meeting, date or shared memory is invented. Zero-heart pairs stay strangers,",
+                    "and a new world never imports anything.")
+                    .define("legacyRelationshipMigration", true);
+            acquaintanceFamiliarity = b.comment("Familiarity needed before a villager counts you as an acquaintance.")
+                    .defineInRange("acquaintanceFamiliarity", 8, 0, 100);
+            acquaintanceDays = b.comment("Separate days with a real exchange needed for acquaintance.")
+                    .defineInRange("acquaintanceDays", 2, 1, 365);
+            friendHearts = b.comment("Hearts needed for friendship. Hearts alone are never enough.")
+                    .defineInRange("friendHearts", 60, 1, 100);
+            friendFamiliarity = b.comment("Familiarity needed for friendship (raised to at least the acquaintance value).")
+                    .defineInRange("friendFamiliarity", 20, 0, 100);
+            friendDays = b.comment("Separate days with a real exchange needed for friendship.")
+                    .defineInRange("friendDays", 4, 1, 365);
+            confidantHearts = b.comment("Hearts needed before a villager confides in you.")
+                    .defineInRange("confidantHearts", 80, 1, 100);
+            confidantFamiliarity = b.comment("Familiarity needed before a villager confides in you.")
+                    .defineInRange("confidantFamiliarity", 40, 0, 100);
+            confidantDays = b.comment("Separate days with a real exchange needed before a villager confides in you.")
+                    .defineInRange("confidantDays", 8, 1, 365);
+            confidantTrustMargin = b.comment(
+                    "How far above their personality's resting trust a villager must trust you to confide.",
+                    "Ignored while the disposition vector is switched off.")
+                    .defineInRange("confidantTrustMargin", 10, 0, 100);
+            ambientPlayerCooldownTicks = b.comment(
+                    "After one villager greets you as you pass, how long (game ticks) before any other",
+                    "villager may (200 = 10 s). Crossing a busy square gets a greeting, not a chorus.",
+                    "Each villager still greets you at most once a day.")
+                    .defineInRange("ambientPlayerCooldownTicks", 200, 0, 24000);
             b.pop();
 
             b.push("rpg");

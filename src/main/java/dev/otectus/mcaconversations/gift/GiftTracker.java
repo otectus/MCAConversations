@@ -28,6 +28,11 @@ public final class GiftTracker {
     }
 
     public static void recordAcceptedGift(Entity villager, ServerPlayer player, ItemStack stack) {
+        if (villager != null && player != null && stack != null && !stack.isEmpty()) {
+            // An accepted gift is a real meeting whatever the gift-memory settings below say, so it
+            // counts toward recognition on its own (Stability spec §8.5). It pays no familiarity.
+            dev.otectus.mcaconversations.conversation.Relationships.creditContact(villager, player);
+        }
         if (!McaConversationsConfig.COMMON.enableStates.get() && !McaConversationsConfig.COMMON.enableTemplates.get()) {
             return;
         }

@@ -173,6 +173,9 @@ public final class ChoiceSelectionService {
             outcome = ChoiceOutcome.EXECUTION_FAILED;
         }
         if (outcome.ok()) {
+            if (MeaningfulExchange.counts(question, answer)) {
+                Relationships.creditContact(villager, player);
+            }
             reofferAfterTerminal(player, villager, question, revision, now);
             ConversationsNetwork.clearOffer(player, revision, ChoiceClearS2C.Reason.CONSUMED);
             return outcome;

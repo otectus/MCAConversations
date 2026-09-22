@@ -96,6 +96,18 @@ public final class ContextKeys {
     public static final ContextKey<String> PLAYER_RELATIONSHIP_BAND = ContextKey.of("player.relationship_band", String.class);
     public static final ContextKey<Boolean> PLAYER_IS_SPOUSE = ContextKey.of("player.is_spouse", Boolean.class);
     public static final ContextKey<Boolean> PLAYER_IS_FAMILY = ContextKey.of("player.is_family", Boolean.class);
+    /** The player is one of this villager's parents, by MCA's family tree. */
+    public static final ContextKey<Boolean> PLAYER_IS_PARENT = ContextKey.of("player.is_parent", Boolean.class);
+    /** The player is one of this villager's children. */
+    public static final ContextKey<Boolean> PLAYER_IS_CHILD = ContextKey.of("player.is_child", Boolean.class);
+    /** The player is one of this villager's siblings. */
+    public static final ContextKey<Boolean> PLAYER_IS_SIBLING = ContextKey.of("player.is_sibling", Boolean.class);
+    /** {@code unmet} or {@code recognized}: whether this villager has actually met the player. */
+    public static final ContextKey<String> SOCIAL_CONTACT = ContextKey.of("social.contact", String.class);
+    /** Distinct days this pair had a meaningful exchange; unavailable without the history store. */
+    public static final ContextKey<Integer> SOCIAL_CONTACT_DAYS = ContextKey.of("social.contact_days", Integer.class);
+    /** {@code hostile}, {@code guarded}, {@code neutral}, {@code cordial}, {@code warm} or {@code affectionate}. */
+    public static final ContextKey<String> SOCIAL_ATTITUDE = ContextKey.of("social.attitude", String.class);
 
     // --- Social --------------------------------------------------------------------------------
     /** Names of living family members the speaker may safely refer to, resolved from MCA's tree. */

@@ -789,6 +789,9 @@ public final class ChatModeDispatcher {
             }
         }
         if (ok) {
+            if (dev.otectus.mcaconversations.conversation.MeaningfulExchange.counts(question, answer)) {
+                dev.otectus.mcaconversations.conversation.Relationships.creditContact(target.entity(), player);
+            }
             // The redirect mixin may have recorded a follow-up currentQuestion during selectAnswer;
             // recordExchange marks the sticky target + resets the miss ladder without clearing it.
             if (makeSticky) {
@@ -1139,9 +1142,15 @@ public final class ChatModeDispatcher {
         return "Asked " + name + " (" + questionId + " / " + answerName + ")." + redirect;
     }
 
-    /** Proactive greet-on-approach entry: an actual hello, sticky so the player can just reply. */
+    /**
+     * Proactive greet-on-approach entry: an actual hello, sticky so the player can just reply.
+     *
+     * <p>Unlike a greeting the player started, this one does not stop the villager: someone who says
+     * hello as you pass carries on with their day unless you answer (Stability spec §10.2). Replying
+     * reaches the ordinary path, which holds them then.
+     */
     static void proactiveGreet(VillagerCandidate target, ServerPlayer player, long now) {
-        hail(target, player, now, 0, true);
+        hail(target, player, now, 0, true, false);
     }
 
     /**
@@ -1200,14 +1209,27 @@ public final class ChatModeDispatcher {
      */
     private static void hail(VillagerCandidate target, ServerPlayer player, long now, int stagger,
                              boolean makeSticky) {
-        String pool = McaCompat.getHearts(player, target.entity()) < 0
-                ? "chatmode.hail_cold" : "chatmode.hail";
+        hail(target, player, now, stagger, makeSticky, true);
+    }
+
+    private static void hail(VillagerCandidate target, ServerPlayer player, long now, int stagger,
+                             boolean makeSticky, boolean holdAttention) {
+        // What the villager may assume decides the words: a first meeting never draws the pool that
+        // greets old friends by name (Stability spec §9.2).
+        dev.otectus.mcaconversations.conversation.SocialFacts facts =
+                dev.otectus.mcaconversations.conversation.Relationships.facts(target.entity(), player);
+        String pool = GreetingPolicy.pool(
+                dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
+                        McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
         ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger,
                 UtteranceAudience.ofStaticLine(pool));
         if (makeSticky) {
             ChatModeSession.recordExchange(player.getUUID(), target.entity().getUUID(), now);
         }
-        attend(target, player, now);
+        if (holdAttention) {
+            attend(target, player, now);
+        }
     }
 
     /**

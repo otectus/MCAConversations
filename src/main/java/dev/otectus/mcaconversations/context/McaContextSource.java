@@ -3,6 +3,11 @@ package dev.otectus.mcaconversations.context;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.RelationshipBand;
 import dev.otectus.mcaconversations.conversation.Relationships;
+import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.conversation.RelationshipRoles;
+import dev.otectus.mcaconversations.conversation.SocialContact;
+import dev.otectus.mcaconversations.conversation.SocialPolicy;
+import dev.otectus.mcaconversations.conversation.SocialFacts;
 import dev.otectus.mcaconversations.personality.Personalities;
 import dev.otectus.mcaconversations.personality.VoiceFamily;
 import dev.otectus.mcaconversations.profession.ProfessionProfile;
@@ -71,6 +76,8 @@ public final class McaContextSource implements ConversationContextSource {
             ContextKeys.WEATHER_RELEVANT,
             ContextKeys.PLAYER_HEARTS, ContextKeys.PLAYER_RELATIONSHIP_BAND,
             ContextKeys.PLAYER_IS_SPOUSE, ContextKeys.PLAYER_IS_FAMILY,
+            ContextKeys.PLAYER_IS_PARENT, ContextKeys.PLAYER_IS_CHILD, ContextKeys.PLAYER_IS_SIBLING,
+            ContextKeys.SOCIAL_CONTACT, ContextKeys.SOCIAL_CONTACT_DAYS, ContextKeys.SOCIAL_ATTITUDE,
             ContextKeys.SOCIAL_FAMILY_NAMES, ContextKeys.SOCIAL_NEARBY,
             ContextKeys.SOCIAL_VILLAGE_POPULATION);
 
@@ -172,13 +179,37 @@ public final class McaContextSource implements ConversationContextSource {
             builder.unknown(ContextKeys.PLAYER_RELATIONSHIP_BAND);
             builder.unknown(ContextKeys.PLAYER_IS_SPOUSE);
             builder.unknown(ContextKeys.PLAYER_IS_FAMILY);
+            builder.unknown(ContextKeys.PLAYER_IS_PARENT);
+            builder.unknown(ContextKeys.PLAYER_IS_CHILD);
+            builder.unknown(ContextKeys.PLAYER_IS_SIBLING);
+            builder.unknown(ContextKeys.SOCIAL_CONTACT);
+            builder.unknown(ContextKeys.SOCIAL_CONTACT_DAYS);
+            builder.unknown(ContextKeys.SOCIAL_ATTITUDE);
         } else {
-            builder.put(ContextKeys.PLAYER_HEARTS, McaCompat.getHearts(player, villager));
-            RelationshipBand band = Relationships.bandOf(villager, player);
+            // One gathering for every relationship field, so the band, the roles and the contact
+            // state in one snapshot can never disagree about the same pair.
+            SocialFacts facts = Relationships.facts(villager, player);
+            RelationshipBand band = SocialPolicy.band(facts, McaConversationsConfig.socialThresholds(),
+                    McaConversationsConfig.relationshipAwareDialogue());
+            SocialContact contact = SocialPolicy.contact(facts);
+            RelationshipRoles roles = facts.roles();
+            builder.put(ContextKeys.PLAYER_HEARTS, facts.hearts());
             builder.put(ContextKeys.PLAYER_RELATIONSHIP_BAND, band.key());
-            builder.put(ContextKeys.PLAYER_IS_SPOUSE,
-                    McaCompat.isMarriedToPlayer(villager, player.getUUID()));
-            builder.put(ContextKeys.PLAYER_IS_FAMILY, band == RelationshipBand.FAMILY);
+            builder.put(ContextKeys.PLAYER_IS_SPOUSE, roles.spouse());
+            // A role, not a band: a relative the villager is currently quarrelling with is still
+            // family, so this reads the family tree rather than whichever band won.
+            builder.put(ContextKeys.PLAYER_IS_FAMILY, roles.family());
+            builder.put(ContextKeys.PLAYER_IS_PARENT, roles.parent());
+            builder.put(ContextKeys.PLAYER_IS_CHILD, roles.child());
+            builder.put(ContextKeys.PLAYER_IS_SIBLING, roles.sibling());
+            builder.put(ContextKeys.SOCIAL_CONTACT, contact.key());
+            if (facts.contactDays().isPresent()) {
+                builder.put(ContextKeys.SOCIAL_CONTACT_DAYS, facts.contactDays().getAsInt());
+            } else {
+                builder.unavailable(ContextKeys.SOCIAL_CONTACT_DAYS);
+            }
+            builder.put(ContextKeys.SOCIAL_ATTITUDE,
+                    SocialPolicy.attitude(band, contact, facts.hearts()).key());
         }
 
         // --- Family names ----------------------------------------------------------------------------

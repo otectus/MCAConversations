@@ -294,6 +294,33 @@ The heartbeat cadence the lease is renewed on is an internal constant (20 ticks)
 setting: it is an implementation detail of the window, and the lease above is the number that
 decides anything.
 
+## `[social]`
+
+> Server file. New in 1.8.0.
+
+How well a villager knows you. Hearts stay MCA's one visible relationship number; these settings
+decide what a villager may **assume** about you, so a first meeting sounds like one and a friendship
+has to be lived rather than bought. The full model — bands, roles, contact days and the upgraded-world
+import — is in `DATAPACK.md` under *Relationship bands*.
+
+| Option | Default | Range | Meaning |
+|---|---|---|---|
+| `relationshipAwareDialogue` | `true` | | Let familiarity and repeated meetings, not hearts alone, decide how close a villager treats you. Off keeps the older heart-only bands; family roles, ruptures and the stranger-safe greetings apply either way |
+| `legacyRelationshipMigration` | `true` | | In a world that existed before 1.8.0, treat a villager who already had positive hearts with you, or is family, as someone you know. Settled once per pair, at the first exchange after the upgrade; nothing is invented, zero-heart pairs stay strangers, and a new world never imports anything |
+| `acquaintanceFamiliarity` / `acquaintanceDays` | `8` / `2` | 0–100 / 1–365 | Familiarity, and separate days with a real exchange, before a villager counts you as an acquaintance. No hearts are needed |
+| `friendHearts` / `friendFamiliarity` / `friendDays` | `60` / `20` / `4` | 1–100 / 0–100 / 1–365 | What friendship needs, all together; trust must also be at least the villager's resting trust |
+| `confidantHearts` / `confidantFamiliarity` / `confidantDays` | `80` / `40` / `8` | 1–100 / 0–100 / 1–365 | What confiding needs, all together |
+| `confidantTrustMargin` | `10` | 0–100 | How far above their resting trust a villager must trust you to confide. Ignored while the disposition vector is off |
+| `ambientPlayerCooldownTicks` | `200` | 0–24000 | After one villager greets you as you pass, how long before any other villager may (200 = 10 s). Each villager still greets you at most once a day |
+
+The thresholds are normalised into a coherent ladder when read: a friend never needs less than an
+acquaintance, nor a confidant less than a friend, so a mistyped value can loosen or tighten the
+progression but never invert it.
+
+Greeting frequency also follows the relationship, on top of `chatModeGreetChance` and the personality
+weighting: a stranger ×0.35, someone you have met or an acquaintance ×0.7, a friend or closer ×1,
+someone you are on bad terms with ×0.25, a hostile villager ×0.1.
+
 ## `[chat]`
 
 Chat mode (since 0.8.0): talk to villagers by typing in the vanilla chat box; they answer in chat through
