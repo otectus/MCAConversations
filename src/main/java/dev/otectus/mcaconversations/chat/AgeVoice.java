@@ -32,7 +32,8 @@ public final class AgeVoice {
     static final Set<String> TODDLER_VOICED = Set.of(
             "chatmode.confused", "chatmode.hint", "chatmode.shrug", "chatmode.clarify",
             "chatmode.dropped", "chatmode.busy", "chatmode.muted", "chatmode.farewell",
-            "chatmode.insult", "chatmode.hail", "chatmode.hail_cold", "chatmode.attentive");
+            "chatmode.insult", "chatmode.hail", "chatmode.hail.recognized", "chatmode.hail.stranger",
+            "chatmode.hail_cold", "chatmode.attentive");
 
     private AgeVoice() {
     }

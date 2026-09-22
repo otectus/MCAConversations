@@ -44,6 +44,12 @@ public final class ConversationHistoryStore {
     private static final String KEY_VERSION = "version";
     private static final String KEY_VILLAGERS = "villagers";
     private static final String KEY_UUID = "uuid";
+    /**
+     * Whether this world predates the social model (Stability spec §11.2). Absent in every file
+     * written before 1.8.0, which is exactly how an upgraded world is recognised; a world whose
+     * history file is created by 1.8.0 or later starts with it {@code false}.
+     */
+    private static final String KEY_LEGACY_IMPORT = "social_legacy_import";
 
     /** Diagnostics spent on a store with nothing evictable before the counter speaks for the rest. */
     private static final int CROWDED_REPORTS = 4;
@@ -51,6 +57,8 @@ public final class ConversationHistoryStore {
     private final Map<UUID, VillagerHistory> byVillager = new LinkedHashMap<>();
     private int loadedVersion = CURRENT_VERSION;
     private boolean degraded;
+    /** Brand-new stores are not upgraded worlds; {@link #load} flips this for a pre-1.8.0 file. */
+    private boolean legacyImportWorld;
     private CompoundTag retainedTag;
     private int discardedOnLoad;
     private CompoundTag originalTag;
@@ -233,6 +241,14 @@ public final class ConversationHistoryStore {
         return removed;
     }
 
+    /**
+     * True when this world's history predates the social model, so a pair's first credited exchange
+     * may import an existing relationship instead of starting from a stranger.
+     */
+    public boolean legacyImportWorld() {
+        return legacyImportWorld;
+    }
+
     public CompoundTag save(CompoundTag tag) {
         if (degraded) {
             // The very tag that was read, so what is written back is byte-for-byte what was found.
@@ -242,6 +258,7 @@ public final class ConversationHistoryStore {
             return retainedTag;
         }
         tag.putInt(KEY_VERSION, CURRENT_VERSION);
+        tag.putBoolean(KEY_LEGACY_IMPORT, legacyImportWorld);
         ListTag list = new ListTag();
         // Sorted so an unchanged store serialises byte-identically twice running; an unstable order
         // would rewrite the world's data file on every save for no reason.
@@ -263,6 +280,7 @@ public final class ConversationHistoryStore {
             return store;
         }
         store.loadedVersion = tag.contains(KEY_VERSION) ? tag.getInt(KEY_VERSION) : 0;
+        store.legacyImportWorld = !tag.contains(KEY_LEGACY_IMPORT) || tag.getBoolean(KEY_LEGACY_IMPORT);
         if (store.loadedVersion > CURRENT_VERSION) {
             store.degraded = true;
             store.retainedTag = tag;

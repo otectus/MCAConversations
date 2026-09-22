@@ -100,33 +100,6 @@ class RelationshipBandLintTest {
                 + " the heart gates were migrated to bands, so some result should be using them");
     }
 
-    /**
-     * {@link RelationshipBand#FAMILY} is real and a pack may model it, but this build cannot resolve
-     * it: MCA's parent/child relations are not among the members the compat layer binds, and
-     * {@code Relationships} deliberately never returns it. Shipping content behind it would be
-     * content nobody can ever reach.
-     */
-    @Test
-    @DisplayName("shipped content does not gate on a band this build cannot resolve")
-    void noContentWaitsOnAnUnresolvableBand() throws IOException {
-        List<String> problems = new ArrayList<>();
-        forEachDialogueObject((file, object) -> {
-            if (!object.has("conversations_relationship")) {
-                return;
-            }
-            RelationshipQuery query;
-            try {
-                query = RelationshipQuery.fromJson(object.get("conversations_relationship"));
-            } catch (RuntimeException e) {
-                return;  // the parse test owns this one
-            }
-            if (query.bands().equals(java.util.Set.of(RelationshipBand.FAMILY))) {
-                problems.add(file + ": gated on 'family' alone, which this build never resolves");
-            }
-        });
-        assertTrue(problems.isEmpty(), String.join(SEP, problems));
-    }
-
     @Test
     @DisplayName("the warmth line is an order, and the roles sit above it")
     void bandsAreOrdered() {

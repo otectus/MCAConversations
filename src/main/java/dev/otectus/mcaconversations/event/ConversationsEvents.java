@@ -59,6 +59,9 @@ public final class ConversationsEvents {
     /** Greet-on-approach proximity-scan cadence (2 s) — cheap AABB queries, not worth a config knob. */
     private static final int GREET_SCAN_INTERVAL_TICKS = 40;
 
+    /** Chat mode as last seen by the server tick, so a switch-off is acted on exactly once. */
+    private static volatile boolean chatModeWasEnabled = true;
+
     private ConversationsEvents() {
     }
 
@@ -363,6 +366,13 @@ public final class ConversationsEvents {
 
         // Villager attention (typing awareness + conversation presence) is applied every tick.
         VillagerAttention.tick(event.getServer(), gameTime);
+        // A config reload can switch chat mode off under live chat conversations; end them once,
+        // on the tick the change is first seen, rather than leaving their offers to be refused.
+        boolean chatEnabled = McaConversationsConfig.COMMON.enableChatMode.get();
+        if (chatModeWasEnabled && !chatEnabled) {
+            ConversationSessions.closeChatSessions();
+        }
+        chatModeWasEnabled = chatEnabled;
 
         // Presence leases and the continued-distance policy, driven from the ownership index alone:
         // one map of live discussions, never a scan of the world's entities (spec §4.3, §5.4).

@@ -8,6 +8,17 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
+## Features (1.8.0)
+
+- **A first meeting sounds like one.** A villager who has never met you says a plain hello rather
+  than greeting you by name like an old friend; someone you have met says "hello again"; friends and
+  family get the warm greetings in their own personality's voice.
+- **Friendship has to be lived.** How close a villager treats you now needs separate days of actually
+  talking and the familiarity you have built, not just hearts — and being their parent, child or
+  sibling finally counts as family. Worlds from before this version keep the friendships they had.
+- **Walking through the village is quieter.** Friends greet you more often than strangers, one
+  greeting at a time, and a villager who says hello as you pass keeps walking unless you answer.
+
 ## Features (1.7.3)
 
 - **Topics that belong to a kingdom.** With Ultima Kingdoms installed, a topic can be offered only to

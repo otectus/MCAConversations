@@ -22,7 +22,7 @@ Machine-generated map of this mod. Read this first when picking the project up.
 
 ```
 dev.otectus.mcaconversations                         4 files
-dev.otectus.mcaconversations.chat                    25 files
+dev.otectus.mcaconversations.chat                    26 files
 dev.otectus.mcaconversations.chat.group              5 files
 dev.otectus.mcaconversations.check                   7 files
 dev.otectus.mcaconversations.client                  4 files
@@ -38,7 +38,7 @@ dev.otectus.mcaconversations.compat.reputation       2 files
 dev.otectus.mcaconversations.compat.seasons          1 file
 dev.otectus.mcaconversations.compat.townstead        3 files
 dev.otectus.mcaconversations.context                 21 files
-dev.otectus.mcaconversations.conversation            64 files
+dev.otectus.mcaconversations.conversation            71 files
 dev.otectus.mcaconversations.court                   5 files
 dev.otectus.mcaconversations.debug                   3 files
 dev.otectus.mcaconversations.disposition             9 files
@@ -95,8 +95,9 @@ Run `check_mod.py` for a full consistency check (missing models, lang keys, text
 
 ## Current focus
 
-1.7.3 (Ultima Kingdoms gates and guild contacts) is committed on both loaders and unpublished; next
-are the 1.8.0 social-behaviour work and the in-game acceptance campaign.
+1.8.0, the first part of the social-behaviour work (relationship bands from contact days, family
+roles and ruptures; stranger-safe greetings), on `feature/social-1.8.0`. 1.7.3 is published to
+`main` and `neoforge/1.21.1`. Next: the rest of the social spec, Townstead, the in-game campaign.
 
 ## Roadmap
 

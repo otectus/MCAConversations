@@ -313,6 +313,24 @@ public final class ConversationSessions {
         return SESSIONS.size();
     }
 
+    /**
+     * Ends every chat-frontend conversation because chat mode has just been switched off (Stability
+     * spec §11.4). A graphical conversation never depended on chat mode and is left alone.
+     *
+     * @return how many sessions were closed
+     */
+    public static int closeChatSessions() {
+        int closed = 0;
+        for (UUID playerId : List.copyOf(SESSIONS.keySet())) {
+            ConversationSession session = SESSIONS.get(playerId);
+            if (session != null && session.frontend() == ConversationSession.Frontend.CHAT) {
+                close(playerId, CloseReason.FEATURE_DISABLED);
+                closed++;
+            }
+        }
+        return closed;
+    }
+
     /** Forget transient state when the server stops. */
     public static void clearAll(CloseReason reason) {
         for (UUID playerId : List.copyOf(SESSIONS.keySet())) {

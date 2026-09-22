@@ -8,7 +8,7 @@ and what has not. It replaces the per-release ledgers (`RELEASE-*-LEDGER.md`,
 same commit, alongside `CHANGELOG.md`. An item leaves this file when it is done *and* its check has
 been run; a check that was not run is written down as not run, never implied.
 
-Last reconciled against the code: 2026-09-22, Forge `19f59cd` / NeoForge `3002bed`, version 1.7.3.
+Last reconciled against the code: 2026-09-22, version 1.8.0 on `feature/social-1.8.0`.
 
 ---
 
@@ -16,10 +16,11 @@ Last reconciled against the code: 2026-09-22, Forge `19f59cd` / NeoForge `3002be
 
 | Version | Forge commit | NeoForge commit | Published |
 |---|---|---|---|
-| 1.7.0 | `ef92593` | `958a0bb` | `origin/main` is here; not tagged |
-| 1.7.1 | `375fbba` | `5b67c5b` | No — local `main` only |
-| 1.7.2 | `e3c0415` | `6186b22` | No |
-| 1.7.3 | `d979cc4` + `19f59cd` | `3002bed` | No |
+| 1.7.0 | `ef92593` | `958a0bb` | Pushed; not tagged |
+| 1.7.1 | `375fbba` | `5b67c5b` | Pushed; not tagged, not uploaded |
+| 1.7.2 | `e3c0415` | `6186b22` | Pushed; not tagged, not uploaded |
+| 1.7.3 | `d979cc4` + `19f59cd` | `3002bed` | Pushed to `main` / `neoforge/1.21.1`; not tagged, not uploaded |
+| 1.8.0 | `feature/social-1.8.0` | pending mirror | No |
 
 Protocol 4 since 1.7.1: a 1.7.0 client and a 1.7.1+ server refuse each other, so 1.7.1–1.7.3 publish
 **on both loaders together**. A build of the 1.7.3 source (without its three review fixes) circulates
@@ -40,6 +41,16 @@ server with this mod); adopting it is the first step of the campaign.
 
 Run each row in the four presentations (Responsive, Minimal, MCA Original, Townstead's screen),
 integrated and dedicated, on both loaders.
+
+### 1.8.0 — social behaviour
+- A new player meets a villager: a neutral, name-free greeting; walking past friends yields warm
+  greetings more often and never more than one every ten seconds.
+- A relationship built over separate days climbs stranger → acquaintance → friend; many hearts in one
+  day do not.
+- An upgraded world: existing friends and family keep their bands; true strangers stay strangers.
+- A parent, child or sibling reads as family, including in the middle of a quarrel.
+- A volunteered greeting does not stop the villager; answering it does.
+- Switching chat mode off in a config reload closes live chat conversations; GUI ones continue.
 
 ### 1.7.3 — kingdom gates and guild contacts
 - A `kingdom_gate` topic is absent for a villager outside the kingdom in the GUI, a crafted packet,
@@ -97,21 +108,32 @@ integrated and dedicated, on both loaders.
 
 ## 3. Open work
 
-### 3.1 Social behaviour — planned 1.8.0
+### 3.1 Social behaviour — 1.8.0 first part shipped; the rest open
 
 `MCAConversations_Conversation_Stability_and_Social_Behavior_Implementation.md` §1.2, §8–§11,
-work packages WP7–WP9. Deferred on 2026-09-15 when 1.7.1 took the stability half. None of it exists:
+work packages WP7–WP9.
 
-- `conversation/Relationships#bandOf` passes `false, false` for family and unresolved conflict; its
-  comment about missing family bindings is stale (helpers exist in `compat/McaCompat`).
-- No social context resolver, dialogue policy or contact policy; no meaningful-contact record in
-  `history/PairHistory`; no `[social]` configuration and no `chat.ambientPlayerCooldownTicks`.
-- Greeting pools are `chatmode.hail`, `hail_cold` and their toddler variants only, split on negative
-  hearts: a zero-heart stranger draws the friendly pool. `GreetOnApproach` weights by personality
-  only.
-- No configuration-reload revalidation (no `ModConfigEvent` handler), so `CloseReason`
-  `FEATURE_DISABLED`, `SPEAKER_UNAVAILABLE` and `INVALID_OFFER` are still reserved and unused.
-- Legacy relationship migration for upgraded worlds (§11.2) is undesigned in code.
+**Delivered in 1.8.0:** real family roles and ruptures in the band (`conversation/Relationships`,
+`SocialPolicy`); the §8.4 ladder with contact days, familiarity and trust, configurable under
+`[social]`; meaningful-contact accounting on `PairHistory` (no schema bump) credited from executed
+replies on both frontends and accepted gifts; the §11.2 one-time legacy import for upgraded worlds;
+`social.contact`, `social.contact_days`, `social.attitude` and the three role fields; stranger /
+recognised / familiar / cold greeting pools with toddler variants; relationship-scaled greeting
+frequency and the per-player ambient cooldown; volunteered greetings no longer hold the villager;
+`CloseReason.FEATURE_DISABLED` used when a config reload switches chat mode off.
+
+**Still open:**
+- §9.3 social metadata on authored line families and scenes (`claims`, `requires_known_player_name`,
+  fallback chains) and its compiler validation; §9.4's checked coverage manifest of every surface.
+- §9.2/§9.4 corpus: only greetings were split. Check-ins, topic openers, farewells and category
+  prompts have not been audited for familiarity a stranger has not earned; no `respected_stranger`,
+  `partner` or `family` greeting families; no personality overlays for the two new greeting pools.
+- §10.2 typing attention still stops every nearby villager; no per-player candidate cap.
+- §8.7 Reputation-driven courtesy for a respected stranger.
+- §14.1 diagnostics: `/conversations` does not yet show the facts, band and attitude it derived.
+- Limitation: a pre-1.8.0 world that never wrote a history file (history switched off) is treated
+  as a new world, so no legacy import happens there.
+- `CloseReason` `SPEAKER_UNAVAILABLE` and `INVALID_OFFER` remain reserved and unused.
 
 ### 3.2 Townstead — planned 1.9.0
 
@@ -222,6 +244,16 @@ content: every new scene must budget voice-family variants with it.
 Every command ran through `/home/otectus/Projects/.mcmod-tools/gradlew-quiet.sh`. "Tests" are totals
 from `build/test-results/test/*.xml`; the six skipped cases are always the Capitals and Townstead
 real-jar probes, which need jar paths that were not supplied.
+
+### 1.8.0 — 2026-09-22
+
+| Check | Forge | NeoForge |
+|---|---|---|
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-171110.log` | see the port's own record below once mirrored |
+| `:test` | executed; 1,630 tests, 0 failures, 6 skipped (25 new; one obsolete lint removed) | — |
+| Jar | `mcaconversations-1.8.0.jar`, protocol 4 | — |
+| `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
+| In-game | **not run** | **not run** |
 
 ### 1.7.3 — 2026-09-22
 

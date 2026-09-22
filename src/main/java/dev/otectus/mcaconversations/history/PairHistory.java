@@ -46,6 +46,21 @@ public final class PairHistory {
     private long lastTalkedDay = Long.MIN_VALUE;
 
     /**
+     * Distinct days this pair had a meaningful exchange (Stability spec §8.5). Counted on the
+     * monotonic game-time day, so {@code /time set} can never mint an extra one, and a clock that
+     * reads earlier than the last credited day credits nothing.
+     */
+    private int contactDays;
+    private long lastContactDay = Long.MIN_VALUE;
+    /** Whether the contact record has been initialised; the legacy decision is taken exactly then. */
+    private boolean contactInitialized;
+    /** Provenance: an upgraded world's one-time import treated this pair as already acquainted. */
+    private boolean legacyContact;
+
+    /** Upper bound on the day counter, so a corrupted save cannot carry an absurd value forward. */
+    public static final int MAX_CONTACT_DAYS = 100_000;
+
+    /**
      * Told when this pair speaks, so the villager that owns the pair can keep its own activity day
      * without polling every pair it holds. Set by {@link VillagerHistory} when it hands the record out
      * or reads one back; a pair built on its own — a unit test, a throwaway — simply has nobody to tell.
@@ -356,6 +371,42 @@ public final class PairHistory {
         return changed;
     }
 
+    // --- Social contact (1.8.0) -------------------------------------------------------------------------
+
+    public int contactDays() {
+        return contactDays;
+    }
+
+    public boolean contactInitialized() {
+        return contactInitialized;
+    }
+
+    public boolean legacyContact() {
+        return legacyContact;
+    }
+
+    /**
+     * Credits one meaningful exchange on {@code gameDay} — at most one per day, whatever happened in it.
+     *
+     * <p>The first credit initialises the record and settles, once and for good, whether this pair was
+     * imported as a legacy relationship: {@code legacyAtInit} is only read then. Every later credit
+     * ignores it, so a heart total that rises after the upgrade can never retroactively become legacy.
+     */
+    public boolean recordContact(long gameDay, boolean legacyAtInit) {
+        boolean changed = false;
+        if (!contactInitialized) {
+            contactInitialized = true;
+            legacyContact = legacyAtInit;
+            changed = true;
+        }
+        if (lastContactDay == Long.MIN_VALUE || gameDay > lastContactDay) {
+            contactDays = Math.min(MAX_CONTACT_DAYS, contactDays + 1);
+            lastContactDay = gameDay;
+            changed = true;
+        }
+        return changed;
+    }
+
     /** The day this pair first spoke; empty on a save that predates the history store (spec §22.2). */
     public java.util.OptionalLong firstMetDay() {
         return firstMetDay == Long.MIN_VALUE ? java.util.OptionalLong.empty()
@@ -369,7 +420,8 @@ public final class PairHistory {
 
     public boolean isEmpty() {
         return threads.isEmpty() && commitments.isEmpty() && claims.isEmpty() && exchanges.isEmpty()
-                && recency.equals(TopicRecencyRecord.EMPTY) && firstMetDay == Long.MIN_VALUE;
+                && recency.equals(TopicRecencyRecord.EMPTY) && firstMetDay == Long.MIN_VALUE
+                && !contactInitialized;
     }
 
     // --- Pruning ---------------------------------------------------------------------------------------
@@ -440,6 +492,16 @@ public final class PairHistory {
         if (lastTalkedDay != Long.MIN_VALUE) {
             tag.putLong("last_talked", lastTalkedDay);
         }
+        if (contactInitialized) {
+            // Absent until a pair's first credited exchange, so every pre-1.8.0 pair saves unchanged.
+            CompoundTag contact = new CompoundTag();
+            contact.putInt("days", contactDays);
+            if (lastContactDay != Long.MIN_VALUE) {
+                contact.putLong("last", lastContactDay);
+            }
+            contact.putBoolean("legacy", legacyContact);
+            tag.put("contact", contact);
+        }
         return tag;
     }
 
@@ -465,6 +527,13 @@ public final class PairHistory {
         }
         history.firstMetDay = tag.contains("first_met") ? tag.getLong("first_met") : Long.MIN_VALUE;
         history.lastTalkedDay = tag.contains("last_talked") ? tag.getLong("last_talked") : Long.MIN_VALUE;
+        if (tag.contains("contact", Tag.TAG_COMPOUND)) {
+            CompoundTag contact = tag.getCompound("contact");
+            history.contactInitialized = true;
+            history.contactDays = Math.max(0, Math.min(MAX_CONTACT_DAYS, contact.getInt("days")));
+            history.lastContactDay = contact.contains("last") ? contact.getLong("last") : Long.MIN_VALUE;
+            history.legacyContact = contact.getBoolean("legacy");
+        }
         history.discardedOnLoad = history.enforceLoadedCaps();
         return history;
     }
