@@ -21,7 +21,22 @@ package dev.otectus.mcaconversations.check;
  */
 public record CheckInputs(int axisValue, int hearts, int personalityFit, int publicStandingFit,
                           int moodAdjust, int roll, int difficulty, boolean tiersEnabled,
-                          boolean vectorEnabled) {
+                          boolean vectorEnabled, int townsteadFit) {
+
+    /** Inputs with no Townstead term, as every check assembled before 1.8.0. */
+    public CheckInputs(int axisValue, int hearts, int personalityFit, int publicStandingFit,
+                       int moodAdjust, int roll, int difficulty, boolean tiersEnabled,
+                       boolean vectorEnabled) {
+        this(axisValue, hearts, personalityFit, publicStandingFit, moodAdjust, roll, difficulty,
+                tiersEnabled, vectorEnabled, 0);
+    }
+
+    /** The same check with no Townstead term, for regression tests (spec §9.1). */
+    public CheckInputs withoutTownsteadFit() {
+        return new CheckInputs(axisValue, hearts, personalityFit, publicStandingFit, moodAdjust, roll,
+                difficulty, tiersEnabled, vectorEnabled, 0);
+    }
+
 
     /**
      * A copy with no public-standing term, for asserting that the rest of the formula is untouched by
@@ -29,6 +44,6 @@ public record CheckInputs(int axisValue, int hearts, int personalityFit, int pub
      */
     public CheckInputs withoutPublicStanding() {
         return new CheckInputs(axisValue, hearts, personalityFit, 0, moodAdjust, roll, difficulty,
-                tiersEnabled, vectorEnabled);
+                tiersEnabled, vectorEnabled, townsteadFit);
     }
 }

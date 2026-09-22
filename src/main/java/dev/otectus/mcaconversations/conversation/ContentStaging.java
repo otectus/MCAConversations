@@ -19,6 +19,7 @@ import dev.otectus.mcaconversations.scene.SceneCatalog;
 import dev.otectus.mcaconversations.scene.SceneDefinition;
 import dev.otectus.mcaconversations.village.CultureToken;
 import dev.otectus.mcaconversations.village.VillageCultureCatalog;
+import dev.otectus.mcaconversations.season.TownsteadHolidays;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -183,7 +184,13 @@ public final class ContentStaging {
         Map<String, InteriorityProfile> loaded = new LinkedHashMap<>();
         Map<String, String> canonicalSources = new LinkedHashMap<>();
         section(ContentSection.INTERIORITY, documents, "profiles", problems, (entry, ctx) -> {
-            String canonical = Personalities.canonical(entry.id());
+            String canonical = Personalities.profileKey(entry.id());
+            if (canonical.isEmpty()) {
+                problems.add(ContentProblem.of(ContentSection.INTERIORITY, entry.origin(),
+                        "/profiles/" + entry.id(), entry.id(), ContentSeverity.REFUSED,
+                        "personality_invalid_id", "'" + entry.id() + "' is not a personality id"));
+                return null;
+            }
             String previous = canonicalSources.put(canonical, entry.id());
             if (previous != null && !previous.equals(entry.id())) {
                 problems.add(ContentProblem.of(ContentSection.INTERIORITY, entry.origin(),
@@ -292,6 +299,25 @@ public final class ContentStaging {
         }
         return build(ContentSection.VILLAGE_CULTURE, problems,
                 () -> new VillageCultureCatalog(tokens, aliases));
+    }
+
+    // --- Townstead holidays ----------------------------------------------------------------------
+
+    /** {@code townstead_holidays}: a malformed mapping is refused like any other entry. */
+    public static StagingResult<TownsteadHolidays> townsteadHolidays(
+            List<StagedResource> documents) {
+        List<ContentProblem> problems = new ArrayList<>();
+        Map<String, TownsteadHolidays.Entry> entries = new TreeMap<>();
+        section(ContentSection.TOWNSTEAD_HOLIDAYS, documents, "holidays", problems, (entry, ctx) -> {
+            String id = entry.id().trim().toLowerCase(Locale.ROOT);
+            entries.put(id, TownsteadHolidays.fromJson(id, entry.json()));
+            return null;
+        });
+        if (fatal(problems)) {
+            return StagingResult.refused(problems);
+        }
+        return build(ContentSection.TOWNSTEAD_HOLIDAYS, problems,
+                () -> new TownsteadHolidays(List.copyOf(entries.values())));
     }
 
     // --- Narrative templates -------------------------------------------------------------------

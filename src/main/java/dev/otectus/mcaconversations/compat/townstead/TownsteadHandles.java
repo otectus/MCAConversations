@@ -57,7 +57,8 @@ final class TownsteadHandles {
     private static final TownsteadBinding.Resolution R = resolveQuietly();
 
     /** Sites that have already reported a failure, so a broken member logs once and not per tick. */
-    private static final Set<String> REPORTED = ConcurrentHashMap.newKeySet();
+    /** Read site to its first failure, for the log's one warning and the status command. */
+    private static final Map<String, String> REPORTED = new ConcurrentHashMap<>();
 
     private TownsteadHandles() {
     }
@@ -748,8 +749,18 @@ final class TownsteadHandles {
      * with this manifest would otherwise log a stack trace per villager per tick, which is how a
      * degraded integration turns into an unusable server (spec 4.4).
      */
+    /** Every read site that has failed this session, as {@code site: exception}, sorted. */
+    static List<String> failedReads() {
+        return new java.util.TreeMap<>(REPORTED).entrySet().stream()
+                .map(e -> e.getKey() + ": " + e.getValue())
+                .toList();
+    }
+
     private static void report(String site, Throwable t) {
-        if (REPORTED.add(site)) {
+        Throwable cause = t instanceof java.lang.reflect.InvocationTargetException ite && ite.getCause() != null
+                ? ite.getCause() : t;
+        if (REPORTED.putIfAbsent(site, cause.getClass().getSimpleName()
+                + (cause.getMessage() == null ? "" : " " + cause.getMessage())) == null) {
             McaConversations.LOGGER.warn("Townstead read '{}' failed; falling back to the neutral value "
                     + "for the rest of this session. Please report this with your Townstead version.", site, t);
         }

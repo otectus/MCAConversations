@@ -28,8 +28,10 @@ public final class CheckResolver {
         int heartsTerm = clamp(in.hearts() / HEARTS_DIVISOR, HEARTS_CAP);
         // Public standing is a small additive context term, never a second relationship vector
         // (spec 30.3). It is 0 without MCA: Reputation, so this line changes no existing outcome.
+        // The Townstead term is authored per check, clamped below the tier margin, and exactly 0
+        // without Townstead, so no existing seeded outcome moves (Townstead spec §9.1).
         int score = axisTerm + heartsTerm + in.personalityFit() + in.publicStandingFit()
-                + in.moodAdjust() + in.roll();
+                + in.townsteadFit() + in.moodAdjust() + in.roll();
 
         if (!in.tiersEnabled()) {
             return score >= in.difficulty() ? CheckTier.SUCCESS : CheckTier.REBUFF;

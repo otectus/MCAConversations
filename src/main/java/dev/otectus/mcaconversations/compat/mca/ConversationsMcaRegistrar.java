@@ -100,6 +100,16 @@ import net.minecraft.network.chat.Component;
  */
 public final class ConversationsMcaRegistrar {
 
+    /** A Townstead condition's score: 1 or 0, and 0 on any failure — never a thrown evaluation. */
+    private static float townsteadScore(java.util.function.BooleanSupplier test) {
+        try {
+            return test.getAsBoolean() ? 1.0f : 0.0f;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("Townstead condition failed; scoring 0", t);
+            return 0.0f;
+        }
+    }
+
     private ConversationsMcaRegistrar() {
     }
 
@@ -309,6 +319,17 @@ public final class ConversationsMcaRegistrar {
                         return 0.0f;
                     }
                 });
+
+        // --- Townstead (1.8.0). Registered whether or not Townstead is installed, so a pack using
+        // them loads everywhere; each scores 0 unless Townstead is live and its context conditions
+        // are switched on. Parsing is strict: a malformed query is refused, never read as "true".
+        for (String type : dev.otectus.mcaconversations.compat.TownsteadConditions.TYPES) {
+            McaHandles.registerCondition(type,
+                    (json, name) -> SafeParse.orNull(type, json,
+                            () -> dev.otectus.mcaconversations.compat.TownsteadConditions.parse(type, json)),
+                    query -> (villager, stack, player) -> townsteadScore(() ->
+                            dev.otectus.mcaconversations.compat.TownsteadConditions.test(query, villager)));
+        }
 
         // --- RPG layer (1.0.0): disposition vector + dialogue checks ---
 
@@ -656,7 +677,7 @@ public final class ConversationsMcaRegistrar {
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
                 + "/conversations_weather/conversations_season/conversations_holiday/conversations_personality/conversations_disposition"
-                + "/conversations_check/conversations_progress/conversations_kingdom/conversations_quest_* and actions conversations_record/conversations_say"
+                + "/conversations_check/conversations_progress/conversations_kingdom/conversations_townstead*/conversations_quest_* and actions conversations_record/conversations_say"
                 + "/conversations_gossip_say/conversations_disposition_apply/conversations_session"
                 + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open"
                 + "/conversations_civic"

@@ -159,7 +159,7 @@ class ReloadTransactionBaselineTest {
     // ---------------------------------------------------------------------------------------------
 
     @Test
-    @DisplayName("all eleven owned sections are staged by one coordinator, which also reads MCA's directory as metadata")
+    @DisplayName("all twelve owned sections are staged by one coordinator, which also reads MCA's directory as metadata")
     void everySectionParticipatesAndTheDialogueDirectoryIsReadAsMetadata() {
         List<String> directories = Arrays.stream(ContentSection.values())
                 .map(ContentSection::directory)
@@ -167,7 +167,8 @@ class ReloadTransactionBaselineTest {
 
         assertEquals(List.of("chat_intents", "conversation_catalog", "conversation_beats",
                         "profession_profiles", "interiority", "identity_tokens", "conversation_scenes",
-                        "village_culture", "episode_templates", "thread_templates", "commitment_templates"),
+                        "village_culture", "episode_templates", "thread_templates", "commitment_templates",
+                        "townstead_holidays"),
                 directories,
                 "the owned catalog inventory in docs/RELOAD-TRANSACTION-BOUNDARY.md is this list");
         assertEquals(directories.size(), directories.stream().distinct().count(),

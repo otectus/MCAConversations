@@ -9,6 +9,7 @@ import dev.otectus.mcaconversations.profession.ProfessionProfiles;
 import dev.otectus.mcaconversations.scene.SceneCatalog;
 import dev.otectus.mcaconversations.village.VillageCultureCatalog;
 import dev.otectus.mcaconversations.chat.IntentIndex;
+import dev.otectus.mcaconversations.season.TownsteadHolidays;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -184,8 +185,11 @@ public final class ContentReloadCoordinator implements PreparableReloadListener 
                     docs(documents, ContentSection.THREAD_TEMPLATES),
                     docs(documents, ContentSection.COMMITMENT_TEMPLATES));
 
+            StagingResult<TownsteadHolidays> holidays =
+                    ContentStaging.townsteadHolidays(docs(documents, ContentSection.TOWNSTEAD_HOLIDAYS));
+
             List<StagingResult<?>> sections = List.of(intents, topics, beats, professions, interiority,
-                    identity, scenes, culture, narrative);
+                    identity, scenes, culture, narrative, holidays);
             sections.forEach(section -> attempt.record(section.problems()));
 
             DialogueResourceIndex dialogues = DialogueResourceIndex.read(manager);
@@ -199,7 +203,7 @@ public final class ContentReloadCoordinator implements PreparableReloadListener 
                     attempt.targetGeneration(), true, attempt.id(),
                     intents.value(), topics.value(), beats.value(), professions.value(),
                     interiority.value(), identity.value(), scenes.value(), culture.value(),
-                    narrative.value(), dialogues, Map.of(), false, List.of());
+                    narrative.value(), holidays.value(), dialogues, Map.of(), false, List.of());
 
             attempt.record(ContentValidation.validate(staged, dialogues, documents));
             return attempt.fatal() ? null : staged;

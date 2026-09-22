@@ -61,7 +61,33 @@ public enum TemplateVariable {
     ALLY_CAPITAL_NAME("mcaconversations.fallback.ally_capital_name"),
 
     /** Localized public name of the civic contact's organization. */
-    CIVIC_ORGANIZATION("mcaconversations.fallback.civic_organization");
+    CIVIC_ORGANIZATION("mcaconversations.fallback.civic_organization"),
+
+    // --- Townstead (1.8.0). Each falls back to neutral wording when Townstead is absent, switched
+    // off, or has nothing to say about this villager, so a line using one never breaks.
+    TOWNSTEAD_ROOT("mcaconversations.fallback.townstead_root"),
+    TOWNSTEAD_SPECIES("mcaconversations.fallback.townstead_species"),
+    TOWNSTEAD_ANCESTRY("mcaconversations.fallback.townstead_ancestry"),
+    TOWNSTEAD_LINEAGE("mcaconversations.fallback.townstead_lineage"),
+    TOWNSTEAD_LIFE_STAGE("mcaconversations.fallback.townstead_life_stage"),
+    TOWNSTEAD_APPARENT_AGE("mcaconversations.fallback.townstead_apparent_age"),
+    TOWNSTEAD_AGE_DESCRIPTION("mcaconversations.fallback.townstead_age_description"),
+    TOWNSTEAD_PERSONALITY("mcaconversations.fallback.townstead_personality"),
+    TOWNSTEAD_PROFESSION_TIER("mcaconversations.fallback.townstead_profession_tier"),
+    TOWNSTEAD_PROFESSION_XP("mcaconversations.fallback.townstead_profession_xp"),
+    TOWNSTEAD_NEED_STATE("mcaconversations.fallback.townstead_need_state"),
+    TOWNSTEAD_SCHEDULE_ACTIVITY("mcaconversations.fallback.townstead_schedule_activity"),
+    TOWNSTEAD_SCHEDULE_TEMPLATE("mcaconversations.fallback.townstead_schedule_template"),
+    TOWNSTEAD_CALENDAR_DATE("mcaconversations.fallback.townstead_calendar_date"),
+    TOWNSTEAD_CALENDAR_MONTH("mcaconversations.fallback.townstead_calendar_month"),
+    TOWNSTEAD_CALENDAR_WEEKDAY("mcaconversations.fallback.townstead_calendar_weekday"),
+    TOWNSTEAD_SEASON("mcaconversations.fallback.townstead_season"),
+    TOWNSTEAD_BUILDING("mcaconversations.fallback.townstead_building"),
+    TOWNSTEAD_SPIRIT_READOUT("mcaconversations.fallback.townstead_spirit_readout"),
+    TOWNSTEAD_SPIRIT_TIER("mcaconversations.fallback.townstead_spirit_tier"),
+    TOWNSTEAD_PRIMARY_SPIRIT("mcaconversations.fallback.townstead_primary_spirit"),
+    TOWNSTEAD_SECONDARY_SPIRIT("mcaconversations.fallback.townstead_secondary_spirit"),
+    TOWNSTEAD_HERITAGE_SUMMARY("mcaconversations.fallback.townstead_heritage_summary");
 
     private final String fallbackKey;
 

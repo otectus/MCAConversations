@@ -207,6 +207,33 @@ public final class ContextKeys {
     public static final ContextKey<Set<String>> STANDING_SPEAKER_KNOWN_FOR =
             ContextKey.generic("standing.speaker_known_for", Set.class);
 
+    // --- Townstead (1.8.0; written only by TownsteadContextSource) -------------------------------
+    /** True when Townstead is live and has a snapshot of this villager. */
+    public static final ContextKey<Boolean> TOWNSTEAD_PRESENT = ContextKey.of("townstead.present", Boolean.class);
+    /** {@code work}, {@code meet}, {@code rest} or {@code idle}: what the villager's shift has them doing. */
+    public static final ContextKey<String> TOWNSTEAD_ACTIVITY = ContextKey.volatileOf("townstead.activity", String.class);
+    /** {@code none}, {@code hunger}, {@code thirst}, {@code fatigue} or {@code collapsed}. */
+    public static final ContextKey<String> TOWNSTEAD_NEED = ContextKey.volatileOf("townstead.need", String.class);
+    public static final ContextKey<Boolean> TOWNSTEAD_NEED_CRISIS = ContextKey.volatileOf("townstead.need_crisis", Boolean.class);
+    public static final ContextKey<String> TOWNSTEAD_HUNGER = ContextKey.volatileOf("townstead.hunger", String.class);
+    public static final ContextKey<String> TOWNSTEAD_THIRST = ContextKey.volatileOf("townstead.thirst", String.class);
+    public static final ContextKey<String> TOWNSTEAD_FATIGUE = ContextKey.volatileOf("townstead.fatigue", String.class);
+    public static final ContextKey<String> TOWNSTEAD_LIFE_STAGE = ContextKey.of("townstead.life_stage", String.class);
+    /** {@code child}, {@code young}, {@code adult}, {@code senior} or {@code ageless}. */
+    public static final ContextKey<String> TOWNSTEAD_AGE = ContextKey.of("townstead.age", String.class);
+    public static final ContextKey<Integer> TOWNSTEAD_PROFESSION_LEVEL =
+            ContextKey.of("townstead.profession_level", Integer.class);
+    public static final ContextKey<Set<String>> TOWNSTEAD_SKILLS = ContextKey.generic("townstead.skills", Set.class);
+    /** The building family the villager is standing in, or empty outside one. */
+    public static final ContextKey<String> TOWNSTEAD_BUILDING = ContextKey.volatileOf("townstead.building", String.class);
+    public static final ContextKey<String> TOWNSTEAD_SPECIES = ContextKey.of("townstead.species", String.class);
+    public static final ContextKey<Integer> TOWNSTEAD_SPIRIT_TIER = ContextKey.of("townstead.spirit_tier", Integer.class);
+    public static final ContextKey<String> TOWNSTEAD_SPIRIT = ContextKey.of("townstead.spirit", String.class);
+    /** {@code settlement}, {@code single}, {@code blend} or {@code mixed}. */
+    public static final ContextKey<String> TOWNSTEAD_SPIRIT_KIND = ContextKey.of("townstead.spirit_kind", String.class);
+    public static final ContextKey<Integer> TOWNSTEAD_MONTH = ContextKey.of("townstead.month", Integer.class);
+    public static final ContextKey<Integer> TOWNSTEAD_WEEKDAY = ContextKey.of("townstead.weekday", Integer.class);
+
     // --- Civic network (Ultima Kingdoms; written only by CivicContextSource) -------------------
     /** True only when the actual speaker is an authored civic contact visible to this requester. */
     public static final ContextKey<Boolean> CIVIC_CONTACT = ContextKey.of("civic.contact", Boolean.class);

@@ -64,6 +64,39 @@ Hearts are still the one number you see; what changed is what a villager may *as
   `affectionate`). Documented in `DATAPACK.md` under *Relationship bands*.
 - A `[social]` section in the server config. Documented in `CONFIG.md`.
 
+### Townstead
+
+Townstead's needs, schedules, calendar, roots, professions, skills, buildings and village spirit are
+now conversation state. Conversations only reads them: Townstead stays the authority on every one,
+and without Townstead installed nothing below changes a line.
+
+- **Five dialogue conditions.** `conversations_townstead_available` gates on a bound capability,
+  `conversations_townstead` compares one allow-listed field (needs, schedule, life stage, profession,
+  personality, calendar, building, origin, spirit) with a typed operator, and
+  `conversations_townstead_tags`, `conversations_townstead_spirit` and `conversations_townstead_skill`
+  read Townstead's own context tags, village spirit and learned skills. They are registered on every
+  install, so a pack using them loads without Townstead; there each one is simply false, and a
+  malformed one is refused rather than read as true.
+- **A `townstead_fit` check term.** A dialogue check may name Townstead tags that help or hinder it —
+  a well-fed villager hears a request more kindly, an exhausted one less. The term is clamped to
+  `maxCheckFit` and is exactly zero without Townstead, so no existing check moves.
+- **Eighteen `townstead.*` context fields and twenty-three `%townstead_*%` template values** — the
+  need to speak about first, the current activity, life stage, trade level, building, species, village
+  spirit, month and weekday among them — each with a neutral fallback line in both locales.
+- **One calendar, not two.** `calendarSource` now decides who says what season it is: in `AUTO`,
+  Townstead's calendar when it names a season, then Serene Seasons, then the built-in cycle. Festivals
+  on a Townstead calendar come from a new reloadable `townstead_holidays` mapping, shipped for
+  Townstead's four calendar profiles. A day no mapping names is no festival at all, rather than the
+  old fixed cycle laid over an unrelated calendar, unless `useLegacyHolidayFallbackWithTownstead` is
+  set.
+- **Custom personalities keep their names.** An interiority profile for a namespaced personality is
+  no longer collapsed onto its bare path, so two packs' `reserved_scholar` are two profiles. A
+  Townstead custom personality uses its own profile when a pack authored one, then the profile of the
+  MCA personality it is based on.
+- **Diagnostics.** `/conversations compat townstead status` for anyone; `probe`, `snapshot` and
+  `explain <question> <answer>` for operators, and `snapshot genes` at level 3 for heritage and
+  inheritance detail; `/conversations compat namespace` names the MCA package root this build bound.
+
 ### Compatibility
 
 - Saves: each pair gains an optional `contact` record, written only after its first credited
@@ -74,6 +107,11 @@ Hearts are still the one number you see; what changed is what a villager may *as
   unchanged at 4.
 - Content gated on `conversations_relationship` sees the new bands. In an upgraded world the
   heart-based bands are preserved for existing relationships; new ones have to be lived.
+- Interiority: a profile authored under a namespace other than `mca` or `minecraft` (for example
+  `mypack:odd`) used to replace the bare `odd` profile, and now defines a profile of its own. A
+  profile id that is not a valid personality id is refused with the rest of the reload.
+- A new datapack directory, `townstead_holidays`, is staged with the rest of the content bundle: a
+  malformed mapping refuses the reload like any other section.
 
 ## [1.7.3] - unreleased
 

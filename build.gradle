@@ -253,13 +253,27 @@ tasks.register('townsteadProbeTest', Test) {
     outputs.upToDateWhen { false }
     testLogging { showStandardStreams = true }
     doFirst {
+        boolean modern = project.hasProperty('townsteadModernJar')
+        boolean legacy = project.hasProperty('townsteadLegacyJar')
+        if (modern && legacy) {
+            // Both variants share Townstead's package names, so one classloader would only ever see
+            // whichever jar came first and the other would pass vacuously. Run them one at a time.
+            throw new GradleException('Pass -PtownsteadModernJar or -PtownsteadLegacyJar, not both: '
+                    + 'the two variants collide in one classloader. Run the task once per jar.')
+        }
         systemProperty 'mcaconversations.townstead.probe.jars',
                 ['townsteadModernJar', 'townsteadLegacyJar']
                         .findAll { project.hasProperty(it) }
                         .collect { project.property(it).toString() }
                         .join(File.pathSeparator)
-        systemProperty 'mcaconversations.probe.jars', configurations.runtimeClasspath
-                .findAll { it.name.contains('minecraft-comes-alive') }
+        // The modern variant is compiled against MCA's forge.net.conczin.mca root, which the dev
+        // runtime's MCA does not have; it rides the probe fleet's 7.7.1 jar instead. The legacy
+        // variant matches the dev runtime.
+        def modernMca = mcaProbeVersions.findIndexOf { it.startsWith('7.7.1') }
+        systemProperty 'mcaconversations.probe.jars', (modern && modernMca >= 0
+                ? configurations.getByName("mcaProbe${modernMca}").files
+                        .findAll { it.name.contains('minecraft-comes-alive') }
+                : configurations.runtimeClasspath.findAll { it.name.contains('minecraft-comes-alive') })
                 .join(File.pathSeparator)
     }
 }

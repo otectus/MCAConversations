@@ -90,6 +90,39 @@ public final class Personalities {
         return LEGACY_ALIASES.getOrDefault(n, n);
     }
 
+    /**
+     * The key an interiority profile is stored and looked up under (Townstead spec §10.1). MCA's own
+     * ids, in any spelling or with the {@code mca}/{@code minecraft} namespace, reduce to the bare
+     * {@link #canonical} voice. Any other namespaced id is a custom personality (a Townstead
+     * datapack's {@code mypack:reserved_scholar}) and keeps its full lowercase id, so two packs'
+     * {@code reserved_scholar} never share a profile. A malformed id is empty, which reads as
+     * neutral.
+     */
+    public static String profileKey(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return "";
+        }
+        String s = raw.trim().toLowerCase(Locale.ROOT);
+        int colon = s.indexOf(':');
+        if (colon < 0) {
+            return s.matches("[a-z0-9_.\\-]+") ? canonical(s) : "";
+        }
+        String namespace = s.substring(0, colon);
+        String path = s.substring(colon + 1);
+        if (!namespace.matches("[a-z0-9_.\\-]+") || !path.matches("[a-z0-9_./\\-]+")) {
+            return "";
+        }
+        if (namespace.equals("mca") || namespace.equals("minecraft")) {
+            return canonical(path);
+        }
+        return s;
+    }
+
+    /** True when {@code key} is a {@link #profileKey} for a custom, namespaced personality. */
+    public static boolean isCustomKey(String key) {
+        return key != null && key.indexOf(':') >= 0;
+    }
+
     /** True when {@code raw} names a personality MCA 7.7 still rolls onto villagers. */
     public static boolean isCanonical(String raw) {
         return CANONICAL.contains(canonical(raw));

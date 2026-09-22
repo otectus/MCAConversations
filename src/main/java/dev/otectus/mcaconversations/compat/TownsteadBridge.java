@@ -139,6 +139,25 @@ public interface TownsteadBridge {
     /** Mark a typed-chat conversation closed. Idempotent; safe to call for an unopened villager. */
     void dialogueClose(Entity villager, ServerPlayer player, long gameTime);
 
+    // --------------------------------------------------------------------------- diagnostics
+
+    /**
+     * How many reaction backends Townstead has registered right now. Zero means every reaction is
+     * inert whatever else bound, because Townstead ships exactly one backend, for Emotecraft.
+     * Diagnostics only: nothing decides behaviour from it, since the dispatcher checks it itself.
+     */
+    default int reactionBackendCount() {
+        return 0;
+    }
+
+    /**
+     * The reads that have failed this session, one line each ({@code site: exception}), so the
+     * status command can name the broken seam without repeating a stack trace. Empty when none has.
+     */
+    default List<String> failedReads() {
+        return List.of();
+    }
+
     // --------------------------------------------------------------------------- convenience
 
     default boolean has(TownsteadCapability capability) {
