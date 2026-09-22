@@ -53,6 +53,19 @@ Hearts are still the one number you see; what changed is what a villager may *as
   villager greets you, the others wait ten seconds (`ambientPlayerCooldownTicks`) before any of them
   may, on top of each villager's once-a-day limit. A greeting a villager volunteers no longer stops
   them in their tracks for half a minute: they carry on unless you answer.
+- **Partners, family and respected strangers have their own greetings.** A spouse, a parent, child
+  or sibling, and — with MCA: Reputation — a stranger from a village that thinks well of you each get
+  a greeting of their own. The respected stranger's is courtesy only: it never claims this villager
+  saw what you did, and a toddler still just peeks at you from behind a barrel. Friends and
+  confidants keep the familiar greetings; family has toddler versions. Both locales.
+- **Strangers and acquaintances greet in character.** The stranger and "hello again" greetings are
+  now voiced by every personality family — the shy villager murmurs, the blunt one wants to know
+  your business — without any of them claiming a friendship that is not there.
+- **Opening the chat box turns a few heads, not the whole square.** Typing now draws a glance from
+  at most the three nearest villagers, and never from one who is asleep or fleeing.
+- **A villager who falls asleep ends the conversation.** A dialogue-screen discussion with a villager
+  who goes to bed now closes, as `SPEAKER_UNAVAILABLE`, rather than waiting on somebody who is no
+  longer there.
 - **Switching chat mode off ends chat conversations cleanly.** A chat conversation that was live when
   a config reload switched chat mode off is now closed on the spot, with its own reason, instead of
   being left for its next reply to be refused. Conversations on the dialogue screen are untouched.
@@ -63,6 +76,8 @@ Hearts are still the one number you see; what changed is what a villager may *as
   `social.contact_days`, and `social.attitude` (`hostile`, `guarded`, `neutral`, `cordial`, `warm` or
   `affectionate`). Documented in `DATAPACK.md` under *Relationship bands*.
 - A `[social]` section in the server config. Documented in `CONFIG.md`.
+- `/conversations social inspect` (operators): the facts, roles, band, contact, attitude, greeting
+  pool and thresholds the social model derived for the nearest villager and you.
 
 ### Townstead
 

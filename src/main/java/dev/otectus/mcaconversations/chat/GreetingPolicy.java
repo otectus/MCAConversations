@@ -20,19 +20,37 @@ public final class GreetingPolicy {
     public static final String STRANGER = "chatmode.hail.stranger";
     /** Something is wrong between them; curt either way. */
     public static final String COLD = "chatmode.hail_cold";
+    /** Never met, but well spoken of: courtesy, and no claim of any particular deed (spec §8.7). */
+    public static final String RESPECTED_STRANGER = "chatmode.hail.respected_stranger";
+    /** Their spouse. */
+    public static final String PARTNER = "chatmode.hail.partner";
+    /** Their parent, child or sibling. */
+    public static final String FAMILY = "chatmode.hail.family";
 
     private GreetingPolicy() {
     }
 
     public static String pool(RelationshipBand band, SocialContact contact) {
+        return pool(band, contact, false);
+    }
+
+    /**
+     * As above. {@code respected} is the villager's community thinking well of the player, which
+     * earns a never-met stranger courtesy and nothing more: a respected stranger is still a stranger,
+     * greeted without a name and without any claim that this villager knows what they did.
+     */
+    public static String pool(RelationshipBand band, SocialContact contact, boolean respected) {
         if (band == null) {
             return STRANGER;
         }
         return switch (band) {
             case HOSTILE, TENSE -> COLD;
-            case PARTNER, FAMILY, CONFIDANT, FRIEND -> FAMILIAR;
+            case PARTNER -> PARTNER;
+            case FAMILY -> FAMILY;
+            case CONFIDANT, FRIEND -> FAMILIAR;
             case ACQUAINTANCE -> RECOGNIZED;
-            case STRANGER -> contact == SocialContact.RECOGNIZED ? RECOGNIZED : STRANGER;
+            case STRANGER -> contact == SocialContact.RECOGNIZED ? RECOGNIZED
+                    : respected ? RESPECTED_STRANGER : STRANGER;
         };
     }
 

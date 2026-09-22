@@ -1253,7 +1253,8 @@ public final class ChatModeDispatcher {
         String pool = GreetingPolicy.pool(
                 dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
                         McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
-                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts),
+                publiclyRespected(target.entity(), player));
         ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger,
                 UtteranceAudience.ofStaticLine(pool));
         if (makeSticky) {
@@ -1268,6 +1269,20 @@ public final class ChatModeDispatcher {
             dev.otectus.mcaconversations.conversation.ConversationOutcomes.react(target.entity(), player,
                     dev.otectus.mcaconversations.conversation.ReactionSemantic.GREETING,
                     ConversationSession.Frontend.CHAT);
+        }
+    }
+
+    /**
+     * The villager's community thinks well of the player (Stability spec §8.7): MCA: Reputation's
+     * standing bias on respect is positive. Courtesy only — it is never evidence that this villager
+     * saw anything, and without Reputation it is simply false.
+     */
+    private static boolean publiclyRespected(Entity villager, ServerPlayer player) {
+        try {
+            return dev.otectus.mcaconversations.compat.ReputationBridge.isAvailable()
+                    && dev.otectus.mcaconversations.compat.ReputationBridge.publicStandingFit(player, villager, "respect") > 0;
+        } catch (Throwable t) {
+            return false;
         }
     }
 

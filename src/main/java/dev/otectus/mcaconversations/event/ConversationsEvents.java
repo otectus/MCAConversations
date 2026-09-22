@@ -516,6 +516,10 @@ public final class ConversationsEvents {
         if (!villager.isAlive()) {
             return CloseReason.SPEAKER_DEAD;
         }
+        if (villager instanceof net.minecraft.world.entity.LivingEntity living && living.isSleeping()) {
+            // Alive and here, but gone to bed: nobody is holding the other half of this conversation.
+            return CloseReason.SPEAKER_UNAVAILABLE;
+        }
         if (ConversationPresence.leaseExpired(handle, gameTime, leaseTicks)) {
             // The window is gone: dismissed without its close arriving, or a client that stopped.
             // Either way the villager is released without waiting for anybody to acknowledge it.
