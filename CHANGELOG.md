@@ -206,6 +206,10 @@ and without Townstead installed nothing below changes a line.
   village's *spirit*, which now belong to *Life here*.
 - The MCA binding gains two members, `Village.getBuildings` and `Building.getId`, present in every
   supported MCA version (checked against 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2).
+- **Both loaders ship 1.8.0 together.** The Forge 1.20.1 build carries the same Townstead and
+  social behaviour and content; this port's only differences from it are recorded, with reasons,
+  in `tools/parity/parity-1.8.0-adaptations.json`. Players need the 1.8.0 jar too, whatever the
+  protocol allows: the new lines are in its client-side language files.
 
 ## [1.7.3] - unreleased
 
