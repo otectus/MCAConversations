@@ -304,7 +304,8 @@ public final class TemplateContextFactory {
                     var sp = s.spirit();
                     if (!sp.isEmpty() && sp.tier() > 0 && !sp.primaryId().isBlank()) {
                         context.with(var, Component.translatableWithFallback(
-                                "townstead.spirit.tier." + sp.primaryId() + "." + sp.tier(),
+                                "townstead.spirit.tier." + sp.primaryId().substring(sp.primaryId().lastIndexOf(':') + 1)
+                                        + "." + sp.tier(),
                                 humanize(sp.primaryId())));
                     }
                 }
@@ -329,12 +330,17 @@ public final class TemplateContextFactory {
 
     private static void spiritName(TemplateContext context, TemplateVariable var, String id) {
         if (id != null && !id.isBlank()) {
-            context.with(var, Component.translatableWithFallback("townstead.spirit." + id, humanize(id)));
+            context.with(var, Component.translatableWithFallback(spiritKey(id), humanize(id)));
         }
     }
 
+    /** Townstead names a spirit by its bare path: {@code townstead.spirit.industrious}. */
+    public static String spiritKey(String id) {
+        return "townstead.spirit." + id.substring(id.lastIndexOf(':') + 1);
+    }
+
     /** {@code mypack:reserved_scholar} → {@code reserved scholar}; a last resort for raw ids. */
-    static String humanize(String id) {
+    public static String humanize(String id) {
         if (id == null || id.isBlank()) {
             return "";
         }

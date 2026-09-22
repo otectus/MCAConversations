@@ -552,4 +552,9 @@ public final class McaCompat {
     public static Optional<String> getBuildingTypeAt(ServerLevel level, int villageId, BlockPos pos) {
         return McaHandles.buildingTypeAt(level, villageId, pos);
     }
+
+    /** Every registered building of a village, id to type; empty when the village cannot be read. */
+    public static Optional<Map<Integer, String>> villageBuildings(ServerLevel level, int villageId) {
+        return McaHandles.villageBuildings(level, villageId);
+    }
 }

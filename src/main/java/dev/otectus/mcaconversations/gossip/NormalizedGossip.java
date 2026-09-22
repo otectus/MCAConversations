@@ -62,7 +62,18 @@ public record NormalizedGossip(UUID toldId, long createdGameTime,
         if (isExternal()) {
             return externalArguments.toArray();
         }
-        return new Object[] {Component.literal(nativeEvent.aName()), Component.literal(nativeEvent.bName())};
+        return new Object[] {subject(nativeEvent, "a_key", nativeEvent.aName()),
+                subject(nativeEvent, "b_key", nativeEvent.bName())};
+    }
+
+    /**
+     * A subject that is a thing rather than a person — a building, a village's spirit — is told
+     * through its translation, falling back to the name cached when it was seen.
+     */
+    private static Component subject(GossipEvent event, String keyAttribute, String cached) {
+        return event.attribute(keyAttribute)
+                .<Component>map(key -> Component.translatableWithFallback(key, cached))
+                .orElseGet(() -> Component.literal(cached));
     }
 
     /**

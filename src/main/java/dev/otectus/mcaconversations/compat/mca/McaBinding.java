@@ -435,6 +435,9 @@ public final class McaBinding {
     /** {@code Optional<Building>} for a position — how a scene learns it is being told in a library. */
     public static final Member VILLAGE_BUILDING_AT = virtual(C_VILLAGE, "getBuildingAt", Object.class, 1);
     public static final Member BUILDING_GET_TYPE = virtual(C_BUILDING, "getType", Object.class, 0);
+    /** {@code Map<Integer, Building>}: every building MCA has registered, Townstead's included. */
+    public static final Member VILLAGE_GET_BUILDINGS = virtual(C_VILLAGE, "getBuildings", Map.class, 0);
+    public static final Member BUILDING_GET_ID = virtual(C_BUILDING, "getId", int.class, 0);
 
     /** Every member above, in declaration order. The single source of truth for what MCA must provide. */
     public static final List<Member> MANIFEST = List.of(
@@ -466,7 +469,8 @@ public final class McaBinding {
             RESIDENCY_GET_WORKPLACE, RESIDENCY_GET_HOME,
             NODE_IS_DECEASED, NODE_PARTNER, NODE_FATHER, NODE_MOTHER, NODE_SIBLINGS, NODE_CHILDREN,
             NODE_PROFESSION_ID,
-            VILLAGE_GET_POPULATION, VILLAGE_BUILDING_AT, BUILDING_GET_TYPE);
+            VILLAGE_GET_POPULATION, VILLAGE_BUILDING_AT, BUILDING_GET_TYPE,
+            VILLAGE_GET_BUILDINGS, BUILDING_GET_ID);
 
     // ---------------------------------------------------------------------------------------------
     // Resolution

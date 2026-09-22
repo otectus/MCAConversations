@@ -120,6 +120,17 @@ and without Townstead installed nothing below changes a line.
   remember it (`mcaconversations.gift.relieved_hunger`, `relieved_thirst`, `helped_recovery`, for a
   quarter of a day) and look grateful. Conversations never fills a need, and a helpful gift earns no
   extra heart.
+- **The village talks about its own.** The gossip sweep now notices ten kinds of Townstead news: a
+  neighbour in a real hunger, thirst or exhaustion emergency, a collapse, a recovery from either, a
+  step up in a trade, a newly learned skill, a new stage of life, a birthday, a building finished or
+  gone, and the village's spirit changing character. Every one has lines in all five gossip voices
+  (ordinary, discreet, teenage, childish and close-neighbour) in both locales. It is kept quiet on
+  purpose: the first sight of anybody or anything says nothing, a crisis is news once and stays a
+  crisis until every need is comfortable again, the same villager's next crisis waits
+  `needCrisisCooldownDays`, a recovery is news only after a crisis was, a building is gone only once
+  `buildingRemovalConfirmScans` sweeps agree, and a villager who could not be read has not changed.
+  Nobody gossips about fertility, genes, heritage or a need's actual numbers. Buildings and spirits
+  are named in the listener's language through Townstead's and MCA's own translations.
 - **Diagnostics.** `/conversations compat townstead status` for anyone; `probe`, `snapshot` and
   `explain <question> <answer>` for operators, and `snapshot genes` at level 3 for heritage and
   inheritance detail; `/conversations compat namespace` names the MCA package root this build bound.
@@ -139,6 +150,12 @@ and without Townstead installed nothing below changes a line.
   profile id that is not a valid personality id is refused with the rest of the reload.
 - A new datapack directory, `townstead_holidays`, is staged with the rest of the content bundle: a
   malformed mapping refuses the reload like any other section.
+- Gossip saves: the gossip file gains a format number, a `townstead` section of plain observed
+  values, and optional bounded attributes on an event. A pre-1.8.0 gossip file loads as before. A
+  1.7.x build skips the new event types, ignores the rest, and drops them if it saves the world.
+  Removing Townstead leaves the section untouched, so re-adding it carries on where it stopped.
+- The MCA binding gains two members, `Village.getBuildings` and `Building.getId`, present in every
+  supported MCA version (checked against 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2).
 
 ## [1.7.3] - unreleased
 

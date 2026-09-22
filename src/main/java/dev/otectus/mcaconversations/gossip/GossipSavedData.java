@@ -26,6 +26,11 @@ public final class GossipSavedData extends SavedData {
     private final Map<UUID, RelationshipSnapshot> snapshots = new HashMap<>();
     /** Last-seen resident UUID set per village id — drives arrival/departure diffing. */
     private final Map<Integer, Set<UUID>> residency = new HashMap<>();
+    /** What the sweep last saw of Townstead (1.8.0); empty in a world that never had it. */
+    private TownsteadObservations townstead = new TownsteadObservations();
+
+    /** Save format: 1 before 1.8.0 (no field), 2 adds event attributes and the Townstead section. */
+    public static final int FORMAT = 2;
 
     public static GossipSavedData get(MinecraftServer server) {
         return server.overworld().getDataStorage()
@@ -66,10 +71,20 @@ public final class GossipSavedData extends SavedData {
 
     public int prune(long now, long retentionTicks) {
         int removed = log.pruneOlderThan(now, retentionTicks);
-        if (removed > 0) {
+        // Townstead observations outlive the events they produced by a margin, so an unloaded resident
+        // is not re-seeded (and a crisis forgotten) while their village is still being visited.
+        if (removed > 0 | townstead.prune(now - 2L * retentionTicks)) {
             setDirty();
         }
         return removed;
+    }
+
+    public TownsteadObservations townstead() {
+        return townstead;
+    }
+
+    public void townsteadChanged() {
+        setDirty();
     }
 
     public void clearEvents() {
@@ -100,6 +115,8 @@ public final class GossipSavedData extends SavedData {
             residencyTag.put(Integer.toString(entry.getKey()), members);
         }
         tag.put("residency", residencyTag);
+        tag.putInt("format", FORMAT);
+        tag.put("townstead", townstead.toNbt());
         return tag;
     }
 
@@ -129,6 +146,9 @@ public final class GossipSavedData extends SavedData {
                 // Corrupt village id or member uuid — skip rather than failing the whole load.
             }
         }
+        // A missing section (every save before 1.8.0) is an empty one; a newer format is ignored and
+        // re-seeded silently by the next sweeps rather than misread.
+        data.townstead = TownsteadObservations.fromNbt(tag.getCompound("townstead"));
         return data;
     }
 }
