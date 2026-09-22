@@ -82,6 +82,15 @@ public enum HubDomain {
             Map.entry("rumors", VILLAGE),
             Map.entry("standing", VILLAGE),
             Map.entry("guild_contact", VILLAGE),
+            // Townstead's "Life here" (1.8.0): filed by what a label may reveal, not by the page.
+            Map.entry("home_and_place", VILLAGE),
+            Map.entry("roots", VILLAGE),
+            Map.entry("community", VILLAGE),
+            Map.entry("wellbeing", PERSONAL),
+            Map.entry("age_and_life", PERSONAL),
+            Map.entry("mastery", WORK),
+            Map.entry("daily_rhythm", EVERYDAY),
+            Map.entry("calendar", EVERYDAY),
             Map.entry("place", VILLAGE),
             Map.entry("origin", VILLAGE),
 

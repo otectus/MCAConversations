@@ -1,0 +1,70 @@
+{
+  "answers": [
+    {
+      "name": "ask_best_part",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "life.a_long_life.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.a_long_life",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.life.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.life.a_long_life.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "well_lived",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "life.a_long_life.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "life.a_long_life",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.life.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.life.a_long_life.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.personal",
+            "conversations_say": {
+              "phrase": "conversations.scene.life.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

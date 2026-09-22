@@ -1,0 +1,77 @@
+{
+  "answers": [
+    {
+      "name": "ask_advice",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "age_and_life.the_later_years.open.advised"
+            },
+            "conversations_disposition_apply": {
+              "topic": "age_and_life.elder",
+              "deltas": {
+                "familiarity": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.age_and_life.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.age_and_life.the_later_years.advised"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "lucky_to_have_you",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "age_and_life.the_later_years.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.age_and_life.honoured",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "age_and_life.elder",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.age_and_life.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.age_and_life.the_later_years.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.age_and_life.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

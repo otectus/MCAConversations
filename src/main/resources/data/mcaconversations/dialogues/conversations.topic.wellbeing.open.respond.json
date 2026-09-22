@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_what_helps",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "wellbeing.open.named"
+            },
+            "conversations_disposition_apply": {
+              "topic": "wellbeing.how_i_am",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.wellbeing.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.wellbeing.open.named"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_a_hand",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "wellbeing.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.wellbeing.offered",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "wellbeing.how_i_am",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.wellbeing.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.wellbeing.open.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "brush_it_off",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "wellbeing.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.wellbeing.brushed_off",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "wellbeing.how_i_am",
+              "deltas": {
+                "warmth": -2,
+                "tension": 1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.wellbeing.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.wellbeing.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

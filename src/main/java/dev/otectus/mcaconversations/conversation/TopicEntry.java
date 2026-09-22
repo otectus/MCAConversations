@@ -35,7 +35,17 @@ public record TopicEntry(String id,
                          Set<String> milestones,
                          Map<String, Set<String>> exclusiveGroups,
                          Optional<KingdomGateSpec> kingdomGate,
-                         boolean civicContact) {
+                         boolean civicContact,
+                         boolean townstead) {
+
+    /** A topic with no Townstead requirement, as every topic before 1.8.0 was. */
+    public TopicEntry(String id, String entryQuestion, String entryAnswer, DepthClass depth, String returnQuestion,
+                      Set<AgeGroup> ages, Set<StanceFamily> requiredStanceFamilies, boolean chatRequired,
+                      Optional<Arc> arc, Set<String> milestones, Map<String, Set<String>> exclusiveGroups,
+                      Optional<KingdomGateSpec> kingdomGate, boolean civicContact) {
+        this(id, entryQuestion, entryAnswer, depth, returnQuestion, ages, requiredStanceFamilies, chatRequired,
+                arc, milestones, exclusiveGroups, kingdomGate, civicContact, false);
+    }
 
     /** MCA's age vocabulary, minus {@code baby} — babies babble and are never catalog topics. */
     public static final Set<AgeGroup> AGE_GROUPS =
@@ -142,10 +152,19 @@ public record TopicEntry(String id,
             }
             civicContact = flag.getAsBoolean();
         }
+        // Offered only while Townstead's content is live (1.8.0). Strict for the same reason.
+        boolean townstead = false;
+        if (json.has("townstead")) {
+            JsonElement flag = json.get("townstead");
+            if (!flag.isJsonPrimitive() || !flag.getAsJsonPrimitive().isBoolean()) {
+                throw new IllegalArgumentException("topic '" + id + "' has a non-boolean \"townstead\"");
+            }
+            townstead = flag.getAsBoolean();
+        }
 
         return new TopicEntry(id, entryQuestion, entryAnswer, depth, returnQuestion,
                 Set.copyOf(ages), Set.copyOf(families), chatRequired, arc,
-                Set.copyOf(milestones), Map.copyOf(exclusiveGroups), kingdomGate, civicContact);
+                Set.copyOf(milestones), Map.copyOf(exclusiveGroups), kingdomGate, civicContact, townstead);
     }
 
     /**

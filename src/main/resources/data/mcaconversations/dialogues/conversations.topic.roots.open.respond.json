@@ -1,0 +1,106 @@
+{
+  "answers": [
+    {
+      "name": "ask_a_story",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "roots.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "roots.where_from",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.roots.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.roots.open.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "respect_the_ways",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "roots.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.roots.respected",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "roots.where_from",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.topic.roots.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.roots.open.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "stories_dont_matter",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "roots.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.roots.dismissed",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "roots.where_from",
+              "deltas": {
+                "warmth": -2
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.roots.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.roots.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

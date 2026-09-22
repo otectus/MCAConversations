@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "tell_about_this_place",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "home_and_place.this_building.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "home_and_place.this_building",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.home_and_place.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.home_and_place.this_building.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "well_kept",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "home_and_place.this_building.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "home_and_place.this_building",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.home_and_place.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.home_and_place.this_building.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.home_and_place.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

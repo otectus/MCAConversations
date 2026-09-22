@@ -312,6 +312,143 @@
         }
       ],
       "epistemic": "inferred"
+    },
+    {
+      "name": "a_long_shift",
+      "subject": "day.a_long_shift",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "mixed",
+      "predicate": "observation",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "townstead.activity",
+          "is": "work",
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "townstead"
+      ],
+      "base_priority": 28,
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [],
+      "prompt": {
+        "en": "Mid-shift.",
+        "pt": "No meio do turno."
+      },
+      "lines": {
+        "en": [
+          "Mid-shift, and the day's only half done. Ask me again at supper.",
+          "Work's going. Slowly, but it's going. That's a day.",
+          "I'm on shift — the day's mostly been the job so far."
+        ],
+        "pt": [
+          "No meio do turno, e o dia só está na metade. Pergunte de novo no jantar.",
+          "O trabalho está andando. Devagar, mas andando. Isso é um dia.",
+          "Estou no turno — o dia até agora foi quase só serviço."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_whats_left",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What's left to do today?",
+            "pt": "O que ainda falta fazer hoje?"
+          },
+          "phrases": [
+            "whats left to do today"
+          ],
+          "phrases_pt": [
+            "o que ainda falta fazer hoje"
+          ],
+          "requires_any": [
+            "left",
+            "falta"
+          ],
+          "disposition": {
+            "familiarity": 1
+          },
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "mixed",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The hard part, naturally. It always saves itself for last.",
+                "Less than this morning. That's the best I can say."
+              ],
+              "pt": [
+                "A parte difícil, claro. Sempre fica pro final.",
+                "Menos que de manhã. É o melhor que posso dizer."
+              ]
+            },
+            "epistemic": "inferred",
+            "temporal": "current",
+            "min_variants": 2
+          }
+        },
+        {
+          "name": "nearly_there",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "You're nearly there.",
+            "pt": "Você já está quase lá."
+          },
+          "phrases": [
+            "youre nearly there"
+          ],
+          "phrases_pt": [
+            "voce ja esta quase la"
+          ],
+          "requires_any": [
+            "nearly",
+            "quase"
+          ],
+          "disposition": {
+            "warmth": 1
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Nearly. Say it again in an hour.",
+                "Kind of you. I'll hold on to that."
+              ],
+              "pt": [
+                "Quase. Diga de novo daqui a uma hora.",
+                "Gentileza sua. Vou me agarrar nisso."
+              ]
+            },
+            "epistemic": "inferred",
+            "temporal": "current",
+            "min_variants": 2
+          }
+        }
+      ],
+      "epistemic": "inferred",
+      "min_variants": 3
     }
   ]
 }

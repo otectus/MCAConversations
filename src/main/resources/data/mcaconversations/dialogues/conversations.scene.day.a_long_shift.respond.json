@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "ask_whats_left",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.a_long_shift.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.a_long_shift",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.day.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.a_long_shift.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "nearly_there",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "day.a_long_shift.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "day.a_long_shift",
+              "deltas": {
+                "warmth": 1
+              }
+            },
+            "next": "conversations.scene.day.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.a_long_shift.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.scene.day.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

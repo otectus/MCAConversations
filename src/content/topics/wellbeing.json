@@ -1,0 +1,725 @@
+{
+ "_comment": [
+  "Townstead needs, spoken about the way a person would: never a number, never a diagnosis. Conditional scenes need Townstead's own reading of hunger or fatigue."
+ ],
+ "topic": "wellbeing",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "wellbeing"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Mind how you go.",
+   "I'll look after myself. Promise.",
+   "Thank you for asking. Truly."
+  ],
+  "pt": [
+   "Vá com cuidado.",
+   "Vou me cuidar. Prometo.",
+   "Agradeço por perguntar. De verdade."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "I'll let you rest.",
+  "pt": "Vou deixar você descansar."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else on your mind?",
+   "pt": "Mais alguma coisa na cabeça?"
+  },
+  "leave": {
+   "en": "I'll let you get on.",
+   "pt": "Vou deixar você seguir."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "I'm managing, thank you for asking.",
+    "Some days are heavier than others. Today's all right.",
+    "I keep going. Most of us do."
+   ],
+   "pt": [
+    "Vou levando, agradeço a pergunta.",
+    "Tem dias mais pesados que outros. Hoje está tudo bem.",
+    "Sigo em frente. A maioria de nós segue."
+   ]
+  },
+  "open": {
+   "subject": "wellbeing.how_i_am",
+   "act": "report",
+   "polarity": "mixed",
+   "predicate": "observation",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "How you're keeping.",
+    "pt": "Como você está."
+   },
+   "lines": {
+    "en": [
+     "I'm keeping well enough. It's kind of you to ask — not many do.",
+     "Tired, fed, standing up. That's a good day by most measures.",
+     "I'm all right. Ask me again at the end of the week."
+    ],
+    "pt": [
+     "Estou bem o bastante. Gentileza sua perguntar — pouca gente pergunta.",
+     "Com sono, de barriga cheia, de pé. É um bom dia pela maioria das medidas.",
+     "Estou bem. Pergunte de novo no fim da semana."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_what_helps",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What keeps you going on a hard day?",
+      "pt": "O que te mantém de pé num dia difícil?"
+     },
+     "phrases": [
+      "what keeps you going on a hard day"
+     ],
+     "phrases_pt": [
+      "o que te mantem de pe num dia dificil"
+     ],
+     "requires_any": [
+      "keeps",
+      "hard",
+      "mantem",
+      "dificil"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "named",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "A hot meal and one person who asks how I am. You've done half of it.",
+        "Knowing the day ends. It always does, however long it feels."
+       ],
+       "pt": [
+        "Uma refeição quente e alguém que pergunte como estou. Metade disso você já fez.",
+        "Saber que o dia acaba. Sempre acaba, por mais comprido que pareça."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "offer_a_hand",
+     "stance": "practical_help",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "If you need anything, just say.",
+      "pt": "Se precisar de alguma coisa, é só dizer."
+     },
+     "phrases": [
+      "if you need anything just say"
+     ],
+     "phrases_pt": [
+      "se precisar de alguma coisa e so dizer"
+     ],
+     "requires_any": [
+      "need",
+      "anything",
+      "precisar",
+      "alguma"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "affection": {
+      "decision": "topic.wellbeing.offered",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I might hold you to that. Thank you.",
+        "That's a kind thing to offer. I'll remember it."
+       ],
+       "pt": [
+        "Talvez eu cobre isso. Agradeço.",
+        "É uma oferta gentil. Vou me lembrar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "brush_it_off",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Everyone's tired. Get on with it.",
+      "pt": "Todo mundo está cansado. Siga em frente."
+     },
+     "phrases": [
+      "everyones tired get on with it"
+     ],
+     "phrases_pt": [
+      "todo mundo esta cansado siga em frente"
+     ],
+     "requires_any": [
+      "tired",
+      "cansado",
+      "siga"
+     ],
+     "disposition": {
+      "warmth": -2,
+      "tension": 1
+     },
+     "affection": {
+      "decision": "topic.wellbeing.brushed_off",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "qualify",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I was getting on with it. I only answered because you asked.",
+        "Fair enough. I'll not bother you with it again."
+       ],
+       "pt": [
+        "Eu estava seguindo. Só respondi porque você perguntou.",
+        "Justo. Não vou te incomodar com isso de novo."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "wellbeing.what_i_keep_quiet",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "What you don't usually say.",
+    "pt": "O que você não costuma dizer."
+   },
+   "lines": {
+    "en": [
+     "Some nights I lie awake doing sums — food, work, time — and they never quite come out even.",
+     "I don't always eat when I should. There's always one more thing first.",
+     "When I'm worn down I go quiet. People mistake it for being fine."
+    ],
+    "pt": [
+     "Tem noites em que o sono não vem e eu fico fazendo contas — comida, trabalho, tempo — e nunca fecham.",
+     "Nem sempre como quando deveria. Sempre tem mais uma coisa antes.",
+     "Quando estou no limite, eu me calo. As pessoas acham que está tudo bem."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_how_to_help",
+     "stance": "empathy",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What would actually help, when it's like that?",
+      "pt": "O que ajudaria de verdade, quando fica assim?"
+     },
+     "phrases": [
+      "what would actually help when its like that"
+     ],
+     "phrases_pt": [
+      "o que ajudaria de verdade quando fica assim"
+     ],
+     "requires_any": [
+      "actually",
+      "help",
+      "ajudaria",
+      "verdade"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.wellbeing.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "Someone noticing before I have to say it. That's most of it.",
+        "A meal I didn't have to think about. Silly, but true."
+       ],
+       "pt": [
+        "Alguém reparar antes que eu precise dizer. É quase tudo.",
+        "Uma refeição em que eu não precise pensar. Bobagem, mas é verdade."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "say_rest",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "You're allowed to rest, you know.",
+      "pt": "Você tem direito de descansar, sabia?"
+     },
+     "phrases": [
+      "youre allowed to rest you know"
+     ],
+     "phrases_pt": [
+      "voce tem direito de descansar sabia"
+     ],
+     "requires_any": [
+      "allowed",
+      "rest",
+      "direito",
+      "descansar"
+     ],
+     "disposition": {
+      "warmth": 3,
+      "respect": 1
+     },
+     "reaction": {
+      "id": "acknowledged",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I know. Knowing and doing are two different trades.",
+        "I'll try. Tell me again if you catch me not."
+       ],
+       "pt": [
+        "Eu sei. Saber e fazer são ofícios diferentes.",
+        "Vou tentar. Me lembre se me pegar sem descansar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "mock_it",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Sounds like you're making a fuss.",
+      "pt": "Parece que você está fazendo drama."
+     },
+     "phrases": [
+      "sounds like youre making a fuss"
+     ],
+     "phrases_pt": [
+      "parece que voce esta fazendo drama"
+     ],
+     "requires_any": [
+      "fuss",
+      "drama"
+     ],
+     "disposition": {
+      "warmth": -2,
+      "tension": 2
+     },
+     "affection": {
+      "decision": "topic.wellbeing.mocked",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "deflect",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Then I'll keep it to myself, like I usually do.",
+        "Maybe. I'll not make it again in front of you."
+       ],
+       "pt": [
+        "Então guardo pra mim, como sempre.",
+        "Pode ser. Não faço de novo na sua frente."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "running_on_empty",
+   "subject": "wellbeing.hungry",
+   "shape": "observe",
+   "act": "complain",
+   "polarity": "negative",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.hunger",
+     "any_of": [
+      "starving",
+      "famished",
+      "hungry"
+     ],
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 42,
+   "cooldown_days": 1,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "An empty stomach.",
+    "pt": "Estômago vazio."
+   },
+   "lines": {
+    "en": [
+     "I haven't eaten properly today. It's starting to tell.",
+     "I could do with a meal and a sit-down, in that order.",
+     "I skipped a meal, then another. My stomach's started complaining out loud."
+    ],
+    "pt": [
+     "Não comi direito hoje. Já está pesando.",
+     "Uma refeição e um banco pra sentar cairiam bem, nessa ordem.",
+     "Pulei uma refeição, depois outra. Meu estômago já reclama em voz alta."
+    ]
+   },
+   "replies": [
+    {
+     "name": "offer_food",
+     "stance": "practical_help",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Let me find you something to eat.",
+      "pt": "Deixa eu arrumar algo pra você comer."
+     },
+     "phrases": [
+      "let me find you something to eat"
+     ],
+     "phrases_pt": [
+      "deixa eu arrumar algo pra voce comer"
+     ],
+     "requires_any": [
+      "eat",
+      "arrumar",
+      "comer"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "trust": 1
+     },
+     "reaction": {
+      "id": "grateful",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "You'd do that? Bread would be plenty. Thank you.",
+        "I won't say no. Anything that fills a hand."
+       ],
+       "pt": [
+        "Faria isso? Um pão já basta. Agradeço.",
+        "Não vou recusar. Qualquer coisa que caiba na mão."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "ask_why_hungry",
+     "stance": "curiosity",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What kept you from eating?",
+      "pt": "O que te impediu de comer?"
+     },
+     "phrases": [
+      "what kept you from eating"
+     ],
+     "phrases_pt": [
+      "o que te impediu de comer"
+     ],
+     "requires_any": [
+      "kept",
+      "eating",
+      "impediu",
+      "comer"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "explained",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "The work didn't stop, so neither did I. Foolish, I know.",
+        "There wasn't much in the stores, and others needed it more."
+       ],
+       "pt": [
+        "O trabalho não parou, então eu também não. Bobagem, eu sei.",
+        "Não tinha muito no estoque, e outros precisavam mais."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 3
+  },
+  {
+   "name": "worn_out",
+   "subject": "wellbeing.worn_out",
+   "shape": "observe",
+   "act": "complain",
+   "polarity": "negative",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.fatigue",
+     "any_of": [
+      "drowsy",
+      "exhausted"
+     ],
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 41,
+   "cooldown_days": 1,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "Worn out.",
+    "pt": "No limite."
+   },
+   "lines": {
+    "en": [
+     "I'm so tired the ground looks soft. Don't let me lie down on it.",
+     "I've been awake too long. Forgive me if I lose the thread.",
+     "I could sleep standing, I think. I nearly did, an hour ago."
+    ],
+    "pt": [
+     "Estou com tanto sono que o chão parece macio. Não me deixe deitar nele.",
+     "Faz tempo demais que não durmo. Desculpe se eu perder o fio.",
+     "Acho que dormiria em pé. Quase dormi, uma hora atrás."
+    ]
+   },
+   "replies": [
+    {
+     "name": "tell_them_to_rest",
+     "stance": "empathy",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Go and rest. We can talk tomorrow.",
+      "pt": "Vá descansar. A gente conversa amanhã."
+     },
+     "phrases": [
+      "go and rest we can talk tomorrow"
+     ],
+     "phrases_pt": [
+      "va descansar a gente conversa amanha"
+     ],
+     "requires_any": [
+      "rest",
+      "tomorrow",
+      "descansar",
+      "amanha"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.wellbeing.sent_to_rest",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I think I will. Thank you for noticing.",
+        "Tomorrow, then. I'll be better company."
+       ],
+       "pt": [
+        "Acho que vou. Agradeço por reparar.",
+        "Amanhã, então. Vou ser uma companhia melhor."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "keep_them_talking",
+     "stance": "challenge",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "plain",
+     "outcome": "qualified",
+     "label": {
+      "en": "Stay a moment longer — this won't take long.",
+      "pt": "Fique mais um pouco — não vai demorar."
+     },
+     "phrases": [
+      "stay a moment longer this wont take long"
+     ],
+     "phrases_pt": [
+      "fique mais um pouco nao vai demorar"
+     ],
+     "requires_any": [
+      "stay",
+      "moment",
+      "fique",
+      "demorar"
+     ],
+     "disposition": {
+      "tension": 1
+     },
+     "reaction": {
+      "id": "qualified",
+      "act": "qualify",
+      "polarity": "mixed",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "A moment. Then I really must sit down.",
+        "All right, but talk slowly. I'm only half here."
+       ],
+       "pt": [
+        "Um instante. Depois eu preciso mesmo sentar.",
+        "Tudo bem, mas fale devagar. Só metade de mim está aqui."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 3
+  }
+ ]
+}

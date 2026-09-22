@@ -1,0 +1,712 @@
+{
+ "_comment": [
+  "Townstead profession levels and learning, as pride and doubt rather than numbers. The level word is Townstead's own translation."
+ ],
+ "topic": "mastery",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "mastery"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Back to the work, then.",
+   "The craft won't practise itself.",
+   "Good talking shop with you."
+  ],
+  "pt": [
+   "De volta ao trabalho, então.",
+   "O ofício não se pratica sozinho.",
+   "Foi bom falar de trabalho com você."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "I'll let you work.",
+  "pt": "Vou deixar você trabalhar."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about the work?",
+   "pt": "Mais alguma coisa sobre o trabalho?"
+  },
+  "leave": {
+   "en": "Back to the work, then.",
+   "pt": "De volta ao trabalho, então."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "The work teaches you, if you let it.",
+    "I'm better at my trade than I was. Not as good as I'll be.",
+    "There's always more to learn in this line."
+   ],
+   "pt": [
+    "O trabalho ensina, se a gente deixa.",
+    "Hoje faço meu ofício melhor do que antes. Não tão bem quanto vou fazer.",
+    "Sempre há mais pra aprender neste ofício."
+   ]
+  },
+  "open": {
+   "subject": "mastery.the_craft",
+   "act": "explain",
+   "polarity": "positive",
+   "predicate": "opinion",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "The craft.",
+    "pt": "O ofício."
+   },
+   "lines": {
+    "en": [
+     "Anyone can do the work. Doing it well takes years and a lot of ruined attempts.",
+     "I learned by watching, then by failing, then by watching again.",
+     "The hands learn before the head does. You'll see what I mean if you ever try it."
+    ],
+    "pt": [
+     "Qualquer um faz o trabalho. Fazer bem leva anos e muita tentativa perdida.",
+     "Aprendi olhando, depois errando, depois olhando de novo.",
+     "As mãos aprendem antes da cabeça. Você vai entender se um dia tentar."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_how_learned",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "How did you learn your trade?",
+      "pt": "Como você aprendeu seu ofício?"
+     },
+     "phrases": [
+      "how did you learn your trade"
+     ],
+     "phrases_pt": [
+      "como voce aprendeu seu oficio"
+     ],
+     "requires_any": [
+      "learn",
+      "trade",
+      "aprendeu",
+      "oficio"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "From someone patient, mostly. I try to pass that patience on.",
+        "One mistake at a time. I've made most of them now."
+       ],
+       "pt": [
+        "Com alguém paciente, principalmente. Tento passar essa paciência adiante.",
+        "Um erro de cada vez. Já cometi quase todos."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "praise_the_work",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Your work shows real skill.",
+      "pt": "Seu trabalho mostra habilidade de verdade."
+     },
+     "phrases": [
+      "your work shows real skill"
+     ],
+     "phrases_pt": [
+      "seu trabalho mostra habilidade de verdade"
+     ],
+     "requires_any": [
+      "skill",
+      "habilidade"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.mastery.praised",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "That means more than you'd think. Thank you.",
+        "I'll take that. It's been a long road to it."
+       ],
+       "pt": [
+        "Isso vale mais do que você imagina. Agradeço.",
+        "Aceito. Foi um longo caminho até aqui."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "anyone_could",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Anyone could do that job.",
+      "pt": "Qualquer um faria esse trabalho."
+     },
+     "phrases": [
+      "anyone could do that job"
+     ],
+     "phrases_pt": [
+      "qualquer um faria esse trabalho"
+     ],
+     "requires_any": [
+      "anyone",
+      "job",
+      "qualquer",
+      "faria"
+     ],
+     "disposition": {
+      "warmth": -2,
+      "respect": -1,
+      "tension": 1
+     },
+     "affection": {
+      "decision": "topic.mastery.belittled",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "resist",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Could they? You're welcome to try tomorrow at dawn.",
+        "Anyone could start it. Finishing it well is another matter."
+       ],
+       "pt": [
+        "Faria? Pode tentar amanhã, ao amanhecer.",
+        "Qualquer um começa. Terminar bem é outra história."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "mastery.what_i_want_to_learn",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "What you still want to learn.",
+    "pt": "O que você ainda quer aprender."
+   },
+   "lines": {
+    "en": [
+     "There's one thing in my trade I still can't do well, and it bothers me more than I let on.",
+     "I'd like to teach someone one day. I'm not sure I know enough yet.",
+     "I watch the best of us and think: one day. Not yet."
+    ],
+    "pt": [
+     "Tem uma coisa no meu ofício que ainda não faço bem, e isso me incomoda mais do que eu deixo transparecer.",
+     "Queria ensinar alguém um dia. Não sei se já sei o bastante.",
+     "Vejo os melhores de nós e penso: um dia. Ainda não."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_what_part",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What's the part you can't get right?",
+      "pt": "Qual é a parte que você não acerta?"
+     },
+     "phrases": [
+      "whats the part you cant get right"
+     ],
+     "phrases_pt": [
+      "qual e a parte que voce nao acerta"
+     ],
+     "requires_any": [
+      "part",
+      "right",
+      "parte",
+      "acerta"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.mastery.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "The fine work, at the end. My hands get impatient just when they shouldn't.",
+        "Knowing when to stop. I always do one thing too many."
+       ],
+       "pt": [
+        "O acabamento, no fim. Minhas mãos ficam impacientes justo quando não deviam.",
+        "Saber quando parar. Sempre faço uma coisa a mais."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "youll_get_there",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "You'll get there. You clearly care about it.",
+      "pt": "Você vai chegar lá. Dá pra ver que você se importa."
+     },
+     "phrases": [
+      "youll get there you clearly care about it"
+     ],
+     "phrases_pt": [
+      "voce vai chegar la da pra ver que voce se importa"
+     ],
+     "requires_any": [
+      "care",
+      "chegar",
+      "importa"
+     ],
+     "disposition": {
+      "warmth": 3
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I hope so. It helps to hear it from someone who isn't me.",
+        "Caring's the easy part. But thank you."
+       ],
+       "pt": [
+        "Espero que sim. Ajuda ouvir isso de alguém que não seja eu.",
+        "Se importar é a parte fácil. Mas agradeço."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "never_will",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "You've had your chance to learn it.",
+      "pt": "Você já teve sua chance de aprender."
+     },
+     "phrases": [
+      "youve had your chance to learn it"
+     ],
+     "phrases_pt": [
+      "voce ja teve sua chance de aprender"
+     ],
+     "requires_any": [
+      "chance"
+     ],
+     "disposition": {
+      "warmth": -3,
+      "tension": 2
+     },
+     "affection": {
+      "decision": "topic.mastery.discouraged",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "resist",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "I've been told that before. I'm still here, still trying.",
+        "Then I'll prove you wrong slowly."
+       ],
+       "pt": [
+        "Já me disseram isso. Continuo aqui, tentando.",
+        "Então vou provar o contrário devagar."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "recognised",
+   "subject": "mastery.rank",
+   "shape": "observe",
+   "act": "celebrate",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.profession_level",
+     "min": 3,
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 40,
+   "cooldown_days": 3,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [
+    "townstead_profession_tier"
+   ],
+   "prompt": {
+    "en": "Where you stand in the trade.",
+    "pt": "Onde você está no ofício."
+   },
+   "lines": {
+    "en": [
+     "They count me a %2$s now. I still feel like I'm catching up.",
+     "%2$s, they say. Took long enough, and I'm not done."
+    ],
+    "pt": [
+     "Agora me contam como %2$s. Ainda sinto que estou correndo atrás.",
+     "%2$s, dizem. Demorou, e ainda não acabou."
+    ]
+   },
+   "replies": [
+    {
+     "name": "congratulate",
+     "stance": "encouragement",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "That's well earned. Congratulations.",
+      "pt": "Isso foi bem merecido. Parabéns."
+     },
+     "phrases": [
+      "thats well earned congratulations"
+     ],
+     "phrases_pt": [
+      "isso foi bem merecido parabens"
+     ],
+     "requires_any": [
+      "earned",
+      "congratulations",
+      "merecido",
+      "parabens"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.mastery.congratulated",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Thank you. I'll try to live up to it.",
+        "Kind of you. Come by and see the work sometime."
+       ],
+       "pt": [
+        "Agradeço. Vou tentar estar à altura.",
+        "Gentileza sua. Passe pra ver o trabalho qualquer dia."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "ask_whats_next",
+     "stance": "curiosity",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What comes after that?",
+      "pt": "O que vem depois disso?"
+     },
+     "phrases": [
+      "what comes after that"
+     ],
+     "phrases_pt": [
+      "o que vem depois disso"
+     ],
+     "requires_any": [
+      "comes",
+      "after",
+      "vem",
+      "depois"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "explained",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "More of the same, done better. That's the only road there is.",
+        "Teaching, maybe. If anyone will learn from me."
+       ],
+       "pt": [
+        "Mais do mesmo, feito melhor. É a única estrada que existe.",
+        "Ensinar, talvez. Se alguém quiser aprender comigo."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  },
+  {
+   "name": "still_learning",
+   "subject": "mastery.learning",
+   "shape": "observe",
+   "act": "report",
+   "polarity": "mixed",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.profession_level",
+     "max": 2,
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 34,
+   "cooldown_days": 3,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [],
+   "prompt": {
+    "en": "Still learning.",
+    "pt": "Ainda aprendendo."
+   },
+   "lines": {
+    "en": [
+     "I'm new to this trade still. Every day I learn something by getting it wrong.",
+     "Ask me in a year. Right now I'm mostly learning what not to do."
+    ],
+    "pt": [
+     "Ainda tenho pouco tempo nesse ofício. Todo dia aprendo algo errando.",
+     "Me pergunte daqui a um ano. Agora estou aprendendo principalmente o que não fazer."
+    ]
+   },
+   "replies": [
+    {
+     "name": "take_it_slowly",
+     "stance": "practical_help",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "Everyone starts somewhere. Take it slowly.",
+      "pt": "Todo mundo começa de algum lugar. Vá com calma."
+     },
+     "phrases": [
+      "everyone starts somewhere take it slowly"
+     ],
+     "phrases_pt": [
+      "todo mundo comeca de algum lugar va com calma"
+     ],
+     "requires_any": [
+      "starts",
+      "slowly",
+      "comeca",
+      "calma"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Slowly. I'll try. The trade doesn't always allow it.",
+        "Good advice. I'll need reminding of it."
+       ],
+       "pt": [
+        "Com calma. Vou tentar. O ofício nem sempre deixa.",
+        "Bom conselho. Vou precisar que me lembrem."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "ask_hardest",
+     "stance": "curiosity",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "What's been hardest to learn?",
+      "pt": "O que foi mais difícil de aprender?"
+     },
+     "phrases": [
+      "whats been hardest to learn"
+     ],
+     "phrases_pt": [
+      "o que foi mais dificil de aprender"
+     ],
+     "requires_any": [
+      "hardest",
+      "dificil"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "explained",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Patience. The materials don't care how fast I want to be.",
+        "Asking for help. I'm getting better at that too."
+       ],
+       "pt": [
+        "Paciência. O material não liga pra pressa que eu tenho.",
+        "Pedir ajuda. Estou melhorando nisso também."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  }
+ ]
+}

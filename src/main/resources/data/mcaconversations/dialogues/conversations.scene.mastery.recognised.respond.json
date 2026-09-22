@@ -1,0 +1,76 @@
+{
+  "answers": [
+    {
+      "name": "congratulate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "mastery.recognised.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.mastery.congratulated",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "mastery.rank",
+              "deltas": {
+                "warmth": 2,
+                "respect": 1
+              }
+            },
+            "next": "conversations.scene.mastery.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.mastery.recognised.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_whats_next",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "mastery.recognised.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "mastery.rank",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.mastery.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.mastery.recognised.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.mastery.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

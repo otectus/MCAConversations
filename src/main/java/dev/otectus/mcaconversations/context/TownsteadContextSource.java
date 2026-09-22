@@ -75,7 +75,7 @@ public final class TownsteadContextSource implements ConversationContextSource {
             }
             builder.put(ContextKeys.TOWNSTEAD_SKILLS, villager.profession().skills());
             builder.put(ContextKeys.TOWNSTEAD_BUILDING,
-                    snapshot.building().present() ? snapshot.building().family() : "");
+                    snapshot.building().present() ? snapshot.building().family() : "none");
         } else {
             for (ContextKey<?> key : List.of(ContextKeys.TOWNSTEAD_ACTIVITY, ContextKeys.TOWNSTEAD_NEED,
                     ContextKeys.TOWNSTEAD_NEED_CRISIS, ContextKeys.TOWNSTEAD_HUNGER, ContextKeys.TOWNSTEAD_THIRST,

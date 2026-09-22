@@ -131,6 +131,22 @@ and without Townstead installed nothing below changes a line.
   `buildingRemovalConfirmScans` sweeps agree, and a villager who could not be read has not changed.
   Nobody gossips about fertility, genes, heritage or a need's actual numbers. Buildings and spirits
   are named in the listener's language through Townstead's and MCA's own translations.
+- **"Life here".** With Townstead running, the conversation hub gains a *Life here* category of
+  eight topics — how a villager is keeping, how their days run, their trade, the years, their
+  people, the places they call home, what the village is becoming, and the calendar — each with an
+  always-available opener and scenes that answer to Townstead's own state: somebody running on an
+  empty stomach, somebody so tired the ground looks soft, somebody mid-shift, a trade level named in
+  Townstead's words, the building they are standing in, the village's spirit, today's date, a
+  festival. All eight can be typed in chat as well as clicked, in both locales, and each has a
+  personality voice for its opening lines. Without Townstead the category and its topics are not
+  offered at all.
+- **Townstead in familiar conversations too.** *How's your day* knows when a villager is mid-shift,
+  *the season* can go by Townstead's calendar, and *life* has something to say from the later years.
+- **Emotion in Townstead's dialogue screen.** Some of these lines carry Townstead's typewriter
+  effects — a sleepy drawl, a whisper, a flash of temper — inside Townstead's own dialogue screen
+  only. The tags live in a separate client file (`assets/mcaconversations/townstead_emotions/`), so
+  chat mode, system chat, text-to-speech and MCA's screen still show clean text; Townstead's own
+  tags always win; and with Townstead absent or changed, the screen simply shows the plain line.
 - **Diagnostics.** `/conversations compat townstead status` for anyone; `probe`, `snapshot` and
   `explain <question> <answer>` for operators, and `snapshot genes` at level 3 for heritage and
   inheritance detail; `/conversations compat namespace` names the MCA package root this build bound.
@@ -154,6 +170,9 @@ and without Townstead installed nothing below changes a line.
   values, and optional bounded attributes on an event. A pre-1.8.0 gossip file loads as before. A
   1.7.x build skips the new event types, ignores the rest, and drops them if it saves the world.
   Removing Townstead leaves the section untouched, so re-adding it carries on where it stopped.
+- Catalog topics accept a strict boolean `townstead`; a topic carrying it is offered only while
+  Townstead's content is live. The `village` chat intent no longer answers questions about a
+  village's *spirit*, which now belong to *Life here*.
 - The MCA binding gains two members, `Village.getBuildings` and `Building.getId`, present in every
   supported MCA version (checked against 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2).
 

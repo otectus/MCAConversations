@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "why_it_fits",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "community.what_they_call_us.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "community.spirit",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.community.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.community.what_they_call_us.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "it_suits_the_place",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "community.what_they_call_us.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "community.spirit",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.community.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.community.what_they_call_us.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.community.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

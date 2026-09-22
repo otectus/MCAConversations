@@ -1,0 +1,564 @@
+{
+ "_comment": [
+  "Townstead registered buildings and the village as a place lived in. The building name is MCA's or Townstead's own translation."
+ ],
+ "topic": "home_and_place",
+ "townstead": true,
+ "entry": {
+  "question": "conversations.cat.townstead",
+  "answer": "home_and_place"
+ },
+ "return_question": "conversations.cat.townstead",
+ "leave_lines": {
+  "en": [
+   "Mind the step on your way out.",
+   "Every corner has a story.",
+   "Come back and see the place again."
+  ],
+  "pt": [
+   "Cuidado com o degrau na saída.",
+   "Cada canto tem uma história.",
+   "Volte pra ver o lugar de novo."
+  ]
+ },
+ "ages": [
+  "teen",
+  "adult"
+ ],
+ "leave_label": {
+  "en": "I'll let you get on.",
+  "pt": "Vou deixar você seguir."
+ },
+ "followup": {
+  "prompt": {
+   "en": "Anything else about the place?",
+   "pt": "Mais alguma coisa sobre o lugar?"
+  },
+  "leave": {
+   "en": "Come back and see it again.",
+   "pt": "Volte pra ver de novo."
+  }
+ },
+ "funnel": {
+  "legacy_lines": {
+   "en": [
+    "Every corner of this village has a story. Some of them are even mine.",
+    "I have my places here. Everyone does.",
+    "Home's where your feet stop aching. Mostly."
+   ],
+   "pt": [
+    "Cada canto deste vilarejo tem uma história. Algumas até são minhas.",
+    "Tenho meus lugares aqui. Todo mundo tem.",
+    "Lar é onde os pés param de doer. Quase sempre."
+   ]
+  },
+  "open": {
+   "subject": "home_and_place.my_places",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "shape": "observe",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "Your places here.",
+    "pt": "Seus lugares aqui."
+   },
+   "lines": {
+    "en": [
+     "There's a bench by the well that's more or less mine now. Nobody's argued.",
+     "I know which floorboards creak in every building I've worked in.",
+     "Some places here feel like mine even though they belong to everyone."
+    ],
+    "pt": [
+     "Tem um banco perto do poço que é mais ou menos meu agora. Ninguém discutiu.",
+     "Sei quais tábuas rangem em cada construção onde já trabalhei.",
+     "Alguns lugares aqui parecem meus, mesmo sendo de todo mundo."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_favourite_spot",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "Where's your favourite spot in the village?",
+      "pt": "Qual é seu lugar preferido no vilarejo?"
+     },
+     "phrases": [
+      "wheres your favourite spot in the village",
+      "where is your favorite spot in the village"
+     ],
+     "phrases_pt": [
+      "qual e seu lugar preferido no vilarejo"
+     ],
+     "requires_any": [
+      "favourite",
+      "favorite",
+      "spot",
+      "preferido"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "The edge of the fields at dusk. You can hear the whole village settle.",
+        "Wherever the bread is warm. I'm simple that way."
+       ],
+       "pt": [
+        "A beira dos campos ao anoitecer. Dá pra ouvir o vilarejo inteiro se acalmar.",
+        "Onde o pão estiver quente. Sou simples assim."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "admire_the_village",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "It's a good village you've all built.",
+      "pt": "Vocês construíram um bom vilarejo."
+     },
+     "phrases": [
+      "its a good village youve all built"
+     ],
+     "phrases_pt": [
+      "voces construiram um bom vilarejo"
+     ],
+     "requires_any": [
+      "built",
+      "construiram"
+     ],
+     "disposition": {
+      "warmth": 2,
+      "respect": 1
+     },
+     "affection": {
+      "decision": "topic.home_and_place.admired",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "We have, haven't we? A stone at a time.",
+        "Thank you. Stay long enough and you'll have built some of it too."
+       ],
+       "pt": [
+        "Construímos, não é? Uma pedra de cada vez.",
+        "Agradeço. Fique tempo suficiente e vai ter construído um pedaço também."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "any_other_village",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "Looks like any other village to me.",
+      "pt": "Pra mim parece qualquer outro vilarejo."
+     },
+     "phrases": [
+      "looks like any other village to me"
+     ],
+     "phrases_pt": [
+      "pra mim parece qualquer outro vilarejo"
+     ],
+     "requires_any": [
+      "looks",
+      "qualquer",
+      "outro"
+     ],
+     "disposition": {
+      "warmth": -2
+     },
+     "affection": {
+      "decision": "topic.home_and_place.belittled",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "qualify",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Then you haven't looked properly yet.",
+        "From the road, maybe. Not from in here."
+       ],
+       "pt": [
+        "Então você ainda não olhou direito.",
+        "Da estrada, talvez. Não daqui de dentro."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  },
+  "more": {
+   "subject": "home_and_place.what_i_miss",
+   "act": "disclose",
+   "polarity": "mixed",
+   "predicate": "disclosure",
+   "temporal": "current",
+   "privacy": "discreet",
+   "shape": "confide",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "prompt": {
+    "en": "A place you miss.",
+    "pt": "Um lugar do qual você sente falta."
+   },
+   "lines": {
+    "en": [
+     "There was a house here once, before the new ones. I still walk around where it stood.",
+     "I miss the old path to the river. They paved it, and it's easier, and I miss it.",
+     "The first room I ever had to myself is someone's storeroom now. I don't go in."
+    ],
+    "pt": [
+     "Tinha uma casa aqui, antes das novas. Ainda dou a volta onde ela ficava.",
+     "Sinto falta do caminho antigo até o rio. Calçaram, ficou mais fácil, e eu sinto falta.",
+     "O primeiro quarto que tive só pra mim hoje é depósito de alguém. Eu não entro."
+    ]
+   },
+   "replies": [
+    {
+     "name": "ask_back_then",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "gentle",
+     "outcome": "engaged",
+     "label": {
+      "en": "What was it like, back then?",
+      "pt": "Como era naquela época?"
+     },
+     "phrases": [
+      "what was it like back then"
+     ],
+     "phrases_pt": [
+      "como era naquela epoca"
+     ],
+     "requires_any": [
+      "back",
+      "then",
+      "naquela",
+      "epoca"
+     ],
+     "disposition": {
+      "familiarity": 3,
+      "trust": 1
+     },
+     "affection": {
+      "decision": "topic.home_and_place.asked_after",
+      "delta": 1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "mixed",
+      "shape": "confide",
+      "lines": {
+       "en": [
+        "Smaller. Louder. Everybody knew whose goat was loose.",
+        "Rougher, but you could see the stars better. Fewer lanterns."
+       ],
+       "pt": [
+        "Menor. Mais barulhento. Todo mundo sabia de quem era a cabra solta.",
+        "Mais rústico, mas dava pra ver melhor as estrelas. Menos lanternas."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2,
+      "privacy": "discreet"
+     }
+    },
+    {
+     "name": "still_there",
+     "stance": "empathy",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "It's still there as long as you remember it.",
+      "pt": "Continua existindo enquanto você lembrar."
+     },
+     "phrases": [
+      "its still there as long as you remember it"
+     ],
+     "phrases_pt": [
+      "continua existindo enquanto voce lembrar"
+     ],
+     "requires_any": [
+      "remember",
+      "lembrar"
+     ],
+     "disposition": {
+      "warmth": 3
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "That's a kind way to put it. I'll hold on to that.",
+        "Maybe. I'll try to remember it properly, then."
+       ],
+       "pt": [
+        "É um jeito gentil de dizer. Vou guardar isso.",
+        "Talvez. Então vou tentar lembrar direito."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "new_is_better",
+     "stance": "dismissal",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "blunt",
+     "outcome": "rebuffed",
+     "label": {
+      "en": "New is better. Let it go.",
+      "pt": "O novo é melhor. Deixe pra lá."
+     },
+     "phrases": [
+      "new is better let it go"
+     ],
+     "phrases_pt": [
+      "o novo e melhor deixe pra la"
+     ],
+     "requires_any": [
+      "better",
+      "novo",
+      "melhor"
+     ],
+     "disposition": {
+      "warmth": -1,
+      "tension": 1
+     },
+     "affection": {
+      "decision": "topic.home_and_place.dismissed",
+      "delta": -1,
+      "budget": "quick",
+      "policy": "once"
+     },
+     "reaction": {
+      "id": "closed",
+      "act": "resist",
+      "polarity": "negative",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "Sometimes. Not always. Not this time.",
+        "You weren't here for the old. That's the difference."
+       ],
+       "pt": [
+        "Às vezes. Nem sempre. Não desta vez.",
+        "Você não viu o antigo. Essa é a diferença."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred"
+  }
+ },
+ "scenes": [
+  {
+   "name": "this_building",
+   "subject": "home_and_place.this_building",
+   "shape": "observe",
+   "act": "report",
+   "polarity": "positive",
+   "predicate": "observation",
+   "temporal": "current",
+   "obligations": [
+    "clarify",
+    "acknowledge"
+   ],
+   "conditions": [
+    {
+     "field": "townstead.building",
+     "is": "none",
+     "not": true,
+     "unknown": "fail"
+    }
+   ],
+   "integrations": [
+    "townstead"
+   ],
+   "base_priority": 36,
+   "cooldown_days": 3,
+   "max_mentions_per_7_days": 2,
+   "vars_used": [
+    "townstead_building"
+   ],
+   "prompt": {
+    "en": "This place.",
+    "pt": "Este lugar."
+   },
+   "lines": {
+    "en": [
+     "The %2$s is where I spend most of my hours. I know every corner of it.",
+     "You've caught me at the %2$s. It's half my home, some weeks."
+    ],
+    "pt": [
+     "É aqui que passo a maior parte das horas: %2$s. Conheço cada canto.",
+     "Você me pegou aqui, %2$s. Em algumas semanas é metade da minha casa."
+    ]
+   },
+   "replies": [
+    {
+     "name": "tell_about_this_place",
+     "stance": "curiosity",
+     "answers": [
+      "clarify"
+     ],
+     "tone": "plain",
+     "outcome": "engaged",
+     "label": {
+      "en": "Tell me about this place.",
+      "pt": "Me fale deste lugar."
+     },
+     "phrases": [
+      "tell me about this place"
+     ],
+     "phrases_pt": [
+      "me fale deste lugar"
+     ],
+     "requires_any": [
+      "place",
+      "lugar"
+     ],
+     "disposition": {
+      "familiarity": 2
+     },
+     "reaction": {
+      "id": "told",
+      "act": "explain",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "It was built with more care than it looks. The corners are square, which is rarer than you'd think.",
+        "Everyone passes through here eventually. You hear all the news."
+       ],
+       "pt": [
+        "Foi construído com mais cuidado do que parece. Os cantos estão no esquadro, o que é mais raro do que se pensa.",
+        "Todo mundo passa por aqui um dia. A gente ouve todas as notícias."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    },
+    {
+     "name": "well_kept",
+     "stance": "encouragement",
+     "answers": [
+      "acknowledge"
+     ],
+     "tone": "gentle",
+     "outcome": "appreciated",
+     "label": {
+      "en": "It's well kept.",
+      "pt": "Isto aqui está bem cuidado."
+     },
+     "phrases": [
+      "its well kept"
+     ],
+     "phrases_pt": [
+      "isto aqui esta bem cuidado"
+     ],
+     "requires_any": [
+      "kept",
+      "cuidado"
+     ],
+     "disposition": {
+      "warmth": 2
+     },
+     "reaction": {
+      "id": "thanked",
+      "act": "accept",
+      "polarity": "positive",
+      "shape": "observe",
+      "lines": {
+       "en": [
+        "We try. Somebody always tracks mud in anyway.",
+        "Thank you. I'll tell the others."
+       ],
+       "pt": [
+        "A gente tenta. Alguém sempre entra com lama mesmo assim.",
+        "Agradeço. Vou contar pros outros."
+       ]
+      },
+      "epistemic": "inferred",
+      "temporal": "current",
+      "min_variants": 2
+     }
+    }
+   ],
+   "epistemic": "inferred",
+   "min_variants": 2
+  }
+ ]
+}

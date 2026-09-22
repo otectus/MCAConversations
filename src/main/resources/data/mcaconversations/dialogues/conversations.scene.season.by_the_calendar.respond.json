@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "what_this_time_brings",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "season.by_the_calendar.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.by_the_calendar",
+              "deltas": {
+                "familiarity": 1
+              }
+            },
+            "next": "conversations.scene.season.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.season.by_the_calendar.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "offer_a_hand_with_it",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "season.by_the_calendar.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "season.by_the_calendar",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.season.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.season.by_the_calendar.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.chitchat",
+            "conversations_say": {
+              "phrase": "conversations.scene.season.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

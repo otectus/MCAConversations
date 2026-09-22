@@ -1,0 +1,69 @@
+{
+  "answers": [
+    {
+      "name": "whats_due_now",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "calendar.todays_date.open.explained"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.today",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.calendar.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.todays_date.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "good_to_keep_track",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "calendar.todays_date.open.thanked"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.today",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.calendar.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.todays_date.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

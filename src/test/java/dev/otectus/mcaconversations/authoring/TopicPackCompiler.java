@@ -56,6 +56,11 @@ final class TopicPackCompiler {
         }
         out.ownTopicCivicContact(topic,
                 source.has("civic_contact") && source.get("civic_contact").getAsBoolean());
+        if (source.has("townstead") && (!source.get("townstead").isJsonPrimitive()
+                || !source.get("townstead").getAsJsonPrimitive().isBoolean())) {
+            throw new IllegalStateException(where + " has a non-boolean townstead");
+        }
+        out.ownTopicTownstead(topic, source.has("townstead") && source.get("townstead").getAsBoolean());
     }
 
     void compile() {

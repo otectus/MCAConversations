@@ -1,0 +1,105 @@
+{
+  "answers": [
+    {
+      "name": "ask_favourite_time",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "calendar.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.the_time_of_year",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.topic.calendar.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.calendar.open.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "invite_to_feast",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "calendar.open.agreed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.calendar.invited_self",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.the_time_of_year",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.calendar.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.calendar.open.agreed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "every_day_the_same",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "calendar.open.closed"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.calendar.dismissed",
+              "delta": -1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.the_time_of_year",
+              "deltas": {
+                "warmth": -1
+              }
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.calendar.open.closed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

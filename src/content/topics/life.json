@@ -319,6 +319,142 @@
         }
       ],
       "epistemic": "inferred"
+    },
+    {
+      "name": "a_long_life",
+      "subject": "life.a_long_life",
+      "shape": "observe",
+      "act": "reminisce",
+      "polarity": "positive",
+      "predicate": "opinion",
+      "temporal": "current",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "townstead.age",
+          "is": "senior",
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "townstead"
+      ],
+      "base_priority": 30,
+      "cooldown_days": 5,
+      "max_mentions_per_7_days": 2,
+      "vars_used": [],
+      "prompt": {
+        "en": "A long life.",
+        "pt": "Uma vida longa."
+      },
+      "lines": {
+        "en": [
+          "I've lived a long life here. Most of it was ordinary, and I'd do all of it again.",
+          "At my age you stop keeping score. You just keep the people."
+        ],
+        "pt": [
+          "Vivi uma vida longa aqui. Quase tudo foi comum, e eu faria tudo de novo.",
+          "Na minha idade a gente para de contar pontos. Só guarda as pessoas."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_best_part",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "gentle",
+          "outcome": "engaged",
+          "label": {
+            "en": "What was the best part?",
+            "pt": "Qual foi a melhor parte?"
+          },
+          "phrases": [
+            "what was the best part"
+          ],
+          "phrases_pt": [
+            "qual foi a melhor parte"
+          ],
+          "requires_any": [
+            "best",
+            "melhor"
+          ],
+          "disposition": {
+            "familiarity": 2
+          },
+          "reaction": {
+            "id": "told",
+            "act": "explain",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "The quiet years in the middle. Nobody writes songs about them, but they were the best.",
+                "The people. It's always the people."
+              ],
+              "pt": [
+                "Os anos tranquilos do meio. Ninguém faz canção sobre eles, mas foram os melhores.",
+                "As pessoas. Sempre as pessoas."
+              ]
+            },
+            "epistemic": "inferred",
+            "temporal": "current",
+            "min_variants": 2
+          }
+        },
+        {
+          "name": "well_lived",
+          "stance": "encouragement",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "gentle",
+          "outcome": "appreciated",
+          "label": {
+            "en": "It sounds like a life well lived.",
+            "pt": "Parece uma vida bem vivida."
+          },
+          "phrases": [
+            "it sounds like a life well lived"
+          ],
+          "phrases_pt": [
+            "parece uma vida bem vivida"
+          ],
+          "requires_any": [
+            "lived",
+            "vivida"
+          ],
+          "disposition": {
+            "warmth": 2,
+            "respect": 1
+          },
+          "reaction": {
+            "id": "thanked",
+            "act": "accept",
+            "polarity": "positive",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I think it was. Thank you for saying so.",
+                "Well lived, and not finished yet."
+              ],
+              "pt": [
+                "Acho que foi. Agradeço por dizer isso.",
+                "Bem vivida, e ainda não acabou."
+              ]
+            },
+            "epistemic": "inferred",
+            "temporal": "current",
+            "min_variants": 2
+          }
+        }
+      ],
+      "epistemic": "inferred",
+      "min_variants": 2
     }
   ]
 }

@@ -1,0 +1,75 @@
+{
+  "answers": [
+    {
+      "name": "how_you_celebrate",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "calendar.festival_days.open.told"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.festival",
+              "deltas": {
+                "familiarity": 2
+              }
+            },
+            "next": "conversations.scene.calendar.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.festival_days.told"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "happy_festival",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "calendar.festival_days.open.thanked"
+            },
+            "conversations_affection_apply": {
+              "decision": "topic.calendar.wished",
+              "delta": 1,
+              "budget": "quick",
+              "policy": "once"
+            },
+            "conversations_disposition_apply": {
+              "topic": "calendar.festival",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.scene.calendar.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.festival_days.thanked"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.townstead",
+            "conversations_say": {
+              "phrase": "conversations.scene.calendar.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
