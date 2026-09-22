@@ -2,8 +2,8 @@
 """Verify shared release content and the reviewed Minecraft/loader adaptations.
 
 Usage: python3 tools/verify_release_parity.py --forge PATH --neoforge PATH
-           [--manifest docs/parity-<release>-adaptations.json]
-Without --manifest the newest docs/parity-*-adaptations.json in this repository is used, "newest"
+           [--manifest tools/parity/parity-<release>-adaptations.json]
+Without --manifest the newest tools/parity/parity-*-adaptations.json in this repository is used, "newest"
 meaning the highest release version parsed from the filename, not the highest string. A relative
 --manifest is resolved against this repository, not the caller's working directory.
 Every shared file is compared. Platform differences are pinned to reviewed hashes;
@@ -89,7 +89,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def release_key(path):
-    """Sort key for docs/parity-<release>-adaptations.json, by version rather than by string,
+    """Sort key for tools/parity/parity-<release>-adaptations.json, by version rather than by string,
     so 1.10.0 sorts after 1.9.0 and a non-numeric part sorts before any number."""
     version = path.name[len('parity-'):-len('-adaptations.json')]
     return tuple((0, int(part)) if part.isdigit() else (-1, 0)
@@ -97,9 +97,9 @@ def release_key(path):
 
 
 def newest_manifest():
-    manifests = sorted((ROOT / 'docs').glob('parity-*-adaptations.json'), key=release_key)
+    manifests = sorted((ROOT / 'tools' / 'parity').glob('parity-*-adaptations.json'), key=release_key)
     if not manifests:
-        raise SystemExit(f'No parity manifest found under {ROOT / "docs"}')
+        raise SystemExit(f'No parity manifest found under {ROOT / "tools" / "parity"}')
     return manifests[-1]
 
 
@@ -109,7 +109,7 @@ def main():
     parser.add_argument('--neoforge', type=Path, required=True)
     parser.add_argument('--manifest', type=Path, default=None,
                         help='adaptation manifest; a relative path is resolved against this '
-                             'repository. Defaults to the newest docs/parity-*-adaptations.json.')
+                             'repository. Defaults to the newest tools/parity/parity-*-adaptations.json.')
     args = parser.parse_args()
     path = newest_manifest() if args.manifest is None else ROOT / args.manifest
     manifest = json.loads(path.read_text())

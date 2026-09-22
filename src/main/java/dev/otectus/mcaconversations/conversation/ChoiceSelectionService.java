@@ -146,7 +146,7 @@ public final class ChoiceSelectionService {
         if (!McaCompat.checkConstraints(villager, player, question, answer)
                 // The same age allow-list the GUI answer list and the direct packet enforce; a
                 // numbered reply must not be a way around it.
-                || !TopicAgeGate.allows(question, answer, villager)) {
+                || !TopicGate.allows(question, answer, villager, player)) {
             return reject(player, revision, ChoiceOutcome.REQUIREMENTS_CHANGED);
         }
         // Claim the offer before anything runs: exactly one attempt per offer, whatever the attempt

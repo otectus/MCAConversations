@@ -5717,6 +5717,283 @@
       ]
     },
     {
+      "name": "guild_contact",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.guild_contact.introduction_ready"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.introduction_ready",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "guild_contact",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "guild_contact.introduction_ready.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.guild_contact",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.guild_contact.introduction_ready.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.introduction_ready",
+              "vars": [
+                "civic_organization"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.guild_contact.commissions_ready"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.commissions_ready",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "guild_contact",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "guild_contact.commissions_ready.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.guild_contact",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.guild_contact.commissions_ready.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.commissions_ready",
+              "vars": [
+                "civic_organization"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.guild_contact.qualification_recovery"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.qualification_recovery",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "guild_contact",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "guild_contact.qualification_recovery.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.guild_contact",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.guild_contact.qualification_recovery.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.qualification_recovery",
+              "vars": [
+                "civic_organization"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 900,
+              "conversations_scene": {
+                "is": "topic.guild_contact.workshop_unavailable"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.workshop_unavailable",
+                "not": true
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "dynamic"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "guild_contact",
+              "budget": "standard",
+              "branch": "scene",
+              "beat": "guild_contact.workshop_unavailable.open"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.guild_contact",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.scene.guild_contact.workshop_unavailable.respond",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.workshop_unavailable",
+              "vars": [
+                "civic_organization"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 800,
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.introduction_ready"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.commissions_ready"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.qualification_recovery"
+              }
+            },
+            {
+              "chance": -5000,
+              "conversations_scene": {
+                "is": "topic.guild_contact.workshop_unavailable"
+              }
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "guild_contact",
+              "budget": "quick",
+              "branch": "funnel",
+              "beat": "guild_contact.open"
+            },
+            "next": "conversations.topic.guild_contact.open.respond",
+            "conversations_say": {
+              "phrase": "conversations.guild_contact.open",
+              "slots": [
+                "civic_organization"
+              ]
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "actions": {
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.guild_contact.legacy"
+            }
+          },
+          "conditions": [
+            {
+              "chance": -2000,
+              "conversations_enabled": "branching"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "back",
       "results": [
         {

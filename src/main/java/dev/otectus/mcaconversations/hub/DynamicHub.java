@@ -3,10 +3,10 @@ package dev.otectus.mcaconversations.hub;
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.FeatureId;
-import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.AgeGroup;
 import dev.otectus.mcaconversations.conversation.ConversationCatalog;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.TopicGate;
 import dev.otectus.mcaconversations.history.EpisodeRecord;
 import dev.otectus.mcaconversations.history.History;
 import dev.otectus.mcaconversations.history.NarrativeCatalogLoader;
@@ -140,7 +140,7 @@ public final class DynamicHub {
                                 records::episode, today))
                         .orElse(List.of()),
                 live, player.getUUID(), slotBudget());
-        return withoutTopicsTooOldFor(plan, McaCompat.ageGroup(villager));
+        return withoutUnavailableTopics(plan, villager, player);
     }
 
     /**
@@ -153,6 +153,18 @@ public final class DynamicHub {
         List<HubSlot> kept = new ArrayList<>(plan.slots().size());
         for (HubSlot slot : plan.slots()) {
             if (catalog.topic(slot.topic()).map(entry -> entry.allowsAge(age)).orElse(true)) {
+                kept.add(slot);
+            }
+        }
+        return kept.size() == plan.slots().size() ? plan : new HubPlan(kept);
+    }
+
+    /** Drops every slot whose catalog age, kingdom or standing restriction no longer passes. */
+    static HubPlan withoutUnavailableTopics(HubPlan plan, Entity villager, ServerPlayer player) {
+        ConversationCatalog catalog = ConversationCatalogLoader.active();
+        List<HubSlot> kept = new ArrayList<>(plan.slots().size());
+        for (HubSlot slot : plan.slots()) {
+            if (catalog.topic(slot.topic()).map(entry -> TopicGate.allows(entry, villager, player)).orElse(true)) {
                 kept.add(slot);
             }
         }

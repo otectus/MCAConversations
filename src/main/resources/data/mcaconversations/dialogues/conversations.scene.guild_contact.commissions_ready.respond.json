@@ -1,0 +1,61 @@
+{
+  "answers": [
+    {
+      "name": "request_commissions",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "guild_contact.commissions_ready.open.requested"
+            },
+            "conversations_civic": "commissions",
+            "next": "conversations.scene.guild_contact.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.commissions_ready.requested",
+              "vars": [
+                "civic_organization"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_requirements",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "guild_contact.commissions_ready.open.explained"
+            },
+            "next": "conversations.scene.guild_contact.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.commissions_ready.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

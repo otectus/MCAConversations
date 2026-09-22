@@ -49,6 +49,13 @@ final class TopicPackCompiler {
         this.entryAnswer = ContentCompiler.require(entry, "answer", where);
         this.ages = ContentCompiler.strings(source, "ages").isEmpty()
                 ? List.of("teen", "adult") : ContentCompiler.strings(source, "ages");
+        out.ownTopicKingdomGate(topic, source.get("kingdom_gate"));
+        if (source.has("civic_contact") && (!source.get("civic_contact").isJsonPrimitive()
+                || !source.get("civic_contact").getAsJsonPrimitive().isBoolean())) {
+            throw new IllegalStateException(where + " has a non-boolean civic_contact");
+        }
+        out.ownTopicCivicContact(topic,
+                source.has("civic_contact") && source.get("civic_contact").getAsBoolean());
     }
 
     void compile() {
@@ -432,6 +439,13 @@ final class TopicPackCompiler {
             disposition.add("deltas", reply.get("disposition"));
             actions.add("conversations_disposition_apply", disposition);
         }
+        if (reply.has("civic_action")) {
+            String civicAction = reply.get("civic_action").getAsString();
+            if (!Set.of("introduction", "commissions").contains(civicAction)) {
+                throw new IllegalStateException(replyKey + " has unknown civic_action '" + civicAction + "'");
+            }
+            actions.addProperty("conversations_civic", civicAction);
+        }
         if (reply.has("claim")) {
             JsonObject claim = new JsonObject();
             claim.addProperty("op", "record");
@@ -804,6 +818,13 @@ final class TopicPackCompiler {
             disposition.add("deltas", reply.get("disposition"));
             actions.add("conversations_disposition_apply", disposition);
         }
+        if (reply.has("civic_action")) {
+            String civicAction = reply.get("civic_action").getAsString();
+            if (!Set.of("introduction", "commissions").contains(civicAction)) {
+                throw new IllegalStateException(replyKey + " has unknown civic_action '" + civicAction + "'");
+            }
+            actions.addProperty("conversations_civic", civicAction);
+        }
         actions.addProperty("next", responseQuestion);
         actions.add("conversations_say", sayAction(reactionSay, List.of()));
 
@@ -854,7 +875,9 @@ final class TopicPackCompiler {
         JsonObject actions = new JsonObject();
         actions.add("conversations_session", session);
         actions.addProperty("next", funnelQuestionId(true));
-        actions.add("conversations_say", sayAction("conversations." + topic + ".open", List.of()));
+        JsonObject funnelOpen = ContentCompiler.object(ContentCompiler.object(source, "funnel"), "open");
+        actions.add("conversations_say", sayAction("conversations." + topic + ".open",
+                ContentCompiler.strings(funnelOpen, "vars_used")));
 
         JsonObject route = new JsonObject();
         route.addProperty("baseChance", 800);

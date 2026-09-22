@@ -229,6 +229,15 @@ public final class ConversationsReputationCompat implements ReputationBridge.Rep
     }
 
     @Override
+    public OptionalInt localScore(ServerPlayer player, Entity villager) {
+        Optional<CommunityKey> key = community(villager);
+        if (key.isEmpty()) {
+            return OptionalInt.empty();
+        }
+        return OptionalInt.of(McaReputationApi.getScoreOrZero(player.server, player.getUUID(), key.get()));
+    }
+
+    @Override
     public String tierId(ServerPlayer player, Entity villager) {
         return community(villager)
                 .map(key -> McaReputationApi.getTierId(player.server, player.getUUID(), key))

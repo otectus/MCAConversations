@@ -4,11 +4,81 @@ All notable changes to this project will be documented in this file. Format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow SemVer.
 
 Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA Reborn
-`[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.8)`. As of 1.6.3, this release is built against the
+`[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.8)`, Ultima Kingdoms `[0.1,)`. As of 1.6.3, this release is built against the
 compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.6.0, vendored in `libs/api/` and hash-pinned by `gradle/sibling-apis.properties`; those jars are not packaged.
 
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
+
+## [1.7.3] - unreleased
+
+Ultima Kingdoms support. Villages now belong to kingdoms and guilds have villagers who speak for
+them, and a topic can be offered only where that is true. This release is about those restrictions
+holding on every way into a conversation, and failing closed when Ultima cannot answer.
+
+A build of this code was distributed inside Ultima Kingdoms' own integration packs under the version
+number 1.7.2. It is the same source as this release apart from the three fixes listed under *Fixed*;
+replace that jar with this one. The network protocol is unchanged at 4, so a 1.7.1 or 1.7.2 client
+still pairs with a 1.7.3 server.
+
+Ultima Kingdoms has no NeoForge 1.21.1 release yet. This port carries the same reflective bridge and
+the same content so the two loaders stay one deliverable; until Ultima ships here the bridge stays
+inert, `guild_contact` never appears, and every kingdom-gated topic stays hidden unless its gate
+explicitly allows an unknown answer.
+
+### Added
+
+- **A topic can belong to a kingdom.** A catalog row or topic pack may carry a `kingdom_gate`: which
+  kingdoms, judged by whose residence or origin, and optionally how the player stands with that
+  kingdom's faction. The topic is then hidden wherever the gate fails, before it is ever offered — in
+  the dialogue screen, a direct submission, a numbered reply, typed chat and the dynamic hub alike.
+  The same gate is available one level down as the `conversations_kingdom` result condition, so a
+  topic everybody can open can still have a villager born in one kingdom talk about home differently
+  from their neighbours. The gate's shape is published as a JSON schema at
+  `assets/mcaconversations/schemas/kingdom_gate.schema.json`, and an unknown key or a malformed id is
+  refused at reload rather than quietly read as "no restriction".
+- **Guild contacts.** A villager Ultima has appointed to speak for a guild can now be asked about it.
+  The new `guild_contact` topic (Village category, adults only) explains what the guild can do for
+  you and, if you qualify, puts in a request for an introduction to another chapter or for the
+  guild's commissions. Ultima decides whether you qualify and where an introduction leads; the
+  villager only relays its answer, to you alone, and never learns or repeats the destination. Asking
+  moves no hearts, no disposition and no opinion: being qualified by an institution is not the same as
+  being liked by the person at the counter.
+- **For pack authors:** `civic_contact` on a topic, the `conversations_civic` action (and
+  `civic_action` on a topic-pack reply, which compiles to it), eleven `civic.*` context fields and the
+  `civic_organization` template variable. All of it is documented in `DATAPACK.md` under *Kingdom
+  gates and civic contacts*.
+
+### Changed
+
+- **One gate for every way into a topic.** The catalog's age allow-list, the kingdom gate and the
+  civic-contact requirement are now decided by a single `TopicGate`, and every entry path asks it —
+  including the dynamic hub, which used to check age on its own.
+- **A starter on somebody else's question is protected too.** A dialogue-screen submission is now
+  routed through this mod's one-shot executor whenever its question and answer are a catalog starter,
+  not only when the question is one of this mod's own. A topic a pack merges into MCA's `greet`, or
+  into a category page of its own, can no longer be submitted past its gates by a crafted packet.
+- **A gate that cannot be evaluated hides what it guards.** If the answer-list filter fails, every
+  starter carrying a kingdom or civic restriction is removed from the menu; age-only and unrestricted
+  answers are left as MCA offered them, as before. A kingdom gate whose Ultima call fails is a closed
+  gate, whatever its `when_unknown` says.
+- **"Unavailable" and "zero standing" are no longer the same answer.** The Reputation bridge can now
+  report that a local standing could not be resolved at all, which a faction-standing gate needs in
+  order not to treat an unknown community as a neutral one.
+- A topic's opening line now receives the template variables its `funnel.open.vars_used` declares,
+  which the generated guild-contact openers rely on for the guild's name.
+
+### Fixed
+
+- **A typo in `civic_contact` no longer opens a civic topic to everybody.** The flag was read leniently,
+  so `1`, `"yes"` or any other non-boolean value became `false` — an ungated topic. Anything but a JSON
+  `true` or `false` is now refused, at generation and at reload.
+- **The answer-list filter can no longer throw into MCA.** Its recovery path read the catalog again
+  unguarded; a second failure there would have escaped into MCA's own answer listing. It is now
+  contained and logged once.
+- **A guild request that never reaches Ultima says so in words.** With Ultima Kingdoms absent the
+  reply used a translation key only Ultima ships, so a player would have seen the raw key. It now uses
+  `mcaconversations.civic.unavailable`, in both locales.
 
 ## [1.7.2] - unreleased
 

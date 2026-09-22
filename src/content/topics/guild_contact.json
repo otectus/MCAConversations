@@ -1,0 +1,861 @@
+{
+  "_comment": [
+    "Requester-scoped civic contact conversation. Ultima owns qualification, policy, destinations and service effects; dialogue only explains and dispatches a revalidated request."
+  ],
+  "topic": "guild_contact",
+  "civic_contact": true,
+  "entry": {
+    "question": "conversations.cat.village",
+    "answer": "guild_contact"
+  },
+  "return_question": "conversations.cat.village",
+  "leave_lines": {
+    "en": [
+      "We can leave the guild's business there.",
+      "That is enough guild business for now.",
+      "We can speak about the guild another time."
+    ],
+    "pt": [
+      "Podemos deixar os assuntos da guilda por aqui.",
+      "Já chega de assuntos da guilda por enquanto.",
+      "Podemos falar sobre a guilda em outro momento."
+    ]
+  },
+  "ages": [
+    "adult"
+  ],
+  "leave_label": {
+    "en": "That answers my question.",
+    "pt": "Isso responde à minha pergunta."
+  },
+  "followup": {
+    "prompt": {
+      "en": "Anything else about the guild's work?",
+      "pt": "Mais alguma coisa sobre o trabalho da guilda?"
+    },
+    "leave": {
+      "en": "That is enough guild business for now.",
+      "pt": "Já chega de assuntos da guilda por enquanto."
+    }
+  },
+  "scenes": [
+    {
+      "name": "introduction_ready",
+      "subject": "guild_contact.introduction",
+      "shape": "problem_solve",
+      "act": "offer_work",
+      "polarity": "neutral",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "civic.introduction_qualified",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "ultima_kingdoms"
+      ],
+      "base_priority": 40,
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "vars_used": [
+        "civic_organization"
+      ],
+      "prompt": {
+        "en": "An introduction through %2$s.",
+        "pt": "Uma apresentação por meio de %2$s."
+      },
+      "lines": {
+        "en": [
+          "I can put your name forward through %2$s. The institution will decide what can be disclosed.",
+          "%2$s allows me to request an introduction for you. The answer still comes from its current records.",
+          "I can explain what %2$s permits from this contact at the moment."
+        ],
+        "pt": [
+          "Posso apresentar seu nome por meio de %2$s. A instituição decidirá o que pode ser revelado.",
+          "%2$s permite que eu solicite uma apresentação para você. A resposta ainda vem dos registros atuais.",
+          "Posso explicar o que %2$s permite por meio deste contato no momento."
+        ]
+      },
+      "replies": [
+        {
+          "name": "request_introduction",
+          "stance": "practical_help",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Please request the introduction.",
+            "pt": "Por favor, solicite a apresentação."
+          },
+          "phrases": [
+            "please request the introduction"
+          ],
+          "phrases_pt": [
+            "por favor solicite a apresentacao"
+          ],
+          "requires_any": [
+            "request",
+            "introduction",
+            "solicite",
+            "apresentacao"
+          ],
+          "civic_action": "introduction",
+          "reaction": {
+            "id": "requested",
+            "act": "report",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I'll ask now. Listen for the institution's answer."
+              ],
+              "pt": [
+                "Vou perguntar agora. Aguarde a resposta da instituição."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        },
+        {
+          "name": "ask_what_this_means",
+          "stance": "curiosity",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What does the introduction reveal?",
+            "pt": "O que a apresentação revela?"
+          },
+          "phrases": [
+            "what does the introduction reveal"
+          ],
+          "phrases_pt": [
+            "o que a apresentacao revela"
+          ],
+          "requires_any": [
+            "reveal",
+            "introduction",
+            "revela",
+            "apresentacao"
+          ],
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "Only what %2$s is prepared to share with you now. I won't name a destination before it does."
+              ],
+              "pt": [
+                "Apenas o que %2$s estiver disposta a compartilhar agora. Não vou indicar um destino antes disso."
+              ]
+            },
+            "vars_used": [
+              "civic_organization"
+            ],
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        }
+      ],
+      "min_variants": 3,
+      "epistemic": "observed"
+    },
+    {
+      "name": "commissions_ready",
+      "subject": "guild_contact.commissions",
+      "shape": "problem_solve",
+      "act": "offer_work",
+      "polarity": "neutral",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "civic.commission_qualified",
+          "is": true,
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "ultima_kingdoms"
+      ],
+      "base_priority": 39,
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "vars_used": [
+        "civic_organization"
+      ],
+      "prompt": {
+        "en": "Available work from %2$s.",
+        "pt": "Trabalho disponível em %2$s."
+      },
+      "lines": {
+        "en": [
+          "%2$s has a curated list of ordinary work I may show you. Every offer keeps its own requirements.",
+          "I can open %2$s's commission list. Accepting one still follows the quest giver's normal rules.",
+          "I can explain what %2$s permits from this contact at the moment."
+        ],
+        "pt": [
+          "%2$s tem uma lista selecionada de trabalhos comuns que posso mostrar. Cada oferta mantém seus próprios requisitos.",
+          "Posso abrir a lista de comissões de %2$s. Aceitar uma ainda segue as regras normais do responsável pela missão.",
+          "Posso explicar o que %2$s permite por meio deste contato no momento."
+        ]
+      },
+      "replies": [
+        {
+          "name": "request_commissions",
+          "stance": "practical_help",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Show me the available commissions.",
+            "pt": "Mostre as comissões disponíveis."
+          },
+          "phrases": [
+            "show me the available commissions"
+          ],
+          "phrases_pt": [
+            "mostre as comissoes disponiveis"
+          ],
+          "requires_any": [
+            "show",
+            "commissions",
+            "mostre",
+            "comissoes"
+          ],
+          "civic_action": "commissions",
+          "reaction": {
+            "id": "requested",
+            "act": "report",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I'll ask %2$s for the work it can offer you now."
+              ],
+              "pt": [
+                "Vou consultar %2$s sobre o trabalho que pode oferecer agora."
+              ]
+            },
+            "vars_used": [
+              "civic_organization"
+            ],
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        },
+        {
+          "name": "ask_about_requirements",
+          "stance": "curiosity",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Do these offers bypass normal requirements?",
+            "pt": "Essas ofertas ignoram os requisitos normais?"
+          },
+          "phrases": [
+            "do these offers bypass normal requirements"
+          ],
+          "phrases_pt": [
+            "essas ofertas ignoram os requisitos normais"
+          ],
+          "requires_any": [
+            "requirements",
+            "bypass",
+            "requisitos",
+            "ignoram"
+          ],
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "No. The list is curated, but each offer remains an ordinary quest with its own checks and cooldowns."
+              ],
+              "pt": [
+                "Não. A lista é selecionada, mas cada oferta continua sendo uma missão comum com suas próprias verificações e esperas."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        }
+      ],
+      "min_variants": 3,
+      "epistemic": "observed"
+    },
+    {
+      "name": "qualification_recovery",
+      "subject": "guild_contact.recovery",
+      "shape": "teach_back",
+      "act": "explain",
+      "polarity": "neutral",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "civic.services_available",
+          "is": true,
+          "unknown": "fail"
+        },
+        {
+          "field": "civic.introduction_qualified",
+          "is": false,
+          "unknown": "fail"
+        },
+        {
+          "field": "civic.commission_qualified",
+          "is": false,
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "ultima_kingdoms"
+      ],
+      "base_priority": 35,
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "vars_used": [
+        "civic_organization"
+      ],
+      "prompt": {
+        "en": "What %2$s needs from me.",
+        "pt": "O que %2$s precisa de mim."
+      },
+      "lines": {
+        "en": [
+          "%2$s knows you, but its current requirements do not open an introduction or commission here yet.",
+          "I cannot open either service from %2$s right now. Its public qualification notice will tell you what can change.",
+          "I can explain what %2$s permits from this contact at the moment."
+        ],
+        "pt": [
+          "%2$s conhece você, mas os requisitos atuais ainda não permitem uma apresentação ou comissão aqui.",
+          "Não posso abrir nenhum dos serviços de %2$s agora. O aviso público de qualificação dirá o que pode mudar.",
+          "Posso explicar o que %2$s permite por meio deste contato no momento."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_where_to_check",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Where can I check the requirements?",
+            "pt": "Onde posso verificar os requisitos?"
+          },
+          "phrases": [
+            "where can i check the requirements"
+          ],
+          "phrases_pt": [
+            "onde posso verificar os requisitos"
+          ],
+          "requires_any": [
+            "where",
+            "requirements",
+            "onde",
+            "requisitos"
+          ],
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "Use the guild record. It shows the current public reasons without asking me to guess."
+              ],
+              "pt": [
+                "Consulte o registro da guilda. Ele mostra os motivos públicos atuais sem que eu precise adivinhar."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        },
+        {
+          "name": "acknowledge_recovery",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Understood. I'll check the record.",
+            "pt": "Entendi. Vou consultar o registro."
+          },
+          "phrases": [
+            "understood i will check the record"
+          ],
+          "phrases_pt": [
+            "entendi vou consultar o registro"
+          ],
+          "requires_any": [
+            "understood",
+            "record",
+            "entendi",
+            "registro"
+          ],
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Good. The record is the authority on your present qualification."
+              ],
+              "pt": [
+                "Ótimo. O registro é a autoridade sobre sua qualificação atual."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        }
+      ],
+      "min_variants": 3,
+      "epistemic": "observed"
+    },
+    {
+      "name": "workshop_unavailable",
+      "subject": "guild_contact.workshop",
+      "shape": "observe",
+      "act": "report",
+      "polarity": "neutral",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "conditions": [
+        {
+          "field": "civic.services_available",
+          "is": false,
+          "unknown": "fail"
+        }
+      ],
+      "integrations": [
+        "ultima_kingdoms"
+      ],
+      "base_priority": 42,
+      "cooldown_days": 1,
+      "max_mentions_per_7_days": 3,
+      "vars_used": [
+        "civic_organization"
+      ],
+      "prompt": {
+        "en": "Why %2$s cannot serve here.",
+        "pt": "Por que %2$s não pode atender aqui."
+      },
+      "lines": {
+        "en": [
+          "%2$s recognizes this contact, but its service point is not available here right now.",
+          "I still speak for %2$s, though this workshop cannot open its services at present.",
+          "I can explain what %2$s permits from this contact at the moment."
+        ],
+        "pt": [
+          "%2$s reconhece este contato, mas seu ponto de atendimento não está disponível aqui agora.",
+          "Ainda represento %2$s, embora esta oficina não possa abrir os serviços no momento.",
+          "Posso explicar o que %2$s permite por meio deste contato no momento."
+        ]
+      },
+      "replies": [
+        {
+          "name": "ask_when_to_return",
+          "stance": "curiosity",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "When should I ask again?",
+            "pt": "Quando devo perguntar de novo?"
+          },
+          "phrases": [
+            "when should i ask again"
+          ],
+          "phrases_pt": [
+            "quando devo perguntar de novo"
+          ],
+          "requires_any": [
+            "when",
+            "again",
+            "quando",
+            "novo"
+          ],
+          "reaction": {
+            "id": "answered",
+            "act": "explain",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Ask after the workshop is restored or another authorized contact is available. I cannot promise a time."
+              ],
+              "pt": [
+                "Pergunte depois que a oficina for restaurada ou outro contato autorizado estiver disponível. Não posso prometer um prazo."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "inferred",
+            "temporal": "future"
+          }
+        },
+        {
+          "name": "acknowledge_unavailable",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Understood. I won't press the matter.",
+            "pt": "Entendi. Não vou insistir."
+          },
+          "phrases": [
+            "understood i will not press the matter"
+          ],
+          "phrases_pt": [
+            "entendi nao vou insistir"
+          ],
+          "requires_any": [
+            "understood",
+            "press",
+            "entendi",
+            "insistir"
+          ],
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Thank you. I would rather give a clear refusal than pretend the service is open."
+              ],
+              "pt": [
+                "Agradeço. Prefiro recusar com clareza a fingir que o serviço está aberto."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        }
+      ],
+      "min_variants": 3,
+      "epistemic": "observed"
+    }
+  ],
+  "funnel": {
+    "legacy_lines": {
+      "en": [
+        "I cannot open the guild service through this conversation right now.",
+        "The guild service is not available through this dialogue at present.",
+        "Ask again when the conversation service is available."
+      ],
+      "pt": [
+        "Não posso abrir o serviço da guilda por esta conversa agora.",
+        "O serviço da guilda não está disponível por este diálogo no momento.",
+        "Pergunte novamente quando o serviço de conversa estiver disponível."
+      ]
+    },
+    "open": {
+      "subject": "guild_contact.introduction",
+      "act": "report",
+      "polarity": "neutral",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "shape": "observe",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "What this contact can request.",
+        "pt": "O que este contato pode solicitar."
+      },
+      "lines": {
+        "en": [
+          "I am an authorized contact for %2$s. I can request an introduction, but the institution rechecks every request.",
+          "Through %2$s I can ask for an introduction. I cannot decide its answer or reveal a destination myself.",
+          "I can send an introduction request to %2$s. Its current records decide what follows."
+        ],
+        "pt": [
+          "Sou um contato autorizado de %2$s. Posso solicitar uma apresentação, mas a instituição verifica cada pedido novamente.",
+          "Por meio de %2$s posso pedir uma apresentação. Não posso decidir a resposta nem revelar um destino por conta própria.",
+          "Posso enviar um pedido de apresentação a %2$s. Os registros atuais decidem o que acontece depois."
+        ]
+      },
+      "vars_used": [
+        "civic_organization"
+      ],
+      "replies": [
+        {
+          "name": "request_introduction",
+          "stance": "practical_help",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Request an introduction for me.",
+            "pt": "Solicite uma apresentação para mim."
+          },
+          "phrases": [
+            "request an introduction for me"
+          ],
+          "phrases_pt": [
+            "solicite uma apresentacao para mim"
+          ],
+          "requires_any": [
+            "request",
+            "introduction",
+            "solicite",
+            "apresentacao"
+          ],
+          "civic_action": "introduction",
+          "reaction": {
+            "id": "requested",
+            "act": "report",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I have sent the request. The institution will give you its current answer."
+              ],
+              "pt": [
+                "Enviei o pedido. A instituição dará a resposta atual."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        },
+        {
+          "name": "ask_about_privacy",
+          "stance": "curiosity",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "What stays private?",
+            "pt": "O que permanece privado?"
+          },
+          "phrases": [
+            "what stays private"
+          ],
+          "phrases_pt": [
+            "o que permanece privado"
+          ],
+          "requires_any": [
+            "private",
+            "stays",
+            "privado",
+            "permanece"
+          ],
+          "reaction": {
+            "id": "explained",
+            "act": "explain",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "teach_back",
+            "lines": {
+              "en": [
+                "I only relay the institution’s requester-specific answer. I do not announce hidden settlements or affiliations."
+              ],
+              "pt": [
+                "Apenas transmito a resposta da instituição para quem pediu. Não anuncio assentamentos ou vínculos ocultos."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        }
+      ]
+    },
+    "more": {
+      "subject": "guild_contact.commissions",
+      "act": "offer_work",
+      "polarity": "neutral",
+      "predicate": "observation",
+      "temporal": "current",
+      "privacy": "discreet",
+      "shape": "problem_solve",
+      "obligations": [
+        "clarify",
+        "acknowledge"
+      ],
+      "prompt": {
+        "en": "What work this contact can show.",
+        "pt": "Que trabalho este contato pode mostrar."
+      },
+      "lines": {
+        "en": [
+          "I can ask %2$s for its curated commission list. The quests remain ordinary offers with their own checks.",
+          "%2$s may have commissions for this contact. Opening the list grants no automatic acceptance or reward.",
+          "I can request %2$s’s current commissions. The quest giver still applies every normal requirement."
+        ],
+        "pt": [
+          "Posso consultar a lista selecionada de comissões de %2$s. As missões continuam sendo ofertas comuns com suas próprias verificações.",
+          "%2$s pode ter comissões para este contato. Abrir a lista não concede aceitação ou recompensa automática.",
+          "Posso solicitar as comissões atuais de %2$s. O responsável pela missão ainda aplica todos os requisitos normais."
+        ]
+      },
+      "vars_used": [
+        "civic_organization"
+      ],
+      "replies": [
+        {
+          "name": "request_commissions",
+          "stance": "practical_help",
+          "answers": [
+            "clarify"
+          ],
+          "tone": "plain",
+          "outcome": "engaged",
+          "label": {
+            "en": "Show me the current commissions.",
+            "pt": "Mostre as comissões atuais."
+          },
+          "phrases": [
+            "show me the current commissions"
+          ],
+          "phrases_pt": [
+            "mostre as comissoes atuais"
+          ],
+          "requires_any": [
+            "show",
+            "commissions",
+            "mostre",
+            "comissoes"
+          ],
+          "civic_action": "commissions",
+          "reaction": {
+            "id": "requested",
+            "act": "report",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "I have asked for the current commission list."
+              ],
+              "pt": [
+                "Solicitei a lista atual de comissões."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        },
+        {
+          "name": "acknowledge_requirements",
+          "stance": "candor",
+          "answers": [
+            "acknowledge"
+          ],
+          "tone": "plain",
+          "outcome": "accepted",
+          "label": {
+            "en": "Understood. Normal quest rules still apply.",
+            "pt": "Entendi. As regras normais de missão ainda valem."
+          },
+          "phrases": [
+            "understood normal quest rules still apply"
+          ],
+          "phrases_pt": [
+            "entendi as regras normais de missao ainda valem"
+          ],
+          "requires_any": [
+            "understood",
+            "rules",
+            "entendi",
+            "regras"
+          ],
+          "reaction": {
+            "id": "acknowledged",
+            "act": "accept",
+            "polarity": "neutral",
+            "privacy": "discreet",
+            "shape": "observe",
+            "lines": {
+              "en": [
+                "Exactly. The guild curates the list; it does not bypass the quest."
+              ],
+              "pt": [
+                "Exatamente. A guilda seleciona a lista; ela não ignora a missão."
+              ]
+            },
+            "min_variants": 1,
+            "epistemic": "observed",
+            "temporal": "current"
+          }
+        }
+      ]
+    }
+  }
+}

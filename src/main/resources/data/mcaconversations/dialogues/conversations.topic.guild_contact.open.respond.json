@@ -1,0 +1,58 @@
+{
+  "answers": [
+    {
+      "name": "request_introduction",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "guild_contact.open.requested"
+            },
+            "conversations_civic": "introduction",
+            "next": "conversations.topic.guild_contact.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.guild_contact.open.requested"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_about_privacy",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "guild_contact.open.explained"
+            },
+            "next": "conversations.topic.guild_contact.more.respond",
+            "conversations_say": {
+              "phrase": "conversations.guild_contact.open.explained"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -81,6 +81,7 @@ public enum HubDomain {
             Map.entry("neighbour", VILLAGE),
             Map.entry("rumors", VILLAGE),
             Map.entry("standing", VILLAGE),
+            Map.entry("guild_contact", VILLAGE),
             Map.entry("place", VILLAGE),
             Map.entry("origin", VILLAGE),
 

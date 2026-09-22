@@ -33,7 +33,9 @@ public record TopicEntry(String id,
                          boolean chatRequired,
                          Optional<Arc> arc,
                          Set<String> milestones,
-                         Map<String, Set<String>> exclusiveGroups) {
+                         Map<String, Set<String>> exclusiveGroups,
+                         Optional<KingdomGateSpec> kingdomGate,
+                         boolean civicContact) {
 
     /** MCA's age vocabulary, minus {@code baby} — babies babble and are never catalog topics. */
     public static final Set<AgeGroup> AGE_GROUPS =
@@ -127,9 +129,23 @@ public record TopicEntry(String id,
             }
         }
 
+        Optional<KingdomGateSpec> kingdomGate = json.has("kingdom_gate")
+                ? Optional.of(KingdomGateSpec.fromJson(json.get("kingdom_gate")))
+                : Optional.empty();
+        // A strict boolean: getAsBoolean() reads 1, "yes" or any typo as false, which would silently
+        // turn a civic-only topic into one offered to everybody.
+        boolean civicContact = false;
+        if (json.has("civic_contact")) {
+            JsonElement flag = json.get("civic_contact");
+            if (!flag.isJsonPrimitive() || !flag.getAsJsonPrimitive().isBoolean()) {
+                throw new IllegalArgumentException("topic '" + id + "' has a non-boolean \"civic_contact\"");
+            }
+            civicContact = flag.getAsBoolean();
+        }
+
         return new TopicEntry(id, entryQuestion, entryAnswer, depth, returnQuestion,
                 Set.copyOf(ages), Set.copyOf(families), chatRequired, arc,
-                Set.copyOf(milestones), Map.copyOf(exclusiveGroups));
+                Set.copyOf(milestones), Map.copyOf(exclusiveGroups), kingdomGate, civicContact);
     }
 
     /**

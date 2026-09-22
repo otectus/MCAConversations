@@ -1007,7 +1007,10 @@ class ConversationGraphLintTest {
     void everyTopicHasABetterAndAWorseRoute() {
         List<String> problems = new ArrayList<>();
         for (TopicEntry topic : catalog.topics()) {
-            if (!isConverted(topic)) {
+            // A civic contact dispatches institutional services. Treating either service choice as
+            // interpersonal praise or insult would turn public qualification into villager warmth,
+            // so these explicitly gated service topics must remain affection-neutral.
+            if (!isConverted(topic) || topic.civicContact()) {
                 continue;
             }
             boolean positive = false;

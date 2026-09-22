@@ -10,6 +10,7 @@ import dev.otectus.mcaconversations.check.CheckDefinition;
 import dev.otectus.mcaconversations.check.CheckResolver;
 import dev.otectus.mcaconversations.check.CheckTier;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.compat.CivicBridge;
 import dev.otectus.mcaconversations.compat.QuestsBridge;
 import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
@@ -46,6 +47,7 @@ import dev.otectus.mcaconversations.template.SayDirective;
 import dev.otectus.mcaconversations.template.WorldContext;
 import dev.otectus.mcaconversations.util.SafeParse;
 import dev.otectus.mcaconversations.world.WorldQuery;
+import net.minecraft.network.chat.Component;
 
 /**
  * Registers this mod's dialogue conditions and actions into MCA's public static registries.
@@ -287,6 +289,23 @@ public final class ConversationsMcaRegistrar {
                         return query.matches(Relationships.bandOf(villager, player)) ? 1.0f : 0.0f;
                     } catch (Throwable t) {
                         McaConversations.LOGGER.debug("conversations_relationship failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
+        // Branch-level kingdom/faction selection. Parsing is Conversations-owned so a malformed
+        // optional integration value is contained even when Ultima is absent; evaluation is
+        // reflection-only and fails closed for every explicit restriction.
+        McaHandles.registerCondition("conversations_kingdom",
+                (json, name) -> SafeParse.orNull("conversations_kingdom", json,
+                        () -> dev.otectus.mcaconversations.conversation.KingdomGateSpec.fromJson(json)),
+                gate -> (villager, stack, player) -> {
+                    try {
+                        return gate != null && player != null
+                                && dev.otectus.mcaconversations.compat.KingdomBridge
+                                        .allows(gate, player, villager) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_kingdom failed; defaulting 0", t);
                         return 0.0f;
                     }
                 });
@@ -579,6 +598,22 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // Revalidates against Ultima's server-owned policy with the actual requester and speaker.
+        // The provider owns any destination message; this adapter returns only its requester-scoped
+        // reason and never serializes the hidden settlement from CivicActionResult.
+        McaHandles.registerAction("conversations_civic",
+                (json, name) -> SafeParse.orNull("conversations_civic", json,
+                        () -> CivicBridge.Action.parse(json.getAsString())),
+                action -> (villager, player) -> {
+                    try {
+                        if (action == null) return;
+                        CivicBridge.Reply reply = CivicBridge.request(action, player, villager);
+                        player.sendSystemMessage(Component.translatable(reply.reason()));
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_civic failed closed", t);
+                    }
+                });
+
         /*
          * conversations_reputation_signal — records an authored conversation outcome as a public deed
          * (spec 30.6).
@@ -621,9 +656,10 @@ public final class ConversationsMcaRegistrar {
 
         McaConversations.LOGGER.info("Registered dialogue conditions conversations_enabled/conversations_disabled/conversations_gossip"
                 + "/conversations_weather/conversations_season/conversations_holiday/conversations_personality/conversations_disposition"
-                + "/conversations_check/conversations_progress/conversations_quest_* and actions conversations_record/conversations_say"
+                + "/conversations_check/conversations_progress/conversations_kingdom/conversations_quest_* and actions conversations_record/conversations_say"
                 + "/conversations_gossip_say/conversations_disposition_apply/conversations_session"
                 + "/conversations_affection_apply/conversations_progress_apply/conversations_quest_open"
+                + "/conversations_civic"
                 + "; reputation conditions conversations_reputation/conversations_reputation_incident"
                 + "/conversations_reputation_profile and action conversations_reputation_signal");
     }

@@ -1,0 +1,61 @@
+{
+  "answers": [
+    {
+      "name": "request_introduction",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "guild_contact.introduction_ready.open.requested"
+            },
+            "conversations_civic": "introduction",
+            "next": "conversations.scene.guild_contact.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.introduction_ready.requested"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ask_what_this_means",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "guild_contact.introduction_ready.open.explained"
+            },
+            "next": "conversations.scene.guild_contact.followup",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.introduction_ready.explained",
+              "vars": [
+                "civic_organization"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

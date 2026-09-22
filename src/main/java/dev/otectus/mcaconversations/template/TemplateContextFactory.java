@@ -7,6 +7,7 @@ import dev.otectus.mcaconversations.compat.CapitalStandingView;
 import dev.otectus.mcaconversations.compat.CapitalsBridge;
 import dev.otectus.mcaconversations.compat.CapitalsCompat;
 import dev.otectus.mcaconversations.compat.McaCompat;
+import dev.otectus.mcaconversations.compat.CivicBridge;
 import dev.otectus.mcaconversations.context.CapitalContextSource;
 import dev.otectus.mcaconversations.gift.ConversationsAttachments;
 import dev.otectus.mcaconversations.season.SeasonContext;
@@ -113,6 +114,8 @@ public final class TemplateContextFactory {
                 case CAPITAL_NAME, SOVEREIGN_NAME, SOVEREIGN_TITLE, HEIR_NAME, HOUSE_NAME,
                         HOUSE_WORDS, VILLAGER_TITLE, RIVAL_CAPITAL_NAME, ALLY_CAPITAL_NAME ->
                         capitalVariable(context, var, villager);
+                case CIVIC_ORGANIZATION -> CivicBridge.speakerContext(player, villager)
+                        .ifPresent(contact -> context.with(var, Component.translatable(contact.nameKey())));
             }
         }
         return context;

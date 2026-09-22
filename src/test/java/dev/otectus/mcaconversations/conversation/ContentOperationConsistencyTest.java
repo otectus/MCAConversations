@@ -44,7 +44,7 @@ class ContentOperationConsistencyTest {
         return new TopicEntry(id, "conversations.cat.chitchat", "day", DepthClass.QUICK,
                 "conversations.cat.chitchat", java.util.Set.of(AgeGroup.ADULT),
                 java.util.Set.of(StanceFamily.EXIT), false, java.util.Optional.empty(),
-                java.util.Set.of(), java.util.Map.of());
+                java.util.Set.of(), java.util.Map.of(), java.util.Optional.empty(), false);
     }
 
     @Test

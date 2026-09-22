@@ -163,7 +163,10 @@ Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public stand
 telling each other what you have done, and — from 0.6.0 — remarking on what *they* know you for),
 **MCA: Capitals** (villages that are capitals speak
 about their sovereign, heirs and court; court changes seed village gossip), **Serene Seasons**
-(real seasons; calendar fallback otherwise), and **Townstead** (villager work in progress scenes) — all soft dependencies; the mod works fully without them.
+(real seasons; calendar fallback otherwise), **Townstead** (its RPG dialogue screen gains numbered
+choices; the rest of the integration is still to come) and **Ultima Kingdoms** (kingdom-gated topics
+and guild contacts; inert on this port until Ultima Kingdoms ships for NeoForge 1.21.1) — all soft
+dependencies; the mod works fully without them.
 
 ## How it works
 

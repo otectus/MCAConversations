@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The committed generated content is what {@code src/content} compiles to, and still is (spec §19).
@@ -69,6 +70,29 @@ class ContentCompilerTest {
                     + " Run ./gradlew generateConversationContent and commit the result.\n"
                     + String.join("\n", drift.stream().limit(40).toList())
                     + (drift.size() > 40 ? "\n… and " + (drift.size() - 40) + " more" : ""));
+        } finally {
+            deleteTree(scratch);
+        }
+    }
+
+    @Test
+    void authoredKingdomGateRoundTripsIntoRuntimeCatalog() throws IOException {
+        Path scratch = Files.createTempDirectory("mcaconversations-kingdom-gate");
+        try {
+            Path resources = scratch.resolve("resources");
+            Path catalog = resources.resolve("data/mcaconversations/conversation_catalog/topics.json");
+            Files.createDirectories(catalog.getParent());
+            Files.writeString(catalog, "{\"topics\":{\"day\":{\"depth\":\"quick\"}}}\n");
+            ContentCompiler compiler = new ContentCompiler(scratch.resolve("content"), resources,
+                    scratch.resolve("fixtures"));
+            compiler.ownTopicKingdomGate("day", com.google.gson.JsonParser.parseString(
+                    "{\"subject\":\"giver_origin\",\"include\":[\"ultima_kingdoms:madera\"]}"));
+            compiler.syncTopicKingdomGates(catalog);
+
+            var gate = com.google.gson.JsonParser.parseString(Files.readString(catalog)).getAsJsonObject()
+                    .getAsJsonObject("topics").getAsJsonObject("day").getAsJsonObject("kingdom_gate");
+            assertEquals("giver_origin", gate.get("subject").getAsString());
+            assertEquals("ultima_kingdoms:madera", gate.getAsJsonArray("include").get(0).getAsString());
         } finally {
             deleteTree(scratch);
         }

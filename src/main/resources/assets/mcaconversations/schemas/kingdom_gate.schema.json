@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://otectus.dev/mcaconversations/schemas/kingdom_gate.schema.json",
+  "title": "MCA Conversations kingdom gate",
+  "type": "object",
+  "properties": {
+    "gate": {
+      "$ref": "#/$defs/resource_location"
+    },
+    "settlement_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "subject": {
+      "enum": [
+        "giver_residence",
+        "giver_origin",
+        "giver_location",
+        "player_location",
+        "explicit_settlement"
+      ],
+      "default": "giver_residence"
+    },
+    "include": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resource_location"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "exclude": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resource_location"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "when_unknown": {
+      "enum": ["deny", "allow"],
+      "default": "deny"
+    },
+    "standing": {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "enum": ["local", "faction", "effective", "either", "both"],
+          "default": "effective"
+        },
+        "kingdom": {
+          "$ref": "#/$defs/resource_location"
+        },
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        }
+      },
+      "anyOf": [
+        {"required": ["min"]},
+        {"required": ["max"]}
+      ],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {"required": ["gate"]},
+      "then": {
+        "not": {
+          "anyOf": [
+            {"required": ["subject"]},
+            {"required": ["include"]},
+            {"required": ["exclude"]},
+            {"required": ["when_unknown"]}
+          ]
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "resource_location": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    }
+  }
+}
