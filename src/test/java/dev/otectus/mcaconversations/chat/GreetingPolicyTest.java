@@ -46,6 +46,18 @@ class GreetingPolicyTest {
     }
 
     @Test
+    void aStrangerIsNeverSeenOffByName() {
+        assertEquals(GreetingPolicy.FAREWELL_STRANGER, GreetingPolicy.farewell(RelationshipBand.STRANGER, SocialContact.UNMET));
+        assertEquals(GreetingPolicy.FAREWELL_STRANGER, GreetingPolicy.farewell(null, null));
+        assertEquals(GreetingPolicy.FAREWELL, GreetingPolicy.farewell(RelationshipBand.STRANGER, SocialContact.RECOGNIZED));
+        assertEquals(GreetingPolicy.FAREWELL, GreetingPolicy.farewell(RelationshipBand.FAMILY, SocialContact.UNMET),
+                "family is never a stranger");
+        assertTrue(UtteranceAudience.ofStaticLine(GreetingPolicy.FAREWELL_STRANGER).bystandersMayHear());
+        assertEquals(GreetingPolicy.FAREWELL_STRANGER + ".toddler",
+                AgeVoice.phrase(GreetingPolicy.FAREWELL_STRANGER, java.util.Optional.of("toddler")));
+    }
+
+    @Test
     void friendsGreetMoreOftenThanStrangersAndGrudgesLeast() {
         double stranger = GreetingPolicy.frequency(RelationshipBand.STRANGER, SocialContact.UNMET);
         double known = GreetingPolicy.frequency(RelationshipBand.ACQUAINTANCE, SocialContact.RECOGNIZED);

@@ -640,7 +640,13 @@ public final class ChatModeDispatcher {
 
     /** Goodbye line + end stickiness (spec §9): the villager stops being the default target. */
     private static void farewell(VillagerCandidate target, ServerPlayer player) {
-        deflect(target, player, "farewell");
+        dev.otectus.mcaconversations.conversation.SocialFacts facts =
+                dev.otectus.mcaconversations.conversation.Relationships.facts(target.entity(), player);
+        String pool = GreetingPolicy.farewell(
+                dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
+                        McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
+        deflect(target, player, pool.substring("chatmode.".length()));
         Session s = ChatModeSession.get(player.getUUID());
         s.villagerId = null;
         s.clearQuestion();

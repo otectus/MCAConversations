@@ -61,6 +61,13 @@ Hearts are still the one number you see; what changed is what a villager may *as
 - **Strangers and acquaintances greet in character.** The stranger and "hello again" greetings are
   now voiced by every personality family — the shy villager murmurs, the blunt one wants to know
   your business — without any of them claiming a friendship that is not there.
+- **Nobody is addressed by a name they never gave.** MCA hands every line the player's name, but a
+  villager who has never met you no longer uses it: goodbyes to strangers are nameless, and the
+  Conversations hub's opening line, chat's small replies ("I'm not sure what you mean", "as you
+  like", "I'll leave you be") and this mod's own additions to MCA's greeting lines no longer name you
+  or claim an acquaintance, in any personality. Ask a stranger "how have you been?" and you get an
+  honest answer from somebody who has not met you yet, rather than "you asked me that this
+  morning". Both locales.
 - **Opening the chat box turns a few heads, not the whole square.** Typing now draws a glance from
   at most the three nearest villagers, and never from one who is asleep or fleeing.
 - **A villager who falls asleep ends the conversation.** A dialogue-screen discussion with a villager
@@ -76,6 +83,12 @@ Hearts are still the one number you see; what changed is what a villager may *as
   `social.contact_days`, and `social.attitude` (`hostile`, `guarded`, `neutral`, `cordial`, `warm` or
   `affectionate`). Documented in `DATAPACK.md` under *Relationship bands*.
 - A `[social]` section in the server config. Documented in `CONFIG.md`.
+- A `social` block on scenes — `contact`, `attitudes`, `claims` (`prior_meeting`,
+  `personal_friendship`, `romantic_relationship`, `family_tie`, `unresolved_rupture`,
+  `shared_episode`) and `requires_known_player_name` — declares what a scene assumes about the pair
+  and becomes hard eligibility: a scene whose assumptions do not hold is not a candidate at all. An
+  unknown claim is refused rather than ignored, and the bundled content compiler refuses a line that
+  names the player without declaring it. Documented in `DATAPACK.md`.
 - `/conversations social inspect` (operators): the facts, roles, band, contact, attitude, greeting
   pool and thresholds the social model derived for the nearest villager and you.
 

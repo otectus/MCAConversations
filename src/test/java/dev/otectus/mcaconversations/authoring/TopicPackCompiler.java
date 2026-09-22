@@ -207,6 +207,21 @@ final class TopicPackCompiler {
         if (definition.has("integrations")) {
             context.add("integrations", definition.get("integrations"));
         }
+        // A declared social contract travels with the scene and is expanded into hard conditions at
+        // load; it is validated here too, so a misspelled claim fails the build rather than a reload.
+        dev.otectus.mcaconversations.conversation.SocialContract social = definition.has("social")
+                ? dev.otectus.mcaconversations.conversation.SocialContract.fromJson(definition.get("social")) : null;
+        if (social != null) {
+            if (social.needsEpisode() && !definition.has("episode_kind")) {
+                throw new IllegalStateException(where + " scene '" + name + "' claims a shared_episode but binds no episode_kind");
+            }
+            context.add("social", definition.get("social"));
+        }
+        if (definition.toString().contains("%1$s") && (social == null || !social.requiresKnownPlayerName())) {
+            throw new IllegalStateException(where + " scene '" + name + "' addresses the player by name (%1$s) without "
+                    + "\"social\": {\"requires_known_player_name\": true}; MCA passing the name does not mean the "
+                    + "villager knows it (Stability spec §9.2)");
+        }
         if (context.size() > 0) {
             scene.add("context", context);
         }
@@ -627,6 +642,11 @@ final class TopicPackCompiler {
      */
     private List<String> compileFunnelPage(JsonObject page, JsonObject next, boolean first,
                                            List<String> inboundBeats) {
+        if (page.toString().contains("%1$s")) {
+            // The funnel is the topic's always-available route, so it reaches strangers too.
+            throw new IllegalStateException(where + " funnel page uses the player's name (%1$s); a funnel reaches "
+                    + "everyone, including villagers who have never met the player");
+        }
         String questionId = funnelQuestionId(first);
         String beatId = funnelBeatId(first);
         String sayKey = "conversations." + topic + "." + (first ? "open" : "more");

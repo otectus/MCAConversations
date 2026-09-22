@@ -26,6 +26,10 @@ public final class GreetingPolicy {
     public static final String PARTNER = "chatmode.hail.partner";
     /** Their parent, child or sibling. */
     public static final String FAMILY = "chatmode.hail.family";
+    /** Goodbye to somebody the villager knows; voiced per personality, and may use their name. */
+    public static final String FAREWELL = "chatmode.farewell";
+    /** Goodbye to somebody never met: no name, no "come back and tell me everything". */
+    public static final String FAREWELL_STRANGER = "chatmode.farewell.stranger";
 
     private GreetingPolicy() {
     }
@@ -52,6 +56,12 @@ public final class GreetingPolicy {
             case STRANGER -> contact == SocialContact.RECOGNIZED ? RECOGNIZED
                     : respected ? RESPECTED_STRANGER : STRANGER;
         };
+    }
+
+    /** Which goodbye: the same permission rule as the hello, so a stranger is never seen off by name. */
+    public static String farewell(RelationshipBand band, SocialContact contact) {
+        boolean unmet = contact != SocialContact.RECOGNIZED;
+        return (band == null || band == RelationshipBand.STRANGER) && unmet ? FAREWELL_STRANGER : FAREWELL;
     }
 
     /**

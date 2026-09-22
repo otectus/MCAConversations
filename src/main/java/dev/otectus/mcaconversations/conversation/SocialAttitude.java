@@ -19,4 +19,17 @@ public enum SocialAttitude {
     public String key() {
         return name().toLowerCase(Locale.ROOT);
     }
+
+    /** The constant with this lowercase key, or empty. */
+    public static java.util.Optional<SocialAttitude> byKey(String raw) {
+        if (raw == null) {
+            return java.util.Optional.empty();
+        }
+        for (SocialAttitude value : values()) {
+            if (value.key().equals(raw.trim().toLowerCase(Locale.ROOT))) {
+                return java.util.Optional.of(value);
+            }
+        }
+        return java.util.Optional.empty();
+    }
 }
