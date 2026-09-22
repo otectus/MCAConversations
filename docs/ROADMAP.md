@@ -20,7 +20,7 @@ Last reconciled against the code: 2026-09-22, version 1.8.0 on `feature/social-1
 | 1.7.1 | `375fbba` | `5b67c5b` | Pushed; not tagged, not uploaded |
 | 1.7.2 | `e3c0415` | `6186b22` | Pushed; not tagged, not uploaded |
 | 1.7.3 | `d979cc4` + `19f59cd` | `3002bed` | Pushed to `main` / `neoforge/1.21.1`; not tagged, not uploaded |
-| 1.8.0 | `feature/social-1.8.0` | pending mirror | No |
+| 1.8.0 | `feature/social-1.8.0` | `feature/social-1.8.0` | No |
 
 Protocol 4 since 1.7.1: a 1.7.0 client and a 1.7.1+ server refuse each other, so 1.7.1–1.7.3 publish
 **on both loaders together**. A build of the 1.7.3 source (without its three review fixes) circulates
@@ -249,10 +249,11 @@ real-jar probes, which need jar paths that were not supplied.
 
 | Check | Forge | NeoForge |
 |---|---|---|
-| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-171110.log` | see the port's own record below once mirrored |
-| `:test` | executed; 1,630 tests, 0 failures, 6 skipped (25 new; one obsolete lint removed) | — |
-| Jar | `mcaconversations-1.8.0.jar`, protocol 4 | — |
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-171110.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-build-20260922-171320.log` (with `verifyJarContents`) |
+| `:test` | executed; 1,630 tests, 0 failures, 6 skipped (25 new; one obsolete lint removed) | executed; 1,673 tests, 0 failures, 6 skipped |
+| Jar | `mcaconversations-1.8.0.jar`, protocol 4 | `mcaconversations-neoforge-1.8.0+1.21.1.jar`, protocol 4 |
 | `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
+| Parity, from both copies | 1,911 identical, 178 reviewed adaptations, verified | same |
 | In-game | **not run** | **not run** |
 
 ### 1.7.3 — 2026-09-22
