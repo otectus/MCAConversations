@@ -743,6 +743,14 @@ public final class ChatModeDispatcher {
             return dev.otectus.mcaconversations.conversation.ChoiceOutcome.of(verdict);
         }
 
+        // Chat, hub shortcuts and numbered chat replies all arrive here immediately before MCA's
+        // engine runs. Recheck the complete catalog gate so a topic that changed kingdom/standing
+        // after it was offered cannot be entered through this direct path.
+        if (!dev.otectus.mcaconversations.conversation.TopicGate
+                .allows(question, answer, target.entity(), player)) {
+            return dev.otectus.mcaconversations.conversation.ChoiceOutcome.REQUIREMENTS_CHANGED;
+        }
+
         // Chat drives MCA's engine directly rather than through the submission packet, so the GUI's
         // planning hook never fires here. Calling it explicitly is what keeps the two frontends
         // behaviourally equivalent: the same topic opens the same scene whichever way it was asked
@@ -868,7 +876,9 @@ public final class ChatModeDispatcher {
         }
         String question = entry.get().entryQuestion();
         String answer = entry.get().entryAnswer();
-        if (!McaCompat.checkConstraints(target.entity(), player, question, answer)) {
+        if (!McaCompat.checkConstraints(target.entity(), player, question, answer)
+                || !dev.otectus.mcaconversations.conversation.TopicGate
+                        .allows(question, answer, target.entity(), player)) {
             // The player typed the phrase of an entry this villager was showing them, so silence is
             // the one answer that is not available: they asked for something they were offered.
             return explainUnavailable(target, player, slot);
@@ -1103,6 +1113,10 @@ public final class ChatModeDispatcher {
             return "No MCA villager within " + (int) radius + " blocks.";
         }
         VillagerFinder.VillagerCandidate target = candidates.get(0);
+        if (!dev.otectus.mcaconversations.conversation.TopicGate
+                .allows(questionId, answerName, target.entity(), player)) {
+            return "That catalog topic is not currently available for this villager and player.";
+        }
         // The op test driver plans too, so "debug-ask a topic opener" reproduces what a real click
         // would produce rather than a version of it with no scene behind it.
         dev.otectus.mcaconversations.scene.ConversationPlanner

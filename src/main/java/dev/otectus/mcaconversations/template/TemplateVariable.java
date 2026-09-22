@@ -58,7 +58,10 @@ public enum TemplateVariable {
     /** A capital this one is at war with. */
     RIVAL_CAPITAL_NAME("mcaconversations.fallback.rival_capital_name"),
     /** A capital this one is allied with. */
-    ALLY_CAPITAL_NAME("mcaconversations.fallback.ally_capital_name");
+    ALLY_CAPITAL_NAME("mcaconversations.fallback.ally_capital_name"),
+
+    /** Localized public name of the civic contact's organization. */
+    CIVIC_ORGANIZATION("mcaconversations.fallback.civic_organization");
 
     private final String fallbackKey;
 

@@ -129,6 +129,7 @@ village death/birth/marriage (`grieving`/`elated`). Durations are configurable; 
 | `conversations_reputation` | `{"min"?, "max"?, "min_tier"?, "max_tier"?, "has_title"?}` | 1 when the player's public standing with this villager's village satisfies every stated bound. Needs MCA: Reputation; 0 without it |
 | `conversations_reputation_incident` | `{"types"?, "statuses"?, "tags"?, "known_to_speaker"?, "max_age"?}` | 1 when a matching deed exists in that village's ledger — and, with `known_to_speaker`, only when *this* villager knows of it. Needs MCA: Reputation; 0 without it |
 | `conversations_reputation_profile` | `{"scope"?, "recognition"?, "facets"?, "allow_partial_history"?}` | 1 when the player's **public profile** satisfies every clause: what they are known for, and how widely. Needs MCA: Reputation 0.6.0 with profiles enabled and profile content published; 0 otherwise. See below |
+| `conversations_kingdom` | a kingdom gate object | 1 when the gate passes for this villager and player. Branch-level: lets a common topic say something different to, or about, one kingdom without hiding the topic. Needs Ultima Kingdoms; see *Kingdom gates and civic contacts* below |
 
 `conversations_enabled`/`conversations_disabled` resolve through one closed registry, `FeatureId`
 (`src/main/java/dev/otectus/mcaconversations/FeatureId.java`) — `topics`, `states`, `templates`,
@@ -153,6 +154,7 @@ distinct unknown ids per run).
 | `conversations_affection_apply` | `{"decision": "<topic.stage.stance>", "delta": ±1..8, "budget"?, "policy"?}` | **the only way branching content may move hearts.** See below |
 | `conversations_progress_apply` | one object or an array of `{"arc",…}` / `{"milestone"}` / `{"exclusive","member"}` | moves durable narrative state. See below |
 | `conversations_reputation_signal` | `{"incident", "decision"?, "visibility"?, "binds"?, "bind_types"?, "bind_max_age"?, "supersedes"?, "supersede_window"?}` | records an authored conversation outcome as a public deed in MCA: Reputation, exactly once. No-op without that mod. See below |
+| `conversations_civic` | `"introduction"` or `"commissions"` | asks Ultima Kingdoms, on behalf of this player and through this villager, for a guild introduction or the guild's commissions, and tells only this player the reason Ultima gives. Ultima re-checks everything itself. See *Kingdom gates and civic contacts* below |
 
 ### Branching conversations (v1.1.0)
 
@@ -230,15 +232,31 @@ file that actually won (last in sorted order), rather than silently picked by ma
 
 `ages` is an allow-list from `conversation/AgeGroup.java`'s four authorable values — `toddler`,
 `child`, `teen`, `adult` (`baby` and `unknown` exist in the enum for a runtime read but can never be
-authored or satisfy an allow-list). It is enforced by `conversation/TopicAgeGate` on every entry
-path a topic-carrying question/answer can reach: the dialogue screen's answer list
-(`mixin/QuestionMixin`), a dialogue-screen submission (`mixin/InteractionDialogueMessageMixin`,
-alongside `conversation/ConversationGuard`'s offer-replay checks), the numbered-choice packet
-(`conversation/ChoiceSelectionService`), and free-text chat matching (`chat/GatePreview`). The
-dynamic hub (`hub/DynamicHub`) is the one exception: it applies `TopicEntry#allowsAge` to its slots
-directly rather than going through `TopicAgeGate`. Only entries the
-catalog knows are gated — an answer with no catalog row is left exactly as MCA offered it. An
-unreadable villager age never satisfies the list.
+authored or satisfy an allow-list). It is enforced, together with the optional `kingdom_gate` and
+`civic_contact` fields below, by one composite gate, `conversation/TopicGate`, on every entry path a
+topic-carrying question/answer can reach: the dialogue screen's answer list (`mixin/QuestionMixin`),
+a dialogue-screen submission (`mixin/InteractionDialogueMessageMixin`, alongside
+`conversation/ConversationGuard`'s offer-replay checks), the numbered-choice packet
+(`conversation/ChoiceSelectionService`), free-text chat matching and typed hub shortcuts
+(`chat/GatePreview`, `chat/ChatModeDispatcher`), and the dynamic hub's slots (`hub/DynamicHub`).
+Only entries the catalog knows are gated — an answer with no catalog row is left exactly as MCA
+offered it. An unreadable villager age never satisfies the list.
+
+A dialogue-screen submission is taken through this mod's own one-shot executor whenever its
+question/answer pair is a catalog starter, whatever namespace the question belongs to — so a starter
+merged into MCA's `greet` or into a pack's own category page (`pastimes.cat` in sample 02) cannot be
+submitted past the gate by a crafted packet.
+
+Two optional catalog fields restrict a topic by what an optional mod knows:
+
+| Field | Value | Meaning |
+|---|---|---|
+| `kingdom_gate` | a kingdom gate object (see *Kingdom gates and civic contacts* below) | The starter is offered only while the gate passes for this villager and player. Needs Ultima Kingdoms; without it the topic is hidden unless the gate is an inline predicate with `"when_unknown": "allow"` |
+| `civic_contact` | `true` | The starter is offered only when Ultima Kingdoms reports the villager in front of you as a civic contact visible to you. Without Ultima Kingdoms the topic never appears |
+
+A topic pack under `src/content/topics/` declares both at its top level; the generator mirrors them
+into the topic's catalog row, and a malformed `kingdom_gate` fails generation and, in a datapack, is
+refused at reload like any other malformed catalog entry, leaving the previous content in force.
 
 Stance families are the shared vocabulary for *what kind of thing the player just said*: `empathy`,
 `curiosity`, `candor`, `encouragement`, `practical_help`, `humor`, `respectful_disagreement`,
@@ -283,6 +301,7 @@ fill `%2$s`, `%3$s`, … in the order listed. Unresolvable vars fall back to neu
 | `villager_title` | the speaker's own court title, localized (e.g. "Hand of the King"), or a neutral fallback when they have no office |
 | `rival_capital_name` | a capital this one is at war with |
 | `ally_capital_name` | a capital this one is allied with |
+| `civic_organization` | the localized public name of the guild this villager is a contact for (Ultima Kingdoms), or "the guild" |
 
 Gossip lines receive `%2$s` = subject A's name (e.g., a capital's village name), `%3$s` = subject B's name or event detail. For capital events: %3$s is the rendered chronicle line for court news; the new sovereign's or heir's name for coronations and royal births; for royal deaths the departed sovereign's name (or a chronicle line when the event came from the chronicle rather than the mourning-flag diff); a rival capital's name for wars and alliances. Empty only for deaths, births, arrivals, and departures (single-villager events not involving capitals).
 
@@ -408,6 +427,78 @@ MCA: Reputation's decision, not a pack's.
 The deed's identity is `decision` plus the bound incident, and it deliberately does **not** name the
 villager: repeating the same apology to a different resident is the same deed, and a replay after a
 reconnect recovers the first answer instead of paying again.
+
+### Kingdom gates and civic contacts (Ultima Kingdoms, optional)
+
+Ultima Kingdoms groups MCA villages into kingdoms and runs guilds with
+appointed villager contacts. Conversations reads both through a reflection-only bridge
+(`compat/KingdomBridge`, `compat/CivicBridge`); no Ultima class is ever linked, which
+`NoUltimaStaticLinkTest` enforces. Ultima remains entirely optional, and content that does not ask
+about it is unaffected by whether it is installed.
+
+**A kingdom gate** is the same object in three places: a catalog row's `kingdom_gate`, a topic pack's
+top-level `kingdom_gate`, and the `conversations_kingdom` result condition. Its schema ships at
+`assets/mcaconversations/schemas/kingdom_gate.schema.json`.
+
+```json
+{
+  "subject": "giver_residence",
+  "include": ["ultima_kingdoms:lunari"],
+  "exclude": [],
+  "when_unknown": "deny",
+  "standing": { "scope": "effective", "min": 20 }
+}
+```
+
+| Key | Default | Meaning |
+|---|---|---|
+| `subject` | `giver_residence` | Whose kingdom is asked about: `giver_residence` (where the villager lives — right for what a resident culturally knows), `giver_origin` (where they came from — heritage and homesickness), `giver_location`, `player_location`, or `explicit_settlement` |
+| `include` / `exclude` | `[]` | Kingdom ids. An empty `include` admits every kingdom not excluded. Ids must be canonical resource ids and may not repeat |
+| `when_unknown` | `deny` | What an unresolved answer means — a villager with no residence, a settlement whose kingdom was removed. `deny` keeps restricted content restricted; `allow` is the only way an inline gate can pass without Ultima installed at all |
+| `settlement_id` | — | A settlement UUID. Required exactly when `subject` is `explicit_settlement` |
+| `gate` | — | A named gate registered by Ultima, used **instead of** `subject`/`include`/`exclude`/`when_unknown`; mixing the two is refused |
+| `standing` | — | Also require the player's standing, evaluated by Ultima Factions: `scope` (`local`, `faction`, `effective`, `either`, `both`; default `effective`), optional `kingdom`, and at least one of `min`/`max`. With a named `gate`, `standing.kingdom` is required |
+
+Semantics worth authoring against:
+
+- **Explicit restrictions fail closed.** Without Ultima Kingdoms, or with its gate API unbound, a
+  gate passes only if it is an inline predicate with `"when_unknown": "allow"` and no `standing`. A
+  call into Ultima that fails at runtime fails the gate whatever `when_unknown` says, and is logged
+  once. A standing clause needs Ultima's faction facade; without it the clause fails.
+- **Unknown fields and malformed ids are refused**, never ignored — a misspelled key cannot quietly
+  turn a restricted topic into a global one.
+- **Topic gate versus branch condition.** `kingdom_gate` hides a whole topic before it is offered, on
+  every entry path. `conversations_kingdom` scores one result of a topic everybody can open. Use the
+  first for "only Lunari residents talk about the moon festival", the second for "a Madera-born
+  resident of Lunari talks differently about home".
+
+**A civic contact** is a villager Ultima has appointed to speak for a guild. A topic marked
+`"civic_contact": true` is offered only when Ultima reports the villager in front of you as a contact
+**visible to you** — qualification, destinations and service effects stay Ultima's. The shipped
+`guild_contact` topic (Village category, adults) is the reference: it explains what the guild can do
+for you and dispatches a request, and it moves no hearts, dispositions or opinions, because a public
+institutional qualification is not warmth.
+
+In a topic pack, a reply takes `"civic_action": "introduction"` or `"commissions"`, which compiles to
+the `conversations_civic` action. The action re-asks Ultima with the actual player and speaker, sends
+**only that player** the reason Ultima returns, and never reads the destination Ultima chose: a guild's
+private destination cannot reach dialogue state, chat, bystanders or generated text. With Ultima
+absent the action replies `mcaconversations.civic.unavailable`.
+
+Civic context fields, written only by `context/CivicContextSource`, all UNAVAILABLE without Ultima
+Kingdoms. When Ultima is present and the speaker is not a contact, `civic.contact` is `false` and every
+other field is UNKNOWN.
+
+| Field | Type | Meaning |
+|---|---|---|
+| `civic.contact` | boolean | The speaker is a civic contact visible to this player |
+| `civic.organization` | string | The guild's resource id |
+| `civic.organization_name_key` | string | The translation key Ultima supplies for the guild's public name — never a settlement name |
+| `civic.role` | string | The speaker's role in the guild |
+| `civic.services_available` | boolean | Whether Ultima reports this contact's services as available right now |
+| `civic.introduction_qualified` / `civic.commission_qualified` | boolean | Whether this player currently qualifies for each service |
+| `civic.introduction_reasons` / `civic.commission_reasons` | list of strings | Ultima's reason keys for the current qualification answer (at most eight each) |
+| `civic.state_revision` / `civic.policy_revision` | long | Ultima's revision counters, for scene conditions that must notice a change |
 
 ## The disposition vector & dialogue checks (v0.7.0)
 

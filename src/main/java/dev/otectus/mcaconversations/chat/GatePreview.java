@@ -4,7 +4,7 @@ import dev.otectus.mcaconversations.FeatureId;
 import dev.otectus.mcaconversations.McaConversationsConfig;
 import dev.otectus.mcaconversations.chat.IntentMatcher.Scored;
 import dev.otectus.mcaconversations.compat.McaCompat;
-import dev.otectus.mcaconversations.conversation.TopicAgeGate;
+import dev.otectus.mcaconversations.conversation.TopicGate;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
@@ -49,6 +49,6 @@ public final class GatePreview {
         }
         // Chat mode enters topics by the same question/answer pair the GUI does, so it owes the
         // catalog's age allow-list the same answer.
-        return TopicAgeGate.allows(scored.question(), scored.answer(), villager);
+        return TopicGate.allows(scored.question(), scored.answer(), villager, player);
     }
 }

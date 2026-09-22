@@ -2,8 +2,8 @@ package dev.otectus.mcaconversations.mixin;
 
 import dev.otectus.mcaconversations.McaConversations;
 import dev.otectus.mcaconversations.McaConversationsConfig;
-import dev.otectus.mcaconversations.conversation.ConversationGuard;
-import dev.otectus.mcaconversations.conversation.TopicAgeGate;
+import dev.otectus.mcaconversations.conversation.ConversationCatalogLoader;
+import dev.otectus.mcaconversations.conversation.TopicGate;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -55,8 +55,8 @@ public abstract class QuestionMixin {
     @Shadow
     public abstract String getName();
 
-    /** One WARN for the age filter, however many questions are scored afterwards. */
-    private static boolean mcaconversations$ageFilterWarned;
+    /** One WARN for the topic filter, however many questions are scored afterwards. */
+    private static boolean mcaconversations$topicFilterWarned;
 
     @Inject(method = "getValidAnswers", at = @At("RETURN"), require = 0)
     private void mcaconversations$filterAnswers(ServerPlayer player, @Coerce Object villager,
@@ -75,31 +75,49 @@ public abstract class QuestionMixin {
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("Hub-button visibility filter failed; leaving answer visible", t);
         }
-        mcaconversations$filterAnswersByAge(villager, answers);
+        mcaconversations$filterTopicAnswers(player, villager, answers);
     }
 
     /**
-     * Drops answers the catalog says this villager is too young to be asked. MCA's constraints have no
-     * {@code child} token, so a topic declared {@code "ages": ["teen", "adult"]} would otherwise still
-     * be listed for a child and be clickable; result conditions cannot help, because they are scored
+     * Drops catalog starters that {@link TopicGate} refuses for this villager and player: the age
+     * allow-list, an optional {@code kingdom_gate} and the {@code civic_contact} requirement. MCA's
+     * constraints have no {@code child} token and know nothing of kingdoms, so a gated topic would
+     * otherwise still be listed and clickable; result conditions cannot help, because they are scored
      * only after the answer is on the menu.
      *
-     * <p>Soft-fail by design: anything unexpected leaves the list exactly as MCA built it, logged once.
+     * <p>A fault here must not widen an explicitly provider-gated topic, so the recovery path removes
+     * every starter carrying a kingdom or civic gate and leaves age-only and unknown answers as MCA
+     * built them. If even that recovery cannot read the catalog, the list is left untouched: this
+     * injection must never throw into MCA's answer listing. Each outcome is logged once.
      */
-    private void mcaconversations$filterAnswersByAge(Object villager, List<String> answers) {
+    private void mcaconversations$filterTopicAnswers(ServerPlayer player, Object villager, List<String> answers) {
         // The age allow-list is catalog content, and it decides what goes on screen; the list a
         // player is shown must come from one bundle.
         try (dev.otectus.mcaconversations.conversation.ContentOperation ignored =
                      dev.otectus.mcaconversations.conversation.ContentOperation.open()) {
             String question = getName();
-            if (!ConversationGuard.isOurQuestion(question) || !(villager instanceof Entity entity)) {
+            if (!(villager instanceof Entity entity)) {
                 return;
             }
-            answers.removeIf(answer -> !TopicAgeGate.allows(question, answer, entity));
+            answers.removeIf(answer -> !TopicGate.allows(question, answer, entity, player));
         } catch (Throwable t) {
-            if (!mcaconversations$ageFilterWarned) {
-                mcaconversations$ageFilterWarned = true;
-                McaConversations.LOGGER.warn("Topic age filter failed; answers left as MCA offered them", t);
+            // A runtime integration fault must not widen an explicitly restricted topic. Preserve the
+            // old soft-fail behavior for age-only and unknown answers, but remove explicit provider gates.
+            try {
+                String question = getName();
+                answers.removeIf(answer -> ConversationCatalogLoader.active().byStarter(question, answer)
+                        .map(entry -> entry.kingdomGate().isPresent() || entry.civicContact()).orElse(false));
+                if (!mcaconversations$topicFilterWarned) {
+                    mcaconversations$topicFilterWarned = true;
+                    McaConversations.LOGGER.warn("Topic gate failed; explicitly provider-gated answers were hidden", t);
+                }
+            } catch (Throwable recovery) {
+                if (!mcaconversations$topicFilterWarned) {
+                    mcaconversations$topicFilterWarned = true;
+                    recovery.addSuppressed(t);
+                    McaConversations.LOGGER.warn("Topic gate and its recovery both failed; answers left as MCA offered them",
+                            recovery);
+                }
             }
         }
     }

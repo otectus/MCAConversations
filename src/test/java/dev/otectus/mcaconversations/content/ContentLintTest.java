@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.otectus.mcaconversations.check.CheckDefinition;
 import dev.otectus.mcaconversations.conversation.AgeGroup;
+import dev.otectus.mcaconversations.conversation.KingdomGateSpec;
 import dev.otectus.mcaconversations.check.CheckTier;
 import dev.otectus.mcaconversations.disposition.DispositionApply;
 import dev.otectus.mcaconversations.disposition.DispositionAxis;
@@ -60,6 +61,7 @@ class ContentLintTest {
             "conversations_quest_completed",
             "conversations_reputation", "conversations_reputation_incident",
             "conversations_reputation_profile",
+            "conversations_kingdom",
             "conversations_session", "conversations_budget",
             // Living histories, registered by LivingHistoriesRegistrar.
             "conversations_profile", "conversations_context", "conversations_episode",
@@ -73,7 +75,7 @@ class ContentLintTest {
             "conversations_record", "conversations_say", "conversations_gossip_say",
             "conversations_disposition_apply", "conversations_quest_open",
             "conversations_session", "conversations_affection_apply", "conversations_progress_apply",
-            "conversations_reputation_signal",
+            "conversations_reputation_signal", "conversations_civic",
             // Living histories. Every one instantiates an authored template rather than a
             // shape, so a result can never invent an episode kind or an unregistered promise.
             "conversations_episode", "conversations_thread", "conversations_commitment",
@@ -287,6 +289,36 @@ class ContentLintTest {
                 }
             }
         }
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /** Optional kingdom gates use the same strict native parser at lint time as at datapack reload. */
+    @Test
+    void everyKingdomGateParses() throws IOException {
+        JsonObject topics = JsonParser.parseString(Files.readString(ContentFixture.TOPICS))
+                .getAsJsonObject().getAsJsonObject("topics");
+        List<String> problems = new ArrayList<>();
+        for (Map.Entry<String, JsonElement> topic : topics.entrySet()) {
+            JsonObject row = topic.getValue().getAsJsonObject();
+            if (!row.has("kingdom_gate")) continue;
+            try {
+                KingdomGateSpec.fromJson(row.get("kingdom_gate"));
+            } catch (IllegalArgumentException exception) {
+                problems.add(topic.getKey() + ": " + exception.getMessage());
+            }
+        }
+        questions.forEach((question, json) -> forEachResult(json, (answer, result) -> {
+            if (!result.has("conditions")) return;
+            for (JsonElement condition : result.getAsJsonArray("conditions")) {
+                JsonObject object = condition.getAsJsonObject();
+                if (!object.has("conversations_kingdom")) continue;
+                try {
+                    KingdomGateSpec.fromJson(object.get("conversations_kingdom"));
+                } catch (IllegalArgumentException exception) {
+                    problems.add(question + "/" + answer + ": " + exception.getMessage());
+                }
+            }
+        }));
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
     }
 

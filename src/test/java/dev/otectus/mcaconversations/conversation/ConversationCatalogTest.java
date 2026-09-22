@@ -85,6 +85,18 @@ class ConversationCatalogTest {
     }
 
     @Test
+    @DisplayName("civic_contact must be a real boolean, so a typo cannot ungate a civic-only topic")
+    void civicContactIsAStrictBoolean() {
+        String withFlag = DAY.replace("\"depth\"", "\"civic_contact\": %s,\n  \"depth\"");
+        assertTrue(TopicEntry.fromJson("day", json(withFlag.formatted("true"))).civicContact());
+        assertFalse(TopicEntry.fromJson("day", json(DAY)).civicContact());
+        for (String bad : List.of("1", "\"yes\"", "\"true\"", "{}")) {
+            assertThrows(IllegalArgumentException.class, () ->
+                    TopicEntry.fromJson("day", json(withFlag.formatted(bad))), bad);
+        }
+    }
+
+    @Test
     @DisplayName("an arc must declare a bound inside the global stage ceiling")
     void rejectsUnboundedArcs() {
         assertThrows(IllegalArgumentException.class, () ->

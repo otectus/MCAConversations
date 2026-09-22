@@ -52,7 +52,7 @@ class OptionalProfessionIsolationTest {
     /** Mods this one really does declare, none of which owns a profession. */
     private static final Set<String> DECLARED_MODS =
             Set.of("forge", "minecraft", "mca", "mcaquests", "mcareputation", "townstead",
-                    "mcacapitals");
+                    "mcacapitals", "ultima_kingdoms");
 
     /**
      * Matches every shape a work id takes, hand-authored or generated.

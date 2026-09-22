@@ -241,9 +241,11 @@ preserving MCA's voice-pack and online-TTS restrictions untouched.
 
 Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public standing, villagers
 telling each other what you have done, and — from 0.6.0 — remarking on what *they* know you for), **MCA: Capitals** `[1.3,)` (villages that are capitals speak
-about their sovereign, heirs and court; court changes seed village gossip), **Townstead** `[0.7.5,0.8)` (its
-schedules, buildings and village culture) and **Serene Seasons** (real seasons; calendar fallback
-otherwise) — all soft dependencies; the mod works fully without any of them.
+about their sovereign, heirs and court; court changes seed village gossip), **Ultima Kingdoms** `[0.1,)`
+(topics offered only in the right kingdom, and guild contacts who relay requests to their guild),
+**Townstead** `[0.7.5,0.8)` (its RPG dialogue screen gains numbered choices; the rest of the
+integration is still to come — see `docs/ROADMAP.md`) and **Serene Seasons** (real seasons; calendar
+fallback otherwise) — all soft dependencies; the mod works fully without any of them.
 
 ## How it works
 

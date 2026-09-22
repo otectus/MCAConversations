@@ -1,0 +1,58 @@
+{
+  "answers": [
+    {
+      "name": "request_commissions",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "guild_contact.more.requested"
+            },
+            "conversations_civic": "commissions",
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.guild_contact.more.requested"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "acknowledge_requirements",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end",
+              "beat": "guild_contact.more.acknowledged"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.guild_contact.more.acknowledged"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.village",
+            "conversations_say": {
+              "phrase": "conversations.scene.guild_contact.leaving"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

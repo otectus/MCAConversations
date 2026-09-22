@@ -5,6 +5,7 @@ import dev.otectus.mcaconversations.conversation.ChoiceSelectionService;
 import dev.otectus.mcaconversations.conversation.ConversationGuard;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.TopicGate;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -60,7 +61,7 @@ public abstract class InteractionDialogueMessageMixin {
 
     @Inject(method = "receive", at = @At("HEAD"), cancellable = true, require = 0)
     private void mcaconversations$validateSubmission(ServerPlayer player, CallbackInfo ci) {
-        if (!ConversationGuard.isOurQuestion(question)) {
+        if (!ConversationGuard.isOurQuestion(question) && !TopicGate.isCatalogStarter(question, answer)) {
             return;
         }
         // Owned submissions use the same one-shot executor as numbered choices. Letting MCA's

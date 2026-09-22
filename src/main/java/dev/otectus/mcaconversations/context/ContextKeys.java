@@ -195,6 +195,27 @@ public final class ContextKeys {
     public static final ContextKey<Set<String>> STANDING_SPEAKER_KNOWN_FOR =
             ContextKey.generic("standing.speaker_known_for", Set.class);
 
+    // --- Civic network (Ultima Kingdoms; written only by CivicContextSource) -------------------
+    /** True only when the actual speaker is an authored civic contact visible to this requester. */
+    public static final ContextKey<Boolean> CIVIC_CONTACT = ContextKey.of("civic.contact", Boolean.class);
+    public static final ContextKey<String> CIVIC_ORGANIZATION = ContextKey.of("civic.organization", String.class);
+    /** Translation key supplied by the civic provider; never a hidden settlement name. */
+    public static final ContextKey<String> CIVIC_ORGANIZATION_NAME_KEY =
+            ContextKey.of("civic.organization_name_key", String.class);
+    public static final ContextKey<String> CIVIC_ROLE = ContextKey.of("civic.role", String.class);
+    public static final ContextKey<Boolean> CIVIC_SERVICES_AVAILABLE =
+            ContextKey.of("civic.services_available", Boolean.class);
+    public static final ContextKey<Boolean> CIVIC_INTRODUCTION_QUALIFIED =
+            ContextKey.of("civic.introduction_qualified", Boolean.class);
+    public static final ContextKey<Boolean> CIVIC_COMMISSION_QUALIFIED =
+            ContextKey.of("civic.commission_qualified", Boolean.class);
+    public static final ContextKey<List<String>> CIVIC_INTRODUCTION_REASONS =
+            ContextKey.generic("civic.introduction_reasons", List.class);
+    public static final ContextKey<List<String>> CIVIC_COMMISSION_REASONS =
+            ContextKey.generic("civic.commission_reasons", List.class);
+    public static final ContextKey<Long> CIVIC_STATE_REVISION = ContextKey.of("civic.state_revision", Long.class);
+    public static final ContextKey<Long> CIVIC_POLICY_REVISION = ContextKey.of("civic.policy_revision", Long.class);
+
     /**
      * Forces this class to initialise.
      *

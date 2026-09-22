@@ -88,10 +88,26 @@ public final class ContentCompiler {
     private final Map<String, List<JsonObject>> entryRoutes = new TreeMap<>();
     /** Topics whose funnel this run generated, and whose lang keys it therefore owns. */
     private final Set<String> funnelTopics = new TreeSet<>();
+    /** Optional kingdom gates declared beside generated topics, mirrored into the runtime catalog. */
+    private final Map<String, java.util.Optional<JsonObject>> topicKingdomGates = new TreeMap<>();
+    /** Topics whose starters require the actual speaker to resolve as a civic contact. */
+    private final Map<String, Boolean> topicCivicContacts = new TreeMap<>();
 
     /** Records that a topic's funnel is generated, so its lang keys are cleaned rather than orphaned. */
     void ownFunnelTopic(String topic) {
         funnelTopics.add(topic);
+    }
+
+    void ownTopicKingdomGate(String topic, JsonElement gate) {
+        java.util.Optional<JsonObject> parsed = gate == null
+                ? java.util.Optional.empty()
+                : java.util.Optional.of(
+                        dev.otectus.mcaconversations.conversation.KingdomGateSpec.fromJson(gate).toJson());
+        topicKingdomGates.put(topic, parsed);
+    }
+
+    void ownTopicCivicContact(String topic, boolean required) {
+        topicCivicContacts.put(topic, required);
     }
 
     /** Matcher fixtures the intent test asserts, so every generated reply is typable. */
@@ -437,6 +453,7 @@ public final class ContentCompiler {
         pruneSharedKeywords();
         checkNoTwoIntentsShareEvidence();
         Path data = resourceRoot.resolve("data/mcaconversations");
+        syncTopicGates(data.resolve("conversation_catalog/topics.json"));
 
         for (Map.Entry<String, JsonObject> entry : dialogues.entrySet()) {
             writeJson(data.resolve("dialogues").resolve(entry.getKey() + ".json"), entry.getValue());
@@ -520,6 +537,52 @@ public final class ContentCompiler {
                 withoutPrefix(langPt, "dialogue."), List.of("mcaconversations.slot."));
         spliceEntryRoutes(data.resolve("dialogues"));
         writeMatcherFixtures(fixtureRoot.resolve("generated_matcher_fixtures.tsv"));
+    }
+
+    /**
+     * Mirrors only the optional gate field from authored topic packs into their existing catalog
+     * rows. No gate means no byte change in today's corpus; adding one is strict-parsed and written
+     * to both sources by the ordinary generator workflow.
+     */
+    void syncTopicKingdomGates(Path catalogFile) throws IOException {
+        syncTopicGates(catalogFile);
+    }
+
+    /** Mirrors all top-level provider gates from authored topic sources into the runtime catalog. */
+    void syncTopicGates(Path catalogFile) throws IOException {
+        if (topicKingdomGates.isEmpty() && topicCivicContacts.isEmpty() || !Files.exists(catalogFile)) return;
+        JsonObject root = JsonParser.parseString(Files.readString(catalogFile)).getAsJsonObject();
+        JsonObject topics = root.getAsJsonObject("topics");
+        if (topics == null) throw new IllegalStateException(catalogFile + " has no topics object");
+        boolean changed = false;
+        for (Map.Entry<String, java.util.Optional<JsonObject>> authored : topicKingdomGates.entrySet()) {
+            JsonObject row = topics.has(authored.getKey()) && topics.get(authored.getKey()).isJsonObject()
+                    ? topics.getAsJsonObject(authored.getKey()) : null;
+            if (row == null) {
+                throw new IllegalStateException("authored topic '" + authored.getKey()
+                        + "' has no runtime catalog row");
+            }
+            JsonElement before = row.get("kingdom_gate");
+            JsonElement after = authored.getValue().orElse(null);
+            if (java.util.Objects.equals(before, after)) continue;
+            if (after == null) row.remove("kingdom_gate");
+            else row.add("kingdom_gate", after.deepCopy());
+            changed = true;
+        }
+        for (Map.Entry<String, Boolean> authored : topicCivicContacts.entrySet()) {
+            JsonObject row = topics.has(authored.getKey()) && topics.get(authored.getKey()).isJsonObject()
+                    ? topics.getAsJsonObject(authored.getKey()) : null;
+            if (row == null) {
+                throw new IllegalStateException("authored topic '" + authored.getKey()
+                        + "' has no runtime catalog row");
+            }
+            boolean before = row.has("civic_contact") && row.get("civic_contact").getAsBoolean();
+            if (before == authored.getValue() && (authored.getValue() || !row.has("civic_contact"))) continue;
+            if (authored.getValue()) row.addProperty("civic_contact", true);
+            else row.remove("civic_contact");
+            changed = true;
+        }
+        if (changed) writeJson(catalogFile, root);
     }
 
     /**

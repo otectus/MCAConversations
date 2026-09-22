@@ -8,6 +8,7 @@ import net.minecraftforge.fml.ModList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -84,6 +85,14 @@ public final class ReputationBridge {
 
         /** The player's standing with this villager's village. Safe default: {@code 0}. */
         int score(ServerPlayer player, Entity villager);
+
+        /**
+         * The player's standing when a local community actually resolves. Empty means unavailable,
+         * which must stay distinct from a known neutral score for effective/faction predicates.
+         */
+        default OptionalInt localScore(ServerPlayer player, Entity villager) {
+            return OptionalInt.empty();
+        }
 
         /** The current tier id, or {@code ""} when nothing resolves. */
         String tierId(ServerPlayer player, Entity villager);
@@ -727,6 +736,20 @@ public final class ReputationBridge {
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("[MCA: Conversations] reputation score failed; using 0", t);
             return 0;
+        }
+    }
+
+    /** The known local score, or empty when Reputation/community resolution is unavailable. */
+    public static OptionalInt localScore(ServerPlayer player, Entity villager) {
+        if (!isAvailable() || player == null || villager == null) {
+            return OptionalInt.empty();
+        }
+        try {
+            OptionalInt score = queries.localScore(player, villager);
+            return score == null ? OptionalInt.empty() : score;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("[MCA: Conversations] local reputation score unavailable", t);
+            return OptionalInt.empty();
         }
     }
 

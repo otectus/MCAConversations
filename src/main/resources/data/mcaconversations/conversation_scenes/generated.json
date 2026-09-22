@@ -1491,6 +1491,136 @@
         "opening_beat": "future.the_decision_between_us.open"
       }
     },
+    "topic.guild_contact.commissions_ready": {
+      "purpose": "topic:guild_contact",
+      "shape": "problem_solve",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "civic.commission_qualified",
+            "is": true,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "ultima_kingdoms"
+        ]
+      },
+      "selection": {
+        "base_priority": 39,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "conversations.scene.guild_contact.commissions_ready.respond",
+        "opening_beat": "guild_contact.commissions_ready.open"
+      }
+    },
+    "topic.guild_contact.introduction_ready": {
+      "purpose": "topic:guild_contact",
+      "shape": "problem_solve",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "civic.introduction_qualified",
+            "is": true,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "ultima_kingdoms"
+        ]
+      },
+      "selection": {
+        "base_priority": 40,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "conversations.scene.guild_contact.introduction_ready.respond",
+        "opening_beat": "guild_contact.introduction_ready.open"
+      }
+    },
+    "topic.guild_contact.qualification_recovery": {
+      "purpose": "topic:guild_contact",
+      "shape": "teach_back",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "civic.services_available",
+            "is": true,
+            "unknown": "fail"
+          },
+          {
+            "field": "civic.introduction_qualified",
+            "is": false,
+            "unknown": "fail"
+          },
+          {
+            "field": "civic.commission_qualified",
+            "is": false,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "ultima_kingdoms"
+        ]
+      },
+      "selection": {
+        "base_priority": 35,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "conversations.scene.guild_contact.qualification_recovery.respond",
+        "opening_beat": "guild_contact.qualification_recovery.open"
+      }
+    },
+    "topic.guild_contact.workshop_unavailable": {
+      "purpose": "topic:guild_contact",
+      "shape": "observe",
+      "profile": {
+        "ages": [
+          "adult"
+        ]
+      },
+      "context": {
+        "conditions": [
+          {
+            "field": "civic.services_available",
+            "is": false,
+            "unknown": "fail"
+          }
+        ],
+        "integrations": [
+          "ultima_kingdoms"
+        ]
+      },
+      "selection": {
+        "base_priority": 42,
+        "cooldown_days": 1,
+        "max_mentions_per_7_days": 3
+      },
+      "route": {
+        "question": "conversations.scene.guild_contact.workshop_unavailable.respond",
+        "opening_beat": "guild_contact.workshop_unavailable.open"
+      }
+    },
     "topic.happy.a_good_stretch": {
       "purpose": "topic:happy",
       "shape": "celebrate",
