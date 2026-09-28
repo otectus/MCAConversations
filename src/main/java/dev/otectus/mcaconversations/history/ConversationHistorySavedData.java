@@ -23,7 +23,12 @@ import java.util.function.Function;
  * {@link #mutate}, which marks the world dirty exactly when the pure store reports a real change. That
  * matters more here than in the other stores: the director reads history during selection, on every
  * interaction, and a read that marked the world dirty would turn conversation into disk traffic
- * (spec §21.6).
+ * (spec §21.6). The one other write is the first: with history on, a store created where there was
+ * no file is saved straight away, because it carries the decision whether this world predates the
+ * social model ({@link ConversationHistoryStore#createdAt}), and that must be taken once, while the
+ * world's age still means something, not again at every start until somebody talks. With history off
+ * nothing is written, so the decision waits for the first start that has history on — a world that ran
+ * for a year without it is an old world when it finally gets one.
  *
  * <p><b>Never dirty at all when degraded.</b> A file written by a newer build is read but never
  * written back in this build's shape, so {@link #setDirty()} is swallowed outright rather than
@@ -48,7 +53,7 @@ public final class ConversationHistorySavedData extends SavedData {
     // and every history in it. The DataFixTypes is null: no vanilla data fixer applies to this file.
     public static ConversationHistorySavedData get(MinecraftServer server) {
         ConversationHistorySavedData data = server.overworld().getDataStorage().computeIfAbsent(
-                new SavedData.Factory<>(ConversationHistorySavedData::create, ConversationHistorySavedData::load, null),
+                new SavedData.Factory<>(() -> createdIn(server), ConversationHistorySavedData::load, null),
                 DATA_NAME);
         data.backUpIfTruncated(server);
         return data;
@@ -93,6 +98,19 @@ public final class ConversationHistorySavedData extends SavedData {
 
     private static ConversationHistorySavedData create() {
         return new ConversationHistorySavedData(new ConversationHistoryStore());
+    }
+
+    /**
+     * The store for a world that had no file: its age decides whether it predates the social model,
+     * and with history on it is saved at once so the decision is taken only this once.
+     */
+    private static ConversationHistorySavedData createdIn(MinecraftServer server) {
+        ConversationHistorySavedData created = new ConversationHistorySavedData(
+                ConversationHistoryStore.createdAt(server.overworld().getGameTime()));
+        if (History.enabled()) {
+            created.setDirty();
+        }
+        return created;
     }
 
     private static ConversationHistorySavedData load(CompoundTag tag, HolderLookup.Provider provider) {

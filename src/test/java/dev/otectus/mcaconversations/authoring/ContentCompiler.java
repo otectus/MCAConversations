@@ -119,6 +119,13 @@ public final class ContentCompiler {
         topicTownstead.put(topic, required);
     }
 
+    /** Topics never hidden by hideExhaustedTopics; written to the catalog row as a flag. */
+    private final Map<String, Boolean> topicRepeatable = new TreeMap<>();
+
+    void ownTopicRepeatable(String topic, boolean repeatable) {
+        topicRepeatable.put(topic, repeatable);
+    }
+
     /** Matcher fixtures the intent test asserts, so every generated reply is typable. */
     private final List<String[]> matcherFixtures = new ArrayList<>();
     /** Answer names offered on each generated page, so a fixture is ranked the way play ranks it. */
@@ -560,7 +567,7 @@ public final class ContentCompiler {
     /** Mirrors all top-level provider gates from authored topic sources into the runtime catalog. */
     void syncTopicGates(Path catalogFile) throws IOException {
         if (topicKingdomGates.isEmpty() && topicCivicContacts.isEmpty() && topicTownstead.isEmpty()
-                || !Files.exists(catalogFile)) return;
+                && topicRepeatable.isEmpty() || !Files.exists(catalogFile)) return;
         JsonObject root = JsonParser.parseString(Files.readString(catalogFile)).getAsJsonObject();
         JsonObject topics = root.getAsJsonObject("topics");
         if (topics == null) throw new IllegalStateException(catalogFile + " has no topics object");
@@ -603,6 +610,19 @@ public final class ContentCompiler {
             if (before == authored.getValue() && (authored.getValue() || !row.has("townstead"))) continue;
             if (authored.getValue()) row.addProperty("townstead", true);
             else row.remove("townstead");
+            changed = true;
+        }
+        for (Map.Entry<String, Boolean> authored : topicRepeatable.entrySet()) {
+            JsonObject row = topics.has(authored.getKey()) && topics.get(authored.getKey()).isJsonObject()
+                    ? topics.getAsJsonObject(authored.getKey()) : null;
+            if (row == null) {
+                throw new IllegalStateException("authored topic '" + authored.getKey()
+                        + "' has no runtime catalog row");
+            }
+            boolean before = row.has("repeatable") && row.get("repeatable").getAsBoolean();
+            if (before == authored.getValue() && (authored.getValue() || !row.has("repeatable"))) continue;
+            if (authored.getValue()) row.addProperty("repeatable", true);
+            else row.remove("repeatable");
             changed = true;
         }
         if (changed) writeJson(catalogFile, root);

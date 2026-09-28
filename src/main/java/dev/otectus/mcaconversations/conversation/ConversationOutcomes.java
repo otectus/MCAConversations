@@ -45,6 +45,14 @@ public final class ConversationOutcomes {
         private final ConversationSession session;
         private final StanceFamily stance;
         private final String topic;
+        private final String question;
+        private final String answer;
+        /**
+         * Topic-completion inputs, captured now because the {@code end} op runs inside the answer and
+         * resets the session's topic before this submission settles (see {@link TopicExhaustion}).
+         */
+        private final String openingBeatId;
+        private final int repliesBefore;
         private int depth = 1;
         private boolean succeeded;
         private int measuredHearts;
@@ -54,13 +62,17 @@ public final class ConversationOutcomes {
         private ReactionRequest requested;
 
         private Submission(Entity villager, ServerPlayer player, ConversationSession.Frontend frontend,
-                           ConversationSession session, StanceFamily stance) {
+                           ConversationSession session, StanceFamily stance, String question, String answer) {
             this.villager = villager;
             this.player = player;
             this.frontend = frontend;
             this.session = session;
             this.stance = stance;
+            this.question = question;
+            this.answer = answer;
             this.topic = session == null ? null : session.topicId().orElse(null);
+            this.openingBeatId = session == null ? null : session.openingBeatId().orElse(null);
+            this.repliesBefore = session == null ? 0 : session.substantiveReplies();
         }
 
         /** Whether the answer ran. A reply that failed still reports its real heart change, but plays nothing. */
@@ -100,7 +112,7 @@ public final class ConversationOutcomes {
         } catch (Throwable ignored) {
             // A reply with no declared stance is ordinary; it simply contributes no stance tag.
         }
-        Submission submission = new Submission(villager, player, frontend, session, stance);
+        Submission submission = new Submission(villager, player, frontend, session, stance, question, answer);
         ACTIVE.set(submission);
         return submission;
     }
@@ -192,6 +204,10 @@ public final class ConversationOutcomes {
         if (!s.succeeded) {
             return;
         }
+        // The reply ran: count it against the topic it was submitted in and record the topic as
+        // discussed when this was the authored way out. Guarded inside; never delays the reaction.
+        TopicExhaustion.onReplySettled(s.villager, s.player, s.session, s.topic, s.question, s.answer,
+                s.openingBeatId, s.repliesBefore);
         ReactionRequest request = s.requested;
         if (request == null) {
             Optional<ReactionSemantic> derived = ReactionSemantic.derive(s.tier, s.outcome, s.stance, s.act,

@@ -66,6 +66,7 @@ class ConfigSpecTest {
             Map.entry("dynamic.maxInitiativesPerVillagerPlayerDay", 1),
             Map.entry("dynamic.initiativeCooldownTicks", 300),
             Map.entry("dynamic.dynamicTopicSlots", 3),
+            Map.entry("topics.hideExhaustedTopics", true),
             Map.entry("history.episodeRetentionDays", 32),
             Map.entry("history.activeEpisodeCap", 6),
             Map.entry("history.resolvedEpisodeCap", 24),
@@ -154,6 +155,7 @@ class ConfigSpecTest {
         assertEquals(1, McaConversationsConfig.maxInitiativesPerVillagerPlayerDay());
         assertEquals(300, McaConversationsConfig.initiativeCooldownTicks());
         assertEquals(3, McaConversationsConfig.dynamicTopicSlots());
+        assertTrue(McaConversationsConfig.hideExhaustedTopics());
 
         assertEquals(32, McaConversationsConfig.episodeRetentionDays());
         assertEquals(6, McaConversationsConfig.activeEpisodeCap());

@@ -17,8 +17,8 @@ import java.util.Set;
 /**
  * Everything one villager durably remembers about one player's conversations: the daily affection
  * budget counters, which decisions have already paid out, where each arc stands, which one-shot
- * milestones have fired, which side of an exclusive choice was taken, and a short ring of recently
- * applied transaction ids for packet idempotency.
+ * milestones have fired, which side of an exclusive choice was taken, which catalog topics have been
+ * discussed to the end, and a short ring of recently applied transaction ids for packet idempotency.
  *
  * <p>Deliberately separate from {@code DispositionRecord}. The vector is a mood-like thing that
  * decays and may safely be dropped on a schema change; this is the ledger that makes "the game
@@ -35,6 +35,8 @@ public final class ProgressRecord {
     static final int MAX_ARCS = 32;
     static final int MAX_MILESTONES = 128;
     static final int MAX_EXCLUSIVE_GROUPS = 32;
+    /** Catalog topics this pair has discussed to the end; a topic id is short and the catalog is small. */
+    static final int MAX_DISCUSSED_TOPICS = 128;
     /**
      * How many recent transaction ids to remember. A duplicated packet arrives within the same tick
      * or two; anything older cannot be a duplicate of a decision the player is still making.
@@ -51,6 +53,7 @@ public final class ProgressRecord {
     private final Map<String, Integer> arcStages = new LinkedHashMap<>();
     private final Set<String> milestones = new LinkedHashSet<>();
     private final Map<String, String> exclusives = new LinkedHashMap<>();
+    private final Set<String> discussedTopics = new LinkedHashSet<>();
     private final Deque<String> recentTransactions = new ArrayDeque<>();
 
     public ProgressRecord(long now) {
@@ -199,6 +202,27 @@ public final class ProgressRecord {
         return true;
     }
 
+    // --- Discussed topics ------------------------------------------------------
+
+    /** True when this pair has discussed the catalog topic to the end at least once. */
+    public boolean hasDiscussedTopic(String topicId) {
+        return topicId != null && discussedTopics.contains(topicId);
+    }
+
+    /**
+     * Records that the pair discussed a catalog topic to the end. Returns true only the first time;
+     * a topic that would push the set past its bound is refused rather than evicting an earlier one,
+     * because forgetting a finished topic would put it back on the menu.
+     */
+    public boolean markTopicDiscussed(String topicId) {
+        if (topicId == null || topicId.isBlank() || discussedTopics.contains(topicId)
+                || discussedTopics.size() >= MAX_DISCUSSED_TOPICS) {
+            return false;
+        }
+        discussedTopics.add(topicId);
+        return true;
+    }
+
     // --- Views for debug output and tests --------------------------------------
 
     public Map<String, Integer> arcStagesView() {
@@ -211,6 +235,10 @@ public final class ProgressRecord {
 
     public Map<String, String> exclusivesView() {
         return Collections.unmodifiableMap(exclusives);
+    }
+
+    public Set<String> discussedTopicsView() {
+        return Collections.unmodifiableSet(discussedTopics);
     }
 
     // --- Serialization ---------------------------------------------------------
@@ -237,6 +265,12 @@ public final class ProgressRecord {
         CompoundTag exclusiveTag = new CompoundTag();
         exclusives.forEach(exclusiveTag::putString);
         tag.put("exclusives", exclusiveTag);
+
+        if (!discussedTopics.isEmpty()) {
+            // Absent until a topic is finished, so a record written before the flag existed and one
+            // written after it with nothing finished are byte-identical.
+            tag.put("discussed", stringList(discussedTopics));
+        }
 
         tag.put("tx", stringList(recentTransactions));
         return tag;
@@ -288,6 +322,9 @@ public final class ProgressRecord {
                     record.exclusives.put(key, member);
                 }
             }
+
+            // Absent in every record written before the topic switch existed: nothing is finished.
+            readStrings(tag, "discussed", MAX_DISCUSSED_TOPICS, record.discussedTopics::add);
 
             readStrings(tag, "tx", MAX_TRANSACTIONS, record.recentTransactions::addLast);
             return Optional.of(record);

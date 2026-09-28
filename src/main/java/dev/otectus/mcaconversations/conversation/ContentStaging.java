@@ -244,19 +244,27 @@ public final class ContentStaging {
         List<ContentProblem> problems = new ArrayList<>();
         Map<String, SceneDefinition> byId = new LinkedHashMap<>();
         Map<String, ResourceOrigin> origins = new LinkedHashMap<>();
+        Map<String, Boolean> declared = new LinkedHashMap<>();
         section(ContentSection.CONVERSATION_SCENES, documents, "scenes", problems, (entry, ctx) -> {
             SceneDefinition scene = SceneDefinition.fromJson(entry.id(), entry.json());
             if (scene != null) {
                 byId.put(scene.id(), scene);
                 origins.put(scene.id(), entry.origin());
+                declared.put(scene.id(), SceneDefinition.declaresSocialContract(entry.json()));
             }
             return null;
         });
         if (fatal(problems)) {
             return StagingResult.refused(problems);
         }
+        Map<String, List<String>> unaudited = unauditedScenes(byId.keySet(), origins, declared);
+        unaudited.forEach((pack, ids) -> problems.add(ContentProblem.of(ContentSection.CONVERSATION_SCENES,
+                origins.get(ids.get(0)), "/scenes/" + ids.get(0), ids.get(0), ContentSeverity.INFO,
+                "social_contract_absent", ids.size() + " scene(s) from pack " + pack + " declare no `social` "
+                        + "block: they stay eligible as written, and what they assume about the player is not "
+                        + "checked. See /conversations social audit")));
         StagingResult<SceneCatalog> built = build(ContentSection.CONVERSATION_SCENES, problems,
-                () -> SceneCatalog.build(new ArrayList<>(byId.values())));
+                () -> SceneCatalog.build(new ArrayList<>(byId.values()), unaudited));
         if (!built.accepted()) {
             return built;
         }
@@ -272,6 +280,34 @@ public final class ContentStaging {
             return StagingResult.refused(all);
         }
         return StagingResult.accepted(catalog, all);
+    }
+
+    /**
+     * Scenes from packs other than this mod's own that declare no {@code social} block, by pack id
+     * (Stability spec §9.3). This mod's bundled scenes are held to their contracts by the content
+     * compiler at build time; anybody else's are loaded as written and can only be reported.
+     */
+    static Map<String, List<String>> unauditedScenes(java.util.Collection<String> ids,
+                                                     Map<String, ResourceOrigin> origins,
+                                                     Map<String, Boolean> declared) {
+        Map<String, List<String>> out = new TreeMap<>();
+        for (String id : new java.util.TreeSet<>(ids)) {
+            ResourceOrigin origin = origins.get(id);
+            String pack = origin == null ? ResourceOrigin.UNKNOWN_PACK : origin.pack();
+            if (!bundledPack(pack) && !Boolean.TRUE.equals(declared.get(id))) {
+                out.computeIfAbsent(pack, unused -> new ArrayList<>()).add(id);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Whether a pack id names this mod's own jar: Forge calls it {@code mod:<id>} and NeoForge
+     * {@code mod/<id>}, and the content is identical on both.
+     */
+    static boolean bundledPack(String pack) {
+        return ("mod:" + dev.otectus.mcaconversations.McaConversations.MOD_ID).equals(pack)
+                || ("mod/" + dev.otectus.mcaconversations.McaConversations.MOD_ID).equals(pack);
     }
 
     // --- Village culture -----------------------------------------------------------------------

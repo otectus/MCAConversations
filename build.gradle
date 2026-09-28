@@ -140,6 +140,7 @@ ext.siblingApi = { String key, String overrideProperty ->
 }
 ext.mcaQuestsApi = siblingApi('mcaquests', 'mcaQuestsApiPath')
 ext.mcaReputationApi = siblingApi('mcareputation', 'mcaReputationApiPath')
+ext.mcaCrimeApi = siblingApi('mcacrime', 'mcaCrimeApiPath')
 
 dependencies {
     // MCA Reborn — a mojmap NeoForge mod jar, so it loads as a real mod under runClient/runServer.
@@ -181,6 +182,10 @@ dependencies {
     // fallback that dropped the compat sources, which turned a missing sibling into a quietly
     // integration-less jar.
     compileOnly files(mcaReputationApi.file)
+
+    // MCA: Crime — OPTIONAL integration (1.8.0), compile-only, on the same vendored-API terms; gated at
+    // runtime by CrimeBridge's ModList check and never bundled.
+    compileOnly files(mcaCrimeApi.file)
 
     // No Mixin dependency or annotation processor: ModDevGradle wires both through NeoForge, and
     // 1.21.1 needs no refmap (dev and production both run official Mojang names).
@@ -323,7 +328,8 @@ tasks.register('verifySiblingApis') {
     doLast {
         def problems = []
         [[key: 'mcaquests', property: 'mcaQuestsApiPath', api: mcaQuestsApi],
-         [key: 'mcareputation', property: 'mcaReputationApiPath', api: mcaReputationApi]].each { provider ->
+         [key: 'mcareputation', property: 'mcaReputationApiPath', api: mcaReputationApi],
+         [key: 'mcacrime', property: 'mcaCrimeApiPath', api: mcaCrimeApi]].each { provider ->
             if (!provider.api.pinned) {
                 logger.lifecycle("verifySiblingApis: ${provider.key} is overridden, hash not checked.")
                 return

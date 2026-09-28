@@ -97,6 +97,20 @@ public final class ProgressSavedData extends SavedData {
         return decided;
     }
 
+    /** Read-only: whether this pair has discussed the topic to the end. Never creates a record. */
+    public boolean hasDiscussedTopic(UUID villager, UUID player, String topicId) {
+        return store.get(villager, player).map(record -> record.hasDiscussedTopic(topicId)).orElse(false);
+    }
+
+    /** Records a finished topic. Returns true the first time; see {@link ProgressRecord#markTopicDiscussed}. */
+    public boolean markTopicDiscussed(UUID villager, UUID player, String topicId, long now) {
+        ProgressRecord record = store.getOrCreate(villager, player, now);
+        boolean first = record.markTopicDiscussed(topicId);
+        record.touch(now);
+        setDirty();
+        return first;
+    }
+
     public int prune(long now, long staleTicks) {
         int removed = store.prune(now, staleTicks);
         if (removed > 0) {

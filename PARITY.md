@@ -72,7 +72,7 @@ PORT_STATUS.md § Verification is empty for that directory. Paths are relative t
 - [x] `compat/McaBridge`, `compat/McaCompat` — at SOURCE HEAD (McaBridge differs only by the `net.neoforged.fml.ModList` import)
 - [x] `compat/quests/*` (7), `compat/reputation/*` (1), `compat/seasons/*` (1) + `QuestsBridge`/`ReputationBridge`/`SeasonsBridge` — unchanged in SOURCE since 89edad2; both sibling class dirs exist so the `compileOnly` branches are taken
 - [x] Townstead: `compat/Townstead*.java` (16) + `compat/townstead/*` (3; 112 manifest `Member`s unchanged, all resolve against 0.7.6 NeoForge), `TownsteadCompat::init` last in `onCommonSetup`
-- [x] `neoforge.mods.toml` optional deps: `mcaquests [0.8,)`, `mcareputation [0.2,)`, `townstead [0.7.5,0.8)`; required `neoforge`, `minecraft`, `mca [7.7.13,8)`
+- [x] `neoforge.mods.toml` optional deps: `mcaquests [0.8,)`, `mcareputation [0.2,)`, `townstead [0.7.5,0.9)`; required `neoforge`, `minecraft`, `mca [7.7.13,8)`
 
 ## H. Commands
 - [x] `/conversations gossip list|clear`, `/conversations chat on|off|status|debug-ask|debug` (`command/ConversationsCommand.java` at HEAD; only the attachment read differs)

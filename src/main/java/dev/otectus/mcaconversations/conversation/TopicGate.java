@@ -8,7 +8,13 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.function.Predicate;
 
-/** The shared age, kingdom and civic-contact decision used by every catalog-topic entry path. */
+/**
+ * The shared age, kingdom, civic-contact and Townstead decision used by every catalog-topic entry path,
+ * plus — on the starter overloads only — whether this pair has already discussed the topic to the end
+ * ({@link TopicExhaustion}). The {@link TopicEntry} overload leaves that out on purpose: the dynamic
+ * hub's slots go through it, and a Continue/Ask entry carries a live thread or episode, which is new
+ * content whatever the topic's history.
+ */
 public final class TopicGate {
 
     private TopicGate() {
@@ -23,7 +29,7 @@ public final class TopicGate {
                                  Entity villager, ServerPlayer player) {
         if (catalog == null || question == null || answer == null) return true;
         return catalog.byStarter(question, answer)
-                .map(entry -> allows(entry, villager, player))
+                .map(entry -> allows(entry, villager, player) && !TopicExhaustion.hides(entry, villager, player))
                 .orElse(true);
     }
 
@@ -60,12 +66,23 @@ public final class TopicGate {
                           Predicate<KingdomGateSpec> kingdomEvaluator,
                           java.util.function.BooleanSupplier civicContactEvaluator,
                           java.util.function.BooleanSupplier townsteadEvaluator) {
+        return allows(catalog, question, answer, age, kingdomEvaluator, civicContactEvaluator, townsteadEvaluator,
+                entry -> false);
+    }
+
+    /** As above, with the pair's "already discussed to the end" answer supplied by the test. */
+    static boolean allows(ConversationCatalog catalog, String question, String answer, AgeGroup age,
+                          Predicate<KingdomGateSpec> kingdomEvaluator,
+                          java.util.function.BooleanSupplier civicContactEvaluator,
+                          java.util.function.BooleanSupplier townsteadEvaluator,
+                          Predicate<TopicEntry> exhaustedEvaluator) {
         if (catalog == null || question == null || answer == null) return true;
         return catalog.byStarter(question, answer)
                 .map(entry -> entry.allowsAge(age)
                         && (!entry.townstead() || townsteadEvaluator.getAsBoolean())
                         && entry.kingdomGate().map(kingdomEvaluator::test).orElse(true)
-                        && (!entry.civicContact() || civicContactEvaluator.getAsBoolean()))
+                        && (!entry.civicContact() || civicContactEvaluator.getAsBoolean())
+                        && !TopicExhaustion.hidden(entry, true, exhaustedEvaluator.test(entry)))
                 .orElse(true);
     }
 }

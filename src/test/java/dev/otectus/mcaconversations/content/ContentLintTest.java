@@ -2,6 +2,7 @@ package dev.otectus.mcaconversations.content;
 
 import dev.otectus.mcaconversations.support.TestPaths;
 
+import dev.otectus.mcaconversations.conversation.TopicExhaustion;
 import dev.otectus.mcaconversations.scene.InitiativePlanner;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -96,6 +97,11 @@ class ContentLintTest {
             "dialogue.conversations.quest.accepted", "dialogue.conversations.quest.in_progress",
             "dialogue.conversations.quest.ready", "dialogue.conversations.quest.completed",
             "dialogue.conversations.quest.failed");
+
+    /** The MCA: Crime guard lines the crime voice resolver references from Java (1.8.0). */
+    private static final Set<String> CRIME_VOICE_KEYS = Set.of(
+            "dialogue.conversations.crime.guard_challenge", "dialogue.conversations.crime.guard_stand_down",
+            "dialogue.conversations.crime.report_filed", "dialogue.conversations.crime.apology_accepted");
 
     // Condition VALUE vocabularies, pinned from the MCA 7.6.26 jar. Most of these are parsed with
     // Enum.valueOf at DATAPACK LOAD TIME and MCA's Dialogues loader has no error containment — an
@@ -758,6 +764,7 @@ class ContentLintTest {
         }
         // Quest lifecycle lines are referenced by the MCA: Quests voice resolver (Java), not by JSON.
         referenced.addAll(QUEST_VOICE_KEYS);
+        referenced.addAll(CRIME_VOICE_KEYS);
         // Intentional extensions of MCA's own dialogue pools (their bases live in MCA's lang),
         // plus dialogue.chat: MCA's next-action builds the header prompt from the raw next string,
         // so the Chat->Conversations redirect displays "dialogue.chat" as the hub entry header even
@@ -784,6 +791,11 @@ class ContentLintTest {
             // something of its own to raise. Spoken from InitiativePlanner, which reaches them by
             // purpose key rather than through any dialogue file, so nothing references them here.
             if (base.startsWith("dialogue." + InitiativePlanner.PHRASE_PREFIX)) {
+                continue;
+            }
+            // dialogue.conversations.topics.nothing_new is said from TopicExhaustion when a category
+            // page has no unfinished topic left; no dialogue file names it.
+            if (base.equals("dialogue." + TopicExhaustion.NOTHING_NEW_PHRASE)) {
                 continue;
             }
             if (!referenced.contains(base) && !mcaPoolBases.contains(base)) {

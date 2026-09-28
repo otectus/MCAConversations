@@ -140,6 +140,7 @@ is the server thinking, and the card waits rather than closing and opening again
 | `enableTemplates` | `true` | templated lines render with neutral fallbacks ("someone", "the village") |
 | `enableGossip` | `true` | no events are detected or told; the "news" topic answers "quiet week" |
 | `enableQuests` | `true` | MCA: Quests integration is inert: the four `conversations_quest_*` conditions score 0, quest lines aren't voiced, and finished quests seed no gossip. Only ever active when the `mcaquests` mod is installed. Note that `conversations_quest_available` is always about the villager in front of you, so `scope` does not apply to it |
+| `enableCrime` | `true` | MCA: Crime integration is inert: the four `conversations_crime_*` conditions score 0, the `crime.*` context fields read UNAVAILABLE, witnesses write no memory and Crime's guard lines are not voiced. Only ever active when the `mcacrime` mod is installed (1.8.0). |
 | `enableWeatherLines` | `true` | weather-aware lines are off; the `conversations_weather` condition and the `world` feature flag score as disabled |
 | `enableBranching` | `true` | converted topics fall back to their 1.0.0 one-line result and return to the category, payout and all. Nothing is ever left as an empty page: each starter carries an explicit legacy fallback |
 
@@ -294,6 +295,14 @@ The heartbeat cadence the lease is renewed on is an internal constant (20 ticks)
 setting: it is an implementation detail of the window, and the lease above is the number that
 decides anything.
 
+## `[topics]`
+
+Server file. Which catalog topics a villager still offers a player.
+
+| Key | Default | Meaning |
+|---|---|---|
+| `hideExhaustedTopics` | `true` | Hide a catalog topic from a villager's list once **this player** has discussed it with **this villager** to the end. "To the end" means the villager answered at least one real reply inside the topic and the player then left it through the dialogue — the leave answer, or an answer that returns to the category. Leaving on the opening page, closing the screen, walking away, disconnecting, or being brushed off by a guarded villager does not count. Tracked per player and per villager: other villagers still offer the topic, and other players still get it from this villager. Completion is always recorded, so switching this back on hides topics finished while it was off. Topics flagged `repeatable` in the conversation catalog (check-ins, news, rumours, what they noticed, weather, season, the day, shared history, work offers, standing and the Capitals and Townstead topics) are never hidden. When a category has nothing left the villager says so once and the page keeps its Back entry. The record lives in the progress ledger (`data/mcaconversations_progress.dat`), so it goes with the villager on death and follows `rpg.dispositionStaleDays` pruning like milestones do. |
+
 ## `[social]`
 
 > Server file. New in 1.8.0.
@@ -306,7 +315,7 @@ import — is in `DATAPACK.md` under *Relationship bands*.
 | Option | Default | Range | Meaning |
 |---|---|---|---|
 | `relationshipAwareDialogue` | `true` | | Let familiarity and repeated meetings, not hearts alone, decide how close a villager treats you. Off keeps the older heart-only bands; family roles, ruptures and the stranger-safe greetings apply either way |
-| `legacyRelationshipMigration` | `true` | | In a world that existed before 1.8.0, treat a villager who already had positive hearts with you, or is family, as someone you know. Settled once per pair, at the first exchange after the upgrade; nothing is invented, zero-heart pairs stay strangers, and a new world never imports anything |
+| `legacyRelationshipMigration` | `true` | | In a world that existed before this mod tracked relationships in it — upgraded from before 1.8.0, an MCA world adding this mod, or one that ran with history off — treat a villager who already had positive hearts with you, or is family, as someone you know. Settled once per pair, at the first exchange; nothing is invented, zero-heart pairs stay strangers, and a brand-new world never imports anything |
 | `acquaintanceFamiliarity` / `acquaintanceDays` | `8` / `2` | 0–100 / 1–365 | Familiarity, and separate days with a real exchange, before a villager counts you as an acquaintance. No hearts are needed |
 | `friendHearts` / `friendFamiliarity` / `friendDays` | `60` / `20` / `4` | 1–100 / 0–100 / 1–365 | What friendship needs, all together; trust must also be at least the villager's resting trust |
 | `confidantHearts` / `confidantFamiliarity` / `confidantDays` | `80` / `40` / `8` | 1–100 / 0–100 / 1–365 | What confiding needs, all together |
@@ -358,7 +367,7 @@ Townstead not installed, none of this does anything and nothing changes**: every
 condition scores `0`, every Townstead template variable falls back to its neutral wording, no
 Townstead class is ever loaded, and every existing seeded check resolves exactly as it does today.
 
-Supported Townstead range: `[0.7.5,0.8)`, gated on `0.7.6`. Conversations reads Townstead state and
+Supported Townstead range: `[0.7.5,0.9)`, gated on `0.7.6`. Conversations reads Townstead state and
 never writes it — needs, schedules, professions, skills, roots, genes, the calendar, buildings and
 village spirit all stay Townstead's to own. The three things Conversations does tell Townstead are a
 measured heart change, a typed-chat conversation opening and closing, and an authored, heart-neutral

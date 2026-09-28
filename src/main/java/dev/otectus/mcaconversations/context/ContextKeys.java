@@ -207,6 +207,17 @@ public final class ContextKeys {
     public static final ContextKey<Set<String>> STANDING_SPEAKER_KNOWN_FOR =
             ContextKey.generic("standing.speaker_known_for", Set.class);
 
+    // --- Crime (1.8.0; MCA: Crime; written only by CrimeContextSource) ---------------------------
+    // Every field reads UNAVAILABLE without MCA: Crime. Coarse on purpose: what a villager could know.
+    /** Whether MCA: Crime currently holds a warrant on the player — the posters are up. */
+    public static final ContextKey<Boolean> CRIME_WANTED = ContextKey.volatileOf("crime.wanted", Boolean.class);
+    /** {@code lawful}, {@code neutral} or {@code outlaw}: how the village's law currently classes the player. */
+    public static final ContextKey<String> CRIME_BAND = ContextKey.volatileOf("crime.band", String.class);
+    /** Whether the player is serving a jail sentence right now. */
+    public static final ContextKey<Boolean> CRIME_JAILED = ContextKey.volatileOf("crime.jailed", Boolean.class);
+    /** Whether the speaker is the law — a guard or an archer — whose lines about a warrant differ from a farmer's. */
+    public static final ContextKey<Boolean> CRIME_SPEAKER_IS_LAW = ContextKey.of("crime.speaker_is_law", Boolean.class);
+
     // --- Townstead (1.8.0; written only by TownsteadContextSource) -------------------------------
     /** True when Townstead is live and has a snapshot of this villager. */
     public static final ContextKey<Boolean> TOWNSTEAD_PRESENT = ContextKey.of("townstead.present", Boolean.class);

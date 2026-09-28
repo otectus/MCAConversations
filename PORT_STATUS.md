@@ -121,7 +121,7 @@ must accept `keyPressed` instead of `m_7933_`.
   `d8fe667d340e54dc7fd46bca762f8b5a0964a2bcce8a640dce3cd0370ebdbffe`. The 1.20.1 jar for the legacy
   probe is at `C:\Users\crims\curseforge\minecraft\Instances\RealCraft\mods\townstead-0.7.6+1.20.1.jar`.
 - `gradle.properties`: `mod_version=1.5.1`; `mca_probe_versions=7.7.33+1.21.1,7.7.36-beta.3+1.21.1`.
-- `neoforge.mods.toml`: optional `mcaquests [0.8,)` and `townstead [0.7.5,0.8)` added next to the
+- `neoforge.mods.toml`: optional `mcaquests [0.8,)` and `townstead [0.7.5,0.9)` added next to the
   optional `mcareputation [0.2,)`.
 - `build.gradle`: `mcaProbe${i}` configurations, `test.doFirst` sets `mcaconversations.probe.jars`,
   `townsteadProbeTest` task (not wired into build; `failOnNoMatchingTests=false` until slice 9).

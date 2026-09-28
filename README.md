@@ -14,16 +14,19 @@ lives in `tools/parity/`.
 ## Features (1.8.0)
 
 - **A first meeting sounds like one.** A villager who has never met you says a plain hello rather
-  than greeting you by name like an old friend; someone you have met says "hello again"; friends and
-  family get the warm greetings in their own personality's voice.
+  than greeting you by name like an old friend; someone you have met says "hello again"; a regular,
+  a friend, a confidant, a spouse, a relative and somebody you have fallen out with each get a
+  greeting of their own, in their own personality's voice.
 - **Friendship has to be lived.** How close a villager treats you now needs separate days of actually
   talking and the familiarity you have built, not just hearts — and being their parent, child or
-  sibling finally counts as family. Worlds from before this version keep the friendships they had.
+  sibling finally counts as family. Worlds from before this version, and MCA worlds adding
+  Conversations for the first time, keep the friendships they had.
 - **Walking through the village is quieter.** Friends greet you more often than strangers, one
   greeting at a time, and a villager who says hello as you pass keeps walking unless you answer.
 - **Nobody knows your name before you have met.** Strangers greet and see you off without it, a
-  respected stranger gets courtesy and nothing presumed, partners and family have greetings of their
-  own, and every personality voices the stranger and "hello again" greetings in character.
+  respected stranger gets courtesy and nothing presumed, and partners and family have greetings of
+  their own — your child greets you as a parent, your parent as their grown child. Every personality
+  voices all of these greetings in character.
 - **Townstead villagers live their Townstead lives in conversation.** With Townstead installed, a
   *Life here* category of eight topics — how they are keeping, their day, their trade, the years,
   their people, their places, what the village is becoming, the calendar — answers to their real

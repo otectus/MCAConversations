@@ -64,6 +64,9 @@ public final class McaConversations {
         // MCA for the same reason as Quests: our reputation-aware conditions are registered by the MCA
         // registrar and must exist before any dialogue JSON referencing them is parsed.
         event.enqueueWork(dev.otectus.mcaconversations.compat.ReputationBridge::tryRegister);
+        // And the optional MCA: Crime integration (no-op when that mod is absent), on the same terms:
+        // our crime-aware conditions are registered by the MCA registrar and must exist first (1.8.0).
+        event.enqueueWork(dev.otectus.mcaconversations.compat.CrimeBridge::tryRegister);
         // And the optional Serene Seasons integration (reflection-only; calendar fallback when absent).
         event.enqueueWork(SeasonsBridge::tryRegister);
         // Last, and by name: the Townstead implementation is reached through a string so no

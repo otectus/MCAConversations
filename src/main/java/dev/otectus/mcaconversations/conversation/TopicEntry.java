@@ -36,7 +36,17 @@ public record TopicEntry(String id,
                          Map<String, Set<String>> exclusiveGroups,
                          Optional<KingdomGateSpec> kingdomGate,
                          boolean civicContact,
-                         boolean townstead) {
+                         boolean townstead,
+                         boolean repeatable) {
+
+    /** A topic that is hidden once discussed to the end, as every topic before the flag existed. */
+    public TopicEntry(String id, String entryQuestion, String entryAnswer, DepthClass depth, String returnQuestion,
+                      Set<AgeGroup> ages, Set<StanceFamily> requiredStanceFamilies, boolean chatRequired,
+                      Optional<Arc> arc, Set<String> milestones, Map<String, Set<String>> exclusiveGroups,
+                      Optional<KingdomGateSpec> kingdomGate, boolean civicContact, boolean townstead) {
+        this(id, entryQuestion, entryAnswer, depth, returnQuestion, ages, requiredStanceFamilies, chatRequired,
+                arc, milestones, exclusiveGroups, kingdomGate, civicContact, townstead, false);
+    }
 
     /** A topic with no Townstead requirement, as every topic before 1.8.0 was. */
     public TopicEntry(String id, String entryQuestion, String entryAnswer, DepthClass depth, String returnQuestion,
@@ -161,10 +171,21 @@ public record TopicEntry(String id,
             }
             townstead = flag.getAsBoolean();
         }
+        // Never hidden by hideExhaustedTopics: its lines come from what is happening now, not from a
+        // story that can be told once. Strict for the same reason as the flags above.
+        boolean repeatable = false;
+        if (json.has("repeatable")) {
+            JsonElement flag = json.get("repeatable");
+            if (!flag.isJsonPrimitive() || !flag.getAsJsonPrimitive().isBoolean()) {
+                throw new IllegalArgumentException("topic '" + id + "' has a non-boolean \"repeatable\"");
+            }
+            repeatable = flag.getAsBoolean();
+        }
 
         return new TopicEntry(id, entryQuestion, entryAnswer, depth, returnQuestion,
                 Set.copyOf(ages), Set.copyOf(families), chatRequired, arc,
-                Set.copyOf(milestones), Map.copyOf(exclusiveGroups), kingdomGate, civicContact, townstead);
+                Set.copyOf(milestones), Map.copyOf(exclusiveGroups), kingdomGate, civicContact, townstead,
+                repeatable);
     }
 
     /**

@@ -92,6 +92,14 @@ public final class ConversationSession {
     private Frontend frontend = Frontend.GUI;
     private CloseReason lastCloseReason;
 
+    /** The first beat entered after the topic began: the villager's opening line, if contracted. */
+    private String openingBeatId;
+    /** Replies the villager answered inside this topic; see {@link TopicExhaustion}. */
+    private int substantiveReplies;
+    /** Whether this topic has already been recorded as fully discussed. */
+    private boolean topicConcluded;
+    /** The last page for which the "nothing new to talk about" line was said, so it is said once. */
+    private String nothingNewSaidOn;
     private String currentBeatId;
     private String currentSubject;
     private NpcSpeechAct lastNpcAct;
@@ -386,6 +394,41 @@ public final class ConversationSession {
 
     // --- Semantic turn state ----------------------------------------------------
 
+    // --- Topic completion bookkeeping (hideExhaustedTopics) -----------------------
+
+    /** The villager's opening beat for the current topic, when the route named one. */
+    public Optional<String> openingBeatId() {
+        return Optional.ofNullable(openingBeatId);
+    }
+
+    /** How many replies the villager has answered inside the current topic. */
+    public int substantiveReplies() {
+        return substantiveReplies;
+    }
+
+    public void noteSubstantiveReply() {
+        if (substantiveReplies < Integer.MAX_VALUE) {
+            substantiveReplies++;
+        }
+    }
+
+    public boolean topicConcluded() {
+        return topicConcluded;
+    }
+
+    public void markTopicConcluded() {
+        this.topicConcluded = true;
+    }
+
+    /** Claims the one "nothing new" line per page; true the first time this page asks. */
+    public boolean claimNothingNewLine(String question) {
+        if (question == null || question.equals(nothingNewSaidOn)) {
+            return false;
+        }
+        nothingNewSaidOn = question;
+        return true;
+    }
+
     /** The beat the villager is currently standing on, if the route was contracted. */
     public Optional<String> currentBeatId() {
         return Optional.ofNullable(currentBeatId);
@@ -440,6 +483,9 @@ public final class ConversationSession {
         if (beat == null) {
             return;
         }
+        if (this.openingBeatId == null) {
+            this.openingBeatId = beat.id();
+        }
         this.currentBeatId = beat.id();
         this.currentSubject = beat.subject();
         this.lastNpcAct = beat.npcAct();
@@ -470,6 +516,9 @@ public final class ConversationSession {
     }
 
     private void resetTurn() {
+        this.openingBeatId = null;
+        this.substantiveReplies = 0;
+        this.topicConcluded = false;
         this.currentBeatId = null;
         this.currentSubject = null;
         this.lastNpcAct = null;

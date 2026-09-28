@@ -92,9 +92,13 @@ description='''${mod_description}'''
 # every Townstead template variable falls back, and no Townstead class is resolved. Ordered AFTER so
 # its registries and reaction data exist before we read them. Townstead 0.7.6 has a NeoForge 1.21.1
 # release, so this range is live on 1.21.1 rather than inert.
+# The range matches MCA: Quests' ([0.7.5,0.9)): NeoForge enforces an optional range when the mod IS
+# present, so the old [0.7.5,0.8) upper bound refused to launch with Townstead 0.8 (the release that
+# adds api.v1) even though the reflective binding stubs every member it cannot resolve. 0.9 has not
+# been seen; the bound is a statement of what was probed, and the binding degrades below it.
 [[dependencies.${mod_id}]]
     modId="townstead"
     type="optional"
-    versionRange="[0.7.5,0.8)"
+    versionRange="[0.7.5,0.9)"
     ordering="AFTER"
     side="BOTH"

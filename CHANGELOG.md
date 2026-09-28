@@ -19,14 +19,34 @@ see; what changed is what a villager may *assume* about you. And with Townstead 
 villagers' needs, shifts, trades, years, roots, buildings, village spirit and calendar become
 something they talk about, act on and gossip about.
 
+### Added — family integration pass (2026-09-27)
+
+- **MCA: Crime integration** (`compat/CrimeBridge`, `compat/crime/`, compiled against Crime's vendored
+  compile-only API jar and loaded by name after the presence check). Four dialogue conditions —
+  `conversations_crime_wanted`, `conversations_crime_band` (`lawful`/`neutral`/`outlaw`),
+  `conversations_crime_jailed`, `conversations_crime_heat` — that score 0 without Crime; four context
+  fields (`crime.wanted`, `crime.band`, `crime.jailed`, `crime.speaker_is_law`) that read UNAVAILABLE
+  without it; a witness memory (`mcaconversations.crime.saw.<crime>`, player-scoped) written on the
+  villagers Crime names as witnesses; and a **guard voice**: Crime's challenge, stand-down, filed-report
+  and accepted-apology lines are spoken in the guard's own personality through Crime's new
+  `CrimeDialogueHooks`, with Crime's datapack line as the fallback. Gossip is deliberately not seeded
+  here — with MCA: Reputation installed Crime's incidents already reach villagers as its gossip
+  candidates, and a second telling in a second voice is the duplication §30.4 forbids. `enableCrime`
+  switches all of it off; `CrimeIntegrationTest` keeps every Crime import inside `compat/crime/`.
+- **Townstead `[0.7.5,0.9)`**, matching MCA: Quests. Forge enforces an optional range when the mod is
+  present, so `[0.7.5,0.8)` would have refused to launch with Townstead 0.8 (the release that adds
+  `api.v1`) even though the binding stubs every member it cannot resolve.
+- The vendored sibling API jars are current: the 1.21.1 ports of MCA: Quests 1.7.1, MCA: Reputation 0.6.0 and MCA: Crime
+  0.7.5, each hash-pinned in `gradle/sibling-apis.properties`.
+
 ### Changed
 
 - **Strangers greet you like strangers.** The greeting a villager used for everyone who was not
   actively disliked called you by name and said things like "I was hoping I'd run into you" — to
-  somebody they had never met. Greetings now come in four kinds: a neutral hello for someone they
-  have never met, a plain "hello again" for someone they have, the familiar greetings (and every
-  personality's voice for them) for friends and family, and the curt ones for somebody they are on
-  bad terms with. Toddlers get their own versions of the first two. Both locales.
+  somebody they had never met. Greetings now follow the relationship: a neutral hello for someone
+  they have never met, a plain "hello again" for someone they have, and a greeting of its own for a
+  regular, a friend, a confidant, a spouse, a relative, somebody they have fallen out with and
+  somebody who is against you. Toddlers get their own versions. Both locales.
 - **Friendship needs time as well as hearts.** How close a villager treats you is now decided from
   hearts *and* from evidence that you know each other: separate days on which you actually talked,
   and the familiarity and trust the hidden disposition vector has built up. An acquaintance needs a
@@ -46,24 +66,59 @@ something they talk about, act on and gossip about.
   `player.is_sibling` fields, and `player.is_family`, keep saying who you are to them.
 - **An unrepaired rupture now shows.** A rupture recorded between you and a villager makes them
   guarded whatever the heart total says, where before it was ignored when choosing the band.
-- **Your old friends still know you.** In a world that existed before this version, a villager who
-  already had positive hearts with you, or is family, keeps treating you as they did. The decision is
-  written once, at your first exchange after the upgrade, and nothing is invented to support it — no
-  meeting, date or number of visits. Villagers you had never warmed to stay strangers, a new world
-  never imports anything, and `legacyRelationshipMigration` turns the import off.
+- **Your old friends still know you.** In a world that existed before this mod kept track of your
+  relationships in it — one upgraded from an earlier version, an MCA world that is only now adding
+  Conversations, or one that ran with conversation history switched off — a villager who already had
+  positive hearts with you, or is family, keeps treating you as they did. Whether a world counts is
+  settled once, when its history file is first written: a world already a day old counts, a brand-new
+  one does not. For each villager the decision is written once, at your first exchange, and nothing is
+  invented to support it — no meeting, date or number of visits. Villagers you had never warmed to
+  stay strangers, and `legacyRelationshipMigration` turns the import off.
 - **Greetings follow the relationship, and a busy square is not a chorus.** Friends greet you as you
   pass far more often than strangers do; somebody you have hurt mostly lets you walk by. After one
   villager greets you, the others wait ten seconds (`ambientPlayerCooldownTicks`) before any of them
   may, on top of each villager's once-a-day limit. A greeting a villager volunteers no longer stops
   them in their tracks for half a minute: they carry on unless you answer.
-- **Partners, family and respected strangers have their own greetings.** A spouse, a parent, child
-  or sibling, and — with MCA: Reputation — a stranger from a village that thinks well of you each get
-  a greeting of their own. The respected stranger's is courtesy only: it never claims this villager
-  saw what you did, and a toddler still just peeks at you from behind a barrel. Friends and
-  confidants keep the familiar greetings; family has toddler versions. Both locales.
-- **Strangers and acquaintances greet in character.** The stranger and "hello again" greetings are
-  now voiced by every personality family — the shy villager murmurs, the blunt one wants to know
-  your business — without any of them claiming a friendship that is not there.
+- **Partners, family and respected strangers have their own greetings, in every personality's
+  voice.** A spouse, a relative and — with MCA: Reputation — a stranger from a village that thinks
+  well of you each get a greeting of their own, and every personality says it in character: the
+  crabby spouse insists they were not waiting by the door, the greedy one calls you the best bargain
+  they ever struck, the gloomy one admits they always half think you will not come back. Family
+  greetings follow who is greeting whom: your child, whatever their age, greets you as a parent and
+  never by your first name; a parent greets you as their grown child; a sibling as a sibling; and a
+  toddler greets every relative alike. None of them assumes whether you are a man or a woman. The
+  respected stranger's greeting is courtesy only: it never claims this villager saw what you did or
+  knows your name, and a toddler still just peeks at you from behind a barrel. Both locales.
+- **Regulars, friends, confidants and people you have fallen out with each have a greeting of their
+  own, in every personality's voice.** Friends and confidants used to share one warm greeting, a
+  regular got the same "hello again" as somebody met once, and a villager who was merely upset with
+  you brushed you off exactly like one who wanted you gone. Now an acquaintance knows your name and
+  treats you as a regular without claiming to have missed you — the anxious one has practised your
+  name, the crabby one warns you not to make them regret learning it. A friend is simply glad to see
+  you. A confidant drops the front: the confident villager admits, between the two of you, to being
+  not half as sure of themselves as they look, and the peppy one asks to be not-bubbly for a minute.
+  That greeting is said for you alone, so nobody nearby overhears it, and it is never romantic — your
+  confidant may be married to somebody else. A villager you have quarrelled with is guarded rather
+  than curt: careful, short and open to putting things right, with no wave and no use of your name,
+  since a pair can be at odds without ever having been introduced. The curt greeting is kept for
+  villagers who are hostile, and it no longer names you either. Toddlers have their own versions.
+  Both locales. For resource-pack authors: the new pools are `chatmode.hail.acquaintance`,
+  `chatmode.hail.friend`, `chatmode.hail.confidant` and `chatmode.hail.guarded`. `chatmode.hail`,
+  which friends and confidants used to share, is no longer chosen for anybody and now holds only
+  nameless lines; a pack that overrode it should move its lines to the pool they fit (`DATAPACK.md`).
+- **A goodbye no longer contradicts the hello.** Everybody used to be seen off with the same friendly
+  goodbye, so a villager who had just been guarded or cold with you would wave you off with "come back
+  and tell me everything" — by name, even if they had never been told it. Somebody you have fallen out
+  with now says a careful goodbye that promises nothing ("Right. We'll talk properly another time.
+  Maybe."), somebody hostile is curt, and neither waves or uses your name. And your own children, of
+  any age, no longer say goodbye to you by your first name: they see you off as a parent. Everybody
+  else keeps the goodbye they had, and every personality voices the new ones in character — the greedy
+  villager considers your account "paused", the odd one uninvites you from their dreams. Toddlers have
+  their own. Both locales. The new pools are `chatmode.farewell.guarded`, `chatmode.farewell.hostile`
+  and `chatmode.farewell.family.parent`.
+- **Strangers, and people they have only met, greet in character.** The stranger and "hello again"
+  greetings are now voiced by every personality family — the shy villager murmurs, the blunt one
+  wants to know your business — without any of them claiming a friendship that is not there.
 - **Nobody is addressed by a name they never gave.** MCA hands every line the player's name, but a
   villager who has never met you no longer uses it: goodbyes to strangers are nameless, and the
   Conversations hub's opening line, chat's small replies ("I'm not sure what you mean", "as you
@@ -82,6 +137,18 @@ something they talk about, act on and gossip about.
 
 ### Added
 
+- **Topics you have finished with a villager stop being offered.** New server option
+  `topics.hideExhaustedTopics` (default on). A topic counts as fully discussed between one player and
+  one villager the first time the villager has answered a real reply inside it and the player then
+  leaves through the dialogue — the leave answer or an answer back to the category. Leaving on the
+  opening page, closing the screen, walking away or being brushed off by a guarded villager does not
+  count. Other villagers still offer the topic and other players still get it from that villager. The
+  record is kept in the progress ledger whether or not the option is on, so turning it on later hides
+  what was finished earlier. Catalog rows and topic packs take a `repeatable: true` flag for topics
+  that are never used up (check-ins, news, rumours, what they noticed, weather, season, the day,
+  shared history, work offers, standing, and the Capitals and Townstead topics); when a category has
+  nothing left the villager says so once and the page keeps its Back entry.
+
 - Three context fields for dialogue and scenes: `social.contact` (`unmet` or `recognized`),
   `social.contact_days`, and `social.attitude` (`hostile`, `guarded`, `neutral`, `cordial`, `warm` or
   `affectionate`). Documented in `DATAPACK.md` under *Relationship bands*.
@@ -93,7 +160,11 @@ something they talk about, act on and gossip about.
   unknown claim is refused rather than ignored, and the bundled content compiler refuses a line that
   names the player without declaring it. Documented in `DATAPACK.md`.
 - `/conversations social inspect` (operators): the facts, roles, band, contact, attitude, greeting
-  pool and thresholds the social model derived for the nearest villager and you.
+  and farewell pools and thresholds the social model derived for the nearest villager and you.
+- `/conversations social audit` (operators): the scenes other packs added without a `social` block,
+  by pack. They load and play exactly as before — nothing is refused or hidden — but nothing checks
+  what they assume about the player, and the list says where to add one. Each such pack is also noted
+  in the reload diagnostics (`social_contract_absent`).
 
 ### Townstead
 

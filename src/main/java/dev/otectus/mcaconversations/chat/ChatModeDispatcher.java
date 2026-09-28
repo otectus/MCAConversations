@@ -645,7 +645,7 @@ public final class ChatModeDispatcher {
         String pool = GreetingPolicy.farewell(
                 dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
                         McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
-                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts));
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts), facts.roles());
         deflect(target, player, pool.substring("chatmode.".length()));
         Session s = ChatModeSession.get(player.getUUID());
         s.villagerId = null;
@@ -653,8 +653,10 @@ public final class ChatModeDispatcher {
         s.consecutiveMisses = 0;
         VillagerAttention.releaseIfOwned(target.entity(), player); // conversation over — back to their day
         dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.close(player.getUUID());
-        dev.otectus.mcaconversations.conversation.ConversationOutcomes.react(target.entity(), player,
-                dev.otectus.mcaconversations.conversation.ReactionSemantic.FAREWELL, ConversationSession.Frontend.CHAT);
+        if (GreetingPolicy.waves(pool)) {
+            dev.otectus.mcaconversations.conversation.ConversationOutcomes.react(target.entity(), player,
+                    dev.otectus.mcaconversations.conversation.ReactionSemantic.FAREWELL, ConversationSession.Frontend.CHAT);
+        }
     }
 
     /** "Stop talking" (spec §11): mute this villager↔player pairing for {@code chatModeMuteTicks}. */
@@ -1244,9 +1246,10 @@ public final class ChatModeDispatcher {
 
     /**
      * A real greeting (not the {@code greet/checkin} "how have you been" <em>answer</em>, which reads
-     * as a reply to a question nobody asked): a line from the {@code chatmode.hail} pool — or the
-     * {@code hail_cold} brush-off when the villager dislikes the player — rendered in personality
-     * voice. Sticky when directed at one player so a plain reply carries the conversation on.
+     * as a reply to a question nobody asked): a line from the pool {@link GreetingPolicy} chooses for
+     * this pair — stranger, regular, friend, confidant, spouse, relative, guarded or hostile — rendered
+     * in personality voice. Sticky when directed at one player so a plain reply carries the
+     * conversation on.
      */
     private static void hail(VillagerCandidate target, ServerPlayer player, long now, int stagger,
                              boolean makeSticky) {
@@ -1257,13 +1260,8 @@ public final class ChatModeDispatcher {
                              boolean makeSticky, boolean holdAttention, boolean react) {
         // What the villager may assume decides the words: a first meeting never draws the pool that
         // greets old friends by name (Stability spec §9.2).
-        dev.otectus.mcaconversations.conversation.SocialFacts facts =
-                dev.otectus.mcaconversations.conversation.Relationships.facts(target.entity(), player);
-        String pool = GreetingPolicy.pool(
-                dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
-                        McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
-                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts),
-                publiclyRespected(target.entity(), player));
+        String pool = greetingPool(target.entity(), player,
+                dev.otectus.mcaconversations.conversation.Relationships.facts(target.entity(), player));
         ChatDelivery.villagerSays(target.entity(), player, voiced(target.entity(), player, pool), stagger,
                 UtteranceAudience.ofStaticLine(pool));
         if (makeSticky) {
@@ -1273,12 +1271,25 @@ public final class ChatModeDispatcher {
         if (holdAttention) {
             attend(target, player, now);
         }
-        if (react && !pool.startsWith("chatmode.hail_cold")) {
-            // A brush-off is not a wave.
+        if (react && GreetingPolicy.waves(pool)) {
             dev.otectus.mcaconversations.conversation.ConversationOutcomes.react(target.entity(), player,
                     dev.otectus.mcaconversations.conversation.ReactionSemantic.GREETING,
                     ConversationSession.Frontend.CHAT);
         }
+    }
+
+    /**
+     * The greeting pool this villager uses for this player: band, contact, a good public name and,
+     * for a relative, which relative. {@code /conversations social inspect} reports the same call, so
+     * what it prints is what the villager says.
+     */
+    public static String greetingPool(Entity villager, ServerPlayer player,
+                                      dev.otectus.mcaconversations.conversation.SocialFacts facts) {
+        return GreetingPolicy.pool(
+                dev.otectus.mcaconversations.conversation.SocialPolicy.band(facts,
+                        McaConversationsConfig.socialThresholds(), McaConversationsConfig.relationshipAwareDialogue()),
+                dev.otectus.mcaconversations.conversation.SocialPolicy.contact(facts),
+                publiclyRespected(villager, player), facts.roles());
     }
 
     /**

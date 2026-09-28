@@ -198,7 +198,7 @@ about our future? Is anything weighing on you?*
 | **Java** | 21 |
 | **Required** | [MCA Reborn](https://www.curseforge.com/minecraft/mc-mods/minecraft-comes-alive-reborn) `7.7.36-beta.3` for NeoForge |
 | **Optional** | Serene Seasons — villagers track the real season when installed (calendar fallback otherwise) |
-| **Optional** | **Townstead** `[0.7.5,0.8)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
+| **Optional** | **Townstead** `[0.7.5,0.9)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
 | **Temporarily unavailable** | MCA: Quests and MCA: Reputation integrations — neither sibling has a 1.21.1 NeoForge release yet |
 
 > This is an **add-on** — MCA Reborn must be installed for it to do anything.

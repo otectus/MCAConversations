@@ -264,6 +264,11 @@ public final class McaConversationsConfig {
         return serverInt(SERVER.dynamicTopicSlots, 3);
     }
 
+    /** hideExhaustedTopics, or true while the server spec is unavailable. */
+    public static boolean hideExhaustedTopics() {
+        return serverBool(SERVER.hideExhaustedTopics, true);
+    }
+
     /** initiativeCooldownTicks, or 300 while the server spec is unavailable. */
     public static int initiativeCooldownTicks() {
         return serverInt(SERVER.initiativeCooldownTicks, 300);
@@ -432,6 +437,7 @@ public final class McaConversationsConfig {
         public final ModConfigSpec.BooleanValue enableTemplates;
         public final ModConfigSpec.BooleanValue enableGossip;
         public final ModConfigSpec.BooleanValue enableQuests;
+        public final ModConfigSpec.BooleanValue enableCrime;
         public final ModConfigSpec.BooleanValue enableBranching;
 
         public final ModConfigSpec.BooleanValue debugBranching;
@@ -555,6 +561,12 @@ public final class McaConversationsConfig {
                     "villagers acknowledge available/active/completed quests in conversation, finished quests",
                     "seed gossip + memory, and quest lines can speak in the villager's personality.")
                     .define("enableQuests", true);
+            enableCrime = b.comment(
+                    "Enable MCA: Crime integration (only active when the 'mcacrime' mod is installed):",
+                    "villagers can gate lines on whether you are wanted, your band or custody",
+                    "(conversations_crime_* conditions, crime.* context fields), witnesses remember what",
+                    "they saw you do, and a guard's challenge speaks in the guard's own personality.")
+                    .define("enableCrime", true);
             enableBranching = b.comment(
                     "Enable branching conversations (1.1.0): a topic opens a short authored exchange in which",
                     "the villager answers and YOU choose what to say back, and your reply — not the act of",
@@ -995,6 +1007,8 @@ public final class McaConversationsConfig {
         public final ModConfigSpec.IntValue socialEdgeCapPerVillager;
         public final ModConfigSpec.IntValue topicRecencyCapPerPair;
 
+        public final ModConfigSpec.BooleanValue hideExhaustedTopics;
+
         Server(ModConfigSpec.Builder b) {
             b.comment("Values the server decides for everyone connected to it. Stored per world under",
                     "serverconfig/ and synchronised to clients, so hearing distance, heart budgets and",
@@ -1105,10 +1119,11 @@ public final class McaConversationsConfig {
                     "stranger-safe greetings apply either way.")
                     .define("relationshipAwareDialogue", true);
             legacyRelationshipMigration = b.comment(
-                    "In a world that existed before 1.8.0, treat a villager who already had positive hearts",
-                    "with you, or is family, as someone you know - once, the first time you speak after the",
-                    "upgrade. No meeting, date or shared memory is invented. Zero-heart pairs stay strangers,",
-                    "and a new world never imports anything.")
+                    "In a world that existed before this mod tracked relationships in it (an upgrade from before",
+                    "1.8.0, an MCA world adding this mod, or one that ran with history off), treat a villager",
+                    "who already had positive hearts with you, or is family, as someone you know - once, the",
+                    "first time you speak. No meeting, date or shared memory is invented. Zero-heart pairs stay",
+                    "strangers, and a brand-new world never imports anything.")
                     .define("legacyRelationshipMigration", true);
             acquaintanceFamiliarity = b.comment("Familiarity needed before a villager counts you as an acquaintance.")
                     .defineInRange("acquaintanceFamiliarity", 8, 0, 100);
@@ -1170,6 +1185,21 @@ public final class McaConversationsConfig {
                     "How many context-specific entries may appear above the six fixed hub categories",
                     "(Continue..., What's on your mind?, Ask about...). 0 keeps the six fixed categories alone.")
                     .defineInRange("dynamicTopicSlots", 3, 0, 3);
+            b.pop();
+
+            b.push("topics");
+            b.comment("Which catalog topics a villager still offers a player.");
+            hideExhaustedTopics = b.comment(
+                    "Hide a catalog topic from a villager's list once this player has discussed it with",
+                    "this villager to the end: the villager answered at least one real reply inside the",
+                    "topic and the player then left it through the dialogue (the leave answer, or an",
+                    "answer that returns to the category). Leaving on the opening page, closing the",
+                    "screen, walking away or being brushed off does not count. Tracked per player and",
+                    "per villager: other villagers still offer the topic, and other players still get it",
+                    "from this villager. Completion is always recorded, so switching this back on hides",
+                    "topics that were finished while it was off. Topics flagged \"repeatable\" in the",
+                    "conversation catalog (news, weather, check-ins and the like) are never hidden.")
+                    .define("hideExhaustedTopics", true);
             b.pop();
 
             b.push("history");

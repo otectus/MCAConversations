@@ -153,4 +153,13 @@ class ConversationCatalogTest {
             assertEquals(depth, DepthClass.byKey(depth.key()).orElseThrow());
         }
     }
+
+    @Test
+    void repeatableIsAStrictBooleanAndDefaultsToFalse() {
+        assertFalse(TopicEntry.fromJson("day", json(DAY)).repeatable());
+        String repeatable = DAY.replace("\"depth\": \"quick\",", "\"depth\": \"quick\", \"repeatable\": true,");
+        assertTrue(TopicEntry.fromJson("day", json(repeatable)).repeatable());
+        String typo = DAY.replace("\"depth\": \"quick\",", "\"depth\": \"quick\", \"repeatable\": \"yes\",");
+        assertThrows(IllegalArgumentException.class, () -> TopicEntry.fromJson("day", json(typo)));
+    }
 }

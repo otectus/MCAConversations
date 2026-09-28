@@ -29,6 +29,7 @@ public enum FeatureId {
     TEMPLATES("templates", () -> McaConversationsConfig.COMMON.enableTemplates.get()),
     GOSSIP("gossip", () -> McaConversationsConfig.COMMON.enableGossip.get()),
     QUESTS("quests", () -> McaConversationsConfig.COMMON.enableQuests.get()),
+    CRIME("crime", () -> McaConversationsConfig.COMMON.enableCrime.get()),
     WORLD("world", () -> McaConversationsConfig.COMMON.enableWeatherLines.get()),
     // "seasons" and "holidays" have their own flags; before they were listed they fell through to
     // the default and scored as enabled forever, so a sink on either could never fire.

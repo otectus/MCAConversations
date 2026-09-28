@@ -83,4 +83,17 @@ class SocialContactRecordTest {
         CompoundTag fresh = new ConversationHistoryStore().save(new CompoundTag());
         assertFalse(ConversationHistoryStore.load(fresh).legacyImportWorld());
     }
+
+    @Test
+    void aWorldThatRanBeforeItHadAnyHistoryFileIsAnUpgradedWorld() {
+        assertFalse(ConversationHistoryStore.createdAt(0L).legacyImportWorld(), "a brand-new world");
+        assertFalse(ConversationHistoryStore.createdAt(ConversationHistoryStore.LEGACY_WORLD_AGE_TICKS - 1)
+                .legacyImportWorld(), "younger than a day");
+        ConversationHistoryStore older = ConversationHistoryStore.createdAt(ConversationHistoryStore.LEGACY_WORLD_AGE_TICKS);
+        assertTrue(older.legacyImportWorld(), "an existing world adding the mod, or one that ran with history off");
+        assertTrue(ConversationHistoryStore.load(older.save(new CompoundTag())).legacyImportWorld(),
+                "the decision is kept, not recomputed");
+        assertFalse(ConversationHistoryStore.load(ConversationHistoryStore.createdAt(0L).save(new CompoundTag()))
+                .legacyImportWorld(), "and a new world stays new however long it runs");
+    }
 }
