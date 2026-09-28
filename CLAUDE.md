@@ -77,5 +77,9 @@ the verified companion tuple per release is kept once, in `MCAReputation/docs/FA
   name after `ModList.isLoaded`, and a static-link test keeps its types out of everything else.
 - **One MCA probe fleet** in every `gradle.properties`: `7.6.20`, `7.6.26`, `7.7.0-beta.2`,
   `7.7.1-alpha.2`, `7.7.1-beta.1`, `7.7.1-beta.2` (all `+1.20.1`), replayed by the binding probe test.
+- **Load order runs from provider to consumer**: MCA, then MCA: Reputation, then MCA: Quests, MCA:
+  Conversations, MCA: Crime and MCA: Mob Compatibility, then Ultima Kingdoms. Declare a companion you
+  read at setup `AFTER` and one that consumes you `BEFORE`; two mods that each declare the other `AFTER`
+  are a cycle Forge refuses to start with (MCA: Crime and Ultima Kingdoms were, until 2026-09-28).
 - **MCA: Reputation's capability strings are drift-checked** by every consumer at startup, and the
   `1.21.1 Ports/` NeoForge trees mirror every change made here.

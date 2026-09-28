@@ -74,12 +74,6 @@ public final class ChatModeDispatcher {
      * back to untouched vanilla chat rather than eating the message.
      */
     public static boolean interceptLocalChat(ServerChatEvent event) {
-        try (ContentOperation ignored = ContentOperation.open()) {
-            return interceptLocalChatPinned(event);
-        }
-    }
-
-    private static boolean interceptLocalChatPinned(ServerChatEvent event) {
         if (!McaConversationsConfig.COMMON.chatModeLocalChat.get()) {
             return false;
         }
@@ -96,14 +90,10 @@ public final class ChatModeDispatcher {
         AcceptedChat accepted = AcceptedChat.of(player, event.getRawText(),
                 server.overworld().getGameTime());
         try {
-            server.execute(() -> {
-                try {
-                    rebroadcastLocal(player, accepted.text());
-                    handle(player, accepted.text());
-                } catch (Throwable t) {
-                    McaConversations.LOGGER.warn("chat-mode local-chat delivery failed", t);
-                }
-            });
+            hop(server, () -> {
+                rebroadcastLocal(player, accepted.text());
+                handle(player, accepted.text());
+            }, "chat-mode local-chat delivery failed");
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("local-chat thread hop failed; leaving vanilla chat untouched", t);
             return false;
@@ -153,18 +143,36 @@ public final class ChatModeDispatcher {
         AcceptedChat accepted = AcceptedChat.of(player, event.getMessage().getString(),
                 server.overworld().getGameTime());
         try {
-            server.execute(() -> {
-                // One captured bundle for the whole pipeline: target, address, normalize, match,
-                // gate-preview and drive all read content, and a reload landing between two of them
-                // would answer one message out of two different catalogs.
-                try (ContentOperation ignored = ContentOperation.open()) {
-                    handle(player, accepted.text());
-                } catch (Throwable t) {
-                    McaConversations.LOGGER.warn("chat-mode handler failed; ignoring message", t);
-                }
-            });
+            hop(server, () -> handle(player, accepted.text()), "chat-mode handler failed; ignoring message");
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("chat-mode thread hop failed; ignoring message", t);
+        }
+    }
+
+    /**
+     * Submits one chat message's work to the server thread. Both entry points go through here, so their
+     * content pinning cannot drift apart again: until 1.8.0 local chat opened its pin around this
+     * submission, on the network thread, and the scheduled pipeline ran with no pin at all. Throws if
+     * the submission itself is refused, which {@link #interceptLocalChat} relies on to leave vanilla chat
+     * untouched.
+     */
+    private static void hop(MinecraftServer server, Runnable work, String failure) {
+        server.execute(() -> pinnedHop(work, failure));
+    }
+
+    /**
+     * The server-thread body of a chat hop: one captured bundle around the whole pipeline. Target,
+     * address, normalize, match, gate-preview and drive all read content, and a reload landing between
+     * two of them would answer one message out of two different catalogs. The pin is opened here, on the
+     * thread the work runs on, because {@link ContentOperation} is thread-confined and not inheritable.
+     * A failing step is contained and logged under {@code failure}. Package-private for
+     * {@code ChatModeDispatcherHopTest}.
+     */
+    static void pinnedHop(Runnable work, String failure) {
+        try (ContentOperation ignored = ContentOperation.open()) {
+            work.run();
+        } catch (Throwable t) {
+            McaConversations.LOGGER.warn(failure, t);
         }
     }
 

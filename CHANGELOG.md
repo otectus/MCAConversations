@@ -39,6 +39,27 @@ something they talk about, act on and gossip about.
 - The vendored sibling API jars are current: MCA: Quests 1.7.1, MCA: Reputation 0.6.1, MCA: Crime
   0.7.5, each hash-pinned in `gradle/sibling-apis.properties`.
 
+### Fixed — family audit remediation (2026-09-28)
+
+- **MCA: Quests showed this mod's objective and reward as raw translation keys.** The `talk_about`
+  objective and `unlock_topic` reward named `mcaquests.objective.mcaconversations.talk_about` and
+  `mcaquests.reward.mcaconversations.unlock_topic`, whose text lived in MCA: Quests' lang file under the
+  pre-0.4.0 `mcarealtalk` names, so no text existed for them and the offer screen, journal and quest
+  card printed the keys. The text now lives here, as `mcaconversations.quests.objective.talk_about` and
+  `mcaconversations.quests.reward.unlock_topic` in `en_us` and `pt_br`, and `QuestsCompatLangKeysTest`
+  fails the build if a key under `compat/quests` is missing from either locale or names another mod's
+  namespace.
+- **Radius-local chat pins its content where the work runs.** With `chatModeLocalChat` on, the
+  message's content bundle was pinned on the network thread around the submission, and the pipeline
+  that ran on the server thread had none, so a `/reload` landing between two of its steps could answer
+  one message from two catalogs. Both chat entry points now hand their work to one server-thread hop
+  that pins inside it (`ChatModeDispatcherHopTest`).
+- **The MCA probe fleet is the family's six builds.** `mca_probe_versions` adds 7.6.26, 7.7.1-beta.1
+  and 7.7.1-beta.2, matching MCA: Quests and MCA: Reputation; the binding, dialogue-reload,
+  gift-acceptance, constraint-vocabulary and mixin-target probes pass on all six.
+- `MODMAP.md` no longer lists the `[townstead]` config keys as unread: all eighteen are read through
+  `compat/Townstead`.
+
 ### Changed
 
 - **Strangers greet you like strangers.** The greeting a villager used for everyone who was not

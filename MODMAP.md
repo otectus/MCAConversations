@@ -140,6 +140,5 @@ generator reference to those files, only test fixtures that use the ids).
 
 - Capitals chronicle text quoted in gossip renders in the server's locale, not the player's.
 - `event_observed` commitment resolver is reserved and never resolves (no generic observer).
-- 17 of the 18 `[townstead]` config keys have no reader; only `enabled` is live.
 - `GroupDirector` builds a new group session per interjection, so the three-speaker cap cannot hold
   across an exchange (group chat is off by default).

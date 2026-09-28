@@ -33,7 +33,7 @@ public record UnlockTopicReward(String topic) implements QuestReward {
 
     @Override
     public Component describe() {
-        return Component.translatable("mcaquests.reward.mcaconversations.unlock_topic",
+        return Component.translatable("mcaconversations.quests.reward.unlock_topic",
                 Component.translatableWithFallback("mcaconversations.topic." + topic, topic));
     }
 
