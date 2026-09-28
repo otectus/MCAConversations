@@ -290,7 +290,7 @@ about our future? Is anything weighing on you?*
 | **Optional** | **MCA: Reputation** `[0.2,)` — public standing, and villagers telling each other what you've done |
 | **Optional** | **MCA Capitals** `[1.3,)` — capitals talk about their sovereign, heirs, houses and court |
 | **Optional** | **Ultima Kingdoms** `[0.1,)` — kingdom-specific topics and guild contacts |
-| **Optional** | **Townstead** `[0.7.5,0.8)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
+| **Optional** | **Townstead** `[0.7.5,0.9)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
 | **Optional** | **Serene Seasons** — villagers track the real season (calendar fallback otherwise) |
 
 **Languages:** English and Brazilian Portuguese, both complete — menus, dialogue, every personality

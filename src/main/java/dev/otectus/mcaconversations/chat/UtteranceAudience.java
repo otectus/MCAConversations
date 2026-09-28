@@ -35,11 +35,21 @@ public record UtteranceAudience(Scope scope, String basis) {
      */
     private static final Set<String> PUBLIC_STATIC_LINES = Set.of(
             "chatmode.hail", "chatmode.hail.recognized", "chatmode.hail.stranger",
-            "chatmode.hail.respected_stranger", "chatmode.hail.partner", "chatmode.hail.family",
+            "chatmode.hail.respected_stranger", "chatmode.hail.acquaintance", "chatmode.hail.friend",
+            "chatmode.hail.partner", "chatmode.hail.family.parent",
+            "chatmode.hail.family.child", "chatmode.hail.family.sibling", "chatmode.hail.guarded",
             "chatmode.hail_cold", "chatmode.attentive", "chatmode.busy",
             "chatmode.clarify", "chatmode.confused", "chatmode.hint", "chatmode.shrug",
             "chatmode.babble", "chatmode.dropped", "chatmode.farewell", "chatmode.farewell.stranger",
+            "chatmode.farewell.guarded", "chatmode.farewell.hostile", "chatmode.farewell.family.parent",
             "chatmode.muted");
+
+    /**
+     * Procedural lines said for one listener. A confidant's greeting is the one hello that may carry a
+     * little of what the villager tells nobody else — a worry, a bad night — so it is not for the
+     * square to overhear.
+     */
+    private static final Set<String> PARTICIPANT_STATIC_LINES = Set.of("chatmode.hail.confidant");
 
     public UtteranceAudience {
         scope = scope == null ? Scope.PARTICIPANT_ONLY : scope;
@@ -65,6 +75,9 @@ public record UtteranceAudience(Scope scope, String basis) {
     public static UtteranceAudience ofStaticLine(String key) {
         if (key != null && PUBLIC_STATIC_LINES.contains(key)) {
             return nearby("static line " + key);
+        }
+        if (key != null && PARTICIPANT_STATIC_LINES.contains(key)) {
+            return participantOnly("static line " + key + ", said for one listener");
         }
         return participantOnly("unclassified static line " + key);
     }

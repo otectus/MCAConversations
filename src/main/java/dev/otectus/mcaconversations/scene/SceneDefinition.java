@@ -262,6 +262,16 @@ public record SceneDefinition(String id,
         return json.get(field).getAsString().trim();
     }
 
+    /**
+     * Whether a scene document declares what it assumes about the pair — a {@code social} block in its
+     * {@code context} (Stability spec §9.3). Read from the document itself, the same field
+     * {@link #fromJson} turns into eligibility.
+     */
+    public static boolean declaresSocialContract(JsonObject json) {
+        JsonObject context = object(json, "context");
+        return context != null && context.has("social");
+    }
+
     private static JsonObject object(JsonObject json, String field) {
         return json != null && json.has(field) && json.get(field).isJsonObject()
                 ? json.getAsJsonObject(field) : null;

@@ -109,7 +109,43 @@ public final class Progress {
         }
     }
 
+    /** True when this pair has discussed the catalog topic to the end; false on any failure. */
+    public static boolean topicDiscussed(Entity villager, ServerPlayer player, String topicId) {
+        MinecraftServer server = serverOf(player);
+        if (server == null || villager == null || topicId == null) {
+            return false;
+        }
+        try {
+            return ProgressSavedData.get(server).hasDiscussedTopic(villager.getUUID(), player.getUUID(), topicId);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("discussed-topic read failed; defaulting false", t);
+            return false;
+        }
+    }
+
     // --- Writes -----------------------------------------------------------------
+
+    /**
+     * Records that this pair discussed a catalog topic to the end. Written whether or not
+     * {@code hideExhaustedTopics} is on, so switching the option on later hides what was finished
+     * earlier. Logs the first recording when {@code debugBranching} is on.
+     */
+    public static void markTopicDiscussed(Entity villager, ServerPlayer player, String topicId) {
+        MinecraftServer server = serverOf(player);
+        if (server == null || villager == null || topicId == null || topicId.isBlank()) {
+            return;
+        }
+        try {
+            boolean first = ProgressSavedData.get(server).markTopicDiscussed(villager.getUUID(), player.getUUID(),
+                    topicId, villager.level().getGameTime());
+            if (first && McaConversationsConfig.COMMON.debugBranching.get()) {
+                McaConversations.LOGGER.info("[branch] topic {} fully discussed villager={} player={}",
+                        topicId, villager.getUUID(), player.getName().getString());
+            }
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("discussed-topic write failed; ignoring", t);
+        }
+    }
 
     /** Applies one progress directive. Logs the transition when {@code debugBranching} is on. */
     public static void apply(Entity villager, ServerPlayer player, ProgressApply directive) {

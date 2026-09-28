@@ -54,10 +54,11 @@ class SiblingApiManifestTest {
     void providersArePresent() {
         assertNotNull(manifest.getProperty("mcaquests.jar"), "no mcaquests block");
         assertNotNull(manifest.getProperty("mcareputation.jar"), "no mcareputation block");
+        assertNotNull(manifest.getProperty("mcacrime.jar"), "no mcacrime block");
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"mcaquests", "mcareputation"})
+    @ValueSource(strings = {"mcaquests", "mcareputation", "mcacrime"})
     @DisplayName("every provider block is complete")
     void blockIsComplete(String provider) {
         for (String key : new String[]{"version", "minecraft", "loader", "commit", "jar", "sha256"}) {
@@ -67,7 +68,7 @@ class SiblingApiManifestTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"mcaquests", "mcareputation"})
+    @ValueSource(strings = {"mcaquests", "mcareputation", "mcacrime"})
     @DisplayName("the provider commit is a full 40-character SHA-1")
     void commitIsFullLength(String provider) {
         String commit = manifest.getProperty(provider + ".commit");
@@ -77,7 +78,7 @@ class SiblingApiManifestTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"mcaquests", "mcareputation"})
+    @ValueSource(strings = {"mcaquests", "mcareputation", "mcacrime"})
     @DisplayName("the pinned hash is a full SHA-256")
     void hashIsFullLength(String provider) {
         String sha256 = manifest.getProperty(provider + ".sha256");
@@ -86,7 +87,7 @@ class SiblingApiManifestTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"mcaquests", "mcareputation"})
+    @ValueSource(strings = {"mcaquests", "mcareputation", "mcacrime"})
     @DisplayName("the vendored jar exists and is named for the pinned version")
     void jarIsVendored(String provider) {
         String relative = manifest.getProperty(provider + ".jar");
@@ -102,7 +103,7 @@ class SiblingApiManifestTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"mcaquests", "mcareputation"})
+    @ValueSource(strings = {"mcaquests", "mcareputation", "mcacrime"})
     @DisplayName("the pin belongs to this repository's loader and Minecraft version")
     void pinMatchesThisBuild(String provider) {
         String expectedMinecraft = gradleProperties.getProperty("minecraft_version");

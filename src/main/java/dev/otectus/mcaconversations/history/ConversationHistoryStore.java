@@ -46,10 +46,16 @@ public final class ConversationHistoryStore {
     private static final String KEY_UUID = "uuid";
     /**
      * Whether this world predates the social model (Stability spec §11.2). Absent in every file
-     * written before 1.8.0, which is exactly how an upgraded world is recognised; a world whose
-     * history file is created by 1.8.0 or later starts with it {@code false}.
+     * written before 1.8.0, which is exactly how an upgraded world is recognised; a file first created
+     * by 1.8.0 or later records what {@link #createdAt} decided for the world it was created in.
      */
     private static final String KEY_LEGACY_IMPORT = "social_legacy_import";
+
+    /**
+     * How old a world must already be, in game ticks, for a history store created in it to count as an
+     * upgraded world: one in-game day. A brand-new world creates its store at server start, at tick 0.
+     */
+    public static final long LEGACY_WORLD_AGE_TICKS = 24000L;
 
     /** Diagnostics spent on a store with nothing evictable before the counter speaks for the rest. */
     private static final int CROWDED_REPORTS = 4;
@@ -57,7 +63,7 @@ public final class ConversationHistoryStore {
     private final Map<UUID, VillagerHistory> byVillager = new LinkedHashMap<>();
     private int loadedVersion = CURRENT_VERSION;
     private boolean degraded;
-    /** Brand-new stores are not upgraded worlds; {@link #load} flips this for a pre-1.8.0 file. */
+    /** A store built bare is a new world; {@link #createdAt} and {@link #load} may decide otherwise. */
     private boolean legacyImportWorld;
     private CompoundTag retainedTag;
     private int discardedOnLoad;
@@ -247,6 +253,21 @@ public final class ConversationHistoryStore {
      */
     public boolean legacyImportWorld() {
         return legacyImportWorld;
+    }
+
+    /**
+     * A store created for the first time in a world that has run for {@code worldGameTime} ticks.
+     *
+     * <p>A world that ran for a day or more before it had any history file — an existing MCA world
+     * adding this mod, or one that ran with history switched off — holds relationships the social model
+     * never saw being built, so it is an upgraded world exactly as a pre-1.8.0 file is. A brand-new
+     * world is not. The answer is written with the store and never recomputed, so a world does not
+     * change its mind as it ages.
+     */
+    public static ConversationHistoryStore createdAt(long worldGameTime) {
+        ConversationHistoryStore store = new ConversationHistoryStore();
+        store.legacyImportWorld = worldGameTime >= LEGACY_WORLD_AGE_TICKS;
+        return store;
     }
 
     public CompoundTag save(CompoundTag tag) {

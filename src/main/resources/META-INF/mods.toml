@@ -74,6 +74,10 @@ description='''${mod_description}'''
 # Townstead - OPTIONAL. When absent, nothing changes: every Townstead dialogue condition
 # scores 0, every Townstead template variable falls back, and no Townstead class is resolved.
 # Ordered AFTER so its registries and reaction data exist before we read them.
+# The range matches MCA: Quests' ([0.7.5,0.9)): Forge enforces an optional range when the mod IS
+# present, so the old [0.7.5,0.8) upper bound refused to launch with Townstead 0.8 (the release that
+# adds api.v1) even though the reflective binding stubs every member it cannot resolve. 0.9 has not
+# been seen; the bound is a statement of what was probed, and the binding degrades below it.
 # MCA Capitals - OPTIONAL. When absent, nothing changes: every capital context field is
 # unavailable, every capital topic self-hides, and no Capitals class is resolved. Ordered AFTER so
 # its capital registry exists before we read it.
@@ -87,6 +91,6 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
     modId="townstead"
     mandatory=false
-    versionRange="[0.7.5,0.8)"
+    versionRange="[0.7.5,0.9)"
     ordering="AFTER"
     side="BOTH"

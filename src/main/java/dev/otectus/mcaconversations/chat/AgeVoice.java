@@ -33,15 +33,22 @@ public final class AgeVoice {
             "chatmode.confused", "chatmode.hint", "chatmode.shrug", "chatmode.clarify",
             "chatmode.dropped", "chatmode.busy", "chatmode.muted", "chatmode.farewell",
             "chatmode.insult", "chatmode.hail", "chatmode.hail.recognized", "chatmode.hail.stranger",
-            "chatmode.hail_cold", "chatmode.attentive", "chatmode.hail.family",
-            "chatmode.farewell.stranger");
+            "chatmode.hail.acquaintance", "chatmode.hail.friend", "chatmode.hail.confidant",
+            "chatmode.hail.guarded", "chatmode.hail_cold", "chatmode.attentive", "chatmode.hail.family.parent",
+            "chatmode.farewell.stranger", "chatmode.farewell.guarded", "chatmode.farewell.hostile",
+            "chatmode.farewell.family.parent");
 
     /**
      * Families a toddler speaks through another family's toddler lines. A small child does not
-     * greet a stranger by their reputation; they peek out from behind a barrel.
+     * greet a stranger by their reputation; they peek out from behind a barrel. Nor do they have a
+     * different hello for each relative: a big brother or sister gets the same arms-up greeting as a
+     * parent. (A toddler cannot be anybody's parent, so the child-role greeting is mapped only so that
+     * a damaged family tree still draws a toddler's line rather than an adult's.)
      */
     static final java.util.Map<String, String> TODDLER_BORROWS = java.util.Map.of(
-            "chatmode.hail.respected_stranger", "chatmode.hail.stranger");
+            "chatmode.hail.respected_stranger", "chatmode.hail.stranger",
+            "chatmode.hail.family.sibling", "chatmode.hail.family.parent",
+            "chatmode.hail.family.child", "chatmode.hail.family.parent");
 
     private AgeVoice() {
     }

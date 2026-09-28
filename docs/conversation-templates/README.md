@@ -4,7 +4,15 @@ These files are a fill-in copy of **every conversation MCA: Conversations ships*
 node, every button the player can press, every line a villager can say back, every per-personality
 version of those lines, and every rule the build enforces on them. Nothing is summarised away.
 
-Start at [00-INDEX.md](00-INDEX.md).
+The files themselves are not kept in the repository — a copy committed once goes stale with the
+next release. Produce a current set from the repository root:
+
+```
+python3 docs/conversation-templates/generate-templates.py
+```
+
+It writes the templates into this folder, from the language files and dialogue data the build ships,
+and `.gitignore` keeps them out of commits. Then start at `00-INDEX.md`.
 
 ---
 

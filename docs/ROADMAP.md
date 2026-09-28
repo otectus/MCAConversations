@@ -53,7 +53,17 @@ integrated and dedicated, on both loaders.
 - Switching chat mode off in a config reload closes live chat conversations; GUI ones continue.
 - A stranger is never named: greeting, farewell, hub prompt, a typed "how have you been" (stranger
   check-in). A spouse, a relative and — with MCA: Reputation — a well-regarded stranger each get
-  their own greeting; a toddler's is its own.
+  their own greeting in the villager's own personality; a relative's depends on whether you are
+  their parent, child or sibling, and your child never uses your name; a toddler's is its own.
+- Greetings follow the band: an acquaintance uses your name without warmth, a friend is glad, a
+  confidant's greeting reaches you and not a second player standing nearby, a villager you have
+  quarrelled with is guarded and does not wave, a hostile one is curt.
+- Goodbyes follow suit: a guarded villager's is careful and a hostile one's curt, neither waves or uses
+  your name; your child's never uses your first name.
+- An MCA world with hearts already earned, adding Conversations for the first time: an old friend keeps
+  their band. A brand-new world imports nothing.
+- A test datapack adding a scene with no `social` block: it plays as before, and
+  `/conversations social audit` lists it under its pack.
 - Opening the chat box turns at most three heads; a sleeping or fleeing villager does not turn.
 - A villager who falls asleep mid-discussion closes it as `SPEAKER_UNAVAILABLE`.
 
@@ -142,25 +152,29 @@ work packages WP7–WP9.
 **Delivered in 1.8.0:** real family roles and ruptures in the band (`conversation/Relationships`,
 `SocialPolicy`); the §8.4 ladder with contact days, familiarity and trust, configurable under
 `[social]`; meaningful-contact accounting on `PairHistory` (no schema bump); the §11.2 one-time
-legacy import; `social.*` context fields and the three role fields; greeting families for stranger,
-respected stranger (MCA: Reputation respect bias, courtesy only), recognised, familiar, partner,
-family and cold, with toddler variants; stranger and recognised greetings voiced by all six
-personality families; stranger farewells; relationship-scaled greeting frequency and the per-player
-ambient cooldown; volunteered greetings no longer hold the villager; typing attention capped at three
+legacy import; `social.*` context fields and the three role fields; §9.2's greeting families —
+stranger, respected stranger (MCA: Reputation respect bias, courtesy only), recognised, acquaintance,
+friend, confidant, partner, family (one pool per role: the player as parent, child or sibling),
+guarded and hostile — each its own pool, with toddler variants; stranger and recognised greetings
+voiced by all six personality families; acquaintance, friend, confidant, partner, family,
+respected-stranger and guarded greetings voiced by every personality (`GreetingVoiceLintTest`); the
+confidant's greeting delivered to the player alone; guarded and hostile greetings name-free and
+without a wave; the pre-1.8.0 `chatmode.hail` chosen by no band and kept name-free; stranger
+farewells, and guarded, hostile and child-to-parent farewells voiced by every personality (name-free,
+no wave for the first two); the legacy import extended to worlds that had no history file until they
+were a day old (an MCA world adding this mod, or history switched off); relationship-scaled greeting frequency and the per-player ambient cooldown; volunteered
+greetings no longer hold the villager; typing attention capped at three
 awake, non-fleeing villagers (§10.2); the stranger check-in; name-free hub prompts, deflections and
 greet-pool extensions in every personality; `SocialContract` scene metadata (§9.3) with compiler
 validation; the checked surface manifest (§9.4, `src/test/resources/social_surface_manifest.json`);
-`/conversations social inspect` (§14.1); `CloseReason.FEATURE_DISABLED` and `SPEAKER_UNAVAILABLE` in
-use, `INVALID_OFFER` documented as never closing by design.
+`/conversations social inspect` (§14.1); `/conversations social audit` and a `social_contract_absent`
+reload note for other packs' scenes without a `social` block (§9.3's diagnostics and migration
+guidance); `CloseReason.FEATURE_DISABLED` and `SPEAKER_UNAVAILABLE` in use, `INVALID_OFFER` documented
+as never closing by design.
 
-**Still open:**
-- The partner, family and respected-stranger greetings are base-voiced only; no personality overlays.
-- §9.2's other semantic families (acquaintance, friend, confidant, guarded greetings as separate
-  pools) — friend and confidant share the familiar pool; guarded and hostile share the cold one.
-- Third-party packs without `social` metadata are structurally compatible but not semantically
-  audited (by design, §9.3); native MCA and other add-ons' lines are not owned.
-- Limitation: a pre-1.8.0 world that never wrote a history file (history switched off) is treated
-  as a new world, so no legacy import happens there.
+**Not planned, by design:**
+- Other packs' scenes without `social` metadata are reported, not proven safe (§9.3): the audit names
+  them, and nothing reads their prose to guess. Native MCA and other add-ons' lines are not owned.
 
 ### 3.2 Townstead — delivered in 1.8.0; what remains
 
@@ -250,15 +264,16 @@ content: every new scene must budget voice-family variants with it.
 
 ### 3.8 Documentation debt
 
-- `docs/conversation-templates/` was generated from the 1.5.1 corpus and lacks the Capitals topics,
-  `guild_contact` and the eight *Life here* topics.
+None recorded. `docs/conversation-templates/` is no longer committed; `generate-templates.py` produces
+a current set on demand (§4, decision 1).
 
 ---
 
 ## 4. Open decisions
 
-1. Regenerate `docs/conversation-templates/` per release (about 23 MB of churn) or drop it and keep
-   only `generate-templates.py`.
+1. ~~Regenerate `docs/conversation-templates/` per release (about 23 MB of churn) or drop it and keep
+   only `generate-templates.py`~~ — decided 2026-09-22: dropped. The generated files are ignored and
+   produced on demand; the generator and its `README.md` stay.
 2. ~~Townstead as its own 1.9.0~~ — decided 2026-09-22: folded into 1.8.0. Emotecraft is documented,
    not declared in `mods.toml`.
 3. Design the romance vertical or remove the `flirtation` / `attraction` scaffolding.
@@ -276,12 +291,12 @@ real-jar probes, which need jar paths that were not supplied.
 
 | Check | Forge | NeoForge |
 |---|---|---|
-| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-193349.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-build-20260922-194008.log` (with `verifyJarContents`) |
-| `:test` | executed; 1,695 tests, 0 failures, 6 skipped | executed; 1,738 tests, 0 failures, 6 skipped |
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260922-214414.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-build-20260922-214447.log` (with `verifyJarContents`) |
+| `:test` | executed; 1,709 tests, 0 failures, 6 skipped | executed; 1,752 tests, 0 failures, 6 skipped |
 | `townsteadProbeTest` against real jars | PASS on 0.7.7 modern (`-193435.log`), 0.7.7 legacy (`-193444.log`) and 0.7.6 (`-193452.log`); each 6 tests, 0 skipped, root `forge.net.conczin.mca`, 14 server capabilities | PASS on the 1.21.1 build (`/tmp/gradle-MCAConversations_1.21.1-townsteadProbeTest-20260922-194113.log`); 6 tests, 0 skipped, root `net.conczin.mca`, 14 server capabilities |
 | Jar | `mcaconversations-1.8.0.jar`, protocol 4 | `mcaconversations-neoforge-1.8.0+1.21.1.jar`, protocol 4 |
 | `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
-| Parity, from both copies | 2,016 identical, 184 reviewed adaptations, verified | same |
+| Parity, from both copies | 2,017 identical, 185 reviewed adaptations, verified | same |
 | In-game | **not run** | **not run** |
 
 The Forge probe logs are `/tmp/gradle-MCAConversations-townsteadProbeTest-20260922-<time>.log`.

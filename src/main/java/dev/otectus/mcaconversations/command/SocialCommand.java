@@ -3,6 +3,7 @@ package dev.otectus.mcaconversations.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import dev.otectus.mcaconversations.McaConversationsConfig;
+import dev.otectus.mcaconversations.chat.ChatModeDispatcher;
 import dev.otectus.mcaconversations.chat.GreetingPolicy;
 import dev.otectus.mcaconversations.compat.McaCompat;
 import dev.otectus.mcaconversations.conversation.RelationshipBand;
@@ -25,7 +26,8 @@ import java.util.OptionalInt;
 
 /**
  * {@code /conversations social inspect}: what the social model derived for the nearest villager and
- * the player running it, and why (Stability spec §14.1).
+ * the player running it, and why (Stability spec §14.1). {@code /conversations social audit}: the
+ * scenes other packs added without saying what they assume (§9.3).
  *
  * <p>Read-only and level 2. Ordinary play never shows any of this — hearts stay the one number a
  * player sees — so this is where an operator answers "why did a stranger greet me like an old
@@ -41,7 +43,36 @@ public final class SocialCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> subtree() {
         return Commands.literal("social")
                 .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("inspect").executes(ctx -> inspect(ctx.getSource())));
+                .then(Commands.literal("inspect").executes(ctx -> inspect(ctx.getSource())))
+                .then(Commands.literal("audit").executes(ctx -> audit(ctx.getSource())));
+    }
+
+    /** How many scene ids {@link #audit} names per pack before it just counts the rest. */
+    private static final int AUDIT_IDS_SHOWN = 8;
+
+    /**
+     * {@code /conversations social audit}: scenes from other packs that declare nothing about what they
+     * assume of the pair (Stability spec §9.3). A report, not a verdict — such a scene may be perfectly
+     * safe; nobody has said so.
+     */
+    private static int audit(CommandSourceStack source) {
+        java.util.SortedMap<String, java.util.List<String>> unaudited =
+                dev.otectus.mcaconversations.scene.SceneCatalogLoader.active().unauditedByPack();
+        if (unaudited.isEmpty()) {
+            say(source, "Every loaded scene declares what it assumes about the player (a `social` block), "
+                    + "or is this mod's own.");
+            return Command.SINGLE_SUCCESS;
+        }
+        int total = unaudited.values().stream().mapToInt(java.util.List::size).sum();
+        say(source, total + " scene(s) from " + unaudited.size() + " pack(s) declare no `social` block. They are "
+                + "eligible as written; whether they suit a stranger is not checked. DATAPACK.md, "
+                + "\"Declaring what a scene assumes\", shows how to add one.");
+        unaudited.forEach((pack, ids) -> {
+            String shown = String.join(", ", ids.subList(0, Math.min(AUDIT_IDS_SHOWN, ids.size())));
+            say(source, "  " + pack + " (" + ids.size() + "): " + shown
+                    + (ids.size() > AUDIT_IDS_SHOWN ? ", and " + (ids.size() - AUDIT_IDS_SHOWN) + " more" : ""));
+        });
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int inspect(CommandSourceStack source) {
@@ -78,16 +109,17 @@ public final class SocialCommand {
                 + (roles.equals(RelationshipRoles.NONE) ? "none" : ""));
         say(source, "  derived   band " + band.key() + ", contact " + contact.key() + ", attitude " + attitude.key()
                 + (aware ? "" : " (relationshipAwareDialogue off: hearts-only bands)"));
-        say(source, "  greeting  pool " + GreetingPolicy.pool(band, contact)
+        say(source, "  greeting  pool " + ChatModeDispatcher.greetingPool(villager, player, facts)
                 + ", frequency x" + String.format("%.2f", GreetingPolicy.frequency(band, contact)));
+        say(source, "  farewell  pool " + GreetingPolicy.farewell(band, contact, roles));
         say(source, "  ladder    acquaintance: familiarity " + thresholds.acquaintanceFamiliarity() + ", "
                 + thresholds.acquaintanceDays() + " days; friend: " + thresholds.friendHearts() + " hearts, familiarity "
                 + thresholds.friendFamiliarity() + ", " + thresholds.friendDays() + " days; confidant: "
                 + thresholds.confidantHearts() + " hearts, familiarity " + thresholds.confidantFamiliarity() + ", "
                 + thresholds.confidantDays() + " days, trust margin " + thresholds.confidantTrustMargin());
         say(source, "  world     " + (History.legacyImportWorld(source.getServer())
-                ? "predates 1.8.0: first exchanges may import an existing relationship"
-                : "began under 1.8.0: every relationship is lived"));
+                ? "began before this mod tracked relationships: first exchanges may import an existing one"
+                : "began with relationship tracking: every relationship is lived"));
         return Command.SINGLE_SUCCESS;
     }
 

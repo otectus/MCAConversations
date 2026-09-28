@@ -43,7 +43,7 @@ import java.util.TreeSet;
  */
 public final class SceneCatalog {
 
-    public static final SceneCatalog EMPTY = new SceneCatalog(List.of());
+    public static final SceneCatalog EMPTY = new SceneCatalog(List.of(), Map.of());
 
     /** Candidates an index lookup may return before hard filtering (spec §21.6). */
     public static final int MAX_INDEXED = 128;
@@ -61,8 +61,9 @@ public final class SceneCatalog {
     private final SortedMap<String, Integer> rawLeafSizes;
     private final SortedMap<String, Integer> topicSizes;
     private final List<String> truncations;
+    private final SortedMap<String, List<String>> unauditedByPack;
 
-    private SceneCatalog(Collection<SceneDefinition> scenes) {
+    private SceneCatalog(Collection<SceneDefinition> scenes, Map<String, List<String>> unauditedByPack) {
         Map<String, SceneDefinition> ids = new TreeMap<>();
         for (SceneDefinition scene : scenes) {
             ids.put(scene.id(), scene);
@@ -116,6 +117,9 @@ public final class SceneCatalog {
         this.rawLeafSizes = java.util.Collections.unmodifiableSortedMap(raw);
         this.topicSizes = java.util.Collections.unmodifiableSortedMap(topics);
         this.truncations = List.copyOf(overflow);
+        SortedMap<String, List<String>> unaudited = new TreeMap<>();
+        unauditedByPack.forEach((pack, sceneIds) -> unaudited.put(pack, List.copyOf(new TreeSet<>(sceneIds))));
+        this.unauditedByPack = java.util.Collections.unmodifiableSortedMap(unaudited);
     }
 
     private static void add(Map<String, List<SceneDefinition>> index, String key,
@@ -136,13 +140,23 @@ public final class SceneCatalog {
     }
 
     public static SceneCatalog build(Collection<SceneDefinition> scenes) {
+        return build(scenes, Map.of());
+    }
+
+    /**
+     * As above, remembering which scenes came from packs other than this mod's own without declaring a
+     * {@code social} block — pack id to scene ids. They are loaded and eligible exactly as before;
+     * the record is for {@code /conversations social audit}, and lives here so it changes only when a
+     * reload is committed.
+     */
+    public static SceneCatalog build(Collection<SceneDefinition> scenes, Map<String, List<String>> unauditedByPack) {
         Map<String, String> seen = new LinkedHashMap<>();
         for (SceneDefinition scene : scenes) {
             if (seen.put(scene.id(), scene.id()) != null) {
                 throw new IllegalArgumentException("duplicate scene '" + scene.id() + "'");
             }
         }
-        return new SceneCatalog(scenes);
+        return new SceneCatalog(scenes, unauditedByPack == null ? Map.of() : unauditedByPack);
     }
 
     public Optional<SceneDefinition> scene(String id) {
@@ -260,6 +274,14 @@ public final class SceneCatalog {
     /** One line per index leaf that lost scenes to {@link #MAX_INDEXED}; empty when none did. */
     public List<String> truncations() {
         return truncations;
+    }
+
+    /**
+     * Scenes from other packs that declare nothing about what they assume of the pair, by pack id
+     * (Stability spec §9.3). Sorted, and empty when every loaded scene declares its assumptions.
+     */
+    public SortedMap<String, List<String>> unauditedByPack() {
+        return unauditedByPack;
     }
 
     /**

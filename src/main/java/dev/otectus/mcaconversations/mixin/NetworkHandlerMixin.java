@@ -89,6 +89,14 @@ public abstract class NetworkHandlerMixin {
                         McaHandles.responseQuestion(message), McaHandles.responseAnswers(message),
                         chat ? ConversationSession.Frontend.CHAT : ConversationSession.Frontend.GUI,
                         player.level().getGameTime());
+                // A category whose every topic this pair has finished gets one villager line saying
+                // so; the page itself still carries its back answer, so it is never an empty menu.
+                if (speaker != null) {
+                    net.minecraft.world.entity.Entity villager = player.serverLevel().getEntity(speaker);
+                    ConversationSessions.raw(player.getUUID()).ifPresent(session ->
+                            dev.otectus.mcaconversations.conversation.TopicExhaustion.onPageOffered(
+                                    villager, player, session, offer.questionId(), offer.answerIds()));
+                }
                 ConversationRef ref = handle == null
                         ? ConversationsNetwork.refFor(player) : ConversationRef.of(handle);
                 if (offer.answerIds().size() <= ChoiceOfferS2C.MAX_CHOICES) {

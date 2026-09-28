@@ -25,8 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Whether a villager greets is a per-(villager, player, day) coin flip: {@code chatModeGreetChance}
  * scaled by personality (the peppy farmer usually says hi; the shy librarian rarely does), hashed
  * deterministically so leaving and re-entering the radius can never re-roll — but tomorrow's roll is a
- * fresh one. The hail itself is a genuine hello ({@code chatmode.hail} pool, hearts-aware), tracked by
- * its own {@code chatgreet.today} memory so it never consumes the GUI's ask-how-you've-been budget.
+ * fresh one. The hail itself is a genuine hello (the pool {@link GreetingPolicy} chooses for the pair's
+ * relationship), tracked by its own {@code chatgreet.today} memory so it never consumes the GUI's
+ * ask-how-you've-been budget.
  * At most one villager (the nearest eligible) greets per scan per player. Server thread only; scan
  * cadence is owned by the tick handler.
  *

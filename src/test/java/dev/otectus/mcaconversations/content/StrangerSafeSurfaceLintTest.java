@@ -20,8 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * (Stability spec §9.2): MCA hands every line the player's name, but that does not mean the villager
  * knows it. Checked in the base lines and in every personality overlay, both locales.
  *
- * <p>The familiar greetings, the known-person farewell and the cold greeting are deliberately absent:
- * the policy only chooses them for somebody the villager has history with — met, family, or quarrelled.
+ * <p>The guarded and hostile greetings and goodbyes are here too. A pair can be at odds without ever having been
+ * introduced — the player struck a villager they never spoke to — so a grudge is no evidence of a name.
+ * So is the pre-1.8.0 greeting, which no band chooses any more and is kept only as a safe answer for
+ * whatever still asks for it. The acquaintance, friend, confidant, spouse and family greetings and the
+ * known-person farewell are deliberately absent: the policy only chooses them for somebody the villager
+ * has actually met, or is related to.
  */
 class StrangerSafeSurfaceLintTest {
 
@@ -29,7 +33,8 @@ class StrangerSafeSurfaceLintTest {
     /** Pools reachable by a never-met pair; each also covers its {@code .toddler} variant. */
     private static final Set<String> STRANGER_REACHABLE = Set.of(
             "chatmode.hail.stranger", "chatmode.hail.recognized", "chatmode.hail.respected_stranger",
-            "chatmode.farewell.stranger", "chatmode.attentive", "chatmode.busy", "chatmode.clarify",
+            "chatmode.hail.guarded", "chatmode.hail_cold", "chatmode.hail", "chatmode.farewell.stranger",
+            "chatmode.farewell.guarded", "chatmode.farewell.hostile", "chatmode.attentive", "chatmode.busy", "chatmode.clarify",
             "chatmode.confused", "chatmode.dropped", "chatmode.hint", "chatmode.insult", "chatmode.muted",
             "chatmode.shrug", "conversations.checkin.stranger", "greet.success", "greet.fail");
 

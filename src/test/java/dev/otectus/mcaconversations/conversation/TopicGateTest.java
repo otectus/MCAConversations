@@ -79,4 +79,29 @@ class TopicGateTest {
                  "ages":["adult"],"required_stance_families":["exit"],"townstead":"yes"}
                 """).getAsJsonObject()));
     }
+
+    @Test
+    void aFinishedStarterIsHiddenUnlessTheTopicIsRepeatable() {
+        ConversationCatalog catalog = ConversationCatalog.build(List.of(
+                TopicEntry.fromJson("life", JsonParser.parseString("""
+                        {"entry":{"question":"conversations.cat.personal","answer":"life"},"depth":"deep",
+                         "return_question":"conversations.cat.personal","ages":["adult"],
+                         "required_stance_families":["exit"]}
+                        """).getAsJsonObject()),
+                TopicEntry.fromJson("news", JsonParser.parseString("""
+                        {"entry":{"question":"conversations.cat.events","answer":"news"},"depth":"quick",
+                         "return_question":"conversations.cat.events","ages":["adult"],
+                         "required_stance_families":["exit"],"repeatable":true}
+                        """).getAsJsonObject())));
+        // Nothing finished: both offered.
+        assertTrue(TopicGate.allows(catalog, "conversations.cat.personal", "life", AgeGroup.ADULT,
+                gate -> true, () -> true, () -> true, entry -> false));
+        // Both finished: the biography hides, the news does not, and an unknown answer is untouched.
+        assertFalse(TopicGate.allows(catalog, "conversations.cat.personal", "life", AgeGroup.ADULT,
+                gate -> true, () -> true, () -> true, entry -> true));
+        assertTrue(TopicGate.allows(catalog, "conversations.cat.events", "news", AgeGroup.ADULT,
+                gate -> true, () -> true, () -> true, entry -> true));
+        assertTrue(TopicGate.allows(catalog, "conversations.cat.personal", "not_catalogued", AgeGroup.ADULT,
+                gate -> true, () -> true, () -> true, entry -> true));
+    }
 }

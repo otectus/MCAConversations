@@ -37,7 +37,8 @@ context/ disposition/ gossip/ history/ personality/ progress/ village/  - the mo
 client/          - client-only code and client UI; common code must not import it (convention only,
                    nothing enforces it)
 compat/mca/      - McaBinding / McaHandles: every MCA class and member resolved by name at runtime
-compat/{townstead,quests,seasons,reputation}/  - same probe-and-stub pattern per optional mod
+compat/{townstead,quests,seasons,reputation,crime}/  - same probe-and-stub pattern per optional mod
+                   (quests, reputation and crime compile against the vendored api jars in libs/api/)
 mixin/, mixin/client/  - mixin targets, split to match the mixins.json lists
 ```
 
@@ -56,3 +57,25 @@ mixin/, mixin/client/  - mixin targets, split to match the mixins.json lists
 
 ## Terminology
 - "Response card" in code and docs = the numbered dialogue choice shown to the player.
+
+## Family compatibility
+
+MCA: Reputation, MCA: Quests, MCA: Crime, MCA: Conversations and MCA: Mob Compatibility are one family of
+MCA Reborn add-ons, and Ultima Kingdoms consumes their APIs. The rules below hold in every repository;
+the verified companion tuple per release is kept once, in `MCAReputation/docs/FAMILY_COMPATIBILITY.md`.
+
+- **MCA Reborn is the only mandatory dependency** (`[7.6,8)`), bound by name across its four package
+  roots. Architectury is never declared mandatory: MCA 7.7 dropped it and this code names no Architectury type.
+- **Companion ranges carry a lower bound only** (`[x.y,)`). Forge enforces an optional range whenever
+  the mod is present, and every companion binding already probes the other mod and degrades, so an
+  upper bound would only ever refuse a launch. The one exception is Townstead, which is third-party
+  and read-only for us: `[0.7.5,0.9)` by decision, so its 0.8 line (the one that adds `api.v1`) can
+  launch beside us while the binding stubs whatever it cannot resolve.
+- **Sibling APIs are consumed through vendored, hash-pinned compile-only jars** (`libs/api/`,
+  `gradle/sibling-apis.properties`, `verifySiblingApis`), never a sibling checkout's class output, so a
+  clean clone builds the integrations a release ships. Each sibling has one adapter package, loaded by
+  name after `ModList.isLoaded`, and a static-link test keeps its types out of everything else.
+- **One MCA probe fleet** in every `gradle.properties`: `7.6.20`, `7.6.26`, `7.7.0-beta.2`,
+  `7.7.1-alpha.2`, `7.7.1-beta.1`, `7.7.1-beta.2` (all `+1.20.1`), replayed by the binding probe test.
+- **MCA: Reputation's capability strings are drift-checked** by every consumer at startup, and the
+  `1.21.1 Ports/` NeoForge trees mirror every change made here.

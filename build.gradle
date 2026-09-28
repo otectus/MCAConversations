@@ -159,6 +159,7 @@ ext.siblingApi = { String key, String overrideProperty ->
 }
 ext.mcaQuestsApi = siblingApi('mcaquests', 'mcaQuestsApiPath')
 ext.mcaReputationApi = siblingApi('mcareputation', 'mcaReputationApiPath')
+ext.mcaCrimeApi = siblingApi('mcacrime', 'mcaCrimeApiPath')
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
@@ -200,6 +201,10 @@ dependencies {
     // block above. Never bundled: the real mod supplies these classes at runtime and everything that
     // touches them is gated behind ReputationBridge's ModList check.
     compileOnly files(mcaReputationApi.file)
+
+    // MCA: Crime — OPTIONAL integration (1.8.0), compile-only, on the same vendored-API terms; gated at
+    // runtime by CrimeBridge's ModList check and never bundled.
+    compileOnly files(mcaCrimeApi.file)
 
     // Mixin annotation processor — generates the refmap for our server-side gift-detection mixin.
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -391,7 +396,8 @@ tasks.register('verifySiblingApis') {
     doLast {
         def problems = []
         [[key: 'mcaquests', property: 'mcaQuestsApiPath', api: mcaQuestsApi],
-         [key: 'mcareputation', property: 'mcaReputationApiPath', api: mcaReputationApi]].each { provider ->
+         [key: 'mcareputation', property: 'mcaReputationApiPath', api: mcaReputationApi],
+         [key: 'mcacrime', property: 'mcaCrimeApiPath', api: mcaCrimeApi]].each { provider ->
             if (!provider.api.pinned) {
                 logger.lifecycle("verifySiblingApis: ${provider.key} is overridden, hash not checked.")
                 return
@@ -490,11 +496,12 @@ tasks.named('jar', Jar).configure {
         def leaked = zipTree(built).matching {
             include 'dev/otectus/mcaquests/**'
             include 'dev/otectus/mcareputation/**'
+            include 'dev/otectus/mcacrime/**'
             include '**/*-api.jar'
         }.files
         if (!leaked.isEmpty()) {
             throw new GradleException("${built.name} bundles ${leaked.size()} sibling add-on entr(ies), " +
-                    "e.g. ${leaked.first().name}; the MCA: Quests and MCA: Reputation APIs are " +
+                    "e.g. ${leaked.first().name}; the MCA: Quests, MCA: Reputation and MCA: Crime APIs are " +
                     "compileOnly and must never be packaged.")
         }
     }

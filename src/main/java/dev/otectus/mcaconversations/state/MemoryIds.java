@@ -67,6 +67,14 @@ public final class MemoryIds {
         return PREFIX + "quest.failed." + sanitize(questId);
     }
 
+    /**
+     * Permanent "I saw this player commit this MCA: Crime crime" flag (per-villager, scope by player;
+     * 1.8.0). {@code crimeType} is Crime's {@code namespace:path} crime id, flattened like a quest id.
+     */
+    public static String crimeWitnessed(String crimeType) {
+        return PREFIX + "crime.saw." + sanitize(crimeType);
+    }
+
     /** Flattens a {@code namespace:path} (or path with {@code /}) into a bare LongTermMemory key segment. */
     private static String sanitize(String questId) {
         return questId.replace(':', '.').replace('/', '.');

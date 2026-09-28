@@ -85,7 +85,8 @@ class OverlayLintTest {
             "dialogue.chatmode.confused", "dialogue.chatmode.hint", "dialogue.chatmode.shrug",
             "dialogue.chatmode.clarify", "dialogue.chatmode.dropped", "dialogue.chatmode.busy",
             "dialogue.chatmode.muted", "dialogue.chatmode.farewell", "dialogue.chatmode.insult",
-            "dialogue.chatmode.hail", "dialogue.chatmode.hail_cold");
+            "dialogue.chatmode.hail.acquaintance", "dialogue.chatmode.hail.friend",
+            "dialogue.chatmode.hail.confidant", "dialogue.chatmode.hail.guarded", "dialogue.chatmode.hail_cold");
 
     private static Map<String, Map<String, String>> overlays;
     private static Map<String, String> baseLang;

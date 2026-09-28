@@ -170,7 +170,7 @@ class ContextKeyOwnershipTest {
         // vacuum.
         assertTrue(ContextKey.all().size() >= 55,
                 "expected the full context vocabulary, found " + ContextKey.all().size());
-        assertEquals(9, ContextSources.registered().size(),
-                "vanilla, mca, village, history, identity, capital, reputation, civic, townstead");
+        assertEquals(10, ContextSources.registered().size(),
+                "vanilla, mca, village, history, identity, capital, reputation, crime, civic, townstead");
     }
 }

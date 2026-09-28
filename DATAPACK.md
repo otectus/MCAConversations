@@ -254,7 +254,13 @@ Two optional catalog fields restrict a topic by what an optional mod knows:
 | `kingdom_gate` | a kingdom gate object (see *Kingdom gates and civic contacts* below) | The starter is offered only while the gate passes for this villager and player. Needs Ultima Kingdoms; without it the topic is hidden unless the gate is an inline predicate with `"when_unknown": "allow"` |
 | `civic_contact` | `true` | The starter is offered only when Ultima Kingdoms reports the villager in front of you as a civic contact visible to you. Without Ultima Kingdoms the topic never appears |
 
-A topic pack under `src/content/topics/` declares both at its top level; the generator mirrors them
+A third optional field is about the player rather than a mod:
+
+| Field | Value | Meaning |
+|---|---|---|
+| `repeatable` | `true` | Never hidden by the `topics.hideExhaustedTopics` server option. Set it on a topic whose lines come from what is happening now (news, weather, a check-in) rather than a story that can be told once. Without it, a topic disappears from a villager's list for a player once that pair has discussed it to the end: the villager answered at least one real reply inside the topic and the player then left through the dialogue rather than by closing the screen |
+
+A topic pack under `src/content/topics/` declares all three at its top level; the generator mirrors them
 into the topic's catalog row, and a malformed `kingdom_gate` fails generation and, in a datapack, is
 refused at reload like any other malformed catalog entry, leaving the previous content in force.
 
@@ -499,6 +505,28 @@ other field is UNKNOWN.
 | `civic.introduction_qualified` / `civic.commission_qualified` | boolean | Whether this player currently qualifies for each service |
 | `civic.introduction_reasons` / `civic.commission_reasons` | list of strings | Ultima's reason keys for the current qualification answer (at most eight each) |
 | `civic.state_revision` / `civic.policy_revision` | long | Ultima's revision counters, for scene conditions that must notice a change |
+
+### MCA: Crime conditions and context fields (MCA: Crime, optional, 1.8.0)
+
+Four conditions that score 1 when MCA: Crime is installed, `enableCrime` is on and the player's legal
+state matches, and 0 otherwise — so a pack written for the full suite still loads without Crime and
+its fallback branch fires:
+
+| Condition | Arguments | Meaning |
+|---|---|---|
+| `conversations_crime_wanted` | `{"wanted": true}` (default `true`) | MCA: Crime holds a warrant on the player (or, with `false`, does not). |
+| `conversations_crime_band` | `{"band": "outlaw"}` — one of `lawful`, `neutral`, `outlaw`; required | The player's band, in the legal words rather than Crime's colours. |
+| `conversations_crime_jailed` | `{"jailed": true}` (default `true`) | The player is serving a sentence right now (or is not). |
+| `conversations_crime_heat` | `{"min": 25}` (default `1`) | The player's Heat is at least `min`. |
+
+A bad argument (an unknown band, a negative minimum) makes the condition never match rather than
+failing the dialogue file. Context fields, every one UNAVAILABLE without Crime: `crime.wanted`*,
+`crime.band`*, `crime.jailed`* and `crime.speaker_is_law` (the speaker is a guard or an archer, whose
+lines about a warrant differ from a farmer's). Starred fields are volatile. A villager Crime names as
+a witness to a crime gets the permanent, player-scoped memory `mcaconversations.crime.saw.<crime id>`,
+usable like any other memory id. Gossip is deliberately not seeded from Crime: with MCA: Reputation
+installed, Crime's incidents already reach villagers as Reputation gossip candidates, and a second
+telling in a second voice is the duplication §30.4 forbids.
 
 ## Townstead (optional, 1.8.0)
 
@@ -987,11 +1015,14 @@ familiarity and trust. The thresholds are server settings (`[social]` in `CONFIG
   middle of a quarrel is `tense` — and still a spouse, which `player.is_spouse` keeps saying.
 - `at_least` counts `partner` and `family` as at least `confidant` — a spouse or a relative may hear
   anything a confidant may. The ruptured bands are never "at least" anything.
-- **Upgraded worlds.** In a world whose history predates 1.8.0, a pair with positive hearts or a
-  family role keeps the heart-based band it always had, so an old friend is not reintroduced as a
-  stranger. The decision is recorded once, at the pair's first exchange after the upgrade, and never
-  revisited — hearts earned later cannot make a pair retroactively "legacy". Nothing is invented: no
-  meeting, date or visit count. Zero-heart pairs stay strangers, and a new world imports nothing.
+- **Upgraded worlds.** In a world that predates the social model — a history file written before
+  1.8.0, or no history file at all until the world was already one in-game day old (an MCA world
+  adding this mod, or one that ran with history off) — a pair with positive hearts or a family role
+  keeps the heart-based band it always had, so an old friend is not reintroduced as a stranger. Which
+  kind of world it is gets written into the history file when that file is created, and never
+  recomputed. For a pair, the decision is recorded once, at its first exchange, and never revisited —
+  hearts earned later cannot make a pair retroactively "legacy". Nothing is invented: no meeting,
+  date or visit count. Zero-heart pairs stay strangers, and a brand-new world imports nothing.
   `legacyRelationshipMigration = false` turns the import off.
 - Degraded modes: with `relationshipAwareDialogue` off, or the history store unreadable, bands fall
   back to hearts, roles and ruptures alone. With the disposition vector off, familiarity is read as
@@ -1023,18 +1054,35 @@ Chat mode's hello and goodbye are chosen by `chat/GreetingPolicy` from the same 
 |---|---|
 | `chatmode.hail.stranger` | never met |
 | `chatmode.hail.respected_stranger` | never met, but MCA: Reputation's respect bias for this villager's community is positive — courtesy, and no claim of any deed |
-| `chatmode.hail.recognized` | met, nothing more (a stranger they have met, or an acquaintance) |
-| `chatmode.hail` | friend or confidant; may use the player's name |
-| `chatmode.hail.partner` / `chatmode.hail.family` | spouse / parent, child or sibling |
-| `chatmode.hail_cold` | tense or hostile |
-| `chatmode.farewell.stranger` / `chatmode.farewell` | goodbye to somebody never met / to anybody else |
+| `chatmode.hail.recognized` | met, nothing more (a stranger they have met) |
+| `chatmode.hail.acquaintance` | acquaintance — a regular; may use the player's name, and claims no affection |
+| `chatmode.hail.friend` | friend; may use the player's name |
+| `chatmode.hail.confidant` | confidant; may use the player's name. Delivered to the player alone, and never romantic |
+| `chatmode.hail.partner` | spouse; may use the player's name |
+| `chatmode.hail.family.parent` | the player is the villager's parent — their child, of any age, greeting them; never uses the player's name |
+| `chatmode.hail.family.child` / `chatmode.hail.family.sibling` | the player is the villager's child / sibling; may use the player's name |
+| `chatmode.hail.guarded` | tense — a recorded rupture, or negative hearts above the hostile line; careful rather than curt, and never uses the player's name |
+| `chatmode.hail_cold` | hostile; never uses the player's name |
+| `chatmode.hail` | chosen for nobody since 1.8.0, when friends and confidants stopped sharing it; kept name-free for older packs and callers |
+| `chatmode.farewell.stranger` | goodbye to somebody never met: no name |
+| `chatmode.farewell.guarded` / `chatmode.farewell.hostile` | goodbye from a tense / hostile villager: no name, no "come back soon", no wave |
+| `chatmode.farewell.family.parent` | the player is the villager's parent — their child, of any age, seeing them off; never uses the player's name |
+| `chatmode.farewell` | goodbye to anybody else the villager knows; may use the player's name |
 
-A toddler speaks each family's `.toddler` variant, and greets a respected stranger with the plain
-stranger lines. **A line a never-met villager can say may not use the player's name (`%1$s`)** — MCA
-passes the name to every line, which does not mean the villager was told it. The stranger pools, the
-chat deflections, the hub and category prompts and this mod's additions to MCA's greet pools are
-held to that in every personality by `StrangerSafeSurfaceLintTest`; `src/test/resources/social_surface_manifest.json`
-lists every surface, its producer, policy, fallback and test.
+A toddler speaks each family's `.toddler` variant, greets a respected stranger with the plain
+stranger lines and greets any relative with `chatmode.hail.family.parent.toddler`. Every personality
+overlay voices the acquaintance, friend, confidant, partner, family, respected-stranger and guarded
+greetings and the guarded, hostile and child's goodbyes with exactly as many lines as the base pool;
+none of them uses a gendered word for the player, and none outside the spouse's and the family's
+calls the player "darling" or asks for a kiss (`GreetingVoiceLintTest`). A guarded or hostile
+villager does not wave, coming or going. **A line a never-met villager
+can say may not use the player's name (`%1$s`)** — MCA passes the name to every line, which does not
+mean the villager was told it. A pair can be at odds without having met (the player struck a
+villager they never spoke to), so the guarded and hostile greetings count as never-met surfaces. The
+stranger pools, the guarded and hostile greetings and goodbyes, `chatmode.hail`, the chat deflections, the hub and
+category prompts and this mod's additions to MCA's greet pools are held to that in every personality
+by `StrangerSafeSurfaceLintTest`; `src/test/resources/social_surface_manifest.json` lists every
+surface, its producer, policy, fallback and test.
 
 ### Declaring what a scene assumes (`social`)
 
@@ -1058,6 +1106,13 @@ with it, like any other malformed entry. In
 `src/content/topics` packs the block goes on the scene itself; the compiler also refuses any scene
 line that uses `%1$s` without `requires_known_player_name`, and any funnel line that does at all,
 because a topic's funnel reaches everybody.
+
+A scene without the block is not refused: packs written before 1.8.0 keep working exactly as they
+did. It is simply unaudited — nothing knows whether its lines suit a stranger — and this mod says so
+rather than guessing from the prose. `/conversations social audit` counts such scenes from packs
+other than this mod's own, pack by pack, naming the first eight of each, and the reload diagnostics
+(logged at debug level) carry one `social_contract_absent` note per pack. To clear a scene from the list, give it a `social` block that states what it assumes;
+a scene that assumes nothing about the pair can say so with `"social": {"contact": ["unmet", "recognized"]}`.
 
 ## Personality overlays and voice families
 

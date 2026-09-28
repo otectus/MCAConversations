@@ -61,6 +61,11 @@ final class TopicPackCompiler {
             throw new IllegalStateException(where + " has a non-boolean townstead");
         }
         out.ownTopicTownstead(topic, source.has("townstead") && source.get("townstead").getAsBoolean());
+        if (source.has("repeatable") && (!source.get("repeatable").isJsonPrimitive()
+                || !source.get("repeatable").getAsJsonPrimitive().isBoolean())) {
+            throw new IllegalStateException(where + " has a non-boolean repeatable");
+        }
+        out.ownTopicRepeatable(topic, source.has("repeatable") && source.get("repeatable").getAsBoolean());
     }
 
     void compile() {

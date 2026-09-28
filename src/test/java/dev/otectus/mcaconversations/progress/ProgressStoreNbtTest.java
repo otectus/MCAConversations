@@ -30,6 +30,7 @@ class ProgressStoreNbtTest {
         record.setMilestone("fears.revelation");
         record.setExclusiveChoice("fears.support", "pledged");
         record.recordApplied("fears.open.comfort", 3, 0);
+        record.markTopicDiscussed("fears");
         return store;
     }
 
@@ -44,6 +45,31 @@ class ProgressStoreNbtTest {
         assertEquals(3, record.positiveToday(0));
         assertEquals(1, record.repeatsToday("fears.open.comfort", 0));
         assertTrue(record.everApplied("fears.open.comfort"));
+        assertTrue(record.hasDiscussedTopic("fears"));
+        assertFalse(record.hasDiscussedTopic("dreams"));
+    }
+
+    @Test
+    @DisplayName("finished topics: first mark wins, the set is bounded, and a record without them loads as none")
+    void discussedTopics() {
+        ProgressRecord record = new ProgressRecord(0);
+        assertTrue(record.markTopicDiscussed("life"));
+        assertFalse(record.markTopicDiscussed("life"), "a second mark is not a change");
+        assertFalse(record.markTopicDiscussed(" "), "a blank id is refused");
+        for (int i = 0; i < ProgressRecord.MAX_DISCUSSED_TOPICS + 8; i++) {
+            record.markTopicDiscussed("t" + i);
+        }
+        assertEquals(ProgressRecord.MAX_DISCUSSED_TOPICS, record.discussedTopicsView().size());
+        assertTrue(record.hasDiscussedTopic("life"), "the bound refuses newcomers rather than evicting");
+
+        CompoundTag saved = record.toNbt();
+        assertEquals(ProgressRecord.MAX_DISCUSSED_TOPICS, saved.getList("discussed", 8).size());
+        ProgressRecord loaded = ProgressRecord.fromNbt(saved).orElseThrow();
+        assertTrue(loaded.hasDiscussedTopic("life"));
+
+        ProgressRecord empty = new ProgressRecord(0);
+        assertFalse(empty.toNbt().contains("discussed"), "absent until something is finished");
+        assertFalse(ProgressRecord.fromNbt(empty.toNbt()).orElseThrow().hasDiscussedTopic("life"));
     }
 
     @Test

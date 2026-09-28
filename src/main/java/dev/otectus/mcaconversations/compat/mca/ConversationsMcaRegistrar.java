@@ -529,6 +529,36 @@ public final class ConversationsMcaRegistrar {
                                 .profile(json.getAsJsonObject())),
                 query -> (villager, stack, player) -> profileScore(query, player, villager));
 
+        // --- Crime-aware conditions (MCA: Crime integration; 0 when that mod is absent) (1.8.0) ---
+        // Registered unconditionally for the same reason as the quest and reputation conditions: a
+        // pack written for the full suite must still load on an install without Crime, and scoring 0
+        // there lets its fallback branch fire. The lambdas reach Crime only through the pure
+        // CrimeBridge SPI, so no mcacrime class loads unless MCA: Crime is present.
+
+        McaHandles.registerCondition("conversations_crime_wanted",
+                (json, name) -> SafeParse.orNull("conversations_crime_wanted", json,
+                        () -> dev.otectus.mcaconversations.compat.crime.CrimeConditionQuery
+                                .flag(json.getAsJsonObject(), "wanted")),
+                query -> (villager, stack, player) -> crimeScore(query, player, CrimeKind.WANTED));
+
+        McaHandles.registerCondition("conversations_crime_band",
+                (json, name) -> SafeParse.orNull("conversations_crime_band", json,
+                        () -> dev.otectus.mcaconversations.compat.crime.CrimeConditionQuery
+                                .band(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> crimeScore(query, player, CrimeKind.BAND));
+
+        McaHandles.registerCondition("conversations_crime_jailed",
+                (json, name) -> SafeParse.orNull("conversations_crime_jailed", json,
+                        () -> dev.otectus.mcaconversations.compat.crime.CrimeConditionQuery
+                                .flag(json.getAsJsonObject(), "jailed")),
+                query -> (villager, stack, player) -> crimeScore(query, player, CrimeKind.JAILED));
+
+        McaHandles.registerCondition("conversations_crime_heat",
+                (json, name) -> SafeParse.orNull("conversations_crime_heat", json,
+                        () -> dev.otectus.mcaconversations.compat.crime.CrimeConditionQuery
+                                .heat(json.getAsJsonObject())),
+                query -> (villager, stack, player) -> crimeScore(query, player, CrimeKind.HEAT));
+
         // --- Actions ---
 
         McaHandles.registerAction("conversations_record",
@@ -847,6 +877,33 @@ public final class ConversationsMcaRegistrar {
     }
 
     /** Scores a {@code conversations_quest_*} condition through the {@link QuestsBridge} SPI; 0 when Quests absent. */
+    private enum CrimeKind { WANTED, BAND, JAILED, HEAT }
+
+    /** 1 when MCA: Crime is present, the integration is on and the player's legal state matches; else 0. */
+    private static float crimeScore(dev.otectus.mcaconversations.compat.crime.CrimeConditionQuery query,
+                                    net.minecraft.server.level.ServerPlayer player, CrimeKind kind) {
+        if (query == null || player == null || !McaConversationsConfig.COMMON.enableCrime.get()) {
+            return 0.0f;
+        }
+        try {
+            dev.otectus.mcaconversations.compat.CrimeBridge.CrimeQueries q =
+                    dev.otectus.mcaconversations.compat.CrimeBridge.queries();
+            if (q == null) {
+                return 0.0f;
+            }
+            boolean match = switch (kind) {
+                case WANTED -> q.isWanted(player) == query.flag().orElse(true);
+                case BAND -> query.band().isPresent() && query.band().equals(q.band(player));
+                case JAILED -> q.isJailed(player) == query.flag().orElse(true);
+                case HEAT -> q.heat(player) >= query.min();
+            };
+            return match ? 1.0f : 0.0f;
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("crime condition failed; defaulting 0", t);
+            return 0.0f;
+        }
+    }
+
     private static float questScore(QuestConditionQuery query,
                                     net.minecraft.server.level.ServerPlayer player,
                                     net.minecraft.world.entity.Entity villager, QuestKind kind) {
