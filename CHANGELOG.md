@@ -39,6 +39,19 @@ something they talk about, act on and gossip about.
 - The vendored sibling API jars are current: the 1.21.1 ports of MCA: Quests 1.7.1, MCA: Reputation 0.6.0 and MCA: Crime
   0.7.5, each hash-pinned in `gradle/sibling-apis.properties`.
 
+### Fixed — family audit remediation (2026-09-28, mirrored from Forge)
+
+- **MCA: Quests showed this mod's objective and reward as raw translation keys.** The `talk_about`
+  objective and `unlock_topic` reward named keys whose text lived in MCA: Quests' lang file under the
+  pre-0.4.0 `mcarealtalk` names, so the offer screen, journal and quest card printed the keys. The text
+  now lives here, as `mcaconversations.quests.objective.talk_about` and
+  `mcaconversations.quests.reward.unlock_topic` in `en_us` and `pt_br`, guarded by
+  `QuestsCompatLangKeysTest`.
+- **Radius-local chat pins its content where the work runs.** With `chatModeLocalChat` on, the content
+  bundle was pinned on the network thread and the server-thread pipeline ran with none, so a `/reload`
+  between two of its steps could answer one message from two catalogs. Both chat entry points now hand
+  their work to one server-thread hop that pins inside it (`ChatModeDispatcherHopTest`).
+
 ### Changed
 
 - **Strangers greet you like strangers.** The greeting a villager used for everyone who was not

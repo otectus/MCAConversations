@@ -42,7 +42,7 @@ public record TalkAboutObjective(String topic, int count) implements QuestObject
 
     @Override
     public Component describe() {
-        return Component.translatable("mcaquests.objective.mcaconversations.talk_about", count,
+        return Component.translatable("mcaconversations.quests.objective.talk_about", count,
                 Component.translatableWithFallback("mcaconversations.topic." + topic, topic));
     }
 
