@@ -97,6 +97,8 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
      * honest alternative — naming the villager alone — is exactly what an unmanaged frontend sends.
      */
     public static ConversationRef refFor(UUID villagerId) {
+        // A handle belongs to the connection that announced it: never quote one on the next server.
+        synchronizeConnection();
         UUID session = handleSessionId;
         if (session != null && (villagerId == null || villagerId.equals(handleVillagerId))) {
             return new ConversationRef(session, handleVillagerId != null ? handleVillagerId : villagerId);
@@ -106,6 +108,9 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
 
     /** The discussion this client is in, or {@link ConversationRef#NONE} when it is in none. */
     public static ConversationRef currentRef() {
+        // Asked every tick by the presence heartbeat, often before anything else has touched state()
+        // on a new connection; without this it went on quoting the previous server's discussion.
+        synchronizeConnection();
         UUID session = handleSessionId;
         return session == null ? ConversationRef.NONE : new ConversationRef(session, handleVillagerId);
     }

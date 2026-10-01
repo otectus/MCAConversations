@@ -158,19 +158,42 @@ public final class ConversationsMcaRegistrar {
                                   net.minecraft.server.level.ServerPlayer player) {
         // Reuse MCA's own id parsing so "var": "player" scoping matches remember/memory.
         String id = McaHandles.parseMemoryId(json, player);
+        // Read before the write: a topic's "again" branch runs while its cooldown is still live and
+        // re-records it, and that refresh is not another conversation about the topic.
+        boolean questTopic = QuestsBridge.queries() != null && isTopicCooldown(id);
+        boolean hadCooldown = questTopic && McaCompat.hasMemory(villager, id);
         if (json.has("time")) {
             McaCompat.remember(villager, id, json.get("time").getAsLong());
         } else {
             McaCompat.rememberForever(villager, id);
         }
-        signalQuestTopic(id, villager, player);
+        if (countsAsTopicConversation(id, hadCooldown)) {
+            signalQuestTopic(id, villager, player);
+        }
+    }
+
+    /** True for a {@code conversations_record} id that is a topic's cooldown flag. */
+    static boolean isTopicCooldown(String id) {
+        return id != null && id.startsWith(MemoryIds.PREFIX + "cooldown.");
     }
 
     /**
-     * When a topic's cooldown flag is (re)written — i.e. the player just had that conversation — signal any
-     * MCA: Quests {@code mcaconversations:talk_about} objective for it. Cooldowns are written through
-     * {@code conversations_record} (topic-ever flags use MCA's native {@code remember}, which we can't hook), so
-     * this fires exactly once per completed topic conversation. No-op when Quests is absent.
+     * Whether writing this record is a new conversation about its topic, for MCA: Quests'
+     * {@code talk_about}: a topic cooldown written while none was running. Every topic starter
+     * records its cooldown, and so does its "again" branch — the one MCA picks <em>because</em> the
+     * cooldown is still live — so counting every write let a player finish a "three heart-to-hearts"
+     * objective by clicking the same topic three times in a minute.
+     */
+    static boolean countsAsTopicConversation(String id, boolean hadCooldown) {
+        return isTopicCooldown(id) && !hadCooldown;
+    }
+
+    /**
+     * When a topic's cooldown flag is newly written — i.e. the player just began that conversation — signal
+     * any MCA: Quests {@code mcaconversations:talk_about} objective for it. Cooldowns are written through
+     * {@code conversations_record} (topic-ever flags use MCA's native {@code remember}, which we can't hook),
+     * and {@link #recordOne} only calls this for a cooldown that was not already running, so it fires once
+     * per conversation about the topic and never for an "again" re-entry. No-op when Quests is absent.
      */
     private static void signalQuestTopic(String id, net.minecraft.world.entity.Entity villager,
                                          net.minecraft.server.level.ServerPlayer player) {

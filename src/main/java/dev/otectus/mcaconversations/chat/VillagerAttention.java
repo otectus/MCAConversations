@@ -131,8 +131,21 @@ public final class VillagerAttention {
         return java.util.Collections.unmodifiableMap(LEDGER.activeHolds());
     }
 
+    /**
+     * The fewest ticks between two typing pings that are acted on. A client sends one when the chat box
+     * opens and one a second after that; the floor only matters to a client that sends more, and each
+     * ping is an entity query on the server thread.
+     */
+    static final int TYPING_PING_FLOOR_TICKS = 5;
+
+    /** Game time of each player's last typing ping that was acted on. */
+    private static final Map<UUID, Long> LAST_TYPING_PING = new ConcurrentHashMap<>();
+
     /** A typing ping from {@code player}: nearby villagers glance over until the pings stop. */
     public static void playerTyping(ServerPlayer player, long now) {
+        if (!acceptTypingPing(LAST_TYPING_PING, player.getUUID(), now)) {
+            return;
+        }
         double radius = McaConversationsConfig.chatModeRadius();
         for (VillagerCandidate c : typingGlances(VillagerFinder.candidates(player, radius))) {
             hold(c.entity(), player, now + TYPING_HOLD_TICKS, Source.TYPING);
@@ -160,6 +173,19 @@ public final class VillagerAttention {
         return out;
     }
 
+    /**
+     * Whether a typing ping arriving at {@code now} is acted on, recording it when it is. A "stopped
+     * typing" ping deliberately does not reset this, so alternating the two cannot bypass the floor.
+     */
+    static boolean acceptTypingPing(Map<UUID, Long> last, UUID playerId, long now) {
+        Long previous = last.get(playerId);
+        if (previous != null && now >= previous && now - previous < TYPING_PING_FLOOR_TICKS) {
+            return false;
+        }
+        last.put(playerId, now);
+        return true;
+    }
+
     /** The player closed the chat screen: drop their TYPING holds (conversations keep attending). */
     public static void playerStoppedTyping(ServerPlayer player) {
         LEDGER.releaseTyping(player.getUUID());
@@ -168,6 +194,9 @@ public final class VillagerAttention {
     /** Logout: drop every hold aimed at the player. */
     public static void clearPlayer(UUID playerId) {
         LEDGER.releasePlayer(playerId);
+        if (playerId != null) {
+            LAST_TYPING_PING.remove(playerId);
+        }
     }
 
     /**
@@ -283,5 +312,6 @@ public final class VillagerAttention {
     public static void reset() {
         LEDGER.clear();
         VILLAGERS.clear();
+        LAST_TYPING_PING.clear();
     }
 }

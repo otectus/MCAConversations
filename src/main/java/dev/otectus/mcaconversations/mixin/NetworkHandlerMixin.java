@@ -33,8 +33,10 @@ import java.util.UUID;
  * {@code net.conczin.mca.*} in 7.7.1-alpha.1, and on 1.21.1 the {@code cobalt.network}
  * {@code NetworkHandler}/{@code Message} pair became {@code network.Network}/{@code HandleablePayload}.
  * Naming the target as a string rather than a class literal is what keeps the MCA jar off this mod's
- * compile classpath; {@link Pseudo} keeps an unmatched target a DEBUG line rather than a startup
- * warning that would be indistinguishable from a real breakage in a bug report.
+ * compile classpath; {@link Pseudo} keeps an unmatched target from being an error. It does not stop
+ * Mixin looking it up, and that lookup logs a {@code WARN Error loading class} indistinguishable from a
+ * real breakage in a bug report; {@code compat.MixinTargetPlugin} skips a target the MCA jar lacks
+ * before the lookup.
  *
  * <p><b>Why {@link Coerce}.</b> The target parameter is MCA's {@code HandleablePayload}, whose package
  * is exactly what varies, so it cannot be named here. {@code @Coerce} lets the handler declare a

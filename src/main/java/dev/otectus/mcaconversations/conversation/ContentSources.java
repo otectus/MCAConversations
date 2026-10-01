@@ -113,6 +113,26 @@ public final class ContentSources {
         return ResourceLocation.fromNamespaceAndPath(file.getNamespace(), path);
     }
 
+    /**
+     * The pack id this mod's own jar reports for its resources, or null without a mod list.
+     *
+     * <p>{@link Resource#sourcePackId()} is the id of the {@code PackResources} a resource came from, not
+     * the pack's repository name. Forge 1.20.1 builds a mod's as
+     * {@code new PathPackResources(file.getFileName(), ...)} ({@code ResourcePackLoader.createPackForMod}),
+     * so there it is the jar's file name; NeoForge 21.1 names it {@code mod/<id>}. This is the
+     * loader-specific half of recognising this mod's own content ({@link ContentStaging#bundledPack}).
+     */
+    static String ownPackFileName() {
+        try {
+            return net.neoforged.fml.ModList.get()
+                    .getModFileById(dev.otectus.mcaconversations.McaConversations.MOD_ID)
+                    .getFile().getFileName();
+        } catch (Throwable t) {
+            // No mod list (unit tests, tooling): only the loader-named pack forms can match.
+            return null;
+        }
+    }
+
     /** One directory's effective documents plus everything that went wrong reading them. */
     public record Staged(List<StagedResource> documents, List<ContentProblem> problems) {
 

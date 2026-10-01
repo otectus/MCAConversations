@@ -8,6 +8,7 @@ import dev.otectus.mcaconversations.conversation.ConversationPresence;
 import dev.otectus.mcaconversations.conversation.OpenRateLimiter;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
+import dev.otectus.mcaconversations.conversation.EngagementPolicy;
 import dev.otectus.mcaconversations.chat.ConversationMovementController.Stance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,31 @@ class ConversationMovementControllerTest {
     /** A live, safe pair in an ordinary discussion with the defaults. */
     private static Situation talking() {
         return new Situation(true, true, false, false, true, true, true);
+    }
+
+    /**
+     * Regression: a chat-side hold used to count any connected player as usable, so a villager kept
+     * standing pinned for the whole attention window toward a player who had walked away, teleported
+     * or changed dimension. Out of reach now means the same as gone: the hold is dropped.
+     */
+    @Test
+    @DisplayName("a chat hold whose player has left the villager's reach is dropped, not held")
+    void chatHoldOutOfReachIsDropped() {
+        // The rule judge() now applies to chat holds: the one chat delivery and chat replies use.
+        double reachSqr = 24.0 * 24.0;
+        assertTrue(EngagementPolicy.evaluate(true, true, true, true, 10.0 * 10.0, reachSqr).ok());
+        assertTrue(EngagementPolicy.evaluate(true, true, true, true, reachSqr, reachSqr).ok(),
+                "the addressed radius itself is still in reach");
+        assertEquals(EngagementPolicy.Verdict.OUT_OF_RANGE,
+                EngagementPolicy.evaluate(true, true, true, true, 25.0 * 25.0, reachSqr), "walked off");
+        assertEquals(EngagementPolicy.Verdict.DIMENSION_CHANGED,
+                EngagementPolicy.evaluate(true, true, true, false, 0.0, reachSqr),
+                "changed dimension, whatever the coordinates say");
+        assertEquals(EngagementPolicy.Verdict.SPEAKER_DEAD,
+                EngagementPolicy.evaluate(true, false, true, true, 1.0, reachSqr));
+        assertEquals(Stance.DROP, ConversationMovementController.decide(
+                new Situation(true, false, false, false, true, true, true)),
+                "a player out of reach is an unusable player, and an unusable player drops the hold");
     }
 
     @Test

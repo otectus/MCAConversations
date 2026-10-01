@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. Format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow SemVer.
 
 Compatibility: Minecraft 1.21.1 · NeoForge 21.1.234+ · Java 21 · requires MCA Reborn
-`[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.8)`, Ultima Kingdoms `[0.1,)`. As of 1.6.3, this release is built against the
+`[7.7.13,8)`. Architectury is not used. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6), Serene Seasons, Townstead `[0.7.5,0.9)`, Ultima Kingdoms `[0.1,)`. As of 1.6.3, this release is built against the
 compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.6.0, vendored in `libs/api/` and hash-pinned by `gradle/sibling-apis.properties`; those jars are not packaged.
 
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
@@ -51,6 +51,39 @@ something they talk about, act on and gossip about.
   bundle was pinned on the network thread and the server-thread pipeline ran with none, so a `/reload`
   between two of its steps could answer one message from two catalogs. Both chat entry points now hand
   their work to one server-thread hop that pins inside it (`ChatModeDispatcherHopTest`).
+
+### Fixed — audit (2026-09-30, mirrored from Forge)
+
+The Forge line's 2026-09-30 audit (`AUDIT.md` in the Forge repository), carried over file for file;
+release parity re-verified from both copies.
+
+- **A villager kept standing still for a player who had walked away.** A hold from a chat exchange, a
+  greeting or an initiative was renewed while its player was merely connected, so the villager stayed
+  pinned and facing them for the whole attention window — thirty seconds by default, up to an hour as
+  configured — after they had walked off, teleported or changed dimension. Those holds now drop the
+  moment the player is out of chat reach (`chatModeAddressedRadius`, another level, dead), by the same
+  rule that already refused their replies and dropped their queued lines.
+- **An MCA: Quests `talk_about` objective counted clicks, not conversations.** The signal fired on every
+  topic cooldown written, and a topic's "again" branch rewrites a cooldown that is still running, so
+  clicking one topic three times finished "three heart-to-hearts". Only a cooldown written while none
+  was running counts now.
+- **A load that leaves the mod with no dialogue says so.** One malformed entry in any pack refuses the
+  whole content load, and at server start there is nothing earlier to keep, so every topic this mod
+  adds disappears until the pack is fixed and `/reload` is run. An ERROR now states that consequence and
+  names the pack; the policy itself is unchanged and is an open decision.
+- **Mixin targets that cannot be present are skipped before Mixin looks them up.** A mixin config plugin
+  (`compat/MixinTargetPlugin`) answers "no" for a target the owning mod's jar does not contain — on
+  this loader, Townstead's three dialogue-UI hooks on a client without Townstead — so that lookup no
+  longer logs a `WARN Error loading class` that reads like a broken hook. Anything it cannot decide is
+  applied exactly as before.
+- **Typing pings are rate-limited on the server.** Each one runs an entity search; a client that sent
+  more than its one a second was served every one. Pings are now acted on at most every five ticks.
+- **`/conversations chat on|off|status` answers in the player's language.** The replies were English
+  literals; they are now `commands.mcaconversations.chat.*` keys in `en_us` and `pt_br`.
+- The client no longer quotes the previous server's discussion in its presence heartbeat after moving
+  to another server; the handle is resynchronised with the connection before every use.
+- The compatibility line above named Townstead `[0.7.5,0.8)`; `neoforge.mods.toml` has declared
+  `[0.7.5,0.9)` since the 2026-09-27 pass.
 
 ### Changed
 
