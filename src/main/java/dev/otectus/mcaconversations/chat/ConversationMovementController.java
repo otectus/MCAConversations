@@ -143,6 +143,12 @@ public final class ConversationMovementController {
      * As above. {@code chat} is true for a chat engagement, the only kind a Townstead work shift
      * demotes to facing: a villager in an open dialogue screen who walked back to work mid-sentence
      * would end that conversation by distance, which is worse than a short pause in the shift.
+     *
+     * <p>A chat-side hold (an exchange, a greeting, an initiative, a typing glance) also needs its
+     * player to still be within reach. A graphical discussion has that judged by the lifecycle tick
+     * before its hold is renewed; a chat hold has no lifecycle, so without this a villager kept
+     * standing still for the whole attention window — up to an hour, as configured — facing a player
+     * who had walked off, teleported or changed dimension.
      */
     public static Stance judge(Entity villager, ServerPlayer player, boolean ownsMovement, boolean chat) {
         boolean usable = villager instanceof Mob mob && !mob.isRemoved() && mob.isAlive()
@@ -151,7 +157,15 @@ public final class ConversationMovementController {
         boolean panicking = usable && ((Mob) villager).getBrain().isActive(Activity.PANIC);
         TownsteadChatPolicy.Facts townstead = usable ? TownsteadChatPolicy.Facts.townstead(villager)
                 : TownsteadChatPolicy.Facts.NONE;
-        return decide(new Situation(usable, player != null && !player.hasDisconnected(), hurt,
+        boolean playerUsable = player != null && !player.hasDisconnected();
+        if (chat && playerUsable && usable) {
+            // The same engagement rule a chat reply is refused by and a queued chat line is dropped
+            // by, at the widest radius chat mode ever accepts an exchange from.
+            double reach = McaConversationsConfig.chatModeAddressedRadius();
+            playerUsable = dev.otectus.mcaconversations.conversation.EngagementPolicy
+                    .evaluate(player, villager, reach * reach).ok();
+        }
+        return decide(new Situation(usable, playerUsable, hurt,
                 panicking, ownsMovement, McaConversationsConfig.holdVillagerDuringInteraction(),
                 McaConversationsConfig.interruptOnImmediateDanger(),
                 townstead.collapsed() || townstead.reactionLocked(), chat && townstead.working()));

@@ -95,11 +95,12 @@ public final class ConversationsCommand {
     private static int setChat(CommandSourceStack source, boolean enabled) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         ConversationsCapabilities.getChatMode(player).ifPresent(state -> state.setEnabled(enabled));
-        String note = McaConversationsConfig.COMMON.enableChatMode.get()
-                ? ""
-                : " (note: chat mode is disabled server-side, so this has no effect yet)";
-        source.sendSuccess(() -> Component.literal("Chat mode " + (enabled ? "enabled" : "disabled")
-                + " for you." + note), false);
+        // Player-facing (no permission level), so translated like everything else a player reads.
+        source.sendSuccess(() -> Component.translatable(enabled
+                ? "commands.mcaconversations.chat.enabled" : "commands.mcaconversations.chat.disabled"), false);
+        if (!McaConversationsConfig.COMMON.enableChatMode.get()) {
+            source.sendSuccess(() -> Component.translatable("commands.mcaconversations.chat.server_disabled"), false);
+        }
         return Command.SINGLE_SUCCESS;
     }
 
@@ -109,10 +110,15 @@ public final class ConversationsCommand {
         boolean playerOn = ConversationsCapabilities.getChatMode(player)
                 .map(ChatModePlayerState::isEnabled)
                 .orElse(McaConversationsConfig.COMMON.chatModeDefaultOn.get());
-        source.sendSuccess(() -> Component.literal("Chat mode: server " + (serverOn ? "on" : "off")
-                + ", you " + (playerOn ? "on" : "off")
-                + (serverOn && playerOn ? " — talk to villagers by typing." : ".")), false);
+        source.sendSuccess(() -> serverOn && playerOn
+                ? Component.translatable("commands.mcaconversations.chat.status.ready")
+                : Component.translatable("commands.mcaconversations.chat.status", onOff(serverOn), onOff(playerOn)),
+                false);
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static Component onOff(boolean on) {
+        return Component.translatable(on ? "commands.mcaconversations.chat.on" : "commands.mcaconversations.chat.off");
     }
 
     private static int debugAsk(CommandSourceStack source, String question, String answer)

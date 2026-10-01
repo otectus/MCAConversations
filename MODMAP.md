@@ -30,15 +30,16 @@ dev.otectus.mcaconversations.client.dialogue         32 files
 dev.otectus.mcaconversations.client.dialogue.dev     3 files
 dev.otectus.mcaconversations.client.townstead        3 files
 dev.otectus.mcaconversations.command                 4 files
-dev.otectus.mcaconversations.compat                  46 files
+dev.otectus.mcaconversations.compat                  48 files
 dev.otectus.mcaconversations.compat.capitals         3 files
+dev.otectus.mcaconversations.compat.crime            5 files
 dev.otectus.mcaconversations.compat.mca              4 files
 dev.otectus.mcaconversations.compat.quests           7 files
 dev.otectus.mcaconversations.compat.reputation       2 files
 dev.otectus.mcaconversations.compat.seasons          1 file
 dev.otectus.mcaconversations.compat.townstead        3 files
-dev.otectus.mcaconversations.context                 22 files
-dev.otectus.mcaconversations.conversation            74 files
+dev.otectus.mcaconversations.context                 23 files
+dev.otectus.mcaconversations.conversation            75 files
 dev.otectus.mcaconversations.court                   5 files
 dev.otectus.mcaconversations.debug                   3 files
 dev.otectus.mcaconversations.disposition             9 files
@@ -100,6 +101,9 @@ family roles and ruptures; stranger-safe greetings, farewells and surfaces; `Soc
 metadata) and the full Townstead integration (conditions, check fit, context, templates, calendar,
 outcomes and reactions, chat policy, gifts, gossip, *Life here*, emotion sidecar, diagnostics).
 1.7.3 is published to `main` and `neoforge/1.21.1`. Next: the in-game campaign (`docs/ROADMAP.md` §2).
+The 2026-09-30 audit (`AUDIT.md`) fixed seven findings on this branch and left three open (the first-load
+refusal policy F3, quest topic names F9, the MCA: Crime declaration F10). The fixes are mirrored to the
+NeoForge port and release parity verifies from both copies (`AUDIT.md` §11).
 
 ## Roadmap
 
@@ -109,6 +113,28 @@ Open work, runtime checks not yet performed, and what was run per release live i
 ## Decisions
 
 **Capitals binding:** MCA Capitals is bound reflectively via `compat/capitals/CapitalsBinding.java`, with no direct imports of its classes. The capital name is the MCA village's name; the event source is chronicle diffs and court snapshots polled together in `court/CourtNewsPoller.java`. The probe jar location is supplied as a command-line property `-PcapitalsJar=<path>` (read via `project.hasProperty` in `build.gradle` ~:262 by the `capitalsProbeTest` task); no probe-version list is stored in `gradle.properties` (binding versions are hard-coded in the binding itself, as they are with MCA).
+
+**Mixin target presence:** `compat/MixinTargetPlugin` is the mixin config's plugin. It answers
+`shouldApplyMixin` "no" only when the owning mod's jar (MCA for `forge.net.*`, Townstead for its
+client screens) definitely lacks the target class, read through `LoadingModList` so nothing is loaded;
+anything it cannot decide is applied as before. It exists because `@Pseudo` does not stop Mixin's
+`ClassInfo` lookup of the absent MCA root, which logged 27 `WARN Error loading class` lines per start.
+
+**Chat-side holds share the engagement rule:** a hold booked by chat, a greeting, an initiative or a
+typing glance is dropped as soon as `EngagementPolicy` fails at `chatModeAddressedRadius` — the rule
+that already refuses a chat reply and drops a queued chat line. Graphical holds keep being judged by
+the lifecycle tick. Typing pings are acted on at most once per 5 ticks per player.
+
+**`talk_about` counts conversations, not clicks:** the MCA: Quests signal fires only when a topic's
+cooldown is written while none was running; a topic's "again" branch refreshes a live cooldown and
+does not count.
+
+**This mod's own pack id on Forge is its jar file name:** `ResourcePackLoader.createPackForMod` builds
+`new PathPackResources(file.getFileName(), ...)`, so `Resource.sourcePackId()` is
+`mcaconversations-<version>.jar`, not `mod:mcaconversations` (that is only the repository entry).
+NeoForge 21.1 uses `mod/<id>` for both. `ContentStaging.bundledPack` accepts all three, and takes the
+jar's name from `ContentSources.ownPackFileName`, the one loader-specific half, so `ContentStaging`
+stays identical on both loaders.
 
 ## Content pipeline
 
@@ -142,3 +168,12 @@ generator reference to those files, only test fixtures that use the ids).
 - `event_observed` commitment resolver is reserved and never resolves (no generic observer).
 - `GroupDirector` builds a new group session per interjection, so the three-speaker cap cannot hold
   across an exchange (group chat is off by default).
+- A refused first content load leaves the mod with no dialogue at all. A single malformed entry in
+  *any* pack refuses the whole attempt, and at server start there is no earlier bundle to retain, so
+  all ~1,057 owned questions are removed from MCA until the pack is fixed or removed and `/reload` is
+  run (observed on real 7.6.20 and 7.7.1-beta.2 servers). One ERROR line now says so and names the
+  pack; changing the policy is an open decision (`AUDIT.md`, open question 1).
+- MCA: Quests quest cards show a raw topic id: `mcaconversations.topic.<id>` names no lang key, so
+  `translatableWithFallback` prints e.g. `ask_parent`.
+- No conversation has been played in a production client; startup, `/reload`, villager spawn/death and
+  the broken-pack path have been observed on dedicated servers only (`AUDIT.md`, verification).

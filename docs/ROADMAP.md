@@ -20,7 +20,7 @@ Last reconciled against the code: 2026-09-22, version 1.8.0 on `feature/social-1
 | 1.7.1 | `375fbba` | `5b67c5b` | Pushed; not tagged, not uploaded |
 | 1.7.2 | `e3c0415` | `6186b22` | Pushed; not tagged, not uploaded |
 | 1.7.3 | `d979cc4` + `19f59cd` | `3002bed` | Pushed to `main` / `neoforge/1.21.1`; not tagged, not uploaded |
-| 1.8.0 | `feature/social-1.8.0` | `feature/social-1.8.0` | No |
+| 1.8.0 | `feature/social-1.8.0`, pushed to `main` | `feature/social-1.8.0`, pushed to `neoforge/1.21.1` | Pushed 2026-09-30; not tagged, not uploaded |
 
 Protocol 4 since 1.7.1: a 1.7.0 client and a 1.7.1+ server refuse each other, so 1.7.1–1.7.3 publish
 **on both loaders together**. A build of the 1.7.3 source (without its three review fixes) circulates
@@ -33,9 +33,9 @@ Fabric / Minecraft 26.2 (`/home/otectus/Projects/Fabric/MCAConversations_26.2`) 
 
 ## 2. Runtime acceptance not yet performed
 
-No release since 1.0.0's startup matrix has been exercised in a production-mapped client or a
-dedicated server. MCA does not load under a ForgeGradle dev runtime, so `runClient` is not evidence.
-Every row below is **not run**. A usable harness exists in the sibling Ultima Kingdoms repository
+No release since 1.0.0's startup matrix has been exercised in a production-mapped client. Dedicated-server
+*startup* of 1.8.0 was observed on 2026-09-30 (§5); no conversation has been played on one. MCA does not
+load under a ForgeGradle dev runtime, so `runClient` is not evidence. Every row below is **not run**. A usable harness exists in the sibling Ultima Kingdoms repository
 (`tools/test/integration_runtime.py`, which already launches a production-style Forge client and
 server with this mod); adopting it is the first step of the campaign.
 
@@ -255,6 +255,9 @@ content: every new scene must budget voice-family variants with it.
 
 ### 3.7 Known limitations and small bugs
 
+- A refused first content load leaves the mod with **no dialogue**: one malformed entry in any pack
+  refuses the whole attempt and nothing earlier exists to retain, until the pack is fixed and `/reload`
+  is run. An ERROR now says so (2026-09-30); the policy is open decision 5 (§4).
 - Chronicle text quoted in Capitals gossip renders in the **server's** locale (since 1.6.0).
 - The `event_observed` commitment resolver is reserved and unavailable: no generic event observer
   exists. Either build one or remove it from the vocabulary.
@@ -278,6 +281,8 @@ a current set on demand (§4, decision 1).
    not declared in `mods.toml`.
 3. Design the romance vertical or remove the `flirtation` / `attraction` scaffolding.
 4. ~~Accept the one-time legacy relationship import~~ — accepted 2026-09-22 and shipped in 1.8.0.
+5. At a refused *first* load, keep rejecting everything (today), or publish this mod's own content and
+   quarantine only the packs that carried a refusal. See `AUDIT.md`, open question 1.
 
 ---
 
@@ -286,6 +291,18 @@ a current set on demand (§4, decision 1).
 Every command ran through `/home/otectus/Projects/.mcmod-tools/gradlew-quiet.sh`. "Tests" are totals
 from `build/test-results/test/*.xml`; the six skipped cases are always the Capitals and Townstead
 real-jar probes, which need jar paths that were not supplied.
+
+### 1.8.0 — 2026-09-30 audit
+
+| Check | Forge | NeoForge |
+|---|---|---|
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20260930-201530.log`; 1,742 tests, 0 failures, 6 skipped; drift gates 2 and 5 tests, 0 failures | PASS with `verifyJarContents`, `/tmp/gradle-MCAConversations_1.21.1-build-20260930-201605.log`; 1,786 tests, 0 failures, 6 skipped; drift gates 2 and 5 |
+| Parity, `tools/verify_release_parity.py` from both copies | 2,028 identical, 191 reviewed adaptations, verified | same |
+| Jar | `mcaconversations-1.8.0.jar`, sha256 `0ceeaf40…`, protocol 4 | `mcaconversations-neoforge-1.8.0+1.21.1.jar`, sha256 `589aa9d7…`, protocol 4 |
+| `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
+| Dedicated server | Packaged Forge 47.4.23 (`/tmp/mcac-boot/boot.py`): starts, `/reload`, console commands, villager summon and kill, stops; 0 WARN/ERROR from this mod; 7/7 mixins applied. MCA 7.7.1-beta.2; MCA 7.6.20 + Architectury (final jar, `rel-*`); MCA 7.6.26 with Townstead 0.7.6, Quests 1.7.0, Reputation 0.6.1, Crime 0.7.5 (2026-09-30 build), Serene Seasons | `runServer` (MCA loads as a real mod here), driven over RCON: same commands; 0 WARN/ERROR from this mod, 0 exceptions; 8/8 mixins applied; MCA root `net.conczin.mca.`, 92 members |
+| Broken third-party pack at startup | Load refused; ERROR names the pack; `datapack disable` recovers (generation 1, 1,057 questions) | not run |
+| In-game conversation | **not run** | **not run** |
 
 ### 1.8.0 — 2026-09-22
 

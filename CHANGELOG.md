@@ -60,6 +60,45 @@ something they talk about, act on and gossip about.
 - `MODMAP.md` no longer lists the `[townstead]` config keys as unread: all eighteen are read through
   `compat/Townstead`.
 
+### Fixed — audit (2026-09-30)
+
+The first time this branch ran on real dedicated servers (MCA 7.6.20, 7.6.26 and 7.7.1-beta.2, alone and
+beside Townstead, MCA: Quests, MCA: Reputation, MCA: Crime and Serene Seasons). Findings and evidence are
+in `AUDIT.md`. Every fix is mirrored to the NeoForge 1.21.1 port, and release parity is verified again
+from both copies: 2,028 identical files and 191 reviewed adaptations, which now include the MCA: Crime
+integration and the family-pass changes of 2026-09-27 and -28 that had never been pinned.
+
+- **A villager kept standing still for a player who had walked away.** A hold from a chat exchange, a
+  greeting or an initiative was renewed while its player was merely connected, so the villager stayed
+  pinned and facing them for the whole attention window — thirty seconds by default, up to an hour as
+  configured — after they had walked off, teleported or changed dimension. Those holds now drop the
+  moment the player is out of chat reach (`chatModeAddressedRadius`, another level, dead), by the same
+  rule that already refused their replies and dropped their queued lines.
+- **`/conversations social audit` listed this mod's own 404 scenes as another pack's.** On Forge a mod's
+  resources report the jar's file name as their pack, not `mod:mcaconversations`, so nothing bundled was
+  ever recognised outside the unit tests, every reload recorded a `social_contract_absent` note against
+  this mod, and a third-party pack's undeclared scene was lost in the list. The bundled pack is now
+  recognised by its file name as well.
+- **An MCA: Quests `talk_about` objective counted clicks, not conversations.** The signal fired on every
+  topic cooldown written, and a topic's "again" branch rewrites a cooldown that is still running, so
+  clicking one topic three times finished "three heart-to-hearts". Only a cooldown written while none
+  was running counts now.
+- **A load that leaves the mod with no dialogue says so.** One malformed entry in any pack refuses the
+  whole content load, and at server start there is nothing earlier to keep, so every topic this mod
+  adds disappears until the pack is fixed and `/reload` is run. The per-problem errors were there, but
+  the only summary was an INFO line that read like a routine refusal; an ERROR now states the
+  consequence and names the pack. The policy itself is unchanged and is an open decision in `AUDIT.md`.
+- **The 27 `WARN Error loading class` lines on every start are gone.** Each MCA mixin names both
+  of MCA's package roots, and `@Pseudo` stops the absent one being an error but not being looked up. A
+  mixin config plugin (`compat/MixinTargetPlugin`) now skips a target the owning mod's jar does not
+  contain before Mixin looks, and applies everything it cannot decide exactly as before.
+- **Typing pings are rate-limited on the server.** Each one runs an entity search; a client that sent
+  more than its one a second was served every one. Pings are now acted on at most every five ticks.
+- **`/conversations chat on|off|status` answers in the player's language.** The replies were English
+  literals; they are now `commands.mcaconversations.chat.*` keys in `en_us` and `pt_br`.
+- The client no longer quotes the previous server's discussion in its presence heartbeat after moving
+  to another server; the handle is resynchronised with the connection before every use.
+
 ### Changed
 
 - **Strangers greet you like strangers.** The greeting a villager used for everyone who was not

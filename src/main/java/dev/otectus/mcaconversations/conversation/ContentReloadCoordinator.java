@@ -485,9 +485,30 @@ public final class ContentReloadCoordinator implements PreparableReloadListener 
                     committed.retainedQuestionCount(),
                     open.tailObserved(),
                     why);
+            if (!committedNow && !committed.available()) {
+                // A rejection with nothing committed before it — the first load of a server, as a rule —
+                // has no earlier content to keep, so every topic this mod adds is gone until an attempt
+                // is accepted. The per-problem errors above say what is wrong; this says what it costs,
+                // because the summary line alone reads like a routine refusal.
+                McaConversations.LOGGER.error("MCA: Conversations has no dialogue content: this content load was "
+                        + "refused and no earlier load was ever accepted, so there is nothing to keep. Its topics "
+                        + "stay unavailable until the problem(s) above are fixed or {} removed, then /reload.",
+                        refusedPacks(problems));
+            }
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("reload summary failed", t);
         }
+    }
+
+    /** The packs whose resources carried a refusal, for the operator's "remove it" choice; never empty. */
+    static String refusedPacks(List<ContentProblem> problems) {
+        java.util.Set<String> packs = new java.util.TreeSet<>();
+        for (ContentProblem problem : problems) {
+            if (problem.severity().fatal()) {
+                packs.add(problem.origin() == null ? ResourceOrigin.UNKNOWN_PACK : problem.origin().pack());
+            }
+        }
+        return packs.isEmpty() ? "the pack at fault" : "pack " + String.join(", ", packs);
     }
 
     // --- Test seams ----------------------------------------------------------------------------

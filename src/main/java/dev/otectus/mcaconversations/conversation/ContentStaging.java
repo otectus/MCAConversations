@@ -290,11 +290,18 @@ public final class ContentStaging {
     static Map<String, List<String>> unauditedScenes(java.util.Collection<String> ids,
                                                      Map<String, ResourceOrigin> origins,
                                                      Map<String, Boolean> declared) {
+        return unauditedScenes(ids, origins, declared, ContentSources.ownPackFileName());
+    }
+
+    /** As above, naming this mod's own file explicitly, so the rule is testable without a mod list. */
+    static Map<String, List<String>> unauditedScenes(java.util.Collection<String> ids,
+                                                     Map<String, ResourceOrigin> origins,
+                                                     Map<String, Boolean> declared, String ownFileName) {
         Map<String, List<String>> out = new TreeMap<>();
         for (String id : new java.util.TreeSet<>(ids)) {
             ResourceOrigin origin = origins.get(id);
             String pack = origin == null ? ResourceOrigin.UNKNOWN_PACK : origin.pack();
-            if (!bundledPack(pack) && !Boolean.TRUE.equals(declared.get(id))) {
+            if (!bundledPack(pack, ownFileName) && !Boolean.TRUE.equals(declared.get(id))) {
                 out.computeIfAbsent(pack, unused -> new ArrayList<>()).add(id);
             }
         }
@@ -302,12 +309,22 @@ public final class ContentStaging {
     }
 
     /**
-     * Whether a pack id names this mod's own jar: Forge calls it {@code mod:<id>} and NeoForge
-     * {@code mod/<id>}, and the content is identical on both.
+     * Whether a pack id names this mod's own jar.
+     *
+     * <p>A resource reports the id of the {@code PackResources} it came from, not the pack's name in
+     * the repository. Forge 1.20.1 builds a mod's resources as
+     * {@code new PathPackResources(file.getFileName(), ...)} ({@code ResourcePackLoader.createPackForMod}),
+     * so on a real Forge install that id is the jar's file name — {@code mcaconversations-1.8.0.jar} —
+     * and {@code mod:<id>} is only the repository entry. Matching {@code mod:<id>} alone recognised this
+     * mod's scenes in unit tests and nowhere else, which put all of them on the audit as another pack's.
+     * NeoForge names both {@code mod/<id>}; all three forms are accepted so the content is identical on
+     * both loaders.
      */
-    static boolean bundledPack(String pack) {
-        return ("mod:" + dev.otectus.mcaconversations.McaConversations.MOD_ID).equals(pack)
-                || ("mod/" + dev.otectus.mcaconversations.McaConversations.MOD_ID).equals(pack);
+    static boolean bundledPack(String pack, String ownFileName) {
+        return pack != null
+                && (("mod:" + dev.otectus.mcaconversations.McaConversations.MOD_ID).equals(pack)
+                || ("mod/" + dev.otectus.mcaconversations.McaConversations.MOD_ID).equals(pack)
+                || pack.equals(ownFileName));
     }
 
     // --- Village culture -----------------------------------------------------------------------

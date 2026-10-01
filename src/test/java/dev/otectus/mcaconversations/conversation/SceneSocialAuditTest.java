@@ -50,6 +50,27 @@ class SceneSocialAuditTest {
         assertEquals(ContentSeverity.INFO, notices.get(0).severity(), "a report, never a refusal");
     }
 
+    /**
+     * Regression: on a real Forge 1.20.1 server a mod's resources report the jar's file name as their
+     * pack id ({@code ResourcePackLoader.createPackForMod}), not {@code mod:<id>}. Matching only the
+     * {@code mod:} form listed all 404 of this mod's own scenes on the audit as another pack's.
+     */
+    @Test
+    @DisplayName("this mod's scenes are not reported under the jar file name Forge gives its resources")
+    void bundledScenesUnderTheJarFileNameAreNotReported() {
+        String jar = "mcaconversations-1.8.0.jar";
+        Map<String, ResourceOrigin> origins = Map.of(
+                "bundled.jar", new ResourceOrigin(null, jar, "data/mcaconversations/conversation_scenes/a.json"),
+                "tales.first", new ResourceOrigin(null, "file/villager_tales", "data/example/conversation_scenes/b.json"));
+        Map<String, Boolean> declared = Map.of("bundled.jar", false, "tales.first", false);
+
+        assertEquals(Map.of("file/villager_tales", List.of("tales.first")),
+                ContentStaging.unauditedScenes(origins.keySet(), origins, declared, jar));
+        assertTrue(ContentStaging.bundledPack(jar, jar));
+        assertTrue(!ContentStaging.bundledPack("file/" + jar, jar), "a datapack is never this mod's own jar");
+        assertTrue(!ContentStaging.bundledPack(null, null));
+    }
+
     @Test
     @DisplayName("with nothing loaded there is nothing to report")
     void anEmptyCatalogReportsNothing() {

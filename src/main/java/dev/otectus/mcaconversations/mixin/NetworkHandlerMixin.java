@@ -32,8 +32,9 @@ import java.util.UUID;
  * <p><b>Two targets, one jar.</b> MCA's Forge classes moved from {@code forge.net.mca.*} to
  * {@code forge.net.conczin.mca.*} in 7.7.1-alpha.1. Mixin resolves each declared target
  * independently and simply omits one it cannot find, so listing both makes this apply on either
- * generation. {@link Pseudo} keeps the unmatched root a DEBUG line rather than a startup warning
- * that would be indistinguishable from a real breakage in a bug report.
+ * generation. {@link Pseudo} keeps the unmatched root from being an error; it does not stop Mixin
+ * looking it up, and that lookup logs a {@code WARN Error loading class} indistinguishable from a real
+ * breakage in a bug report. {@code compat.MixinTargetPlugin} skips the absent root before the lookup.
  *
  * <p><b>Why {@link Coerce}.</b> The target parameter is MCA's {@code Message}, whose package is
  * exactly what varies, so it cannot be named here. {@code @Coerce} lets the handler declare a
