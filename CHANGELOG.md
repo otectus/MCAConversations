@@ -19,6 +19,14 @@ see; what changed is what a villager may *assume* about you. And with Townstead 
 villagers' needs, shifts, trades, years, roots, buildings, village spirit and calendar become
 something they talk about, act on and gossip about.
 
+### Fixed — MCA: Kingdoms rename (2026-10-01, mirrored from Forge)
+
+- `KingdomBridge` and `CivicBridge` resolve MCA: Kingdoms (formerly Ultima Kingdoms) through
+  `compat/KingdomsIdentity`, the current generation first and, for one release, the old one; the guild-contact
+  scenes name `mcakingdoms`, and either id counts as present under the other. The generated content was rebuilt
+  and the stale `scene_generated_ultima_kingdoms.json` files removed. Inert on this branch until Kingdoms ships
+  for NeoForge, but in step with the Forge line.
+
 ### Added — family integration pass (2026-09-27)
 
 - **MCA: Crime integration** (`compat/CrimeBridge`, `compat/crime/`, compiled against Crime's vendored

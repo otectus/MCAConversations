@@ -37,14 +37,14 @@ lives in `tools/parity/`.
 
 ## Features (1.7.3)
 
-- **Topics that belong to a kingdom.** With Ultima Kingdoms installed (it has no NeoForge 1.21.1
+- **Topics that belong to a kingdom.** With MCA: Kingdoms installed (it has no NeoForge 1.21.1
   build yet, so on this port the integration waits for it), a topic can be offered only to
   villagers of the right kingdom, judged by where they live or where they came from, and only while
   the player stands well enough with its faction. The restriction holds on every way into a
   conversation — the dialogue screen, a numbered reply, typed chat, the dynamic hub, a crafted packet —
-  and a gate Ultima cannot answer hides what it guards.
+  and a gate Kingdoms cannot answer hides what it guards.
 - **Guild contacts.** A villager appointed to speak for a guild can explain what the guild does and
-  put in a request for an introduction or for its commissions. Ultima decides; the villager relays
+  put in a request for an introduction or for its commissions. Kingdoms decides; the villager relays
   its answer to you alone and never repeats where an introduction leads.
 
 ## Features (1.7.2)
@@ -224,8 +224,8 @@ about their sovereign, heirs and court; court changes seed village gossip), **Se
 (real seasons; calendar fallback otherwise), **Townstead** (needs, schedules, trades, life stages,
 roots, buildings, village spirit and calendar become conversation state, with a *Life here* topic
 category, reactions, gossip, and numbered choices in its RPG dialogue screen; **Emotecraft** is needed
-for reactions to play) and **Ultima Kingdoms** (kingdom-gated topics
-and guild contacts; inert on this port until Ultima Kingdoms ships for NeoForge 1.21.1) — all soft
+for reactions to play) and **MCA: Kingdoms**, formerly Ultima Kingdoms (kingdom-gated topics
+and guild contacts; inert on this port until MCA: Kingdoms ships for NeoForge 1.21.1) — all soft
 dependencies; the mod works fully without them.
 
 ## How it works

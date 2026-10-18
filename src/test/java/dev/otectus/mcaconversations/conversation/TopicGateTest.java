@@ -15,7 +15,7 @@ class TopicGateTest {
                 {"entry":{"question":"greet","answer":"checkin"},"depth":"quick",
                  "return_question":"main","ages":["adult"],
                  "required_stance_families":["exit"],
-                 "kingdom_gate":{"include":["ultima_kingdoms:lunari"]}}
+                 "kingdom_gate":{"include":["mcakingdoms:lunari"]}}
                 """).getAsJsonObject());
         return ConversationCatalog.build(List.of(entry));
     }

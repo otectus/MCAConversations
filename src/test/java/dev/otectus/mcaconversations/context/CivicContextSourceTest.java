@@ -17,13 +17,13 @@ class CivicContextSourceTest {
         builder.beginSource(CivicContextSource.ID);
         CivicContextSource.contribute(builder, new CivicBridge.Contact(
                 UUID.fromString("fcd0b19b-77fb-4aa2-aaf4-a83272b071b8"),
-                ResourceLocation.fromNamespaceAndPath("ultima_kingdoms", "lamplighters"),
+                ResourceLocation.fromNamespaceAndPath("mcakingdoms", "lamplighters"),
                 "civic.organization.lamplighters", "guild_contact", true, false, true,
                 List.of("civic.introduction.rank"), List.of(), 17L, 4L));
         ConversationContextSnapshot snapshot = builder.build();
 
         assertEquals(Optional.of(true), snapshot.value(ContextKeys.CIVIC_CONTACT));
-        assertEquals(Optional.of("ultima_kingdoms:lamplighters"),
+        assertEquals(Optional.of("mcakingdoms:lamplighters"),
                 snapshot.value(ContextKeys.CIVIC_ORGANIZATION));
         assertEquals(Optional.of("civic.organization.lamplighters"),
                 snapshot.value(ContextKeys.CIVIC_ORGANIZATION_NAME_KEY));

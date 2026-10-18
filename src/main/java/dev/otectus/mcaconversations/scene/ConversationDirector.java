@@ -19,7 +19,6 @@ import dev.otectus.mcaconversations.profession.ProfessionProfileLoader;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.fml.ModList;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -450,7 +449,8 @@ public final class ConversationDirector {
             return true;
         }
         try {
-            return ModList.get() != null && ModList.get().isLoaded(modId.trim().toLowerCase(Locale.ROOT));
+            // MCA: Kingdoms counts under either loader id (it was ultima_kingdoms before 0.1.1).
+            return dev.otectus.mcaconversations.compat.KingdomsIdentity.isLoaded(modId.trim().toLowerCase(Locale.ROOT));
         } catch (Throwable t) {
             return false;
         }

@@ -86,13 +86,13 @@ class ContentCompilerTest {
             ContentCompiler compiler = new ContentCompiler(scratch.resolve("content"), resources,
                     scratch.resolve("fixtures"));
             compiler.ownTopicKingdomGate("day", com.google.gson.JsonParser.parseString(
-                    "{\"subject\":\"giver_origin\",\"include\":[\"ultima_kingdoms:madera\"]}"));
+                    "{\"subject\":\"giver_origin\",\"include\":[\"mcakingdoms:madera\"]}"));
             compiler.syncTopicKingdomGates(catalog);
 
             var gate = com.google.gson.JsonParser.parseString(Files.readString(catalog)).getAsJsonObject()
                     .getAsJsonObject("topics").getAsJsonObject("day").getAsJsonObject("kingdom_gate");
             assertEquals("giver_origin", gate.get("subject").getAsString());
-            assertEquals("ultima_kingdoms:madera", gate.getAsJsonArray("include").get(0).getAsString());
+            assertEquals("mcakingdoms:madera", gate.getAsJsonArray("include").get(0).getAsString());
         } finally {
             deleteTree(scratch);
         }

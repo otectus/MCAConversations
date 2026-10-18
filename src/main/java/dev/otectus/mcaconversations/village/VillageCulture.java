@@ -9,7 +9,6 @@ import dev.otectus.mcaconversations.identity.VillagerIdentityRecord;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.fml.ModList;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -156,7 +155,7 @@ public final class VillageCulture {
 
     private static boolean modPresent(String modId) {
         try {
-            return modId != null && ModList.get() != null && ModList.get().isLoaded(modId);
+            return modId != null && dev.otectus.mcaconversations.compat.KingdomsIdentity.isLoaded(modId);
         } catch (Throwable t) {
             return false;
         }

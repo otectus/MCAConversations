@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import java.util.List;
 import java.util.Optional;
 
-/** Requester/speaker civic facts supplied only by Ultima's public reflective API. */
+/** Requester/speaker civic facts supplied only by MCA: Kingdoms' public reflective API. */
 public final class CivicContextSource implements ConversationContextSource {
     public static final String ID = "civic";
     private static final List<ContextKey<?>> DECLARES = List.of(
@@ -36,7 +36,7 @@ public final class CivicContextSource implements ConversationContextSource {
     public void contribute(ContextSnapshotBuilder builder, ContextRequest request) {
         if (!isAvailable(request)) {
             builder.allUnavailable(DECLARES);
-            builder.reportCapability(ContextCapabilities.Status.ABSENT, "Ultima civic API unavailable");
+            builder.reportCapability(ContextCapabilities.Status.ABSENT, "MCA: Kingdoms civic API unavailable");
             return;
         }
         Optional<CivicBridge.Contact> context = CivicBridge.speakerContext(request.player(), request.villager());

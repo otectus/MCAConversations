@@ -142,20 +142,15 @@
       "neoforge": "701aac4f0002caf7febad406211cbab723a85b22b065f3b33ba7688632482210",
       "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types."
     },
-    "src/main/java/dev/otectus/mcaconversations/compat/CivicBridge.java": {
-      "forge": "469b343921857276d7a7cce1d4cd8636967f880d0281a69f353eeef503c06ac8",
-      "neoforge": "3ba67172acf3d03961aad3a661b3da61c70a978e33be45cba9693abec9d7bfe5",
-      "reason": "1.7.3: new. net.neoforged.fml.ModList in place of net.minecraftforge.fml.ModList; the reflective civic bridge is otherwise shared source."
-    },
     "src/main/java/dev/otectus/mcaconversations/compat/CrimeBridge.java": {
       "forge": "4a6b4ff0f587637abb5e654c49f085ab8ebf3744e6c01b82b6711dc72827d9bb",
       "neoforge": "bb3259e26b5f4aa59c01346ec532c328a28c626494706be1338136cb428fa871",
       "reason": "1.8.0 MCA: Crime integration: net.neoforged.fml.ModList in place of net.minecraftforge.fml.ModList; otherwise identical."
     },
-    "src/main/java/dev/otectus/mcaconversations/compat/KingdomBridge.java": {
-      "forge": "065632ca6114b73a5444b0a2e2afd0d1ca1a9c0e499aac7ace580ab2c72e9838",
-      "neoforge": "029f66182c1643f5270334350d2b8c4097a9e96b860adecbd232573bccf469b9",
-      "reason": "1.7.3: new. net.neoforged.fml.ModList in place of net.minecraftforge.fml.ModList; the reflective kingdom bridge is otherwise shared source."
+    "src/main/java/dev/otectus/mcaconversations/compat/KingdomsIdentity.java": {
+      "forge": "636d28d14b67eac6779a7bc1d37bd99fa08328d3483ba7f4d0f9e2e619bf94e2",
+      "neoforge": "86b2144b236f8d8d149662149a58914f9cffe1a1241803a70d13b67055d98f7b",
+      "reason": "MCA: Kingdoms rename (2026-10-01): new. net.neoforged.fml.ModList in place of net.minecraftforge.fml.ModList; CivicBridge, KingdomBridge, ConversationDirector, WorkEpisodeGenerator and VillageCulture, which carried that import, now go through KingdomsIdentity and are shared source."
     },
     "src/main/java/dev/otectus/mcaconversations/compat/McaBridge.java": {
       "forge": "a8f2bd85bd51b3ff9386e3c89b66118a9ba139e4f57ff9546c07c3611c246213",
@@ -447,16 +442,6 @@
       "neoforge": "4c9df530bb5402d0404e95addd581d68d462c7528463a6d202fb10321c23de1b",
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
-    "src/main/java/dev/otectus/mcaconversations/scene/ConversationDirector.java": {
-      "forge": "1bfdf2166c9e679e0e169535fd5ad76dc8caf97ac49b9553f64c2c640c9e419a",
-      "neoforge": "f2ac668d3e40c2329b4e6cbe9f6e6cfac4f19298115b917b561b33943b563257",
-      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
-    },
-    "src/main/java/dev/otectus/mcaconversations/scene/WorkEpisodeGenerator.java": {
-      "forge": "97d1706d774d64b4caa3fa87e05279083ceee0f5b15a4a60b527300de6940d40",
-      "neoforge": "811a53404e184edf8f3a23863b5e977325e9520d0ff261799376609d7e4ba84b",
-      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
-    },
     "src/main/java/dev/otectus/mcaconversations/template/SlotRenderer.java": {
       "forge": "a3a40ddcb321250d45a99824df96a9212cd10cd245de0802686d1406c77ce5b7",
       "neoforge": "795a68a662ef2efc2c6fc9a8ce59b4735e18149c9221c12e128b4814ac328f62",
@@ -467,25 +452,20 @@
       "neoforge": "e4354104d6922f094316084906e8f4caff6753f066be194c09e73560cf16fd11",
       "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
     },
-    "src/main/java/dev/otectus/mcaconversations/village/VillageCulture.java": {
-      "forge": "8c63aadbf1d1867dea61e6461f619d5a5e48e483fe52b6c3d856f8256cd7d01f",
-      "neoforge": "07b656cb6a0035e2ef9ee8a5c4329873d15bfe4a6714035ae990e76e3f4133c8",
-      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
-    },
     "src/main/java/dev/otectus/mcaconversations/village/VillageCultureSavedData.java": {
       "forge": "e4898cf7a62d69bc3d547a2ea77ecaeb518fda68a4cedc5b11b6d96711e7e84e",
       "neoforge": "01fa282de281a3845ce59c12c6dc8663b3467e232459a884e99183aefa3a517b",
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
     "src/main/resources/META-INF/mods.toml": {
-      "forge": "59dc2fd67ac986a57d04de0c4d68326d00e12c58025442395b85eeac65ddfefc",
+      "forge": "a9228238ec1f00d97ad7bb6d4bf97c271de71a3513fb703719a3995ee48c5b7e",
       "neoforge": null,
-      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format."
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format. MCA: Kingdoms rename (2026-10-01): declares mcakingdoms (mandatory=false) beside the legacy ultima_kingdoms id."
     },
     "src/main/resources/META-INF/neoforge.mods.toml": {
       "forge": null,
-      "neoforge": "5bb7e6d20c4cfe612e17d258c71f9bfc75cefe71049d74419076ffbabb47ee1f",
-      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format."
+      "neoforge": "8ecb84dd6b3fae2de96c30bc060b2701a4da7829aa92bb4a0d55d24f94c7b257",
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format. MCA: Kingdoms rename (2026-10-01): declares mcakingdoms (type=\"optional\") beside the legacy ultima_kingdoms id."
     },
     "src/main/resources/mcaconversations.mixins.json": {
       "forge": "5d366d2c60073592fca71fb742232ddc03053ab91b8472685a3300c22560e6c5",
@@ -522,6 +502,11 @@
       "neoforge": "d2d56ea0d9aac9ec803a421af97247982e8a658e4e4004da978268e11cdbfe19",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
+    "src/test/java/dev/otectus/mcaconversations/NoKingdomsStaticLinkTest.java": {
+      "forge": "869e7167756fe876151805b2f661f68321688cd295f7467a84702f724fb35096",
+      "neoforge": "9037966f2c80652a3f464b4e3ed1adc5e0f036e7bb629ede3a3fd0223b21d8de",
+      "reason": "MCA: Kingdoms rename (2026-10-01): NoUltimaStaticLinkTest renamed. Resolves build/classes through TestPaths.of rather than Path.of, which NeoForgePortLintTest requires."
+    },
     "src/test/java/dev/otectus/mcaconversations/NoMcaStaticLinkTest.java": {
       "forge": "e6c68af1d77e9bceacd73ea91d811fdf1d486e3975f3e4f281dd8e2ae61d8416",
       "neoforge": "9bafed16d9283d3aee2aa8123aa90427831919d2679467d7058ef2b4ea60262b",
@@ -531,11 +516,6 @@
       "forge": "d9574f908bfcbcd9287feaf3cb7647a8332d71507a912be12dc9a94ceeceb8e3",
       "neoforge": "51df003fb032ac70c498192f63c042feeeb8b8c1db37f770485792631b9f7b79",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
-    },
-    "src/test/java/dev/otectus/mcaconversations/NoUltimaStaticLinkTest.java": {
-      "forge": "7b1cef4f08f85d67e2aba2b3252e975079adebb34e0b3e898c3d3530253a2f89",
-      "neoforge": "64d7c9070dd8d62113d3a5af1b51ccba7f84a47fc34fea12795282783373c06a",
-      "reason": "1.7.3: new test. Resolves build/classes through TestPaths.of rather than Path.of, which NeoForgePortLintTest requires."
     },
     "src/test/java/dev/otectus/mcaconversations/authoring/CapitalsNarrativeContractTest.java": {
       "forge": "7ef95c84d5e0053ab8c10f113e4013b614ec52c3a8fbf7821c59b3c5d3dddc67",
@@ -548,9 +528,9 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/authoring/ContentCompilerTest.java": {
-      "forge": "b84b6f0e2bb3cd381245599e4e9877bca84f0f7e700d18d5fe3cf41d3585c6d7",
-      "neoforge": "5999fb1ea23c5dcf9796a8e7dc18ad74259bea04951c89c7ec914ab7674c0ae4",
-      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+      "forge": "396845a5346f3b76360288e17a52086676a815c5800c5ddd8bf9d6e8c1190ec5",
+      "neoforge": "8bbf60af6a66c32ce3f18190a91c461e45b04e87623fc596d36cb1ac71d485f6",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. MCA: Kingdoms rename (2026-10-01): the same edit on both loaders; the adaptation is unchanged."
     },
     "src/test/java/dev/otectus/mcaconversations/authoring/VoiceFamilyCompiler.java": {
       "forge": "0ed6229c844bdb1abf2b9b87113d513a814902a22482cf1f9e3b2cced28a2c14",
@@ -598,9 +578,9 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/compat/CivicBridgeTest.java": {
-      "forge": "b463b924054d8c2aaa8aa5581b3b83ed8a59f9f08e17fb709e40767e1733f1f5",
-      "neoforge": "b7faaebb75d78644f6f4cac73eab3a1f17115e704e1b9b09964f45184b55e6bf",
-      "reason": "1.7.3: new test. Resolves the language files through TestPaths.of rather than Path.of, which NeoForgePortLintTest requires."
+      "forge": "a39de602debcc2cd47ee70b600d2a8c19594710cca5feaa0c7c5fce2b4bd8c81",
+      "neoforge": "15a3115a0ad428536df458b7af7a6ea5e2604680aaa9be44817ea4f0107f63d5",
+      "reason": "1.7.3: new test. Resolves the language files through TestPaths.of rather than Path.of, which NeoForgePortLintTest requires. MCA: Kingdoms rename (2026-10-01): the same edit on both loaders; the adaptation is unchanged."
     },
     "src/test/java/dev/otectus/mcaconversations/compat/ConstraintVocabularyProbeTest.java": {
       "forge": "61a2812da7575116d8df708379aa5b3a62eed6e1f6b765eeb3af396872cae62f",
@@ -668,9 +648,9 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/content/CivicContentContractTest.java": {
-      "forge": "4bad1d63b5c6a3938e29f383ea696625e2319544e957ff70619f20d3cddc59ba",
-      "neoforge": "ca56c926ac21c5f4b1549f0643f6d251f90ee9feec995e435d819079d207d4ed",
-      "reason": "1.7.3: new test. Resolves repository paths through TestPaths.of rather than Path.of, which NeoForgePortLintTest requires."
+      "forge": "1fdd0eb9b96552dc1ddd71ba99b93379318968048aa8f499e944b508603a87e1",
+      "neoforge": "4fb343947cde44d859a2e7f9b3b227be30df22bcd3e5ec53b3bdf4c77f45c62e",
+      "reason": "1.7.3: new test. Resolves repository paths through TestPaths.of rather than Path.of, which NeoForgePortLintTest requires. MCA: Kingdoms rename (2026-10-01): the same edit on both loaders; the adaptation is unchanged."
     },
     "src/test/java/dev/otectus/mcaconversations/content/ContentCoverageReportTest.java": {
       "forge": "3cb3bca6545f63aacd093424253cdd48843b23c962157e671ba2b49adb59ec39",
@@ -753,9 +733,9 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/content/OptionalProfessionIsolationTest.java": {
-      "forge": "15b9043d612190648c44bf7a7d239d523fd45527ee63a575bbb0d3395857b9d6",
-      "neoforge": "607d7adf6deeb5e13b21c0d624ca43e27e06bd72dea6f0e2a59d6de2c632b667",
-      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+      "forge": "8421fbb8077dc6b6bd77c25b2977051a7f156ee5a44348cd38e08add28872388",
+      "neoforge": "611dbcf3cf404b87736a125720fb5e8ac790a1ecec3f3ed74b9a9fffe943736c",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. MCA: Kingdoms rename (2026-10-01): the same edit on both loaders; the adaptation is unchanged."
     },
     "src/test/java/dev/otectus/mcaconversations/content/OverlayLintTest.java": {
       "forge": "c5d5c1c9d96b4aa35ab71a354128169381dd4bb3c692be31ed73228e9391eb1b",
@@ -823,9 +803,9 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/context/CivicContextSourceTest.java": {
-      "forge": "c51487a6642d489aed23ad128e840eddcc7d8fe47280018961c3e6e81e9ecdf5",
-      "neoforge": "0afed1f8a3735d7dbd2e08b13740003780394e718488b87665129cc970aa19b6",
-      "reason": "1.7.3: new test. ResourceLocation.fromNamespaceAndPath in place of the two-argument constructor, which 1.21.1 removed."
+      "forge": "8a06b04bfdcfedd9f1a3cf04b5c90cbb0168d7ce5a98365f7d61e37709aa0c5e",
+      "neoforge": "d520239e06ce2aceadfe1c200f3cfc76ce3f07419559a36c34b846c2c3b91be7",
+      "reason": "1.7.3: new test. ResourceLocation.fromNamespaceAndPath in place of the two-argument constructor, which 1.21.1 removed. MCA: Kingdoms rename (2026-10-01): the fixture namespace is mcakingdoms; the adaptation is unchanged."
     },
     "src/test/java/dev/otectus/mcaconversations/context/ContextKeyOwnershipTest.java": {
       "forge": "89406521d6245934202b353876a2eeaa815ed349a8687155d6808c19196397f7",

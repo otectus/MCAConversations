@@ -79,8 +79,17 @@ description='''${mod_description}'''
     ordering="AFTER"
     side="BOTH"
 
-# Ultima Kingdoms - OPTIONAL. Catalog and branch gates bind reflectively when present; without it,
+# MCA: Kingdoms - OPTIONAL. Catalog and branch gates bind reflectively when present; without it,
 # ordinary content is unchanged and explicitly restricted content follows its authored unknown policy.
+[[dependencies.${mod_id}]]
+    modId="mcakingdoms"
+    type="optional"
+    versionRange="[0.1,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# The same mod under its loader id before its 0.1.1 rename (Ultima Kingdoms). Still recognised for one
+# release (compat/KingdomsIdentity); remove together with the legacy id there.
 [[dependencies.${mod_id}]]
     modId="ultima_kingdoms"
     type="optional"

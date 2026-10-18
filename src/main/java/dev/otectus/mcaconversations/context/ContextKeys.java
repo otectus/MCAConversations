@@ -245,7 +245,7 @@ public final class ContextKeys {
     public static final ContextKey<Integer> TOWNSTEAD_MONTH = ContextKey.of("townstead.month", Integer.class);
     public static final ContextKey<Integer> TOWNSTEAD_WEEKDAY = ContextKey.of("townstead.weekday", Integer.class);
 
-    // --- Civic network (Ultima Kingdoms; written only by CivicContextSource) -------------------
+    // --- Civic network (MCA: Kingdoms; written only by CivicContextSource) ---------------------
     /** True only when the actual speaker is an authored civic contact visible to this requester. */
     public static final ContextKey<Boolean> CIVIC_CONTACT = ContextKey.of("civic.contact", Boolean.class);
     public static final ContextKey<String> CIVIC_ORGANIZATION = ContextKey.of("civic.organization", String.class);

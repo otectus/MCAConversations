@@ -5,7 +5,6 @@ import dev.otectus.mcaconversations.conversation.KingdomGateSpec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.fml.ModList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -15,17 +14,18 @@ import java.util.OptionalInt;
 import java.util.UUID;
 
 /**
- * Optional, reflection-only boundary to Ultima Kingdoms and Ultima Factions.
+ * Optional, reflection-only boundary to MCA: Kingdoms' kingdom gates and faction standing.
  *
  * <p>Every method fails closed for authored restrictions. Ungated content never calls this class,
  * and the one compatibility escape hatch is {@code when_unknown: allow} on an inline predicate.
  */
 public final class KingdomBridge {
 
-    private static final String MOD_ID = "ultima_kingdoms";
-    private static final String GATE_API = "com.ultimakingdoms.api.gating.KingdomGateApi";
-    private static final String FACTIONS_API = "com.ultimakingdoms.api.factions.UltimaFactionsApi";
-    private static final String STANDING_SCOPE = "com.ultimakingdoms.api.factions.StandingScope";
+    // Relative to the installed generation's API package; "%s" is its facade prefix (KingdomsIdentity).
+    private static final String GATE_API = "gating.KingdomGateApi";
+    private static final String FACTIONS_API = "factions.%sFactionsApi";
+    private static final String STANDING_SCOPE = "factions.StandingScope";
+    private static final String COMMUNITY_REF = "McaCommunityRef";
 
     private static volatile Binding binding;
     private static volatile boolean attempted;
@@ -73,7 +73,7 @@ public final class KingdomBridge {
                 standing.minimum(), standing.maximum());
     }
 
-    /** Prefer Ultima's public provider facade; older Ultima builds fall back to Conversations' bridge. */
+    /** Prefer Kingdoms' public provider facade; older Kingdoms builds fall back to Conversations' bridge. */
     private static OptionalInt localStanding(Binding live, Object service,
                                              ServerPlayer player, Entity giver) {
         if (live.factionsLocalStanding() == null || live.communityConstructor() == null) {
@@ -87,7 +87,7 @@ public final class KingdomBridge {
             Object score = live.factionsLocalStanding().invoke(service, player.getUUID(), community);
             return score instanceof OptionalInt value ? value : OptionalInt.empty();
         } catch (Throwable unavailable) {
-            McaConversations.LOGGER.debug("[MCA: Conversations] Ultima local-standing provider unavailable", 
+            McaConversations.LOGGER.debug("[MCA: Conversations] MCA: Kingdoms local-standing provider unavailable", 
                     unwrap(unavailable));
             return OptionalInt.empty();
         }
@@ -117,14 +117,17 @@ public final class KingdomBridge {
     private static Binding binding() {
         Binding cached = binding;
         if (cached != null) return cached;
-        if (attempted || !ModList.get().isLoaded(MOD_ID)) return null;
+        if (attempted) return null;
+        Optional<KingdomsIdentity.Generation> installed = KingdomsIdentity.installed();
+        if (installed.isEmpty()) return null;
+        KingdomsIdentity.Generation generation = installed.get();
         synchronized (KingdomBridge.class) {
             if (binding != null) return binding;
             if (attempted) return null;
             attempted = true;
             try {
                 ClassLoader loader = KingdomBridge.class.getClassLoader();
-                Class<?> gateApi = Class.forName(GATE_API, false, loader);
+                Class<?> gateApi = Class.forName(generation.className(GATE_API), false, loader);
                 Method testJson = gateApi.getMethod("testJson", ServerPlayer.class, Entity.class,
                         String.class, Optional.class);
                 Method testNamed = gateApi.getMethod("testNamed", ServerPlayer.class, Entity.class,
@@ -138,34 +141,34 @@ public final class KingdomBridge {
                 Constructor<?> communityConstructor = null;
                 Class<?> standingScope = null;
                 try {
-                    Class<?> factionsApi = Class.forName(FACTIONS_API, false, loader);
-                    standingScope = Class.forName(STANDING_SCOPE, false, loader);
+                    Class<?> factionsApi = Class.forName(generation.className(FACTIONS_API), false, loader);
+                    standingScope = Class.forName(generation.className(STANDING_SCOPE), false, loader);
                     factionsGet = factionsApi.getMethod("get", net.minecraft.server.MinecraftServer.class);
                     Class<?> service = factionsGet.getReturnType();
                     factionsMatches = service.getMethod("matches", standingScope, UUID.class,
                             ResourceLocation.class, OptionalInt.class, int.class, int.class);
                     try {
-                        Class<?> community = Class.forName(
-                                "com.ultimakingdoms.api.McaCommunityRef", false, loader);
+                        Class<?> community = Class.forName(generation.className(COMMUNITY_REF), false, loader);
                         communityConstructor = community.getConstructor(ResourceLocation.class, int.class);
                         factionsLocalStanding = service.getMethod("getLocalStanding", UUID.class, community);
                     } catch (ClassNotFoundException | NoSuchMethodException olderFacade) {
                         // Additive capability. ReputationBridge supplies the same tri-state local input
-                        // for older Ultima builds; absence is still OptionalInt.empty(), never zero.
+                        // for older Kingdoms builds; absence is still OptionalInt.empty(), never zero.
                     }
                 } catch (ClassNotFoundException | NoSuchMethodException unavailable) {
-                    McaConversations.LOGGER.info("[MCA: Conversations] Ultima Kingdoms has kingdom gates but "
-                            + "no compatible Ultima Factions facade; standing clauses remain unavailable.");
+                    McaConversations.LOGGER.info("[MCA: Conversations] MCA: Kingdoms has kingdom gates but "
+                            + "no compatible factions facade; standing clauses remain unavailable.");
                 }
                 binding = new Binding(testJson, testNamed, resolve, factionsGet, factionsMatches,
                         factionsLocalStanding, communityConstructor, standingScope);
-                McaConversations.LOGGER.info("[MCA: Conversations] Ultima Kingdoms kingdom gates detected{}.",
-                        factionsMatches == null ? "" : " with faction standing");
+                McaConversations.LOGGER.info("[MCA: Conversations] MCA: Kingdoms kingdom gates detected{}{}.",
+                        factionsMatches == null ? "" : " with faction standing",
+                        generation == KingdomsIdentity.Generation.LEGACY ? " (pre-rename Ultima Kingdoms jar)" : "");
                 return binding;
             } catch (Throwable throwable) {
                 if (!bindFailureReported) {
                     bindFailureReported = true;
-                    McaConversations.LOGGER.error("[MCA: Conversations] Ultima Kingdoms is installed but its "
+                    McaConversations.LOGGER.error("[MCA: Conversations] MCA: Kingdoms is installed but its "
                             + "kingdom gate API did not bind; authored kingdom restrictions fail closed.",
                             unwrap(throwable));
                 }
@@ -177,7 +180,7 @@ public final class KingdomBridge {
     private static void reportRuntimeFailure(Throwable throwable) {
         if (!runtimeFailureReported) {
             runtimeFailureReported = true;
-            McaConversations.LOGGER.error("[MCA: Conversations] Ultima kingdom/faction gate failed closed.",
+            McaConversations.LOGGER.error("[MCA: Conversations] MCA: Kingdoms kingdom/faction gate failed closed.",
                     unwrap(throwable));
         }
     }

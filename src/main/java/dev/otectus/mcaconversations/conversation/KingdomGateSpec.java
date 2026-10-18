@@ -12,10 +12,10 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Conversations-owned, strict representation of an optional Ultima kingdom gate.
+ * Conversations-owned, strict representation of an optional MCA: Kingdoms gate.
  *
- * <p>This type deliberately does not name an Ultima class. Catalogs must remain parseable when
- * Ultima Kingdoms is not installed, and malformed restrictions must be refused during reload rather
+ * <p>This type deliberately does not name a Kingdoms class. Catalogs must remain parseable when
+ * MCA: Kingdoms is not installed, and malformed restrictions must be refused during reload rather
  * than becoming global content. Runtime evaluation is delegated to the optional reflective bridge.
  */
 public record KingdomGateSpec(Optional<ResourceLocation> namedGate,
@@ -69,7 +69,7 @@ public record KingdomGateSpec(Optional<ResourceLocation> namedGate,
         }
     }
 
-    /** An inclusive standing range, evaluated by Ultima Factions in the requested scope. */
+    /** An inclusive standing range, evaluated by Kingdoms' factions in the requested scope. */
     public record StandingGate(StandingScope scope, Optional<ResourceLocation> kingdom,
                                int minimum, int maximum) {
         private static final Set<String> FIELDS = Set.of("scope", "kingdom", "min", "max");
@@ -181,7 +181,7 @@ public record KingdomGateSpec(Optional<ResourceLocation> namedGate,
         return json;
     }
 
-    /** Fallback when Ultima is absent: only an explicitly authored inline allow may open. */
+    /** Fallback when Kingdoms is absent: only an explicitly authored inline allow may open. */
     public boolean allowsWhenUnavailable() {
         return namedGate.isEmpty() && standing.isEmpty() && whenUnknown == UnknownPolicy.ALLOW;
     }

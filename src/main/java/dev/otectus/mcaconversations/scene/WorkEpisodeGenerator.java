@@ -6,7 +6,6 @@ import dev.otectus.mcaconversations.history.EpisodeTemplate;
 import dev.otectus.mcaconversations.history.History;
 import dev.otectus.mcaconversations.history.NarrativeCatalogLoader;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.fml.ModList;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -113,7 +112,8 @@ public final class WorkEpisodeGenerator {
             return true;
         }
         try {
-            return ModList.get() != null && ModList.get().isLoaded(modId.trim().toLowerCase(Locale.ROOT));
+            // MCA: Kingdoms counts under either loader id (it was ultima_kingdoms before 0.1.1).
+            return dev.otectus.mcaconversations.compat.KingdomsIdentity.isLoaded(modId.trim().toLowerCase(Locale.ROOT));
         } catch (Throwable t) {
             return false;
         }

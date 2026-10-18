@@ -1,6 +1,7 @@
 package dev.otectus.mcaconversations;
 
 import dev.otectus.mcaconversations.support.TestPaths;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,23 +14,29 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Proves the optional Ultima bridge contains no JVM type reference that would make it mandatory. */
-class NoUltimaStaticLinkTest {
+/**
+ * Proves the optional MCA: Kingdoms bridges contain no JVM type reference that would make it mandatory,
+ * under its current package or the one it had as Ultima Kingdoms before 0.1.1.
+ */
+class NoKingdomsStaticLinkTest {
 
-    private static final byte[] NEEDLE = "com/ultimakingdoms/".getBytes(StandardCharsets.UTF_8);
+    private static final List<byte[]> NEEDLES = List.of(
+            "dev/otectus/mcakingdoms/".getBytes(StandardCharsets.UTF_8),
+            "com/ultimakingdoms/".getBytes(StandardCharsets.UTF_8));
 
     @Test
-    void noCompiledClassStaticallyLinksUltima() throws IOException {
+    void noCompiledClassStaticallyLinksKingdoms() throws IOException {
         Path classes = TestPaths.of("build/classes/java/main");
         List<String> violations = new ArrayList<>();
         try (Stream<Path> paths = Files.walk(classes)) {
             for (Path path : paths.filter(file -> file.toString().endsWith(".class")).toList()) {
-                if (contains(Files.readAllBytes(path), NEEDLE)) {
+                byte[] bytes = Files.readAllBytes(path);
+                if (NEEDLES.stream().anyMatch(needle -> contains(bytes, needle))) {
                     violations.add(classes.relativize(path).toString().replace('\\', '/'));
                 }
             }
         }
-        assertTrue(violations.isEmpty(), "Ultima is optional, but these classes statically link it: " + violations);
+        assertTrue(violations.isEmpty(), "MCA: Kingdoms is optional, but these classes statically link it: " + violations);
     }
 
     private static boolean contains(byte[] haystack, byte[] needle) {

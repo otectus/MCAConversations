@@ -28,7 +28,7 @@ class CivicContentContractTest {
         for (JsonElement sceneElement : topic.getAsJsonArray("scenes")) {
             JsonObject scene = sceneElement.getAsJsonObject();
             assertEquals("discreet", scene.get("privacy").getAsString());
-            assertTrue(strings(scene.getAsJsonArray("integrations")).contains("ultima_kingdoms"));
+            assertTrue(strings(scene.getAsJsonArray("integrations")).contains("mcakingdoms"));
             for (JsonElement replyElement : scene.getAsJsonArray("replies")) {
                 JsonObject reply = replyElement.getAsJsonObject();
                 assertFalse(reply.has("affection"));
