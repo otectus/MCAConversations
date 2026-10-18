@@ -170,6 +170,19 @@ public final class Townstead {
         return fresh;
     }
 
+    /**
+     * A snapshot this cache already holds for {@code villager} that was read after {@code sinceTick},
+     * or null. Reads nothing: it lets a longer-lived consumer notice that somebody else's fresh read
+     * changed what it cached, at no cost of its own.
+     */
+    public static TownsteadSnapshot cachedNewerThan(Entity villager, long sinceTick) {
+        if (villager == null) {
+            return null;
+        }
+        Cached cached = CACHE.get(villager.getUUID());
+        return cached != null && cached.gameTime() > sinceTick ? cached.snapshot() : null;
+    }
+
     /** Drops every cached snapshot: server stop, config change, or a test. */
     public static void clearCaches() {
         CACHE.clear();

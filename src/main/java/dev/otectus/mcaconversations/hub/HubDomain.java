@@ -129,5 +129,6 @@ public enum HubDomain {
             Map.entry("us", FAMILY),
             Map.entry("family", FAMILY),
             Map.entry("ask_parent", FAMILY),
-            Map.entry("checkin_child", FAMILY));
+            Map.entry("checkin_child", FAMILY),
+            Map.entry("their_children", FAMILY));
 }

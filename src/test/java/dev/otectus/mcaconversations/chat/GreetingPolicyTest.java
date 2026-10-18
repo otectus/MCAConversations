@@ -3,7 +3,12 @@ package dev.otectus.mcaconversations.chat;
 import dev.otectus.mcaconversations.conversation.RelationshipBand;
 import dev.otectus.mcaconversations.conversation.RelationshipRoles;
 import dev.otectus.mcaconversations.conversation.SocialContact;
+import dev.otectus.mcaconversations.conversation.SocialFacts;
+import dev.otectus.mcaconversations.conversation.SocialPolicy;
+import dev.otectus.mcaconversations.conversation.SocialThresholds;
 import org.junit.jupiter.api.Test;
+
+import java.util.OptionalInt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -181,5 +186,44 @@ class GreetingPolicyTest {
         assertEquals(GreetingPolicy.STRANGER + ".toddler",
                 AgeVoice.phrase(GreetingPolicy.RESPECTED_STRANGER, java.util.Optional.of("toddler")),
                 "a toddler does not greet anybody by their reputation");
+    }
+
+    /**
+     * {@code family(NONE)} answers "the player is their parent", which is only safe because nothing
+     * the social policy decides can reach it (feedback remediation WP-C3): the FAMILY band is earned
+     * by a real parent, child or sibling tie, so a relative is always greeted by who they actually
+     * are. Swept over every role combination and the facts that move the band.
+     */
+    @Test
+    void theFamilyBandAlwaysCarriesTheRoleThatEarnedIt() {
+        int familyBands = 0;
+        for (int mask = 0; mask < 16; mask++) {
+            RelationshipRoles roles = new RelationshipRoles((mask & 1) != 0, (mask & 2) != 0,
+                    (mask & 4) != 0, (mask & 8) != 0);
+            for (int hearts : new int[] {-100, -50, -1, 0, 1, 10, 50, 100, 200}) {
+                for (boolean rupture : new boolean[] {false, true}) {
+                    for (OptionalInt days : new OptionalInt[] {OptionalInt.empty(), OptionalInt.of(0),
+                            OptionalInt.of(5), OptionalInt.of(100)}) {
+                        for (boolean legacy : new boolean[] {false, true}) {
+                            for (boolean aware : new boolean[] {false, true}) {
+                                SocialFacts facts = new SocialFacts(hearts, roles, rupture, days, legacy,
+                                        OptionalInt.of(100), OptionalInt.of(50));
+                                if (SocialPolicy.band(facts, SocialThresholds.DEFAULTS, aware)
+                                        != RelationshipBand.FAMILY) {
+                                    continue;
+                                }
+                                familyBands++;
+                                assertTrue(roles.family(), "FAMILY band without a family role: " + facts);
+                                String expected = roles.parent() ? GreetingPolicy.FAMILY_PARENT
+                                        : roles.child() ? GreetingPolicy.FAMILY_CHILD : GreetingPolicy.FAMILY_SIBLING;
+                                assertEquals(expected, GreetingPolicy.pool(RelationshipBand.FAMILY,
+                                        SocialPolicy.contact(facts), false, roles), facts.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        assertTrue(familyBands > 0, "the sweep never produced the family band");
     }
 }

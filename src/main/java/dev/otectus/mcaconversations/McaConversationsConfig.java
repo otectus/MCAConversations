@@ -1247,6 +1247,7 @@ public final class McaConversationsConfig {
         public final ModConfigSpec.BooleanValue showSpeakerPortrait;
         public final ModConfigSpec.EnumValue<QuestionReveal> questionRevealMode;
         public final ModConfigSpec.IntValue deliveredHistoryEntries;
+        public final ModConfigSpec.BooleanValue chatModeSpeech;
 
         Client(ModConfigSpec.Builder b) {
             b.push("display");
@@ -1305,6 +1306,26 @@ public final class McaConversationsConfig {
                     "to disk or exported. 0 disables the drawer entirely.")
                     .defineInRange("deliveredHistoryEntries", 64, 0, 256);
             b.pop();
+
+            b.push("speech");
+            chatModeSpeech = b.comment(
+                    "Hand chat-mode villager lines (typed conversations, greetings) to MCA Reborn's own",
+                    "speech, once each, exactly as MCA speaks lines in its interaction screen: silent with",
+                    "the MCA Voices resource pack (it has no recordings for these lines), spoken with",
+                    "MCA's online text-to-speech. Off by default. A nearby player who overhears a",
+                    "public reply hears it spoken too, and each listening client sends its own request",
+                    "to an online backend. Options blocks and heart feedback are never spoken.")
+                    .define("chatModeSpeech", false);
+            b.pop();
+        }
+    }
+
+    /** {@code [speech] chatModeSpeech}; false whenever the client spec cannot be read. */
+    public static boolean chatModeSpeech() {
+        try {
+            return CLIENT.chatModeSpeech.get();
+        } catch (Throwable notLoaded) {
+            return false;
         }
     }
 }

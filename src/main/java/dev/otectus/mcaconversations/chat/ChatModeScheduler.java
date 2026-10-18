@@ -165,6 +165,11 @@ public final class ChatModeScheduler {
         }
     }
 
+    /** How many deliveries are queued in all, for {@code /conversations perf status}. */
+    public static int size() {
+        return QUEUE.size();
+    }
+
     /** How many deliveries are still queued for {@code player} (diagnostics and tests). */
     public static int pendingFor(java.util.UUID player) {
         int count = 0;

@@ -112,7 +112,7 @@ public abstract class QuestionMixin {
                 String question = getName();
                 answers.removeIf(answer -> ConversationCatalogLoader.active().byStarter(question, answer)
                         .map(entry -> entry.kingdomGate().isPresent() || entry.civicContact()
-                                || entry.townstead()).orElse(false));
+                                || entry.townstead() || entry.familyGated()).orElse(false));
                 if (!mcaconversations$topicFilterWarned) {
                     mcaconversations$topicFilterWarned = true;
                     McaConversations.LOGGER.warn("Topic gate failed; explicitly provider-gated answers were hidden", t);

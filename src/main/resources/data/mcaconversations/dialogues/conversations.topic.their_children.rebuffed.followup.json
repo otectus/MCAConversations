@@ -8,17 +8,18 @@
           "actions": {
             "conversations_session": {
               "op": "turn",
-              "beat": "checkin_child.rebuffed.apologize"
+              "beat": "their_children.rebuffed.apologize.to.hub"
             },
             "conversations_disposition_apply": {
               "topic": "checkin_child.rebuffed.apologize",
               "deltas": {
-                "tension": -3
+                "tension": -3,
+                "trust": 1
               }
             },
-            "next": "conversations.family",
+            "next": "conversations.cat.relationships",
             "conversations_say": {
-              "phrase": "conversations.checkin_child.rebuffed.apologize"
+              "phrase": "conversations.their_children.rebuffed.apologize"
             }
           }
         }
@@ -32,7 +33,7 @@
           "actions": {
             "conversations_session": {
               "op": "turn",
-              "beat": "checkin_child.rebuffed.explain"
+              "beat": "their_children.rebuffed.explain.to.hub"
             },
             "conversations_disposition_apply": {
               "topic": "checkin_child.rebuffed.explain",
@@ -40,9 +41,9 @@
                 "tension": -1
               }
             },
-            "next": "conversations.family",
+            "next": "conversations.cat.relationships",
             "conversations_say": {
-              "phrase": "conversations.checkin_child.rebuffed.explain"
+              "phrase": "conversations.their_children.rebuffed.explain"
             }
           }
         }
@@ -57,9 +58,9 @@
             "conversations_session": {
               "op": "end"
             },
-            "next": "conversations.family",
+            "next": "conversations.cat.relationships",
             "conversations_say": {
-              "phrase": "conversations.checkin_child.rebuffed.leave"
+              "phrase": "conversations.their_children.rebuffed.leave"
             }
           }
         }

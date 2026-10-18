@@ -59,7 +59,7 @@ class ContentLintTest {
             "conversations_enabled", "conversations_disabled", "conversations_gossip", "conversations_weather",
             "conversations_season", "conversations_holiday", "conversations_personality",
             "conversations_disposition", "conversations_check", "conversations_progress",
-            "conversations_relationship",
+            "conversations_relationship", "conversations_family",
             "conversations_quest_available", "conversations_quest_active", "conversations_quest_ready",
             "conversations_quest_completed",
             "conversations_reputation", "conversations_reputation_incident",

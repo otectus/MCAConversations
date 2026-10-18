@@ -19,6 +19,90 @@ see; what changed is what a villager may *assume* about you. And with Townstead 
 villagers' needs, shifts, trades, years, roots, buildings, village spirit and calendar become
 something they talk about, act on and gossip about.
 
+**Network protocol 5.** 1.8.0 and 1.7.x refuse each other, so update the server and every client
+together, on either loader.
+
+### Fixed — player feedback (2026-10-17, mirrored from Forge)
+
+Four player reports: the dialogue card and the chat log disagreed, villager speech kept replaying the
+opening greeting, the player's own child talked like a parent, and a server lagged around villagers.
+The diagnosis and the design are in the Forge repository's
+`docs/MCAConversations-Feedback-Remediation-Implementation-Plan.md`.
+Everything here is the Forge 1.20.1 change, made on this loader too; the one adaptation is noted in
+its entry. None of it has been played in a real client yet; see *Not verified* at the end of this
+section.
+
+- **The dialogue card waits for the line it answers.** Nothing tied a set of answers to the villager
+  line it answered: the card trusted that the last line to arrive was the right one, and MCA sends a
+  turn's answers before its line. Every villager line, silent prompt and feedback block in a
+  Conversations discussion now carries an identity, and each set of answers names its line. Until that
+  line is on screen, choosing does nothing and the narrator says "Waiting for the villager to finish…";
+  a newer line of the same conversation withdraws the card. If the line never arrives, the card becomes
+  answerable after two seconds anyway, so a conversation cannot freeze. This is the change that needs
+  protocol 5.
+- **Villager speech no longer replays an earlier line for this mod's sentences.** MCA decides what to
+  speak from the last *pooled* line any text on the client resolved. After MCA's greeting, every fixed
+  line of this mod inherited it: a voice pack replayed the greeting's recording, and online
+  text-to-speech read the greeting's text. Now, before chat and speech read one of this mod's lines,
+  MCA's speech is pointed at that line's own key. A line without a recording in a voice pack is silent,
+  as it always was; online text-to-speech speaks the line on screen. Lines that are not this mod's are
+  left as MCA handles them, and any failure leaves MCA's behaviour unchanged. On this loader MCA's
+  `VillagerMessage` already carries its components, so the repair hooks MCA's client message handler
+  (`mixin/client/VillagerMessageSpeechMixin`) rather than the message itself.
+- **Typed conversations can be spoken (client option, off by default).** With `[speech]
+  chatModeSpeech = true` in `mcaconversations-client.toml`, a villager's chat-mode line is handed to
+  MCA's speech once, as its interaction screen does. Option lists and heart feedback are never spoken.
+  It is off because each listening client sends its own request to an online voice backend.
+- **Your own child talks like your child.** Checking in on your own child answered "how are you?" as a
+  parent talking about *their* children ("Mine aren't. Mine are theirs."), and asking your own parent
+  had a child's lines two pages deep ("I mended the fence myself"). The two family topics are now
+  three:
+  - *How are you holding up?* (checking in on your child) is the child talking, at their own age all
+    the way down. A toddler's check-in is one exchange. A child and a teen each have their own lines
+    for what they are proud of, what happened at home and a promise you have not kept. A grown child
+    has pages of their own.
+  - *Can I ask you something?* (asking your parent) is your parent talking, and closes on a page of
+    its own.
+  - *How are your children?* is new, under Relationships. An adult villager who has children talks
+    about them, whoever you are to them. It is offered only when MCA's family tree records children
+    for that villager.
+
+  Typing "how are the kids" now asks the new topic, which only a villager with children takes up, so
+  your own young child no longer answers it as a parent. "How are you getting on" checks in on your
+  child. Topic ids and cooldowns are unchanged, so a world mid-cooldown behaves the same.
+  **The Portuguese family lines were written without a native speaker and need a native reading
+  before release.**
+- **Maintenance no longer lands on one tick.** Every `gossipScanIntervalTicks` (30 seconds by
+  default), the gossip scan, the three store prunes, the rumour sweep and the session sweep ran on the
+  same tick, and at its default so did the court poll. The prunes walked every stored record, loaded
+  or not, and the history prune ran forty times a day although its expiry rules are by the day. The
+  work is now spread across the interval, and each piece is bounded and resumes where it stopped:
+  128 residents per village per scan, 64 villagers per prune run, a new disposition or progress pass
+  at most once per in-game hour, and a new history pass once per in-game day. A held villager's
+  Townstead state is read once per `townsteadContextCacheTicks` instead of every tick. The change loads
+  no chunks and leaves villager AI alone. Whether this was the lag players saw has not been measured.
+- New diagnostics: `/conversations perf status` (op) shows what each part of this mod's server tick
+  costs over the last minute and how much the bounded sweeps examined, and `/conversations perf reset`
+  clears it. On the client, `/conversations client diagnose` reports which lines each surface showed,
+  and `/conversations client speech-trace on|off` logs which key MCA's speech was given for each line.
+- For pack authors: catalog topics accept `player_role` (what the player is to the speaker) and
+  `family` (`{"has": "children"}`), both enforced by the topic gate on every entry path. Beats accept
+  `context.player_role`, and there is a new dialogue condition, `conversations_family`.
+  `FamilyPerspectiveTest` fails the build when a family topic reaches a line written from the other
+  side. Pages moved: `conversations.topic.ask_parent.pride` and `.event` are now
+  `conversations.topic.checkin_child.pride` and `.event`, and
+  `conversations.topic.checkin_child.rebuffed.followup` is now
+  `conversations.topic.their_children.rebuffed.followup`. The parent-voice answers of
+  `checkin_child.respond` and `.followup` moved to `conversations.topic.their_children.respond` and
+  `.followup`. `DATAPACK.md` (*The family topics' pages*) lists every page, line and intent that moved.
+
+**Not verified.** Unit tests, binding probes against MCA 7.7.33 and 7.7.36-beta.3 and a dedicated-server
+start are evidence of wiring, not of what a player sees or hears. None of the following has been run: the
+card and chat agreement in each presentation, speech with the MCA Voices pack or online
+text-to-speech, the family topics with real relatives, the lifecycle regressions, two clients on a
+dedicated server, and a profile of the maintenance change. The Forge repository's `docs/ROADMAP.md`
+§2 lists each with its procedure.
+
 ### Fixed — MCA: Kingdoms rename (2026-10-01, mirrored from Forge)
 
 - `KingdomBridge` and `CivicBridge` resolve MCA: Kingdoms (formerly Ultima Kingdoms) through
@@ -313,8 +397,7 @@ and without Townstead installed nothing below changes a line.
   exchange, and the history store gains one flag marking whether the world predates the social model.
   The history schema is still 1, so this build and 1.7.x read each other's files. A 1.7.x build
   ignores the new keys, and drops them if it saves the world; opened again under 1.8.0, such a world
-  is treated as an upgraded one and each pair's contact record starts over. Network protocol
-  unchanged at 4.
+  is treated as an upgraded one and each pair's contact record starts over.
 - Content gated on `conversations_relationship` sees the new bands. In an upgraded world the
   heart-based bands are preserved for existing relationships; new ones have to be lived.
 - Interiority: a profile authored under a namespace other than `mca` or `minecraft` (for example
@@ -331,6 +414,12 @@ and without Townstead installed nothing below changes a line.
   village's *spirit*, which now belong to *Life here*.
 - The MCA binding gains two members, `Village.getBuildings` and `Building.getId`, present in every
   supported MCA version (checked against 7.6.20, 7.7.0-beta.2 and 7.7.1-alpha.2).
+- **Network protocol 5** (`network_protocol` in `gradle.properties`). Choice offers carry the sequence
+  number of the line they answer, so a 1.7.x client and a 1.8.0 server, or the reverse, are refused
+  by the channel with a clear rejection rather than a misread packet. Saves are untouched by the
+  feedback work: no history, progress, disposition or gossip format changed. The speech members the
+  client binds (`CommonSpeechManager`, `DialogueType.applyFallback`, `SpeechManager.onChatMessage`)
+  are present and identical in MCA 7.7.33 and 7.7.36-beta.3, which the binding probe replays.
 - **Both loaders ship 1.8.0 together.** The Forge 1.20.1 build carries the same Townstead and
   social behaviour and content; this port's only differences from it are recorded, with reasons,
   in `tools/parity/parity-1.8.0-adaptations.json`. Players need the 1.8.0 jar too, whatever the

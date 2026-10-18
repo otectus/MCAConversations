@@ -398,6 +398,15 @@ public final class McaHandles {
      * Returns false when either half is unavailable, so the caller can fall back to plain chat.
      */
     public static boolean sendDialogueLine(ServerPlayer player, Component line) {
+        return sendDialogueLine(player, line, false);
+    }
+
+    /**
+     * As above with MCA's silent flag, for re-sending one of MCA's own page prompts with its
+     * utterance tag: a silent prompt is shown but never echoed to chat or spoken, and that has to
+     * survive the rebuild.
+     */
+    public static boolean sendDialogueLine(ServerPlayer player, Component line, boolean silent) {
         if (player == null || line == null) {
             return false;
         }
@@ -406,7 +415,7 @@ public final class McaHandles {
             // boolean silent) - the 1.20.1 constructor took (boolean, Component). The handle is bound
             // by arity, so the argument order here is the only place the difference shows; the wrong
             // order would fail the asType cast and silently fall back to plain chat.
-            Object packet = H_NEW_QUESTION_RESPONSE.invoke(line, false);
+            Object packet = H_NEW_QUESTION_RESPONSE.invoke(line, silent);
             if (packet == null) {
                 return false;
             }
@@ -1184,5 +1193,122 @@ public final class McaHandles {
     /** Lowercased {@code name()} of an MCA enum value, or null — how every enum read leaves this class. */
     private static String enumName(Object value) {
         return value instanceof Enum<?> e ? e.name().toLowerCase(Locale.ROOT) : null;
+    }
+
+    // ==============================================================================================
+    // MCA's speech association — physical client only (feedback remediation §2.2)
+    // ==============================================================================================
+
+    /**
+     * MCA's speech association, resolved from {@link McaBinding#CLIENT_MANIFEST} under the root this
+     * class already matched.
+     *
+     * <p>A separate holder on purpose: its static initialiser loads MCA's {@code SpeechManager}, a
+     * client class, so it must run only when client code first asks — never from this class's own
+     * initialiser, which runs on dedicated servers too. Nothing here can throw; every accessor returns
+     * its documented empty value when a member is unbound.
+     */
+    public static final class Speech {
+
+        private static final McaBinding.Resolution C = resolveClientQuietly();
+        private static final MethodHandle H_COMMON = C.handle(McaBinding.SPEECH_COMMON_INSTANCE);
+        private static final MethodHandle H_LAST_KEY = C.handle(McaBinding.SPEECH_LAST_RESOLVED_KEY);
+        private static final MethodHandle H_SET_LAST_KEY = C.handle(McaBinding.SPEECH_LAST_RESOLVED_KEY_SET);
+        private static final MethodHandle H_TRANSLATIONS = C.handle(McaBinding.SPEECH_TRANSLATIONS);
+        private static final MethodHandle H_APPLY_FALLBACK = C.handle(McaBinding.DIALOGUE_APPLY_FALLBACK);
+        private static final MethodHandle H_MANAGER = C.handle(McaBinding.SPEECH_MANAGER_INSTANCE);
+        private static final MethodHandle H_ON_CHAT_MESSAGE = C.handle(McaBinding.SPEECH_ON_CHAT_MESSAGE);
+        private static final MethodHandle H_TTS_MODEL = C.handle(McaBinding.CONFIG_ONLINE_TTS_MODEL);
+
+        private Speech() {
+        }
+
+        private static McaBinding.Resolution resolveClientQuietly() {
+            try {
+                return McaBinding.resolveClientAgainst(McaHandles.class.getClassLoader(), R.root());
+            } catch (Throwable t) {
+                return McaBinding.absent();
+            }
+        }
+
+        /** The client resolution, for diagnostics. */
+        public static McaBinding.Resolution resolution() {
+            return C;
+        }
+
+        /** True when the association can be read and written at all. */
+        public static boolean available() {
+            return C.has(McaBinding.SPEECH_COMMON_INSTANCE) && C.has(McaBinding.SPEECH_TRANSLATIONS)
+                    && C.has(McaBinding.SPEECH_LAST_RESOLVED_KEY_SET) && C.has(McaBinding.DIALOGUE_APPLY_FALLBACK);
+        }
+
+        private static Object common() {
+            try {
+                return H_COMMON.invoke();
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+
+        /** MCA's {@code CommonSpeechManager.lastResolvedKey}, or null. */
+        public static String lastResolvedKey() {
+            Object common = common();
+            return common != null && ref(H_LAST_KEY, common) instanceof String key ? key : null;
+        }
+
+        /** Writes {@code lastResolvedKey}. False when it could not be written. */
+        public static boolean setLastResolvedKey(String key) {
+            Object common = common();
+            if (common == null) {
+                return false;
+            }
+            try {
+                H_SET_LAST_KEY.invoke(common, key);
+                return C.has(McaBinding.SPEECH_LAST_RESOLVED_KEY_SET);
+            } catch (Throwable t) {
+                return false;
+            }
+        }
+
+        /** MCA's {@code translations} map (component contents to resolved key), or null. */
+        @SuppressWarnings("unchecked")
+        public static Map<Object, String> translations() {
+            Object common = common();
+            return common != null && ref(H_TRANSLATIONS, common) instanceof Map<?, ?> map
+                    ? (Map<Object, String>) map : null;
+        }
+
+        /** {@code DialogueType.applyFallback(key)}: the variant this client resolves the key to. */
+        public static String applyFallback(String key) {
+            try {
+                return H_APPLY_FALLBACK.invoke(key) instanceof String resolved ? resolved : null;
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+
+        /** MCA's configured online TTS model name, or null when it cannot be read. */
+        public static String onlineTtsModel() {
+            try {
+                Object config = H_CONFIG_INSTANCE.invoke();
+                return config != null && ref(H_TTS_MODEL, config) instanceof String model ? model : null;
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+
+        /** Hands one line to MCA's speech exactly as its own villager-message handler does. */
+        public static boolean onChatMessage(Component line, UUID speaker) {
+            try {
+                Object manager = H_MANAGER.invoke();
+                if (manager == null || !C.has(McaBinding.SPEECH_ON_CHAT_MESSAGE)) {
+                    return false;
+                }
+                H_ON_CHAT_MESSAGE.invoke(manager, line, speaker);
+                return true;
+            } catch (Throwable t) {
+                return false;
+            }
+        }
     }
 }

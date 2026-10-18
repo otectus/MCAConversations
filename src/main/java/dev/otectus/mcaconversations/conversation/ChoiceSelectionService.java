@@ -89,7 +89,10 @@ public final class ChoiceSelectionService {
      */
     public static ChoiceOutcome submit(ServerPlayer player, UUID sessionId, long revision, int absoluteIndex,
                                        UUID candidateVillagerId) {
-        try (ContentOperation ignored = ContentOperation.open()) {
+        // One turn: whatever offer the answer's actions mint is sent when they have all run, naming
+        // the last line they delivered — MCA sends a page's prompt after its answer list.
+        try (ContentOperation ignored = ContentOperation.open();
+             OfferDispatch.Turn turn = OfferDispatch.openTurn()) {
             return submitPinned(player, sessionId, revision, absoluteIndex, candidateVillagerId);
         }
     }
@@ -209,11 +212,12 @@ public final class ChoiceSelectionService {
                     .isEmpty()) {
                 return;
             }
+            // The terminal line the client is already showing is the line this re-offer belongs to;
+            // inside a turn the dispatch names it, outside one the offer makes no claim.
             ConversationSessions.reofferConsumed(player.getUUID(), question, revisionBefore, now)
                     .filter(offer -> !offer.answerIds().isEmpty()
                             && offer.answerIds().size() <= ChoiceOfferS2C.MAX_CHOICES)
-                    .ifPresent(offer -> ConversationsNetwork.sendOffer(player,
-                            ChoiceOfferS2C.from(ConversationsNetwork.refFor(player), offer)));
+                    .ifPresent(offer -> OfferDispatch.offer(player, ConversationsNetwork.refFor(player), offer));
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("re-offer after terminal reply failed for {}", question, t);
         }
@@ -356,7 +360,8 @@ public final class ChoiceSelectionService {
                     ChoiceOutcome.OBSOLETE_HANDLE);
             return;
         }
-        try (ContentOperation ignored = ContentOperation.open()) {
+        try (ContentOperation ignored = ContentOperation.open();
+             OfferDispatch.Turn turn = OfferDispatch.openTurn()) {
             ConversationSession session = ConversationSessions.raw(player.getUUID()).orElse(null);
             if (session == null || !session.claimTopicReturn(revision)) {
                 return;

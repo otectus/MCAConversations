@@ -56,12 +56,74 @@ public final class TownsteadChatPolicy {
 
         public static final Facts NONE = new Facts(false, false, false, false, false, false, false, false);
 
+        /** Held villagers whose hold facts are cached at once; cleared, not evicted, past this. */
+        private static final int MAX_HELD = 256;
+        private static final java.util.Map<UUID, HeldFacts> HELD = new java.util.concurrent.ConcurrentHashMap<>();
+
         /**
          * Only the Townstead half, for callers that already know the generic state — the attention
          * tick, which must not add a dialogue-screen read per held villager per tick.
          */
         public static Facts townstead(Entity villager) {
             return villager == null ? NONE : readTownstead(villager, false, false, false);
+        }
+
+        /**
+         * The Townstead half for judging a <em>held</em> villager, read at most once per
+         * {@code townstead.contextCacheTicks} instead of once per tick (feedback remediation WP-D3).
+         *
+         * <p>The hold is renewed every tick for every live discussion, and each renewal used to make a
+         * reflective reaction-lock read. Reused for the cache window, the facts are refreshed early
+         * when this mod plays a reaction on the villager ({@link #invalidateHold}) or when any other
+         * caller's fresh snapshot shows the villager collapsing or recovering. Danger — hurt, PANIC —
+         * is vanilla state and is still read live by the caller every tick.
+         */
+        public static Facts townsteadForHold(Entity villager) {
+            if (villager == null || villager.level() == null) {
+                return NONE;
+            }
+            long now = villager.level().getGameTime();
+            HeldFacts held = HELD.get(villager.getUUID());
+            if (held != null && holdFactsFresh(now, held.at(), Townstead.contextCacheTicks(),
+                    collapseChanged(villager, held))) {
+                dev.otectus.mcaconversations.debug.PerfCounters.SERVER.count(
+                        dev.otectus.mcaconversations.debug.PerfCounters.Count.TOWNSTEAD_HOLD_CACHED, 1);
+                return held.facts();
+            }
+            Facts fresh = townstead(villager);
+            dev.otectus.mcaconversations.debug.PerfCounters.SERVER.count(
+                    dev.otectus.mcaconversations.debug.PerfCounters.Count.TOWNSTEAD_HOLD_READS, 1);
+            if (HELD.size() >= MAX_HELD) {
+                HELD.clear();
+            }
+            HELD.put(villager.getUUID(), new HeldFacts(now, fresh));
+            return fresh;
+        }
+
+        /**
+         * Pure: whether hold facts read at {@code at} may still be used at {@code now}. Within the
+         * window, unless somebody else's fresher read shows the villager collapsing or recovering.
+         */
+        static boolean holdFactsFresh(long now, long at, int ttlTicks, boolean collapseChanged) {
+            return !collapseChanged && now >= at && now - at < Math.max(1, ttlTicks);
+        }
+
+        /** Drops a villager's cached hold facts: a reaction was just played on it. */
+        public static void invalidateHold(Entity villager) {
+            if (villager != null) {
+                HELD.remove(villager.getUUID());
+            }
+        }
+
+        /** Drops every cached hold fact (server stop, tests). */
+        public static void resetHolds() {
+            HELD.clear();
+        }
+
+        private static boolean collapseChanged(Entity villager, HeldFacts held) {
+            TownsteadSnapshot newer = Townstead.cachedNewerThan(villager, held.at());
+            return newer != null && newer.live() && !newer.villager().isEmpty()
+                    && newer.villager().needs().collapsed() != held.facts().collapsed();
         }
 
         /** Reads the live villager. Townstead facts are false unless schedule respect is on. */
@@ -137,5 +199,9 @@ public final class TownsteadChatPolicy {
     /** Multiplier on an ambient reply's score: an at-work villager is a less likely responder. */
     public static double ambientWeight(Facts f) {
         return f.working() ? WORKING_AMBIENT_WEIGHT : 1.0D;
+    }
+
+    /** One held villager's Townstead facts and the game tick they were read. */
+    private record HeldFacts(long at, Facts facts) {
     }
 }

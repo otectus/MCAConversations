@@ -121,7 +121,8 @@ class MixinTargetProbeTest {
         INJECTION_POINTS.put("MCAClientMixin", List.of("useExpandedPersonalityTranslations"));
         // VillagerMessageMixin is deliberately absent on 1.21.1: VillagerMessage is a record of
         // Components and the JSON re-parse bug it worked around no longer exists (PORT_STATUS.md,
-        // Deviation 2).
+        // Deviation 2). The speech association repair hooks the client handler instead (Deviation 25).
+        INJECTION_POINTS.put("VillagerMessageSpeechMixin", List.of("handleVillagerMessage"));
         INJECTION_POINTS.put("InteractScreenChoiceMixin", List.of("<init>", "render", "keyPressed",
                 "mouseClicked", "mouseScrolled", "onClose", "tick", "setLastPhrase"));
     }
@@ -181,6 +182,9 @@ class MixinTargetProbeTest {
         if (mixin.equals("InteractScreenChoiceMixin")) {
             checkQuestionCapture(jar, target, problems);
         }
+        if (mixin.equals("VillagerMessageSpeechMixin")) {
+            checkSpeechHandOff(jar, target, problems);
+        }
         checkShadows(jar, mixin, compiled.binaryName(), target, problems);
     }
 
@@ -206,6 +210,34 @@ class MixinTargetProbeTest {
             if (!new String(bytes, StandardCharsets.ISO_8859_1).contains("split")) {
                 problems.add(jar.getFileName() + ": setLastPhrase no longer invokes production Font.split"
                         + "; exact speaker capture would soft-fail");
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * The speech association repair modifies two calls inside {@code handleVillagerMessage}: the chat
+     * log's {@code ChatListener.handleSystemMessage(Component, boolean)}, and MCA's
+     * {@code SpeechManager.onChatMessage(Component, UUID)}, which the mixin names without its owner.
+     * Both must still be there, and the speech call must still be MCA's own.
+     */
+    private static void checkSpeechHandOff(Path jar, Class<?> target, List<String> problems) {
+        String entryName = target.getName().replace('.', '/') + ".class";
+        try (JarFile opened = new JarFile(jar.toFile())) {
+            java.util.jar.JarEntry entry = opened.getJarEntry(entryName);
+            if (entry == null) {
+                problems.add(jar.getFileName() + ": missing bytecode entry " + entryName);
+                return;
+            }
+            String bytes = new String(opened.getInputStream(entry).readAllBytes(), StandardCharsets.ISO_8859_1);
+            for (String needle : List.of("handleSystemMessage", "onChatMessage",
+                    "(Lnet/minecraft/network/chat/Component;Ljava/util/UUID;)V",
+                    "net/conczin/mca/client/tts/SpeechManager")) {
+                if (!bytes.contains(needle)) {
+                    problems.add(jar.getFileName() + ": " + target.getName() + " no longer references '"
+                            + needle + "'; the speech association repair would soft-fail");
+                }
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);

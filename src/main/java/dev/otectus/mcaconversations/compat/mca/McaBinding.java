@@ -84,7 +84,7 @@ public final class McaBinding {
     // Member descriptors
     // ---------------------------------------------------------------------------------------------
 
-    private enum Kind { CLASS, VIRTUAL, STATIC, GETTER, CONSTRUCTOR }
+    private enum Kind { CLASS, VIRTUAL, STATIC, GETTER, CONSTRUCTOR, STATIC_GETTER, SETTER }
 
     /**
      * One thing this mod needs from MCA, named relative to the package root. Identity-compared, so
@@ -119,7 +119,8 @@ public final class McaBinding {
         public String toString() {
             return switch (kind) {
                 case CLASS -> ownerRelative;
-                case GETTER -> ownerRelative + "." + name;
+                case GETTER, STATIC_GETTER -> ownerRelative + "." + name;
+                case SETTER -> ownerRelative + "." + name + "=";
                 default -> ownerRelative + "#" + name + "/" + arity;
             };
         }
@@ -133,7 +134,8 @@ public final class McaBinding {
             int params = switch (kind) {
                 case VIRTUAL, GETTER -> arity + 1; // receiver first
                 case STATIC, CONSTRUCTOR -> arity;
-                case CLASS -> 0;
+                case STATIC_GETTER, CLASS -> 0;
+                case SETTER -> 2;                  // receiver, value
             };
             return MethodType.methodType(returnType, Collections.nCopies(params, Object.class));
         }
@@ -167,6 +169,19 @@ public final class McaBinding {
     /** As {@link #getter}, but a miss is recorded and tolerated instead of failing the probe test. */
     private static Member optionalGetter(String ownerRelative, String field) {
         return new Member(Kind.GETTER, ownerRelative, field, Object.class, 0, null, false);
+    }
+
+    /** A static field read, for the singletons MCA exposes as {@code public static final INSTANCE}. */
+    private static Member staticGetter(String ownerRelative, String field) {
+        return new Member(Kind.STATIC_GETTER, ownerRelative, field, Object.class, 0, null, true);
+    }
+
+    /**
+     * An instance field write. Conversations writes exactly one MCA field, MCA's speech association
+     * key, and only on the client — see {@link #CLIENT_MANIFEST}.
+     */
+    private static Member setter(String ownerRelative, String field) {
+        return new Member(Kind.SETTER, ownerRelative, field, void.class, 1, null, true);
     }
 
     /**
@@ -471,6 +486,40 @@ public final class McaBinding {
             VILLAGE_GET_BUILDINGS, BUILDING_GET_ID);
 
     // ---------------------------------------------------------------------------------------------
+    // The client manifest: MCA's speech association (feedback remediation §2.2).
+    //
+    // Kept apart from MANIFEST because SpeechManager is a client class: resolving it on a dedicated
+    // server would load a class that names the Minecraft client. It is resolved only on the physical
+    // client, against the root MANIFEST already matched, and McaBindingProbeTest replays it across the
+    // fleet exactly like the main manifest. Verified present and identical in 7.6.20, 7.6.26,
+    // 7.7.0-beta.2, 7.7.1-alpha.2, 7.7.1-beta.1 and 7.7.1-beta.2:
+    //   entity.CommonSpeechManager: public static final INSTANCE; public String lastResolvedKey;
+    //     public final LimitedLinkedHashMap<ComponentContents, String> translations (a LinkedHashMap)
+    //   entity.ai.DialogueType: public static String applyFallback(String)
+    //   client.tts.SpeechManager: public static final INSTANCE; public void onChatMessage(Component, UUID)
+    // ---------------------------------------------------------------------------------------------
+
+    private static final String C_COMMON_SPEECH = "entity.CommonSpeechManager";
+    private static final String C_DIALOGUE_TYPE = "entity.ai.DialogueType";
+    private static final String C_SPEECH_MANAGER = "client.tts.SpeechManager";
+
+    public static final Member SPEECH_COMMON_INSTANCE = staticGetter(C_COMMON_SPEECH, "INSTANCE");
+    public static final Member SPEECH_LAST_RESOLVED_KEY = getter(C_COMMON_SPEECH, "lastResolvedKey");
+    public static final Member SPEECH_LAST_RESOLVED_KEY_SET = setter(C_COMMON_SPEECH, "lastResolvedKey");
+    public static final Member SPEECH_TRANSLATIONS = getter(C_COMMON_SPEECH, "translations");
+    public static final Member DIALOGUE_APPLY_FALLBACK = statik(C_DIALOGUE_TYPE, "applyFallback", Object.class, 1);
+    public static final Member SPEECH_MANAGER_INSTANCE = staticGetter(C_SPEECH_MANAGER, "INSTANCE");
+    public static final Member SPEECH_ON_CHAT_MESSAGE = virtual(C_SPEECH_MANAGER, "onChatMessage", void.class, 2);
+    /** Read only by {@code /conversations client diagnose}; optional, so a rename costs a diagnostic line. */
+    public static final Member CONFIG_ONLINE_TTS_MODEL = optionalGetter(C_CONFIG, "onlineTTSModel");
+
+    /** Every client-only member, in declaration order. Resolved only on the physical client. */
+    public static final List<Member> CLIENT_MANIFEST = List.of(
+            SPEECH_COMMON_INSTANCE, SPEECH_LAST_RESOLVED_KEY, SPEECH_LAST_RESOLVED_KEY_SET,
+            SPEECH_TRANSLATIONS, DIALOGUE_APPLY_FALLBACK, SPEECH_MANAGER_INSTANCE, SPEECH_ON_CHAT_MESSAGE,
+            CONFIG_ONLINE_TTS_MODEL);
+
+    // ---------------------------------------------------------------------------------------------
     // Resolution
     // ---------------------------------------------------------------------------------------------
 
@@ -571,19 +620,34 @@ public final class McaBinding {
      * exactly the {@code NoClassDefFoundError} cascade this class exists to remove.
      */
     public static Resolution resolveAgainst(ClassLoader loader) {
+        String root = probeRoot(loader);
+        if (root == null) {
+            return new Resolution(mcaOnClasspath(loader) ? Status.UNBINDABLE : Status.ABSENT,
+                    null, new IdentityHashMap<>(), new ArrayList<>(), new ArrayList<>());
+        }
+        return resolveMembers(MANIFEST, loader, root);
+    }
+
+    /**
+     * Resolves {@link #CLIENT_MANIFEST} against {@code loader} under a root the main manifest has
+     * already matched. Never throws; a null root is an absent binding. Call it on the physical client
+     * only — it loads a client class.
+     */
+    public static Resolution resolveClientAgainst(ClassLoader loader, String root) {
+        if (root == null) {
+            return absent();
+        }
+        return resolveMembers(CLIENT_MANIFEST, loader, root);
+    }
+
+    private static Resolution resolveMembers(List<Member> manifest, ClassLoader loader, String root) {
         Map<Member, Object> resolved = new IdentityHashMap<>();
         List<String> missingRequired = new ArrayList<>();
         List<String> missingOptional = new ArrayList<>();
 
-        String root = probeRoot(loader);
-        if (root == null) {
-            return new Resolution(mcaOnClasspath(loader) ? Status.UNBINDABLE : Status.ABSENT,
-                    null, resolved, missingRequired, missingOptional);
-        }
-
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         Map<String, Class<?>> classes = new java.util.HashMap<>();
-        for (Member member : MANIFEST) {
+        for (Member member : manifest) {
             try {
                 Class<?> owner = classes.computeIfAbsent(member.ownerRelative,
                         relative -> loadOrNull(loader, root + relative));
@@ -593,7 +657,8 @@ public final class McaBinding {
                 }
                 Object value = switch (member.kind) {
                     case CLASS -> owner;
-                    case GETTER -> bindGetter(lookup, owner, member);
+                    case GETTER, STATIC_GETTER -> bindGetter(lookup, owner, member);
+                    case SETTER -> bindSetter(lookup, owner, member);
                     case CONSTRUCTOR -> bindConstructor(lookup, owner, member);
                     default -> bindMethod(lookup, owner, member);
                 };
@@ -736,11 +801,26 @@ public final class McaBinding {
     private static MethodHandle bindGetter(MethodHandles.Lookup lookup, Class<?> owner, Member member) {
         try {
             Field field = findField(owner, member.name);
-            if (field == null) {
+            if (field == null || Modifier.isStatic(field.getModifiers()) != (member.kind == Kind.STATIC_GETTER)) {
                 return null;
             }
             field.setAccessible(true);
             return erase(lookup.unreflectGetter(field), member.erasedType());
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    /** An instance field that is neither static nor final, written through an erased setter. */
+    private static MethodHandle bindSetter(MethodHandles.Lookup lookup, Class<?> owner, Member member) {
+        try {
+            Field field = findField(owner, member.name);
+            if (field == null || Modifier.isStatic(field.getModifiers())
+                    || Modifier.isFinal(field.getModifiers())) {
+                return null;
+            }
+            field.setAccessible(true);
+            return erase(lookup.unreflectSetter(field), member.erasedType());
         } catch (Throwable t) {
             return null;
         }

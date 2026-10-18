@@ -129,6 +129,17 @@ is the server thinking, and the card waits rather than closing and opening again
 
 **`MCA_ORIGINAL`** displays whatever MCA Reborn and the active resource pack normally render for dialogue.
 
+## `[speech]` (client)
+
+| Option | Default | Meaning |
+|---|---|---|
+| `chatModeSpeech` | `false` | Hand chat-mode villager lines (typed conversations, greetings) to MCA Reborn's own speech, once each, exactly as MCA speaks a line in its interaction screen. With the MCA Voices resource pack they stay silent, because it has no recordings for these lines; with MCA's online text-to-speech they are spoken. Option blocks and heart feedback are never spoken. New in 1.8.0 |
+
+Off by default because it costs requests. A nearby player who overhears a public reply hears it
+spoken too, and each listening client sends its own request to an online backend. Lines in the
+interaction screen do not depend on this option: since 1.8.0 MCA's speech is given the sentence this
+mod delivered there, rather than whichever pooled line MCA resolved last.
+
 ---
 
 ## `[features]`
@@ -220,6 +231,29 @@ gates on them with a plain `{"memory": {"id": "mcaconversations.state.<name>"}}`
 Scan cost: one nearest village per online player per interval, deduplicated. Relationship detection reads
 loaded residents only; arrival/departure reads the village's stored residency set (load-independent) and
 diffs it against a persisted snapshot — both negligible on `/neoforge tps`.
+
+**`gossipScanIntervalTicks` sets the period of all of this mod's maintenance (1.8.0).** Until 1.8.0
+the gossip scan, the three store prunes, the rumour sweep, the session sweep and the court poll all ran
+on the same tick. They are now spread across the interval: gossip at its start, the session sweep an
+eighth of the way in, rumours at a quarter, the disposition and progress prunes at half, the history
+prune at three quarters, and the court poll seven ticks after its own interval begins. The
+greeting scan and the Townstead dialogue sweep keep their 40-tick period, but the players are spread
+across those 40 ticks by their UUID instead of all being scanned on one. Each piece is bounded and
+resumes where it stopped:
+
+- a relationship scan observes at most 128 loaded residents of a village and carries on with the rest
+  at the next scan, so a village that fits in one batch — nearly all of them — is observed whole every
+  scan, as before;
+- the disposition and progress prunes examine 64 villagers per run, and start a new pass at most once
+  per in-game hour;
+- the history prune examines 64 villagers per run, and starts a new pass only when the in-game day has
+  changed.
+
+The work and the expiry rules are the same, and the pacing never discards durable history. On a large
+store an expired record can wait a few minutes longer to be removed, because it is reached in
+batches. No option was added. `/conversations perf status` reports what each piece
+costs per tick over the last minute (p50, p95, max) and how many items the bounded sweeps examined;
+`/conversations perf reset` clears it.
 
 ## `[rpg]`
 

@@ -49,6 +49,26 @@ class GossipDiffTest {
         assertEquals("Ann", out.get(0).bName()); // name recovered from the partner's snapshot
     }
 
+    /**
+     * A large village is observed a batch at a time (feedback remediation WP-D2), so the two partners
+     * of one marriage can be seen on two different sweeps. The second sighting finds its partner's
+     * snapshot already naming it and stays quiet: one marriage, one event.
+     */
+    @Test
+    void aCoupleSeenOnTwoSweepsIsOneMarriage() {
+        List<GossipDiff.Derived> first = GossipDiff.diff(
+                List.of(obs(SMALL, "Ann", BIG, false)),
+                Map.of(SMALL, snap(null, "Ann", false), BIG, snap(null, "Bob", false)),
+                Set.of(), true, true, true);
+        assertEquals(1, first.size());
+        // The first sweep wrote Ann's snapshot with her new partner; Bob is observed on the next one.
+        List<GossipDiff.Derived> second = GossipDiff.diff(
+                List.of(obs(BIG, "Bob", SMALL, false)),
+                Map.of(SMALL, snap(BIG, "Ann", false), BIG, snap(null, "Bob", false)),
+                Set.of(), true, true, true);
+        assertTrue(second.isEmpty(), "the marriage was already told when Ann was seen");
+    }
+
     @Test
     void noMarriageWithoutSnapshotChange() {
         List<GossipDiff.Derived> out = GossipDiff.diff(

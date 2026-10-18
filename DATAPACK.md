@@ -181,6 +181,7 @@ Available only when MCA Capitals is installed and the `[capitals]` master switch
 | `conversations_reputation_incident` | `{"types"?, "statuses"?, "tags"?, "known_to_speaker"?, "max_age"?}` | 1 when a matching deed exists in that village's ledger — and, with `known_to_speaker`, only when *this* villager knows of it. Needs MCA: Reputation; 0 without it |
 | `conversations_reputation_profile` | `{"scope"?, "recognition"?, "facets"?, "allow_partial_history"?}` | 1 when the player's **public profile** satisfies every clause: what they are known for, and how widely. Needs MCA: Reputation 0.6.0 with profiles enabled and profile content published; 0 otherwise. See below |
 | `conversations_kingdom` | a kingdom gate object | 1 when the gate passes for this villager and player. Branch-level: lets a common topic say something different to, or about, one kingdom without hiding the topic. Needs Ultima Kingdoms; see *Kingdom gates and civic contacts* below |
+| `conversations_family` | `{"has": "children" \| "parents" \| "siblings"}` | 1 when MCA's family tree records at least one such relative of the villager, loaded or not. About the speaker's own family, whoever the player is; 0 when the tree cannot be read. Since 1.8.0 |
 
 ## Custom actions
 
@@ -306,6 +307,21 @@ into the topic's catalog row, and a malformed `kingdom_gate` fails generation an
 refused at reload like any other malformed catalog entry, leaving the previous content in force.
 Ultima Kingdoms has no NeoForge 1.21.1 release yet, so on this port the bridge stays inert and every
 gated topic stays hidden unless its gate explicitly allows an unknown answer.
+
+Two more optional catalog fields (1.8.0) say whose family a topic is about. They are written in the
+catalog row itself — the topic-pack generator does not mirror them — and `TopicGate` enforces them on
+the same entry paths, beside the age allow-list:
+
+| Field | Value | Meaning |
+|---|---|---|
+| `player_role` | `"parent"` \| `"child"` \| `"sibling"` \| `"spouse"` | What the **player** is to the speaker for this topic. The starter is offered only when MCA's family tree agrees: `checkin_child` is `parent` (the player checking in on their own child) and `ask_parent` is `child`. A pair whose roles cannot be read opens no such topic |
+| `family` | `{"has": "children" \| "parents" \| "siblings"}` | Something the speaker's own family must include, whoever the player is. `their_children` needs `{"has": "children"}`. Read the same way as the `conversations_family` condition |
+
+A `player_role` is also a promise about the lines. `FamilyPerspectiveTest` walks every `next` page
+reachable from the topic's starter and fails the build when a reached beat contract
+(`conversation_beats/`) declares a different `player_role` in its `context`, or when one line or page
+is reached from two perspectives. Each run writes what it walked to
+`build/reports/conversations/family-perspective.md`.
 
 Stance families are the shared vocabulary for *what kind of thing the player just said*: `empathy`,
 `curiosity`, `candor`, `encouragement`, `practical_help`, `humor`, `respectful_disagreement`,
@@ -1125,6 +1141,35 @@ that are not are the ones worth being honest with yourself about.
       `LEGACY_REWARDED_STARTERS`, because the debt is paid.
 - [ ] Add the topic's interesting paths to `TopicPathSimulationTest`. Its coverage half walks every
       catalogued topic automatically; the hand-written scenarios are for beats worth naming.
+
+## The family topics' pages (1.8.0)
+
+`checkin_child` and `ask_parent` were partly written from the wrong side, so their pages moved to
+the topic whose speaker they fit. Topic ids, starters and cooldown memories
+(`mcaconversations.cooldown.checkin_child`, `.ask_parent`) are unchanged. A pack that overrides one
+of these pages should check it against this list:
+
+- `conversations.topic.checkin_child.respond` and `.followup` keep their ids but are now the
+  player's own child answering, at four ages. Their old parent-voice answers moved to the new
+  `their_children` topic: `listen`/`praise`/`dismiss` to `conversations.topic.their_children.respond`,
+  and `guide`/`play_along`/`scold` to `conversations.topic.their_children.followup`.
+- `conversations.topic.checkin_child.rebuffed.followup` is now
+  `conversations.topic.their_children.rebuffed.followup`, and `conversations.topic.family.scolded.close`
+  is reached from `their_children`.
+- `conversations.topic.ask_parent.pride` and `.event` are now `conversations.topic.checkin_child.pride`
+  and `.event`, offered from `checkin_child.followup`. `ask_parent.followup` closes on the new
+  `conversations.topic.ask_parent.close`.
+- New pages: `conversations.topic.checkin_child.grown.followup` and `.grown.close` (a grown child),
+  and `conversations.topic.their_children.respond`, `.followup`, `.close` and `.rebuffed.followup`.
+  `their_children` starts from `conversations.cat.relationships`, with its own cooldown memory
+  `mcaconversations.cooldown.their_children`.
+- Lines moved with their pages: `family.child.listen`/`praise`/`dismiss`/`guide`/`play_along`/`scold`/`leave`
+  became `their_children.*`, `checkin_child.rebuffed.*` became `their_children.rebuffed.*`, and
+  `ask_parent.pride*`/`ask_parent.event*` became `checkin_child.pride*`/`checkin_child.event*`.
+- Beat files `checkin_child_close.json` and `repair_checkin_child_rebuffed_followup.json` are gone;
+  their beats are in `interior_their_children.json`. The chat intents `checkin_child.hurt.*`,
+  `checkin_child.followup.*` and `checkin_child.rebuffed.*` became `their_children.*`, and
+  `ask_parent.pride*`/`ask_parent.event*` became `checkin_child.pride*`/`checkin_child.event*`.
 
 ## Conventions for content that degrades gracefully
 

@@ -47,9 +47,17 @@ public final class ConversationSession {
      */
     public record ChoiceOffer(long revision, UUID villagerId, String questionId,
                               List<String> answerIds, Frontend frontend,
-                              long createdGameTime, boolean consumed, long generation) {
+                              long createdGameTime, boolean consumed, long generation,
+                              long utteranceSeq) {
         public ChoiceOffer {
             answerIds = answerIds == null ? List.of() : List.copyOf(answerIds);
+            utteranceSeq = Math.max(-1L, utteranceSeq);
+        }
+
+        /** An offer that has not been sent yet, so it names no line. */
+        public ChoiceOffer(long revision, UUID villagerId, String questionId, List<String> answerIds,
+                           Frontend frontend, long createdGameTime, boolean consumed, long generation) {
+            this(revision, villagerId, questionId, answerIds, frontend, createdGameTime, consumed, generation, -1L);
         }
     }
 
@@ -59,6 +67,9 @@ public final class ConversationSession {
             new java.util.concurrent.atomic.AtomicLong();
 
     private static final int MAX_TRANSACTIONS = 8;
+
+    /** How many delivered utterances the session remembers: enough for one turn and the one before. */
+    static final int MAX_UTTERANCES = 8;
 
     /** How many beats back anti-repetition and the debug trace can see. */
     private static final int MAX_RECENT_BEATS = 8;
@@ -70,6 +81,12 @@ public final class ConversationSession {
     private static final int MAX_TURN_FACTS = 24;
 
     private final UUID playerId;
+    /**
+     * The identity of this session's utterances when no handle names the discussion — chat mode's
+     * ambient exchanges, a graphical page MCA opened without an accepted interaction. Minted with the
+     * object, never persisted.
+     */
+    private final UUID sessionNonce = UUID.randomUUID();
 
     private ConversationHandle handle;
     private UUID villagerId;
@@ -83,6 +100,7 @@ public final class ConversationSession {
     private long offerGeneration = ContentGeneration.current();
     private long offerCreatedGameTime;
     private boolean offerConsumed;
+    private long offerUtteranceSeq = -1L;
     private long topicReturnRevision = -1L;
     private Frontend offerFrontend = Frontend.GUI;
     private long startedGameTime;
@@ -112,6 +130,8 @@ public final class ConversationSession {
     private final Set<SemanticFact> turnFacts = new LinkedHashSet<>();
     private final Deque<String> recentBeats = new ArrayDeque<>();
     private final Deque<String> transactions = new ArrayDeque<>();
+    private final Deque<Utterance> utterances = new ArrayDeque<>();
+    private long utteranceSeq;
     private long submissionSeq;
     private final Set<String> claimedSideEffects = new java.util.HashSet<>();
 
@@ -206,6 +226,7 @@ public final class ConversationSession {
         this.offerFrontend = frontend == null ? Frontend.GUI : frontend;
         this.offerCreatedGameTime = now;
         this.offerConsumed = false;
+        this.offerUtteranceSeq = -1L;
         this.topicReturnRevision = -1L;
         return currentOffer().orElseThrow();
     }
@@ -231,7 +252,8 @@ public final class ConversationSession {
             return Optional.empty();
         }
         return Optional.of(new ChoiceOffer(offerRevision, offerVillagerId, currentQuestion,
-                currentAnswers, offerFrontend, offerCreatedGameTime, offerConsumed, offerGeneration));
+                currentAnswers, offerFrontend, offerCreatedGameTime, offerConsumed, offerGeneration,
+                offerUtteranceSeq));
     }
 
     /**
@@ -254,6 +276,86 @@ public final class ConversationSession {
         }
         int index = currentAnswers.indexOf(answer);
         return index >= 0 && consumeOffer(offerRevision, index).isPresent();
+    }
+
+    // --- Utterances (feedback remediation §2.1) -----------------------------------
+
+    /**
+     * The identity this session's utterances are tagged with: the accepted discussion's session id
+     * when there is one, so the client can match a line against the offer that names the same
+     * discussion, and the session's own nonce otherwise.
+     */
+    public UUID utteranceIdentity() {
+        return handle != null ? handle.sessionId() : sessionNonce;
+    }
+
+    /** The identity used when no handle names the discussion. */
+    public UUID sessionNonce() {
+        return sessionNonce;
+    }
+
+    /**
+     * Records one delivered utterance and returns it with its sequence number.
+     *
+     * <p>The counter is per session and monotonic, distinct from the offer revision (which is global)
+     * and from question ids: one turn may say several lines, and a reused question is a new utterance.
+     */
+    public Utterance recordUtterance(UtteranceTag.Kind kind, Frontend frontend, String strippedKey) {
+        utteranceSeq++;
+        Utterance said = new Utterance(utteranceIdentity(), utteranceSeq, kind, frontend, strippedKey,
+                Utterance.variantOf(strippedKey), ContentGeneration.current(), -1L);
+        utterances.addLast(said);
+        while (utterances.size() > MAX_UTTERANCES) {
+            utterances.removeFirst();
+        }
+        return said;
+    }
+
+    /**
+     * The last line this frontend delivered in the discussion the session now serves, or -1.
+     *
+     * <p>Filtered by identity as well as frontend: a line said under the previous handle belongs to a
+     * discussion that has ended, and naming it would point the client at a conversation it has left.
+     * Feedback blocks never count — an offer belongs to what the villager said, not to the options
+     * printed under it.
+     */
+    public long lastUtteranceSeq(Frontend frontend) {
+        UUID identity = utteranceIdentity();
+        java.util.Iterator<Utterance> newestFirst = utterances.descendingIterator();
+        while (newestFirst.hasNext()) {
+            Utterance said = newestFirst.next();
+            if (said.identity().equals(identity) && said.frontend() == frontend
+                    && said.kind() != UtteranceTag.Kind.FEEDBACK) {
+                return said.seq();
+            }
+        }
+        return -1L;
+    }
+
+    /** The utterances this session remembers, oldest first. */
+    public List<Utterance> recentUtterances() {
+        return List.copyOf(utterances);
+    }
+
+    /**
+     * Notes that the live offer was sent naming {@code seq}. Only the live revision is updated, so a
+     * late call for an offer that has since been replaced cannot rewrite the current one.
+     */
+    public void bindOfferUtterance(long revision, long seq) {
+        if (revision != offerRevision || currentQuestion == null) {
+            return;
+        }
+        offerUtteranceSeq = Math.max(-1L, seq);
+        if (seq < 0) {
+            return;
+        }
+        java.util.List<Utterance> rewritten = new java.util.ArrayList<>(utterances.size());
+        for (Utterance said : utterances) {
+            rewritten.add(said.seq() == seq && said.identity().equals(utteranceIdentity())
+                    ? said.referencedBy(revision) : said);
+        }
+        utterances.clear();
+        utterances.addAll(rewritten);
     }
 
     // --- Frozen plan and context snapshot (spec §9.3, §10.5) --------------------

@@ -366,6 +366,20 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
+        // Who the speaker's own family includes: {"has": "children"} (1.8.0, feedback remediation
+        // WP-C2). Read from MCA's family tree by UUID; an unreadable tree has nobody in it.
+        McaHandles.registerCondition("conversations_family",
+                (json, name) -> SafeParse.orNull("conversations_family", json,
+                        () -> dev.otectus.mcaconversations.conversation.FamilyRequirement.fromJson(json)),
+                requirement -> (villager, stack, player) -> {
+                    try {
+                        return requirement != null && requirement.test(villager) ? 1.0f : 0.0f;
+                    } catch (Throwable t) {
+                        McaConversations.LOGGER.debug("conversations_family failed; defaulting 0", t);
+                        return 0.0f;
+                    }
+                });
+
         // Branch-level kingdom/faction selection. Parsing is Conversations-owned so a malformed
         // optional integration value is contained even when Kingdoms is absent; evaluation is
         // reflection-only and fails closed for every explicit restriction.

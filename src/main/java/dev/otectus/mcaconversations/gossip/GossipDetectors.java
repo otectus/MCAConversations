@@ -75,6 +75,43 @@ public final class GossipDetectors {
         }
     }
 
+    /** Per-village resident cursors for large villages, keyed like the sweep's own dedup key. */
+    private static final Map<Long, dev.otectus.mcaconversations.util.ResumableSweep<UUID>> RESIDENT_SWEEPS =
+            new HashMap<>();
+
+    /** The slice of {@code loaded} this sweep observes: all of it when it fits in one batch. */
+    static List<Entity> residentBatch(ServerLevel level, int villageId, List<Entity> loaded) {
+        int batchSize = dev.otectus.mcaconversations.event.MaintenanceSchedule.GOSSIP_RESIDENT_BATCH;
+        long key = villageKey(level, villageId);
+        if (loaded.size() <= batchSize) {
+            RESIDENT_SWEEPS.remove(key);
+            return loaded;
+        }
+        Map<UUID, Entity> byId = new HashMap<>(loaded.size() * 2);
+        for (Entity resident : loaded) {
+            byId.put(resident.getUUID(), resident);
+        }
+        dev.otectus.mcaconversations.util.ResumableSweep<UUID> sweep = RESIDENT_SWEEPS.computeIfAbsent(key,
+                ignored -> new dev.otectus.mcaconversations.util.ResumableSweep<>());
+        List<Entity> batch = new ArrayList<>(batchSize);
+        for (UUID id : sweep.next(byId::keySet, batchSize)) {
+            Entity resident = byId.get(id);
+            if (resident != null) {
+                batch.add(resident);
+            }
+        }
+        return batch;
+    }
+
+    private static long villageKey(ServerLevel level, int villageId) {
+        return ((long) level.dimension().location().hashCode() << 32) | (villageId & 0xFFFFFFFFL);
+    }
+
+    /** Forgets every cursor: a new world has different villages. */
+    public static void reset() {
+        RESIDENT_SWEEPS.clear();
+    }
+
     /** The periodic scan. Called from the server tick handler at the configured interval. */
     public static void scan(MinecraftServer server) {
         if (!McaConversationsConfig.COMMON.enableGossip.get()) {
@@ -109,7 +146,13 @@ public final class GossipDetectors {
         }
 
         // --- Relationship diff (marriage/divorce/birth) over the LOADED residents ---
-        List<Entity> residents = McaCompat.loadedVillageResidents(level, villageId);
+        // Bounded per sweep: a village larger than one batch is observed a slice at a time, resuming
+        // where the last sweep stopped (feedback remediation WP-D2). A village that fits in one batch
+        // — nearly all of them — is observed whole every sweep, exactly as before.
+        List<Entity> residents = residentBatch(level, villageId,
+                McaCompat.loadedVillageResidents(level, villageId));
+        dev.otectus.mcaconversations.debug.PerfCounters.SERVER.count(
+                dev.otectus.mcaconversations.debug.PerfCounters.Count.RESIDENTS_EXAMINED, residents.size());
         List<GossipDiff.Observation> observations = new ArrayList<>(residents.size());
         for (Entity resident : residents) {
             if (!McaCompat.isMcaVillager(resident)) {
@@ -180,6 +223,17 @@ public final class GossipDetectors {
         }
         if (current.equals(prior)) {
             return;
+        }
+        // A newborn not in this sweep's batch has not been reported as a birth yet; it must not be
+        // reported as an arrival meanwhile. Its BIRTH comes when its batch is observed.
+        births = new HashSet<>(births);
+        for (UUID u : current) {
+            if (!prior.contains(u) && !births.contains(u) && data.snapshots().get(u) == null) {
+                Entity newcomer = level.getEntity(u);
+                if (newcomer != null && McaCompat.isMcaVillager(newcomer) && McaCompat.isBaby(newcomer)) {
+                    births.add(u);
+                }
+            }
         }
 
         Map<UUID, String> names = new HashMap<>(McaCompat.villageResidentNames(level, villageId));

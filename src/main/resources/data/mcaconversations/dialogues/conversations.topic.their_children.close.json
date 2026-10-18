@@ -1,0 +1,51 @@
+{
+  "answers": [
+    {
+      "name": "thank",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "their_children.close.thank.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "their_children.close.thank",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "their_children.close.thank",
+              "deltas": {
+                "warmth": 2
+              }
+            },
+            "next": "conversations.cat.relationships",
+            "conversations_say": {
+              "phrase": "conversations.their_children.close.thank"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.cat.relationships",
+            "conversations_say": {
+              "phrase": "conversations.their_children.close.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

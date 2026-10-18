@@ -1,5 +1,53 @@
 {
   "beats": {
+    "ask_parent.close.leave.to.hub": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.close.leave",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.parting",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended",
+      "context": {
+        "player_role": "child"
+      }
+    },
+    "ask_parent.close.mattered.to.hub": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.close.mattered",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.close",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "player_role": "child"
+      }
+    },
+    "ask_parent.close.thank.to.hub": {
+      "topic": "ask_parent",
+      "say": "conversations.ask_parent.close.thank",
+      "response_question": "conversations.family",
+      "npc_act": "accept",
+      "subject": "ask_parent.close",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated",
+      "context": {
+        "player_role": "child"
+      }
+    },
     "family.parent.again.to.ask_parent": {
       "topic": "ask_parent",
       "say": "conversations.family.parent.again",
@@ -26,7 +74,10 @@
       "forbidden_stances": [
         "flirtation"
       ],
-      "outcome": "accepted"
+      "outcome": "accepted",
+      "context": {
+        "player_role": "child"
+      }
     },
     "family.parent.answer_honestly.to.ask_parent": {
       "topic": "ask_parent",
@@ -54,7 +105,73 @@
       "forbidden_stances": [
         "flirtation"
       ],
-      "outcome": "accepted"
+      "outcome": "accepted",
+      "context": {
+        "player_role": "child"
+      }
+    },
+    "family.parent.ask_worries.to.ask_parent.close": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.ask_worries",
+      "response_question": "conversations.topic.ask_parent.close",
+      "npc_act": "accept",
+      "subject": "family",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      },
+      "context": {
+        "player_role": "child"
+      }
+    },
+    "family.parent.deflect.to.ask_parent.close": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.deflect",
+      "response_question": "conversations.topic.ask_parent.close",
+      "npc_act": "deflect",
+      "subject": "family",
+      "polarity": "negative",
+      "openness": "guarded",
+      "allowed_stances": [
+        "boundary_push",
+        "candor",
+        "challenge",
+        "curiosity",
+        "dismissal",
+        "empathy",
+        "encouragement",
+        "exit",
+        "humor",
+        "practical_help",
+        "respectful_disagreement",
+        "restraint",
+        "self_disclosure"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "qualified",
+      "context": {
+        "player_role": "child"
+      }
     },
     "family.parent.proud.to.ask_parent": {
       "topic": "ask_parent",
@@ -82,7 +199,10 @@
       "forbidden_stances": [
         "flirtation"
       ],
-      "outcome": "accepted"
+      "outcome": "accepted",
+      "context": {
+        "player_role": "child"
+      }
     },
     "family.parent.reassure.to.ask_parent": {
       "topic": "ask_parent",
@@ -110,7 +230,42 @@
       "forbidden_stances": [
         "flirtation"
       ],
-      "outcome": "accepted"
+      "outcome": "accepted",
+      "context": {
+        "player_role": "child"
+      }
+    },
+    "family.parent.thank_them.to.ask_parent.close": {
+      "topic": "ask_parent",
+      "say": "conversations.family.parent.thank_them",
+      "response_question": "conversations.topic.ask_parent.close",
+      "npc_act": "accept",
+      "subject": "family",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      },
+      "context": {
+        "player_role": "child"
+      }
     },
     "family.parent.worried.to.ask_parent": {
       "topic": "ask_parent",
@@ -138,10 +293,41 @@
       "forbidden_stances": [
         "flirtation"
       ],
-      "outcome": "accepted"
+      "outcome": "accepted",
+      "context": {
+        "player_role": "child"
+      }
     }
   },
   "replies": {
+    "conversations.topic.ask_parent.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "family.parent.ask_worries.to.ask_parent.close",
+        "family.parent.deflect.to.ask_parent.close",
+        "family.parent.thank_them.to.ask_parent.close"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.ask_parent.close/say_means": {
+      "stance": "candor",
+      "responds_to": [
+        "family.parent.ask_worries.to.ask_parent.close",
+        "family.parent.deflect.to.ask_parent.close",
+        "family.parent.thank_them.to.ask_parent.close"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.ask_parent.close/thank": {
+      "stance": "candor",
+      "responds_to": [
+        "family.parent.ask_worries.to.ask_parent.close",
+        "family.parent.deflect.to.ask_parent.close",
+        "family.parent.thank_them.to.ask_parent.close"
+      ],
+      "tone": "gentle"
+    },
     "conversations.topic.ask_parent.followup/ask_worries": {
       "stance": "curiosity",
       "responds_to": [

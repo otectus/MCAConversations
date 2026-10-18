@@ -153,4 +153,72 @@ class AgeSeparationTest {
         }
         assertTrue(problems.isEmpty(), String.join(SEP, problems));
     }
+
+    // --- Deeper pages (feedback remediation WP-C2) ----------------------------------------------------------
+
+    /**
+     * The same rule one page down. A topic used to branch by age at its opener and then send every age
+     * into one shared page of replies, which is how a toddler who passed the starter could reach "I
+     * mended the fence myself". Where a deeper page now reserves a result for an age, that age speaks
+     * its own pool: two ages drawing one pool inside one answer is the shared sentence the split removed.
+     */
+    @Test
+    @DisplayName("deeper pages: within one answer, no two age groups draw the same pool")
+    void deeperPagesKeepAgesApart() {
+        Set<String> hubs = ContentFixture.hubQuestions();
+        List<String> problems = new ArrayList<>();
+        for (String id : ContentFixture.graph().questionIds()) {
+            if (hubs.contains(id) || id.startsWith(HUB_PREFIX)) {
+                continue;
+            }
+            DialogueGraph.Question page = ContentFixture.graph().question(id).orElseThrow();
+            for (DialogueGraph.Answer answer : page.answers()) {
+                Map<String, List<String>> agesByPool = new TreeMap<>();
+                for (DialogueGraph.Result result : answer.results()) {
+                    String age = ageOf(result);
+                    String pool = ContentFixture.spokenPhrase(result.actions());
+                    if (age != null && pool != null) {
+                        agesByPool.computeIfAbsent(pool, p -> new ArrayList<>()).add(age);
+                    }
+                }
+                agesByPool.forEach((pool, ages) -> {
+                    if (ages.size() > 1) {
+                        problems.add(id + "/" + answer.name() + ": " + ages + " all speak '" + pool + "'");
+                    }
+                });
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
+
+    /** An age-reserved result on a deeper page is filed under a beat that says which age it is for. */
+    @Test
+    @DisplayName("deeper pages: an age-reserved line's beat declares that age")
+    void deeperAgeLinesDeclareTheirAge() {
+        Set<String> hubs = ContentFixture.hubQuestions();
+        List<String> problems = new ArrayList<>();
+        for (String id : ContentFixture.graph().questionIds()) {
+            if (hubs.contains(id) || id.startsWith(HUB_PREFIX)) {
+                continue;
+            }
+            for (DialogueGraph.Answer answer : ContentFixture.graph().question(id).orElseThrow().answers()) {
+                for (DialogueGraph.Result result : answer.results()) {
+                    String age = ageOf(result);
+                    String pool = ContentFixture.spokenPhrase(result.actions());
+                    if (age == null || pool == null || !result.actions().has("next")) {
+                        continue;
+                    }
+                    String next = result.actions().get("next").getAsString();
+                    ContentFixture.catalog().forRoute(pool, next).ifPresent(beat -> {
+                        Set<String> declared = beat.context().ages();
+                        if (!declared.contains(age)) {
+                            problems.add(id + "/" + answer.name() + ": the " + age + " line '" + pool
+                                    + "' is filed under beat " + beat.id() + ", which declares ages " + declared);
+                        }
+                    });
+                }
+            }
+        }
+        assertTrue(problems.isEmpty(), String.join(SEP, problems));
+    }
 }

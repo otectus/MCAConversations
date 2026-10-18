@@ -1,0 +1,572 @@
+{
+  "beats": {
+    "family.scolded.apologize.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.family.scolded.apologize",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "qualify",
+      "subject": "their_children.scolded",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted"
+    },
+    "family.scolded.leave.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.family.scolded.leave",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children.scolded",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "family.scolded.soften.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.family.scolded.soften",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children.scolded",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "their_children.again.to.their_children.respond": {
+      "topic": "their_children",
+      "say": "conversations.their_children.again",
+      "response_question": "conversations.topic.their_children.respond",
+      "npc_act": "accept",
+      "subject": "their_children",
+      "polarity": "neutral",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "restraint",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "challenge",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "their_children.close.leave.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.their_children.close.leave",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children.parting",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "their_children.close.thank.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.their_children.close.thank",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children.close",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "appreciated"
+    },
+    "their_children.guarded.to.their_children.respond": {
+      "topic": "their_children",
+      "say": "conversations.their_children.guarded",
+      "response_question": "conversations.topic.their_children.respond",
+      "npc_act": "qualify",
+      "subject": "their_children",
+      "polarity": "neutral",
+      "openness": "guarded",
+      "allowed_stances": [
+        "restraint",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "challenge",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "their_children.guide.to.close": {
+      "topic": "their_children",
+      "say": "conversations.their_children.guide",
+      "response_question": "conversations.topic.their_children.close",
+      "npc_act": "accept",
+      "subject": "their_children.advice",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "their_children.leave.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.their_children.leave",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children.parting",
+      "polarity": "neutral",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "their_children.listen.to.their_children.followup": {
+      "topic": "their_children",
+      "say": "conversations.their_children.listen",
+      "response_question": "conversations.topic.their_children.followup",
+      "npc_act": "accept",
+      "subject": "their_children.wellbeing",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "practical_help",
+        "encouragement",
+        "respectful_disagreement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "their_children.open.terminal": {
+      "topic": "their_children",
+      "say": "conversations.their_children.open",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children",
+      "polarity": "positive",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "context": {
+        "ages": [
+          "adult"
+        ]
+      }
+    },
+    "their_children.open.to.their_children.respond": {
+      "topic": "their_children",
+      "say": "conversations.their_children.open",
+      "response_question": "conversations.topic.their_children.respond",
+      "npc_act": "accept",
+      "subject": "their_children",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "restraint",
+        "encouragement",
+        "dismissal",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "challenge",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "their_children.play_along.to.close": {
+      "topic": "their_children",
+      "say": "conversations.their_children.play_along",
+      "response_question": "conversations.topic.their_children.close",
+      "npc_act": "accept",
+      "subject": "their_children.advice",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted",
+      "callback": {
+        "fact": "arc",
+        "value": "family",
+        "resumes": [
+          "family.resume.admit_forgot",
+          "family.resume.ask_how_it_went",
+          "family.resume.just_listen",
+          "family.resume.keep_promise",
+          "family.resume.offer_to_help",
+          "family.resume.opener"
+        ]
+      }
+    },
+    "their_children.praise.to.their_children.followup": {
+      "topic": "their_children",
+      "say": "conversations.their_children.praise",
+      "response_question": "conversations.topic.their_children.followup",
+      "npc_act": "accept",
+      "subject": "their_children.praise",
+      "polarity": "positive",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "practical_help",
+        "encouragement",
+        "respectful_disagreement",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "candor",
+        "humor",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "accepted"
+    },
+    "their_children.rebuffed.apologize.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.their_children.rebuffed.apologize",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "qualify",
+      "subject": "their_children.rebuffed",
+      "polarity": "mixed",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "accepted"
+    },
+    "their_children.rebuffed.explain.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.their_children.rebuffed.explain",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "qualify",
+      "subject": "their_children.rebuffed",
+      "polarity": "negative",
+      "openness": "permits_followup",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "qualified"
+    },
+    "their_children.rebuffed.leave.to.hub": {
+      "topic": "their_children",
+      "say": "conversations.their_children.rebuffed.leave",
+      "response_question": "conversations.cat.relationships",
+      "npc_act": "accept",
+      "subject": "their_children.rebuffed",
+      "polarity": "negative",
+      "openness": "ends_conversation",
+      "allowed_stances": [
+        "exit"
+      ],
+      "outcome": "conversation_ended"
+    },
+    "their_children.rebuffed.open": {
+      "topic": "their_children",
+      "say": "conversations.their_children.dismiss",
+      "response_question": "conversations.topic.their_children.rebuffed.followup",
+      "npc_act": "hurt",
+      "subject": "their_children.rebuffed",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "allowed_stances": [
+        "candor",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "empathy",
+        "curiosity",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "hurt"
+    },
+    "their_children.scolded": {
+      "topic": "their_children",
+      "say": "conversations.their_children.scold",
+      "response_question": "conversations.topic.family.scolded.close",
+      "npc_act": "hurt",
+      "subject": "their_children.scolded",
+      "polarity": "negative",
+      "openness": "closes_subject",
+      "facts": [
+        "family:child",
+        "player:urged_severity"
+      ],
+      "allowed_stances": [
+        "candor",
+        "empathy",
+        "exit"
+      ],
+      "forbidden_stances": [
+        "curiosity",
+        "encouragement",
+        "practical_help",
+        "humor",
+        "respectful_disagreement",
+        "self_disclosure",
+        "restraint",
+        "challenge",
+        "dismissal",
+        "boundary_push",
+        "flirtation"
+      ],
+      "outcome": "hurt"
+    }
+  },
+  "replies": {
+    "conversations.topic.family.scolded.close/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "their_children.scolded"
+      ],
+      "tone": "gentle",
+      "requires_facts": [
+        "player:urged_severity"
+      ],
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.family.scolded.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "their_children.scolded"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.family.scolded.close/soften": {
+      "stance": "empathy",
+      "responds_to": [
+        "their_children.scolded"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "appreciated"
+      ]
+    },
+    "conversations.topic.their_children.close/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "their_children.guide.to.close",
+        "their_children.play_along.to.close"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.their_children.close/thank": {
+      "stance": "candor",
+      "responds_to": [
+        "their_children.guide.to.close",
+        "their_children.play_along.to.close"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.their_children.followup/guide": {
+      "stance": "practical_help",
+      "responds_to": [
+        "their_children.listen.to.their_children.followup",
+        "their_children.praise.to.their_children.followup"
+      ],
+      "tone": "plain"
+    },
+    "conversations.topic.their_children.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "their_children.listen.to.their_children.followup",
+        "their_children.praise.to.their_children.followup"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.their_children.followup/play_along": {
+      "stance": "encouragement",
+      "responds_to": [
+        "their_children.listen.to.their_children.followup",
+        "their_children.praise.to.their_children.followup"
+      ],
+      "tone": "playful"
+    },
+    "conversations.topic.their_children.followup/scold": {
+      "stance": "respectful_disagreement",
+      "responds_to": [
+        "their_children.listen.to.their_children.followup",
+        "their_children.praise.to.their_children.followup"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.their_children.rebuffed.followup/apologize": {
+      "stance": "candor",
+      "responds_to": [
+        "their_children.rebuffed.open"
+      ],
+      "tone": "gentle",
+      "outcomes": [
+        "accepted"
+      ]
+    },
+    "conversations.topic.their_children.rebuffed.followup/explain": {
+      "stance": "candor",
+      "responds_to": [
+        "their_children.rebuffed.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "qualified"
+      ]
+    },
+    "conversations.topic.their_children.rebuffed.followup/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "their_children.rebuffed.open"
+      ],
+      "tone": "plain",
+      "outcomes": [
+        "conversation_ended"
+      ],
+      "exit": true
+    },
+    "conversations.topic.their_children.respond/dismiss": {
+      "stance": "dismissal",
+      "responds_to": [
+        "their_children.again.to.their_children.respond",
+        "their_children.guarded.to.their_children.respond",
+        "their_children.open.to.their_children.respond"
+      ],
+      "tone": "blunt"
+    },
+    "conversations.topic.their_children.respond/leave": {
+      "stance": "exit",
+      "responds_to": [
+        "their_children.again.to.their_children.respond",
+        "their_children.guarded.to.their_children.respond",
+        "their_children.open.to.their_children.respond"
+      ],
+      "tone": "plain",
+      "exit": true
+    },
+    "conversations.topic.their_children.respond/listen": {
+      "stance": "restraint",
+      "responds_to": [
+        "their_children.again.to.their_children.respond",
+        "their_children.guarded.to.their_children.respond",
+        "their_children.open.to.their_children.respond"
+      ],
+      "tone": "gentle"
+    },
+    "conversations.topic.their_children.respond/praise": {
+      "stance": "encouragement",
+      "responds_to": [
+        "their_children.again.to.their_children.respond",
+        "their_children.guarded.to.their_children.respond",
+        "their_children.open.to.their_children.respond"
+      ],
+      "tone": "gentle"
+    }
+  }
+}

@@ -66,9 +66,21 @@ public final class GreetOnApproach {
 
     /** One scan over all online players. Caller gates on the config flags and the tick cadence. */
     public static void scan(MinecraftServer server) {
+        scan(server, player -> true);
+    }
+
+    /**
+     * One scan over the online players {@code due} selects. The tick handler passes the players whose
+     * turn it is this tick, so each player is still scanned once per 40 ticks but the server never
+     * scans all of them on the same tick (feedback remediation WP-D2).
+     */
+    public static void scan(MinecraftServer server, java.util.function.Predicate<UUID> due) {
         double radius = McaConversationsConfig.chatModeRadius();
         long now = server.overworld().getGameTime();
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            if (!due.test(player.getUUID())) {
+                continue;
+            }
             if (player.hasDisconnected() || !player.isAlive() || player.isSpectator()) {
                 continue;
             }

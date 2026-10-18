@@ -121,7 +121,7 @@ public final class ConversationsEmotionTags {
     }
 
     /** The visible text of a tagged line. */
-    static String strip(String tagged) {
+    public static String strip(String tagged) {
         String result = tagged;
         while (STRIP.matcher(result).find()) {
             result = STRIP.matcher(result).replaceAll("$1");

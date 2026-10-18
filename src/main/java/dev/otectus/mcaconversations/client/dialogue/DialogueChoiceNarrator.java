@@ -13,6 +13,7 @@ public final class DialogueChoiceNarrator {
     private int focusedIndex = -1;
     private int page = -1;
     private int lockedIndex = -1;
+    private long waitingRevision = -1L;
 
     public DialogueChoiceNarrator() {
         this(DialogueChoiceNarrator::sayThroughNarrator);
@@ -83,7 +84,20 @@ public final class DialogueChoiceNarrator {
         say(Component.translatable("gui.mcaconversations.responses.selected", answer));
     }
 
+    /**
+     * Said once when the card's answers have arrived ahead of the line they belong to, so a player
+     * who presses a key hears why nothing happened.
+     */
+    public void waiting(long revision) {
+        if (waitingRevision == revision) {
+            return;
+        }
+        waitingRevision = revision;
+        say(Component.translatable("gui.mcaconversations.responses.waiting"));
+    }
+
     public void reset() {
+        waitingRevision = -1L;
         offerRevision = -1L;
         focusedIndex = -1;
         page = -1;

@@ -51,6 +51,46 @@ class ChoiceOfferCodecTest {
         assertEquals(villager, decoded.handle().villagerId());
     }
 
+    /** Protocol 5: the offer names the line it belongs to, and "no claim" stays one byte. */
+    @Test
+    void roundTripsTheUtteranceItNames() {
+        ConversationRef ref = new ConversationRef(UUID.randomUUID(), UUID.randomUUID());
+        ChoiceOfferS2C named = new ChoiceOfferS2C(ref, 5L, ConversationSession.Frontend.GUI, "q",
+                List.of("a", "b"), 17L);
+        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        ChoiceOfferS2C.STREAM_CODEC.encode(buffer, named);
+        ChoiceOfferS2C decoded = ChoiceOfferS2C.STREAM_CODEC.decode(buffer);
+        assertEquals(named, decoded);
+        assertEquals(17L, decoded.utteranceSeq());
+        assertEquals(0, buffer.readableBytes());
+
+        ChoiceOfferS2C unclaimed = new ChoiceOfferS2C(ref, 5L, ConversationSession.Frontend.GUI, "q",
+                List.of("a", "b"));
+        assertEquals(-1L, unclaimed.utteranceSeq());
+        FriendlyByteBuf a = new FriendlyByteBuf(Unpooled.buffer());
+        FriendlyByteBuf b = new FriendlyByteBuf(Unpooled.buffer());
+        ChoiceOfferS2C.STREAM_CODEC.encode(a, unclaimed);
+        ChoiceOfferS2C.STREAM_CODEC.encode(b, new ChoiceOfferS2C(ref, 5L, ConversationSession.Frontend.GUI, "q",
+                List.of("a", "b"), 0L));
+        assertEquals(a.readableBytes(), b.readableBytes(), "-1 and 0 both cost a single varint byte");
+        assertEquals(unclaimed, ChoiceOfferS2C.STREAM_CODEC.decode(a));
+    }
+
+    @Test
+    void rejectsAnUtteranceBelowMinusOne() {
+        assertThrows(IllegalArgumentException.class, () -> new ChoiceOfferS2C(ConversationRef.NONE, 1L,
+                ConversationSession.Frontend.GUI, "q", List.of("a"), -2L));
+        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+        ConversationRef.write(buffer, ConversationRef.NONE);
+        buffer.writeVarLong(1L);
+        buffer.writeEnum(ConversationSession.Frontend.GUI);
+        buffer.writeUtf("q", ChoiceOfferS2C.MAX_ID_LENGTH);
+        buffer.writeVarInt(1);
+        buffer.writeUtf("a", ChoiceOfferS2C.MAX_ID_LENGTH);
+        buffer.writeVarLong(-5L);
+        assertThrows(DecoderException.class, () -> ChoiceOfferS2C.STREAM_CODEC.decode(buffer));
+    }
+
     @Test
     void rejectsOversizedCountsBeforeAllocating() {
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());

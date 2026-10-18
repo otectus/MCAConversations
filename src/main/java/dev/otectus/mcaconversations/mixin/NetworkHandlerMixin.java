@@ -7,6 +7,8 @@ import dev.otectus.mcaconversations.conversation.ConversationHandle;
 import dev.otectus.mcaconversations.conversation.ConversationSessions;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import dev.otectus.mcaconversations.conversation.InteractionBoundary;
+import dev.otectus.mcaconversations.conversation.OfferDispatch;
+import dev.otectus.mcaconversations.conversation.UtteranceStamp;
 import dev.otectus.mcaconversations.network.ChoiceClearS2C;
 import dev.otectus.mcaconversations.network.ChoiceOfferS2C;
 import dev.otectus.mcaconversations.network.ConversationRef;
@@ -48,6 +50,12 @@ import java.util.UUID;
  * {@link InteractionBoundary} mints the discussion's handle there, so the offer it records names a
  * real villager instead of {@code null}.
  *
+ * <p><b>And where lines get their identity</b> (protocol 5). In a managed graphical discussion,
+ * one of MCA's own single-line packets — a page prompt, a native {@code say} — is re-sent carrying
+ * its utterance tag and the untagged original is cancelled; lines this mod says are tagged where they
+ * are written and pass through untouched. Offers are handed to {@link OfferDispatch}, which holds them
+ * to the end of a turn this mod drives so each one names the line it belongs to.
+ *
  * <p>{@code remap = false}: MCA's own method. {@code require = 0} (config default): if MCA reshapes
  * {@code sendToPlayer} the injection silently no-ops, {@code ChatModeSession.redirectionAvailable()}
  * stays false, and chat mode degrades gracefully. Any runtime failure falls through to normal delivery.
@@ -70,6 +78,10 @@ public abstract class NetworkHandlerMixin {
                 if (ChatModeSession.activeFor(player)
                         && ChatModeSession.deliverQuestion(player, McaHandles.questionText(message),
                                 McaHandles.isSilentQuestion(message))) {
+                    ci.cancel();
+                } else if (UtteranceStamp.restampQuestion(player, message)) {
+                    // MCA's own line in a managed discussion, already re-sent carrying its utterance
+                    // tag; the untagged original must not follow it.
                     ci.cancel();
                 }
             } else if (McaHandles.isDialogueResponse(message)) {
@@ -104,7 +116,9 @@ public abstract class NetworkHandlerMixin {
                         ConversationsNetwork.clearOffer(player, ref, offer.revision(),
                                 ChoiceClearS2C.Reason.NONE);
                     } else {
-                        ConversationsNetwork.sendOffer(player, ChoiceOfferS2C.from(ref, offer));
+                        // Held to the end of the turn when this mod is driving one, so the offer can
+                        // name the line the turn ends on (MCA sends the page prompt after this packet).
+                        OfferDispatch.offer(player, ref, offer);
                     }
                 } else {
                     ConversationsNetwork.clearOffer(player, ref, offer.revision(),

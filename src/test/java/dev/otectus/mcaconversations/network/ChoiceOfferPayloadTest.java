@@ -30,14 +30,15 @@ class ChoiceOfferPayloadTest {
     @Test
     void theByteOrderMatchesTheForgeEncoder() {
         // Protocol 4 prefixes the handle: absent session flag | absent villager flag, then
-        // varLong 42 | enum CHAT (varInt ordinal 1) | utf "q" | varInt count 2 | utf "a" | utf "bb"
+        // varLong 42 | enum CHAT (varInt ordinal 1) | utf "q" | varInt count 2 | utf "a" | utf "bb";
+        // protocol 5 appends the line the offer names as varLong(seq + 1), so "none" (-1) is one 0x00.
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
         ChoiceOfferS2C.STREAM_CODEC.encode(buffer, new ChoiceOfferS2C(ConversationRef.NONE, 42L,
                 ConversationSession.Frontend.CHAT, "q", List.of("a", "bb")));
         byte[] actual = new byte[buffer.readableBytes()];
         buffer.getBytes(0, actual);
         assertArrayEquals(
-                new byte[]{0x00, 0x00, 0x2A, 0x01, 0x01, 0x71, 0x02, 0x01, 0x61, 0x02, 0x62, 0x62},
+                new byte[]{0x00, 0x00, 0x2A, 0x01, 0x01, 0x71, 0x02, 0x01, 0x61, 0x02, 0x62, 0x62, 0x00},
                 actual);
 
         ChoiceOfferS2C decoded = ChoiceOfferS2C.STREAM_CODEC.decode(buffer);

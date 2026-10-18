@@ -37,7 +37,20 @@ public record TopicEntry(String id,
                          Optional<KingdomGateSpec> kingdomGate,
                          boolean civicContact,
                          boolean townstead,
-                         boolean repeatable) {
+                         boolean repeatable,
+                         Optional<PlayerRole> playerRole,
+                         Optional<FamilyRequirement> family) {
+
+    /** A topic written from no particular family perspective, as every topic before 1.8.0 was. */
+    public TopicEntry(String id, String entryQuestion, String entryAnswer, DepthClass depth, String returnQuestion,
+                      Set<AgeGroup> ages, Set<StanceFamily> requiredStanceFamilies, boolean chatRequired,
+                      Optional<Arc> arc, Set<String> milestones, Map<String, Set<String>> exclusiveGroups,
+                      Optional<KingdomGateSpec> kingdomGate, boolean civicContact, boolean townstead,
+                      boolean repeatable) {
+        this(id, entryQuestion, entryAnswer, depth, returnQuestion, ages, requiredStanceFamilies, chatRequired,
+                arc, milestones, exclusiveGroups, kingdomGate, civicContact, townstead, repeatable,
+                Optional.empty(), Optional.empty());
+    }
 
     /** A topic that is hidden once discussed to the end, as every topic before the flag existed. */
     public TopicEntry(String id, String entryQuestion, String entryAnswer, DepthClass depth, String returnQuestion,
@@ -182,10 +195,33 @@ public record TopicEntry(String id,
             repeatable = flag.getAsBoolean();
         }
 
+        // What the player is to the speaker (1.8.0, feedback remediation §2.3): the perspective the
+        // topic is written from, enforced by TopicGate against MCA's family tree. Strict, because a
+        // typo here would silently offer a child's lines to a parent.
+        Optional<PlayerRole> playerRole = Optional.empty();
+        if (json.has("player_role")) {
+            JsonElement role = json.get("player_role");
+            if (!role.isJsonPrimitive() || !role.getAsJsonPrimitive().isString()) {
+                throw new IllegalArgumentException("topic '" + id + "' has a non-string \"player_role\"");
+            }
+            playerRole = Optional.of(PlayerRole.byKey(role.getAsString()).orElseThrow(() ->
+                    new IllegalArgumentException("topic '" + id + "' player_role must be one of parent, child, "
+                            + "sibling, spouse (got '" + role.getAsString() + "')")));
+        }
+        // Who the speaker's own family must include, e.g. {"has": "children"} (1.8.0).
+        Optional<FamilyRequirement> family = json.has("family")
+                ? Optional.of(FamilyRequirement.fromJson(json.get("family")))
+                : Optional.empty();
+
         return new TopicEntry(id, entryQuestion, entryAnswer, depth, returnQuestion,
                 Set.copyOf(ages), Set.copyOf(families), chatRequired, arc,
                 Set.copyOf(milestones), Map.copyOf(exclusiveGroups), kingdomGate, civicContact, townstead,
-                repeatable);
+                repeatable, playerRole, family);
+    }
+
+    /** True when the topic says what the player must be to the speaker, or what the speaker must have. */
+    public boolean familyGated() {
+        return playerRole.isPresent() || family.isPresent();
     }
 
     /**

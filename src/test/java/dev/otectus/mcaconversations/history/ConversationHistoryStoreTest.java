@@ -292,6 +292,25 @@ class ConversationHistoryStoreTest {
         }
     }
 
+    /** The history prune paced in batches expires exactly what one unbatched pass does (WP-D2). */
+    @Test
+    void aBatchedPrunePassMatchesTheUnbatchedOne() {
+        ConversationHistoryStore whole = populated(130, 2);
+        ConversationHistoryStore batched = populated(130, 2);
+        int expected = whole.prune(100_000);
+        dev.otectus.mcaconversations.util.ResumableSweep<UUID> sweep = new dev.otectus.mcaconversations.util.ResumableSweep<>();
+        int removed = 0;
+        int calls = 0;
+        do {
+            removed += batched.prune(100_000, sweep.next(batched::villagerIds, 64));
+            calls++;
+        } while (sweep.inPass());
+        assertEquals(3, calls, "130 villagers in batches of 64");
+        assertEquals(expected, removed);
+        assertEquals(whole.recordCount(), batched.recordCount());
+        assertEquals(whole.villagerCount(), batched.villagerCount());
+    }
+
     @Test
     void prunedRecordsAreCountedAndBounded() {
         ConversationHistoryStore store = populated(4, 2);

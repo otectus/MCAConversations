@@ -209,6 +209,9 @@ public final class ConversationsNetwork {
         if (player == null || player.hasDisconnected()) {
             return;
         }
+        // An offer still held for the end of its turn is retired here too, or it would be sent after
+        // the clear that was meant to retire it.
+        dev.otectus.mcaconversations.conversation.OfferDispatch.cancel(player, revision);
         PacketDistributor.sendToPlayer(player, new ChoiceClearS2C(handle, revision, reason));
     }
 
