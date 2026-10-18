@@ -8,7 +8,7 @@ Built against MCA 7.7.0-beta.2; verified on 7.6.20. Architectury is no longer de
 asks for it itself; MCA 7.7 dropped it). Since 1.6.3, the optional MCA: Quests and MCA: Reputation
 integrations compile against those add-ons' compile-only API jars, vendored under `libs/api/` and
 hash-pinned by `gradle/sibling-apis.properties` — MCA: Quests 1.6.4 and MCA: Reputation 0.6.0. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
-Serene Seasons, Townstead `[0.7.5,0.9)`, Ultima Kingdoms `[0.1,)`, MCA: Crime `[0,)` (voice + legal state).
+Serene Seasons, Townstead `[0.7.5,0.9)`, MCA: Kingdoms `[0.1,)` (formerly Ultima Kingdoms), MCA: Crime `[0,)` (voice + legal state).
 
 ## [1.8.0] - unreleased
 
@@ -98,6 +98,22 @@ integration and the family-pass changes of 2026-09-27 and -28 that had never bee
   literals; they are now `commands.mcaconversations.chat.*` keys in `en_us` and `pt_br`.
 - The client no longer quotes the previous server's discussion in its presence heartbeat after moving
   to another server; the handle is resynchronised with the connection before every use.
+
+### Fixed — MCA: Kingdoms rename (2026-10-01 review)
+
+- **Kingdom gates and guild contacts work with the renamed mod.** Ultima Kingdoms became MCA: Kingdoms
+  (mod id `mcakingdoms`, API package `dev.otectus.mcakingdoms.api`, facade `KingdomsFactionsApi`), and
+  `KingdomBridge` and `CivicBridge` still looked for the old names: every `kingdom_gate` fell back to its
+  `when_unknown` policy, `civic_contact` topics were hidden, and the guild-contact scenes refused to run
+  because their `integrations` named `ultima_kingdoms`. Both bridges now resolve every class through
+  `compat/KingdomsIdentity` against the installed generation, the current one first and, for one release,
+  the old jar. The scenes name `mcakingdoms`, and an authored integration naming either id counts as present
+  under the other (scenes, work episodes and culture tokens). `mods.toml` declares `mcakingdoms` and keeps
+  `ultima_kingdoms` for one release.
+- The generated content was rebuilt: `scene_generated_mcakingdoms.json` replaces the stale
+  `scene_generated_ultima_kingdoms.json` intents and beats, which the compiler does not delete on its own.
+- Tests: `NoUltimaStaticLinkTest` is `NoKingdomsStaticLinkTest` and refuses links to either package; the new
+  `KingdomsIdentityTest` pins both name tables; Kingdoms fixtures use the `mcakingdoms` namespace.
 
 ### Changed
 

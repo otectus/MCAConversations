@@ -162,6 +162,11 @@ that the generators never read or write (confirmed against `ContentCompiler`'s o
 comment and by grepping `src/test/java/.../authoring/` for `conversations.cat`, which finds no
 generator reference to those files, only test fixtures that use the ids).
 
+- MCA: Kingdoms is recognised as `mcakingdoms` and, for one release, as its pre-rename `ultima_kingdoms`
+  (`compat/KingdomsIdentity`, the legacy `mods.toml` entry). Remove the legacy generation and entry together in
+  the release after next. The content compiler never deletes a per-integration generated file whose owner
+  disappeared; remove stale `scene_generated_<owner>.json` files by hand after renaming an integration.
+
 ## Known issues
 
 - Capitals chronicle text quoted in gossip renders in the server's locale, not the player's.

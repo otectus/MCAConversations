@@ -17,8 +17,8 @@ class KingdomGateSpecTest {
     void inlineGateAndEveryStandingScopeRoundTrip() {
         for (String scope : List.of("local", "faction", "effective", "either", "both")) {
             JsonObject json = JsonParser.parseString("""
-                    {"subject":"giver_origin","include":["ultima_kingdoms:madera"],
-                     "exclude":["ultima_kingdoms:yew"],"when_unknown":"allow",
+                    {"subject":"giver_origin","include":["mcakingdoms:madera"],
+                     "exclude":["mcakingdoms:yew"],"when_unknown":"allow",
                      "standing":{"scope":"%s","min":-25,"max":100}}
                     """.formatted(scope)).getAsJsonObject();
             KingdomGateSpec parsed = KingdomGateSpec.fromJson(json);
@@ -28,7 +28,7 @@ class KingdomGateSpecTest {
     }
 
     @Test
-    void absentUltimaOnlyHonorsExplicitInlineUnknownAllow() {
+    void absentKingdomsOnlyHonorsExplicitInlineUnknownAllow() {
         assertFalse(KingdomGateSpec.fromJson(JsonParser.parseString("{}"))
                 .allowsWhenUnavailable());
         assertTrue(KingdomGateSpec.fromJson(JsonParser.parseString("{\"when_unknown\":\"allow\"}"))

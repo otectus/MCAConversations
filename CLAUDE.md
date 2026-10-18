@@ -61,7 +61,7 @@ mixin/, mixin/client/  - mixin targets, split to match the mixins.json lists
 ## Family compatibility
 
 MCA: Reputation, MCA: Quests, MCA: Crime, MCA: Conversations and MCA: Mob Compatibility are one family of
-MCA Reborn add-ons, and Ultima Kingdoms consumes their APIs. The rules below hold in every repository;
+MCA Reborn add-ons, and MCA: Kingdoms (formerly Ultima Kingdoms) consumes their APIs. The rules below hold in every repository;
 the verified companion tuple per release is kept once, in `MCAReputation/docs/FAMILY_COMPATIBILITY.md`.
 
 - **MCA Reborn is the only mandatory dependency** (`[7.6,8)`), bound by name across its four package
@@ -78,8 +78,10 @@ the verified companion tuple per release is kept once, in `MCAReputation/docs/FA
 - **One MCA probe fleet** in every `gradle.properties`: `7.6.20`, `7.6.26`, `7.7.0-beta.2`,
   `7.7.1-alpha.2`, `7.7.1-beta.1`, `7.7.1-beta.2` (all `+1.20.1`), replayed by the binding probe test.
 - **Load order runs from provider to consumer**: MCA, then MCA: Reputation, then MCA: Quests, MCA:
-  Conversations, MCA: Crime and MCA: Mob Compatibility, then Ultima Kingdoms. Declare a companion you
+  Conversations, MCA: Crime and MCA: Mob Compatibility, then MCA: Kingdoms. Declare a companion you
   read at setup `AFTER` and one that consumes you `BEFORE`; two mods that each declare the other `AFTER`
   are a cycle Forge refuses to start with (MCA: Crime and Ultima Kingdoms were, until 2026-09-28).
+  Kingdoms' mod id is `mcakingdoms` since its 0.1.1 rename; companions declare it and, for one release,
+  the old `ultima_kingdoms` id too (`compat/KingdomsIdentity` here).
 - **MCA: Reputation's capability strings are drift-checked** by every consumer at startup, and the
   `1.21.1 Ports/` NeoForge trees mirror every change made here.

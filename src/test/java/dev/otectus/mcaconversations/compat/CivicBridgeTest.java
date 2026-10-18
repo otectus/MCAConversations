@@ -35,12 +35,12 @@ class CivicBridgeTest {
     @Test
     void publicContextIsFlattenedAndBounded() throws Throwable {
         CivicBridge.Contact context = CivicBridge.decodeContextForTest(new FakeContext(
-                NPC, "ultima_kingdoms:civic/lamplighters", "civic.organization/lamplighters",
+                NPC, "mcakingdoms:civic/lamplighters", "civic.organization/lamplighters",
                 "guild_contact", true, true, false,
                 List.of("civic.qualified"), List.of("civic.rank_required"), 14L, 9L));
 
         assertEquals(NPC, context.npc());
-        assertEquals("ultima_kingdoms:civic/lamplighters", context.organization().toString());
+        assertEquals("mcakingdoms:civic/lamplighters", context.organization().toString());
         assertEquals(List.of("civic.rank_required"), context.commissionReasons());
         assertThrows(UnsupportedOperationException.class,
                 () -> context.reasons().add("civic.not_allowed"));
@@ -52,7 +52,7 @@ class CivicBridgeTest {
                 new FakeContext(NPC, "NOT A RESOURCE", "civic.name", "contact",
                         true, true, true, List.of(), List.of(), 1L, 1L)));
         assertThrows(IllegalArgumentException.class, () -> CivicBridge.decodeContextForTest(
-                new FakeContext(NPC, "ultima_kingdoms:guild", "civic.name", "contact",
+                new FakeContext(NPC, "mcakingdoms:guild", "civic.name", "contact",
                         true, true, true, List.of("x", "x", "x", "x", "x", "x", "x", "x", "x"),
                         List.of(), 1L, 1L)));
     }
@@ -63,10 +63,10 @@ class CivicBridgeTest {
                 CivicBridge.decodeReplyForTest(new FakeResult()));
     }
 
-    /** Ultima's reason keys only exist while Ultima is installed; a request that never reached it
+    /** Kingdoms' reason keys only exist while Kingdoms is installed; a request that never reached it
      *  must answer with a key this mod ships in every maintained locale, never a raw key. */
     @Test
-    void aRequestThatNeverReachesUltimaUsesAKeyThisModTranslates() throws Exception {
+    void aRequestThatNeverReachesKingdomsUsesAKeyThisModTranslates() throws Exception {
         CivicBridge.resetForTest();
         CivicBridge.Reply reply = CivicBridge.request(CivicBridge.Action.INTRODUCTION, null, null);
 

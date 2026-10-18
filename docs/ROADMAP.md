@@ -24,7 +24,7 @@ Last reconciled against the code: 2026-09-22, version 1.8.0 on `feature/social-1
 
 Protocol 4 since 1.7.1: a 1.7.0 client and a 1.7.1+ server refuse each other, so 1.7.1–1.7.3 publish
 **on both loaders together**. A build of the 1.7.3 source (without its three review fixes) circulates
-inside Ultima Kingdoms' integration packs labelled 1.7.2 (sha256 `6d0714…`); replace it with 1.7.3.
+inside Ultima Kingdoms' (now MCA: Kingdoms') integration packs labelled 1.7.2 (sha256 `6d0714…`); replace it with 1.7.3.
 
 Fabric / Minecraft 26.2 (`/home/otectus/Projects/Fabric/MCAConversations_26.2`) is at 1.6.4 and lacks
 1.7.0–1.7.3. It is outside the current scope and listed here only so nobody assumes parity.
@@ -35,7 +35,7 @@ Fabric / Minecraft 26.2 (`/home/otectus/Projects/Fabric/MCAConversations_26.2`) 
 
 No release since 1.0.0's startup matrix has been exercised in a production-mapped client. Dedicated-server
 *startup* of 1.8.0 was observed on 2026-09-30 (§5); no conversation has been played on one. MCA does not
-load under a ForgeGradle dev runtime, so `runClient` is not evidence. Every row below is **not run**. A usable harness exists in the sibling Ultima Kingdoms repository
+load under a ForgeGradle dev runtime, so `runClient` is not evidence. Every row below is **not run**. A usable harness exists in the sibling MCA: Kingdoms repository
 (`tools/test/integration_runtime.py`, which already launches a production-style Forge client and
 server with this mod); adopting it is the first step of the campaign.
 
@@ -92,8 +92,11 @@ integrated and dedicated, on both loaders.
 - A `kingdom_gate` topic is absent for a villager outside the kingdom in the GUI, a crafted packet,
   a numbered reply, typed chat and the dynamic hub; present inside it.
 - `guild_contact` appears only for an appointed contact; an introduction and a commissions request
-  relay Ultima's reason to the requester alone; no destination reaches chat or bystanders.
-- Ultima absent: no gated topic, no error, `mcaconversations.civic.unavailable` is translated.
+  relay Kingdoms' reason to the requester alone; no destination reaches chat or bystanders.
+- Kingdoms absent: no gated topic, no error, `mcaconversations.civic.unavailable` is translated.
+- Kingdoms' packaged `civic-loop` acceptance (2026-10-01) already exercises the civic topic with an actual
+  nearby guild contact and rejects a remote speaker on a dedicated server; a client-side play-through is
+  still not run.
 
 ### 1.7.2 — MCA: Reputation 0.6.0
 - A villager raises `known_for_courage` / `known_for_violence` only when they know the deed.
@@ -207,13 +210,15 @@ documented as needed for reactions and is not declared in `mods.toml`.
   `known_for_violence`); neutral-stranger, recognized-stranger, reliable and mixed are missing.
 - `storyRevision` is not carried into the gossip told-memory.
 
-### 3.4 Ultima Kingdoms follow-ups
+### 3.4 MCA: Kingdoms follow-ups
 
 - The gate infrastructure has one authored use (`guild_contact`); no topic ships a `kingdom_gate`.
-- Ultima's own roadmap (`UltimaKingdoms/docs/Ultima-Factions-Integration-Audit-and-Roadmap.md`, S02)
+- Kingdoms' own roadmap (`MCAKingdoms/docs/MCAKingdoms-Factions-Integration-Audit-and-Roadmap.md`, S02)
   proposes a faction context query — public allegiance, standing, institution role, treaty status,
   news this speaker knows — through the ordinary context pipeline.
-- Ultima Kingdoms has no NeoForge 1.21.1 build; the port's bridge is inert.
+- MCA: Kingdoms (Ultima Kingdoms until its 0.1.1 rename) has no NeoForge 1.21.1 build; the port's bridge is inert.
+- Drop the pre-rename `ultima_kingdoms` generation from `compat/KingdomsIdentity` and its `mods.toml` entry in
+  the release after next.
 
 ### 3.5 Conversation-systems plan residue
 

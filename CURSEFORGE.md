@@ -35,7 +35,7 @@ wave, a clap or a tear. Without Townstead none of this appears.
 
 ## Since 1.5.1, in brief
 
-- **1.7.3 — kingdoms and guilds.** With Ultima Kingdoms, topics can belong to a kingdom, and guild
+- **1.7.3 — kingdoms and guilds.** With MCA: Kingdoms (then Ultima Kingdoms), topics can belong to a kingdom, and guild
   contacts relay requests to their guild.
 
 - **1.7.2 — known for something.** With MCA: Reputation 0.6.0, a villager who has heard what you did
@@ -289,7 +289,7 @@ about our future? Is anything weighing on you?*
 | **Optional** | **MCA: Quests** `[0.8,)` — quest-aware conversation lines |
 | **Optional** | **MCA: Reputation** `[0.2,)` — public standing, and villagers telling each other what you've done |
 | **Optional** | **MCA Capitals** `[1.3,)` — capitals talk about their sovereign, heirs, houses and court |
-| **Optional** | **Ultima Kingdoms** `[0.1,)` — kingdom-specific topics and guild contacts |
+| **Optional** | **MCA: Kingdoms** `[0.1,)` (formerly Ultima Kingdoms) — kingdom-specific topics and guild contacts |
 | **Optional** | **Townstead** `[0.7.5,0.9)` — the *Life here* topics, needs, schedules, trades, calendar and village spirit in conversation, reactions (with **Emotecraft**), gossip, and numbered choices in its RPG dialogue screen |
 | **Optional** | **Serene Seasons** — villagers track the real season (calendar fallback otherwise) |
 

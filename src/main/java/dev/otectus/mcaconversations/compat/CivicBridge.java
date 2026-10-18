@@ -4,7 +4,6 @@ import dev.otectus.mcaconversations.McaConversations;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.fml.ModList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/** Reflection-only access to Ultima Kingdoms' requester-scoped civic contact API. */
+/** Reflection-only access to MCA: Kingdoms' requester-scoped civic contact API. */
 public final class CivicBridge {
 
-    private static final String MOD_ID = "ultima_kingdoms";
-    private static final String API = "com.ultimakingdoms.api.civic.CivicNetworkApi";
-    /** Conversations-owned reason for a request that never reached Ultima. */
+    /** Relative to the installed Kingdoms generation's API package (see {@link KingdomsIdentity}). */
+    private static final String API = "civic.CivicNetworkApi";
+    /** Conversations-owned reason for a request that never reached Kingdoms. */
     static final String UNAVAILABLE_KEY = "mcaconversations.civic.unavailable";
     private static volatile Access binding;
     private static volatile boolean attempted;
@@ -50,7 +49,7 @@ public final class CivicBridge {
         }
     }
 
-    /** Requester-only result. Settlement identity deliberately remains inside Ultima's own response. */
+    /** Requester-only result. Settlement identity deliberately remains inside Kingdoms' own response. */
     public record Reply(boolean success, String reason) {
     }
 
@@ -84,7 +83,7 @@ public final class CivicBridge {
     public static Reply request(Action action, ServerPlayer player, Entity speaker) {
         Access live = access();
         if (live == null || action == null || player == null || speaker == null) {
-            // Ultima's own reason keys only exist while Ultima is installed; this one is ours, so a
+            // Kingdoms' own reason keys only exist while Kingdoms is installed; this one is ours, so a
             // pack that authors the action on an ungated route never shows the player a raw key.
             return new Reply(false, UNAVAILABLE_KEY);
         }
@@ -122,7 +121,7 @@ public final class CivicBridge {
     private static Reply decodeReply(Object raw) throws Throwable {
         boolean success = (boolean) accessor(raw, "success").invoke(raw);
         String reason = boundedKey((String) accessor(raw, "reason").invoke(raw), "action reason");
-        // Deliberately do not invoke settlement(): destinations remain inside Ultima's requester-only
+        // Deliberately do not invoke settlement(): destinations remain inside Kingdoms' requester-only
         // presentation and cannot leak into MCA dialogue state, chat, or generated text.
         return new Reply(success, reason);
     }
@@ -182,12 +181,8 @@ public final class CivicBridge {
         if (testAccess != null) return testAccess;
         if (binding != null) return binding;
         if (attempted) return null;
-        try {
-            if (!ModList.get().isLoaded(MOD_ID)) {
-                attempted = true;
-                return null;
-            }
-        } catch (Throwable unavailableForge) {
+        Optional<KingdomsIdentity.Generation> installed = KingdomsIdentity.installed();
+        if (installed.isEmpty()) {
             attempted = true;
             return null;
         }
@@ -196,7 +191,7 @@ public final class CivicBridge {
             if (attempted) return null;
             attempted = true;
             try {
-                Class<?> api = Class.forName(API, false, CivicBridge.class.getClassLoader());
+                Class<?> api = Class.forName(installed.get().className(API), false, CivicBridge.class.getClassLoader());
                 Method context = api.getMethod("speakerContext", ServerPlayer.class, Entity.class);
                 Method introduction = api.getMethod("requestIntroduction", ServerPlayer.class, Entity.class);
                 Method commissions = api.getMethod("requestCommissions", ServerPlayer.class, Entity.class);
@@ -222,7 +217,7 @@ public final class CivicBridge {
         failureReported = true;
         Throwable cause = failure instanceof InvocationTargetException invocation
                 && invocation.getCause() != null ? invocation.getCause() : failure;
-        McaConversations.LOGGER.warn("Ultima civic context/action bridge failed closed", cause);
+        McaConversations.LOGGER.warn("MCA: Kingdoms civic context/action bridge failed closed", cause);
     }
 
     private record ReflectiveAccess(Method context, Method introduction, Method commissions) implements Access {

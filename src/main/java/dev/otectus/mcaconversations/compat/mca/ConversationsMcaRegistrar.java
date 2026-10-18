@@ -367,7 +367,7 @@ public final class ConversationsMcaRegistrar {
                 });
 
         // Branch-level kingdom/faction selection. Parsing is Conversations-owned so a malformed
-        // optional integration value is contained even when Ultima is absent; evaluation is
+        // optional integration value is contained even when Kingdoms is absent; evaluation is
         // reflection-only and fails closed for every explicit restriction.
         McaHandles.registerCondition("conversations_kingdom",
                 (json, name) -> SafeParse.orNull("conversations_kingdom", json,
@@ -731,7 +731,7 @@ public final class ConversationsMcaRegistrar {
                     }
                 });
 
-        // Revalidates against Ultima's server-owned policy with the actual requester and speaker.
+        // Revalidates against Kingdoms' server-owned policy with the actual requester and speaker.
         // The provider owns any destination message; this adapter returns only its requester-scoped
         // reason and never serializes the hidden settlement from CivicActionResult.
         McaHandles.registerAction("conversations_civic",

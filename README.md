@@ -34,13 +34,13 @@ Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Rebo
 
 ## Features (1.7.3)
 
-- **Topics that belong to a kingdom.** With Ultima Kingdoms installed, a topic can be offered only to
+- **Topics that belong to a kingdom.** With MCA: Kingdoms installed, a topic can be offered only to
   villagers of the right kingdom, judged by where they live or where they came from, and only while
   the player stands well enough with its faction. The restriction holds on every way into a
   conversation — the dialogue screen, a numbered reply, typed chat, the dynamic hub, a crafted packet —
-  and a gate Ultima cannot answer hides what it guards.
+  and a gate Kingdoms cannot answer hides what it guards.
 - **Guild contacts.** A villager appointed to speak for a guild can explain what the guild does and
-  put in a request for an introduction or for its commissions. Ultima decides; the villager relays
+  put in a request for an introduction or for its commissions. Kingdoms decides; the villager relays
   its answer to you alone and never repeats where an introduction leads.
 
 ## Features (1.7.2)
@@ -297,7 +297,7 @@ preserving MCA's voice-pack and online-TTS restrictions untouched.
 
 Optional: **MCA: Quests** (quest-aware lines), **MCA: Reputation** (public standing, villagers
 telling each other what you have done, and — from 0.6.0 — remarking on what *they* know you for), **MCA: Capitals** `[1.3,)` (villages that are capitals speak
-about their sovereign, heirs and court; court changes seed village gossip), **Ultima Kingdoms** `[0.1,)`
+about their sovereign, heirs and court; court changes seed village gossip), **MCA: Kingdoms** `[0.1,)`, formerly Ultima Kingdoms
 (topics offered only in the right kingdom, and guild contacts who relay requests to their guild),
 **Townstead** `[0.7.5,0.9)` (needs, schedules, trades, life stages, roots, buildings, village
 spirit and calendar become conversation state, with a *Life here* topic category, reactions,
