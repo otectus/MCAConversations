@@ -1,0 +1,92 @@
+{
+  "answers": [
+    {
+      "name": "offer_help",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.grown.help.to.checkin_child.grown.close"
+            },
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.grown.help",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.grown.help",
+              "deltas": {
+                "trust": 3,
+                "warmth": 2
+              }
+            },
+            "next": "conversations.topic.checkin_child.grown.close",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.grown.help"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "proud",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.grown.proud.to.checkin_child.grown.close"
+            },
+            "conversations_progress_apply": {
+              "arc": "family",
+              "op": "advance",
+              "to": 1
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.grown.proud",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.grown.proud",
+              "deltas": {
+                "warmth": 5
+              }
+            },
+            "next": "conversations.topic.checkin_child.grown.close",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.grown.proud"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 1,
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.leave.grown"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

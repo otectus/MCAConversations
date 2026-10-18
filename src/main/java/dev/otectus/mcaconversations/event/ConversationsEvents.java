@@ -43,6 +43,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import dev.otectus.mcaconversations.debug.PerfCounters;
+import dev.otectus.mcaconversations.util.ResumableSweep;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -55,9 +57,6 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = McaConversations.MOD_ID)
 public final class ConversationsEvents {
-
-    /** Greet-on-approach proximity-scan cadence (2 s) — cheap AABB queries, not worth a config knob. */
-    private static final int GREET_SCAN_INTERVAL_TICKS = 40;
 
     /** Chat mode as last seen by the server tick, so a switch-off is acted on exactly once. */
     private static volatile boolean chatModeWasEnabled = true;
@@ -119,9 +118,12 @@ public final class ConversationsEvents {
         dev.otectus.mcaconversations.compat.NativeInteractionClose.shutdown();
         VillagerAttention.reset();
         GreetOnApproach.reset();
+        resetMaintenance();
+        PerfCounters.SERVER.reset();
         dev.otectus.mcaconversations.hub.DynamicHub.reset();
         CapitalsBridge.Holder.clearCaches();
         dev.otectus.mcaconversations.compat.Townstead.clearCaches();
+        dev.otectus.mcaconversations.chat.TownsteadChatPolicy.Facts.resetHolds();
         dev.otectus.mcaconversations.gift.GiftNeedObservation.reset();
         // The bundle holds MCA's parsed Question objects strongly, so it has to be dropped with the
         // rest: a retained executable table belongs to one server lifecycle and must never be
@@ -362,58 +364,116 @@ public final class ConversationsEvents {
         if (event.phase != TickEvent.Phase.END || !McaBridge.isAvailable()) {
             return;
         }
-        // Deferred chat-mode replies are due-checked every tick (deadline queue, not the modulo cadence).
-        long gameTime = event.getServer().overworld().getGameTime();
-        ChatModeScheduler.drain(gameTime);
+        PerfCounters perf = PerfCounters.SERVER;
+        net.minecraft.server.MinecraftServer server = event.getServer();
+        try {
+            // Deferred chat-mode replies are due-checked every tick (deadline queue, not the modulo cadence).
+            long gameTime = server.overworld().getGameTime();
+            long tick = server.getTickCount();
+            long started = PerfCounters.start();
+            ChatModeScheduler.drain(gameTime);
+            perf.end(PerfCounters.Section.CHAT_DRAIN, started);
 
-        // Villager attention (typing awareness + conversation presence) is applied every tick.
-        VillagerAttention.tick(event.getServer(), gameTime);
-        // A config reload can switch chat mode off under live chat conversations; end them once,
-        // on the tick the change is first seen, rather than leaving their offers to be refused.
-        boolean chatEnabled = McaConversationsConfig.COMMON.enableChatMode.get();
-        if (chatModeWasEnabled && !chatEnabled) {
-            ConversationSessions.closeChatSessions();
-        }
-        chatModeWasEnabled = chatEnabled;
+            // Villager attention (typing awareness + conversation presence) is applied every tick.
+            started = PerfCounters.start();
+            VillagerAttention.tick(server, gameTime);
+            perf.end(PerfCounters.Section.ATTENTION, started);
+            // A config reload can switch chat mode off under live chat conversations; end them once,
+            // on the tick the change is first seen, rather than leaving their offers to be refused.
+            boolean chatEnabled = McaConversationsConfig.COMMON.enableChatMode.get();
+            if (chatModeWasEnabled && !chatEnabled) {
+                ConversationSessions.closeChatSessions();
+            }
+            chatModeWasEnabled = chatEnabled;
 
-        // Presence leases and the continued-distance policy, driven from the ownership index alone:
-        // one map of live discussions, never a scan of the world's entities (spec §4.3, §5.4).
-        tickDiscussions(event.getServer(), gameTime);
+            // Presence leases and the continued-distance policy, driven from the ownership index alone:
+            // one map of live discussions, never a scan of the world's entities (spec §4.3, §5.4).
+            started = PerfCounters.start();
+            tickDiscussions(server, gameTime);
+            perf.end(PerfCounters.Section.DISCUSSIONS, started);
 
-        // The approach scan: one light cadence carrying both things a villager may say to somebody
-        // walking past. Greeting and initiative are separately switchable, so the scan runs when
-        // either is on and each half checks its own switch — a server that turned greetings off has
-        // not thereby decided that a due promise should go unmentioned.
-        if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0
-                && McaConversationsConfig.COMMON.enableChatMode.get()
-                && (McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()
-                        || McaConversationsConfig.maxInitiativesPerVillagerPlayerDay() > 0)) {
-            GreetOnApproach.scan(event.getServer());
-        }
-        // Typed-chat conversations Townstead was told about, closed once their sticky window lapses
-        // without a farewell (an unanswered greeting, a player who simply walked off).
-        if (event.getServer().getTickCount() % GREET_SCAN_INTERVAL_TICKS == 0) {
-            dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.sweep((playerId, villagerId) ->
-                    dev.otectus.mcaconversations.chat.ChatModeDispatcher.chatConversationLapsed(playerId,
-                            villagerId, gameTime));
-        }
+            // The approach scan: one light cadence carrying both things a villager may say to somebody
+            // walking past. Greeting and initiative are separately switchable, so the scan runs when
+            // either is on and each half checks its own switch — a server that turned greetings off has
+            // not thereby decided that a due promise should go unmentioned. Each player keeps the same
+            // 40-tick period, but the players are spread across those 40 ticks (MaintenanceSchedule).
+            if (McaConversationsConfig.COMMON.enableChatMode.get()
+                    && (McaConversationsConfig.COMMON.chatModeGreetOnApproach.get()
+                            || McaConversationsConfig.maxInitiativesPerVillagerPlayerDay() > 0)) {
+                started = PerfCounters.start();
+                GreetOnApproach.scan(server, player -> MaintenanceSchedule.playerDue(player, tick));
+                perf.end(PerfCounters.Section.GREET_SCAN, started);
+            }
+            // Typed-chat conversations Townstead was told about, closed once their sticky window lapses
+            // without a farewell (an unanswered greeting, a player who simply walked off).
+            started = PerfCounters.start();
+            dev.otectus.mcaconversations.compat.TownsteadDialogueTracking.sweep(
+                    player -> MaintenanceSchedule.playerDue(player, tick),
+                    (playerId, villagerId) -> dev.otectus.mcaconversations.chat.ChatModeDispatcher
+                            .chatConversationLapsed(playerId, villagerId, gameTime));
+            perf.end(PerfCounters.Section.TOWNSTEAD_SWEEP, started);
 
-        // Court news rides its own cadence, deliberately not the gossip sweep's: a capital's chronicle
-        // changes far less often than a village's marriages do, and the poll reads an optional mod.
-        int courtInterval = Math.max(1, McaConversationsConfig.COMMON.capitalNewsPollSeconds.get() * 20);
-        if (event.getServer().getTickCount() % courtInterval == 0) {
-            CourtNewsPoller.tick(event.getServer());
-        }
+            // Court news rides its own cadence, deliberately not the gossip sweep's: a capital's chronicle
+            // changes far less often than a village's marriages do, and the poll reads an optional mod.
+            // Offset from the gossip phase, so the two never share a tick at their common default.
+            int courtInterval = Math.max(1, McaConversationsConfig.COMMON.capitalNewsPollSeconds.get() * 20);
+            if (MaintenanceSchedule.courtDue(tick, courtInterval)) {
+                started = PerfCounters.start();
+                CourtNewsPoller.tick(server);
+                perf.end(PerfCounters.Section.COURT_POLL, started);
+            }
 
-        int interval = McaConversationsConfig.COMMON.gossipScanIntervalTicks.get();
-        if (event.getServer().getTickCount() % interval == 0) {
-            GossipDetectors.scan(event.getServer());
-            pruneStaleDispositions(event.getServer());
-            pruneStaleProgress(event.getServer());
-            pruneLivingHistory(event.getServer());
-            spreadVillageTalk(event.getServer());
-            ConversationSessions.sweep(gameTime);
+            int interval = McaConversationsConfig.COMMON.gossipScanIntervalTicks.get();
+            if (MaintenanceSchedule.due(MaintenanceSchedule.Job.GOSSIP, tick, interval)) {
+                started = PerfCounters.start();
+                GossipDetectors.scan(server);
+                perf.end(PerfCounters.Section.GOSSIP_SCAN, started);
+            }
+            if (MaintenanceSchedule.due(MaintenanceSchedule.Job.SESSION_SWEEP, tick, interval)) {
+                started = PerfCounters.start();
+                ConversationSessions.sweep(gameTime);
+                perf.end(PerfCounters.Section.SESSION_SWEEP, started);
+            }
+            if (MaintenanceSchedule.due(MaintenanceSchedule.Job.RUMOURS, tick, interval)) {
+                started = PerfCounters.start();
+                spreadVillageTalk(server);
+                perf.end(PerfCounters.Section.RUMOURS, started);
+            }
+            if (MaintenanceSchedule.due(MaintenanceSchedule.Job.STORE_PRUNE, tick, interval)) {
+                started = PerfCounters.start();
+                pruneStaleDispositions(server, gameTime);
+                perf.end(PerfCounters.Section.PRUNE_DISPOSITION, started);
+                started = PerfCounters.start();
+                pruneStaleProgress(server, gameTime);
+                perf.end(PerfCounters.Section.PRUNE_PROGRESS, started);
+            }
+            if (MaintenanceSchedule.due(MaintenanceSchedule.Job.HISTORY_PRUNE, tick, interval)) {
+                started = PerfCounters.start();
+                pruneLivingHistory(server);
+                perf.end(PerfCounters.Section.PRUNE_HISTORY, started);
+            }
+        } finally {
+            perf.endTick();
         }
+    }
+
+    /** One resumable pass per store; each prune call examines one bounded batch (WP-D2). */
+    private static final ResumableSweep<java.util.UUID> DISPOSITION_PRUNE = new ResumableSweep<>();
+    private static final ResumableSweep<java.util.UUID> PROGRESS_PRUNE = new ResumableSweep<>();
+    private static final ResumableSweep<java.util.UUID> HISTORY_PRUNE = new ResumableSweep<>();
+    private static long dispositionPassStartedAt = Long.MIN_VALUE;
+    private static long progressPassStartedAt = Long.MIN_VALUE;
+    private static long historyPassDay = Long.MIN_VALUE;
+
+    /** Forgets every pass in progress: a new world has different stores. */
+    static void resetMaintenance() {
+        DISPOSITION_PRUNE.reset();
+        PROGRESS_PRUNE.reset();
+        HISTORY_PRUNE.reset();
+        dispositionPassStartedAt = Long.MIN_VALUE;
+        progressPassStartedAt = Long.MIN_VALUE;
+        historyPassDay = Long.MIN_VALUE;
+        GossipDetectors.reset();
     }
 
     /**
@@ -542,47 +602,83 @@ public final class ConversationsEvents {
         return false;
     }
 
-    /** Age-based disposition pruning, riding the gossip scan cadence (no extra tick work). */
-    private static void pruneStaleDispositions(net.minecraft.server.MinecraftServer server) {
+    /**
+     * Age-based disposition pruning, one bounded batch per call. A new pass starts at most once per
+     * in-game hour; a pass in progress continues at every store phase until it has visited every
+     * villager it started with (WP-D2).
+     */
+    private static void pruneStaleDispositions(net.minecraft.server.MinecraftServer server, long gameTime) {
         int staleDays = McaConversationsConfig.dispositionStaleDays();
         if (staleDays <= 0 || !McaConversationsConfig.COMMON.enableDispositions.get()) {
             return;
         }
         try {
-            DispositionSavedData.get(server).prune(server.overworld().getGameTime(), staleDays * 24_000L);
+            if (!DISPOSITION_PRUNE.inPass()) {
+                if (!MaintenanceSchedule.storePassMayStart(gameTime, dispositionPassStartedAt)) {
+                    return;
+                }
+                dispositionPassStartedAt = gameTime;
+            }
+            DispositionSavedData data = DispositionSavedData.get(server);
+            java.util.List<java.util.UUID> batch = DISPOSITION_PRUNE.next(data::villagerIds,
+                    MaintenanceSchedule.STORE_PRUNE_BATCH);
+            PerfCounters.SERVER.count(PerfCounters.Count.PRUNE_VILLAGERS_EXAMINED, batch.size());
+            data.pruneVillagers(batch, gameTime, staleDays * 24_000L);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("disposition prune failed; ignoring", t);
         }
     }
 
     /**
-     * Age-based progress pruning, riding the same low-frequency cadence as the gossip scan. Uses the
-     * disposition stale-days knob rather than adding a second one: both are "this pair has not spoken
-     * in a very long time" and an operator should not have to reason about two numbers.
+     * Age-based progress pruning, paced like the disposition prune. Uses the disposition stale-days
+     * knob rather than adding a second one: both are "this pair has not spoken in a very long time"
+     * and an operator should not have to reason about two numbers.
      */
-    private static void pruneStaleProgress(net.minecraft.server.MinecraftServer server) {
+    private static void pruneStaleProgress(net.minecraft.server.MinecraftServer server, long gameTime) {
         int staleDays = McaConversationsConfig.dispositionStaleDays();
         if (staleDays <= 0) {
             return;
         }
         try {
-            ProgressSavedData.get(server).prune(server.overworld().getGameTime(), staleDays * 24_000L);
+            if (!PROGRESS_PRUNE.inPass()) {
+                if (!MaintenanceSchedule.storePassMayStart(gameTime, progressPassStartedAt)) {
+                    return;
+                }
+                progressPassStartedAt = gameTime;
+            }
+            ProgressSavedData data = ProgressSavedData.get(server);
+            java.util.List<java.util.UUID> batch = PROGRESS_PRUNE.next(data::villagerIds,
+                    MaintenanceSchedule.STORE_PRUNE_BATCH);
+            PerfCounters.SERVER.count(PerfCounters.Count.PRUNE_VILLAGERS_EXAMINED, batch.size());
+            data.pruneVillagers(batch, gameTime, staleDays * 24_000L);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("progress prune failed; ignoring", t);
         }
     }
 
     /**
-     * Expiry-based history pruning, riding the same low-frequency cadence as everything else here.
+     * Expiry-based history pruning, one bounded batch per call.
      *
-     * <p>Deliberately not a tick job of its own. §21.6 forbids a per-tick scan of history, and the
-     * gossip sweep already runs at exactly the frequency this needs: expired episodes, lapsed threads
-     * and settled promises are not urgent, and a pass every few thousand ticks is plenty.
+     * <p>Deliberately not a tick job of its own. §21.6 forbids a per-tick scan of history, and every
+     * expiry rule it applies is day-granular, so a pass starts only when the in-game day has changed —
+     * it used to run forty times a day over the whole store — and continues in batches until it has
+     * visited every villager it started with. Durable history is never discarded by the pacing; what
+     * expires is exactly what expired before.
      */
     private static void pruneLivingHistory(net.minecraft.server.MinecraftServer server) {
         try {
             long today = server.overworld().getDayTime() / 24000L;
-            dev.otectus.mcaconversations.history.History.prune(server, today);
+            if (!HISTORY_PRUNE.inPass()) {
+                if (today == historyPassDay) {
+                    return;
+                }
+                historyPassDay = today;
+            }
+            java.util.List<java.util.UUID> batch = HISTORY_PRUNE.next(
+                    () -> dev.otectus.mcaconversations.history.History.villagerIds(server),
+                    MaintenanceSchedule.HISTORY_PRUNE_BATCH);
+            PerfCounters.SERVER.count(PerfCounters.Count.HISTORY_VILLAGERS_EXAMINED, batch.size());
+            dev.otectus.mcaconversations.history.History.prune(server, today, batch);
         } catch (Throwable t) {
             McaConversations.LOGGER.debug("living-history prune failed; ignoring", t);
         }

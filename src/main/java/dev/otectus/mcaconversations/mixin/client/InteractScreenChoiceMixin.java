@@ -7,7 +7,10 @@ import dev.otectus.mcaconversations.client.dialogue.ClientDialogueHistory;
 import dev.otectus.mcaconversations.client.dialogue.ConfirmationArming;
 import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceInput;
 import dev.otectus.mcaconversations.client.dialogue.DialogueChoiceRenderer;
+import dev.otectus.mcaconversations.client.dialogue.ClientUtteranceLedger;
 import dev.otectus.mcaconversations.client.dialogue.DialogueHitTarget;
+import dev.otectus.mcaconversations.client.dialogue.UtteranceAgreement;
+import dev.otectus.mcaconversations.conversation.UtteranceTag;
 import dev.otectus.mcaconversations.conversation.ConversationSession;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -52,11 +55,14 @@ public abstract class InteractScreenChoiceMixin {
     @Unique private LivingEntity mcaconversations$speaker;
     @Unique private FormattedText mcaconversations$questionComponent;
     @Unique private long mcaconversations$questionRevision;
+    @Unique private UtteranceTag.Id mcaconversations$questionUtterance;
     @Unique private boolean mcaconversations$silentQuestion;
     @Unique private boolean mcaconversations$suppressed;
 
     @Inject(method = "<init>", at = @At("RETURN"), require = 0, remap = false)
     private void mcaconversations$captureVillager(@Coerce Object villager, CallbackInfo ci) {
+        dev.otectus.mcaconversations.client.dialogue.dev.ClientDiagnostics.fired(
+                dev.otectus.mcaconversations.client.dialogue.dev.ClientDiagnostics.Hook.INTERACT_SCREEN);
         if (villager instanceof Entity entity) {
             mcaconversations$villagerId = entity.getUUID();
             mcaconversations$speakerName = entity.getDisplayName().copy();
@@ -85,16 +91,48 @@ public abstract class InteractScreenChoiceMixin {
         mcaconversations$questionComponent = question instanceof Component component
                 ? component.copy() : question;
         mcaconversations$questionRevision++;
+        mcaconversations$questionUtterance = null;
         // The one point where this client has the villager's line as a resolved component. Recording
         // it here is what keeps the history the conversation that happened: a pooled line asked for
         // again resolves to a different sentence, so an id kept for later would not be this line.
         if (mcaconversations$questionComponent instanceof Component spoken) {
-            ClientDialogueHistory.spoken(
-                    ClientDialogueHistory.spokenIdentity(mcaconversations$historyConversation,
-                            mcaconversations$questionRevision),
+            UtteranceTag.Id utterance = UtteranceTag.read(spoken).orElse(null);
+            mcaconversations$questionUtterance = utterance;
+            // The ledger learns what the card now shows; paging, resizing, the utilities and the
+            // reveal never come through here, so none of them can move it.
+            if (utterance != null) {
+                ClientUtteranceLedger.get().record(utterance, spoken, ClientUtteranceLedger.Surface.SCREEN,
+                        mcaconversations$clientTick());
+            } else {
+                ClientUtteranceLedger.get().displayedUntagged();
+            }
+            ClientDialogueHistory.spoken(utterance != null
+                            ? ClientDialogueHistory.spokenIdentity(utterance)
+                            : ClientDialogueHistory.spokenIdentity(mcaconversations$historyConversation,
+                                    mcaconversations$questionRevision),
                     mcaconversations$speakerName, spoken);
         }
         return question;
+    }
+
+    @Unique
+    private static long mcaconversations$clientTick() {
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        return minecraft.player == null ? 0L : minecraft.player.tickCount;
+    }
+
+    /**
+     * The identity the renderer's model is keyed on: the utterance when the line carries one, so one
+     * line is one presentation however many times MCA hands it over, and the local count otherwise.
+     */
+    @Unique
+    private long mcaconversations$presentationRevision() {
+        UtteranceTag.Id utterance = mcaconversations$questionUtterance;
+        if (utterance == null) {
+            return mcaconversations$questionRevision;
+        }
+        long identity = utterance.identity().getMostSignificantBits() ^ utterance.identity().getLeastSignificantBits();
+        return (identity * 31L + utterance.seq()) | Long.MIN_VALUE;
     }
 
     @Inject(method = {"tick", "m_86600_"}, at = @At("TAIL"), require = 0, remap = false)
@@ -124,8 +162,11 @@ public abstract class InteractScreenChoiceMixin {
         }
         dialogQuestionText = mcaconversations$savedQuestion;
         mcaconversations$suppressed = false;
+        // The card is drawn either way; while its line is still on the way it shows the footer it
+        // shows after a selection, and nothing on it can be chosen.
+        mcaconversations$renderer.waiting(ClientChoiceMessages.agreement() == UtteranceAgreement.Verdict.WAITING);
         mcaconversations$renderer.render(graphics, mouseX, mouseY, partialTick,
-                mcaconversations$questionComponent, mcaconversations$questionRevision,
+                mcaconversations$questionComponent, mcaconversations$presentationRevision(),
                 mcaconversations$speakerName, mcaconversations$silentQuestion, dialogQuestionText,
                 mcaconversations$speaker);
         mcaconversations$renderer.lapseReturn(() -> ClientChoiceController.returnToTopics(
@@ -311,7 +352,10 @@ public abstract class InteractScreenChoiceMixin {
         ClientChoiceState.ClientChoiceOffer offer = ClientChoiceMessages.state().offer().orElse(null);
         return offer != null && offer.frontend() == ConversationSession.Frontend.GUI
                 && offer.questionId().equals(dialogQuestionId)
-                && (offer.answerIds().equals(dialogAnswers) || ClientChoiceMessages.state().locked());
+                && (offer.answerIds().equals(dialogAnswers) || ClientChoiceMessages.state().locked())
+                // A later line of the same discussion retires the offer here (the call clears it);
+                // waiting for the offer's own line keeps the card, unanswerable.
+                && ClientChoiceMessages.agreement() != UtteranceAgreement.Verdict.SUPERSEDED;
     }
 
     /**
@@ -323,6 +367,12 @@ public abstract class InteractScreenChoiceMixin {
      */
     @Unique
     private boolean mcaconversations$select(int absoluteIndex) {
+        // Digits, Enter, Space and clicks all end here, already consumed by their handlers: while the
+        // offer's line has not been drawn, choosing does nothing at all.
+        if (!ClientChoiceMessages.agreement().answerable()) {
+            mcaconversations$renderer.announceWaiting();
+            return false;
+        }
         if (!ClientChoiceController.select(absoluteIndex, mcaconversations$villagerId,
                 mcaconversations$renderer.answerText(absoluteIndex))) {
             return false;

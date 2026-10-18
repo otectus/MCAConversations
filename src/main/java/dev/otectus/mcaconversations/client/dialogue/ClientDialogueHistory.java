@@ -40,6 +40,14 @@ public final class ClientDialogueHistory {
         return "spoken:" + conversationId + ":" + phraseRevision;
     }
 
+    /**
+     * Identity of a line that carries its utterance tag: the utterance itself, so one line that
+     * reaches the card twice, or the card and the chat log, is one entry by construction.
+     */
+    public static String spokenIdentity(dev.otectus.mcaconversations.conversation.UtteranceTag.Id utterance) {
+        return spokenIdentity(utterance.identity(), utterance.seq());
+    }
+
     /** Identity of a reply: the offer it answered and the answer that was picked. */
     public static String responseIdentity(long revision, int index) {
         return "response:" + revision + ":" + index;

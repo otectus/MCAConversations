@@ -154,4 +154,19 @@ class ConversationMovementControllerTest {
             VillagerAttention.reset();
         }
     }
+
+    /**
+     * A held villager's Townstead facts are reused for the context-cache window instead of being read
+     * every tick (feedback remediation WP-D3), and dropped early when a fresher read elsewhere shows
+     * the villager collapsing or recovering.
+     */
+    @Test
+    void heldTownsteadFactsAreReusedForTheCacheWindowOnly() {
+        assertTrue(TownsteadChatPolicy.Facts.holdFactsFresh(100L, 100L, 20, false));
+        assertTrue(TownsteadChatPolicy.Facts.holdFactsFresh(119L, 100L, 20, false));
+        assertFalse(TownsteadChatPolicy.Facts.holdFactsFresh(120L, 100L, 20, false), "the window has passed");
+        assertFalse(TownsteadChatPolicy.Facts.holdFactsFresh(105L, 100L, 20, true), "a collapse changes the hold now");
+        assertFalse(TownsteadChatPolicy.Facts.holdFactsFresh(99L, 100L, 20, false), "a clock that went back");
+        assertTrue(TownsteadChatPolicy.Facts.holdFactsFresh(100L, 100L, 0, false), "a window is at least one tick");
+    }
 }

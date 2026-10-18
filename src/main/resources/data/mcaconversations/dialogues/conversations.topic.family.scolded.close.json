@@ -8,15 +8,16 @@
           "actions": {
             "conversations_session": {
               "op": "turn",
-              "beat": "family.scolded.apologize"
+              "beat": "family.scolded.apologize.to.hub"
             },
             "conversations_disposition_apply": {
               "topic": "family.scolded.apologize",
               "deltas": {
-                "tension": -4
+                "tension": -3,
+                "respect": 1
               }
             },
-            "next": "conversations.family",
+            "next": "conversations.cat.relationships",
             "conversations_say": {
               "phrase": "conversations.family.scolded.apologize"
             }
@@ -32,22 +33,22 @@
           "actions": {
             "conversations_session": {
               "op": "turn",
-              "beat": "family.scolded.soften"
+              "beat": "family.scolded.soften.to.hub"
             },
             "conversations_affection_apply": {
               "decision": "checkin_child.hurt.soften",
               "delta": 1,
-              "budget": "standard",
+              "budget": "relationship",
               "policy": "daily_repeat"
             },
             "conversations_disposition_apply": {
               "topic": "family.scolded.soften",
               "deltas": {
                 "tension": -2,
-                "warmth": 3
+                "warmth": 2
               }
             },
-            "next": "conversations.family",
+            "next": "conversations.cat.relationships",
             "conversations_say": {
               "phrase": "conversations.family.scolded.soften"
             }
@@ -64,7 +65,7 @@
             "conversations_session": {
               "op": "end"
             },
-            "next": "conversations.family",
+            "next": "conversations.cat.relationships",
             "conversations_say": {
               "phrase": "conversations.family.scolded.leave"
             }

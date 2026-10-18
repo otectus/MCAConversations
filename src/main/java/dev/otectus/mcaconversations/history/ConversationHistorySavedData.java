@@ -159,6 +159,15 @@ public final class ConversationHistorySavedData extends SavedData {
         return removed;
     }
 
+    /** One bounded step of a resumable prune pass (see {@code util.ResumableSweep}). */
+    public int prune(long today, java.util.Collection<UUID> batch) {
+        int removed = store.prune(today, batch);
+        if (removed > 0) {
+            setDirty();
+        }
+        return removed;
+    }
+
     public ConversationHistoryStore store() {
         return store;
     }

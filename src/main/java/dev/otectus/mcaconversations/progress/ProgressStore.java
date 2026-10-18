@@ -126,10 +126,26 @@ public final class ProgressStore {
 
     /** Drops records not written for {@code staleTicks}; returns how many were removed. */
     public int prune(long now, long staleTicks) {
+        return pruneVillagers(villagerIds(), now, staleTicks);
+    }
+
+    /** The villagers this store holds records for, as a snapshot a batched prune can walk. */
+    public java.util.List<UUID> villagerIds() {
+        return java.util.List.copyOf(villagers.keySet());
+    }
+
+    /**
+     * {@link #prune}, restricted to {@code batch}: one bounded step of a resumable pass. A villager
+     * no longer in the store is skipped, so a pass over a snapshot of {@link #villagerIds()} removes
+     * exactly what one unbatched call would have.
+     */
+    public int pruneVillagers(java.util.Collection<UUID> batch, long now, long staleTicks) {
         int removed = 0;
-        Iterator<Map<UUID, ProgressRecord>> perVillager = villagers.values().iterator();
-        while (perVillager.hasNext()) {
-            Map<UUID, ProgressRecord> players = perVillager.next();
+        for (UUID villager : batch) {
+            Map<UUID, ProgressRecord> players = villagers.get(villager);
+            if (players == null) {
+                continue;
+            }
             Iterator<ProgressRecord> records = players.values().iterator();
             while (records.hasNext()) {
                 if (records.next().lastUpdated() < now - staleTicks) {
@@ -138,7 +154,7 @@ public final class ProgressStore {
                 }
             }
             if (players.isEmpty()) {
-                perVillager.remove();
+                villagers.remove(villager);
             }
         }
         return removed;

@@ -24,7 +24,7 @@
                 "familiarity": 2
               }
             },
-            "next": "conversations.topic.family.close",
+            "next": "conversations.topic.ask_parent.close",
             "conversations_say": {
               "phrase": "conversations.family.parent.ask_worries"
             }
@@ -55,7 +55,7 @@
                 "warmth": 5
               }
             },
-            "next": "conversations.topic.family.close",
+            "next": "conversations.topic.ask_parent.close",
             "conversations_say": {
               "phrase": "conversations.family.parent.thank_them"
             }
@@ -82,27 +82,9 @@
                 "tension": 3
               }
             },
-            "next": "conversations.topic.family.close",
+            "next": "conversations.topic.ask_parent.close",
             "conversations_say": {
               "phrase": "conversations.family.parent.deflect"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "ask_event",
-      "results": [
-        {
-          "baseChance": 1,
-          "actions": {
-            "conversations_session": {
-              "op": "turn",
-              "beat": "ask_parent.event"
-            },
-            "next": "conversations.topic.ask_parent.event",
-            "conversations_say": {
-              "phrase": "conversations.ask_parent.event"
             }
           }
         }

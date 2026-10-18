@@ -632,6 +632,32 @@ public final class History {
         }
     }
 
+    /** The villagers with a stored history, for a batched prune pass; empty when unavailable. */
+    public static java.util.List<UUID> villagerIds(MinecraftServer server) {
+        if (server == null || !enabled()) {
+            return java.util.List.of();
+        }
+        try {
+            return ConversationHistorySavedData.get(server).store().villagerIds();
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("history villager list unavailable; nothing to prune", t);
+            return java.util.List.of();
+        }
+    }
+
+    /** One bounded step of the pruning pass, over {@code batch} (feedback remediation WP-D2). */
+    public static int prune(MinecraftServer server, long today, java.util.Collection<UUID> batch) {
+        if (server == null || !enabled() || batch == null || batch.isEmpty()) {
+            return 0;
+        }
+        try {
+            return ConversationHistorySavedData.get(server).prune(today, batch);
+        } catch (Throwable t) {
+            McaConversations.LOGGER.debug("history prune failed; ignoring", t);
+            return 0;
+        }
+    }
+
     /** Runs the pruning pass; called from the existing low-frequency sweep, never per tick. */
     public static int prune(MinecraftServer server, long today) {
         if (server == null || !enabled()) {

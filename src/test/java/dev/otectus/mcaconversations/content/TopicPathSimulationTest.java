@@ -25,14 +25,18 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -1269,5 +1273,127 @@ class TopicPathSimulationTest {
         apply(chosen, run);
         assertTrue(run.milestone("secret.entrusted"), "hearing it is what entrusts you");
         assertEquals(1, run.arcStage("secret"));
+    }
+
+    // ------------------------------------------------------------------
+    // Feedback remediation §2.3, WP-C2: the family topics, one perspective and one age at a time
+    // ------------------------------------------------------------------
+
+    /** The pages a walk reached and every line spoken on the way. */
+    private record Reach(Set<String> pages, Set<String> lines) {
+    }
+
+    /**
+     * Clicks every answer this villager is shown on every page the opener leads to, staying on pages
+     * whose ids start with {@code within}, and collects what was said. Each click is judged in a fresh
+     * run, so one branch's consequences never colour another branch's lines.
+     */
+    private static Reach reach(String question, String answer, World world, String within) {
+        Set<String> pages = new TreeSet<>();
+        Set<String> lines = new TreeSet<>();
+        Set<String> clicked = new HashSet<>();
+        Deque<String[]> pending = new ArrayDeque<>();
+        pending.add(new String[] {question, answer});
+        while (!pending.isEmpty()) {
+            String[] step = pending.removeFirst();
+            if (!clicked.add(step[0] + "/" + step[1])) {
+                continue;
+            }
+            JsonObject actions = select(step[0], step[1], new Run(world)).getAsJsonObject("actions");
+            String line = ContentFixture.spokenPhrase(actions);
+            if (line != null) {
+                lines.add(line);
+            }
+            String next = actions.has("next") ? actions.get("next").getAsString() : null;
+            if (next == null || !next.startsWith(within) || !pages.add(next)) {
+                continue;
+            }
+            for (JsonElement element : questions.get(next).getAsJsonArray("answers")) {
+                JsonObject shown = element.getAsJsonObject();
+                if (!shown.has("constraints")
+                        || constraintsValue(shown.get("constraints").getAsString(), world) > 0) {
+                    pending.add(new String[] {next, shown.get("name").getAsString()});
+                }
+            }
+        }
+        return new Reach(pages, lines);
+    }
+
+    /** The player's own child at this age: MCA's {@code kids} constraint holds. */
+    private static World ownChild(String age) {
+        World world = new World().age(age);
+        world.traits.add("kids");
+        world.traits.add("family");
+        return world;
+    }
+
+    private static final String CHECKIN = "conversations.topic.checkin_child.";
+
+    @Test
+    @DisplayName("16. the player's own child is checked in on at their own age, all the way down")
+    void eachAgeOfTheirOwnChildHasItsOwnCheckin() {
+        Map<String, Reach> byAge = new LinkedHashMap<>();
+        for (String age : List.of("toddler", "child", "teen", "adult")) {
+            byAge.put(age, reach("conversations.family", "checkin_child", ownChild(age), CHECKIN));
+        }
+        assertEquals(Set.of(CHECKIN + "respond"), byAge.get("toddler").pages(),
+                "a toddler's check-in is one exchange and back to the family page");
+        for (String age : List.of("child", "teen")) {
+            Set<String> pages = byAge.get(age).pages();
+            assertTrue(pages.containsAll(Set.of(CHECKIN + "respond", CHECKIN + "followup", CHECKIN + "pride",
+                    CHECKIN + "event", CHECKIN + "promise")), age + " reached " + pages);
+            assertFalse(pages.stream().anyMatch(page -> page.contains(".grown.")), age + " reached " + pages);
+        }
+        assertEquals(Set.of(CHECKIN + "respond", CHECKIN + "grown.followup", CHECKIN + "grown.close"),
+                byAge.get("adult").pages(), "a grown child is not walked through a ten-year-old's pages");
+
+        List<String> ages = List.copyOf(byAge.keySet());
+        for (int i = 0; i < ages.size(); i++) {
+            for (int j = i + 1; j < ages.size(); j++) {
+                Set<String> shared = new TreeSet<>(byAge.get(ages.get(i)).lines());
+                shared.retainAll(byAge.get(ages.get(j)).lines());
+                assertTrue(shared.isEmpty(), ages.get(i) + " and " + ages.get(j) + " share " + shared);
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("17. their_children is a parent talking about their own children, on every page of it")
+    void theirChildrenIsTheParentsOwnTopic() {
+        Reach reach = reach("conversations.cat.relationships", "their_children", new World(), "conversations.topic.");
+        assertTrue(reach.pages().containsAll(Set.of("conversations.topic.their_children.respond",
+                "conversations.topic.their_children.followup", "conversations.topic.their_children.close",
+                "conversations.topic.their_children.rebuffed.followup", "conversations.topic.family.scolded.close")),
+                "reached " + reach.pages());
+        for (String page : reach.pages()) {
+            assertFalse(page.contains("checkin_child") || page.contains("ask_parent"), "their_children reached " + page);
+        }
+        Set<String> childLines = new TreeSet<>();
+        for (String age : List.of("toddler", "child", "teen", "adult")) {
+            childLines.addAll(reach("conversations.family", "checkin_child", ownChild(age), CHECKIN).lines());
+        }
+        World parent = new World();
+        parent.traits.add("parent");
+        Set<String> parentLines = reach("conversations.family", "ask_parent", parent,
+                "conversations.topic.ask_parent.").lines();
+        for (String line : reach.lines()) {
+            assertFalse(childLines.contains(line), line + " is also said by the player's own child");
+            assertFalse(parentLines.contains(line), line + " is also said by the player's own parent");
+        }
+    }
+
+    @Test
+    @DisplayName("18. the player's own parent closes ask_parent on its own page")
+    void askParentClosesOnItsOwnPage() {
+        World parent = new World();
+        parent.traits.add("parent");
+        Reach reach = reach("conversations.family", "ask_parent", parent, "conversations.topic.");
+        assertTrue(reach.pages().contains("conversations.topic.ask_parent.close"), "reached " + reach.pages());
+        for (String page : reach.pages()) {
+            assertTrue(page.startsWith("conversations.topic.ask_parent."), "ask_parent reached " + page);
+        }
+        assertTrue(reach.lines().containsAll(Set.of("conversations.ask_parent.close.thank",
+                "conversations.ask_parent.close.mattered", "conversations.ask_parent.close.leave")),
+                "the close page speaks its own lines: " + reach.lines());
     }
 }

@@ -1,6 +1,6 @@
 {
   "release": "1.8.0",
-  "protocol": "4",
+  "protocol": "5",
   "files": {
     "datapack_samples/02-new-category/data/sample_pastimes/dialogues/pastimes.games.respond.json": {
       "forge": "7ec55a8ebefff6b3b69ed16cd27cb9969fd1a4376dcfebba58a01a3de6509091",
@@ -48,9 +48,9 @@
       "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
     },
     "src/main/java/dev/otectus/mcaconversations/McaConversationsConfig.java": {
-      "forge": "fb7db855ebc8d788ad4430f53573c3d79bf413dfd45563678cfb567aaa959e35",
-      "neoforge": "9328925e45e8074f274d33fdcc47f75b6eb04ce9c69e02f812ebf30ff0301062",
-      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation. 1.7.1 slice 4: the eight new [conversation] server settings are declared on ModConfigSpec."
+      "forge": "500a983a577c5347f9c863192313cdbf461f780097da1767781219cb0f6311cc",
+      "neoforge": "5dbd47754a87050b6bd35304b5df99a25eabf01b3422eadccacf72c889069b46",
+      "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation. 1.7.1 slice 4: the eight new [conversation] server settings are declared on ModConfigSpec. 1.8.0 feedback remediation: the client [speech] chatModeSpeech key is declared on ModConfigSpec."
     },
     "src/main/java/dev/otectus/mcaconversations/chat/AcceptedChat.java": {
       "forge": "a2f6a8839cc268ca84e6aa785dddc21d8bb8d6ed48fe9c4bba92b417a4ecd8a6",
@@ -113,9 +113,14 @@
       "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
     },
     "src/main/java/dev/otectus/mcaconversations/client/dialogue/DialogueChoiceRenderer.java": {
-      "forge": "d790541a372249c3c036903aa0b6b96ae2e9a0f9f259e4c52cc95f00bfbd034a",
-      "neoforge": "769d0fb24ca12b7723083b2b9a4a4f81c3ae7bb6c705d36908af1c4fa5466bd7",
+      "forge": "99bcea60a5cd35ea075666286664bfcd0571099e492dfb6c537c2359d83b79c3",
+      "neoforge": "30b4ee2ced9200eccaf24880c229ec776de762a7eb4c4d827ba1153c79220959",
       "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
+    },
+    "src/main/java/dev/otectus/mcaconversations/client/dialogue/dev/ClientDiagnosticsCommand.java": {
+      "forge": "44569532770031658833be8ec7d8ecac7e5e18acf20efdf0dee391625e599a05",
+      "neoforge": "af20e2370f4476c72bbc65fda210f004dfe452ec3fafc3599c9b2c11d3f5b6f8",
+      "reason": "NeoForge client-command event API (net.neoforged packages, @EventBusSubscriber). 1.8.0 feedback remediation."
     },
     "src/main/java/dev/otectus/mcaconversations/client/dialogue/dev/DialogueCardPreviewScreen.java": {
       "forge": "79d44da092eb63ba9d5fbda22193c4b112d42cf72dddcf2d4aada4ad60e08273",
@@ -128,8 +133,8 @@
       "reason": "Minecraft GUI sprites, portrait signatures, scrolling or NeoForge config/payload API."
     },
     "src/main/java/dev/otectus/mcaconversations/command/ConversationsCommand.java": {
-      "forge": "e0dc8508f0d68794f02aaef0c0c851c90e5c20f2c567e3218a840c48e97b3b98",
-      "neoforge": "46293656dd95c1e945103f8c1f07d47ed4ae394c398a2d39ea27c1ce357e3a29",
+      "forge": "9976179704442fb1f9eba1daa244985a4187da5f90192ae40a79da6760f7fb5d",
+      "neoforge": "2cbcf4dfcce705a97fe5e166ce49e2f7c9a650ddf9e986e3db445dafdd7aea76",
       "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
     },
     "src/main/java/dev/otectus/mcaconversations/command/TownsteadCommand.java": {
@@ -193,14 +198,14 @@
       "reason": "1.8.0 MCA: Crime integration: NeoForge event and bus packages in place of Forge's; otherwise identical."
     },
     "src/main/java/dev/otectus/mcaconversations/compat/mca/McaBinding.java": {
-      "forge": "9febbf08f0508b429cd16e266385d573bcd0d98533daec9300d6189e3847b38b",
-      "neoforge": "cf8cd668e1acf9f071fe5104a9a9939d8e42266c4bfe6cbef08ff0b242ee839e",
+      "forge": "1ed769642e649d8df0ac282b8a5217e9803740f2a43d4877020a412c7b163bfc",
+      "neoforge": "bd24532e8bfe76df797ddc0d8d2e7ba07aa97ac4a4098b84896eee58b8473984",
       "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types. 1.7.1 slice 5: the same STOP_INTERACTING binding added in a file that already diverges."
     },
     "src/main/java/dev/otectus/mcaconversations/compat/mca/McaHandles.java": {
-      "forge": "313b160ff0b4b5314c34685f88f609fd8c070e47f8f40db5d308c719e67c5441",
-      "neoforge": "7b50c13ec74530d10036fcd353adeae6e48f546909bc02fd318aecc75a6aac05",
-      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types. 1.7.1 slice 5: the same stopInteracting wrapper added in a file that already diverges."
+      "forge": "e4681fd22a85155ca893f07db160d4e629cd9da78342e871e786805f94489a4d",
+      "neoforge": "07a753a0636466db62fb75abb2a49d89b43d5c0da0a5fb68165e7eef36a437be",
+      "reason": "NeoForge dependency APIs, MCA constructor/accessor signatures, loader discovery or codec types. 1.7.1 slice 5: the same stopInteracting wrapper added in a file that already diverges. 1.8.0 feedback remediation: the question-response constructor takes (line, silent), so the silent flag follows the record order."
     },
     "src/main/java/dev/otectus/mcaconversations/compat/quests/ConversationsQuestsCompat.java": {
       "forge": "c5433f2fb3005e1e1d569c452e0e74698d2e2c08ab4b9276d3abcdc645517124",
@@ -243,8 +248,8 @@
       "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation."
     },
     "src/main/java/dev/otectus/mcaconversations/conversation/ConversationSessions.java": {
-      "forge": "5b5467fbabb5dd300beb7ab13b53835567e519705fa7ef460afaf26411a4aa57",
-      "neoforge": "2b28c7f586a2f29efac72da706fb66bf24538cc612559bb09f824599ea406b23",
+      "forge": "b865c8ee8674fa88d0beaacb3ea5fd15166350e7518d6faa25f38f7a4a7c975f",
+      "neoforge": "27ed776e25fe5a75342b8e3b6ce723861cebf1821b5f36149400927063b135d6",
       "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation. 1.7.1: the same shared edit applied in a file that already diverges on this platform."
     },
     "src/main/java/dev/otectus/mcaconversations/court/CourtMemorySavedData.java": {
@@ -253,13 +258,13 @@
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
     "src/main/java/dev/otectus/mcaconversations/disposition/DispositionSavedData.java": {
-      "forge": "04ba4c1ecfdba0b9ca11107874b35dee8391f88b8be1d82dadfedaad503f6bad",
-      "neoforge": "608a44c5205f47a0e2467eea25f5152c852cd4fb8d3bc9340595da5949c2a58a",
+      "forge": "19dcaaac38895587766fadeb42fbfa13e022cba70e9fdc150b444836cc7e356f",
+      "neoforge": "52ae00c7a220ac6b59c271c9dfd1843113441369f68936a2cc59586b54c143e6",
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
     "src/main/java/dev/otectus/mcaconversations/event/ConversationsEvents.java": {
-      "forge": "44e5b5cfabfd0ad4c95de628a5dcf593b7728314ac023f84a9ba1c432a4de820",
-      "neoforge": "749f2dbce138f5e7871d66bde518bc090dcb42183ca2c1b352a2be28d6bfa929",
+      "forge": "c2f4ca9cf0f22d8226c35e8435ff47acc478792ca3f0b4a39d4899754fbf63a8",
+      "neoforge": "86ba7cf6f022502bb51397ffda993e906bcf923193b875413e3c2bc1f2965b00",
       "reason": "NeoForge event/config APIs, Minecraft registry/language API, or corresponding platform documentation. 1.7.1 slice 4: the lifecycle tick runs on ServerTickEvent.Post; slice 5 uses LivingIncomingDamageEvent and LivingDamageEvent.Pre in place of Forge's LivingAttackEvent and LivingHurtEvent."
     },
     "src/main/java/dev/otectus/mcaconversations/gift/ConversationsAttachments.java": {
@@ -308,8 +313,8 @@
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
     "src/main/java/dev/otectus/mcaconversations/history/ConversationHistorySavedData.java": {
-      "forge": "739400dda4fd5d264a675a3d282db863ccedaa2aa0b8153ebf55ff16fb09ee85",
-      "neoforge": "bacd9ecf5a0cb88cd0186831054a5aa7592f2b7a11473d2276595e866b19552d",
+      "forge": "3374fbaea7a847fdfee111b5c50d29ee52ee47e1c04fc1683a097b5a7439aff3",
+      "neoforge": "6dc1b13a8b35bcd08f3dee8dfdbb4b84bf6e3768ecb4256896a51e9ea269c0ba",
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
     "src/main/java/dev/otectus/mcaconversations/identity/VillagerIdentitySavedData.java": {
@@ -343,8 +348,8 @@
       "reason": "1.7.1 slice 3: new mixin. MCA 1.21.1 ships InteractionCloseRequest as a record with handleServer(ServerPlayer) under the single net.conczin.mca root, where Forge has a class with receive(ServerPlayer) under two package roots."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/NetworkHandlerMixin.java": {
-      "forge": "d7228a12e1a7c1ef3e3db1441f95edcc2aa5fecd56ee1dc816e6af31afc9a56b",
-      "neoforge": "9c79ada2d113e763da327621ca59f2a3ab09a5185d7879131c2563ae57490dbc",
+      "forge": "9fc7e823dc5c6e50b4945f669c962bf9dfd24d60627597e8ad6f22e389e182c5",
+      "neoforge": "fb82e61d9aba440e9de1f8de611734426c3385dd4e2e9924fe11317f80c89ae1",
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration. 1.7.1 slice 3: the port targets net.conczin.mca.network.Network only."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/PlayerLegacyDataMixin.java": {
@@ -353,18 +358,18 @@
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/QuestionMixin.java": {
-      "forge": "7427aebcd7ec124176a08015fb4d21f667777db42bbad101f056c6b9f28f3a77",
-      "neoforge": "72ca581c69c7e52a13de6e21c583221aaada25da6403bd4a7947b2f17cbe3a56",
+      "forge": "0d01e0ae30da55d1fab9a2a739d5360485c983003ba3a70b554f198e04e1f126",
+      "neoforge": "ddd6694a187d0bf9948cf6b22e763344c2e3d12f57bd49eb8c1d452d968e7fef",
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/client/InteractScreenChoiceMixin.java": {
-      "forge": "882267439a2afd966ff761f58bbe04cd0c93d212929f3be472b39985777b3ee5",
-      "neoforge": "9460b0a86ef3558216dddea78adee0f3ff378741c652d1eece1e7215508c632a",
+      "forge": "03a4853462cae54f7ba52d4d8abec16abc9bfaadc9c81eb96f127e6292c8e561",
+      "neoforge": "a2a1e70ca518b71a9c440eb3b5ec764e4cbe62167454dc065a6298be98168f2f",
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration. 1.7.1: the same shared edit applied in a file that already diverges on this platform."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/client/MCAClientMixin.java": {
-      "forge": "0e564c7c3217d01b20ccdcfe1af37960fc46c3b03b5b35da0d8f0f04891c39bc",
-      "neoforge": "2c6f920e9077487ca4d871d71064c1435159ae0aaa8003e85e82b4c436d68e0f",
+      "forge": "5d9775ac63687ab412e50981b4fb4dab1a971845d2f45438b3fc29203c55b42d",
+      "neoforge": "c00df85f9a42e1b4b654b9cf5d9070f97e9e5c304798c7cc43fee1e572f7e35d",
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/client/TownsteadChoicePanelMixin.java": {
@@ -378,9 +383,14 @@
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
     },
     "src/main/java/dev/otectus/mcaconversations/mixin/client/VillagerMessageMixin.java": {
-      "forge": "39da6261fee2358771db21df4b8cce8b9115c15913b119a8d3782ee0dfe56156",
+      "forge": "ed22329f3f681df4bc0ca419db1cf06a5f75999e3f35bdad574b27fd1f324ca9",
       "neoforge": null,
       "reason": "MCA package/record targets and Minecraft method signatures; NeoForge legacy attachment migration."
+    },
+    "src/main/java/dev/otectus/mcaconversations/mixin/client/VillagerMessageSpeechMixin.java": {
+      "forge": null,
+      "neoforge": "e85dba2eb86e29f9f84b81d45f5becc011d0c262a20e2c7de27d677595b00938",
+      "reason": "Port-only: 1.21.1 VillagerMessage is a record of Components, so the speech association repair hooks MCA's ClientHandlerImpl.handleVillagerMessage instead of the message's getters (PORT_STATUS.md Deviations 2 and 25). 1.8.0 feedback remediation."
     },
     "src/main/java/dev/otectus/mcaconversations/network/ChoiceClearS2C.java": {
       "forge": "e7e4408b7dd3531aff2a9881bd97dd3caa12b0b4aa2cd9666997b13d74b952e6",
@@ -388,9 +398,9 @@
       "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes. 1.7.1 slice 3: the port declares a typed CustomPacketPayload with a StreamCodec and encode(buffer, message) argument order, in place of Forge's static encode/decode pair."
     },
     "src/main/java/dev/otectus/mcaconversations/network/ChoiceOfferS2C.java": {
-      "forge": "8b6275a1d2a63aafd309dc6735ab173d42f95046197d1dff40aa5f20e51c508e",
-      "neoforge": "9f907f2e0daa8f85217c450923530030173ed870faf6b7b6c1afd7b1f8191bfe",
-      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes. 1.7.1 slice 3: the port declares a typed CustomPacketPayload with a StreamCodec and encode(buffer, message) argument order, in place of Forge's static encode/decode pair."
+      "forge": "6d98f7849ee5d5c746c83be433d7d0819349c8c955da95faf6a79cda36890f36",
+      "neoforge": "1a5228a8a2a2be85a644010e872d967876b447ef908590bc50e84880d95f76b4",
+      "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes. 1.7.1 slice 3: the port declares a typed CustomPacketPayload with a StreamCodec and encode(buffer, message) argument order, in place of Forge's static encode/decode pair. 1.8.0 feedback remediation: utteranceSeq is added to the record that implements CustomPacketPayload."
     },
     "src/main/java/dev/otectus/mcaconversations/network/ChoiceReturnC2S.java": {
       "forge": "8e5547cd7deff26edab28dd871e88182684982470d5631acaf3ddc0e6a837ad3",
@@ -423,8 +433,8 @@
       "reason": "1.7.1 slice 3: new lifecycle packet. The port declares a typed CustomPacketPayload (type ids conversation_opened, conversation_closed, conversation_presence and conversation_close) with a StreamCodec, and has no handle(Supplier<NetworkEvent.Context>). Slice 4 added the lease heartbeat it carries."
     },
     "src/main/java/dev/otectus/mcaconversations/network/ConversationsNetwork.java": {
-      "forge": "8cb71cb8b928b5d7b3f3fedd33ce983cebd36c1b2e4dc08057c3baa8e25409d2",
-      "neoforge": "6c6cef741be52ef99397d5894f4f0c9749133464b27302a11e8790ba52e1f809",
+      "forge": "ec7a77ff17f4fb94fcdf784966559655b8df819da419e0cf5fe7646de99c3aab",
+      "neoforge": "f7590ff3778a107a69346826fc1804c318170094a4da01b65ce81e2d1fea5db7",
       "reason": "NeoForge typed payload registration and client setup; shared protocol data and outcomes. 1.7.1 slice 3: the four new lifecycle payloads are registered through a PayloadRegistrar on RegisterPayloadHandlersEvent with IPayloadContext handlers, and are sent with PacketDistributor.sendToPlayer."
     },
     "src/main/java/dev/otectus/mcaconversations/network/TypingStatusC2S.java": {
@@ -438,8 +448,8 @@
       "reason": "MCA 1.21.1 canonical personality registry; legacy aliases retained by normalization."
     },
     "src/main/java/dev/otectus/mcaconversations/progress/ProgressSavedData.java": {
-      "forge": "1ad260c144b1d247cdab1726a7b4cfc54d40aea540813edb0dd95b82e0ee8954",
-      "neoforge": "4c9df530bb5402d0404e95addd581d68d462c7528463a6d202fb10321c23de1b",
+      "forge": "059c3b8b90ced0d4df8d6b4033ac24359f2caf8358d50e7d7c89a6145347f791",
+      "neoforge": "6f91d70f4cccdcfe22f3eeb2407726a7114586bb3d537472697fe8d4b34b14d5",
       "reason": "Minecraft 1.21.1 SavedData factory and HolderLookup serialization signatures."
     },
     "src/main/java/dev/otectus/mcaconversations/template/SlotRenderer.java": {
@@ -468,9 +478,9 @@
       "reason": "Loader metadata, Java/mixin targets and Minecraft pack format. MCA: Kingdoms rename (2026-10-01): declares mcakingdoms (type=\"optional\") beside the legacy ultima_kingdoms id."
     },
     "src/main/resources/mcaconversations.mixins.json": {
-      "forge": "5d366d2c60073592fca71fb742232ddc03053ab91b8472685a3300c22560e6c5",
-      "neoforge": "49cded40b29e469592511996843408d81c98c3e52c9f1eaae671fd3c48a587d4",
-      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format. 1.7.1 slices 3 and 5: the two new common mixins are listed alongside the port's own PlayerLegacyDataMixin and without client.VillagerMessageMixin."
+      "forge": "999d3712499736813d0bfd4b16480f9724d3169a4245b6cba9498bf474006747",
+      "neoforge": "8344061fcb069671152247f9146e7cf51d8a1da381aa4384410cd3f62c26ee30",
+      "reason": "Loader metadata, Java/mixin targets and Minecraft pack format. 1.7.1 slices 3 and 5: the two new common mixins are listed alongside the port's own PlayerLegacyDataMixin and without client.VillagerMessageMixin. 1.8.0 feedback remediation: client.ChatListenerSpeechMixin on both; client.VillagerMessageSpeechMixin here in place of SOURCE's VillagerMessageMixin."
     },
     "src/main/resources/pack.mcmeta": {
       "forge": "18c50663587d8c124e49471ba8605738cde39151a209c23f26ffbc94c022db4a",
@@ -494,8 +504,8 @@
     },
     "src/test/java/dev/otectus/mcaconversations/MixinTargetProbeTest.java": {
       "forge": "c2121b7c0841811ca8a60797b5a9f2a3266a8c98128cadb30d14911ca3ca6b0d",
-      "neoforge": "b164ed31159839e21e7060c594db2bf5eea64f831c73a66ab4755cc47c468c9b",
-      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: probes handleServer rather than receive for the new close guard; slice 5 added the InteractTaskMovementMixin injection point."
+      "neoforge": "ca07e84059dfff2c1cf7fed3ad593fa6701e9893e52be80e10b9b88f078e43bd",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: probes handleServer rather than receive for the new close guard; slice 5 added the InteractTaskMovementMixin injection point. 1.8.0 feedback remediation: probes VillagerMessageSpeechMixin's handleVillagerMessage and both calls it modifies."
     },
     "src/test/java/dev/otectus/mcaconversations/NoCapitalsStaticLinkTest.java": {
       "forge": "26d64f8f2a84185d839a5a32f0e591e127b355b1d963309782fe9c306f44e839",
@@ -548,8 +558,8 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/chat/IntentMatcherTest.java": {
-      "forge": "ed50fd192c945b5e92475c13caf84dda11749d0e9ab2eaee0675cbddd1354699",
-      "neoforge": "95e30383ae1f0c5b5629b0d642ec5c2652d6d8414de797e49bcd93aa2a5a3332",
+      "forge": "2c3f32dbf6339231c4ad1170d94d03bea717601af8f628b0edc9316da5416670",
+      "neoforge": "2877803f1b01ef4c342cf89e26234912bbfac532fc1c26aff491f6ca36723f08",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/chat/group/GroupConversationTest.java": {
@@ -593,8 +603,8 @@
       "reason": "1.8.0 MCA: Crime integration test: the port's TestPaths source root and ResourceLocation.fromNamespaceAndPath (1.21.1)."
     },
     "src/test/java/dev/otectus/mcaconversations/compat/McaBindingProbeTest.java": {
-      "forge": "719acf94642b815c55b62cf0b3855747a9085503ec94d52f6f653c3b9d6a379f",
-      "neoforge": "02acc3a8cfe412dc8ef4d56bde9d111a8a2c8145549271529442423af953ce0e",
+      "forge": "0387cd0227f749bf4bd7f03edcb1bbc067ebeb87f6dbfcf5d4d934e5f31a4d6b",
+      "neoforge": "ffd153a18b23786e4b9b41956a6dd2d4b7c8eb15f0e92191f66f273dfd0be8b6",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/compat/McaDialogueReloadProbeTest.java": {
@@ -663,8 +673,8 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/content/ContentLintTest.java": {
-      "forge": "0ff3d25a7a70cf631eab1a5cb647d8541f383ee34cb629d910d3d7d1f4dd8629",
-      "neoforge": "ceea0ab4d5328726b38a78e24d8424b6632ae69c2ffc31370a22e1b7525fba5a",
+      "forge": "1e0345f60158a143893875ffa0d29e2f759bd0e81d712462b24600ab80fe3dd2",
+      "neoforge": "23d3a1a63d86a9c1ae5333e0fb2b9da126a2e18627db17a0fafaa52fd6eac110",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/content/ConversationGraphLintTest.java": {
@@ -681,6 +691,11 @@
       "forge": "cb43cf4faf0df2060c3e325e1eb9f520ebcedbfb233bbf690aaaf19156cafe81",
       "neoforge": "52306f381399e18633bf7e2335b8b215369d6d96ec834259eca72e9f23b52245",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/FamilyPerspectiveTest.java": {
+      "forge": "e20c5188fe9057c7b9ccd606e4924bac234c64dd2977f2090e429fcb0d31d180",
+      "neoforge": "ac31deca8633b80bedcab38914bfe21fcd2af786d6563003ff09d6ce78308332",
+      "reason": "NeoForge test bootstrap: ModDevGradle's unitTest runs from build/minecraft-junit, so the report path resolves through support.TestPaths. 1.8.0 feedback remediation."
     },
     "src/test/java/dev/otectus/mcaconversations/content/FeatureOffLintTest.java": {
       "forge": "fc1e5e5a57cd39c459581f4155acea00dcaf33d41572161653a3bda3bdbf29d9",
@@ -731,6 +746,11 @@
       "forge": "cb2cda0e7e7ed426a4e5c8a95a4a92fea0f0b634ea50d9632e1b82a43d86517c",
       "neoforge": "a0a2398bcb5003b1d1813be92e35b1557dec04b455f028bb4de2931e3698bc52",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/content/NoProfessionOverlayLintTest.java": {
+      "forge": "4233aaa05ce380fa78f05bc9db8d29378019012262dacda59215de2e8f67645a",
+      "neoforge": "198f4006e41770201e57e24d3cd8104c9d7e8d6468d337fb376405ce8da8e9ae",
+      "reason": "NeoForge test bootstrap: repository paths resolve through support.TestPaths. 1.8.0 feedback remediation."
     },
     "src/test/java/dev/otectus/mcaconversations/content/OptionalProfessionIsolationTest.java": {
       "forge": "8421fbb8077dc6b6bd77c25b2977051a7f156ee5a44348cd38e08add28872388",
@@ -788,8 +808,8 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/content/TopicPathSimulationTest.java": {
-      "forge": "390cc1b173e2d51a256c313c55319a1da6b394a31c9552587ada414003125b30",
-      "neoforge": "ce908539030b8e169ec10a2bcbb6c51430dde3118ec92cbca100de6c7154308e",
+      "forge": "69dab8d1a237dc4c90abc66b7b8c46c524f3d5d4f2edf0d2b41fbd85ad56c339",
+      "neoforge": "e975061092ea7270c6abb832db1ede87b8b2c8db8436f1f6ee1a6dd48524627d",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
     },
     "src/test/java/dev/otectus/mcaconversations/content/TownsteadContentContractTest.java": {
@@ -817,6 +837,11 @@
       "neoforge": "a29a8b1650b526736362a5b2b7d93b6a74d334959e0936b7171ddfe88bb47a37",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1: the same shared edit applied in a file that already diverges on this platform."
     },
+    "src/test/java/dev/otectus/mcaconversations/conversation/FamilyChatRoutingTest.java": {
+      "forge": "d9df9591215f5469904e4ad17b7ea1ce131b0aa71ec78f0dc77f97ef3d1cad2f",
+      "neoforge": "acbddfac0dcefba21e2afc4078ed59383f71352e6c898ab21904da3ca2bbc693",
+      "reason": "NeoForge test bootstrap: repository paths resolve through support.TestPaths. 1.8.0 feedback remediation."
+    },
     "src/test/java/dev/otectus/mcaconversations/conversation/ReactionSemanticTest.java": {
       "forge": "38cf516811e5d6448159192c4c61d10fa6457b4e5a1384ddbefe0dad64dc69f0",
       "neoforge": "fa99c2e0a27534bb99177adf0fa13763246caf0ddac7e1f1d409a4bea522b2cb",
@@ -826,6 +851,11 @@
       "forge": "2d969e19c2a65c064f8d6c61e73b99dbd4fd6113edfaa1d1f3e9067fe2cbe5c4",
       "neoforge": "45fb884b33cda5fccbc374747196305f105a3eadf5add1e7b130ed9e32ebce16",
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations."
+    },
+    "src/test/java/dev/otectus/mcaconversations/conversation/UtteranceTagTest.java": {
+      "forge": "87c43c2705dc41e7ece2079fad18b5381ca8002a9fa3dfe432db494bbf3f5848",
+      "neoforge": "63ebc81c843c1b0511fe7106dc6a6b13e5e5e55c907ef5eebf8f83e35a36edba",
+      "reason": "Minecraft 1.21.1 Component.Serializer takes a HolderLookup.Provider (RegistryAccess.EMPTY). 1.8.0 feedback remediation."
     },
     "src/test/java/dev/otectus/mcaconversations/gift/AttachmentNbtRoundTripTest.java": {
       "forge": null,
@@ -868,14 +898,14 @@
       "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: port-only byte-order pin, updated for the two-byte conversation-handle prefix."
     },
     "src/test/java/dev/otectus/mcaconversations/network/ChoiceOfferCodecTest.java": {
-      "forge": "6e5e4212a50629ff7b37ec001cdf698512f5016d1e909b11843da7e08e5dd588",
-      "neoforge": "c237c50125d313a0a9a0fc03c5df782fbb65f0833b2c9a9fd3e5155321760a5e",
-      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: round-trips through STREAM_CODEC with encode(buffer, message)."
+      "forge": "c873eab5915006151f03ee0f23a9fa85044aa6ef142bab04d13270c5a3038b8d",
+      "neoforge": "cfea78c64172ffcc548f144dd571e4fdeed9b8dceef2b1d6d7328687165cee35",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: round-trips through STREAM_CODEC with encode(buffer, message). 1.8.0 feedback remediation: the utterance round trips use STREAM_CODEC too."
     },
     "src/test/java/dev/otectus/mcaconversations/network/ChoiceOfferPayloadTest.java": {
       "forge": null,
-      "neoforge": "5a3e236c7bcb2f0863a17c7b3d757a1c6343937d764ff067f1acf1d00d855cf3",
-      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: port-only byte-order pin, updated for the two-byte conversation-handle prefix."
+      "neoforge": "ad5f78462fb9561148826368d476615ba76df01d27b19a67c8f94abea9b3706b",
+      "reason": "NeoForge test bootstrap, repository paths, payload codecs, registry APIs or MCA artifact expectations. 1.7.1 slice 3: port-only byte-order pin, updated for the two-byte conversation-handle prefix. 1.8.0 feedback remediation: the byte-order pin gains the protocol 5 utterance byte."
     },
     "src/test/java/dev/otectus/mcaconversations/network/ChoiceReturnCodecTest.java": {
       "forge": "2fd5221da77cec9e26ee489b85703162ca7630978defaffca9ca02bfe20aa71d",

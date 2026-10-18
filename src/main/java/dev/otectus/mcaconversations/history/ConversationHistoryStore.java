@@ -233,12 +233,29 @@ public final class ConversationHistoryStore {
 
     /** Runs every villager's pruning pass. Returns the number of removals and state transitions. */
     public int prune(long today) {
+        return prune(today, villagerIds());
+    }
+
+    /** The villagers this store holds a history for, as a snapshot a batched prune can walk. */
+    public List<UUID> villagerIds() {
+        return List.copyOf(byVillager.keySet());
+    }
+
+    /**
+     * {@link #prune(long)}, restricted to {@code batch}: one bounded step of a resumable pass. A
+     * villager no longer in the store is skipped; expiry rules are exactly the unbatched ones.
+     */
+    public int prune(long today, java.util.Collection<UUID> batch) {
         int removed = 0;
         List<UUID> empties = new ArrayList<>();
-        for (Map.Entry<UUID, VillagerHistory> entry : byVillager.entrySet()) {
-            removed += entry.getValue().prune(today);
-            if (entry.getValue().isEmpty()) {
-                empties.add(entry.getKey());
+        for (UUID villager : batch) {
+            VillagerHistory history = byVillager.get(villager);
+            if (history == null) {
+                continue;
+            }
+            removed += history.prune(today);
+            if (history.isEmpty()) {
+                empties.add(villager);
             }
         }
         for (UUID villager : empties) {

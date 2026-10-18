@@ -47,6 +47,8 @@ public abstract class MCAClientMixin {
             cancellable = true, require = 0)
     private static void mcaconversations$allowOverlayLocales(CallbackInfoReturnable<Boolean> cir) {
         try {
+            dev.otectus.mcaconversations.client.dialogue.dev.ClientDiagnostics.fired(
+                    dev.otectus.mcaconversations.client.dialogue.dev.ClientDiagnostics.Hook.MCA_CLIENT);
             if (Boolean.TRUE.equals(cir.getReturnValue())) {
                 return; // MCA already allows it; nothing to widen.
             }

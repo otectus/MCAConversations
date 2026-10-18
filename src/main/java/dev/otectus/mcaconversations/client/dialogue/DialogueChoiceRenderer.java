@@ -63,6 +63,31 @@ public final class DialogueChoiceRenderer {
     /** The footer's two utility buttons; null while the card has no footer strip. */
     private DialogueChoiceLayout.Rect historyButton;
     private DialogueChoiceLayout.Rect settingsButton;
+    /** True while the offer's own line has not been drawn: the card shows, nothing on it can be chosen. */
+    private boolean waiting;
+    private long waitingAnnouncedFor = -1L;
+
+    /**
+     * Whether the card is waiting for the line its offer names (feedback remediation §2.1). Set by
+     * the screen before each frame; the footer then says what it says after a selection, and the
+     * narrator says once that the villager has not finished.
+     */
+    public void waiting(boolean waitingForLine) {
+        this.waiting = waitingForLine;
+        if (waitingForLine) {
+            announceWaiting();
+        }
+    }
+
+    /** Announces the wait once per offer, however many presses arrive during it. */
+    public void announceWaiting() {
+        long revision = ClientChoiceMessages.state().offer().map(ClientChoiceState.ClientChoiceOffer::revision)
+                .orElse(-1L);
+        if (revision >= 0 && revision != waitingAnnouncedFor) {
+            waitingAnnouncedFor = revision;
+            narrator.waiting(revision);
+        }
+    }
 
     public void tick() {
         syncConfirmationArming();
@@ -864,7 +889,7 @@ public final class DialogueChoiceRenderer {
         }
         if (ClientChoiceController.showHints()) {
             int budget = hintLimit - hintX;
-            Component hint = renderedLock >= 0
+            Component hint = renderedLock >= 0 || waiting
                     ? (font.width(footerSelecting) <= budget ? footerSelecting : null)
                     : controls.hint(budget, card.compact(), font::width);
             if (hint != null) {

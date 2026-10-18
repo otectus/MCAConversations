@@ -198,7 +198,15 @@ public final class McaCompat {
         // Name the pooled variant here, on the server, before the packet leaves. MCA would otherwise
         // resolve the pool on the client with a fresh random draw and no memory of the last sentence,
         // which is what makes a pool of three read like a pool of one. See LineVoice.
-        Optional<Component> line = Optional.of(LineVoice.pinned(built.get(), villager, player));
+        // Then give it its utterance identity, after the pin and before it leaves, so the card, the
+        // chat log, the speech lookup and the answer offer can all name this one line.
+        boolean chat = dev.otectus.mcaconversations.chat.ChatModeSession.activeFor(player);
+        Optional<Component> line = Optional.of(dev.otectus.mcaconversations.conversation.UtteranceStamp.stamp(
+                player, LineVoice.pinned(built.get(), villager, player),
+                dev.otectus.mcaconversations.conversation.UtteranceTag.Kind.NPC_LINE,
+                chat ? dev.otectus.mcaconversations.conversation.ConversationSession.Frontend.CHAT
+                        : dev.otectus.mcaconversations.conversation.ConversationSession.Frontend.GUI,
+                chat && villager != null ? villager.getUUID() : null));
         if (McaHandles.sendDialogueLine(player, line.get())) {
             return;
         }

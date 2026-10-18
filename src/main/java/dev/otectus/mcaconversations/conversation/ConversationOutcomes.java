@@ -228,6 +228,11 @@ public final class ConversationOutcomes {
         }
         try {
             boolean played = Townstead.bridge().fireReaction(level, villager, player, request.reaction(), tags);
+            if (played) {
+                // The villager is now reaction-locked; the next hold judgement must see it at once,
+                // not when its cached Townstead facts age out.
+                dev.otectus.mcaconversations.chat.TownsteadChatPolicy.Facts.invalidateHold(villager);
+            }
             if (Townstead.debug()) {
                 McaConversations.LOGGER.info("[townstead] reaction {} for {} {} (tags {})", request.reaction(),
                         villager.getUUID(), played ? "played" : "declined", tags);

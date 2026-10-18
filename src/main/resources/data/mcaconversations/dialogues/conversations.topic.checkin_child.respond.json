@@ -4,24 +4,146 @@
       "name": "listen",
       "results": [
         {
-          "baseChance": 1,
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": 100,
+              "age_group": "baby"
+            }
+          ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.really.little.to.hub"
+            },
             "conversations_affection_apply": {
-              "decision": "family.child.listen",
+              "decision": "checkin_child.really",
               "delta": 2,
               "budget": "relationship",
               "policy": "daily_repeat"
             },
             "conversations_disposition_apply": {
-              "topic": "family.child.listen",
+              "topic": "checkin_child.really",
               "deltas": {
-                "warmth": 4,
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.really.little"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.really.teen.to.checkin_child.followup"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.really",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.really",
+              "deltas": {
+                "warmth": 3,
                 "trust": 2
               }
             },
             "next": "conversations.topic.checkin_child.followup",
             "conversations_say": {
-              "phrase": "conversations.family.child.listen"
+              "phrase": "conversations.checkin_child.really.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.really.to.checkin_child.followup"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.really",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.really",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.checkin_child.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.really"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.really.grown.to.checkin_child.grown.followup"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.really",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.really",
+              "deltas": {
+                "warmth": 3,
+                "trust": 2
+              }
+            },
+            "next": "conversations.topic.checkin_child.grown.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.really.grown"
             }
           }
         }
@@ -31,23 +153,142 @@
       "name": "praise",
       "results": [
         {
-          "baseChance": 1,
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": 100,
+              "age_group": "baby"
+            }
+          ],
           "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.praise.little.to.hub"
+            },
             "conversations_affection_apply": {
-              "decision": "family.child.praise",
+              "decision": "checkin_child.praise",
               "delta": 2,
               "budget": "relationship",
               "policy": "daily_repeat"
             },
             "conversations_disposition_apply": {
-              "topic": "family.child.praise",
+              "topic": "checkin_child.praise",
               "deltas": {
-                "warmth": 5
+                "warmth": 4
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.praise.little"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.praise.teen.to.checkin_child.followup"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.praise",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.praise",
+              "deltas": {
+                "warmth": 4
               }
             },
             "next": "conversations.topic.checkin_child.followup",
             "conversations_say": {
-              "phrase": "conversations.family.child.praise"
+              "phrase": "conversations.checkin_child.praise.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.praise.to.checkin_child.followup"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.praise",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.praise",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.checkin_child.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.praise"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.praise.grown.to.checkin_child.grown.followup"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.praise",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.praise",
+              "deltas": {
+                "warmth": 4
+              }
+            },
+            "next": "conversations.topic.checkin_child.grown.followup",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.praise.grown"
             }
           }
         }
@@ -55,30 +296,113 @@
     },
     {
       "name": "dismiss",
+      "constraints": "!baby,!toddler",
       "results": [
         {
-          "baseChance": 1,
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
           "actions": {
             "conversations_session": {
               "op": "turn",
-              "beat": "checkin_child.rebuffed.open"
+              "beat": "checkin_child.dismiss.teen.to.hub"
             },
             "conversations_affection_apply": {
-              "decision": "family.child.dismiss",
+              "decision": "checkin_child.dismiss",
               "delta": -2,
               "budget": "relationship",
               "policy": "daily_repeat"
             },
             "conversations_disposition_apply": {
-              "topic": "family.child.dismiss",
+              "topic": "checkin_child.dismiss",
               "deltas": {
-                "warmth": -5,
-                "tension": 5
+                "warmth": -4,
+                "tension": 3
               }
             },
-            "next": "conversations.topic.checkin_child.rebuffed.followup",
+            "next": "conversations.family",
             "conversations_say": {
-              "phrase": "conversations.family.child.dismiss"
+              "phrase": "conversations.checkin_child.dismiss.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.dismiss.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.dismiss",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.dismiss",
+              "deltas": {
+                "warmth": -4,
+                "tension": 3
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.dismiss"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.dismiss.grown.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "checkin_child.dismiss",
+              "delta": -2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "checkin_child.dismiss",
+              "deltas": {
+                "warmth": -4,
+                "tension": 3
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.dismiss.grown"
             }
           }
         }
@@ -88,7 +412,32 @@
       "name": "ask_promise",
       "results": [
         {
-          "baseChance": 1,
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.promise.teen"
+            },
+            "next": "conversations.topic.checkin_child.promise",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.promise.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
           "actions": {
             "conversations_session": {
               "op": "turn",
@@ -100,20 +449,97 @@
             }
           }
         }
-      ]
+      ],
+      "constraints": "!baby,!toddler,!adult"
     },
     {
       "name": "leave",
       "results": [
         {
-          "baseChance": 1,
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "toddler"
+            },
+            {
+              "chance": 100,
+              "age_group": "baby"
+            }
+          ],
           "actions": {
             "conversations_session": {
               "op": "end"
             },
             "next": "conversations.family",
             "conversations_say": {
-              "phrase": "conversations.family.child.leave"
+              "phrase": "conversations.checkin_child.leave.little"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.leave.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.leave"
+            }
+          }
+        },
+        {
+          "baseChance": 1,
+          "conditions": [
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.leave.grown"
             }
           }
         }

@@ -25,9 +25,17 @@ public final class ClientChoiceState {
      */
     public record ClientChoiceOffer(long revision, UUID villagerId, String questionId,
                                     List<String> answerIds,
-                                    ConversationSession.Frontend frontend, long receivedClientTick) {
+                                    ConversationSession.Frontend frontend, long receivedClientTick,
+                                    UUID identity, long utteranceSeq) {
         public ClientChoiceOffer {
             answerIds = answerIds == null ? List.of() : List.copyOf(answerIds);
+            utteranceSeq = Math.max(-1L, utteranceSeq);
+        }
+
+        /** An offer that names no discussion and no line (protocol 4 semantics, previews, tests). */
+        public ClientChoiceOffer(long revision, UUID villagerId, String questionId, List<String> answerIds,
+                                 ConversationSession.Frontend frontend, long receivedClientTick) {
+            this(revision, villagerId, questionId, answerIds, frontend, receivedClientTick, null, -1L);
         }
     }
 

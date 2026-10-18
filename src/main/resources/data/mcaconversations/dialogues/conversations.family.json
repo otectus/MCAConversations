@@ -134,22 +134,8 @@
           "baseChance": 0,
           "conditions": [
             {
-              "chance": 1,
-              "conversations_relationship": {
-                "at_least": "stranger"
-              }
-            },
-            {
-              "chance": -2000,
-              "age_group": "toddler"
-            },
-            {
-              "chance": -2000,
-              "age_group": "baby"
-            },
-            {
-              "chance": -2000,
-              "age_group": "teen"
+              "chance": 100,
+              "age_group": "child"
             },
             {
               "chance": -1000,
@@ -183,6 +169,66 @@
             "next": "conversations.topic.checkin_child.respond",
             "conversations_say": {
               "phrase": "conversations.family.child.doing"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 1,
+              "conversations_relationship": {
+                "at_least": "stranger"
+              }
+            },
+            {
+              "chance": -2000,
+              "age_group": "toddler"
+            },
+            {
+              "chance": -2000,
+              "age_group": "baby"
+            },
+            {
+              "chance": -2000,
+              "age_group": "teen"
+            },
+            {
+              "chance": -2000,
+              "age_group": "child"
+            },
+            {
+              "chance": -1000,
+              "memory": {
+                "id": "mcaconversations.cooldown.checkin_child",
+                "var": "player"
+              }
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "branching"
+            },
+            {
+              "chance": -2000,
+              "conversations_disabled": "topics"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "begin",
+              "topic": "checkin_child",
+              "budget": "relationship",
+              "branch": "grown",
+              "beat": "family.child.grown.to.checkin_child"
+            },
+            "conversations_record": {
+              "id": "mcaconversations.cooldown.checkin_child",
+              "var": "player",
+              "time": 36000
+            },
+            "next": "conversations.topic.checkin_child.respond",
+            "conversations_say": {
+              "phrase": "conversations.family.child.grown"
             }
           }
         },

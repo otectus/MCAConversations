@@ -107,6 +107,20 @@ public final class ProgressSavedData extends SavedData {
         return removed;
     }
 
+    /** One bounded step of a resumable prune pass (see {@code util.ResumableSweep}). */
+    public int pruneVillagers(java.util.Collection<UUID> batch, long now, long staleTicks) {
+        int removed = store.pruneVillagers(batch, now, staleTicks);
+        if (removed > 0) {
+            setDirty();
+        }
+        return removed;
+    }
+
+    /** The villagers a prune pass walks. */
+    public java.util.List<UUID> villagerIds() {
+        return store.villagerIds();
+    }
+
     public void removeVillager(UUID villager) {
         store.removeVillager(villager);
         setDirty();

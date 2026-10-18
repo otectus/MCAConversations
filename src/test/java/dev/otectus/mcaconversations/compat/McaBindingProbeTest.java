@@ -82,6 +82,13 @@ class McaBindingProbeTest {
                                 + "member with optionalVirtual and give McaHandles a fallback).");
                 assertEquals(McaBinding.Status.BOUND, resolution.status(), jar.getFileName().toString());
 
+                // The client manifest (MCA's speech association, feedback remediation WP-B1) under the
+                // same root, exactly as the physical client resolves it.
+                McaBinding.Resolution client = McaBinding.resolveClientAgainst(loader, resolution.root());
+                assertEquals(List.of(), client.unresolvedRequired(),
+                        jar.getFileName() + " is missing client member(s) the speech repair requires.");
+                assertEquals(McaBinding.Status.BOUND, client.status(), jar.getFileName() + " (client)");
+
                 System.out.println("[probe] " + jar.getFileName() + " -> " + resolution.root()
                         + (resolution.unresolvedOptional().isEmpty() ? ""
                                 : " (optional absent, fallbacks apply: " + resolution.unresolvedOptional() + ")"));
@@ -107,6 +114,10 @@ class McaBindingProbeTest {
             // callers with no null check of their own.
             assertNotNull(resolution.handle(McaBinding.GET_VILLAGER_BRAIN));
             assertEquals(null, resolution.cls(McaBinding.VILLAGER_CLASS));
+            // No root, no client binding: every client handle is a stub too.
+            McaBinding.Resolution client = McaBinding.resolveClientAgainst(empty, resolution.root());
+            assertEquals(McaBinding.Status.ABSENT, client.status());
+            assertNotNull(client.handle(McaBinding.SPEECH_ON_CHAT_MESSAGE));
         }
     }
 

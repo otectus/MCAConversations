@@ -62,8 +62,16 @@ public final class GossipDiff {
             if (detectMarriage && o.partner().isPresent() && prevPartner.isEmpty()) {
                 UUID partner = o.partner().get();
                 Observation partnerObs = byId.get(partner);
-                // Both observed: only the smaller UUID emits (dedup); partner unobserved: emit here.
-                boolean emit = partnerObs == null || o.uuid().compareTo(partner) < 0;
+                // Both observed: only the smaller UUID emits (dedup). Partner unobserved — unloaded, or
+                // in another batch of a large village's sweep — emit here unless the partner's own
+                // snapshot already names this villager: then the partner was seen married first and
+                // that sighting already told the village.
+                boolean partnerAlreadyReported = partnerObs == null
+                        && Optional.ofNullable(snapshots.get(partner))
+                                .flatMap(RelationshipSnapshot::partner)
+                                .filter(o.uuid()::equals)
+                                .isPresent();
+                boolean emit = partnerObs == null ? !partnerAlreadyReported : o.uuid().compareTo(partner) < 0;
                 if (emit) {
                     String partnerName = partnerObs != null ? partnerObs.name()
                             : Optional.ofNullable(snapshots.get(partner)).map(RelationshipSnapshot::name).orElse("");

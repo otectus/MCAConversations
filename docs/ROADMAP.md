@@ -20,11 +20,15 @@ Last reconciled against the code: 2026-09-22, version 1.8.0 on `feature/social-1
 | 1.7.1 | `375fbba` | `5b67c5b` | Pushed; not tagged, not uploaded |
 | 1.7.2 | `e3c0415` | `6186b22` | Pushed; not tagged, not uploaded |
 | 1.7.3 | `d979cc4` + `19f59cd` | `3002bed` | Pushed to `main` / `neoforge/1.21.1`; not tagged, not uploaded |
-| 1.8.0 | `feature/social-1.8.0`, pushed to `main` | `feature/social-1.8.0`, pushed to `neoforge/1.21.1` | Pushed 2026-09-30; not tagged, not uploaded |
+| 1.8.0 | `feature/social-1.8.0`, pushed to `main` | `feature/social-1.8.0`, pushed to `neoforge/1.21.1` | Pushed 2026-09-30, then 2026-10-17 with the MCA: Kingdoms rename and the feedback remediation; not tagged, not uploaded |
 
 Protocol 4 since 1.7.1: a 1.7.0 client and a 1.7.1+ server refuse each other, so 1.7.1–1.7.3 publish
 **on both loaders together**. A build of the 1.7.3 source (without its three review fixes) circulates
 inside Ultima Kingdoms' (now MCA: Kingdoms') integration packs labelled 1.7.2 (sha256 `6d0714…`); replace it with 1.7.3.
+
+1.8.0 moves to **protocol 5** (the 2026-10-17 player-feedback remediation: a choice offer names the line
+it answers). A 1.7.x client and a 1.8.0 server refuse each other, so 1.8.0 also publishes on both
+loaders together.
 
 Fabric / Minecraft 26.2 (`/home/otectus/Projects/Fabric/MCAConversations_26.2`) is at 1.6.4 and lacks
 1.7.0–1.7.3. It is outside the current scope and listed here only so nobody assumes parity.
@@ -41,6 +45,32 @@ server with this mod); adopting it is the first step of the campaign.
 
 Run each row in the four presentations (Responsive, Minimal, MCA Original, Townstead's screen),
 integrated and dedicated, on both loaders.
+
+### 1.8.0 — player-feedback remediation (2026-10-17)
+The procedures, the environment manifest to record and the expected evidence are in
+`docs/MCAConversations-Feedback-Remediation-Implementation-Plan.md` §5. Unit tests, binding probes
+and a dedicated-server boot are evidence of wiring only (plan §5 Part E), so all six rows are open.
+- **B1, text agreement**: not run. Each turn shows one sentence on the card, in the chat log, in the
+  history drawer and in the `/conversations client diagnose` ledger, in all four presentations and with
+  `numberedResponses=false`; the card is never answerable before its line is shown. Again after
+  `/reload`, and after switching to `pt_br` mid-conversation.
+- **B2, speech**: not run. Needs the MCA Voices pack or a working `enableOnlineTTS` backend, and neither
+  is set up here. `/conversations client speech-trace on` shows each Conversations line mapped to its
+  own key. The voice pack stays silent for those lines, online TTS speaks them in order, and switching
+  villagers quickly plays no stale opener. The narrator still announces focus. With `[speech]
+  chatModeSpeech` on, a typed-chat line is spoken once; with it off, never.
+- **B3, family**: not run. Use the player's toddler, teen, adult child and parent, plus an unrelated
+  child and an adult with children, in the GUI and typed chat, in both locales. `their_children` appears
+  only for a villager with children, no child line reaches a parent and no parent line reaches a child.
+  Re-run after ageing the teen up.
+- **B4, lifecycle**: not run. Walk 10 and 25 blocks, go to the Nether, attack, kill, log out, die, go to
+  bed, `/reload` with the card open, and take the villager over from a second client: everything
+  behaves as `AUDIT.md` §10 lists.
+- **C, dedicated server with two clients**: not run. Covers takeover and bystander chat, and a
+  protocol-4 client must be refused by the channel.
+- **D, performance**: not run. No spark or Observable baseline exists on the named hardware and
+  `docs/PERF-BASELINE-<date>.md` is not written, so the 600-tick spike before and after, and the
+  chunk-ticket owners, are unmeasured.
 
 ### 1.8.0 — social behaviour
 - A new player meets a villager: a neutral, name-free greeting; walking past friends yields warm
@@ -235,6 +265,8 @@ documented as needed for reactions and is not declared in `mods.toml`.
 - **WP12 / F10** — Portuguese first-person gender agreement: about 240 `Obrigada`/`Obrigado` in 57
   profession sources plus `cansada`, `sozinha`, `pronta` and similar; `src/content/topics/` and
   `src/content/voices/` never swept. Needs a native reader; lint can only find candidates.
+  The 1.8.0 family lines (`checkin_child`, `their_children`, `ask_parent.close`, and their voice
+  overlays) were written in Portuguese without a native speaker, and need that reading before release.
 - **WP13** — 8 of the 48 everyday scenes; pilots B (boundary respected), C (harmless disagreement) and
   D (court change) unauthored; `shared.advice` is the only non-work episode family; commitment
   resolvers are almost all item delivery.
@@ -296,6 +328,19 @@ a current set on demand (§4, decision 1).
 Every command ran through `/home/otectus/Projects/.mcmod-tools/gradlew-quiet.sh`. "Tests" are totals
 from `build/test-results/test/*.xml`; the six skipped cases are always the Capitals and Townstead
 real-jar probes, which need jar paths that were not supplied.
+
+### 1.8.0 — 2026-10-17 player-feedback remediation
+
+| Check | Forge | NeoForge |
+|---|---|---|
+| `compileJava` | PASS, `/tmp/gradle-MCAConversations-compileJava-20261017-155247.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-compileJava-20261017-160517.log` |
+| Tests | `check` PASS, `/tmp/gradle-MCAConversations-check-20261017-155254.log`, reusing `test` from `-test-20261017-154036.log`: 1,828 tests, 0 failures, 6 skipped | `test` PASS, `/tmp/gradle-MCAConversations_1.21.1-test-20261017-160826.log`: 1,872 tests, 0 failures, 6 skipped |
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20261017-161409.log` (rebuilt after a comment-only edit; tests up to date); drift gates 2 and 5 tests, 0 failures | PASS with `verifyJarContents`, `/tmp/gradle-MCAConversations_1.21.1-build-20261017-161326.log`; drift gates 2 and 5 |
+| Jar | `mcaconversations-1.8.0.jar`, sha256 `361b0faa…`, protocol 5 | `mcaconversations-neoforge-1.8.0+1.21.1.jar`, sha256 `a488d732…`, protocol 5 |
+| `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
+| Parity, `tools/verify_release_parity.py` from both copies | Manifest re-pinned for the remediation (25 entries re-pinned, 6 new, protocol 5); the MCA: Kingdoms rename's 15 adaptations are pinned in its own commit. Verifies: 2,064 identical, 193 reviewed adaptations | same |
+| Dedicated server | Packaged Forge 47.4.23 with MCA 7.6.26 and Architectury 9.2.14 (`tools/test/conversations_server.py`): starts, `/conversations perf status` twice over 65 s, stops cleanly. No ERROR or exception names this mod. Binding root `forge.net.mca.`, 92 members. 6 of 7 common mixins applied; `InteractTaskMovementMixin`'s target is not loaded without a villager. Each maintenance job ran once per interval, and there are no forced chunks | `runServer` (bare `./gradlew`), driven over RCON: same commands, same result. Binding root `net.conczin.mca.`, 92 members; 7 of 8 common mixins applied |
+| In-game conversation, speech, two clients, profile | **not run** (§2) | **not run** (§2) |
 
 ### 1.8.0 — 2026-09-30 audit
 

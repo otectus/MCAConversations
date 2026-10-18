@@ -30,6 +30,27 @@ class DeliveredHistoryTest {
         assertEquals(1, history.size());
     }
 
+    /**
+     * Since protocol 5 a tagged line's identity is its utterance, so one line the card draws twice —
+     * MCA handing the same component over again, a screen rebuilt mid-line — is one entry by
+     * construction, while the same words said again are a second one.
+     */
+    @Test
+    void oneUtterancePerEntryHoweverManySurfacesDrewIt() {
+        java.util.UUID discussion = java.util.UUID.nameUUIDFromBytes("history-discussion".getBytes());
+        dev.otectus.mcaconversations.conversation.UtteranceTag.Id first =
+                new dev.otectus.mcaconversations.conversation.UtteranceTag.Id(discussion, 1L,
+                        dev.otectus.mcaconversations.conversation.UtteranceTag.Kind.NPC_LINE, null);
+        dev.otectus.mcaconversations.conversation.UtteranceTag.Id again =
+                new dev.otectus.mcaconversations.conversation.UtteranceTag.Id(discussion, 2L,
+                        dev.otectus.mcaconversations.conversation.UtteranceTag.Kind.NPC_LINE, null);
+        DeliveredHistory history = new DeliveredHistory(8);
+        assertTrue(history.record(spoken(ClientDialogueHistory.spokenIdentity(first), "Hello.")));
+        assertFalse(history.record(spoken(ClientDialogueHistory.spokenIdentity(first), "Hello.")));
+        assertTrue(history.record(spoken(ClientDialogueHistory.spokenIdentity(again), "Hello.")));
+        assertEquals(2, history.size());
+    }
+
     @Test
     void theOldestEntryLeavesWhenTheBoundIsReached() {
         DeliveredHistory history = new DeliveredHistory(3);

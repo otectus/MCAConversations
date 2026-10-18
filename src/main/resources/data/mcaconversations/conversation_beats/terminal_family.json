@@ -10,19 +10,10 @@
       "openness": "ends_conversation",
       "allowed_stances": [
         "exit"
-      ]
-    },
-    "family.child.leave.terminal": {
-      "topic": "family",
-      "say": "conversations.family.child.leave",
-      "response_question": "conversations.family",
-      "npc_act": "accept",
-      "subject": "family.talk",
-      "polarity": "neutral",
-      "openness": "ends_conversation",
-      "allowed_stances": [
-        "exit"
-      ]
+      ],
+      "context": {
+        "player_role": "parent"
+      }
     },
     "family.close.leave.terminal": {
       "topic": "family",
@@ -94,7 +85,10 @@
       "openness": "ends_conversation",
       "allowed_stances": [
         "exit"
-      ]
+      ],
+      "context": {
+        "player_role": "child"
+      }
     },
     "family.parent.proud.terminal": {
       "topic": "family",
@@ -106,7 +100,10 @@
       "openness": "ends_conversation",
       "allowed_stances": [
         "exit"
-      ]
+      ],
+      "context": {
+        "player_role": "child"
+      }
     }
   }
 }

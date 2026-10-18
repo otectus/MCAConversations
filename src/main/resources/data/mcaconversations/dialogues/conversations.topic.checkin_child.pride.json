@@ -1,0 +1,181 @@
+{
+  "answers": [
+    {
+      "name": "say_it_back",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.pride.said.teen.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "ask_parent.pride.said",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "ask_parent.pride.said",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.pride.said.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.pride.said.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "ask_parent.pride.said",
+              "delta": 2,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "ask_parent.pride.said",
+              "deltas": {
+                "warmth": 4,
+                "trust": 2
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.pride.said"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "show_me",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.pride.show.teen.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "ask_parent.pride.show",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "ask_parent.pride.show",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.pride.show.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "turn",
+              "beat": "checkin_child.pride.show.to.hub"
+            },
+            "conversations_affection_apply": {
+              "decision": "ask_parent.pride.show",
+              "delta": 1,
+              "budget": "relationship",
+              "policy": "daily_repeat"
+            },
+            "conversations_disposition_apply": {
+              "topic": "ask_parent.pride.show",
+              "deltas": {
+                "warmth": 3
+              }
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.pride.show"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "leave",
+      "results": [
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "teen"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.pride.leave.teen"
+            }
+          }
+        },
+        {
+          "baseChance": 0,
+          "conditions": [
+            {
+              "chance": 100,
+              "age_group": "child"
+            }
+          ],
+          "actions": {
+            "conversations_session": {
+              "op": "end"
+            },
+            "next": "conversations.family",
+            "conversations_say": {
+              "phrase": "conversations.checkin_child.pride.leave"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

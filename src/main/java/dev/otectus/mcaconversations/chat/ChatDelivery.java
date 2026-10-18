@@ -78,7 +78,13 @@ public final class ChatDelivery {
         // Choose the pooled variant here, once, rather than letting every recipient's client roll
         // its own — see VariantPools. Also yields the sentence length the delay is scaled from.
         Voiced voiced = voice(line, villager, player);
-        MutableComponent rendered = applyFormat(cfg.chatModeMessageFormat.get(), coloredName, voiced.line());
+        // Its utterance identity rides inside the line itself, so every recipient's chat log, the
+        // optional chat speech and the dedupe that keeps it to one reading all name the same line.
+        Component spoken = dev.otectus.mcaconversations.conversation.UtteranceStamp.stamp(player, voiced.line(),
+                dev.otectus.mcaconversations.conversation.UtteranceTag.Kind.NPC_LINE,
+                dev.otectus.mcaconversations.conversation.ConversationSession.Frontend.CHAT,
+                villager == null ? null : villager.getUUID());
+        MutableComponent rendered = applyFormat(cfg.chatModeMessageFormat.get(), coloredName, spoken);
 
         MinecraftServer server = player.getServer();
         long now = server != null ? server.overworld().getGameTime() : 0L;
@@ -120,16 +126,23 @@ public final class ChatDelivery {
         Component forSpeaker = rendered;
         if (!suffix.isEmpty() || hasOptions) {
             MutableComponent personal = rendered.copy();
+            // Heart feedback and the options block are one FEEDBACK utterance: identified so a
+            // client can tell them from the line above them, and never spoken.
+            MutableComponent block = Component.empty();
             if (!suffix.isEmpty()) {
                 feedback.heartsDelta = 0; // consume: an exchange shows its feedback exactly once
-                personal.append(Component.literal(suffix)
+                block.append(Component.literal(suffix)
                         .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             }
             if (hasOptions) {
                 // The choices belong to the player being asked, never to bystanders overhearing.
-                personal.append(Component.literal("\n")).append(feedback.options);
+                block.append(Component.literal("\n")).append(feedback.options);
                 feedback.options = null; // consume: shown once, under the line that prompted them
             }
+            personal.append(dev.otectus.mcaconversations.conversation.UtteranceStamp.stamp(speaker, block,
+                    dev.otectus.mcaconversations.conversation.UtteranceTag.Kind.FEEDBACK,
+                    dev.otectus.mcaconversations.conversation.ConversationSession.Frontend.CHAT,
+                    villager == null ? null : villager.getUUID()));
             forSpeaker = personal;
         }
         speaker.sendSystemMessage(forSpeaker);

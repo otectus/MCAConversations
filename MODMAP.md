@@ -105,6 +105,11 @@ The 2026-09-30 audit (`AUDIT.md`) fixed seven findings on this branch and left t
 refusal policy F3, quest topic names F9, the MCA: Crime declaration F10). The fixes are mirrored to the
 NeoForge port and release parity verifies from both copies (`AUDIT.md` §11).
 
+The player-feedback remediation (2026-10-17, `docs/MCAConversations-Feedback-Remediation-Implementation-Plan.md`)
+is folded into 1.8.0: utterance identity and offer correlation (network protocol 5), MCA speech
+following the delivered line, the family topics split by perspective, and the maintenance phase table.
+Its in-game gates (plan §5) have not been run; `docs/ROADMAP.md` §2 lists them.
+
 ## Roadmap
 
 Open work, runtime checks not yet performed, and what was run per release live in
@@ -136,6 +141,30 @@ NeoForge 21.1 uses `mod/<id>` for both. `ContentStaging.bundledPack` accepts all
 jar's name from `ContentSources.ownPackFileName`, the one loader-specific half, so `ContentStaging`
 stays identical on both loaders.
 
+**One utterance, one identity (protocol 5):** every villager line, silent prompt and feedback block sent
+for a Conversations discussion carries a tag (`conversation/UtteranceTag`: a style insertion on an extra,
+unused translatable argument, so MCA renders nothing differently), and a choice offer names the
+sequence number of the line it answers, or `-1`. MCA sends a turn's answers before its prompt, so
+`conversation/OfferDispatch` holds a turn's offer until the turn's line has gone. The client lets the
+card be answered only once that line is on screen (`client/dialogue/UtteranceAgreement`), retires it when
+a later line of the same discussion is, and fails open after 40 ticks with one DEBUG line.
+
+**MCA speaks the delivered line:** MCA associates every translatable with the last *pooled* key it
+resolved (`CommonSpeechManager.lastResolvedKey`), so speech could replay an earlier sentence.
+`client/speech/SpeechAssociation` points the association at the line's own key before chat and speech
+read it, only for lines this mod owns or tagged, and leaves MCA's behaviour alone on any failure.
+Chat-mode lines reach MCA speech only with the client option `[speech] chatModeSpeech`
+(`client/speech/ChatModeSpeech`, `mixin/client/ChatListenerSpeechMixin`).
+
+**Family topics state their perspective:** catalog rows may carry `player_role` (what the player is
+to the speaker) and `family` (`{"has": "children"}`); `TopicGate` enforces both on every entry path,
+and `FamilyPerspectiveTest` holds every beat a perspective topic reaches to the topic's role.
+
+**Maintenance is a phase table:** `event/MaintenanceSchedule` spreads the gossip-interval jobs across
+the interval and the 40-tick player scans across the players; the store prunes and the resident diff
+run in bounded, resumable batches (`util/ResumableSweep`). `debug/PerfCounters` times each section
+for `/conversations perf status`.
+
 ## Content pipeline
 
 `src/content/{topics,professions,voices}` are the hand-authored sources for the branching/dynamic
@@ -144,7 +173,8 @@ corpus. Two Gradle tasks compile them into committed runtime resources (`build.g
 - `generateConversationContent` runs `authoring.ContentCompiler` (`src/content` → `src/main/resources`),
   owning `conversations.scene.*` dialogues, `scene_*.json` contracts/intents and the five
   narrative-template directories. It also mirrors a topic pack's `kingdom_gate` / `civic_contact` /
-  `townstead` into that topic's `conversation_catalog/topics.json` row, and rewrites
+  `townstead` into that topic's `conversation_catalog/topics.json` row (`player_role` and `family`
+  are written in the row by hand), and rewrites
   `assets/mcaconversations/lang/*.json` in sorted key order — a hand-added key survives, but the
   drift gate fails until the generator has re-sorted it.
 - `generateVoiceOverlays` runs `authoring.VoiceFamilyCompiler` (`src/content/voices` →
@@ -182,3 +212,5 @@ generator reference to those files, only test fixtures that use the ids).
   `translatableWithFallback` prints e.g. `ask_parent`.
 - No conversation has been played in a production client; startup, `/reload`, villager spawn/death and
   the broken-pack path have been observed on dedicated servers only (`AUDIT.md`, verification).
+- The Portuguese family lines added in 1.8.0 (`checkin_child`, `their_children`, `ask_parent.close`)
+  were written without a native speaker and need a native reading before release.

@@ -114,19 +114,18 @@
       "question": "conversations.family",
       "answer": "checkin_child",
       "keywords": {
-        "child": 1.4,
-        "holding": 1.0,
+        "holding": 1.4,
+        "getting": 0.8,
         "okay": 0.6
       },
       "requiresAny": [
-        "child",
-        "holding"
+        "holding",
+        "getting"
       ],
       "phrases": [
-        "holding up",
-        "how are the kids",
-        "little one",
-        "how is your child"
+        "how are you getting on",
+        "are you holding up okay",
+        "are you getting on alright"
       ],
       "category": "topics"
     },
@@ -168,6 +167,25 @@
         "a memory",
         "tell me a story",
         "family memories"
+      ],
+      "category": "topics"
+    },
+    "family.their_children": {
+      "question": "conversations.cat.relationships",
+      "answer": "their_children",
+      "keywords": {
+        "child": 1.4,
+        "growing": 0.8,
+        "raising": 0.8
+      },
+      "requiresAny": [
+        "child"
+      ],
+      "phrases": [
+        "how are the kids",
+        "how are your children",
+        "how are your little ones",
+        "how are your kids doing"
       ],
       "category": "topics"
     },
@@ -252,7 +270,7 @@
       ],
       "category": "topics"
     },
-    "checkin_child.hurt.apologize": {
+    "their_children.hurt.apologize": {
       "question": "conversations.topic.family.scolded.close",
       "answer": "apologize",
       "context": "conversations.topic.family.scolded.close",
@@ -274,7 +292,7 @@
       ],
       "category": "topics"
     },
-    "checkin_child.hurt.soften": {
+    "their_children.hurt.soften": {
       "question": "conversations.topic.family.scolded.close",
       "answer": "soften",
       "context": "conversations.topic.family.scolded.close",

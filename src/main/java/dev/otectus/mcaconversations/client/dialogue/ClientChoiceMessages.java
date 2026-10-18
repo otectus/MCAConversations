@@ -73,6 +73,7 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
         }
         if (screen != owner) {
             STATE.clearLocal(ConversationSession.Frontend.GUI);
+            ClientUtteranceLedger.get().screenOpened();
         }
         screen = owner;
         screenVillagerId = villagerId;
@@ -199,6 +200,7 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
             // delivered history goes with the old one. This is also the disconnect and world-change
             // path: leaving a world leaves nothing behind in memory to be re-read later.
             ClientDialogueHistory.clear();
+            ClientUtteranceLedger.get().clear();
             screen = null;
             screenVillagerId = null;
             screenShown = false;
@@ -354,7 +356,41 @@ public final class ClientChoiceMessages implements ChoicePacketSink {
         // claims one.
         UUID owner = message.frontend() == ConversationSession.Frontend.GUI ? screenVillagerId() : null;
         STATE.accept(new ClientChoiceState.ClientChoiceOffer(message.revision(), owner,
-                message.questionId(), message.answerIds(), message.frontend(), tick));
+                message.questionId(), message.answerIds(), message.frontend(), tick,
+                message.handle().sessionId(), message.utteranceSeq()));
+    }
+
+    /** Offers already reported as having waited out their grace, so each is logged once. */
+    private static long lapseLoggedFor = -1L;
+
+    /**
+     * Whether the graphical card may be answered now (feedback remediation §2.1).
+     *
+     * <p>Asked by the screen every frame and before every selection. A superseded offer is retired
+     * here exactly as a {@code SUPERSEDED} clear would retire it; a lapsed one is answerable and
+     * names both identities in one debug line, so a correlation bug shows up in a log instead of as a
+     * frozen card.
+     */
+    public static UtteranceAgreement.Verdict agreement() {
+        ClientChoiceState.ClientChoiceOffer offer = STATE.offer().orElse(null);
+        if (offer == null || offer.frontend() != ConversationSession.Frontend.GUI) {
+            return UtteranceAgreement.Verdict.ACTIONABLE;
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        long tick = minecraft.player == null ? offer.receivedClientTick() : minecraft.player.tickCount;
+        UtteranceAgreement.Displayed displayed = ClientUtteranceLedger.get().lastDisplayed().orElse(null);
+        UtteranceAgreement.Verdict verdict = UtteranceAgreement.decide(offer.utteranceSeq(), offer.identity(),
+                displayed, Math.max(0L, tick - offer.receivedClientTick()), UtteranceAgreement.GRACE_TICKS);
+        if (verdict == UtteranceAgreement.Verdict.SUPERSEDED) {
+            STATE.clear(offer.revision(), ChoiceClearS2C.Reason.SUPERSEDED);
+        } else if (verdict == UtteranceAgreement.Verdict.LAPSED && lapseLoggedFor != offer.revision()) {
+            lapseLoggedFor = offer.revision();
+            dev.otectus.mcaconversations.McaConversations.LOGGER.debug(
+                    "offer {} named line {}/{} but the screen shows {}; answering anyway after {} ticks",
+                    offer.revision(), offer.identity(), offer.utteranceSeq(), displayed,
+                    UtteranceAgreement.GRACE_TICKS);
+        }
+        return verdict;
     }
 
     public static void applyClear(ChoiceClearS2C message) {

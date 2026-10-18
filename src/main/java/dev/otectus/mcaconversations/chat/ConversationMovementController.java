@@ -155,7 +155,7 @@ public final class ConversationMovementController {
                 && !mob.isSleeping();
         boolean hurt = usable && ((Mob) villager).hurtTime > 0;
         boolean panicking = usable && ((Mob) villager).getBrain().isActive(Activity.PANIC);
-        TownsteadChatPolicy.Facts townstead = usable ? TownsteadChatPolicy.Facts.townstead(villager)
+        TownsteadChatPolicy.Facts townstead = usable ? TownsteadChatPolicy.Facts.townsteadForHold(villager)
                 : TownsteadChatPolicy.Facts.NONE;
         boolean playerUsable = player != null && !player.hasDisconnected();
         if (chat && playerUsable && usable) {

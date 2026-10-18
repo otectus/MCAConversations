@@ -75,7 +75,18 @@ public final class TownsteadDialogueTracking {
      * farewell, for one. Called on a slow cadence; the predicate gets the player and villager ids.
      */
     public static void sweep(BiPredicate<UUID, UUID> lapsed) {
+        sweep(player -> true, lapsed);
+    }
+
+    /** As above for the players {@code due} selects: the tick handler spreads players across ticks. */
+    public static void sweep(java.util.function.Predicate<UUID> due, BiPredicate<UUID, UUID> lapsed) {
+        if (OPEN.isEmpty()) {
+            return;
+        }
         for (Map.Entry<UUID, Open> entry : OPEN.entrySet()) {
+            if (!due.test(entry.getKey())) {
+                continue;
+            }
             Open open = entry.getValue();
             if (open.villager().get() == null || open.player().get() == null
                     || lapsed.test(entry.getKey(), open.villagerId())) {

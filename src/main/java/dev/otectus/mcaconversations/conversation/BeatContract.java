@@ -77,10 +77,17 @@ public record BeatContract(String id,
                               Set<String> ages,
                               Set<RelationshipBand> relationships,
                               Set<String> states,
-                              Set<String> integrations) {
+                              Set<String> integrations,
+                              Optional<PlayerRole> playerRole) {
 
         public static final BeatContext ANY =
-                new BeatContext(Optional.empty(), Set.of(), Set.of(), Set.of(), Set.of());
+                new BeatContext(Optional.empty(), Set.of(), Set.of(), Set.of(), Set.of(), Optional.empty());
+
+        /** A context that states no family perspective, as every beat before 1.8.0 was. */
+        public BeatContext(Optional<String> profession, Set<String> ages, Set<RelationshipBand> relationships,
+                           Set<String> states, Set<String> integrations) {
+            this(profession, ages, relationships, states, integrations, Optional.empty());
+        }
 
         /** Exact registry ids, so an absent mod's profession simply never matches. */
         public static final Pattern PROFESSION = Pattern.compile("[a-z0-9_.-]+:[a-z0-9_./-]+");
@@ -134,8 +141,16 @@ public record BeatContract(String id,
             }
 
             Set<String> integrations = new LinkedHashSet<>(strings(json, "integrations"));
+            // What the player is to the speaker (1.8.0): the family perspective this line is written
+            // from. FamilyPerspectiveTest holds every beat a perspective topic reaches to its topic's.
+            Optional<PlayerRole> playerRole = Optional.empty();
+            if (json.has("player_role")) {
+                String role = json.get("player_role").getAsString();
+                playerRole = Optional.of(PlayerRole.byKey(role).orElseThrow(() -> new IllegalArgumentException(
+                        "beat '" + beatId + "' player_role '" + role + "' is not one of parent, child, sibling, spouse")));
+            }
             return new BeatContext(profession, Set.copyOf(ages), Set.copyOf(relationships),
-                    Set.copyOf(states), Set.copyOf(integrations));
+                    Set.copyOf(states), Set.copyOf(integrations), playerRole);
         }
     }
 

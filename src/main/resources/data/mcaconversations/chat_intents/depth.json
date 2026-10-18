@@ -73,6 +73,46 @@
       ],
       "category": "topics"
     },
+    "ask_parent.close.thank": {
+      "question": "conversations.topic.ask_parent.close",
+      "answer": "thank",
+      "context": "conversations.topic.ask_parent.close",
+      "keywords": {
+        "telling": 1.2,
+        "thank": 0.5,
+        "told": 0.6
+      },
+      "requiresAny": [
+        "telling",
+        "told"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thanks for telling me that",
+        "i am glad you told me"
+      ],
+      "category": "topics"
+    },
+    "ask_parent.close.say_means": {
+      "question": "conversations.topic.ask_parent.close",
+      "answer": "say_means",
+      "context": "conversations.topic.ask_parent.close",
+      "keywords": {
+        "mattered": 1.5,
+        "said": 0.4,
+        "meant": 0.6
+      },
+      "requiresAny": [
+        "mattered",
+        "meant"
+      ],
+      "phrases": [
+        "that mattered what you said",
+        "what you said mattered to me",
+        "that meant something to me"
+      ],
+      "category": "topics"
+    },
     "ask_parent.reassure": {
       "question": "conversations.topic.ask_parent.respond",
       "answer": "reassure",
@@ -208,10 +248,10 @@
       ],
       "category": "topics"
     },
-    "checkin_child.dismiss": {
-      "question": "conversations.topic.checkin_child.respond",
+    "their_children.dismiss": {
+      "question": "conversations.topic.their_children.respond",
       "answer": "dismiss",
-      "context": "conversations.topic.checkin_child.respond",
+      "context": "conversations.topic.their_children.respond",
       "keywords": {
         "children": 1.2,
         "same": 0.6
@@ -226,10 +266,30 @@
       ],
       "category": "topics"
     },
-    "checkin_child.followup.guide": {
-      "question": "conversations.topic.checkin_child.followup",
+    "checkin_child.dismiss": {
+      "question": "conversations.topic.checkin_child.respond",
+      "answer": "dismiss",
+      "context": "conversations.topic.checkin_child.respond",
+      "keywords": {
+        "off": 1.2,
+        "along": 1.2,
+        "fine": 0.5
+      },
+      "requiresAny": [
+        "off",
+        "along"
+      ],
+      "phrases": [
+        "you are fine off you go",
+        "off you go then",
+        "run along now"
+      ],
+      "category": "topics"
+    },
+    "their_children.followup.guide": {
+      "question": "conversations.topic.their_children.followup",
       "answer": "guide",
-      "context": "conversations.topic.checkin_child.followup",
+      "context": "conversations.topic.their_children.followup",
       "keywords": {
         "helped": 1.5,
         "me": 0.3
@@ -244,10 +304,10 @@
       ],
       "category": "topics"
     },
-    "checkin_child.followup.play_along": {
-      "question": "conversations.topic.checkin_child.followup",
+    "their_children.followup.play_along": {
+      "question": "conversations.topic.their_children.followup",
       "answer": "play_along",
-      "context": "conversations.topic.checkin_child.followup",
+      "context": "conversations.topic.their_children.followup",
       "keywords": {
         "sound": 0.5,
         "wonderful": 1.5
@@ -262,10 +322,10 @@
       ],
       "category": "topics"
     },
-    "checkin_child.followup.scold": {
-      "question": "conversations.topic.checkin_child.followup",
+    "their_children.followup.scold": {
+      "question": "conversations.topic.their_children.followup",
       "answer": "scold",
-      "context": "conversations.topic.checkin_child.followup",
+      "context": "conversations.topic.their_children.followup",
       "keywords": {
         "firmer": 1.5,
         "strict": 1.2
@@ -281,10 +341,10 @@
       ],
       "category": "topics"
     },
-    "checkin_child.listen": {
-      "question": "conversations.topic.checkin_child.respond",
+    "their_children.listen": {
+      "question": "conversations.topic.their_children.respond",
       "answer": "listen",
-      "context": "conversations.topic.checkin_child.respond",
+      "context": "conversations.topic.their_children.respond",
       "keywords": {
         "how": 0.4,
         "really": 0.8,
@@ -298,10 +358,29 @@
       ],
       "category": "topics"
     },
-    "checkin_child.praise": {
+    "checkin_child.listen": {
       "question": "conversations.topic.checkin_child.respond",
-      "answer": "praise",
+      "answer": "listen",
       "context": "conversations.topic.checkin_child.respond",
+      "keywords": {
+        "really": 1.5,
+        "how": 0.4,
+        "you": 0.2
+      },
+      "requiresAny": [
+        "really"
+      ],
+      "phrases": [
+        "tell me how you really are",
+        "how are you really",
+        "how are you doing really"
+      ],
+      "category": "topics"
+    },
+    "their_children.praise": {
+      "question": "conversations.topic.their_children.respond",
+      "answer": "praise",
+      "context": "conversations.topic.their_children.respond",
       "keywords": {
         "doing": 0.5,
         "right": 0.8,
@@ -315,10 +394,29 @@
       ],
       "category": "topics"
     },
-    "checkin_child.rebuffed.apologize": {
-      "question": "conversations.topic.checkin_child.rebuffed.followup",
+    "checkin_child.praise": {
+      "question": "conversations.topic.checkin_child.respond",
+      "answer": "praise",
+      "context": "conversations.topic.checkin_child.respond",
+      "keywords": {
+        "well": 1.5,
+        "doing": 0.5,
+        "so": 0.2
+      },
+      "requiresAny": [
+        "well"
+      ],
+      "phrases": [
+        "you are doing so well",
+        "you are doing really well",
+        "look how well you are doing"
+      ],
+      "category": "topics"
+    },
+    "their_children.rebuffed.apologize": {
+      "question": "conversations.topic.their_children.rebuffed.followup",
       "answer": "apologize",
-      "context": "conversations.topic.checkin_child.rebuffed.followup",
+      "context": "conversations.topic.their_children.rebuffed.followup",
       "keywords": {
         "careless": 1.5,
         "child": 1.2,
@@ -337,10 +435,10 @@
       ],
       "category": "topics"
     },
-    "checkin_child.rebuffed.explain": {
-      "question": "conversations.topic.checkin_child.rebuffed.followup",
+    "their_children.rebuffed.explain": {
+      "question": "conversations.topic.their_children.rebuffed.followup",
       "answer": "explain",
-      "context": "conversations.topic.checkin_child.rebuffed.followup",
+      "context": "conversations.topic.their_children.rebuffed.followup",
       "keywords": {
         "meant": 1.5,
         "came": 1.2,
@@ -2351,6 +2449,106 @@
         "here is what i know already",
         "i can tell you what i know",
         "let me tell you what i have heard"
+      ],
+      "category": "topics"
+    },
+    "checkin_child.grown.help": {
+      "question": "conversations.topic.checkin_child.grown.followup",
+      "answer": "offer_help",
+      "context": "conversations.topic.checkin_child.grown.followup",
+      "keywords": {
+        "need": 1.2,
+        "help": 1.0,
+        "anything": 0.4
+      },
+      "requiresAny": [
+        "need",
+        "help"
+      ],
+      "phrases": [
+        "is there anything you need from me",
+        "do you need anything from me",
+        "can i help you with anything"
+      ],
+      "category": "topics"
+    },
+    "checkin_child.grown.proud": {
+      "question": "conversations.topic.checkin_child.grown.followup",
+      "answer": "proud",
+      "context": "conversations.topic.checkin_child.grown.followup",
+      "keywords": {
+        "proud": 1.5,
+        "become": 1.0,
+        "who": 0.3
+      },
+      "requiresAny": [
+        "proud",
+        "become"
+      ],
+      "phrases": [
+        "i am proud of who you have become",
+        "i am so proud of you",
+        "look at who you have become"
+      ],
+      "category": "topics"
+    },
+    "checkin_child.grown.supper": {
+      "question": "conversations.topic.checkin_child.grown.close",
+      "answer": "come_by",
+      "context": "conversations.topic.checkin_child.grown.close",
+      "keywords": {
+        "supper": 1.5,
+        "dinner": 1.2,
+        "come": 0.4
+      },
+      "requiresAny": [
+        "supper",
+        "dinner"
+      ],
+      "phrases": [
+        "come by for supper this week",
+        "come for supper",
+        "come over for dinner this week"
+      ],
+      "category": "topics"
+    },
+    "checkin_child.grown.mattered": {
+      "question": "conversations.topic.checkin_child.grown.close",
+      "answer": "say_means",
+      "context": "conversations.topic.checkin_child.grown.close",
+      "keywords": {
+        "mattered": 1.5,
+        "said": 0.4,
+        "meant": 0.6
+      },
+      "requiresAny": [
+        "mattered",
+        "meant"
+      ],
+      "phrases": [
+        "that mattered what you said",
+        "what you said mattered to me",
+        "that meant something to me"
+      ],
+      "category": "topics"
+    },
+    "their_children.close.thank": {
+      "question": "conversations.topic.their_children.close",
+      "answer": "thank",
+      "context": "conversations.topic.their_children.close",
+      "keywords": {
+        "telling": 1.2,
+        "thank": 0.5,
+        "told": 0.6
+      },
+      "requiresAny": [
+        "telling",
+        "told"
+      ],
+      "phrases": [
+        "thank you for telling me",
+        "thanks for telling me about them",
+        "i am glad you told me about them"
       ],
       "category": "topics"
     }

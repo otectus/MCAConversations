@@ -212,6 +212,7 @@ public final class ConversationSessions {
     /** Drops a player's session entirely (logout, death). */
     public static void clear(UUID playerId, CloseReason reason) {
         close(playerId, reason);
+        UtteranceStamp.forgetPlayer(playerId);
     }
 
     /** Closes every session pointed at a villager that just died or was removed. */
@@ -338,6 +339,8 @@ public final class ConversationSessions {
         }
         SESSIONS.clear();
         ConversationPresence.clear();
+        UtteranceStamp.resetForTesting();
+        OfferDispatch.resetForTesting();
     }
 
     /** Test seam: forget every session. */
