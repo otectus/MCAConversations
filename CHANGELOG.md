@@ -10,7 +10,9 @@ integrations compile against those add-ons' compile-only API jars, vendored unde
 hash-pinned by `gradle/sibling-apis.properties` — MCA: Quests 1.6.4 and MCA: Reputation 0.6.0. Optional: MCA: Quests, MCA: Reputation, MCA: Capitals 1.3+ (tested against 1.3.6),
 Serene Seasons, Townstead `[0.7.5,0.9)`, MCA: Kingdoms `[0.1,)` (formerly Ultima Kingdoms), MCA: Crime `[0,)` (voice + legal state).
 
-## [1.8.0] - unreleased
+## [1.8.1] - unreleased
+
+## [1.8.0] - October 17th, 2026
 
 Social behaviour, and Townstead. A villager meeting you for the first time now sounds like somebody
 meeting you for the first time — no name they were never told, no friendship they never had — and

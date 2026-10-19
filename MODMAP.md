@@ -96,14 +96,17 @@ Run `check_mod.py` for a full consistency check (missing models, lang keys, text
 
 ## Current focus
 
-1.8.0 on `feature/social-1.8.0`: the social-behaviour work (relationship bands from contact days,
-family roles and ruptures; stranger-safe greetings, farewells and surfaces; `SocialContract` scene
-metadata) and the full Townstead integration (conditions, check fit, context, templates, calendar,
-outcomes and reactions, chat policy, gifts, gossip, *Life here*, emotion sidecar, diagnostics).
-1.7.3 is published to `main` and `neoforge/1.21.1`. Next: the in-game campaign (`docs/ROADMAP.md` §2).
-The 2026-09-30 audit (`AUDIT.md`) fixed seven findings on this branch and left three open (the first-load
-refusal policy F3, quest topic names F9, the MCA: Crime declaration F10). The fixes are mirrored to the
-NeoForge port and release parity verifies from both copies (`AUDIT.md` §11).
+1.8.1 (unreleased) on `feature/social-1.8.0`, pushed to `main` and `neoforge/1.21.1`: so far only the
+version bump; the dialogue-style reversibility fix is planned for it. Next: the in-game campaign
+(`docs/ROADMAP.md` §2).
+
+1.8.0 was released on 2026-10-17 as pushed (Forge `fdbff9c`, NeoForge `cbe13fd`): the social-behaviour
+work (relationship bands from contact days, family roles and ruptures; stranger-safe greetings, farewells
+and surfaces; `SocialContract` scene metadata) and the full Townstead integration (conditions, check fit,
+context, templates, calendar, outcomes and reactions, chat policy, gifts, gossip, *Life here*, emotion
+sidecar, diagnostics). The 2026-09-30 audit (`AUDIT.md`) fixed seven findings in it and left three open
+(the first-load refusal policy F3, quest topic names F9, the MCA: Crime declaration F10). The fixes are
+mirrored to the NeoForge port and release parity verifies from both copies (`AUDIT.md` §11).
 
 The player-feedback remediation (2026-10-17, `docs/MCAConversations-Feedback-Remediation-Implementation-Plan.md`)
 is folded into 1.8.0: utterance identity and offer correlation (network protocol 5), MCA speech

@@ -8,7 +8,7 @@ of --seed-world (never the original), and every run gets its own new directory.
 
 Example:
   python3 tools/test/conversations_server.py \
-      --mod build/libs/mcaconversations-1.8.0.jar \
+      --mod build/libs/mcaconversations-1.8.1.jar \
       --mod "/home/otectus/Documents/curseforge/minecraft/Instances/Ultima/mods/minecraft-comes-alive-7.6.26+1.20.1-universal.jar" \
       --mod "/home/otectus/Documents/curseforge/minecraft/Instances/Ultima/mods/architectury-9.2.14-forge.jar" \
       --command "conversations perf status" --wait-ticks 1300 --command "conversations perf status"

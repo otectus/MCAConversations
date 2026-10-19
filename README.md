@@ -8,7 +8,7 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-## Features (1.8.0)
+## Features (1.8.1)
 
 - **A first meeting sounds like one.** A villager who has never met you says a plain hello rather
   than greeting you by name like an old friend; someone you have met says "hello again"; a regular,

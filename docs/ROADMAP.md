@@ -20,7 +20,8 @@ Last reconciled against the code: 2026-09-22, version 1.8.0 on `feature/social-1
 | 1.7.1 | `375fbba` | `5b67c5b` | Pushed; not tagged, not uploaded |
 | 1.7.2 | `e3c0415` | `6186b22` | Pushed; not tagged, not uploaded |
 | 1.7.3 | `d979cc4` + `19f59cd` | `3002bed` | Pushed to `main` / `neoforge/1.21.1`; not tagged, not uploaded |
-| 1.8.0 | `feature/social-1.8.0`, pushed to `main` | `feature/social-1.8.0`, pushed to `neoforge/1.21.1` | Pushed 2026-09-30, then 2026-10-17 with the MCA: Kingdoms rename and the feedback remediation; not tagged, not uploaded |
+| 1.8.0 | `fdbff9c` | `cbe13fd` | Released 2026-10-17 as pushed to `main` / `neoforge/1.21.1` (first pushed 2026-09-30; the 2026-10-17 push added the MCA: Kingdoms rename and the feedback remediation); not tagged |
+| 1.8.1 | `feature/social-1.8.0`, pushed to `main` | `feature/social-1.8.0`, pushed to `neoforge/1.21.1` | Unreleased; so far only the version bump. Protocol 5, unchanged |
 
 Protocol 4 since 1.7.1: a 1.7.0 client and a 1.7.1+ server refuse each other, so 1.7.1–1.7.3 publish
 **on both loaders together**. A build of the 1.7.3 source (without its three review fixes) circulates
@@ -328,6 +329,20 @@ a current set on demand (§4, decision 1).
 Every command ran through `/home/otectus/Projects/.mcmod-tools/gradlew-quiet.sh`. "Tests" are totals
 from `build/test-results/test/*.xml`; the six skipped cases are always the Capitals and Townstead
 real-jar probes, which need jar paths that were not supplied.
+
+### 1.8.1 — 2026-10-19 version bump
+
+No source file changed: `mod_version` 1.8.0 → 1.8.1 in both `gradle.properties`, protocol 5 unchanged.
+
+| Check | Forge | NeoForge |
+|---|---|---|
+| `compileJava` | PASS, `/tmp/gradle-MCAConversations-compileJava-20261019-140847.log` | PASS, `/tmp/gradle-MCAConversations_1.21.1-compileJava-20261019-140859.log` |
+| Tests | `check` PASS, `/tmp/gradle-MCAConversations-check-20261019-140911.log`: 1,828 tests, 0 failures, 6 skipped | `check` PASS, `/tmp/gradle-MCAConversations_1.21.1-check-20261019-140932.log`: 1,872 tests, 0 failures, 6 skipped |
+| `build verifyGeneratedConversationContent verifyVoiceOverlays` | PASS, `/tmp/gradle-MCAConversations-build-20261019-140951.log` (tests up to date from `check`); drift gates 2 and 5 tests, 0 failures | PASS with `verifyJarContents` (2,146 entries, nothing shaded), `/tmp/gradle-MCAConversations_1.21.1-build-20261019-141021.log`; drift gates 2 and 5 |
+| Jar | `mcaconversations-1.8.1.jar`, sha256 `743c3f39…`, protocol 5 | `mcaconversations-neoforge-1.8.1+1.21.1.jar`, sha256 `aeffeeb5…`, protocol 5 |
+| `check_mod.py` | 0 errors, 0 warnings, 0 notes | not applicable |
+| Parity, `tools/verify_release_parity.py` from both copies | New manifest `tools/parity/parity-1.8.1-adaptations.json`: the 1.8.0 manifest with only `release` changed. Verifies: 2,064 identical, 193 reviewed adaptations | same |
+| Dedicated server, in-game | **not run** (version bump only) | **not run** |
 
 ### 1.8.0 — 2026-10-17 player-feedback remediation
 
