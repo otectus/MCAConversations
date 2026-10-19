@@ -8,10 +8,10 @@
 
 Deeper, less repetitive villager conversations for **Minecraft Comes Alive: Reborn**.
 
-Shared gameplay and content track the Forge 1.20.1 line at 1.8.0. The parity manifest for each release
+Shared gameplay and content track the Forge 1.20.1 line at 1.8.1. The parity manifest for each release
 lives in `tools/parity/`.
 
-## Features (1.8.0)
+## Features (1.8.1)
 
 - **A first meeting sounds like one.** A villager who has never met you says a plain hello rather
   than greeting you by name like an old friend; someone you have met says "hello again"; a regular,

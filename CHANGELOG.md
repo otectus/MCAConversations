@@ -10,7 +10,9 @@ compile-only API jars of MCA: Quests 1.6.4 and MCA: Reputation 0.6.0, vendored i
 Entries up to and including 1.2.1 describe the Minecraft 1.20.1 / Forge line, which remains a
 separate download and is not superseded by this one.
 
-## [1.8.0] - unreleased
+## [1.8.1] - unreleased
+
+## [1.8.0] - October 17th, 2026
 
 Social behaviour, and Townstead. A villager meeting you for the first time now sounds like somebody
 meeting you for the first time — no name they were never told, no friendship they never had — and
